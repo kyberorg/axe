@@ -1,0 +1,49 @@
+#Maven generated build
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+#Signed artifacts
+*.asc
+
+#KDE files
+.directory
+
+#Project specific files
+bin/
+/db
+.eclipse
+/lib/
+/logs/
+/modules
+/project/target
+/documentation/
+tmp/
+test-result
+build
+server.pid
+*.eml
+/dist/
+.cache
+.mvn
