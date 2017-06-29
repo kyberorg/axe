@@ -16,4 +16,9 @@ public class Endpoint {
 
     @ApiMethod(HttpMethod.POST)
     public static final String STORE_API = "/api/store";
+
+    @ApiMethod(HttpMethod.GET)
+    public static final String LINK_API= "/api/link/";
+    public static final String LINK_API_MAPPING= "/api/link/{ident}";
+    public static final String LINK_API_BASE= "/api/link";
 }
