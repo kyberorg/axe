@@ -7,7 +7,4 @@ package ee.yals.test.utils;
  * @since 0.0
  */
 public class TestUtils {
-    public static class Endpoint {
-        public static final String STORE_API="/api/store"; //Method: POST
-    }
 }

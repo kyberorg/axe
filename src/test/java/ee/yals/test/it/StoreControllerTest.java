@@ -1,8 +1,8 @@
 package ee.yals.test.it;
 
+import ee.yals.Endpoint;
 import ee.yals.json.EmptyJson;
 import ee.yals.json.StoreJson;
-import ee.yals.test.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,21 +48,21 @@ public class StoreControllerTest {
     @Test
     public void onRequestWithoutBodyStatusIs400() throws Exception {
         assertNotNull(this.mockMvc);
-        mockMvc.perform(post(TestUtils.Endpoint.STORE_API))
+        mockMvc.perform(post(Endpoint.STORE_API))
                 .andExpect(status().is(400));
     }
 
     @Test
     public void onRequestWithEmptyBodyStatusIs400() throws Exception {
         assertNotNull(this.mockMvc);
-        mockMvc.perform(post(TestUtils.Endpoint.STORE_API).content(""))
+        mockMvc.perform(post(Endpoint.STORE_API).content(""))
                 .andExpect(status().is(400));
     }
 
     @Test
     public void onRequestWithNonJsonBodyStatusIs421() throws Exception {
         assertNotNull(this.mockMvc);
-        mockMvc.perform(post(TestUtils.Endpoint.STORE_API).content("not a JSON"))
+        mockMvc.perform(post(Endpoint.STORE_API).content("not a JSON"))
                 .andExpect(status().is(421));
     }
 
@@ -70,7 +70,7 @@ public class StoreControllerTest {
     public void onRequestWithJSONWithoutLinkParamStatusIs421() throws Exception {
 
         assertNotNull(this.mockMvc);
-        mockMvc.perform(post(TestUtils.Endpoint.STORE_API).content(EmptyJson.create().toString()))
+        mockMvc.perform(post(Endpoint.STORE_API).content(EmptyJson.create().toString()))
                 .andExpect(status().is(421));
     }
 
@@ -80,7 +80,7 @@ public class StoreControllerTest {
         String correctJson = StoreJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
-        mockMvc.perform(post(TestUtils.Endpoint.STORE_API).content(correctJson))
+        mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
                 .andExpect(status().is(400));
     }
 
@@ -90,7 +90,7 @@ public class StoreControllerTest {
         String correctJson = StoreJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
-        mockMvc.perform(post(TestUtils.Endpoint.STORE_API).content(correctJson))
+        mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
                 .andExpect(status().is(400));
     }
 
@@ -100,7 +100,7 @@ public class StoreControllerTest {
         String correctJson = StoreJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
-        mockMvc.perform(post(TestUtils.Endpoint.STORE_API).content(correctJson))
+        mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
                 .andExpect(status().is(201));
     }
 
