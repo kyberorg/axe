@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * @since 1.0
  */
 @Since(1.0)
-public class ErrorJson {
+public class ErrorJson extends Json {
 
     @Since(1.0)
     private Error error;

@@ -1,0 +1,29 @@
+package ee.yals.storage;
+
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Class description
+ *
+ * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
+ * @since 0.0
+ */
+@Component
+public class LinkStorage {
+
+    private static Map<String, String> storage = new HashMap<>();
+
+    public static final String LINK_NOT_FOUND = "LinkNotFound";
+
+    public void save(String ident, String link) {
+        storage.put(ident, link);
+    }
+
+    public String find(String ident) {
+        return storage.getOrDefault(ident, LINK_NOT_FOUND);
+    }
+
+}

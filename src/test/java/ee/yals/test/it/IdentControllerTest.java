@@ -65,10 +65,10 @@ public class IdentControllerTest {
     }
 
     @Test
-    public void onRequestWithSpecialCharIdentStatusIs404() throws Exception {
+    public void onRequestWithSpecialCharIdentStatusIs400() throws Exception {
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(get(Endpoint.LINK_API + "%#"))
-                .andExpect(status().is(404))
+                .andExpect(status().is(400))
                 .andReturn();
 
        assertResultIsJson(result);

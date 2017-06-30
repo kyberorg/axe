@@ -70,6 +70,7 @@ public class StoreControllerTest {
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content("not a JSON"))
                 .andExpect(status().is(421))
                 .andReturn();
+        assertResultIsJson(result);
     }
 
     @Test

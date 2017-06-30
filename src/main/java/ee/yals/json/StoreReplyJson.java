@@ -16,7 +16,7 @@ public class StoreReplyJson extends Json {
         return new StoreReplyJson();
     }
 
-    public StoreReplyJson withIdent() {
+    public StoreReplyJson withIdent(String ident) {
         this.ident = ident;
         return this;
     }
