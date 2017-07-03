@@ -1,6 +1,10 @@
 package ee.yals.json;
 
 import com.google.gson.annotations.Since;
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Store Endpoint incoming JSON
@@ -9,6 +13,9 @@ import com.google.gson.annotations.Since;
  * @since 1.0
  */
 public class StoreJson extends Json {
+    @NotNull(message = "must be present")
+    @Size(min = 5, max = 15613)
+    @URL
     @Since(1.0)
     private String link;
 

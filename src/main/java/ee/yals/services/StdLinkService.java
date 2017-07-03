@@ -1,5 +1,6 @@
 package ee.yals.services;
 
+import ee.yals.result.AddResult;
 import ee.yals.result.GetResult;
 import ee.yals.storage.LinkStorage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,11 @@ public class StdLinkService implements LinkService {
     public GetResult getLink(String ident) {
         String link = storage.find(ident);
         return link.equals(LinkStorage.LINK_NOT_FOUND) ? new GetResult.NotFound() : new GetResult.Success(link);
+    }
+
+    @Override
+    public AddResult addNew(String ident, String link) {
+        storage.save(ident, link);
+        return new AddResult.Success();
     }
 }

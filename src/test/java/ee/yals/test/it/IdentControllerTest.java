@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static ee.yals.test.utils.TestUtils.assertResultIsJson;
+import static ee.yals.test.utils.TestUtils.assertResultIsErrorJson;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,7 +52,7 @@ public class IdentControllerTest {
                 .andExpect(status().is(400))
                 .andReturn();
 
-        assertResultIsJson(result);
+        assertResultIsErrorJson(result);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class IdentControllerTest {
         MvcResult result = mockMvc.perform(get(Endpoint.LINK_API + " "))
                 .andExpect(status().is(400))
                 .andReturn();
-        assertResultIsJson(result);
+        assertResultIsErrorJson(result);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class IdentControllerTest {
                 .andExpect(status().is(400))
                 .andReturn();
 
-       assertResultIsJson(result);
+       assertResultIsErrorJson(result);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class IdentControllerTest {
         MvcResult result = mockMvc.perform(get(Endpoint.LINK_API + "notStoredIdent"))
                 .andExpect(status().is(404))
         .andReturn();
-        assertResultIsJson(result);
+        assertResultIsErrorJson(result);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class IdentControllerTest {
         MvcResult result = mockMvc.perform(get(Endpoint.LINK_API + ident))
                 .andExpect(status().is(200))
                 .andReturn();
-        assertResultIsJson(result);
+        assertResultIsErrorJson(result);
     }
 
     private String store(String longLink) throws Exception {

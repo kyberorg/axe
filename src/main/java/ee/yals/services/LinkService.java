@@ -1,5 +1,6 @@
 package ee.yals.services;
 
+import ee.yals.result.AddResult;
 import ee.yals.result.GetResult;
 
 /**
@@ -11,4 +12,6 @@ import ee.yals.result.GetResult;
 public interface LinkService {
 
     GetResult getLink(String ident);
+
+    AddResult addNew(String ident, String link);
 }

@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static ee.yals.test.utils.TestUtils.assertResultIsErrorJson;
 import static ee.yals.test.utils.TestUtils.assertResultIsJson;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,8 +52,7 @@ public class StoreControllerTest {
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API))
                 .andExpect(status().is(400))
                 .andReturn();
-
-        assertResultIsJson(result);
+        //assertResultIsJson(result);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class StoreControllerTest {
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(""))
                 .andExpect(status().is(400))
                 .andReturn();
-        assertResultIsJson(result);
+        //assertResultIsJson(result);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class StoreControllerTest {
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content("not a JSON"))
                 .andExpect(status().is(421))
                 .andReturn();
-        assertResultIsJson(result);
+        assertResultIsErrorJson(result);
     }
 
     @Test
@@ -79,29 +79,29 @@ public class StoreControllerTest {
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(EmptyJson.create().toString()))
                 .andExpect(status().is(421))
                 .andReturn();
-        assertResultIsJson(result);
+        assertResultIsErrorJson(result);
     }
 
     @Test
-    public void onRequestWithEmptyLinkStatusIs400() throws Exception {
+    public void onRequestWithEmptyLinkStatusIs421() throws Exception {
         String longLink = "";
         String correctJson = StoreJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
-                .andExpect(status().is(400))
+                .andExpect(status().is(421))
                 .andReturn();
-        assertResultIsJson(result);
+        assertResultIsErrorJson(result);
     }
 
     @Test
-    public void onRequestWithNotALinkStatusIs400() throws Exception {
-        String longLink = "";
+    public void onRequestWithNotALinkStatusIs421() throws Exception {
+        String longLink = "notALink";
         String correctJson = StoreJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
-                .andExpect(status().is(400))
+                .andExpect(status().is(421))
                 .andReturn();
     }
 
@@ -114,6 +114,7 @@ public class StoreControllerTest {
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
                 .andExpect(status().is(201))
                 .andReturn();
+
         assertResultIsJson(result);
     }
 
