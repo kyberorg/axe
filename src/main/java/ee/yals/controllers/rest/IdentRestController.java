@@ -9,6 +9,7 @@ import ee.yals.services.LinkService;
 import ee.yals.utils.IdentGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 public class IdentRestController {
 
     @Autowired
+    @Qualifier("dbStorage")
     private LinkService linkService;
 
     @RequestMapping(method = RequestMethod.GET, value = {

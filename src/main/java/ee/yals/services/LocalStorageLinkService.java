@@ -4,16 +4,18 @@ import ee.yals.result.AddResult;
 import ee.yals.result.GetResult;
 import ee.yals.storage.LinkStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- * Class description
+ * Class, which operates with local storage
  *
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 1.0
  */
+@Qualifier("localStorage")
 @Component
-public class StdLinkService implements LinkService {
+public class LocalStorageLinkService implements LinkService {
 
     @Autowired
     private LinkStorage storage;

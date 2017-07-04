@@ -11,6 +11,7 @@ import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.IdentGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,7 @@ import java.util.Set;
 public class StoreRestController {
 
     @Autowired
+    @Qualifier("dbStorage")
     private LinkService linkService;
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
