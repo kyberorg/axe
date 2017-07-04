@@ -3,12 +3,20 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
         <changeSet id="1" author="kyberorg">
-            <sqlFile path="sql/001-init.sql" relativeToChangelogFile="true" stripComments="true" />
+            <createTable tableName="links">
+                <column name="id" autoIncrement="true" type="bigint">
+                    <constraints primaryKey="true"/>
+                </column>
+                <column name="ident" type="varchar(255)">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="link" type="varchar(255)">
+                    <constraints nullable="false"/>
+                </column>
+            </createTable>
         </changeSet>
 
 </databaseChangeLog>
