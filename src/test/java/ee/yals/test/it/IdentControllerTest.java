@@ -1,8 +1,8 @@
 package ee.yals.test.it;
 
 import ee.yals.Endpoint;
-import ee.yals.json.StoreJson;
-import ee.yals.json.StoreReplyJson;
+import ee.yals.json.StoreRequestJson;
+import ee.yals.json.StoreResponseJson;
 import ee.yals.test.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -99,7 +99,7 @@ public class IdentControllerTest {
 
     private String store(String longLink) throws Exception {
 
-        String requestJson = StoreJson.create().withLink(longLink).toString();
+        String requestJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(requestJson))
@@ -110,8 +110,8 @@ public class IdentControllerTest {
         assertNotNull(responseBody);
         assertFalse(responseBody.trim().isEmpty());
 
-        StoreReplyJson replyJson;
-        replyJson = TestUtils.gson().fromJson(responseBody, StoreReplyJson.class);
+        StoreResponseJson replyJson;
+        replyJson = TestUtils.gson().fromJson(responseBody, StoreResponseJson.class);
         return replyJson.getIdent();
     }
 

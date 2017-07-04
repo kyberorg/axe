@@ -1,16 +1,16 @@
 package ee.yals.result;
 
 /**
- * Class description
+ * Result of storing operation
  *
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 1.0
  */
-public interface AddResult {
-    class Success implements AddResult {
+public interface StoreResult {
+    class Success implements StoreResult {
     }
 
-    class Fail implements AddResult {
+    class Fail implements StoreResult {
         private String errorMessage;
 
         public Fail(String errorMessage) {

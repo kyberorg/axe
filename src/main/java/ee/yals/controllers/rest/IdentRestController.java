@@ -3,7 +3,7 @@ package ee.yals.controllers.rest;
 import ee.yals.Endpoint;
 import ee.yals.json.ErrorJson;
 import ee.yals.json.Json;
-import ee.yals.json.LinkReplyJson;
+import ee.yals.json.LinkResponseJson;
 import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.IdentGenerator;
@@ -52,7 +52,7 @@ public class IdentRestController {
         boolean isIdentValid = ident.matches(IdentGenerator.VALID_IDENT_PATTERN);
         if (!isIdentValid) {
             response.setStatus(400);
-            return ErrorJson.createWithMessage("Ident must be 2+ chars alphanumeric string");
+            return ErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string");
         }
 
         GetResult result = linkService.getLink(ident);
@@ -61,7 +61,7 @@ public class IdentRestController {
             return ErrorJson.createWithMessage(((GetResult.NotFound) result).getErrorMessage());
         } else if (result instanceof GetResult.Success) {
             response.setStatus(200);
-            return LinkReplyJson.create().withLink(((GetResult.Success) result).getLink());
+            return LinkResponseJson.create().withLink(((GetResult.Success) result).getLink());
         } else {
             response.setStatus(500);
             return ErrorJson.createWithMessage("Unexpected Server error");

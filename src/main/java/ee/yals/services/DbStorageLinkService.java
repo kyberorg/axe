@@ -2,7 +2,7 @@ package ee.yals.services;
 
 import ee.yals.models.Link;
 import ee.yals.models.dao.LinkRepo;
-import ee.yals.result.AddResult;
+import ee.yals.result.StoreResult;
 import ee.yals.result.GetResult;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +34,14 @@ public class DbStorageLinkService implements LinkService {
     }
 
     @Override
-    public AddResult addNew(String ident, String link) {
+    public StoreResult storeNew(String ident, String link) {
         Link linkObject = Link.create(ident, link);
         try {
             repo.save(linkObject);
-            return new AddResult.Success();
+            return new StoreResult.Success();
         } catch (Exception e) {
             LOGGER.error("Exception on storing new " + Link.class.getSimpleName(), e);
-            return new AddResult.Fail("Failed to add new record");
+            return new StoreResult.Fail("Failed to add new record");
         }
 
     }

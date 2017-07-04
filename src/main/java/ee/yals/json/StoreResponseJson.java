@@ -8,15 +8,15 @@ import com.google.gson.annotations.Since;
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
-public class StoreReplyJson extends Json {
+public class StoreResponseJson extends Json {
     @Since(1.0)
     private String ident;
 
-    public static StoreReplyJson create() {
-        return new StoreReplyJson();
+    public static StoreResponseJson create() {
+        return new StoreResponseJson();
     }
 
-    public StoreReplyJson withIdent(String ident) {
+    public StoreResponseJson withIdent(String ident) {
         this.ident = ident;
         return this;
     }

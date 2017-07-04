@@ -9,7 +9,7 @@ import com.google.gson.Gson;
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
-public class Json {
+public abstract class Json {
 
     @Override
     public String toString() {

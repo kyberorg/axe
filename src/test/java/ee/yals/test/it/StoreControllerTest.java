@@ -2,8 +2,8 @@ package ee.yals.test.it;
 
 import ee.yals.Endpoint;
 import ee.yals.json.EmptyJson;
-import ee.yals.json.StoreJson;
-import ee.yals.json.StoreReplyJson;
+import ee.yals.json.StoreRequestJson;
+import ee.yals.json.StoreResponseJson;
 import ee.yals.test.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,7 +87,7 @@ public class StoreControllerTest {
     @Test
     public void onRequestWithEmptyLinkStatusIs421() throws Exception {
         String longLink = "";
-        String correctJson = StoreJson.create().withLink(longLink).toString();
+        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
@@ -99,7 +99,7 @@ public class StoreControllerTest {
     @Test
     public void onRequestWithNotALinkStatusIs421() throws Exception {
         String longLink = "notALink";
-        String correctJson = StoreJson.create().withLink(longLink).toString();
+        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
@@ -110,7 +110,7 @@ public class StoreControllerTest {
     @Test
     public void onRequestWithCorrectLinkStatusIs201() throws Exception {
         String longLink = "http://virtadev.net"; //That very long, really
-        String correctJson = StoreJson.create().withLink(longLink).toString();
+        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
@@ -123,7 +123,7 @@ public class StoreControllerTest {
     @Test
     public void onRequestWithCorrectLinkReturnsJsonWithIdent() throws Exception {
         String longLink = "http://virtadev.net"; //That very long, really
-        String correctJson = StoreJson.create().withLink(longLink).toString();
+        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
@@ -134,9 +134,9 @@ public class StoreControllerTest {
         assertNotNull(responseBody);
         assertFalse(responseBody.trim().isEmpty());
 
-        StoreReplyJson replyJson;
+        StoreResponseJson replyJson;
         try {
-            replyJson = TestUtils.gson().fromJson(responseBody, StoreReplyJson.class);
+            replyJson = TestUtils.gson().fromJson(responseBody, StoreResponseJson.class);
         } catch (Exception e) {
             fail("Could not parse reply JSON");
             return;

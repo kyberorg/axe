@@ -3,9 +3,9 @@ package ee.yals.controllers.rest;
 import ee.yals.Endpoint;
 import ee.yals.json.ErrorJson;
 import ee.yals.json.Json;
-import ee.yals.json.StoreJson;
-import ee.yals.json.StoreReplyJson;
-import ee.yals.result.AddResult;
+import ee.yals.json.StoreRequestJson;
+import ee.yals.json.StoreResponseJson;
+import ee.yals.result.StoreResult;
 import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
@@ -40,16 +40,16 @@ public class StoreRestController {
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.STORE_API)
     public Json store(@RequestBody String body, HttpServletResponse response) {
-        StoreJson storeInput;
+        StoreRequestJson storeInput;
         try {
-            storeInput = AppUtils.GSON.fromJson(body, StoreJson.class);
+            storeInput = AppUtils.GSON.fromJson(body, StoreRequestJson.class);
         } catch (Exception e) {
             response.setStatus(421);
             return ErrorJson.createWithMessage("Unable to parse json");
         }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<StoreJson>> errors = validator.validate(storeInput);
+        Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
         Set<ConstraintViolation> errors1 = new HashSet<>();
         if (!errors.isEmpty()) {
             errors1.addAll(errors);
@@ -73,10 +73,10 @@ public class StoreRestController {
             } while (isIdentAlreadyExists(ident));
         }
 
-        AddResult result = linkService.addNew(ident, storeInput.getLink());
-        if (result instanceof AddResult.Success) {
+        StoreResult result = linkService.storeNew(ident, storeInput.getLink());
+        if (result instanceof StoreResult.Success) {
             response.setStatus(201);
-            return StoreReplyJson.create().withIdent(ident);
+            return StoreResponseJson.create().withIdent(ident);
         } else {
             response.setStatus(500);
             return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");

@@ -12,18 +12,18 @@ import javax.validation.constraints.Size;
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
-public class StoreJson extends Json {
+public class StoreRequestJson extends Json {
     @NotNull(message = "must be present")
     @Size(min = 5, max = 15613)
     @URL
     @Since(1.0)
     private String link;
 
-    public static StoreJson create() {
-        return new StoreJson();
+    public static StoreRequestJson create() {
+        return new StoreRequestJson();
     }
 
-    public StoreJson withLink(String link) {
+    public StoreRequestJson withLink(String link) {
         this.link = link;
         return this;
     }
