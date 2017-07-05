@@ -1,6 +1,6 @@
 package ee.yals.controllers.internal;
 
-import ee.yals.utils.AppUtils;
+import ee.yals.utils.constants.Header;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,11 +35,11 @@ public class YalsController {
 
     protected String redirect(String url) {
         response.setStatus(302);
-        response.setHeader(AppUtils.LOCATION_HEADER_NAME, url);
+        response.setHeader(Header.LOCATION, url);
         return "";
     }
 
     protected boolean hasTestHeader() {
-        return Objects.nonNull(request.getHeader(AppUtils.TEST_HEADER_NAME));
+        return Objects.nonNull(request.getHeader(Header.TEST));
     }
 }

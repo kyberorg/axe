@@ -10,12 +10,12 @@ import com.google.gson.GsonBuilder;
  * @since 1.0
  */
 public class AppUtils {
-    public static final String LOCATION_HEADER_NAME = "Location";
-    public static final String TEST_HEADER_NAME = "Tezt";
+
+    public static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
     private AppUtils() {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    public static final Gson GSON = new GsonBuilder().serializeNulls().create();
+
 }

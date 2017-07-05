@@ -4,14 +4,14 @@ import ee.yals.Endpoint;
 import ee.yals.controllers.SlashController;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
-import ee.yals.test.utils.TestUtils;
 import ee.yals.utils.AppUtils;
+import ee.yals.utils.constants.Header;
+import ee.yals.utils.constants.MimeType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -57,7 +57,7 @@ public class SlashControllerTest {
 
         MvcResult result = mockMvc.perform(
                 get(Endpoint.SLASH_BASE + ident)
-                        .header(AppUtils.TEST_HEADER_NAME, true))
+                        .header(Header.TEST, true))
                 .andExpect(status().is(302))
                 .andReturn();
 
@@ -73,7 +73,7 @@ public class SlashControllerTest {
 
         mockMvc.perform(
                 get(Endpoint.SLASH_BASE + ident)
-                        .header(AppUtils.TEST_HEADER_NAME, true))
+                        .header(Header.TEST, true))
                 .andExpect(status().is(404));
 
     }
@@ -81,7 +81,7 @@ public class SlashControllerTest {
     private String store(String urlToStore) throws Exception {
         String request = StoreRequestJson.create().withLink(urlToStore).toString();
         MvcResult storeResult = mockMvc.perform(post(Endpoint.STORE_API)
-                .contentType(MediaType.APPLICATION_JSON).content(request))
+                .contentType(MimeType.APPLICATION_JSON).content(request))
                 .andExpect(status().is(201))
                 .andReturn();
 
@@ -89,7 +89,7 @@ public class SlashControllerTest {
         assertNotNull(responseBody);
         assertFalse(responseBody.trim().isEmpty());
 
-        StoreResponseJson replyJson = TestUtils.gson().fromJson(responseBody, StoreResponseJson.class);
+        StoreResponseJson replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
         assertNotNull(replyJson);
         return replyJson.getIdent();
     }

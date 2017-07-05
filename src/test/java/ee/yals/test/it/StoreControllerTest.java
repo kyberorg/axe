@@ -4,7 +4,7 @@ import ee.yals.Endpoint;
 import ee.yals.json.EmptyJson;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
-import ee.yals.test.utils.TestUtils;
+import ee.yals.utils.AppUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Unit testing for store API
  *
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
@@ -51,19 +51,15 @@ public class StoreControllerTest {
     @Test
     public void onRequestWithoutBodyStatusIs400() throws Exception {
         assertNotNull(this.mockMvc);
-        MvcResult result = mockMvc.perform(post(Endpoint.STORE_API))
-                .andExpect(status().is(400))
-                .andReturn();
-        //assertResultIsJson(result);
+        mockMvc.perform(post(Endpoint.STORE_API))
+                .andExpect(status().is(400));
     }
 
     @Test
     public void onRequestWithEmptyBodyStatusIs400() throws Exception {
         assertNotNull(this.mockMvc);
-        MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(""))
-                .andExpect(status().is(400))
-                .andReturn();
-        //assertResultIsJson(result);
+        mockMvc.perform(post(Endpoint.STORE_API).content(""))
+                .andExpect(status().is(400));
     }
 
     @Test
@@ -102,9 +98,8 @@ public class StoreControllerTest {
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
-        MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
-                .andExpect(status().is(421))
-                .andReturn();
+        mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
+                .andExpect(status().is(421));
     }
 
     @Test
@@ -136,7 +131,7 @@ public class StoreControllerTest {
 
         StoreResponseJson replyJson;
         try {
-            replyJson = TestUtils.gson().fromJson(responseBody, StoreResponseJson.class);
+            replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
         } catch (Exception e) {
             fail("Could not parse reply JSON");
             return;

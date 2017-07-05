@@ -1,7 +1,7 @@
 package ee.yals;
 
-import ee.yals.utils.ApiMethod;
 import ee.yals.utils.HttpMethod;
+import ee.yals.utils.RequestMethod;
 
 /**
  * List of application endpoints
@@ -14,15 +14,23 @@ public class Endpoint {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    @ApiMethod(HttpMethod.POST)
+    @RequestMethod(value = HttpMethod.POST, api = true)
     public static final String STORE_API = "/api/store";
 
-    @ApiMethod(HttpMethod.GET)
+    @RequestMethod(value = HttpMethod.GET, api = true)
     public static final String LINK_API= "/api/link/";
     public static final String LINK_API_MAPPING= "/api/link/{ident}";
     public static final String LINK_API_BASE= "/api/link";
 
-    @ApiMethod(HttpMethod.GET)
+    @RequestMethod(HttpMethod.GET)
     public static final String SLASH_BASE = "/";
     public static final String SLASH= "/{ident}";
+
+    @RequestMethod(HttpMethod.GET)
+    public static final String ROBOTS_TXT = "/robots.txt";
+    public static final String HUMANS_TXT = "/humans.txt";
+    public static final String FAVICON_ICO = "/favicon.ico";
+
+    @RequestMethod(HttpMethod.GET)
+    public static final String TEST_CSS = "/s/a.css";
 }

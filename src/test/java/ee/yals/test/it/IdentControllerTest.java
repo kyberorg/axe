@@ -1,9 +1,10 @@
 package ee.yals.test.it;
 
 import ee.yals.Endpoint;
+import ee.yals.controllers.rest.IdentRestController;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
-import ee.yals.test.utils.TestUtils;
+import ee.yals.utils.AppUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,10 +27,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Class description
+ * Testing {@link IdentRestController}
  *
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
@@ -111,7 +112,7 @@ public class IdentControllerTest {
         assertFalse(responseBody.trim().isEmpty());
 
         StoreResponseJson replyJson;
-        replyJson = TestUtils.gson().fromJson(responseBody, StoreResponseJson.class);
+        replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
         return replyJson.getIdent();
     }
 
