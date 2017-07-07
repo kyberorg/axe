@@ -16,12 +16,12 @@ public class TechPartsController {
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.ROBOTS_TXT, produces = "text/plain")
     public String robots() {
-        return "/s/tech/robots.txt";
+        return "/s/robots.txt";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.HUMANS_TXT, produces = "text/plain")
     public String humans() {
-        return "/s/tech/humans.txt";
+        return "/s/humans.txt";
     }
 
 }

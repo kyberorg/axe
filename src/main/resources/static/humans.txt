@@ -15,6 +15,6 @@
     Last update: 2016/02/28
     Language: English
     Standards: HTML5, CSS3
-    Components: Spring Boot, jQuery, Twitter Bootstrap, Java, Selenide
+    Components: Play Framework, jQuery, Twitter Bootstrap, Java, Selenide
     Software: IDEA
     Hosted on: Hetzner

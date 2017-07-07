@@ -54,7 +54,7 @@ public class StaticControllerTest {
                 .andExpect(status().is(200))
                 .andReturn();
 
-        assertContentNotEmpty("a.css is empty", result);
+        assertContentNotEmpty(Endpoint.TEST_CSS + " is empty", result);
         assertContentType(MimeType.TEXT_CSS, result);
     }
 }

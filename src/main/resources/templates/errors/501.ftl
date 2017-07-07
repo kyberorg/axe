@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <@head.meta></@head.meta>
-    <title>Error 404</title>
+    <title>Error 501</title>
 <@head.css></@head.css>
 <@head.donkey></@head.donkey>
 </head>
@@ -14,10 +14,10 @@
         &nbsp;
     </div>
     <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-        <h1>404 - No Such Page Exception</h1>
-        <p class="lead">We don't have such page at you site. Really. <br>
-            Make sure you copypasted it fully and without extra characters</p>
-        <img src="/s/images/404.jpg" alt="No such page really...">
+        <h1>501 - No Implementation Found Exception</h1>
+        <p class="lead">Hups...We have no idea how to handle given URL <br>
+        </p>
+
     </div>
 </div>
 </body>

@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * Tests for {@link SlashController}
@@ -92,6 +93,12 @@ public class SlashControllerTest {
         StoreResponseJson replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
         assertNotNull(replyJson);
         return replyJson.getIdent();
+    }
+
+    public void homePageDisplaysCorrectly() throws Exception {
+        assertNotNull(this.mockMvc);
+        mockMvc.perform(get(Endpoint.SLASH_BASE))
+                .andExpect(view().name("index"));
     }
 
 }
