@@ -85,7 +85,6 @@ public class ErrorJson extends Json {
         }
 
         Error message(String errorText) {
-            this.field = "";
             this.errorMessage = errorText;
             return this;
         }

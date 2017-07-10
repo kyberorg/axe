@@ -14,6 +14,8 @@ import static com.codeborne.selenide.Selenide.open;
  * @since 1.0
  */
 public class IncorrectInput extends UITest {
+    private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
+    private static final String MALFORMED_URL_TEXT = "";
 
     @Before
     public void openUrl() {
@@ -26,7 +28,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("cannot be empty"));
+        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
     }
 
     @Test
@@ -35,7 +37,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("cannot be empty"));
+        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
 
     }
 
@@ -45,7 +47,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("cannot be empty"));
+        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
 
     }
 
@@ -55,7 +57,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(and("short and notURL text", text("URL is malformed")));
+        $("#errorText").shouldHave(and("short and notURL text", text(MALFORMED_URL_TEXT)));
     }
 
     @Test
@@ -64,7 +66,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("URL is malformed"));
+        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test
@@ -73,7 +75,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("URL is malformed"));
+        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test
@@ -82,7 +84,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("URL is malformed"));
+        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test
