@@ -1,9 +1,7 @@
 package ee.yals.test.selenide.front;
 
-import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.selenide.UITest;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
@@ -17,9 +15,6 @@ import static org.junit.Assert.assertEquals;
  * @since 1.0
  */
 public class CorrectInput extends UITest {
-
-    @Rule // automatically takes screenshot of every failed test
-    public ScreenShooter makeScreenShotsOnFail = ScreenShooter.failedTests();
 
     @Before
     public void openUrl() {

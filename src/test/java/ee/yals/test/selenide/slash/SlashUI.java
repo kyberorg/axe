@@ -1,12 +1,10 @@
 package ee.yals.test.selenide.slash;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
 import org.junit.Assume;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
@@ -19,8 +17,6 @@ import static com.codeborne.selenide.Selenide.open;
  * @since 1.0
  */
 public class SlashUI extends UITest {
-    @Rule // automatically takes screenshot of every failed test
-    public ScreenShooter makeScreenShotsOnFail = ScreenShooter.failedTests();
 
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
