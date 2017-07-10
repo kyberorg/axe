@@ -1,9 +1,7 @@
 package ee.yals.test.selenide.front;
 
-import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.selenide.UITest;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
@@ -16,8 +14,8 @@ import static com.codeborne.selenide.Selenide.open;
  * @since 1.0
  */
 public class IncorrectInput extends UITest {
-    @Rule // automatically takes screenshot of every failed test
-    public ScreenShooter makeScreenShotsOnFail = ScreenShooter.failedTests();
+    private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
+    private static final String MALFORMED_URL_TEXT = "";
 
     @Before
     public void openUrl() {
@@ -30,7 +28,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("cannot be empty"));
+        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
     }
 
     @Test
@@ -39,7 +37,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("cannot be empty"));
+        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
 
     }
 
@@ -49,7 +47,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("cannot be empty"));
+        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
 
     }
 
@@ -59,7 +57,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(and("short and notURL text", text("valid URL")));
+        $("#errorText").shouldHave(and("short and notURL text", text(MALFORMED_URL_TEXT)));
     }
 
     @Test
@@ -68,7 +66,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("valid URL"));
+        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test
@@ -77,7 +75,16 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("valid URL"));
+        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
+    }
+
+    @Test
+    public void urlWithSpecialCharsShallNotPass(){
+        pasteValueInFormAndSubmitIt("http://f%&k.com");
+
+        formIsClearedAndResultNotVisible();
+        errorBoxShouldAppear();
+        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test

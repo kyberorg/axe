@@ -48,6 +48,10 @@ public class TestUtils {
         assertEquals(mimeType, result.getResponse().getContentType());
     }
 
+    public static String whichBrowser() {
+        return System.getProperty(Selenide.Props.BROWSER, Selenide.Browser.HTMLUNIT);
+    }
+
     private static boolean isValidErrorJson(MvcResult mvcResult) throws Exception {
         String body = mvcResult.getResponse().getContentAsString();
         try {

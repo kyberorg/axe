@@ -32,5 +32,5 @@ public class Endpoint {
     public static final String FAVICON_ICO = "/favicon.ico";
 
     @RequestMethod(HttpMethod.GET)
-    public static final String TEST_CSS = "/s/test.css";
+    public static final String TEST_CSS = "/s/css/test.css";
 }
