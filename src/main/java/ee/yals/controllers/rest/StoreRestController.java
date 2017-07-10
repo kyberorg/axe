@@ -10,6 +10,7 @@ import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.IdentGenerator;
+import ee.yals.utils.UrlExtraValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +56,12 @@ public class StoreRestController {
             errors1.addAll(errors);
             response.setStatus(421);
             return ErrorJson.createFromSetOfErrors(errors1);
+        }
+
+        String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
+        if(! messageFromExtraValidator.equals(UrlExtraValidator.VALID)){
+            response.setStatus(421);
+            return ErrorJson.createWithMessage(messageFromExtraValidator);
         }
 
         String usersIdent = ""; //TODO replace by data from JSON

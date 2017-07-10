@@ -55,7 +55,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(and("short and notURL text", text("valid URL")));
+        $("#errorText").shouldHave(and("short and notURL text", text("URL is malformed")));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("valid URL"));
+        $("#errorText").shouldHave(text("URL is malformed"));
     }
 
     @Test
@@ -73,7 +73,16 @@ public class IncorrectInput extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("valid URL"));
+        $("#errorText").shouldHave(text("URL is malformed"));
+    }
+
+    @Test
+    public void urlWithSpecialCharsShallNotPass(){
+        pasteValueInFormAndSubmitIt("http://f%&k.com");
+
+        formIsClearedAndResultNotVisible();
+        errorBoxShouldAppear();
+        $("#errorText").shouldHave(text("URL is malformed"));
     }
 
     @Test
