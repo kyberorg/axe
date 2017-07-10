@@ -3,7 +3,9 @@ package ee.yals.test.selenide.slash;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.selenide.UITest;
-import org.junit.Ignore;
+import ee.yals.test.utils.Selenide;
+import ee.yals.test.utils.TestUtils;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -28,8 +30,15 @@ public class SlashUI extends UITest {
     }
 
     @Test
-    @Ignore //not working with HtmlUnit
     public void saveLinkAndClickOnResult() {
+        boolean browserIsHtmlUnit = TestUtils.whichBrowser().equals(Selenide.Browser.HTMLUNIT);
+
+        if (browserIsHtmlUnit) {
+            Assume.assumeTrue("External resources not working with " + Selenide.Browser.HTMLUNIT + ". Test ignored",
+                    true);
+            return;
+        }
+
         open("/");
         $("input#longUrl").setValue("https://vr.fi");
         $("button#shortenIt").click();
@@ -41,8 +50,14 @@ public class SlashUI extends UITest {
     }
 
     @Test
-    @Ignore //not working with HtmlUnit
     public void saveLinkAndCopyValueAndOpenIt() {
+        boolean browserIsHtmlUnit = TestUtils.whichBrowser().equals(Selenide.Browser.HTMLUNIT);
+        if (browserIsHtmlUnit) {
+            Assume.assumeTrue("External resources not working with " + Selenide.Browser.HTMLUNIT + ". Test ignored",
+                    true);
+            return;
+        }
+
         open("/");
         $("input#longUrl").setValue("https://vr.fi");
         $("button#shortenIt").click();

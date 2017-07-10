@@ -1,7 +1,7 @@
 package ee.yals.test.selenide;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
+import ee.yals.test.utils.Selenide;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -23,20 +23,20 @@ public abstract class UITest {
 
     @BeforeClass
     public static void setUp() {
-        Configuration.browser = System.getProperty("selenide.browser", "htmlunit");
-        Configuration.timeout = Long.parseLong(System.getProperty("selenide.timeout", "5000"));
-        Configuration.baseUrl = System.getProperty("selenide.baseUrl", BASE_URL);
+        Configuration.browser = System.getProperty(Selenide.Props.BROWSER, Selenide.Browser.HTMLUNIT);
+        Configuration.timeout = Long.parseLong(System.getProperty(Selenide.Props.TIMEOUT, "5000"));
+        Configuration.baseUrl = System.getProperty(Selenide.Props.BASE_URL, BASE_URL);
     }
 
     @After
     public void refresh() {
-        Selenide.refresh();
+        com.codeborne.selenide.Selenide.refresh();
     }
 
 
     @AfterClass
     public static void closeBrowser() {
-        Selenide.close();
+        com.codeborne.selenide.Selenide.close();
     }
 
 }
