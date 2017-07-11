@@ -9,8 +9,7 @@ import java.util.Optional;
 /**
  * Link DTO
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public interface LinkRepo extends Repository<Link, Long> {
     Optional<Link> findSingleByIdent(String linkIdent);

@@ -3,10 +3,11 @@ package ee.yals.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
- * App-wide constants
+ * App-wide tools
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 public class AppUtils {
@@ -17,5 +18,18 @@ public class AppUtils {
         throw new UnsupportedOperationException("Utility class");
     }
 
+    /**
+     * Calculates host:port server running at
+     *
+     * @since 2.0
+     */
+    public static class HostHelper {
+        private HostHelper() {
+            throw new UnsupportedOperationException("Utility class");
+        }
 
+        public static String getHostFromRequest(HttpServletRequest request) {
+            return request.getServerName() + ":" + request.getServerPort();
+        }
+    }
 }

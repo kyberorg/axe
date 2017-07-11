@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Unit testing for store API
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)

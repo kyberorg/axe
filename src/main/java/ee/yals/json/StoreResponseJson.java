@@ -1,11 +1,11 @@
 package ee.yals.json;
 
 import com.google.gson.annotations.Since;
+import ee.yals.json.internal.Json;
 
 /**
  * Store Endpoint outcoming JSON
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 public class StoreResponseJson extends Json {

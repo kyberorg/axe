@@ -5,8 +5,8 @@ import ee.yals.controllers.SlashController;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
 import ee.yals.utils.AppUtils;
-import ee.yals.utils.constants.Header;
-import ee.yals.utils.constants.MimeType;
+import ee.yals.constants.Header;
+import ee.yals.constants.MimeType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Tests for {@link SlashController}
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)

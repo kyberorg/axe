@@ -1,10 +1,10 @@
 package ee.yals.result;
 
 /**
- * Class description
+ * Result of get link operation. {@link Success} for positive result, {@link NotFound} for negative.
+ * {@link Success} contains {@link Success#link}
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 2.0
  */
 public interface GetResult {
     class Success implements GetResult {

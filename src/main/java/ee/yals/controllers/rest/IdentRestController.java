@@ -2,11 +2,11 @@ package ee.yals.controllers.rest;
 
 import ee.yals.Endpoint;
 import ee.yals.json.ErrorJson;
-import ee.yals.json.Json;
+import ee.yals.json.internal.Json;
 import ee.yals.json.LinkResponseJson;
 import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
-import ee.yals.utils.IdentGenerator;
+import ee.yals.core.IdentGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Request stored link by ident
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @RestController

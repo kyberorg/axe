@@ -2,6 +2,7 @@ package ee.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Since;
+import ee.yals.json.internal.Json;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.constraints.NotNull;

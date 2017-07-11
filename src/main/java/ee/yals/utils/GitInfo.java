@@ -1,4 +1,4 @@
-package ee.yals;
+package ee.yals.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -13,7 +13,6 @@ import java.util.Objects;
 /**
  * Provides correct application version
  *
- * @author Alexander Muravya {@literal <asm@virtalab.net>}
  * @since 1.0
  */
 @Component

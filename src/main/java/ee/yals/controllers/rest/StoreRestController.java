@@ -2,14 +2,14 @@ package ee.yals.controllers.rest;
 
 import ee.yals.Endpoint;
 import ee.yals.json.ErrorJson;
-import ee.yals.json.Json;
+import ee.yals.json.internal.Json;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
 import ee.yals.result.StoreResult;
 import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
-import ee.yals.utils.IdentGenerator;
+import ee.yals.core.IdentGenerator;
 import ee.yals.utils.UrlExtraValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +28,6 @@ import java.util.Set;
 /**
  * Stores long link to storage
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @RestController

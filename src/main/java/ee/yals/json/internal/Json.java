@@ -1,4 +1,4 @@
-package ee.yals.json;
+package ee.yals.json.internal;
 
 import com.google.gson.Gson;
 
@@ -6,8 +6,7 @@ import com.google.gson.Gson;
  *
  * Basic methods for application JSONs
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public abstract class Json {
 

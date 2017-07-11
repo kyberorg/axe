@@ -2,8 +2,8 @@ package ee.yals.test.utils;
 
 import ee.yals.json.ErrorJson;
 import ee.yals.utils.AppUtils;
-import ee.yals.utils.constants.Header;
-import ee.yals.utils.constants.MimeType;
+import ee.yals.constants.Header;
+import ee.yals.constants.MimeType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
@@ -13,8 +13,7 @@ import static org.junit.Assert.*;
 /**
  * Useful stuff for testing
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public class TestUtils {
 

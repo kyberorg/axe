@@ -8,8 +8,7 @@ import ee.yals.json.LinkResponseJson;
 import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
-import ee.yals.utils.HostHelper;
-import ee.yals.utils.IdentGenerator;
+import ee.yals.core.IdentGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import java.util.Objects;
 /**
  * Handles {@link ee.yals.Endpoint#SLASH_BASE}
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @Controller
@@ -63,7 +61,7 @@ public class SlashController extends YalsController {
         try {
             Log.info(String.format("Searching for ident. Ident %s", ident));
             String schema = request.getScheme() + "://";
-            String url = schema + HostHelper.getHostFromRequest(request) + Endpoint.LINK_API + ident;
+            String url = schema + AppUtils.HostHelper.getHostFromRequest(request) + Endpoint.LINK_API + ident;
             Log.info(String.format("Requesting API. URL: %s", url));
             apiResponse = Unirest.get(url).asString();
         } catch (Exception e) {

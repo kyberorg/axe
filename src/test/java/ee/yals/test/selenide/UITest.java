@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * Common stuff for all UI Test
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @RunWith(SpringRunner.class)

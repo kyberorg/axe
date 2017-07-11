@@ -1,12 +1,11 @@
-package ee.yals.utils;
+package ee.yals.core;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
- * Class description
+ * Generates unique combination for short URL aka ident
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 1.0
  */
 public class IdentGenerator {
     private static final int IDENT_DEFAULT_LENGTH = 6;

@@ -3,8 +3,7 @@ package ee.yals.test.utils;
 /**
  * Selenide properties values and browser constants collected together for better documentation
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public class Selenide {
 

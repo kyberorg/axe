@@ -1,6 +1,6 @@
 package ee.yals.controllers.internal;
 
-import ee.yals.utils.constants.Header;
+import ee.yals.constants.Header;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +10,7 @@ import java.util.Objects;
 /**
  * Common methods for all controller
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 @Component
 public class YalsController {

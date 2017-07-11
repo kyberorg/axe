@@ -1,10 +1,9 @@
-package ee.yals.utils.constants;
+package ee.yals.constants;
 
 /**
  * MIME-types
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public final class MimeType {
 

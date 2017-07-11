@@ -3,6 +3,9 @@ package ee.yals;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Main (Start point)
+ */
 @SpringBootApplication
 public class YalsApplication {
 

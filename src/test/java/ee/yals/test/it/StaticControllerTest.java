@@ -1,8 +1,8 @@
 package ee.yals.test.it;
 
 import ee.yals.Endpoint;
-import ee.yals.utils.constants.Header;
-import ee.yals.utils.constants.MimeType;
+import ee.yals.constants.Header;
+import ee.yals.constants.MimeType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Retrieving application static resources
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)

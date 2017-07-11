@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * Handles tech resources such as robots.txt, humans.txt and favicon.ico
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 @Controller
 public class TechPartsController {

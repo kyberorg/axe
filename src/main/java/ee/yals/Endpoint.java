@@ -1,13 +1,12 @@
 package ee.yals;
 
-import ee.yals.utils.HttpMethod;
-import ee.yals.utils.RequestMethod;
+import ee.yals.documentation.HttpMethod;
+import ee.yals.documentation.RequestMethod;
 
 /**
  * List of application endpoints
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 2.0
  */
 public class Endpoint {
     private Endpoint() {

@@ -54,13 +54,13 @@
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
 </div>
 
-<#if (varBox.displayCommitInfo)>
+<#if (params.displayCommitInfo)>
 <footer class="footer">
     <div class="container">
         <span id="version" class="text-muted">
-            Version ${varBox.commitTag} (code based on commit
-            <a href="${varBox.repository}/${varBox.commitHash}">
-            ${varBox.commit}</a>)
+            Version ${params.commitTag} (code based on commit
+            <a href="${params.repository}/${params.commitHash}">
+            ${params.commit}</a>)
         </span>
     </div>
 </footer>

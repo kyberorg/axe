@@ -1,10 +1,9 @@
-package ee.yals.utils;
+package ee.yals.documentation;
 
 /**
  * Just a list of HttpMethods
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public enum HttpMethod {
     GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE, ALL

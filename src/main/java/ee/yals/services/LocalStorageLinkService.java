@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * Class, which operates with local storage
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 @Qualifier("localStorage")
 @Component

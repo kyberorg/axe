@@ -1,14 +1,13 @@
 package ee.yals.result;
 
 /**
- * Result of storing operation
+ * Result of storing operation {@link Success} for positive result, {@link Fail} for negative.
+ * {@link Fail} contains {@link Fail#errorMessage}
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public interface StoreResult {
-    class Success implements StoreResult {
-    }
+    class Success implements StoreResult {}
 
     class Fail implements StoreResult {
         private String errorMessage;

@@ -14,8 +14,7 @@ import java.util.Optional;
 /**
  * Service, which interacts with database
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 @Qualifier("dbStorage")
 @Component

@@ -1,13 +1,13 @@
-package ee.yals.utils;
+package ee.yals.documentation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
 /**
- * Class description
+ * Provides string value of method, which should be used to request certain REST-endpoint.
+ * Used for documentation inside code.
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 @Target(ElementType.FIELD)
 public @interface RequestMethod {

@@ -1,6 +1,6 @@
 package ee.yals.controllers;
 
-import ee.yals.GitInfo;
+import ee.yals.utils.GitInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,6 @@ import java.util.Objects;
 /**
  * Serves requests to index (/) page
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 @Controller
@@ -24,10 +23,13 @@ public class Front {
 
     /**
      * Index (/) page
-     * @return The index (FTL)
+     *
+     * @param params {@link java.util.Map}, which passes params ot FTL templates.
+     *                                    In template they are reachable using 'params' name (set as annotation value)
+     * @return Template (FTL) name
      */
     @RequestMapping("/")
-    public String index(@ModelAttribute("varBox") ModelMap varBox) {
+    public String index(@ModelAttribute("params") ModelMap params) {
         if (Objects.isNull(gitInfo)) {
             return "index";
         }
@@ -37,11 +39,11 @@ public class Front {
 
         boolean displayCommitInfo = StringUtils.isNoneBlank(latestCommit, latestTag);
 
-        varBox.addAttribute("displayCommitInfo", displayCommitInfo);
-        varBox.addAttribute("commitHash", latestCommit);
-        varBox.addAttribute("commit", latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
-        varBox.addAttribute("commitTag", latestTag);
-        varBox.addAttribute("repository", GitInfo.REPOSITORY);
+        params.addAttribute("displayCommitInfo", displayCommitInfo);
+        params.addAttribute("commitHash", latestCommit);
+        params.addAttribute("commit", latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
+        params.addAttribute("commitTag", latestTag);
+        params.addAttribute("repository", GitInfo.REPOSITORY);
 
         return "index";
     }

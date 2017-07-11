@@ -1,6 +1,6 @@
 package ee.yals.test.selenide.front;
 
-import ee.yals.GitInfo;
+import ee.yals.utils.GitInfo;
 import ee.yals.test.selenide.UITest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -15,8 +15,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * Checking elements of footer with information about version
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public class VersionInfoFooter extends UITest {
 

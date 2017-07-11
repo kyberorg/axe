@@ -1,6 +1,7 @@
 package ee.yals.json;
 
 import com.google.gson.annotations.Since;
+import ee.yals.json.internal.Json;
 import ee.yals.utils.UrlExtraValidator;
 import org.hibernate.validator.constraints.URL;
 
@@ -10,7 +11,6 @@ import javax.validation.constraints.Size;
 /**
  * Store Endpoint incoming JSON
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
 public class StoreRequestJson extends Json {

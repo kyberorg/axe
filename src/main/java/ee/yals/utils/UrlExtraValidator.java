@@ -3,10 +3,9 @@ package ee.yals.utils;
 import org.apache.commons.validator.routines.UrlValidator;
 
 /**
- * Does extra validation of URL
+ * Does extra validation of URL to filter out not valid URLs passed thru {@link org.hibernate.validator.constraints.URL} validation
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 1.0
+ * @since 2.0
  */
 public class UrlExtraValidator {
     private UrlExtraValidator(){
@@ -20,5 +19,4 @@ public class UrlExtraValidator {
         UrlValidator validator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
         return validator.isValid(url) ? VALID : URL_NOT_VALID;
     }
-
 }

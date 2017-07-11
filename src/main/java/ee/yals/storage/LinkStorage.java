@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class description
+ * Local storage implementation, used as fallback, when DB is absent. Same as in-memory DB.
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
- * @since 0.0
+ * @since 2.0
  */
 @Component
 public class LinkStorage {
