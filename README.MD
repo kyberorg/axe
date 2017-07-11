@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/virtalab/yals.svg?branch=master)](https://travis-ci.org/virtalab/yals)
+
 # Yet another link shortener
 
 Just a simple link shortener like many others for friends.
@@ -12,6 +14,11 @@ Just a simple link shortener like many others for friends.
 * Select all autodetected Spring facets
 
 * Use ``` YalsApplication.main() ``` as start point
+
+### Trunk build status
+
+[![Build Status](https://travis-ci.org/virtalab/yals.svg?branch=trunk)](https://travis-ci.org/virtalab/yals)
+[![codecov](https://codecov.io/gh/virtalab/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/virtalab/yals)
 
 ## Release Notes
 ### Version 2.0 (11/07/17)

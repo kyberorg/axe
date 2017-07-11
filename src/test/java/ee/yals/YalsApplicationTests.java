@@ -3,6 +3,8 @@ package ee.yals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -11,6 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @since 2.0
  */
 @RunWith(SpringRunner.class)
+@ContextConfiguration({"classpath*:test-app.xml"})
+@TestPropertySource(locations = "classpath:test-app.properties")
 @SpringBootTest
 public class YalsApplicationTests {
 
