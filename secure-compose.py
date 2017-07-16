@@ -104,6 +104,7 @@ replacements = {'__YALS_VERSION__': app_version,
                 '__YALS_DB_TYPE__': db_type,
                 '__YALS_DB_DRIVER__': db_driver,
                 '__YALS_DB_URL__': db_url,
+                '__YALS_DB_NAME__': db_name,
                 '__YALS_DB_USER__': db_user,
                 '__YALS_DB_PASS__': db_pass,
                 '__YALS_DB_ROOT_PASS__': db_root_pass

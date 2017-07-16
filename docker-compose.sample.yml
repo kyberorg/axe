@@ -4,6 +4,9 @@ services:
         image: mariadb:5.5.56
         environment:
             - MYSQL_ROOT_PASSWORD=__YALS_DB_ROOT_PASS__
+            - MYSQL_DATABASE=__YALS_DB_NAME__
+            - MYSQL_USER=__YALS_DB_USER__
+            - MYSQL_PASSWORD=__YALS_DB_PASS__
         restart: always
 
     yals:
