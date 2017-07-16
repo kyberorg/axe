@@ -14,7 +14,7 @@ def mysql_jdbc_url_builder(db__host, db__port, db__name):
     # Gives: jdbc:mysql://127.0.0.1:3306/dbNameHere?useUnicode=true&characterEncoding=UTF-8
     b_jdbc_mysql_prefix = 'jdbc:mysql://'
     b_utf_part = 'useUnicode=true&characterEncoding=UTF-8'
-    b_url = b_jdbc_mysql_prefix + db__host + ":" + db__port + "/" + db__name + "?" + b_utf_part
+    b_url = b_jdbc_mysql_prefix + db__host + ":" + str(db__port) + "/" + db__name + "?" + b_utf_part
     return b_url
 
 
