@@ -1,8 +1,26 @@
+sudo: required
+
+services:
+    - docker
+
 language: java
 jdk: oraclejdk8
 
+env:
+   global:
+       - PROJECT=yals
+       - G_COMMIT=${TRAVIS_COMMIT::7}
+       - G_TAG=${TRAVIS_TAG}
+       - G_BRANCH=${TRAVIS_BRANCH}
+
 after_success:
     - bash <(curl -s https://codecov.io/bash)
+    - export D_REPO=${D_USER}/${PROJECT}
+    - export D_TAG=`if [ "x$G_TAG" == "x" ]; then echo $G_TAG; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo $G_COMMIT; fi`
+    - docker login -u $D_USER -p $D_PASS
+    - docker build -t $D_REPO:$G_COMMIT .
+    - docker tag $D_REPO:$G_COMMIT $D_REPO:$D_TAG
+    - docker push $D_REPO
 
 notifications:
     email:

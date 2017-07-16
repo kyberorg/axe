@@ -1,0 +1,21 @@
+version: '2'
+services:
+    yals_db:
+        image: mariadb:5.5.56
+        environment:
+            - MYSQL_ROOT_PASSWORD=__YALS_DB_ROOT_PASS__
+        restart: always
+
+    yals:
+        image: kyberorg/yals:__YALS_VERSION__
+        restart: always
+        links:
+           - yals_db
+        ports:
+           - "__YALS_PORT__"
+        environment:
+           - DB_TYPE=__YALS_DB_TYPE__
+           - DB_DRIVER=__YALS_DB_DRIVER__
+           - DB_URL=__YALS_DB_URL__
+           - DB_USER=__YALS_DB_USER__
+           - DB_PASS=__YALS_DB_PASS__
