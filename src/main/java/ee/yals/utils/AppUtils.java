@@ -2,6 +2,7 @@ package ee.yals.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,7 +30,12 @@ public class AppUtils {
         }
 
         public static String getHostFromRequest(HttpServletRequest request) {
-            return request.getServerName() + ":" + request.getServerPort();
+            boolean isAppRunningInDocker = StringUtils.isNoneBlank((System.getProperty("docker.internal.port", "")));
+            if (isAppRunningInDocker) {
+                return "localhost" + ":" + System.getProperty("docker.internal.port");
+            } else {
+                return request.getServerName() + ":" + request.getServerPort();
+            }
         }
     }
 }
