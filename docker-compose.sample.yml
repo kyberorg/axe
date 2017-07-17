@@ -17,6 +17,7 @@ services:
         ports:
            - "__YALS_PORT__"
         environment:
+           - DOCKER_INTERNAL_PORT=8080
            - DB_TYPE=__YALS_DB_TYPE__
            - DB_DRIVER=__YALS_DB_DRIVER__
            - DB_URL=__YALS_DB_URL__
