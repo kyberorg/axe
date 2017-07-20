@@ -18,6 +18,11 @@ def mysql_jdbc_url_builder(db__host, db__port, db__name):
     return b_url
 
 
+def create_java_debug_str(debug_port):
+    debug_str = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address="
+    return debug_str + str(debug_port)
+
+
 sample = 'docker-compose.sample.yml'
 config = 'docker-compose.yml'
 tmp_config = 'docker-compose.yml.tmp'
@@ -49,6 +54,11 @@ db_pass_user_input = raw_input()
 # db root pass
 print('And main question: Database root password')
 db_root_pass_user_input = raw_input()
+
+# java debugging
+print('Should I enable Java Remote Debugging (y/n) ?')
+# TODO read and ask about port
+java_debug = ""
 
 print('Okay, got it. Checking answers and replacing default value')
 
@@ -107,7 +117,8 @@ replacements = {'__YALS_VERSION__': app_version,
                 '__YALS_DB_NAME__': db_name,
                 '__YALS_DB_USER__': db_user,
                 '__YALS_DB_PASS__': db_pass,
-                '__YALS_DB_ROOT_PASS__': db_root_pass
+                '__YALS_DB_ROOT_PASS__': db_root_pass,
+                '__YALS_JAVA_DEBUG__' : java_debug
                 }
 
 # Action!
