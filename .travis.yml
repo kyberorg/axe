@@ -9,17 +9,20 @@ jdk: oraclejdk8
 env:
    global:
        - PROJECT=yals
-       - G_COMMIT=${TRAVIS_COMMIT::7}
        - G_TAG=${TRAVIS_TAG}
        - G_BRANCH=${TRAVIS_BRANCH}
+       - T_BUILD=${TRAVIS_JOB_NUMBER}
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
     - export D_REPO=${D_USER}/${PROJECT}
-    - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo $G_COMMIT; fi`
+    - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; else echo "latest-$G_BRANCH"; fi`
+    - echo "Building docker $D_REPO:travis-$T_BUILD"
+    - docker build -t $D_REPO:travis-$T_BUILD .
+    - echo "Adding additional tag $D_REPO:$D_TAG to travis-$T_BUILD"
+    - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG
+    - echo "Logging in to Docker hub as $D_USER"
     - docker login -u $D_USER -p $D_PASS
-    - echo "Building docker $D_REPO:$D_TAG"
-    - docker build -t $D_REPO:$D_TAG .
     - echo "Pushing image to $D_REPO"
     - docker push $D_REPO
 
