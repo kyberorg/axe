@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
     yals_db:
         image: mariadb:__YALS_DB_VERSION__

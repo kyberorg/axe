@@ -157,7 +157,7 @@ if sample_type == 'db':
 
     with open(config) as infile, open(tmp_config, 'w') as outfile:
         for line in infile:
-            for src, target in replacements.iteritems():
+            for src, target in db_replacements.iteritems():
                 if src != target:
                     line = line.replace(src, target)
             outfile.write(line)
