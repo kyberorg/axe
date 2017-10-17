@@ -19,11 +19,11 @@ def sample_type(user_selection):
     return prefix
 
 
-def mysql_jdbc_url_builder(db__host, db__port, db__name):
+def mysql_jdbc_url_builder(db__name, db__host='yals_db'):
     # Gives: jdbc:mysql://127.0.0.1:3306/dbNameHere?useUnicode=true&characterEncoding=UTF-8
     b_jdbc_mysql_prefix = 'jdbc:mysql://'
     b_utf_part = 'useUnicode=true&characterEncoding=UTF-8'
-    b_url = b_jdbc_mysql_prefix + db__host + ":" + str(db__port) + "/" + db__name + "?" + b_utf_part
+    b_url = b_jdbc_mysql_prefix + db__host + "/" + db__name + "?" + b_utf_part
     return b_url
 
 
@@ -65,6 +65,13 @@ print ('Select port on which server will be accessible (Default: 9090)')
 port_user_input = raw_input()
 
 print('Good. Tell me about database')
+# db host (if not in docker)
+if sample_type == "nodb":
+    print('Database host (with port, if port is custom)')
+    db_host_user_input = raw_input()
+else:
+    db_host_user_input = 'yals_db' # should be same as service name in compose
+
 # db name
 print('Database name')
 db_name_user_input = raw_input()
@@ -120,13 +127,13 @@ db_type = "MYSQL"
 db_driver = "com.mysql.jdbc.Driver"
 
 # DB host
-db_host = 'yals_db'  # should be same as service name in compose
+db_host = test_value(db_host_user_input, 'localhost', 'Database host cannot be empty. Using default: localhost')
 
 # DB port
 db_port = 3306  # we using standard
 
 # DB URL
-db_url = mysql_jdbc_url_builder(db_host, db_port, db_name)
+db_url = mysql_jdbc_url_builder(db_name, db_host)
 
 replacements = {'__YALS_VERSION__': app_version,
                 '__YALS_PORT__': str(server_port) + ':8080',
