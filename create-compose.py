@@ -32,6 +32,15 @@ def create_java_debug_str(debug_port):
     return debug_str + str(debug_port)
 
 
+def action(replacement):
+    with open(config) as infile, open(tmp_config, 'w') as outfile:
+        for line in infile:
+            for src, target in replacement.iteritems():
+                if src != target:
+                    line = line.replace(src, target)
+            outfile.write(line)
+
+
 config = 'docker-compose.yml'
 tmp_config = 'docker-compose.yml.tmp'
 
@@ -68,8 +77,11 @@ db_pass_user_input = raw_input()
 
 # java debugging
 print('Should I enable Java Remote Debugging (y/n) ?')
-# TODO read and ask about port
-java_debug = ""
+debug_user_input = raw_input()
+if (debug_user_input == 'y') or (debug_user_input == 'yes'):
+    debug = True
+else:
+    debug = False
 
 print('Okay, got it. Checking answers and replacing default value')
 
@@ -124,17 +136,10 @@ replacements = {'__YALS_VERSION__': app_version,
                 '__YALS_DB_NAME__': db_name,
                 '__YALS_DB_USER__': db_user,
                 '__YALS_DB_PASS__': db_pass,
-                '__YALS_JAVA_DEBUG__': java_debug
                 }
 
 # Action!
-with open(config) as infile, open(tmp_config, 'w') as outfile:
-    for line in infile:
-        for src, target in replacements.iteritems():
-            if src != target:
-                line = line.replace(src, target)
-        outfile.write(line)
-
+action(replacements)
 move(tmp_config, config)
 
 if sample_type == 'db':
@@ -156,14 +161,15 @@ if sample_type == 'db':
         '__YALS_DB_ROOT_PASS__': db_root_pass
     }
 
-    with open(config) as infile, open(tmp_config, 'w') as outfile:
-        for line in infile:
-            for src, target in db_replacements.iteritems():
-                if src != target:
-                    line = line.replace(src, target)
-            outfile.write(line)
+    action(db_replacements)
+    move(tmp_config, config)
 
-
-move(tmp_config, config)
+if debug:
+    java_debug = create_java_debug_str(5050)
+    debug_replacements = {
+        '__YALS_JAVA_DEBUG__': java_debug
+    }
+    action(debug_replacements)
+    move(tmp_config, config)
 
 print("Done! Now it's time to run: 'docker-compose up -d'")
