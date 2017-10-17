@@ -23,4 +23,4 @@ services:
            - DB_URL=__YALS_DB_URL__
            - DB_USER=__YALS_DB_USER__
            - DB_PASS=__YALS_DB_PASS__
-           - JAVA_OPTS="$JAVA_OPTS __YALS_JAVA_DEBUG__"
+           - JAVA_OPTS="__YALS_JAVA_DEBUG__"
