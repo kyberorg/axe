@@ -135,6 +135,7 @@ with open(config) as infile, open(tmp_config, 'w') as outfile:
                 line = line.replace(src, target)
         outfile.write(line)
 
+move(tmp_config, config)
 
 if sample_type == 'db':
     print ('As you want to have DB as docker container I have additional questions')
