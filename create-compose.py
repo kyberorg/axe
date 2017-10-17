@@ -11,7 +11,7 @@ def test_value(value_to_test, default_value, message):
 
 
 def sample_type(user_selection):
-    if user_selection == 'y' | user_selection == 'yes':
+    if (user_selection == 'y') or (user_selection == 'yes'):
         prefix = 'db'
     else:
         prefix = 'nodb'
@@ -19,17 +19,26 @@ def sample_type(user_selection):
     return prefix
 
 
-def mysql_jdbc_url_builder(db__host, db__port, db__name):
+def mysql_jdbc_url_builder(db__name, db__host='yals_db'):
     # Gives: jdbc:mysql://127.0.0.1:3306/dbNameHere?useUnicode=true&characterEncoding=UTF-8
     b_jdbc_mysql_prefix = 'jdbc:mysql://'
     b_utf_part = 'useUnicode=true&characterEncoding=UTF-8'
-    b_url = b_jdbc_mysql_prefix + db__host + ":" + str(db__port) + "/" + db__name + "?" + b_utf_part
+    b_url = b_jdbc_mysql_prefix + db__host + "/" + db__name + "?" + b_utf_part
     return b_url
 
 
 def create_java_debug_str(debug_port):
     debug_str = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address="
     return debug_str + str(debug_port)
+
+
+def action(replacement):
+    with open(config) as infile, open(tmp_config, 'w') as outfile:
+        for line in infile:
+            for src, target in replacement.iteritems():
+                if src != target:
+                    line = line.replace(src, target)
+            outfile.write(line)
 
 
 config = 'docker-compose.yml'
@@ -56,6 +65,13 @@ print ('Select port on which server will be accessible (Default: 9090)')
 port_user_input = raw_input()
 
 print('Good. Tell me about database')
+# db host (if not in docker)
+if sample_type == "nodb":
+    print('Database host (with port, if port is custom)')
+    db_host_user_input = raw_input()
+else:
+    db_host_user_input = 'yals_db' # should be same as service name in compose
+
 # db name
 print('Database name')
 db_name_user_input = raw_input()
@@ -65,11 +81,6 @@ db_user_user_input = raw_input()
 # db pass
 print('Password of ' + db_user_user_input + ' we connect to ' + db_name_user_input)
 db_pass_user_input = raw_input()
-
-# java debugging
-print('Should I enable Java Remote Debugging (y/n) ?')
-# TODO read and ask about port
-java_debug = ""
 
 print('Okay, got it. Checking answers and replacing default value')
 
@@ -108,13 +119,13 @@ db_type = "MYSQL"
 db_driver = "com.mysql.jdbc.Driver"
 
 # DB host
-db_host = 'yals_db'  # should be same as service name in compose
+db_host = test_value(db_host_user_input, 'localhost', 'Database host cannot be empty. Using default: localhost')
 
 # DB port
 db_port = 3306  # we using standard
 
 # DB URL
-db_url = mysql_jdbc_url_builder(db_host, db_port, db_name)
+db_url = mysql_jdbc_url_builder(db_name, db_host)
 
 replacements = {'__YALS_VERSION__': app_version,
                 '__YALS_PORT__': str(server_port) + ':8080',
@@ -124,17 +135,11 @@ replacements = {'__YALS_VERSION__': app_version,
                 '__YALS_DB_NAME__': db_name,
                 '__YALS_DB_USER__': db_user,
                 '__YALS_DB_PASS__': db_pass,
-                '__YALS_JAVA_DEBUG__': java_debug
                 }
 
 # Action!
-with open(config) as infile, open(tmp_config, 'w') as outfile:
-    for line in infile:
-        for src, target in replacements.iteritems():
-            if src != target:
-                line = line.replace(src, target)
-        outfile.write(line)
-
+action(replacements)
+move(tmp_config, config)
 
 if sample_type == 'db':
     print ('As you want to have DB as docker container I have additional questions')
@@ -155,14 +160,7 @@ if sample_type == 'db':
         '__YALS_DB_ROOT_PASS__': db_root_pass
     }
 
-    with open(config) as infile, open(tmp_config, 'w') as outfile:
-        for line in infile:
-            for src, target in replacements.iteritems():
-                if src != target:
-                    line = line.replace(src, target)
-            outfile.write(line)
-
-
-move(tmp_config, config)
+    action(db_replacements)
+    move(tmp_config, config)
 
 print("Done! Now it's time to run: 'docker-compose up -d'")
