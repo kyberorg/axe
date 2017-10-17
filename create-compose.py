@@ -11,7 +11,7 @@ def test_value(value_to_test, default_value, message):
 
 
 def sample_type(user_selection):
-    if user_selection == 'y' | user_selection == 'yes':
+    if (user_selection == 'y') or (user_selection == 'yes'):
         prefix = 'db'
     else:
         prefix = 'nodb'
