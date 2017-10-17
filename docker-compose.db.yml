@@ -1,7 +1,7 @@
-version: '2'
+version: '3'
 services:
     yals_db:
-        image: mariadb:5.5.56
+        image: mariadb:__YALS_DB_VERSION__
         environment:
             - MYSQL_ROOT_PASSWORD=__YALS_DB_ROOT_PASS__
             - MYSQL_DATABASE=__YALS_DB_NAME__
