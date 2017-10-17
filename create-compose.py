@@ -10,6 +10,15 @@ def test_value(value_to_test, default_value, message):
         return value_to_test
 
 
+def sample_type(user_selection):
+    if user_selection == 'y' | user_selection == 'yes':
+        prefix = 'db'
+    else:
+        prefix = 'nodb'
+
+    return prefix
+
+
 def mysql_jdbc_url_builder(db__host, db__port, db__name):
     # Gives: jdbc:mysql://127.0.0.1:3306/dbNameHere?useUnicode=true&characterEncoding=UTF-8
     b_jdbc_mysql_prefix = 'jdbc:mysql://'
@@ -23,13 +32,19 @@ def create_java_debug_str(debug_port):
     return debug_str + str(debug_port)
 
 
-sample = 'docker-compose.sample.yml'
 config = 'docker-compose.yml'
 tmp_config = 'docker-compose.yml.tmp'
 
-copyfile(sample, config)
 print ('Welcome to local ' + config + ' creator')
 print('Let me create config for you. I have a few questions for you')
+
+print ('Are we including DB container in compose (y/n) ?')
+sample_type_user_input = raw_input()
+
+sample_type = sample_type(sample_type_user_input)
+sample = 'docker-compose.' + sample_type + '.yml'
+
+copyfile(sample, config)
 
 # app version
 print('Tell me what Yals version should I build. Default: latest')
@@ -50,10 +65,6 @@ db_user_user_input = raw_input()
 # db pass
 print('Password of ' + db_user_user_input + ' we connect to ' + db_name_user_input)
 db_pass_user_input = raw_input()
-
-# db root pass
-print('And main question: Database root password')
-db_root_pass_user_input = raw_input()
 
 # java debugging
 print('Should I enable Java Remote Debugging (y/n) ?')
@@ -90,10 +101,6 @@ db_user = test_value(db_user_user_input, 'yals', 'Database user cannot be empty.
 # DB password
 db_pass = test_value(db_pass_user_input, 'yals', 'Database pass cannot be empty. Using default: yals')
 
-# DB Root Password
-db_root_pass = test_value(db_root_pass_user_input,
-                          'yals', 'Database root password cannot be empty. Using default: yals')
-
 # DB Type
 db_type = "MYSQL"
 
@@ -117,8 +124,7 @@ replacements = {'__YALS_VERSION__': app_version,
                 '__YALS_DB_NAME__': db_name,
                 '__YALS_DB_USER__': db_user,
                 '__YALS_DB_PASS__': db_pass,
-                '__YALS_DB_ROOT_PASS__': db_root_pass,
-                '__YALS_JAVA_DEBUG__' : java_debug
+                '__YALS_JAVA_DEBUG__': java_debug
                 }
 
 # Action!
@@ -128,6 +134,35 @@ with open(config) as infile, open(tmp_config, 'w') as outfile:
             if src != target:
                 line = line.replace(src, target)
         outfile.write(line)
+
+
+if sample_type == 'db':
+    print ('As you want to have DB as docker container I have additional questions')
+    print ('Which MariaDB version to use ? Available versions here: https://hub.docker.com/r/library/mariadb/tags/')
+    db_version_user_input = raw_input()
+
+    print('What about Database root password ?')
+    db_root_pass_user_input = raw_input()
+
+    # DB Version
+    db_version = test_value(db_version_user_input, 'yals', 'Database version cannot be empty. Using default: 10.3')
+    # DB Root Password
+    db_root_pass = test_value(db_root_pass_user_input, 'yals',
+                              'Database root password cannot be empty. Using default: yals')
+
+    db_replacements = {
+        '__YALS_DB_VERSION__': db_version,
+        '__YALS_DB_ROOT_PASS__': db_root_pass
+    }
+
+    with open(config) as infile, open(tmp_config, 'w') as outfile:
+        for line in infile:
+            for src, target in replacements.iteritems():
+                if src != target:
+                    line = line.replace(src, target)
+            outfile.write(line)
+
+
 move(tmp_config, config)
 
 print("Done! Now it's time to run: 'docker-compose up -d'")
