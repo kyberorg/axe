@@ -6,7 +6,7 @@ jdk: oraclejdk8
 
 before_deploy:
     - "mvn -DskipTests package"
-    - export PACK=$(ls target/yals-*.jar)
+    - export PACK=$(ls target/yals.jar)
 
 deploy:
    provider: releases
