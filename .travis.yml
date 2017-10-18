@@ -1,5 +1,13 @@
 language: java
+
+sudo: required
+
 jdk: oraclejdk8
+
+branches:
+  only:
+    - master
+    - /v\d+\.\d+[a-z]/
 
 before_deploy:
     - "mvn -DskipTests package"
@@ -9,7 +17,9 @@ deploy:
    provider: releases
    api_key:
       secure: 58906b95dec31950612b35d012aa02ba99b6c63f
+   file_glob: true
    file: "${PACK}"
+   skip_cleanup: true
    on:
      repo: yadevee/yals
      all_branches: true
