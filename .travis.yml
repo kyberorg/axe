@@ -4,11 +4,6 @@ sudo: required
 
 jdk: oraclejdk8
 
-branches:
-  only:
-    - master
-    - /v\d+\.\d+[a-z]/
-
 before_deploy:
     - "mvn -DskipTests package"
     - export PACK=$(ls target/yals.jar)
