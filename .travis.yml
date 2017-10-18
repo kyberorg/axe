@@ -1,10 +1,23 @@
 language: java
 jdk: oraclejdk8
 
+before_deploy:
+    - "mvn -DskipTests package"
+    - export PACK=$(ls target/yals.jar)
+
+deploy:
+   provider: releases
+   api_key:
+      secure: 58906b95dec31950612b35d012aa02ba99b6c63f
+   file: "${PACK}"
+   on:
+     repo: yadevee/yals
+     all_branches: true
+     tags: true
+
 after_success:
     - bash <(curl -s https://codecov.io/bash)
 
 notifications:
     email:
        - asm@virtalab.net
-
