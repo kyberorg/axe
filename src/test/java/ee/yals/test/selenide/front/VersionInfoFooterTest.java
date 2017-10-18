@@ -17,7 +17,7 @@ import static junit.framework.Assert.assertNotNull;
  *
  * @since 2.0
  */
-public class VersionInfoFooter extends UITest {
+public class VersionInfoFooterTest extends UITest {
 
     @Autowired
     private GitInfo gitInfoBean;

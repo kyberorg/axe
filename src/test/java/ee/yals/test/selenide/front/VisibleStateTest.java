@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.*;
  *
  * @since 1.0
  */
-public class VisibleState extends UITest {
+public class VisibleStateTest extends UITest {
 
     @Before
     public void openUrl() {

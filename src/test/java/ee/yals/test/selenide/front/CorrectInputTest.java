@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @since 1.0
  */
-public class CorrectInput extends UITest {
+public class CorrectInputTest extends UITest {
 
     @Before
     public void openUrl() {

@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.open;
  *
  * @since 1.0
  */
-public class SlashUI extends UITest {
+public class SlashUITest extends UITest {
 
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
