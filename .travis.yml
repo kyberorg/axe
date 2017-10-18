@@ -11,7 +11,7 @@ before_deploy:
 deploy:
    provider: releases
    api_key:
-      secure: aad9c2b4c932a1205a4b71382d944c30b225e3ee
+      secure: 227b381ea05746751dad9d60d42157ecda6b6749
    file_glob: true
    file: "${PACK}"
    skip_cleanup: true
