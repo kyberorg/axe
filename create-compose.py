@@ -82,14 +82,6 @@ db_user_user_input = raw_input()
 print('Password of ' + db_user_user_input + ' we connect to ' + db_name_user_input)
 db_pass_user_input = raw_input()
 
-# java debugging
-print('Should I enable Java Remote Debugging (y/n) ?')
-debug_user_input = raw_input()
-if (debug_user_input == 'y') or (debug_user_input == 'yes'):
-    debug = True
-else:
-    debug = False
-
 print('Okay, got it. Checking answers and replacing default value')
 
 # App Version check
@@ -169,14 +161,6 @@ if sample_type == 'db':
     }
 
     action(db_replacements)
-    move(tmp_config, config)
-
-if debug:
-    java_debug = create_java_debug_str(5050)
-    debug_replacements = {
-        '__YALS_JAVA_DEBUG__': java_debug
-    }
-    action(debug_replacements)
     move(tmp_config, config)
 
 print("Done! Now it's time to run: 'docker-compose up -d'")
