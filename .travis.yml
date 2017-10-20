@@ -11,7 +11,7 @@ before_deploy:
 deploy:
    provider: releases
    api_key:
-      secure: 227b381ea05746751dad9d60d42157ecda6b6749
+      secure: $GH_TOKEN
    file_glob: true
    file: "${PACK}"
    skip_cleanup: true
