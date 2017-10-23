@@ -1,5 +1,24 @@
 language: java
+
+sudo: required
+
 jdk: oraclejdk8
+
+before_deploy:
+    - "mvn -DskipTests package"
+    - export PACK=$(ls target/yals.jar)
+
+deploy:
+   provider: releases
+   api_key:
+      secure: $GH_TOKEN
+   file_glob: true
+   file: "${PACK}"
+   skip_cleanup: true
+   on:
+     repo: yadevee/yals
+     all_branches: true
+     tags: true
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
@@ -7,4 +26,3 @@ after_success:
 notifications:
     email:
        - asm@virtalab.net
-
