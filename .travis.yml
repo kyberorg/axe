@@ -15,7 +15,7 @@ env:
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
-    - echo "Verbose info. Build #$T_BUILD, Git branch: $G_BRANCH, Git Tag: G_TAG"
+    - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
     - export D_REPO=${D_USER}/${PROJECT}
     - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
     - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; else echo "x"; fi`
@@ -23,7 +23,7 @@ after_success:
     - docker build -t $D_REPO:travis-$T_BUILD .
     - echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"
     - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG
-    - if ["x$D_TAG" != "xx" ];  then echo "Adding additional tag $D_TAG to tagged release to travis-$T_BUILD" && docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG; fi
+    - if [ "x$D_TAG" != "xx" ];  then echo "Adding additional tag $D_TAG to tagged release to travis-$T_BUILD" && docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG; fi
     - echo "Logging in to Docker hub as $D_USER"
     - docker login -u $D_USER -p $D_PASS
     - echo "Pushing image to $D_REPO"
