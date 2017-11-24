@@ -1,9 +1,6 @@
 #Maven generated build
 target/
 
-### Docker ###
-docker-compose.yml
-
 
 ### STS ###
 .apt_generated
