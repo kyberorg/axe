@@ -16,7 +16,7 @@ env:
 after_success:
     - bash <(curl -s https://codecov.io/bash)
     - export D_REPO=${D_USER}/${PROJECT}
-    - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; else if [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
+    - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
     - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; else echo "x"; fi`
     - echo "Building docker $D_REPO:travis-$T_BUILD"
     - docker build -t $D_REPO:travis-$T_BUILD .
