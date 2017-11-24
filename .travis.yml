@@ -16,11 +16,13 @@ env:
 after_success:
     - bash <(curl -s https://codecov.io/bash)
     - export D_REPO=${D_USER}/${PROJECT}
-    - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; else echo "latest-$G_BRANCH"; fi`
+    - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; else if [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
+    - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; else echo "x"; fi`
     - echo "Building docker $D_REPO:travis-$T_BUILD"
     - docker build -t $D_REPO:travis-$T_BUILD .
-    - echo "Adding additional tag $D_REPO:$D_TAG to travis-$T_BUILD"
-    - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG
+    - echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"
+    - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG
+    - if ["x$D_TAG" != "xx" ];  then echo "Adding additional tag $D_TAG to tagged release to travis-$T_BUILD" && docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG
     - echo "Logging in to Docker hub as $D_USER"
     - docker login -u $D_USER -p $D_PASS
     - echo "Pushing image to $D_REPO"
