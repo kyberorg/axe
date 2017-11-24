@@ -9,18 +9,25 @@ jdk: oraclejdk8
 env:
    global:
        - PROJECT=yals
-       - G_TAG=${TRAVIS_TAG}
        - G_BRANCH=${TRAVIS_BRANCH}
        - T_BUILD=${TRAVIS_JOB_NUMBER}
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
     - export D_REPO=${D_USER}/${PROJECT}
-    - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; else echo "latest-$G_BRANCH"; fi`
+    - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; else echo $TRAVIS_TAG; fi`
+    - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
+    - export IS_TAG_BUILD=`if [ "$G_TAG" != "-" ]; then echo "yes"; else echo "no"; fi`
+
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Building tagged build for tag $G_TAG" &&  docker build -t $D_REPO:$G_TAG .; fi
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Logging in to Docker hub as $D_USER" && docker login -u $D_USER -p $D_PASS; fi
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Pushing image to $D_REPO" && docker push $D_REPO && exit 0; fi
+
+    - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
     - echo "Building docker $D_REPO:travis-$T_BUILD"
     - docker build -t $D_REPO:travis-$T_BUILD .
-    - echo "Adding additional tag $D_REPO:$D_TAG to travis-$T_BUILD"
-    - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG
+    - echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"
+    - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG
+
     - echo "Logging in to Docker hub as $D_USER"
     - docker login -u $D_USER -p $D_PASS
     - echo "Pushing image to $D_REPO"
