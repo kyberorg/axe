@@ -22,7 +22,7 @@ after_success:
     - docker build -t $D_REPO:travis-$T_BUILD .
     - echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"
     - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG
-    - if ["x$D_TAG" != "xx" ];  then echo "Adding additional tag $D_TAG to tagged release to travis-$T_BUILD" && docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG
+    - if ["x$D_TAG" != "xx" ];  then echo "Adding additional tag $D_TAG to tagged release to travis-$T_BUILD" && docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_TAG; fi
     - echo "Logging in to Docker hub as $D_USER"
     - docker login -u $D_USER -p $D_PASS
     - echo "Pushing image to $D_REPO"
