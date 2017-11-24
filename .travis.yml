@@ -15,6 +15,7 @@ env:
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
+    - echo "Verbose info. Build #$T_BUILD, Git branch: $G_BRANCH, Git Tag: G_TAG"
     - export D_REPO=${D_USER}/${PROJECT}
     - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
     - export D_TAG=`if [ "x$G_TAG" != "x" ]; then echo $G_TAG; else echo "x"; fi`
