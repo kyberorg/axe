@@ -20,12 +20,14 @@ after_success:
     - export IS_TAG_BUILD=`if [ "$G_TAG" != "-" ]; then echo "yes"; else echo "no"; fi`
 
     - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Building tagged build for tag $G_TAG" &&  docker build -t $D_REPO:$G_TAG .; fi
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Logging in to Docker hub as $D_USER" && docker login -u $D_USER -p $D_PASS; fi
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Pushing image to $D_REPO" && docker push $D_REPO && exit 0; fi
 
-    - if [ "$IS_TAG_BUILD" != "yes" ]; export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`; fi
-    - if [ "$IS_TAG_BUILD" != "yes" ]; echo "Building docker $D_REPO:travis-$T_BUILD"; fi
-    - if [ "$IS_TAG_BUILD" != "yes" ]; docker build -t $D_REPO:travis-$T_BUILD .; fi
-    - if [ "$IS_TAG_BUILD" != "yes" ]; echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"; fi
-    - if [ "$IS_TAG_BUILD" == "yes" ]; docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG; fi
+    - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
+    - echo "Building docker $D_REPO:travis-$T_BUILD"
+    - docker build -t $D_REPO:travis-$T_BUILD .
+    - echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"
+    - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG
 
     - echo "Logging in to Docker hub as $D_USER"
     - docker login -u $D_USER -p $D_PASS
