@@ -20,6 +20,17 @@ Just a simple link shortener like many others for friends.
 [![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=trunk)](https://travis-ci.org/virtalab/yals)
 [![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/virtalab/yals)
 
+### How run application ?
+An MYSQL example: 
+
+``` java 
+   -Ddb.type=MYSQL 
+   -Ddb.driver=com.mysql.jdbc.Driver
+   -Ddb.url=jdbc:mysql://127.0.0.1:3306/dbNameHere?useUnicode=true&characterEncoding=UTF-8
+   -Ddb.user=yals_user
+   -Ddb.pass=yals_pass
+```
+
 ## Release Notes
 ### Version 2.0 (11/07/17)
 Second stable version

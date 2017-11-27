@@ -1,6 +1,6 @@
 #Maven generated build
 target/
-!.mvn/wrapper/maven-wrapper.jar
+
 
 ### STS ###
 .apt_generated
@@ -41,7 +41,6 @@ bin/
 /documentation/
 tmp/
 test-result
-build
 server.pid
 *.eml
 /dist/

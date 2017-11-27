@@ -1,0 +1,31 @@
+version: '3'
+services:
+  yals_db:
+     image: mariadb:10.3
+     restart: always
+     container_name: yals_db
+     env_file:
+         - ./.env
+     volumes:
+         - ./yals_db:/var/lib/mysql
+     networks:
+         - app
+         - db
+     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+
+  yals_app:
+     image: kyberorg/yals:$TAG
+     restart: always
+     container_name: yals
+     ports:
+         - "8001:8080"
+     env_file:
+          - ./.env
+     networks:
+          - app
+
+networks:
+     app:
+      driver: bridge
+     db:
+      driver: bridge

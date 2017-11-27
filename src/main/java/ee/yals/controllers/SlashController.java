@@ -61,7 +61,7 @@ public class SlashController extends YalsController {
         try {
             Log.info(String.format("Searching for ident. Ident %s", ident));
             String schema = request.getScheme() + "://";
-            String url = schema + AppUtils.HostHelper.getHostFromRequest(request) + Endpoint.LINK_API + ident;
+            String url = schema + AppUtils.HostHelper.getAPIHostPort() + Endpoint.LINK_API + ident;
             Log.info(String.format("Requesting API. URL: %s", url));
             apiResponse = Unirest.get(url).asString();
         } catch (Exception e) {
