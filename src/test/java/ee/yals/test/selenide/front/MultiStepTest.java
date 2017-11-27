@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.open;
  *
  * @since 1.0
  */
-public class MultiStepTests extends UITest {
+public class MultiStepTest extends UITest {
 
     @Before
     public void openUrl() {

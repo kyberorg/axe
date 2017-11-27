@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/virtalab/yals.svg?branch=master)](https://travis-ci.org/virtalab/yals)
+[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=master)](https://travis-ci.org/virtalab/yals)
 
 # Yet another link shortener
 
@@ -17,8 +17,8 @@ Just a simple link shortener like many others for friends.
 
 ### Trunk build status
 
-[![Build Status](https://travis-ci.org/virtalab/yals.svg?branch=trunk)](https://travis-ci.org/virtalab/yals)
-[![codecov](https://codecov.io/gh/virtalab/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/virtalab/yals)
+[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=trunk)](https://travis-ci.org/virtalab/yals)
+[![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/virtalab/yals)
 
 ### How run application ?
 An MYSQL example: 
@@ -41,4 +41,4 @@ Second stable version
 
 ## Version 1.0 and less (01/04/16)
 
-Can be found from [here](https://github.com/virtalab/yals-play/blob/trunk/README.md#yet-another-link-shortener)
+Can be found from [here](https://github.com/yadevee/yals-play/blob/trunk/README.md#yet-another-link-shortener)

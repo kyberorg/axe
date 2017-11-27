@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.open;
  *
  * @since 1.0
  */
-public class IncorrectInput extends UITest {
+public class IncorrectInputTest extends UITest {
     private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
     private static final String MALFORMED_URL_TEXT = "";
 
