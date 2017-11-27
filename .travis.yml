@@ -9,14 +9,13 @@ jdk: oraclejdk8
 env:
    global:
        - PROJECT=yals
-       - G_TAG=${TRAVIS_TAG}
        - G_BRANCH=${TRAVIS_BRANCH}
        - T_BUILD=${TRAVIS_JOB_NUMBER}
 
 after_success:
     - export D_REPO=${D_USER}/${PROJECT}
-    - export G_TAG=`if [ "x$G_TAG" == "x" ]; then echo "-"; fi`
-    - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $TRAVIS_TAG"
+    - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; then echo $TRAVIS_TAG fi`
+    - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
     - export IS_TAG_BUILD=`if [ "$G_TAG" != "-" ]; then echo "yes"; else echo "no"; fi`
 
     - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Building tagged build for tag $G_TAG" &&  docker build -t $D_REPO:$G_TAG .; fi
