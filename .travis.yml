@@ -14,7 +14,7 @@ env:
 
 after_success:
     - export D_REPO=${D_USER}/${PROJECT}
-    - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; then echo $TRAVIS_TAG fi`
+    - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; else echo $TRAVIS_TAG; fi`
     - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
     - export IS_TAG_BUILD=`if [ "$G_TAG" != "-" ]; then echo "yes"; else echo "no"; fi`
 
