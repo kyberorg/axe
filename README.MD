@@ -32,6 +32,11 @@ An MYSQL example:
 ```
 
 ## Release Notes
+### Version 2.0.1 (27/11/17)
+Small fix
+
+* Removed vertical scroll bar below (#14)
+
 ### Version 2.0 (11/07/17)
 Second stable version
 
