@@ -12,6 +12,10 @@ env:
        - G_BRANCH=${TRAVIS_BRANCH}
        - T_BUILD=${TRAVIS_JOB_NUMBER}
 
+install:
+     - echo $TRAVIS_COMMIT > COMMIT
+     - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
 after_success:
     - export D_REPO=${D_USER}/${PROJECT}
     - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; else echo $TRAVIS_TAG; fi`
