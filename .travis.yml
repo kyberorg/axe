@@ -14,6 +14,7 @@ env:
 
 install:
      - echo $TRAVIS_COMMIT > COMMIT
+     - git describe --tags $(git rev-list --tags --max-count=1) > TAG
      - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 after_success:
