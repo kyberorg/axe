@@ -12,12 +12,15 @@ env:
        - G_BRANCH=${TRAVIS_BRANCH}
        - T_BUILD=${TRAVIS_JOB_NUMBER}
 
-install:
-     - echo $TRAVIS_COMMIT > COMMIT
-     - git describe --tags $(git rev-list --tags --max-count=1) > TAG
-     - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
 after_success:
+    - echo $TRAVIS_COMMIT > COMMIT
+
+    - export VERY_LATEST_COMMIT=`git describe --tags $(git rev-list --tags --max-count=1)`
+    - export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
+    - echo "Verbose info. Commit $TRAVIS_COMMIT, "
+    - export TAG=`if [ "$G_BRANCH" == "master" ]; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
+    - echo $TAG > TAG
+
     - export D_REPO=${D_USER}/${PROJECT}
     - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; else echo $TRAVIS_TAG; fi`
     - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
