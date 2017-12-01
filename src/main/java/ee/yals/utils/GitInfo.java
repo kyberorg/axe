@@ -34,6 +34,7 @@ public class GitInfo {
     }
 
     private String findLatestCommitHash() {
+        debug();
         try {
             String lastCommit = FileUtils.readFileToString(new File("./COMMIT"), Charset.defaultCharset()).trim();
             return !lastCommit.isEmpty() ? lastCommit : "";
@@ -51,5 +52,10 @@ public class GitInfo {
             Log.warn("Exception while getting latest tag", e);
             return "";
         }
+    }
+
+    private void debug(){
+        String pwd = new File(".").getAbsolutePath();
+        Log.warn("PWD: " + pwd);
     }
 }
