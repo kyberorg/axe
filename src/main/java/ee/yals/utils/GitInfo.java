@@ -16,6 +16,8 @@ import java.nio.charset.Charset;
 public class GitInfo {
     private static final Logger Log = Logger.getLogger(GitInfo.class);
     public static final String REPOSITORY = "https://github.com/yadevee/yals/commit/";
+    private static final String COMMIT_FILE = "/app/COMMIT";
+    private static final String TAG_FILE = "/app/TAG/";
 
     private String latestCommit;
     private String latestTag;
@@ -34,9 +36,8 @@ public class GitInfo {
     }
 
     private String findLatestCommitHash() {
-        debug();
         try {
-            String lastCommit = FileUtils.readFileToString(new File("./COMMIT"), Charset.defaultCharset()).trim();
+            String lastCommit = FileUtils.readFileToString(new File(COMMIT_FILE), Charset.defaultCharset()).trim();
             return !lastCommit.isEmpty() ? lastCommit : "";
         } catch (Exception e) {
             Log.warn("Exception while getting latest commit hash", e);
@@ -46,16 +47,11 @@ public class GitInfo {
 
     private String findLatestTag() {
         try {
-            String lastTag = FileUtils.readFileToString(new File("./TAG"), Charset.defaultCharset()).trim();
+            String lastTag = FileUtils.readFileToString(new File(TAG_FILE), Charset.defaultCharset()).trim();
             return !lastTag.isEmpty() ? lastTag : "";
         } catch (Exception e) {
             Log.warn("Exception while getting latest tag", e);
             return "";
         }
-    }
-
-    private void debug(){
-        String pwd = new File(".").getAbsolutePath();
-        Log.warn("PWD: " + pwd);
     }
 }
