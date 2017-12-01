@@ -18,7 +18,7 @@ import java.util.Objects;
 @Component
 public class GitInfo {
     private static final Logger Log = Logger.getLogger(GitInfo.class);
-    public static final String REPOSITORY = "https://bitbucket.org/virtalab/yals-spring/commits/";
+    public static final String REPOSITORY = "https://github.com/yadevee/yals/commit/";
 
     private String latestCommit;
     private String latestTag;
