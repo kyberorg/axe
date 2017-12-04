@@ -2,7 +2,6 @@ package ee.yals.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -13,7 +12,7 @@ import java.nio.charset.Charset;
  * @since 1.0
  * @deprecated use {@link ee.yals.utils.git.GitInfo}
  */
-@Component
+
 @Deprecated()
 public class OldGitInfo {
     private static final Logger Log = Logger.getLogger(OldGitInfo.class);
