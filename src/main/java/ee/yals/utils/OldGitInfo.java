@@ -11,10 +11,12 @@ import java.nio.charset.Charset;
  * Provides correct application version
  *
  * @since 1.0
+ * @deprecated use {@link ee.yals.utils.git.GitInfo}
  */
 @Component
-public class GitInfo {
-    private static final Logger Log = Logger.getLogger(GitInfo.class);
+@Deprecated()
+public class OldGitInfo {
+    private static final Logger Log = Logger.getLogger(OldGitInfo.class);
     public static final String REPOSITORY = "https://github.com/yadevee/yals/commit/";
     private static final String COMMIT_FILE = "/app/COMMIT";
     private static final String TAG_FILE = "/app/TAG/";
@@ -22,7 +24,7 @@ public class GitInfo {
     private String latestCommit;
     private String latestTag;
 
-    public GitInfo() {
+    public OldGitInfo() {
         latestCommit = findLatestCommitHash();
         latestTag = findLatestTag();
     }
