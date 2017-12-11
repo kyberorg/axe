@@ -1,5 +1,8 @@
 package ee.yals.utils.git;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,18 +21,29 @@ public class MavenGitInfo extends GitInfo {
     @Override
     boolean isApplicable() {
         //TODO implement
-        return false;
+        return true;
     }
 
     @Override
     public String getLatestCommitHash() {
         //TODO implement
-        return GitInfo.NOTHING_FOUND_MARKER;
+        PropertySourcesPlaceholderConfigurer props = placeholderConfigurer();
+        return props.toString();
     }
 
     @Override
     public String getLatestTag() {
         //TODO implement
         return GitInfo.NOTHING_FOUND_MARKER;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        PropertySourcesPlaceholderConfigurer propsConfig
+                = new PropertySourcesPlaceholderConfigurer();
+        propsConfig.setLocation(new ClassPathResource("git.properties"));
+        propsConfig.setIgnoreResourceNotFound(true);
+        propsConfig.setIgnoreUnresolvablePlaceholders(true);
+        return propsConfig;
     }
 }
