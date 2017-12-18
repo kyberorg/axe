@@ -138,7 +138,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Im-memory database for testing purposes -->
+        <!-- In-memory database for testing purposes -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -247,12 +247,13 @@
 			</build>
 		</profile>
 		<profile>
+            <!-- Profile adds h2 database in runtime (for development) -->
 			<id>h2</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<dependencies>
-				<!-- Im-memory database for testing purposes -->
+                <!-- In-memory database for testing purposes -->
 				<dependency>
 					<groupId>com.h2database</groupId>
 					<artifactId>h2</artifactId>

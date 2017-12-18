@@ -41,7 +41,8 @@ function onSuccessStoreLink(data, textStatus, jqXHR) {
             showError("Internal error. Got malformed reply from server");
             return;
         }
-        $("#resultLink").html(window.location.href + ident).attr("href", ident);
+
+        $("#resultLink").html(window.location.origin + "/" + ident).attr("href", ident);
         $("#result").removeClass('invisible');
     }
 }
