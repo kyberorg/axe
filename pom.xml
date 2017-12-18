@@ -233,6 +233,7 @@
 			</build>
 		</profile>
 		<profile>
+            <!-- Profile adds h2 database in runtime (for development) -->
 			<id>h2</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
