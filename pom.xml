@@ -144,7 +144,12 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.13-atlassian-1</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<finalName>yals</finalName>
@@ -168,7 +173,8 @@
 				<version>2.2.1</version>
 				<configuration>
 					<failOnNoGitDirectory>false</failOnNoGitDirectory>
-
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
 				</configuration>
 			</plugin>
 		</plugins>
