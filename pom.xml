@@ -144,11 +144,6 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13-atlassian-1</version>
-        </dependency>
     </dependencies>
 
 	<build>
