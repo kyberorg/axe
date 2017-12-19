@@ -1,11 +1,9 @@
 package ee.yals.test.selenide.front;
 
-import ee.yals.utils.GitInfo;
 import ee.yals.test.selenide.UITest;
-import org.apache.commons.lang3.StringUtils;
+import ee.yals.utils.git.GitInfo;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -19,8 +17,7 @@ import static junit.framework.Assert.assertNotNull;
  */
 public class VersionInfoFooterTest extends UITest {
 
-    @Autowired
-    private GitInfo gitInfoBean;
+    private GitInfo gitInfo = GitInfo.getInstance();
 
     @Before
     public void openUrl() {
@@ -50,11 +47,14 @@ public class VersionInfoFooterTest extends UITest {
     }
 
     private boolean shouldCommitInfoBeDisplayed() {
-        assertNotNull(this.gitInfoBean);
+        assertNotNull(this.gitInfo);
 
-        String latestCommit = gitInfoBean.getLatestCommitHash();
-        String latestTag = gitInfoBean.getLatestTag();
+        String latestCommit = gitInfo.getLatestCommitHash().trim();
+        String latestTag = gitInfo.getLatestTag().trim();
 
-        return StringUtils.isNoneBlank(latestCommit, latestTag);
+        boolean commitPresent = (!latestCommit.equals(GitInfo.NOTHING_FOUND_MARKER));
+        boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER));
+
+        return commitPresent && tagPresent;
     }
 }
