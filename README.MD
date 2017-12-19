@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=master)](https://travis-ci.org/virtalab/yals)
+[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=master)](https://travis-ci.org/yadevee/yals)
 
 # Yet another link shortener
 
@@ -17,21 +17,32 @@ Just a simple link shortener like many others for friends.
 
 ### Trunk build status
 
-[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=trunk)](https://travis-ci.org/virtalab/yals)
-[![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/virtalab/yals)
+[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=trunk)](https://travis-ci.org/yadevee/yals)
+[![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)
 
 ### How run application ?
-An MYSQL example: 
+* Build with Maven with H2 profile enabled
+
+``` mvn -P h2 -Dskip.tests clean package```
+
+* Run JAR with following options:
 
 ``` java 
-   -Ddb.type=MYSQL 
-   -Ddb.driver=com.mysql.jdbc.Driver
-   -Ddb.url=jdbc:mysql://127.0.0.1:3306/dbNameHere?useUnicode=true&characterEncoding=UTF-8
-   -Ddb.user=yals_user
-   -Ddb.pass=yals_pass
+   -Ddb.type=H2 
+   -Ddb.driver=org.h2.Driver
+   -Ddb.url=jdbc:h2:mem:test
 ```
 
 ## Release Notes
+### Version 2.0.2 (19/12/17)
+Fix pack
+
+* Docker ready Git-feature implementation (#1)
+
+* Review technologies at humans.txt (#9)
+
+* URL Args must be cleaned (#18)
+
 ### Version 2.0.1 (27/11/17)
 Small fix
 

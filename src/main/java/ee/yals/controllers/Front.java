@@ -1,8 +1,6 @@
 package ee.yals.controllers;
 
-import ee.yals.utils.GitInfo;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import ee.yals.utils.git.GitInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,8 +16,7 @@ import java.util.Objects;
 @Controller
 public class Front {
 
-    @Autowired
-    private GitInfo gitInfo;
+    private GitInfo gitInfo = GitInfo.getInstance();
 
     /**
      * Index (/) page
@@ -34,10 +31,13 @@ public class Front {
             return "index";
         }
 
-        String latestCommit = gitInfo.getLatestCommitHash();
-        String latestTag = gitInfo.getLatestTag();
+        String latestCommit = gitInfo.getLatestCommitHash().trim();
+        String latestTag = gitInfo.getLatestTag().trim();
 
-        boolean displayCommitInfo = StringUtils.isNoneBlank(latestCommit, latestTag);
+        boolean commitPresent = (!latestCommit.equals(GitInfo.NOTHING_FOUND_MARKER));
+        boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER));
+
+        boolean displayCommitInfo = commitPresent && tagPresent;
 
         params.addAttribute("displayCommitInfo", displayCommitInfo);
         params.addAttribute("commitHash", latestCommit);
