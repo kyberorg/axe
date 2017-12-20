@@ -36,6 +36,10 @@
                 <label for="longUrl">Your very long URL here: </label>
                 <input type="text" class="form-control" name="longUrl" id="longUrl"
                        placeholder="http://mysuperlongurlhere.tld">
+                <p id="publicAccessBanner" class="help-block">
+                    Note: all links considered as public and can be used by
+                    anyone
+                </p>
             </div>
             <button id="shortenIt" type="submit" class="btn btn-primary">Shorten it!</button>
         </form>

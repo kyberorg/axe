@@ -88,4 +88,13 @@ public class VisibleStateTest extends UITest {
         $("form").find("button").has(cssClass("btn-primary")); //This class make button blue
         $("form").find("button").shouldHave(text("Shorten it!"));
     }
+
+    @Test
+    public void publicAccessBannerIsPresentAndHasNeededText() {
+        $("#publicAccessBanner").shouldBe(visible);
+        $("#publicAccessBanner").shouldHave(text("public"));
+
+        SelenideElement form = $("#publicAccessBanner").closest("form");
+        form.should(exist);
+    }
 }
