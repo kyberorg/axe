@@ -80,6 +80,19 @@ function onFailStoreLink(jqXHR, textStatus, errorThrown) {
     }
 }
 
+function copyLinkToClipboard() {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($("#resultLink").text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+
+    $("#linkCopiedModal").modal('show');
+    setTimeout(function () {
+        $("#linkCopiedModal").modal('hide');
+    }, 1000);
+}
+
 function handleForm(e) {
     e.preventDefault();
     cleanErrors();
@@ -102,5 +115,7 @@ function handleForm(e) {
 
 $(document).ready(function () {
     $("#shortenIt").on('click', handleForm);
-    $("#errorClose").on('click', onAlertClose)
+    $("#errorClose").on('click', onAlertClose);
+    $('[data-toggle="tooltip"]').tooltip();
+    $("#copyLink").on('click', copyLinkToClipboard);
 });
