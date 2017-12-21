@@ -79,7 +79,7 @@
             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
             <p class="in-same-line">Short link copied</p>
         </div><!-- /.modal-body -->
-    </div>
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 </body>
