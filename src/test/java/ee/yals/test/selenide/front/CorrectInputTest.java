@@ -58,6 +58,7 @@ public class CorrectInputTest extends UITest {
         $("#result").shouldBe(visible);
         $("#resultLink").shouldBe(visible);
         $("#resultLink").shouldHave(text(BASE_URL));
+        $("#copyLink").shouldBe(visible);
         String actualText = $("#resultLink").getText();
         String hrefValue = $("#resultLink").getAttribute("href");
         assertEquals("link in 'href' value is not same as link shown text", actualText, hrefValue);

@@ -54,6 +54,8 @@
             <span class="strong-link">
                 <a id="resultLink" href=""></a>
             </span>
+        <span id="copyLink" class="glyphicon glyphicon-duplicate" aria-hidden="true"
+              data-toggle="tooltip" data-placement="right" title="Copy link"></span>
     </div>
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
 </div>
@@ -69,5 +71,16 @@
     </div>
 </footer>
 </#if >
+
+<!-- Link copied modal -->
+<div class="modal fade bs-example-modal-sm" id="linkCopiedModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-body modal-content alert alert-success">
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+            <p class="in-same-line">Short link copied</p>
+        </div><!-- /.modal-body -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 </body>
 </html>
