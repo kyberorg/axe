@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static org.junit.Assert.fail;
 
 /**
  * Checks state of front page (elements and so on...)
@@ -96,5 +97,25 @@ public class VisibleStateTest extends UITest {
 
         SelenideElement form = $("#publicAccessBanner").closest("form");
         form.should(exist);
+    }
+
+    @Test
+    public void overallLinksTextExists() {
+        $("#overallLinksText").shouldBe(exist);
+        $("#overallLinksText").shouldBe(visible);
+        $("#overallLinksText").shouldHave(text("Yals already saved"));
+    }
+
+    @Test
+    public void overallLinksNumberExistsAndNumber() {
+        $("#overallLinksNum").shouldBe(exist);
+        $("#overallLinksNum").shouldBe(visible);
+        String numberText = $("#overallLinksNum").text();
+        try {
+            int numberOfSavedLinks = Integer.parseInt(numberText);
+            Assert.assertTrue(numberOfSavedLinks == 0);
+        } catch (NumberFormatException e) {
+            fail("Number of saved links is not a valid number");
+        }
     }
 }

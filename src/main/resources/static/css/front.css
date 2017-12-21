@@ -52,3 +52,7 @@ body {
 .in-same-line {
     display: inline;
 }
+
+.overall-number-line {
+    align-content: right;
+}

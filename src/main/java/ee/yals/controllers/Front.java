@@ -45,7 +45,8 @@ public class Front {
         params.addAttribute("commitTag", latestTag);
         params.addAttribute("repository", GitInfo.REPOSITORY);
 
+        params.addAttribute("overallLinks", 0);
+
         return "index";
     }
-
 }
