@@ -47,8 +47,7 @@ public class SlashUITest extends UITest {
 
     @Test
     public void saveLinkAndCopyValueAndOpenIt() {
-        boolean browserIsHtmlUnit = TestUtils.whichBrowser().equals(Selenide.Browser.HTMLUNIT);
-        if (browserIsHtmlUnit) {
+        if (isBrowserHtmlUnit()) {
             Assume.assumeTrue("External resources not working with " + Selenide.Browser.HTMLUNIT + ". Test ignored",
                     true);
             return;
