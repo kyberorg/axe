@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 /**
- * ervice which queries from DB about totals
+ * Service which queries from DB about totals
  *
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 2.1

@@ -42,9 +42,6 @@
                 </p>
             </div>
             <button id="shortenIt" type="submit" class="btn btn-primary">Shorten it!</button>
-        <#--<div class="form-group">
-            <span id="overallNumber" class="overall-number-line">N links were saved</span>
-        </div>-->
         </form>
 
         <span id="emptyLine">&nbsp;</span>
