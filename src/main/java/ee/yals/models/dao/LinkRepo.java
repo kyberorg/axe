@@ -15,4 +15,5 @@ public interface LinkRepo extends Repository<Link, Long> {
     Optional<Link> findSingleByIdent(String linkIdent);
     Link save(Link linkToSave);
     List<Link> findAll();
+    long count();
 }

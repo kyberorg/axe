@@ -43,7 +43,17 @@
             </div>
             <button id="shortenIt" type="submit" class="btn btn-primary">Shorten it!</button>
         </form>
+
         <span id="emptyLine">&nbsp;</span>
+    </div>
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
+</div>
+<div id="overallLinksDiv" class="row">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
+    <div id="overallLinks" class="main col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <span id="overallLinksText">
+            Yals already saved <span id="overallLinksNum">${params.overallLinks}</span> links
+        </span>
     </div>
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
 </div>

@@ -77,6 +77,16 @@ public class MultiStepTest extends UITest {
         Assert.assertEquals(shortLink, pastedLink);
     }
 
+    @Test
+    public void linksCounterIncreasedValueAfterSave() {
+        long initialNumber = Long.parseLong($("#overallLinksNum").text());
+
+        pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
+
+        long numberAfterLinkSaved = Long.parseLong($("#overallLinksNum").text());
+        Assert.assertEquals(initialNumber + 1, numberAfterLinkSaved);
+    }
+
     private void pasteValueInFormAndSubmitIt(String link) {
         $("#longUrl").setValue(link);
         $("form").find("button").click();
