@@ -80,7 +80,6 @@ public class MultiStepTest extends UITest {
     @Test
     public void linksCounterIncreasedValueAfterSave() {
         long initialNumber = Long.parseLong($("#overallLinksNum").text());
-        Assert.assertEquals(0, initialNumber);
 
         pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
 

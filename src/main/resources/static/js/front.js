@@ -44,11 +44,12 @@ function onSuccessStoreLink(data, textStatus, jqXHR) {
 
         $("#resultLink").html(window.location.origin + "/" + ident).attr("href", ident);
         $("#result").removeClass('invisible');
+        updateCounter();
     }
 }
 
 function onFailStoreLink(jqXHR, textStatus, errorThrown) {
-    if (jqXHR !== null || jqXHR != undefined) {
+    if (jqXHR !== null || jqXHR !== undefined) {
 
         var replyRaw = jqXHR.responseText;
         console.log("Reply JSON: " + replyRaw);
@@ -91,6 +92,17 @@ function copyLinkToClipboard() {
     setTimeout(function () {
         $("#linkCopiedModal").modal('hide');
     }, 1000);
+}
+
+function updateCounter() {
+    var counter = $("#overallLinksNum");
+    var currentNum = counter.text();
+
+    if ($.isNumeric(currentNum)) {
+        counter.text(parseInt(currentNum) + 1);
+    } else {
+        console.error("Failed to update counter. Current counter value is not a number")
+    }
 }
 
 function handleForm(e) {
