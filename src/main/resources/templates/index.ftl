@@ -19,17 +19,17 @@
 <!-- Error Div -->
 <div class="container-fluid">
     <div id="first" class="row">
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
-        <div id="error" class="alert alert-danger col-xs-12 col-sm-10 col-md-8 col-lg-8 invisible">
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
+        <div id="error" class="alert alert-danger col-xs-12 col-sm-10 col-md-8 col-lg-6 invisible">
             <button id="errorClose" class="close" type="button" aria-hidden="true">&times;</button>
             <strong>Hups! </strong><span id="errorText"></span>
         </div>
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
     </div>
     <!-- Main Div -->
     <div id="main" class="row">
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
-        <div id="center" class="main col-xs-12 col-sm-10 col-md-8 col-lg-8">
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
+        <div id="center" class="main col-xs-12 col-sm-10 col-md-8 col-lg-6">
             <h2>Yet another link shortener</h2>
             <p class="lead"><i>... for friends</i></p>
             <form role="form">
@@ -47,29 +47,29 @@
 
             <span id="emptyLine">&nbsp;</span>
         </div>
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
     </div>
     <!-- Overall Div -->
     <div id="overallLinksDiv" class="row">
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
-        <div id="overallLinks" class="main col-xs-12 col-sm-10 col-md-8 col-lg-8">
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
+        <div id="overallLinks" class="main col-xs-12 col-sm-10 col-md-8 col-lg-6">
             <span id="overallLinksText">
                 Yals already saved <span id="overallLinksNum">${params.overallLinks}</span> links
             </span>
         </div>
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
     </div>
     <!-- Result Div -->
     <div id="resultRow" class="row">
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
-        <div id="result" class="result col-xs-12 col-sm-10 col-md-8 col-lg-8 invisible">
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
+        <div id="result" class="result col-xs-12 col-sm-10 col-md-8 col-lg-6 invisible">
             <span class="strong-link">
                 <a id="resultLink" href=""></a>
             </span>
             <span id="copyLink" class="glyphicon glyphicon-duplicate" aria-hidden="true"
                   data-toggle="tooltip" data-placement="right" title="Copy link"></span>
         </div>
-        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
     </div>
 </div>
 
