@@ -34,3 +34,25 @@ body {
     max-width: 680px;
     padding-top: 15px;
 }
+
+.modal.fade.in .modal-body {
+    bottom: 0;
+    opacity: 1;
+}
+
+.modal-body {
+    bottom: -250px;
+    -webkit-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    text-align: center;
+}
+
+.in-same-line {
+    display: inline;
+}
+
+.overall-number-line {
+    align-content: right;
+}

@@ -44,11 +44,12 @@ function onSuccessStoreLink(data, textStatus, jqXHR) {
 
         $("#resultLink").html(window.location.origin + "/" + ident).attr("href", ident);
         $("#result").removeClass('invisible');
+        updateCounter();
     }
 }
 
 function onFailStoreLink(jqXHR, textStatus, errorThrown) {
-    if (jqXHR !== null || jqXHR != undefined) {
+    if (jqXHR !== null || jqXHR !== undefined) {
 
         var replyRaw = jqXHR.responseText;
         console.log("Reply JSON: " + replyRaw);
@@ -80,6 +81,30 @@ function onFailStoreLink(jqXHR, textStatus, errorThrown) {
     }
 }
 
+function copyLinkToClipboard() {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($("#resultLink").text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+
+    $("#linkCopiedModal").modal('show');
+    setTimeout(function () {
+        $("#linkCopiedModal").modal('hide');
+    }, 1000);
+}
+
+function updateCounter() {
+    var counter = $("#overallLinksNum");
+    var currentNum = counter.text();
+
+    if ($.isNumeric(currentNum)) {
+        counter.text(parseInt(currentNum) + 1);
+    } else {
+        console.error("Failed to update counter. Current counter value is not a number")
+    }
+}
+
 function handleForm(e) {
     e.preventDefault();
     cleanErrors();
@@ -102,5 +127,7 @@ function handleForm(e) {
 
 $(document).ready(function () {
     $("#shortenIt").on('click', handleForm);
-    $("#errorClose").on('click', onAlertClose)
+    $("#errorClose").on('click', onAlertClose);
+    $('[data-toggle="tooltip"]').tooltip();
+    $("#copyLink").on('click', copyLinkToClipboard);
 });

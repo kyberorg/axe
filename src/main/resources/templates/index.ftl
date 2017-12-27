@@ -36,10 +36,24 @@
                 <label for="longUrl">Your very long URL here: </label>
                 <input type="text" class="form-control" name="longUrl" id="longUrl"
                        placeholder="http://mysuperlongurlhere.tld">
+                <p id="publicAccessBanner" class="help-block">
+                    Note: all links considered as public and can be used by
+                    anyone
+                </p>
             </div>
             <button id="shortenIt" type="submit" class="btn btn-primary">Shorten it!</button>
         </form>
+
         <span id="emptyLine">&nbsp;</span>
+    </div>
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
+</div>
+<div id="overallLinksDiv" class="row">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
+    <div id="overallLinks" class="main col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <span id="overallLinksText">
+            Yals already saved <span id="overallLinksNum">${params.overallLinks}</span> links
+        </span>
     </div>
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
 </div>
@@ -50,6 +64,8 @@
             <span class="strong-link">
                 <a id="resultLink" href=""></a>
             </span>
+        <span id="copyLink" class="glyphicon glyphicon-duplicate" aria-hidden="true"
+              data-toggle="tooltip" data-placement="right" title="Copy link"></span>
     </div>
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">&nbsp;</div>
 </div>
@@ -65,5 +81,16 @@
     </div>
 </footer>
 </#if >
+
+<!-- Link copied modal -->
+<div class="modal fade bs-example-modal-sm" id="linkCopiedModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-body modal-content alert alert-success">
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+            <p class="in-same-line">Short link copied</p>
+        </div><!-- /.modal-body -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 </body>
 </html>

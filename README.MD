@@ -34,6 +34,15 @@ Just a simple link shortener like many others for friends.
 ```
 
 ## Release Notes
+### Version 2.1 (22/12/17)
+Banners and copy to clipboard
+
+* Banner about public access (#21)
+
+* Banner: "N overall links saved" (#22)
+
+* Copy to clipboard feature (#26)
+
 ### Version 2.0.2 (19/12/17)
 Fix pack
 

@@ -1,6 +1,9 @@
 package ee.yals.controllers;
 
+import ee.yals.services.overall.OverallService;
 import ee.yals.utils.git.GitInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +20,10 @@ import java.util.Objects;
 public class Front {
 
     private GitInfo gitInfo = GitInfo.getInstance();
+
+    @Qualifier("dbOverallService")
+    @Autowired
+    private OverallService overallService;
 
     /**
      * Index (/) page
@@ -45,7 +52,8 @@ public class Front {
         params.addAttribute("commitTag", latestTag);
         params.addAttribute("repository", GitInfo.REPOSITORY);
 
+        params.addAttribute("overallLinks", overallService.numberOfStoredLinks());
+
         return "index";
     }
-
 }
