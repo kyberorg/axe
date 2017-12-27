@@ -41,6 +41,22 @@ body {
     height: 60px;
     background-color: #f5f5f5;
 }
+
+.under-footer {
+    display: none;
+}
+
+@media all and (max-height: 500px) {
+    .footer {
+        display: none;
+    }
+
+    .under-footer {
+        display: block;
+        line-height: 1px;
+    }
+}
+
 .footer .container {
     width: auto;
     max-width: 680px;
@@ -68,3 +84,4 @@ body {
 .overall-number-line {
     align-content: right;
 }
+
