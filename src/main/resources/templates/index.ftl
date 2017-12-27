@@ -83,6 +83,7 @@
         </span>
     </div>
 </footer>
+<div class="under-footer">&nbsp;</div>
 </#if >
 
 <!-- Link copied modal -->
