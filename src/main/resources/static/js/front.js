@@ -1,6 +1,6 @@
 function cleanErrors() {
     $("#errorText").html("");
-    $("#error").addClass('invisible');
+    $("#errorModal").modal('hide');
 }
 
 function cleanForm() {
@@ -14,7 +14,7 @@ function cleanResults(){
 
 function showError(errorMessage) {
     $("#errorText").html(errorMessage);
-    $("#error").removeClass('invisible');
+    $("#errorModal").modal('show');
 }
 
 function sendLink(long_url) {
@@ -29,7 +29,7 @@ function sendLink(long_url) {
 
 function onAlertClose() {
     $("#errorText").html("");
-    $("#error").addClass('invisible');
+    $("#errorModal").modal('hide');
 }
 
 function onSuccessStoreLink(data, textStatus, jqXHR) {
