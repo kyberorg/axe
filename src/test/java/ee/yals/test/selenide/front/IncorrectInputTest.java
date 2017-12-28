@@ -5,8 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.*;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_DIV;
 
 /**
  * Tries to fill some wrong values to longURL and tests reaction
@@ -28,7 +30,7 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
+        ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
     }
 
     @Test
@@ -37,7 +39,7 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
+        ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
 
     }
 
@@ -47,7 +49,7 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text(CANNOT_EMPTY_TEXT));
+        ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
 
     }
 
@@ -57,7 +59,7 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(and("short and notURL text", text(MALFORMED_URL_TEXT)));
+        ERROR_TEXT.shouldHave(and("short and notURL text", text(MALFORMED_URL_TEXT)));
     }
 
     @Test
@@ -66,7 +68,7 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
+        ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test
@@ -75,7 +77,7 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
+        ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test
@@ -84,7 +86,7 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text(MALFORMED_URL_TEXT));
+        ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
 
     @Test
@@ -93,22 +95,17 @@ public class IncorrectInputTest extends UITest {
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
-        $("#errorText").shouldHave(text("protocol not supported"));
-    }
-
-    private void pasteValueInFormAndSubmitIt(String link) {
-        $("#longUrl").setValue(link);
-        $("form").find("button").click();
+        ERROR_TEXT.shouldHave(text("protocol not supported"));
     }
 
     private void errorBoxShouldAppear() {
-        $("#error").shouldBe(visible);
-        $("#errorText").shouldNotBe(empty);
-        $("#errorClose").shouldBe(visible);
+        ERROR_DIV.shouldBe(visible);
+        ERROR_TEXT.shouldNotBe(empty);
+        ERROR_CLOSE.shouldBe(visible);
     }
 
     private void formIsClearedAndResultNotVisible() {
-        $("#longUrl").shouldBe(empty);
-        $("#result").shouldNotBe(visible);
+        LONG_URL_INPUT.shouldBe(empty);
+        RESULT_DIV.shouldNotBe(visible);
     }
 }

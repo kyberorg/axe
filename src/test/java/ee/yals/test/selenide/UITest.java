@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
+
 /**
  * Common stuff for all UI Test
  *
@@ -49,5 +52,10 @@ public abstract class UITest {
 
     protected boolean isBrowserHtmlUnit(){
         return TestUtils.whichBrowser().equals(Selenide.Browser.HTMLUNIT);
+    }
+
+    protected void pasteValueInFormAndSubmitIt(String link) {
+        LONG_URL_INPUT.setValue(link);
+        SUBMIT_BUTTON.click();
     }
 }

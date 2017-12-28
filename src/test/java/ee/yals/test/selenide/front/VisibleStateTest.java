@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_DIV;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.*;
+import static ee.yals.test.utils.selectors.FrontSelectors.OverallRow.*;
+import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_DIV;
 import static org.junit.Assert.fail;
 
 /**
@@ -25,44 +29,44 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void errorBlockIsHidden() {
-        $("#error").shouldNotBe(visible);
+        ERROR_DIV.shouldNotBe(visible);
     }
 
     @Test
     public void mainBlockIsVisible() {
-        $("#main").shouldBe(visible);
+        MAIN_DIV.shouldBe(visible);
     }
 
     @Test
     public void resultBlockIsHidden() {
-        $("#result").shouldNotBe(visible);
+        RESULT_DIV.shouldNotBe(visible);
     }
 
     @Test
     public void formHasFieldAndButton() {
-        SelenideElement formField = $("form").find("input#longUrl");
+        SelenideElement formField = FORM.find(INPUT_ID);
 
         formField.shouldBe(exist);
         formField.shouldHave(type("text"));
 
-        SelenideElement button = $("form").find("button");
+        SelenideElement button = FORM.find("button");
         button.shouldBe(exist);
     }
 
     @Test
     public void formHasOnlyOneButton() {
-        $("form").findAll("button").shouldHaveSize(1);
+        FORM.findAll("button").shouldHaveSize(1);
     }
 
     @Test
     public void inputAndButtonAreNotDisabled() {
-        $("form").find("input#longUrl").shouldNotBe(disabled);
-        $("form").find("button").shouldNotBe(disabled);
+        FORM.find(INPUT_ID).shouldNotBe(disabled);
+        FORM.find("button").shouldNotBe(disabled);
     }
 
     @Test
     public void inputShouldHavePlaceholder() {
-        $("form").find("input#longUrl").shouldHave(attribute("placeholder"));
+        $("form").find(INPUT_ID).shouldHave(attribute("placeholder"));
     }
 
     @Test
@@ -73,12 +77,12 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void mainDivShouldHaveH2() {
-        $("#main h2").shouldBe(exist);
+        H2.shouldBe(exist);
     }
 
     @Test
     public void inputFieldHasLabel() {
-        SelenideElement label = $("#longUrl").parent().find("label");
+        SelenideElement label = LONG_URL_INPUT.parent().find("label");
         label.shouldBe(exist);
         label.shouldNotBe(empty);
         label.shouldHave(attribute("for", "longUrl"));
@@ -86,31 +90,37 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void buttonIsPrimaryAndHasText() {
-        $("form").find("button").has(cssClass("btn-primary")); //This class make button blue
-        $("form").find("button").shouldHave(text("Shorten it!"));
+        SUBMIT_BUTTON.has(cssClass("btn-primary")); //This class make button blue
+        SUBMIT_BUTTON.shouldHave(text("Shorten it!"));
     }
 
     @Test
     public void publicAccessBannerIsPresentAndHasNeededText() {
-        $("#publicAccessBanner").shouldBe(visible);
-        $("#publicAccessBanner").shouldHave(text("public"));
+        PUBLIC_ACCESS_BANNER.shouldBe(visible);
+        PUBLIC_ACCESS_BANNER.shouldHave(text("public"));
 
-        SelenideElement form = $("#publicAccessBanner").closest("form");
+        SelenideElement form = PUBLIC_ACCESS_BANNER.closest("form");
         form.should(exist);
     }
 
     @Test
-    public void overallLinksTextExists() {
-        $("#overallLinksText").shouldBe(exist);
-        $("#overallLinksText").shouldBe(visible);
-        $("#overallLinksText").shouldHave(text("Yals already saved"));
+    public void overallLinksDivExistsAndDisplayed() {
+        OVERALL_DIV.shouldBe(exist);
+        OVERALL_DIV.shouldBe(visible);
+    }
+
+    @Test
+    public void overallLinksTextExistsAndDisplayed() {
+        OVERALL_LINKS_TEXT.shouldBe(exist);
+        OVERALL_LINKS_TEXT.shouldBe(visible);
+        OVERALL_LINKS_TEXT.shouldHave(text("Yals already saved"));
     }
 
     @Test
     public void overallLinksNumberExistsAndNumber() {
-        $("#overallLinksNum").shouldBe(exist);
-        $("#overallLinksNum").shouldBe(visible);
-        String numberText = $("#overallLinksNum").text();
+        OVERALL_LINKS_NUMBER.shouldBe(exist);
+        OVERALL_LINKS_NUMBER.shouldBe(visible);
+        String numberText = OVERALL_LINKS_NUMBER.text();
         try {
             int numberOfSavedLinks = Integer.parseInt(numberText);
             Assert.assertTrue(numberOfSavedLinks >= 0);

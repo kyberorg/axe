@@ -5,8 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_DIV;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_TEXT;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -49,23 +52,18 @@ public class CorrectInputTest extends UITest {
         checkExpectedBehavior();
     }
 
-    private void pasteValueInFormAndSubmitIt(String link){
-        $("#longUrl").setValue(link);
-        $("form").find("button").click();
-    }
-
     private void checkExpectedBehavior(){
-        $("#result").shouldBe(visible);
-        $("#resultLink").shouldBe(visible);
-        $("#resultLink").shouldHave(text(BASE_URL));
-        $("#copyLink").shouldBe(visible);
-        String actualText = $("#resultLink").getText();
-        String hrefValue = $("#resultLink").getAttribute("href");
+        RESULT_DIV.shouldBe(visible);
+        RESULT_LINK.shouldBe(visible);
+        RESULT_LINK.shouldHave(text(BASE_URL));
+        COPY_RESULT_ICON.shouldBe(visible);
+        String actualText = RESULT_LINK.getText();
+        String hrefValue = RESULT_LINK.getAttribute("href");
         assertEquals("link in 'href' value is not same as link shown text", actualText, hrefValue);
 
-        $("#longUrl").shouldBe(empty);
+        LONG_URL_INPUT.shouldBe(empty);
 
-        $("#error").shouldNotBe(visible);
-        $("#errorText").shouldBe(empty);
+        ERROR_DIV.shouldNotBe(visible);
+        ERROR_TEXT.shouldBe(empty);
     }
 }
