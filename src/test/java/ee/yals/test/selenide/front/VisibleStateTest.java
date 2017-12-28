@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_DIV;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.*;
 import static ee.yals.test.utils.selectors.FrontSelectors.OverallRow.*;
 import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_DIV;
@@ -29,7 +29,7 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void errorBlockIsHidden() {
-        ERROR_DIV.shouldNotBe(visible);
+        ERROR_MODAL.shouldNotBe(visible);
     }
 
     @Test

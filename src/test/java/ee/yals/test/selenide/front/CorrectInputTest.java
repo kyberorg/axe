@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_DIV;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_TEXT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
@@ -63,7 +63,7 @@ public class CorrectInputTest extends UITest {
 
         LONG_URL_INPUT.shouldBe(empty);
 
-        ERROR_DIV.shouldNotBe(visible);
+        ERROR_MODAL.shouldNotBe(visible);
         ERROR_TEXT.shouldBe(empty);
     }
 }

@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
  */
 public class FrontSelectors {
     public static class ErrorRow {
-        public static final SelenideElement ERROR_DIV = $("#error");
+        public static final SelenideElement ERROR_MODAL = $("#errorModal");
         public static final SelenideElement ERROR_TEXT = $("#errorText");
         public static final SelenideElement ERROR_CLOSE = $("#errorClose");
     }
