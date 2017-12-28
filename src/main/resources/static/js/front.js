@@ -27,11 +27,6 @@ function sendLink(long_url) {
     doPost(storeLinkRoute, json, onSuccessStoreLink, onFailStoreLink);
 }
 
-function onAlertClose() {
-    $("#errorText").html("");
-    $("#errorModal").modal('hide');
-}
-
 function onSuccessStoreLink(data, textStatus, jqXHR) {
     cleanErrors();
     cleanForm();
@@ -127,7 +122,6 @@ function handleForm(e) {
 
 $(document).ready(function () {
     $("#shortenIt").on('click', handleForm);
-    $("#errorClose").on('click', onAlertClose);
     $('[data-toggle="tooltip"]').tooltip();
     $("#copyLink").on('click', copyLinkToClipboard);
 });
