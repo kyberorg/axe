@@ -16,15 +16,12 @@
 <@js.request_js></@js.request_js>
 <script src="/s/js/front.js"></script>
 
-<!-- Error Div -->
+<!-- Main container -->
 <div class="container-fluid">
+    <!-- Error Div -->
     <div id="first" class="row mini-row">
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
         <!-- There will be authorization line -->
-    <#--<div id="error" class="alert alert-danger col-xs-12 col-sm-10 col-md-8 col-lg-6 invisible">
-        <button id="errorClose" class="close" type="button" aria-hidden="true">&times;</button>
-        <strong>Hups! </strong><span id="errorText"></span>
-    </div>-->
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
     </div>
     <!-- Main Div -->
