@@ -4,12 +4,16 @@ import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
+import ee.yals.test.utils.selectors.Page404;
+import ee.yals.test.utils.selectors.VR;
 import org.junit.Assume;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
+import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
 
 /**
  * Testing /(Slash) URL
@@ -21,8 +25,8 @@ public class SlashUITest extends UITest {
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
         open("/");
-        $("#longUrl").shouldBe(exist);
-        $("#shortenIt").shouldBe(exist);
+        LONG_URL_INPUT.shouldBe(exist);
+        SUBMIT_BUTTON.shouldBe(exist);
     }
 
     @Test
@@ -36,11 +40,10 @@ public class SlashUITest extends UITest {
         }
 
         open("/");
-        $("input#longUrl").setValue("https://vr.fi");
-        $("button#shortenIt").click();
+        pasteValueInFormAndSubmitIt("https://vr.fi");
 
-        $("a#resultLink").shouldBe(visible);
-        $("#resultLink").click();
+        RESULT_LINK.shouldBe(visible);
+        RESULT_LINK.click();
 
         verifyThatVROpened();
     }
@@ -54,11 +57,11 @@ public class SlashUITest extends UITest {
         }
 
         open("/");
-        $("input#longUrl").setValue("https://vr.fi");
-        $("button#shortenIt").click();
+        pasteValueInFormAndSubmitIt("https://vr.fi");
 
-        $("a#resultLink").shouldBe(visible);
-        String linkText = $("a#resultLink").getText();
+
+        RESULT_LINK.shouldBe(visible);
+        String linkText = RESULT_LINK.getText();
 
         open(linkText);
         verifyThatVROpened();
@@ -67,12 +70,12 @@ public class SlashUITest extends UITest {
     @Test
     public void openSomethingNonExisting() {
         open("/perkele");
-        $("h1").shouldBe(exist);
-        $("h1").shouldHave(text("404"));
+        Page404.H1.shouldBe(exist);
+        Page404.H1.shouldHave(text("404"));
     }
 
     private void verifyThatVROpened() {
-        SelenideElement vrLogo = $("a.mainLogo").find("img");
+        SelenideElement vrLogo = VR.LOGO.find("img");
         vrLogo.shouldBe(exist);
         vrLogo.shouldHave(attribute("alt", "VR"));
     }

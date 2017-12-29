@@ -5,13 +5,12 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
 
 /**
  * Tests unusual usage
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 2.0
  */
 public class AbnormalUsageTest extends UITest {
@@ -24,12 +23,7 @@ public class AbnormalUsageTest extends UITest {
         open("/?" + EXTRA_ARGUMENT);
         pasteValueInFormAndSubmitIt(LINK_TO_SAVE);
 
-        $("#resultLink").shouldNotBe(empty);
-        $("#resultLink").shouldNotHave(text(EXTRA_ARGUMENT));
-    }
-
-    private void pasteValueInFormAndSubmitIt(String link) {
-        $("#longUrl").setValue(link);
-        $("form").find("button").click();
+        RESULT_LINK.shouldNotBe(empty);
+        RESULT_LINK.shouldNotHave(text(EXTRA_ARGUMENT));
     }
 }

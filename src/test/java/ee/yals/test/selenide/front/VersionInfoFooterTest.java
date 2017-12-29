@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.utils.selectors.FrontSelectors.Footer.*;
 import static junit.framework.Assert.assertNotNull;
 
 /**
@@ -29,20 +29,20 @@ public class VersionInfoFooterTest extends UITest {
         boolean shouldCommitInfoDisplayed = shouldCommitInfoBeDisplayed();
 
         if (shouldCommitInfoDisplayed) {
-            $("footer").shouldBe(visible);
+            FOOTER.shouldBe(visible);
         } else {
-            $("footer").shouldNotBe(visible);
+            FOOTER.shouldNotBe(visible);
         }
     }
 
     @Test
     public void footerHasAllRequiredElements() {
         if(shouldCommitInfoBeDisplayed()){
-            $("#version").shouldBe(visible);
-            $("#version").shouldHave(text("version")).shouldHave(text("commit"));
-            $("#version a").shouldBe(visible);
-            $("#version a").shouldNotBe(empty);
-            $("#version a").shouldHave(attribute("href"));
+            VERSION.shouldBe(visible);
+            VERSION.shouldHave(text("version")).shouldHave(text("commit"));
+            COMMIT_LINK.shouldBe(visible);
+            COMMIT_LINK.shouldNotBe(empty);
+            COMMIT_LINK.shouldHave(attribute("href"));
         }
     }
 

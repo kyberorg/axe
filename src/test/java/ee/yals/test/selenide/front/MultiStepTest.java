@@ -9,8 +9,12 @@ import org.junit.Test;
 import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_CLOSE;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.selectors.FrontSelectors.OverallRow.OVERALL_LINKS_NUMBER;
+import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
 
 /**
  * Contains multi step tests for Front page
@@ -25,32 +29,32 @@ public class MultiStepTest extends UITest {
     }
 
     @Test
-    public void closeButtonReallyClosesErrorDiv() {
+    public void closeButtonReallyClosesErrorModal() {
         pasteValueInFormAndSubmitIt(" ");
 
-        $("#errorClose").click();
-        $("div#error").shouldNotBe(visible);
+        ERROR_CLOSE.click();
+        ERROR_MODAL.shouldNotBe(visible);
 
     }
 
     @Test
-    public void closeButtonClosesErrorDivButNotRemoves() {
+    public void closeButtonClosesErrorModalButNotRemoves() {
         pasteValueInFormAndSubmitIt(" ");
 
-        $("#errorClose").click();
-        $("div#error").shouldNotBe(visible);
-        $("div#error").shouldBe(exist);
+        ERROR_CLOSE.click();
+        ERROR_MODAL.shouldNotBe(visible);
+        ERROR_MODAL.shouldBe(exist);
     }
 
     @Test
     public void shortenItButtonClearsResultAndValueIfVisible() {
-        pasteValueInFormAndSubmitIt("http://virtadev.net");
-        $("div#result").shouldBe(visible);
-        $("input#longUrl").shouldBe(empty);
+        pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
+        RESULT_DIV.shouldBe(visible);
+        LONG_URL_INPUT.shouldBe(empty);
 
         pasteValueInFormAndSubmitIt("ggg");
-        $("div#result").shouldNotBe(visible);
-        $("#resultLink").shouldBe(empty);
+        RESULT_DIV.shouldNotBe(visible);
+        RESULT_LINK.shouldBe(empty);
 
     }
 
@@ -64,31 +68,26 @@ public class MultiStepTest extends UITest {
         }
         pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
 
-        $("div#result").shouldBe(visible);
-        $("#copyLink").shouldBe(visible);
+        RESULT_DIV.shouldBe(visible);
+        COPY_RESULT_ICON.shouldBe(visible);
 
-        $("#copyLink").click();
-        $("#longUrl").click();
-        $("#longUrl").sendKeys(Keys.chord(Keys.CONTROL, "v"));
+        COPY_RESULT_ICON.click();
+        LONG_URL_INPUT.click();
+        LONG_URL_INPUT.sendKeys(Keys.chord(Keys.CONTROL, "v"));
 
-        String shortLink = $("#resultLink").text();
+        String shortLink = RESULT_LINK.text();
 
-        String pastedLink = $("#longUrl").val();
+        String pastedLink = LONG_URL_INPUT.val();
         Assert.assertEquals(shortLink, pastedLink);
     }
 
     @Test
     public void linksCounterIncreasedValueAfterSave() {
-        long initialNumber = Long.parseLong($("#overallLinksNum").text());
+        long initialNumber = Long.parseLong(OVERALL_LINKS_NUMBER.text());
 
         pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
 
-        long numberAfterLinkSaved = Long.parseLong($("#overallLinksNum").text());
+        long numberAfterLinkSaved = Long.parseLong(OVERALL_LINKS_NUMBER.text());
         Assert.assertEquals(initialNumber + 1, numberAfterLinkSaved);
-    }
-
-    private void pasteValueInFormAndSubmitIt(String link) {
-        $("#longUrl").setValue(link);
-        $("form").find("button").click();
     }
 }

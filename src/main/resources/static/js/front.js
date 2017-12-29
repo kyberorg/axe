@@ -1,6 +1,6 @@
 function cleanErrors() {
     $("#errorText").html("");
-    $("#error").addClass('invisible');
+    $("#errorModal").modal('hide');
 }
 
 function cleanForm() {
@@ -14,7 +14,7 @@ function cleanResults(){
 
 function showError(errorMessage) {
     $("#errorText").html(errorMessage);
-    $("#error").removeClass('invisible');
+    $("#errorModal").modal('show');
 }
 
 function sendLink(long_url) {
@@ -25,11 +25,6 @@ function sendLink(long_url) {
         link : longUrl
     };
     doPost(storeLinkRoute, json, onSuccessStoreLink, onFailStoreLink);
-}
-
-function onAlertClose() {
-    $("#errorText").html("");
-    $("#error").addClass('invisible');
 }
 
 function onSuccessStoreLink(data, textStatus, jqXHR) {
@@ -127,7 +122,6 @@ function handleForm(e) {
 
 $(document).ready(function () {
     $("#shortenIt").on('click', handleForm);
-    $("#errorClose").on('click', onAlertClose);
     $('[data-toggle="tooltip"]').tooltip();
     $("#copyLink").on('click', copyLinkToClipboard);
 });

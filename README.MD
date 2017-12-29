@@ -34,6 +34,15 @@ Just a simple link shortener like many others for friends.
 ```
 
 ## Release Notes
+### Version 2.2 (29/12/17)
+Mobile-friendly site
+
+* Tag footer no longer hides content on small screens (#34)
+
+* Error box rewritten from static row to modal (#33)
+
+* Internal: Move selenide selectors to separate class (#27)
+
 ### Version 2.1 (22/12/17)
 Banners and copy to clipboard
 
