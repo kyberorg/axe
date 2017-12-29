@@ -18,12 +18,13 @@
 
 <!-- Error Div -->
 <div class="container-fluid">
-    <div id="first" class="row">
+    <div id="first" class="row mini-row">
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
-        <div id="error" class="alert alert-danger col-xs-12 col-sm-10 col-md-8 col-lg-6 invisible">
-            <button id="errorClose" class="close" type="button" aria-hidden="true">&times;</button>
-            <strong>Hups! </strong><span id="errorText"></span>
-        </div>
+        <!-- There will be authorization line -->
+    <#--<div id="error" class="alert alert-danger col-xs-12 col-sm-10 col-md-8 col-lg-6 invisible">
+        <button id="errorClose" class="close" type="button" aria-hidden="true">&times;</button>
+        <strong>Hups! </strong><span id="errorText"></span>
+    </div>-->
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
     </div>
     <!-- Main Div -->
@@ -92,6 +93,21 @@
         <div class="modal-body modal-content alert alert-success">
             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
             <p class="in-same-line">Short link copied</p>
+        </div><!-- /.modal-body -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Error modal -->
+<div class="modal fade" id="errorModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-body modal-content alert alert-danger">
+            <button id="errorClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+            </button>
+            <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+            <p class="in-same-line">
+                <strong>Hups! </strong><span id="errorText"></span>
+            </p>
         </div><!-- /.modal-body -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

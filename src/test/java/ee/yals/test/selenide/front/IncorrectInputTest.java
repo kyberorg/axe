@@ -99,7 +99,7 @@ public class IncorrectInputTest extends UITest {
     }
 
     private void errorBoxShouldAppear() {
-        ERROR_DIV.shouldBe(visible);
+        ERROR_MODAL.shouldBe(visible);
         ERROR_TEXT.shouldNotBe(empty);
         ERROR_CLOSE.shouldBe(visible);
     }

@@ -11,7 +11,7 @@ import org.openqa.selenium.Keys;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_CLOSE;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_DIV;
+import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.OverallRow.OVERALL_LINKS_NUMBER;
 import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
@@ -29,21 +29,21 @@ public class MultiStepTest extends UITest {
     }
 
     @Test
-    public void closeButtonReallyClosesErrorDiv() {
+    public void closeButtonReallyClosesErrorModal() {
         pasteValueInFormAndSubmitIt(" ");
 
         ERROR_CLOSE.click();
-        ERROR_DIV.shouldNotBe(visible);
+        ERROR_MODAL.shouldNotBe(visible);
 
     }
 
     @Test
-    public void closeButtonClosesErrorDivButNotRemoves() {
+    public void closeButtonClosesErrorModalButNotRemoves() {
         pasteValueInFormAndSubmitIt(" ");
 
         ERROR_CLOSE.click();
-        ERROR_DIV.shouldNotBe(visible);
-        ERROR_DIV.shouldBe(exist);
+        ERROR_MODAL.shouldNotBe(visible);
+        ERROR_MODAL.shouldBe(exist);
     }
 
     @Test
