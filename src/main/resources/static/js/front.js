@@ -100,6 +100,21 @@ function updateCounter() {
     }
 }
 
+function openWhyModal(e) {
+    e.preventDefault();
+    $("#whyModal").modal('show');
+}
+
+function openLoginForm(e) {
+    e.preventDefault();
+    window.location = "/auth/login";
+}
+
+function openAuthPage(e) {
+    e.preventDefault();
+    window.location = "/auth";
+}
+
 function handleForm(e) {
     e.preventDefault();
     cleanErrors();
@@ -124,4 +139,7 @@ $(document).ready(function () {
     $("#shortenIt").on('click', handleForm);
     $('[data-toggle="tooltip"]').tooltip();
     $("#copyLink").on('click', copyLinkToClipboard);
+    $("#whyLink").on('click', openWhyModal);
+    $("#demoButton").on('click', openLoginForm);
+    $("#loginButton").on('click', openAuthPage);
 });

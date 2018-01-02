@@ -32,4 +32,8 @@ public class Endpoint {
 
     @RequestMethod(HttpMethod.GET)
     public static final String TEST_CSS = "/s/css/test.css";
+
+    @RequestMethod(HttpMethod.GET)
+    public static final String AUTH_PAGE = "/auth";
+    public static final String LOGIN_FORM = "/auth/login";
 }

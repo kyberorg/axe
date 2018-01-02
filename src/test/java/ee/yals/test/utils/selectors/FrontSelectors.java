@@ -10,6 +10,12 @@ import static com.codeborne.selenide.Selenide.$;
  * @since 2.2
  */
 public class FrontSelectors {
+    public static class AuthRow {
+        public static final SelenideElement AUTH_DIV = $("#auth");
+        public static final SelenideElement MY_YALS_LOGO = $("#myYalsLogo");
+        public static final SelenideElement WHY_LINK = $("#whyLink");
+        public static final SelenideElement LOGIN_BUTTON = $("#loginButton");
+    }
     public static class ErrorRow {
         public static final SelenideElement ERROR_MODAL = $("#errorModal");
         public static final SelenideElement ERROR_TEXT = $("#errorText");
@@ -42,6 +48,14 @@ public class FrontSelectors {
         public static final SelenideElement FOOTER = $("footer");
         public static final SelenideElement VERSION = $("#version");
         public static final SelenideElement COMMIT_LINK = $("#version a");
+    }
 
+    public static class WhyModal {
+        public static final SelenideElement WHY_MODAL = $("#whyModal");
+        public static final SelenideElement WHY_MODAL_TITLE = WHY_MODAL.$(".modal-title");
+        public static final SelenideElement WHY_MODAL_BODY = WHY_MODAL.$(".modal-body");
+        public static final SelenideElement WHY_MODAL_BUTTONS = WHY_MODAL.$(".modal-footer");
+        public static final SelenideElement WHY_MODAL_CLOSE_BUTTON = WHY_MODAL_BUTTONS.$("button.btn-close");
+        public static final SelenideElement WHY_MODAL_DEMO_BUTTON = WHY_MODAL_BUTTONS.$("button.btn-primary");
     }
 }

@@ -104,3 +104,6 @@ body {
     align-content: right;
 }
 
+.right {
+    float: right;
+}

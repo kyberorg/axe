@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static ee.yals.test.utils.selectors.FrontSelectors.AuthRow.*;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.*;
 import static ee.yals.test.utils.selectors.FrontSelectors.OverallRow.*;
@@ -127,5 +128,49 @@ public class VisibleStateTest extends UITest {
         } catch (NumberFormatException e) {
             fail("Number of saved links is not a valid number");
         }
+    }
+
+    @Test
+    public void authDivShouldBeVisible() {
+        AUTH_DIV.should(exist);
+        AUTH_DIV.shouldBe(visible);
+    }
+
+    @Test
+    public void loginButtonVisibleAndHasText() {
+        LOGIN_BUTTON.should(exist);
+        LOGIN_BUTTON.shouldBe(visible);
+        LOGIN_BUTTON.shouldHave(text("Sign in"));
+    }
+
+    @Test
+    public void loginButtonShouldBeWithinAuthDiv() {
+        SelenideElement loginButtonParent = LOGIN_BUTTON.parent();
+        loginButtonParent.shouldHave(id(AUTH_DIV.getAttribute("id")));
+    }
+
+    @Test
+    public void myYalsLogoIsPresent() {
+        MY_YALS_LOGO.should(exist);
+        MY_YALS_LOGO.shouldBe(visible);
+    }
+
+    @Test
+    public void myYalsLogoShouldBeWithinAuthDiv() {
+        SelenideElement myYalsLogo = MY_YALS_LOGO.parent();
+        myYalsLogo.shouldHave(id(AUTH_DIV.getAttribute("id")));
+    }
+
+    @Test
+    public void whyLinkIsPresentAndHasTextWhy() {
+        WHY_LINK.should(exist);
+        WHY_LINK.shouldBe(visible);
+        WHY_LINK.shouldHave(text("Why"));
+    }
+
+    @Test
+    public void whyLinkShouldBeWithinAuthDiv() {
+        SelenideElement whyLink = WHY_LINK.parent();
+        whyLink.shouldHave(id(AUTH_DIV.getAttribute("id")));
     }
 }

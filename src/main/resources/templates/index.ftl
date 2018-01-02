@@ -18,10 +18,14 @@
 
 <!-- Main container -->
 <div class="container-fluid">
-    <!-- Error Div -->
-    <div id="first" class="row mini-row">
+    <!-- Auth Div -->
+    <div id="authRow" class="row mini-row">
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
-        <!-- There will be authorization line -->
+        <div id="auth" class="main col-xs-12 col-sm-10 col-md-8 col-lg-6">
+            <img id="myYalsLogo" src="/s/images/logo.png" alt="my yals logo"/>
+            <a id="whyLink" href="#" class="in-same-line">Why?</a>
+            <button id="loginButton" type="button" class="btn btn-primary right">Sign In</button>
+        </div>
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
     </div>
     <!-- Main Div -->
@@ -106,6 +110,26 @@
                 <strong>Hups! </strong><span id="errorText"></span>
             </p>
         </div><!-- /.modal-body -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Why modal -->
+<div class="modal fade" id="whyModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Why Sign in?</h4>
+            </div><!-- /.modal-header -->
+            <div class="modal-body">
+                <p>Registered user has bonus to create own readable short links (random by default).</p>
+            </div><!-- /.modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
+                <button id="demoButton" type="button" class="btn btn-primary">To Demo</button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
