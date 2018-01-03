@@ -24,9 +24,9 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/virtalab/yals</url>
-		<connection>scm:git:https://github.com/virtalab/yals.git</connection>
-		<developerConnection>scm:git:https://github.com/virtalab/yals.git</developerConnection>
+		<url>https://github.com/yadevee/yals</url>
+		<connection>scm:git:https://github.com/yadevee/yals.git</connection>
+		<developerConnection>scm:git:https://github.com/yadevee/yals.git</developerConnection>
 	</scm>
 
 	<properties>
