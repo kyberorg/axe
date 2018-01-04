@@ -12,3 +12,7 @@
 <!-- Request JS -->
 <script src="/s/js/lib/request.js"></script>
 </#macro>
+
+<#macro loginPage_js>
+    <script src="/s/js/loginPage.js"></script>
+</#macro>
