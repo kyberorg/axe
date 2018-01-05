@@ -1,5 +1,6 @@
 package ee.yals.test.selenide.loginPage;
 
+import ee.yals.Endpoint;
 import ee.yals.test.selenide.UITest;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ public class VisualStateTest extends UITest {
 
     @Before
     public void openUrl() {
-        open("/auth/login");
+        open(Endpoint.LOGIN_FORM);
     }
 
     @Test

@@ -29,5 +29,21 @@
         <button id="loginButton" class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
     </form>
 </div><!-- /Main container -->
+
+<!-- Error modal -->
+<div class="modal fade" id="errorModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-body modal-content alert alert-danger">
+            <button id="errorClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+            </button>
+            <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+            <p class="in-same-line">
+                <strong>Hups! </strong><span id="errorText"></span>
+            </p>
+        </div><!-- /.modal-body -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 </body>
 </html>
