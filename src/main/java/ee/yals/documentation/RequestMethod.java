@@ -8,7 +8,9 @@ import java.lang.annotation.Target;
  * Used for documentation inside code.
  *
  * @since 2.0
+ * @deprecated replaced by {@link ee.yals.Endpoints}
  */
+@Deprecated
 @Target(ElementType.FIELD)
 public @interface RequestMethod {
     HttpMethod value();

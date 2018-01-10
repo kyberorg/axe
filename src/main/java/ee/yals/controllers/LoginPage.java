@@ -1,6 +1,8 @@
 package ee.yals.controllers;
 
 import ee.yals.Endpoint;
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.template.TemplateHashModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,7 +25,14 @@ public class LoginPage {
      */
     @RequestMapping(Endpoint.LOGIN_FORM)
     public String loginPage(@ModelAttribute("params") ModelMap params) {
+        params.addAttribute("statika", getStaticAccessor());
         return "loginPage";
+    }
+
+    private TemplateHashModel getStaticAccessor() {
+        BeansWrapper w = new BeansWrapper();
+        TemplateHashModel statika = w.getStaticModels();
+        return statika;
     }
 }
 

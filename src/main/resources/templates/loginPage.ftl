@@ -1,6 +1,7 @@
 <#import "lib/head.ftl" as head>
 <#import "lib/css.ftl" as css>
 <#import "lib/js.ftl" as js>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +16,10 @@
 <@js.jquery_bootstrap></@js.jquery_bootstrap>
 <@js.request_js></@js.request_js>
 <@js.loginPage_js></@js.loginPage_js>
+
+<script>
+    var authApiPath = "${params.statika["ee.yals.Endpoints"].LOGIN_AUTH_API.path()}";
+</script>
 
 <!-- Main container -->
 <div class="container-fluid vcenter">

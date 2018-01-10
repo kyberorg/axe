@@ -7,7 +7,9 @@ import ee.yals.documentation.RequestMethod;
  * List of application endpoints
  *
  * @since 2.0
+ * @deprecated replaced by {@link EndpointN}
  */
+@Deprecated
 public class Endpoint {
     private Endpoint() {
         throw new UnsupportedOperationException("Utility class");

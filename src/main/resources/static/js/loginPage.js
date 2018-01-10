@@ -9,6 +9,7 @@ function showError(errorMessage) {
 }
 
 function doLogin(yalsUser, yalsPass) {
+    console.log("In JS Home " + authApiPath);
     var loginRoute = "/api/login";
 
     var yalsUsername = yalsUser.trim();
