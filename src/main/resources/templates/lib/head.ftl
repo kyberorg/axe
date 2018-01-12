@@ -8,13 +8,6 @@
 <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 </#macro>
 
-<#macro css>
-<!-- Bootstrap -->
-<link href="/s/css/bs/bootstrap.min.css" rel="stylesheet">
-<link href="/s/css/bs/bootstrap-theme.min.css" rel="stylesheet">
-<link href="/s/css/front.css" rel="stylesheet">
-</#macro>
-
 <#macro donkey>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>

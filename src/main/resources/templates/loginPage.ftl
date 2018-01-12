@@ -7,7 +7,7 @@
 <head>
     <@head.meta></@head.meta>
     <title>Login to MyYals</title>
-    <@head.css></@head.css>
+
     <@head.donkey></@head.donkey>
     <@css.loginPage_css></@css.loginPage_css>
 </head>

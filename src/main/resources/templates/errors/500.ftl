@@ -1,10 +1,11 @@
 <#import "../lib/head.ftl" as head>
+<#import "../lib/css.ftl" as css>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <@head.meta></@head.meta>
     <title>Error 500</title>
-<@head.css></@head.css>
+<@css.bs></@css.bs>
 <@head.donkey></@head.donkey>
 </head>
 <body>

@@ -1,12 +1,14 @@
 <#import "lib/head.ftl" as head>
 <#import "lib/js.ftl" as js>
+<#import "lib/css.ftl" as css>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <@head.meta></@head.meta>
     <title>Link shortener for friends</title>
 
-<@head.css></@head.css>
+<@css.bs></@css.bs>
+<@css.front_css></@css.front_css>
 
 <@head.donkey></@head.donkey>
 </head>
