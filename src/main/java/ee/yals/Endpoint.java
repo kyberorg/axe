@@ -36,4 +36,7 @@ public class Endpoint {
     @RequestMethod(HttpMethod.GET)
     public static final String AUTH_PAGE = "/auth";
     public static final String LOGIN_FORM = "/auth/login";
+
+    @RequestMethod(value = HttpMethod.POST, api = true)
+    public static final String LOGIN_API = "/api/login";
 }

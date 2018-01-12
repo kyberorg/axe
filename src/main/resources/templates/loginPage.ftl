@@ -1,3 +1,4 @@
+<#--noinspection JSUnusedLocalSymbols-->
 <#import "lib/head.ftl" as head>
 <#import "lib/css.ftl" as css>
 <#import "lib/js.ftl" as js>
@@ -15,6 +16,10 @@
 <@js.jquery_bootstrap></@js.jquery_bootstrap>
 <@js.request_js></@js.request_js>
 <@js.loginPage_js></@js.loginPage_js>
+
+<script>
+    var authApiPath = "${j.helper.loginEndpoint()}";
+</script>
 
 <!-- Main container -->
 <div class="container-fluid vcenter">

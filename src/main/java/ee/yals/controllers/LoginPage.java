@@ -1,6 +1,7 @@
 package ee.yals.controllers;
 
 import ee.yals.Endpoint;
+import ee.yals.jhelper.LoginPageJHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,7 +23,8 @@ public class LoginPage {
      * @return Template (FTL) name
      */
     @RequestMapping(Endpoint.LOGIN_FORM)
-    public String loginPage(@ModelAttribute("params") ModelMap params) {
+    public String loginPage(@ModelAttribute("j") ModelMap params) {
+        params.addAttribute("helper", LoginPageJHelper.getInstance());
         return "loginPage";
     }
 }
