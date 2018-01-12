@@ -1,13 +1,15 @@
 <#import "../lib/head.ftl" as head>
 <#import "../lib/css.ftl" as css>
+<#import "../lib/js.ftl" as js>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <@head.meta></@head.meta>
     <title>Error 404</title>
+
 <@css.bs></@css.bs>
 
-<@head.donkey></@head.donkey>
+<@js.donkey></@js.donkey>
 
 </head>
 <body>
