@@ -7,15 +7,17 @@
 <head>
     <@head.meta></@head.meta>
     <title>Login to MyYals</title>
-    <@head.css></@head.css>
-    <@head.donkey></@head.donkey>
+
+    <@css.bs></@css.bs>
     <@css.loginPage_css></@css.loginPage_css>
+
+    <@js.jquery></@js.jquery>
+    <@js.jquery_bootstrap></@js.jquery_bootstrap>
+    <@js.request_js></@js.request_js>
+    <@js.donkey></@js.donkey>
+    <@js.loginPage_js></@js.loginPage_js>
 </head>
 <body>
-<@js.jquery></@js.jquery>
-<@js.jquery_bootstrap></@js.jquery_bootstrap>
-<@js.request_js></@js.request_js>
-<@js.loginPage_js></@js.loginPage_js>
 
 <script>
     var authApiPath = "${j.helper.loginEndpoint()}";

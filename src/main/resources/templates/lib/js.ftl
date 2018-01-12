@@ -13,6 +13,18 @@
 <script src="/s/js/lib/request.js"></script>
 </#macro>
 
+<#macro donkey>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="/s/js/ie/html5shiv.js"></script>
+<script src="/s/js/ie/respond.min.js"></script>
+<![endif]-->
+</#macro>
+
+<#macro front_js>
+    <script src="/s/js/front.js"></script>
+</#macro>
+
 <#macro loginPage_js>
     <script src="/s/js/loginPage.js"></script>
 </#macro>

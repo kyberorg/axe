@@ -1,21 +1,24 @@
 <#import "lib/head.ftl" as head>
 <#import "lib/js.ftl" as js>
+<#import "lib/css.ftl" as css>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <@head.meta></@head.meta>
     <title>Link shortener for friends</title>
 
-<@head.css></@head.css>
+<@css.bs></@css.bs>
+<@css.front_css></@css.front_css>
 
-<@head.donkey></@head.donkey>
-</head>
-<body>
 <@js.jquery></@js.jquery>
 <@js.jquery_bootstrap></@js.jquery_bootstrap>
 <@js.request_js></@js.request_js>
-<script src="/s/js/front.js"></script>
+<@js.donkey></@js.donkey>
 
+<@js.front_js></@js.front_js>
+
+</head>
+<body>
 <!-- Main container -->
 <div class="container-fluid">
     <!-- Auth Div -->
