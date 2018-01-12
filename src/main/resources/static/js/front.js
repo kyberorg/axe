@@ -47,7 +47,7 @@ function onFailStoreLink(jqXHR, textStatus, errorThrown) {
     if (jqXHR !== null || jqXHR !== undefined) {
 
         var replyRaw = jqXHR.responseText;
-        console.log("Reply JSON: " + replyRaw);
+        console.debug("Reply JSON: " + replyRaw);
         var reply = JSON.parse(replyRaw);
 
         var errors = [];
@@ -123,7 +123,7 @@ function handleForm(e) {
     var isFormValid = true;
 
     var longUrl = $("#longUrl").val();
-    console.log("Got long URL: " + longUrl);
+    console.debug("Got long URL: " + longUrl);
     cleanForm();
     if (longUrl === undefined || longUrl.trim().length === 0) {
         var errorMessage = "Long URL cannot be empty";
