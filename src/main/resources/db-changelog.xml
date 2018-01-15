@@ -69,9 +69,6 @@
             <column name="expired" type="tinyint">
                 <constraints nullable="false"/>
             </column>
-            <column name="token" type="varchar(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="owner"
                                  baseTableName="tokens"
