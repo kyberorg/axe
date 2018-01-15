@@ -5,71 +5,85 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
-        <changeSet id="1" author="kyberorg">
-            <createTable tableName="links">
-                <column name="id" autoIncrement="true" type="bigint">
-                    <constraints primaryKey="true"/>
-                </column>
-                <column name="ident" type="varchar(255)">
-                    <constraints nullable="false"/>
-                </column>
-                <column name="link" type="varchar(255)">
-                    <constraints nullable="false"/>
-                </column>
-            </createTable>
-        </changeSet>
+    <changeSet id="1" author="kyberorg">
+        <createTable tableName="links">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ident" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="link" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 
-        <changeSet id="2" author="kyberorg">
-            <createTable tableName="users">
-                <column name="id" autoIncrement="true" type="bigint">
-                    <constraints primaryKey="true"/>
-                </column>
-                <column name="name" type="varchar(255)">
-                    <constraints nullable="false" unique="true"/>
-                </column>
-                <column name="password" type="varchar(255)">
-                    <constraints nullable="false"/>
-                </column>
-                <column name="created" type="bigint">
-                    <constraints nullable="false" />
-                </column>
-                <column name="updated" type="bigint">
-                    <constraints nullable="false" />
-                </column>
-            </createTable>
+    <changeSet id="2" author="kyberorg">
+        <createTable tableName="users">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="secrets">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user"
+                                 baseTableName="secrets"
+                                 constraintName="fk_secret_owner"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
 
-            <createTable tableName="tokens">
-                <column name="id" autoIncrement="true" type="bigint">
-                    <constraints primaryKey="true"/>
-                </column>
-                <column name="token" type="varchar(255)">
-                    <constraints nullable="false" unique="true"/>
-                </column>
-                <column name="owner" type="bigint">
-                    <constraints nullable="false"/>
-                </column>
-                <column name="expiration_time" type="bigint">
-                    <constraints nullable="false" />
-                </column>
-                <column name="expired" type="tinyint">
-                    <constraints nullable="false" />
-                </column>
-                <column name="token" type="varchar(255)">
-                    <constraints nullable="false" unique="true"/>
-                </column>
-            </createTable>
-            <addForeignKeyConstraint baseColumnNames="person_id"
-            baseTableName="tokens"
-            constraintName="fk_token_owner"
-            deferrable="true"
-            initiallyDeferred="true"
-            onDelete="CASCADE"
-            onUpdate="RESTRICT"
-            referencedColumnNames="id"
-            referencedTableName="users"/>
-            <rollback>
-                <dropTable tableName="tokens"/>
-                <dropTable tableName="users"/>
-            </rollback>
-        </changeSet>
+        <createTable tableName="tokens">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="owner" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_time" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expired" type="tinyint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="owner"
+                                 baseTableName="tokens"
+                                 constraintName="fk_token_owner"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        <rollback>
+            <dropTable tableName="tokens"/>
+            <dropTable tableName="secrets"/>
+            <dropTable tableName="users"/>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>
