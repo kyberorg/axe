@@ -3,6 +3,7 @@ package ee.yals.models.dao;
 import ee.yals.models.User;
 import org.springframework.data.repository.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepo extends Repository<User, Long> {
@@ -10,4 +11,7 @@ public interface UserRepo extends Repository<User, Long> {
 
     User save(User userToSave);
 
+    @SuppressWarnings("unused")
+        //Used in tests
+    List<User> findAll();
 }

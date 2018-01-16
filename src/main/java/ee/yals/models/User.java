@@ -1,5 +1,8 @@
 package ee.yals.models;
 
+
+import org.apache.commons.lang3.StringUtils;
+
 import javax.persistence.*;
 
 /**
@@ -14,6 +17,9 @@ public class User {
     private static final String ALIAS_COLUMN = "alias";
     private static final String CREATED_COLUMN = "created";
     private static final String UPDATED_COLUMN = "updated";
+
+    private User() {
+    }
 
     @Id
     @GeneratedValue
@@ -44,4 +50,27 @@ public class User {
         return updated;
     }
 
+    public static User create(String userName) throws IllegalArgumentException {
+        if (StringUtils.isBlank(userName)) {
+            throw new IllegalArgumentException("Username (aka Alias) cannot be empty");
+        }
+
+        long now = System.currentTimeMillis();
+
+        User u = new User();
+        u.alias = userName;
+        u.created = now;
+        u.updated = now;
+
+        return u;
+    }
+
+    public User updateAliasWith(String newAliasName) throws IllegalArgumentException {
+        if (StringUtils.isBlank(newAliasName)) {
+            throw new IllegalArgumentException("Username (aka Alias) cannot be empty");
+        }
+
+        this.alias = newAliasName;
+        return this;
+    }
 }
