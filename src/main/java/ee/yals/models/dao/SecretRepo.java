@@ -4,7 +4,6 @@ import ee.yals.models.Secret;
 import ee.yals.models.User;
 import org.springframework.data.repository.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface SecretRepo extends Repository<Secret, Long> {
@@ -12,7 +11,4 @@ public interface SecretRepo extends Repository<Secret, Long> {
 
     Secret save(Secret secretToSave);
 
-    List<Secret> findAll();
-
-    long count();
 }

@@ -13,7 +13,7 @@ public class Secret {
     @GeneratedValue
     private long id;
 
-    @Column(name = USER_COLUMN, nullable = false)
+    @JoinColumn(name = USER_COLUMN, nullable = false)
     @OneToOne
     private User user;
 

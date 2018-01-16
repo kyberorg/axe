@@ -18,7 +18,7 @@ public class Token {
     @Column(name = TOKEN_COLUMN, unique = true, nullable = false)
     private String token;
 
-    @Column(name = OWNER_COLUMN, nullable = false)
+    @JoinColumn(name = OWNER_COLUMN, nullable = false)
     @ManyToOne
     private User owner;
 
