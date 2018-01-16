@@ -85,10 +85,20 @@
     </changeSet>
     <changeSet id="3" author="kyberorg">
         <insert tableName="users">
-            <column name="id">0</column>
-            <column name="alias">yals</column>
+            <column name="id">1</column>
+            <column name="alias">yalsGod</column>
             <column name="created">0</column>
             <column name="updated">0</column>
+        </insert>
+        <insert tableName="users">
+            <column name="id">2</column>
+            <column name="alias">demo</column>
+            <column name="created">0</column>
+            <column name="updated">0</column>
+        </insert>
+        <insert tableName="secrets">
+            <column name="user">2</column> <!-- demo -->
+            <column name="password">26C669CD0814AC40E5328752B21C4AA6450D16295E4EEC30356A06A911C23983AAEBE12D5DA38EEEBFC1B213BE650498DF8419194D5A26C7E0A50AF156853C79</column><!-- demo -->
         </insert>
     </changeSet>
 </databaseChangeLog>
