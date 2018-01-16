@@ -83,4 +83,12 @@
             <dropTable tableName="users"/>
         </rollback>
     </changeSet>
+    <changeSet id="3" author="kyberorg">
+        <insert tableName="users">
+            <column name="id">0</column>
+            <column name="alias">yals</column>
+            <column name="created">0</column>
+            <column name="updated">0</column>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
