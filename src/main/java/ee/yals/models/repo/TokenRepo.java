@@ -1,4 +1,4 @@
-package ee.yals.models.dao;
+package ee.yals.models.repo;
 
 import ee.yals.models.Token;
 import org.springframework.data.repository.Repository;

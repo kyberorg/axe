@@ -1,6 +1,6 @@
 package ee.yals.services.overall;
 
-import ee.yals.models.dao.LinkRepo;
+import ee.yals.models.repo.LinkRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

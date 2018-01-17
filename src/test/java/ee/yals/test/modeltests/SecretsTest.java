@@ -2,12 +2,11 @@ package ee.yals.test.modeltests;
 
 import ee.yals.models.Secret;
 import ee.yals.models.User;
-import ee.yals.models.dao.SecretRepo;
-import ee.yals.models.dao.UserRepo;
+import ee.yals.models.dao.SecretDao;
+import ee.yals.models.dao.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -28,18 +27,18 @@ import static org.junit.Assert.assertTrue;
 public class SecretsTest {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserDao userDao;
 
     @Autowired
-    private SecretRepo secretRepo;
+    private SecretDao secretDao;
 
     @Test
     public void canCreateNewSecret() {
         User user = createUser();
         Secret secret = Secret.create("ABC321").forUser(user).please();
-        secretRepo.save(secret);
+        secretDao.save(secret);
 
-        List<Secret> allSecrets = secretRepo.findAll();
+        List<Secret> allSecrets = secretDao.findAll();
         assertTrue(allSecrets.size() == 1);
     }
 
@@ -50,12 +49,12 @@ public class SecretsTest {
 
         User user = createUser();
         Secret secret = Secret.create(initialSecret).forUser(user).please();
-        secretRepo.save(secret);
+        secretDao.save(secret);
 
         secret.updateSecretWith(updatedSecretString);
-        secretRepo.save(secret);
+        secretDao.save(secret);
 
-        Optional<Secret> updatedSecret = secretRepo.findSingleByUser(user);
+        Optional<Secret> updatedSecret = secretDao.findSingleByUser(user);
 
         assertTrue(updatedSecret.isPresent());
         assertEquals(updatedSecretString, updatedSecret.get().getPassword());
@@ -65,12 +64,12 @@ public class SecretsTest {
     public void cannotCreateMoreThanOneSecretForUser() {
         User user = createUser();
         Secret secret = Secret.create("ABC123").forUser(user).please();
-        secretRepo.save(secret);
+        secretDao.save(secret);
 
         Secret secret2 = Secret.create("DEF321").forUser(user).please();
-        secretRepo.save(secret2);
+        secretDao.save(secret2);
 
-        List<Secret> secrets = secretRepo.findAll();
+        List<Secret> secrets = secretDao.findAll();
         assertTrue(secrets.size() == 1);
     }
 
@@ -88,6 +87,6 @@ public class SecretsTest {
 
     private User createUser() {
         User u = User.create("uzer");
-        return userRepo.save(u);
+        return userDao.save(u);
     }
 }

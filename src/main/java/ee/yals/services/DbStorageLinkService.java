@@ -1,9 +1,9 @@
 package ee.yals.services;
 
 import ee.yals.models.Link;
-import ee.yals.models.dao.LinkRepo;
-import ee.yals.result.StoreResult;
+import ee.yals.models.repo.LinkRepo;
 import ee.yals.result.GetResult;
+import ee.yals.result.StoreResult;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

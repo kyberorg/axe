@@ -1,7 +1,7 @@
 package ee.yals.test.modeltests;
 
 import ee.yals.models.User;
-import ee.yals.models.dao.UserRepo;
+import ee.yals.models.dao.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
@@ -26,14 +24,14 @@ import static org.junit.Assert.assertTrue;
 public class UserTest {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserDao userDao;
 
     @Test
     public void canCreateNewUser() {
         String userName = "uzer";
         createUzer(userName);
 
-        Optional<User> foundUser = userRepo.findSingleByAlias(userName);
+        Optional<User> foundUser = userDao.findSingleByAlias(userName);
 
         assertTrue(foundUser.isPresent());
         assertEquals(userName, foundUser.get().getAlias());
@@ -46,9 +44,9 @@ public class UserTest {
 
         String newUserName = "uzerUpd";
         uzer.updateAliasWith(newUserName);
-        userRepo.save(uzer);
+        userDao.save(uzer);
 
-        Optional<User> foundUser = userRepo.findSingleByAlias(newUserName);
+        Optional<User> foundUser = userDao.findSingleByAlias(newUserName);
         assertTrue(foundUser.isPresent());
         assertEquals(newUserName, foundUser.get().getAlias());
     }
@@ -59,7 +57,7 @@ public class UserTest {
         createUzer(userName);
 
         User uzer2 = User.create(userName);
-        userRepo.save(uzer2);
+        userDao.save(uzer2);
     }
 
     @Test
@@ -78,7 +76,7 @@ public class UserTest {
         long updatedOfCreatedUser = createdUser.getUpdated();
 
         createdUser.updateAliasWith("newUzer");
-        User updatedUser = userRepo.save(createdUser);
+        User updatedUser = userDao.save(createdUser);
 
         long updatedAfterUpdate = updatedUser.getUpdated();
 
@@ -91,7 +89,7 @@ public class UserTest {
         long createdOfCreatedUser = createdUser.getCreated();
 
         createdUser.updateAliasWith("newUzer");
-        User updatedUser = userRepo.save(createdUser);
+        User updatedUser = userDao.save(createdUser);
 
         long createdAfterUpdate = updatedUser.getUpdated();
 
@@ -110,6 +108,6 @@ public class UserTest {
 
     private User createUzer(String userName) {
         User uzer = User.create(userName);
-        return userRepo.save(uzer);
+        return userDao.save(uzer);
     }
 }

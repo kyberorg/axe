@@ -65,6 +65,7 @@ public class Token {
         }
         Token token = new Token();
         token.token = TokenGenerator.generateNew();
+        token.owner = tokenOwner;
         token.expirationTime = System.currentTimeMillis() + TOKEN_LIFETIME * 1000;
         token.expired = isExpired(token);
         return token;

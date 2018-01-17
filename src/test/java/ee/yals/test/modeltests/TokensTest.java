@@ -2,8 +2,8 @@ package ee.yals.test.modeltests;
 
 import ee.yals.models.Token;
 import ee.yals.models.User;
-import ee.yals.models.dao.TokenRepo;
-import ee.yals.models.dao.UserRepo;
+import ee.yals.models.dao.TokenDao;
+import ee.yals.models.dao.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
@@ -27,19 +25,19 @@ import static org.junit.Assert.assertTrue;
 public class TokensTest {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserDao userDao;
 
     @Autowired
-    private TokenRepo tokenRepo;
+    private TokenDao tokenDao;
 
     @Test
     public void canCreateToken() {
         User tokenOwner = createUser();
         Token token = Token.createFor(tokenOwner);
         String tokenValue = token.getToken();
-        tokenRepo.save(token);
+        tokenDao.save(token);
 
-        Optional<Token> foundToken = tokenRepo.findSingleByToken(tokenValue);
+        Optional<Token> foundToken = tokenDao.findSingleByToken(tokenValue);
         assertTrue(foundToken.isPresent());
         assertEquals(tokenValue, foundToken.get().getToken());
     }
@@ -57,11 +55,11 @@ public class TokensTest {
 
         User tokenOwner = createUser();
         Token token = Token.createFor(tokenOwner);
-        tokenRepo.save(token);
+        tokenDao.save(token);
 
         Thread.sleep(tokenExpiresIn * 1000);
 
-        Optional<Token> foundToken = tokenRepo.findSingleByToken(token.getToken());
+        Optional<Token> foundToken = tokenDao.findSingleByToken(token.getToken());
         if (foundToken.isPresent()) {
             assertTrue(foundToken.get().isExpired());
         } else {
@@ -73,9 +71,9 @@ public class TokensTest {
     public void byDefaultNewTokenIsNotExpired() {
         User tokenOwner = createUser();
         Token token = Token.createFor(tokenOwner);
-        tokenRepo.save(token);
+        tokenDao.save(token);
 
-        Optional<Token> foundToken = tokenRepo.findSingleByToken(token.getToken());
+        Optional<Token> foundToken = tokenDao.findSingleByToken(token.getToken());
         if (foundToken.isPresent()) {
             assertFalse(foundToken.get().isExpired());
         } else {
@@ -86,6 +84,6 @@ public class TokensTest {
 
     private User createUser() {
         User user = User.create("Uzer");
-        return userRepo.save(user);
+        return userDao.save(user);
     }
 }
