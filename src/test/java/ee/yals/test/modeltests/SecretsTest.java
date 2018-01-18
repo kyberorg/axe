@@ -1,5 +1,6 @@
 package ee.yals.test.modeltests;
 
+import ee.yals.exceptions.ElementAlreadyExistsException;
 import ee.yals.models.Secret;
 import ee.yals.models.User;
 import ee.yals.models.dao.SecretDao;
@@ -60,7 +61,7 @@ public class SecretsTest {
         assertEquals(updatedSecretString, updatedSecret.get().getPassword());
     }
 
-    @Test
+    @Test(expected = ElementAlreadyExistsException.class)
     public void cannotCreateMoreThanOneSecretForUser() {
         User user = createUser();
         Secret secret = Secret.create("ABC123").forUser(user).please();

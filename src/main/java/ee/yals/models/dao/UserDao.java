@@ -19,7 +19,7 @@ public class UserDao {
     }
 
     public User save(User userToSave) {
-        //TODO update "updated field, if update"
+        userToSave.updateUpdated();
         return userRepo.save(userToSave);
     }
 

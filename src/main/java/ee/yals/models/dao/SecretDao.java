@@ -1,5 +1,6 @@
 package ee.yals.models.dao;
 
+import ee.yals.exceptions.ElementAlreadyExistsException;
 import ee.yals.models.Secret;
 import ee.yals.models.User;
 import ee.yals.models.repo.SecretRepo;
@@ -19,8 +20,18 @@ public class SecretDao {
         return secretRepo.findSingleByUser(user);
     }
 
-    public Secret save(Secret secretToSave) {
-        //TODO check on user
+    public Secret save(Secret secretToSave) throws ElementAlreadyExistsException {
+
+        User secretOwner = secretToSave.getUser();
+        Optional<Secret> currentSecret = findSingleByUser(secretOwner);
+        if (currentSecret.isPresent()) {
+            boolean isThisNewSecret = secretToSave.getId() != currentSecret.get().getId();
+            if (isThisNewSecret) {
+                throw new ElementAlreadyExistsException("Cannot create more that one " + Secret.class.getSimpleName()
+                        + " for one " + User.class.getSimpleName());
+            }
+        }
+
         return secretRepo.save(secretToSave);
     }
 
@@ -29,4 +40,5 @@ public class SecretDao {
     public List<Secret> findAll() {
         return secretRepo.findAll();
     }
+
 }

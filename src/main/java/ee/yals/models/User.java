@@ -73,4 +73,9 @@ public class User {
         this.alias = newAliasName;
         return this;
     }
+
+    public User updateUpdated() {
+        this.updated = System.currentTimeMillis();
+        return this;
+    }
 }
