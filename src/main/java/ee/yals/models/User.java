@@ -59,9 +59,7 @@ public class User {
 
         User u = new User();
         u.alias = userName;
-        u.created = now;
-        u.updated = now;
-
+        //created and updated are controlled in save time
         return u;
     }
 
@@ -74,8 +72,13 @@ public class User {
         return this;
     }
 
-    public User updateUpdated() {
-        this.updated = System.currentTimeMillis();
+    public User updateUpdatedWith(Long timeStamp) {
+        this.updated = timeStamp;
+        return this;
+    }
+
+    public User setCreatedAt(Long timeStamp) {
+        this.created = timeStamp;
         return this;
     }
 }

@@ -91,7 +91,7 @@ public class UserTest {
         createdUser.updateAliasWith("newUzer");
         User updatedUser = userDao.save(createdUser);
 
-        long createdAfterUpdate = updatedUser.getUpdated();
+        long createdAfterUpdate = updatedUser.getCreated();
 
         assertEquals(createdAfterUpdate, createdOfCreatedUser);
     }

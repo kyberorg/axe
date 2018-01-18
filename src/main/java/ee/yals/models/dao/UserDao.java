@@ -19,12 +19,20 @@ public class UserDao {
     }
 
     public User save(User userToSave) {
-        userToSave.updateUpdated();
+        Long now = System.currentTimeMillis();
+        if (isNewRecord(userToSave)) {
+            userToSave.setCreatedAt(now);
+        }
+        userToSave.updateUpdatedWith(now);
         return userRepo.save(userToSave);
     }
 
     @SuppressWarnings("unused") //Used in tests
     public List<User> findAll() {
         return userRepo.findAll();
+    }
+
+    private boolean isNewRecord(User userToCheck) {
+        return !userRepo.findSingleById(userToCheck.getId()).isPresent();
     }
 }

@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface UserRepo extends Repository<User, Long> {
     Optional<User> findSingleByAlias(String alias);
 
+    Optional<User> findSingleById(Long id);
+
     User save(User userToSave);
 
     List<User> findAll();
