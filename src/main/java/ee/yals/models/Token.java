@@ -12,12 +12,9 @@ public class Token {
     private static final String TOKEN_COLUMN = "token";
     private static final String OWNER_COLUMN = "owner";
     private static final String EXPIRATION_TIME_COLUMN = "expiration_time";
-    private static final String EXPIRED_COLUMN = "expired";
 
     public static final String TOKEN_LIFETIME_PROPERTY_KEY = "yals.token.lifetime";
     private static final long DEFAULT_TOKEN_LIFETIME = 3600;
-    private static final long TOKEN_LIFETIME = Long.parseLong(System.getProperty(TOKEN_LIFETIME_PROPERTY_KEY,
-            Long.toString(DEFAULT_TOKEN_LIFETIME))); //in seconds
 
     private Token() {
     }
@@ -36,8 +33,6 @@ public class Token {
     @Column(name = EXPIRATION_TIME_COLUMN, nullable = false)
     private long expirationTime;
 
-    @Column(name = EXPIRED_COLUMN, nullable = false)
-    private boolean expired;
 
     public long getId() {
         return id;
@@ -55,10 +50,6 @@ public class Token {
         return expirationTime;
     }
 
-    public boolean isExpired() {
-        return expired;
-    }
-
     public static Token createFor(User tokenOwner) {
         if (Objects.isNull(tokenOwner)) {
             throw new IllegalArgumentException("Token Owner cannot be NULL");
@@ -66,13 +57,16 @@ public class Token {
         Token token = new Token();
         token.token = TokenGenerator.generateNew();
         token.owner = tokenOwner;
-        token.expirationTime = System.currentTimeMillis() + TOKEN_LIFETIME * 1000;
-        token.expired = isExpired(token);
+        token.expirationTime = System.currentTimeMillis() + token.getTokenLifetime() * 1000;
         return token;
     }
 
-    public static boolean isExpired(Token tokenToCheck) {
-        return System.currentTimeMillis() > tokenToCheck.expirationTime;
-        //TODO this should update (notify) to DB somehow
+    public boolean isExpired() {
+        return System.currentTimeMillis() > this.expirationTime;
+    }
+
+    private long getTokenLifetime() {
+        return Long.parseLong(System.getProperty(TOKEN_LIFETIME_PROPERTY_KEY,
+                Long.toString(DEFAULT_TOKEN_LIFETIME))); //in seconds
     }
 }
