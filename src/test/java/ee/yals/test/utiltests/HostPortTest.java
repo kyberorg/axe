@@ -1,5 +1,6 @@
 package ee.yals.test.utiltests;
 
+import ee.yals.test.YalsTest;
 import ee.yals.utils.AppUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration({"classpath*:test-app.xml"})
 @WebAppConfiguration
 @TestPropertySource(locations = "classpath:test-app.properties")
-public class HostPortTest {
+public class HostPortTest extends YalsTest {
     @Test
     public void apiHostMethodProvidesCorrectInternalAPILocation() {
         String serverPortPropertyName = "server.port";

@@ -100,4 +100,25 @@
             </column><!-- demo -->
         </insert>
     </changeSet>
+    <changeSet id="4" author="kyberorg">
+        <addColumn tableName="links">
+            <column name="owner" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="owner"
+                                 baseTableName="links"
+                                 constraintName="fk_link_owner"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="owner"
+                                      constraintName="fk_link_owner"/>
+            <dropColumn tableName="links"
+                        columnName="owner"/>
+
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

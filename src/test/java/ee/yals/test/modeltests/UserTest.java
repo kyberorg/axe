@@ -2,6 +2,7 @@ package ee.yals.test.modeltests;
 
 import ee.yals.models.User;
 import ee.yals.models.dao.UserDao;
+import ee.yals.test.YalsTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @TestPropertySource(locations = "classpath:test-app.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class UserTest {
+public class UserTest extends YalsTest {
 
     @Autowired
     private UserDao userDao;

@@ -1,15 +1,19 @@
 package ee.yals.controllers.rest;
 
 import ee.yals.Endpoint;
+import ee.yals.core.IdentGenerator;
 import ee.yals.json.ErrorJson;
-import ee.yals.json.internal.Json;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
-import ee.yals.result.StoreResult;
+import ee.yals.json.internal.Json;
+import ee.yals.models.Token;
+import ee.yals.models.User;
+import ee.yals.models.dao.TokenDao;
+import ee.yals.models.dao.UserDao;
 import ee.yals.result.GetResult;
+import ee.yals.result.StoreResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
-import ee.yals.core.IdentGenerator;
 import ee.yals.utils.UrlExtraValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,6 +27,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -33,9 +38,20 @@ import java.util.Set;
 @RestController
 public class StoreRestController {
 
+    private static final String NO_TOKEN = "NOT_A_TOKEN";
+
     @Autowired
     @Qualifier("dbStorage")
     private LinkService linkService;
+
+    //TODO call service instead direct access from Controller to DAO
+    @Autowired
+    private UserDao userDao;
+
+    //TODO call service instead direct access from Controller to DAO
+    @Autowired
+    private TokenDao tokenDao;
+
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.STORE_API)
@@ -79,7 +95,10 @@ public class StoreRestController {
             } while (isIdentAlreadyExists(ident));
         }
 
-        StoreResult result = linkService.storeNew(ident, storeInput.getLink());
+        //TODO get token from JSON
+        User linkOwner = giveUserFromToken(NO_TOKEN);
+
+        StoreResult result = linkService.storeNew(ident, storeInput.getLink(), linkOwner);
         if (result instanceof StoreResult.Success) {
             response.setStatus(201);
             return StoreResponseJson.create().withIdent(ident);
@@ -98,4 +117,19 @@ public class StoreRestController {
         return (searchResult instanceof GetResult.Success);
     }
 
+    private User giveUserFromToken(String token) {
+        //TODO call services here
+        if (token.equals(NO_TOKEN)) {
+            //default user
+            return userDao.getDefaultUser();
+        } else {
+            //TODO call services here
+            Optional<Token> tokenRecord = tokenDao.findSingleByToken(token);
+            if (tokenRecord.isPresent()) {
+                return tokenRecord.get().getOwner();
+            } else {
+                return userDao.getDefaultUser();
+            }
+        }
+    }
 }

@@ -2,6 +2,7 @@ package ee.yals.test.selenide;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
+import ee.yals.test.YalsTest;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
 import org.junit.After;
@@ -24,7 +25,7 @@ import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource(locations = "classpath:test-app.properties")
-public abstract class UITest {
+public abstract class UITest extends YalsTest {
 
     protected final static String BASE_URL = "http://localhost:8080";
 

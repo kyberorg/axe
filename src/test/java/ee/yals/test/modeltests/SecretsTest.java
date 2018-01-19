@@ -5,6 +5,7 @@ import ee.yals.models.Secret;
 import ee.yals.models.User;
 import ee.yals.models.dao.SecretDao;
 import ee.yals.models.dao.UserDao;
+import ee.yals.test.YalsTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 @WebAppConfiguration
 @TestPropertySource(locations = "classpath:test-app.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class SecretsTest {
+public class SecretsTest extends YalsTest {
 
     @Autowired
     private UserDao userDao;
@@ -39,8 +40,8 @@ public class SecretsTest {
         Secret secret = Secret.create("ABC321").forUser(user).please();
         secretDao.save(secret);
 
-        List<Secret> allSecrets = secretDao.findAll();
-        assertTrue(allSecrets.size() == 1);
+        Optional<Secret> storedSecret = secretDao.findSingleByUser(user);
+        assertTrue(storedSecret.isPresent());
     }
 
     @Test

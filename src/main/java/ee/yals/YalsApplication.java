@@ -9,7 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class YalsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(YalsApplication.class, args);
-	}
+    /**
+     * Default application user when exact user is not set
+     */
+    public static final String YALS_GOD = "yalsGod";
+
+    public static void main(String[] args) {
+        SpringApplication.run(YalsApplication.class, args);
+    }
 }

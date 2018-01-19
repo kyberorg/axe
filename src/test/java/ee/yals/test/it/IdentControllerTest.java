@@ -4,6 +4,7 @@ import ee.yals.Endpoint;
 import ee.yals.controllers.rest.IdentRestController;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
+import ee.yals.test.YalsTest;
 import ee.yals.utils.AppUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration({"classpath*:test-app.xml"})
 @WebAppConfiguration
 @TestPropertySource(locations = "classpath:test-app.properties")
-public class IdentControllerTest {
+public class IdentControllerTest extends YalsTest {
     @Autowired
     private WebApplicationContext wac;
 
