@@ -102,7 +102,7 @@
     </changeSet>
     <changeSet id="4" author="kyberorg">
         <addColumn tableName="links">
-            <column name="owner" type="bigint">
+            <column name="owner" type="bigint" defaultValue="1">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
