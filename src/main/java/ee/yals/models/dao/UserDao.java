@@ -1,6 +1,5 @@
 package ee.yals.models.dao;
 
-import ee.yals.YalsApplication;
 import ee.yals.models.User;
 import ee.yals.models.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +34,5 @@ public class UserDao {
 
     private boolean isNewRecord(User userToCheck) {
         return !userRepo.findSingleById(userToCheck.getId()).isPresent();
-    }
-
-    public User getDefaultUser() {
-        Optional<User> godUser = findSingleByAlias(YalsApplication.YALS_GOD);
-        if (godUser.isPresent()) {
-            return godUser.get();
-        } else {
-            throw new Error("Application initialization error. Reason: '" + YalsApplication.YALS_GOD + "'" +
-                    " user is not found in DB");
-        }
     }
 }

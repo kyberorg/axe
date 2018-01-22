@@ -18,7 +18,6 @@ public class TokenDao {
     }
 
     public Token save(Token tokenToSave) {
-        //TODO set expiration
         return tokenRepo.save(tokenToSave);
     }
 
