@@ -19,8 +19,6 @@ import java.util.Optional;
 @Component
 public class DbTokenService implements TokenService {
 
-    public static final String NO_TOKEN = "NOT_A_TOKEN";
-
     @Autowired
     private UserService userService;
 

@@ -14,7 +14,7 @@ public class Token {
     private static final String EXPIRATION_TIME_COLUMN = "expiration_time";
 
     public static final String TOKEN_LIFETIME_PROPERTY_KEY = "yals.token.lifetime";
-    private static final long DEFAULT_TOKEN_LIFETIME = 3600;
+    private static final long DEFAULT_TOKEN_LIFETIME = 3600; //in seconds
 
     private Token() {
     }

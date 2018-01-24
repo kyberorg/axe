@@ -27,7 +27,7 @@ import javax.validation.Validator;
 import java.util.HashSet;
 import java.util.Set;
 
-import static ee.yals.services.token.DbTokenService.NO_TOKEN;
+import static ee.yals.services.token.TokenService.NO_TOKEN;
 
 /**
  * Stores long link to storage
