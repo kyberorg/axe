@@ -1,7 +1,6 @@
 package ee.yals.models.dao;
 
 import ee.yals.models.Link;
-import ee.yals.models.repo.LinkRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +18,10 @@ public class LinkDao {
 
     public Link save(Link linkToSave) {
         return linkRepo.save(linkToSave);
+    }
+
+    public long count() {
+        return linkRepo.count();
     }
 
 }

@@ -1,4 +1,4 @@
-package ee.yals.models.repo;
+package ee.yals.models.dao;
 
 import ee.yals.models.User;
 import org.springframework.data.repository.Repository;
@@ -6,7 +6,7 @@ import org.springframework.data.repository.Repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepo extends Repository<User, Long> {
+interface UserRepo extends Repository<User, Long> {
     Optional<User> findSingleByAlias(String alias);
 
     Optional<User> findSingleById(Long id);

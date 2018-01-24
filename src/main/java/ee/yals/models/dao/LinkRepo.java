@@ -1,4 +1,4 @@
-package ee.yals.models.repo;
+package ee.yals.models.dao;
 
 import ee.yals.models.Link;
 import org.springframework.data.repository.Repository;
@@ -11,7 +11,7 @@ import java.util.Optional;
  *
  * @since 2.0
  */
-public interface LinkRepo extends Repository<Link, Long> {
+interface LinkRepo extends Repository<Link, Long> {
     Optional<Link> findSingleByIdent(String linkIdent);
     Link save(Link linkToSave);
     List<Link> findAll();

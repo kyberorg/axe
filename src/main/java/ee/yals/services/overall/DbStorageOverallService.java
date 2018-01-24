@@ -1,6 +1,6 @@
 package ee.yals.services.overall;
 
-import ee.yals.models.repo.LinkRepo;
+import ee.yals.models.dao.LinkDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -18,14 +18,10 @@ import java.util.Objects;
 public class DbStorageOverallService implements OverallService {
 
     @Autowired
-    private LinkRepo repo;
+    private LinkDao dao;
 
     @Override
     public long numberOfStoredLinks() {
-        if(Objects.nonNull(repo)){
-            return repo.count();
-        } else {
-            return 0;
-        }
+        return Objects.nonNull(dao) ? dao.count() : 0;
     }
 }

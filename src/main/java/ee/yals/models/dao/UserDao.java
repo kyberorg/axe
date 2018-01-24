@@ -1,7 +1,6 @@
 package ee.yals.models.dao;
 
 import ee.yals.models.User;
-import ee.yals.models.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

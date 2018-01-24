@@ -3,7 +3,6 @@ package ee.yals.models.dao;
 import ee.yals.exceptions.ElementAlreadyExistsException;
 import ee.yals.models.Secret;
 import ee.yals.models.User;
-import ee.yals.models.repo.SecretRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
