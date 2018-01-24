@@ -123,6 +123,13 @@
 			<version>2.6</version>
 		</dependency>
 
+		<!-- For encrypt secrets -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+		</dependency>
+
 		<!-- Spring Boot Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

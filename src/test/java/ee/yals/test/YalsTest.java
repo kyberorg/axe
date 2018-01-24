@@ -7,11 +7,19 @@ import ee.yals.models.User;
 import ee.yals.models.dao.SecretDao;
 import ee.yals.models.dao.UserDao;
 import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Class cointains methods, which apply to Test SuiteCase in Yals Application
+ * Class contains methods, which apply to Test SuiteCase in Yals Application
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"classpath*:test-app.xml"})
+@TestPropertySource(locations = "classpath:test-app.properties")
 public class YalsTest {
 
     @Autowired
@@ -34,13 +42,15 @@ public class YalsTest {
             userDao.save(demoUser);
 
             if (!secretDao.findSingleByUser(demoUser).isPresent()) {
-                //TODO real function here
                 //Create demo password
-                Secret demoSecret = Secret.create("26C669CD0814AC40E5328752B21C4AA6450D16295E4EEC30356A06A911C23983AAEBE12D5DA38EEEBFC1B213BE650498DF8419194D5A26C7E0A50AF156853C79")
-                        .forUser(demoUser)
-                        .please();
+                Secret demoSecret = Secret.create("demo").forUser(demoUser).please();
                 secretDao.save(demoSecret);
             }
         }
+    }
+
+    @Test
+    public void contextLoads() {
+
     }
 }
