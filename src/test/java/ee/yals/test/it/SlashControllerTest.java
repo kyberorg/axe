@@ -1,12 +1,13 @@
 package ee.yals.test.it;
 
 import ee.yals.Endpoint;
+import ee.yals.constants.Header;
+import ee.yals.constants.MimeType;
 import ee.yals.controllers.SlashController;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
+import ee.yals.test.YalsTest;
 import ee.yals.utils.AppUtils;
-import ee.yals.constants.Header;
-import ee.yals.constants.MimeType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration({"classpath*:test-app.xml"})
 @WebAppConfiguration
 @TestPropertySource(locations = "classpath:test-app.properties")
-public class SlashControllerTest {
+public class SlashControllerTest extends YalsTest {
 
     @Autowired
     private WebApplicationContext wac;

@@ -1,7 +1,8 @@
 package ee.yals.services;
 
-import ee.yals.result.StoreResult;
+import ee.yals.models.User;
 import ee.yals.result.GetResult;
+import ee.yals.result.StoreResult;
 
 /**
  * Queries for Link storage
@@ -12,5 +13,5 @@ public interface LinkService {
 
     GetResult getLink(String ident);
 
-    StoreResult storeNew(String ident, String link);
+    StoreResult storeNew(String ident, String link, User owner);
 }

@@ -1,7 +1,8 @@
 package ee.yals.services;
 
-import ee.yals.result.StoreResult;
+import ee.yals.models.User;
 import ee.yals.result.GetResult;
+import ee.yals.result.StoreResult;
 import ee.yals.storage.LinkStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +27,7 @@ public class LocalStorageLinkService implements LinkService {
     }
 
     @Override
-    public StoreResult storeNew(String ident, String link) {
+    public StoreResult storeNew(String ident, String link, User owner) {
         storage.save(ident, link);
         return new StoreResult.Success();
     }

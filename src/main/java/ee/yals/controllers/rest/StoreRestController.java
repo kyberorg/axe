@@ -1,15 +1,17 @@
 package ee.yals.controllers.rest;
 
 import ee.yals.Endpoint;
+import ee.yals.core.IdentGenerator;
 import ee.yals.json.ErrorJson;
-import ee.yals.json.internal.Json;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
-import ee.yals.result.StoreResult;
+import ee.yals.json.internal.Json;
+import ee.yals.models.User;
 import ee.yals.result.GetResult;
+import ee.yals.result.StoreResult;
 import ee.yals.services.LinkService;
+import ee.yals.services.token.TokenService;
 import ee.yals.utils.AppUtils;
-import ee.yals.core.IdentGenerator;
 import ee.yals.utils.UrlExtraValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +27,8 @@ import javax.validation.Validator;
 import java.util.HashSet;
 import java.util.Set;
 
+import static ee.yals.services.token.TokenService.NO_TOKEN;
+
 /**
  * Stores long link to storage
  *
@@ -36,6 +40,9 @@ public class StoreRestController {
     @Autowired
     @Qualifier("dbStorage")
     private LinkService linkService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.STORE_API)
@@ -79,7 +86,10 @@ public class StoreRestController {
             } while (isIdentAlreadyExists(ident));
         }
 
-        StoreResult result = linkService.storeNew(ident, storeInput.getLink());
+        //TODO get token from JSON
+        User linkOwner = tokenService.giveUserFromToken(NO_TOKEN);
+
+        StoreResult result = linkService.storeNew(ident, storeInput.getLink(), linkOwner);
         if (result instanceof StoreResult.Success) {
             response.setStatus(201);
             return StoreResponseJson.create().withIdent(ident);

@@ -5,18 +5,120 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
-        <changeSet id="1" author="kyberorg">
-            <createTable tableName="links">
-                <column name="id" autoIncrement="true" type="bigint">
-                    <constraints primaryKey="true"/>
-                </column>
-                <column name="ident" type="varchar(255)">
-                    <constraints nullable="false"/>
-                </column>
-                <column name="link" type="varchar(255)">
-                    <constraints nullable="false"/>
-                </column>
-            </createTable>
-        </changeSet>
+    <changeSet id="1" author="kyberorg">
+        <createTable tableName="links">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ident" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="link" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 
+    <changeSet id="2" author="kyberorg">
+        <createTable tableName="users">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="alias" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="secrets">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user"
+                                 baseTableName="secrets"
+                                 constraintName="fk_secret_owner"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+
+        <createTable tableName="tokens">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="owner" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_time" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="owner"
+                                 baseTableName="tokens"
+                                 constraintName="fk_token_owner"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        <rollback>
+            <dropTable tableName="tokens"/>
+            <dropTable tableName="secrets"/>
+            <dropTable tableName="users"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="3" author="kyberorg">
+        <insert tableName="users">
+            <column name="id">1</column>
+            <column name="alias">yalsGod</column>
+            <column name="created">0</column>
+            <column name="updated">0</column>
+        </insert>
+        <insert tableName="users">
+            <column name="id">2</column>
+            <column name="alias">demo</column>
+            <column name="created">0</column>
+            <column name="updated">0</column>
+        </insert>
+        <insert tableName="secrets">
+            <column name="user">2</column> <!-- demo -->
+            <column name="password">
+                26C669CD0814AC40E5328752B21C4AA6450D16295E4EEC30356A06A911C23983AAEBE12D5DA38EEEBFC1B213BE650498DF8419194D5A26C7E0A50AF156853C79
+            </column><!-- demo -->
+        </insert>
+    </changeSet>
+    <changeSet id="4" author="kyberorg">
+        <addColumn tableName="links">
+            <column name="owner" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="owner"
+                                 baseTableName="links"
+                                 constraintName="fk_link_owner"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="owner"
+                                      constraintName="fk_link_owner"/>
+            <dropColumn tableName="links"
+                        columnName="owner"/>
+
+        </rollback>
+    </changeSet>
 </databaseChangeLog>
