@@ -18,9 +18,23 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class MMRestController {
 
+    private static final String PAYLOAD_MARKER_TEXT = "text=";
+
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.MM_API)
     public Json mm(@RequestBody String body, HttpServletResponse response) {
-        System.out.println("MM: " + body);
+        String[] bodyParams = body.split("&");
+        if (bodyParams.length <= 1) {
+            response.setStatus(421);
+            return ErrorJson.createWithMessage("Body should be a valid request from MatterMost");
+        }
+
+        for (String bodyParam : bodyParams) {
+            if (bodyParam.startsWith(PAYLOAD_MARKER_TEXT)) {
+                String link = bodyParam.replaceFirst("text=", "");
+                System.out.println("MM Link: " + link);
+            }
+        }
+
         response.setStatus(200);
         return ErrorJson.createWithMessage("Not impl");
     }
