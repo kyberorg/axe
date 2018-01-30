@@ -2,6 +2,7 @@ package ee.yals.controllers.rest;
 
 import ee.yals.Endpoint;
 import ee.yals.json.ErrorJson;
+import ee.yals.json.MattermostResponseJson;
 import ee.yals.json.internal.Json;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,10 @@ public class MMRestController {
         for (String bodyParam : bodyParams) {
             if (bodyParam.startsWith(PAYLOAD_MARKER_TEXT)) {
                 String link = bodyParam.replaceFirst("text=", "");
-                System.out.println("MM Link: " + link);
+                MattermostResponseJson mmJson = new MattermostResponseJson();
+                mmJson.text = "You sent: " + link;
+                response.setStatus(200);
+                return mmJson;
             }
         }
 
