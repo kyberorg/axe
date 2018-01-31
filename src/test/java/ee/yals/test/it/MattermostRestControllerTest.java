@@ -76,6 +76,30 @@ public class MattermostRestControllerTest {
     }
 
     @Test
+    public void toPayloadWithTrailingSpaceShouldReplyCorrectJson() throws Exception {
+
+        MattermostMock matterMock = MattermostMock.create()
+                .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
+                .withCommand("yals")
+                .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withText("https%3A%2F%2Fyals.ee+") //Space encodes as +
+                .withToken(RandomStringUtils.randomAlphanumeric(15))
+                .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
+
+        String matterRequest = matterMock.toString();
+
+        MvcResult result = mockMvc.perform(
+                post(Endpoint.MM_API)
+                        .content(matterRequest)
+                        .header(Header.TEST, true))
+                .andExpect(status().is(200))
+                .andReturn();
+        assertTrue(isResultMattermostReplyJson(result));
+        assertContentType(MimeType.APPLICATION_JSON, result);
+    }
+
+
+    @Test
     public void toPayloadWithUsernameShouldReplyWithCorrectJsonAndTextContainsThisUser() throws Exception {
 
         String uzer = "uzer";

@@ -1,12 +1,15 @@
 package ee.yals.mm;
 
 import ee.yals.constants.App;
+import org.apache.commons.collections.list.UnmodifiableList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
 
@@ -43,7 +46,14 @@ public class Mattermost {
         if (StringUtils.isBlank(mm.text) || mm.text.equals(NO_VALUE)) {
             throw new IllegalStateException("Param 'text' is missing");
         } else {
-            mm.text = mm.decodeUrlInText();
+            mm.text = mm.decodeText(mm.text);
+            //as the moment we use only first argument from query
+            List<String> queryCommands = mm.extractCommandsFromMMQueryString();
+            if (queryCommands.isEmpty()) {
+                throw new IllegalStateException("Got empty query (aka text) from MatterMost. Nothing to shorten");
+            } else {
+                mm.text = queryCommands.get(0);
+            }
         }
         return mm;
     }
@@ -117,17 +127,19 @@ public class Mattermost {
         }
     }
 
-    private String decodeUrlInText() {
-        try {
-            URI uri = new URI(this.text);
-            return uri.getPath();
-        } catch (URISyntaxException e) {
-            return this.text;
-        }
-    }
-
     private String decodeText(String encodedString) {
         return URLDecoder.decode(encodedString);
+    }
+
+    private List<String> extractCommandsFromMMQueryString() {
+        List commands;
+        if (Objects.isNull(this.text) || StringUtils.isBlank(this.text)) {
+            commands = UnmodifiableList.decorate(new ArrayList());
+        } else {
+            String[] commandArray = this.text.split(" ");
+            commands = UnmodifiableList.decorate(Arrays.asList(commandArray));
+        }
+        return commands;
     }
 
     private boolean isParamStartWith(Marker marker) {

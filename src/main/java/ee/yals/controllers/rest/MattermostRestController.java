@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 import static ee.yals.mm.Mattermost.Constants.AT;
+import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
 
 /**
  * MatterMost chat endpoint
@@ -62,7 +63,7 @@ public class MattermostRestController {
 
     private MattermostResponseJson success(Link savedLink) {
         String hostname = getServerHostname(request);
-        String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) ?
+        String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) && (!mattermost.getUsername().equals(NO_VALUE)) ?
                 "Okay " + AT + mattermost.getUsername() + ", " : "Okay, ";
 
         return MattermostResponseJson.createWithText(userGreet + "here is your short link: " + hostname + "/" + savedLink.getIdent());
