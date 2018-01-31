@@ -21,6 +21,9 @@ public class Endpoint {
     public static final String LINK_API_MAPPING= "/api/link/{ident}";
     public static final String LINK_API_BASE= "/api/link";
 
+    @RequestMethod(value = HttpMethod.POST, api = true)
+    public static final String MM_API = "/api/mm";
+
     @RequestMethod(HttpMethod.GET)
     public static final String SLASH_BASE = "/";
     public static final String SLASH= "/{ident}";

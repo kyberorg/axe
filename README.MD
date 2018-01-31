@@ -34,6 +34,12 @@ Just a simple link shortener like many others for friends.
 ```
 
 ## Release Notes
+
+### Version 2.3 (31/01/18)
+Mattermost integration
+
+* Mattermost endpoint (#65)
+
 ### Version 2.2 (29/12/17)
 Mobile-friendly site
 
