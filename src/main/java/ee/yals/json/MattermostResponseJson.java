@@ -26,8 +26,8 @@ public class MattermostResponseJson extends Json {
     @JsonProperty("goto_location")
     private String gotoLocation;
 
-    @JsonProperty("user_name")
-    private String username = "YalsBot";
+    @JsonProperty("username")
+    private String username = Mattermost.Constants.BOT_NAME;
 
     private MattermostResponseJson() {
     }

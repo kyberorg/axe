@@ -76,7 +76,8 @@ public class MattermostRestController {
     }
 
     private MattermostResponseJson serverError() {
-        return MattermostResponseJson.createWithText(Emoji.WARNING + " Server Error");
+        return MattermostResponseJson.createWithText(Emoji.WARNING + " Server Error")
+                .addGotoLocation(Mattermost.Constants.SUPPORT_URL);
     }
 
     private String getServerHostname(HttpServletRequest request) {
