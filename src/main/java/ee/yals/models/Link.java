@@ -51,4 +51,9 @@ public class Link {
         linkObject.link = link;
         return linkObject;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s [ ident: %s, shortLink: %s ]", Link.class.getSimpleName(), ident, link);
+    }
 }
