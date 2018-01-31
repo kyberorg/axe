@@ -7,6 +7,7 @@ import ee.yals.mm.Mattermost;
 import ee.yals.mm.Mattermost.Emoji;
 import ee.yals.models.Link;
 import ee.yals.services.mm.MattermostService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 import static ee.yals.mm.Mattermost.Constants.AT;
@@ -37,7 +37,7 @@ public class MattermostRestController {
     private Mattermost mattermost;
 
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.MM_API)
-    public Json mm(@RequestBody String body, HttpServletRequest request, HttpServletResponse response) {
+    public Json mm(@RequestBody String body, HttpServletRequest request) {
         try {
             mattermost = Mattermost.createFromResponseBody(body);
             if (UrlValidator.getInstance().isValid(mattermost.getText())) {
@@ -63,7 +63,9 @@ public class MattermostRestController {
     }
 
     private MattermostResponseJson usage() {
-        return MattermostResponseJson.createWithText(Emoji.WARNING + " Usage: /" + mattermost.getCommand() +
+        String command = StringUtils.isNotBlank(mattermost.getCommand()) ? mattermost.getCommand() : "/yals";
+
+        return MattermostResponseJson.createWithText(Emoji.WARNING + "  Usage: " + command +
                 " http://mysuperlonglink.tld");
     }
 

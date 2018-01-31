@@ -3,6 +3,7 @@ package ee.yals.json;
 import com.google.gson.annotations.SerializedName;
 import ee.yals.json.internal.Json;
 import ee.yals.mm.Mattermost;
+import ee.yals.mm.Mattermost.Emoji;
 import ee.yals.utils.UrlExtraValidator;
 import org.apache.commons.validator.GenericValidator;
 
@@ -35,7 +36,7 @@ public class MattermostResponseJson extends Json {
         MattermostResponseJson mmJson = new MattermostResponseJson();
 
         boolean containsUrl = UrlExtraValidator.isStringContainsUrl(text);
-        boolean isErrorMessage = text.contains(Mattermost.Emoji.WARNING);
+        boolean isErrorMessage = text.contains(Emoji.WARNING);
         if (containsUrl || isErrorMessage) {
             mmJson.text = text;
             return mmJson;

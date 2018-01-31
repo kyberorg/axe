@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 
 import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
 
@@ -96,6 +97,7 @@ public class Mattermost {
                 channelName = removeMarker(Marker.CHANNEL_NAME);
             } else if (isParamStartWith(Marker.COMMAND)) {
                 command = removeMarker(Marker.COMMAND);
+                command = decodeText(command);
             } else if (isParamStartWith(Marker.TEAM_DOMAIN)) {
                 teamDomain = removeMarker(Marker.TEAM_DOMAIN);
             } else if (isParamStartWith(Marker.TEAM_ID)) {
@@ -122,6 +124,11 @@ public class Mattermost {
         } catch (URISyntaxException e) {
             return this.text;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private String decodeText(String encodedString) {
+        return URLDecoder.decode(encodedString);
     }
 
     private boolean isParamStartWith(Marker marker) {
