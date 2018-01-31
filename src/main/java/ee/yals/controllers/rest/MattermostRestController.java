@@ -59,11 +59,11 @@ public class MattermostRestController {
 
     private MattermostResponseJson success(Link savedLink) {
         String hostname = "https://yals.yadev.ee";
-        return MattermostResponseJson.createWithText("Dear " + AT + mattermost.getUsername() + " here is your short link: " + hostname + "/" + savedLink.getIdent());
+        return MattermostResponseJson.createWithText("Okay " + AT + mattermost.getUsername() + ", here is your short link: " + hostname + "/" + savedLink.getIdent());
     }
 
     private MattermostResponseJson usage() {
-        return MattermostResponseJson.createWithText(Emoji.WARNING + "Usage: /" + mattermost.getCommand() +
+        return MattermostResponseJson.createWithText(Emoji.WARNING + " Usage: /" + mattermost.getCommand() +
                 " http://mysuperlonglink.tld");
     }
 
