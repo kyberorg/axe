@@ -36,8 +36,11 @@ public class MattermostRestController {
 
     private Mattermost mattermost;
 
+    private HttpServletRequest request;
+
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.MM_API)
     public Json mm(@RequestBody String body, HttpServletRequest request) {
+        this.request = request;
         try {
             mattermost = Mattermost.createFromResponseBody(body);
             if (UrlValidator.getInstance().isValid(mattermost.getText())) {
@@ -58,8 +61,11 @@ public class MattermostRestController {
     }
 
     private MattermostResponseJson success(Link savedLink) {
-        String hostname = "https://yals.yadev.ee";
-        return MattermostResponseJson.createWithText("Okay " + AT + mattermost.getUsername() + ", here is your short link: " + hostname + "/" + savedLink.getIdent());
+        String hostname = getServerHostname(request);
+        String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) ?
+                "Okay " + AT + mattermost.getUsername() + ", " : "Okay, ";
+
+        return MattermostResponseJson.createWithText(userGreet + "here is your short link: " + hostname + "/" + savedLink.getIdent());
     }
 
     private MattermostResponseJson usage() {
@@ -71,5 +77,10 @@ public class MattermostRestController {
 
     private MattermostResponseJson serverError() {
         return MattermostResponseJson.createWithText(Emoji.WARNING + " Server Error");
+    }
+
+    private String getServerHostname(HttpServletRequest request) {
+        String requestUrl = request.getRequestURL().toString();
+        return requestUrl.replace(Endpoint.MM_API, "");
     }
 }

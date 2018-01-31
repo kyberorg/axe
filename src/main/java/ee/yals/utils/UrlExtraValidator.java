@@ -9,7 +9,7 @@ import org.apache.commons.validator.routines.UrlValidator;
  * @since 2.0
  */
 public class UrlExtraValidator {
-    private final static String URL_MARKER = "://";
+    private static final String URL_MARKER = "://";
     private UrlExtraValidator(){
         throw new UnsupportedOperationException("Utility class");
     }
@@ -29,7 +29,7 @@ public class UrlExtraValidator {
         String[] words = string.split(" ");
         int urlCount = 0;
         for (String word : words) {
-            if (word.contains(URL_MARKER) && new UrlValidator(UrlValidator.ALLOW_ALL_SCHEMES).isValid(word)) {
+            if (word.contains(URL_MARKER) && new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS).isValid(word)) {
                 urlCount += 1;
             }
         }

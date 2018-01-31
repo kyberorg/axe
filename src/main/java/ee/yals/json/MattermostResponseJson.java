@@ -1,6 +1,6 @@
 package ee.yals.json;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ee.yals.json.internal.Json;
 import ee.yals.mm.Mattermost;
 import ee.yals.mm.Mattermost.Emoji;
@@ -14,19 +14,19 @@ import org.apache.commons.validator.GenericValidator;
  */
 public class MattermostResponseJson extends Json {
 
-    @SerializedName("icon_url")
+    @JsonProperty("icon_url")
     private String iconUrl = Mattermost.Constants.BOT_ICON;
 
-    @SerializedName("text")
+    @JsonProperty("text")
     private String text;
 
-    @SerializedName("response_type")
+    @JsonProperty("response_type")
     private String responseType = Mattermost.ResponseType.IN_CHANNEL.toString();
 
-    @SerializedName("goto_location")
+    @JsonProperty("goto_location")
     private String gotoLocation;
 
-    @SerializedName("user_name")
+    @JsonProperty("user_name")
     private String username = "YalsBot";
 
     private MattermostResponseJson() {
