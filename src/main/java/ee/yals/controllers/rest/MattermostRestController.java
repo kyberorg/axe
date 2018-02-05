@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static ee.yals.mm.Mattermost.Constants.AT;
@@ -56,6 +57,9 @@ public class MattermostRestController {
             } else {
                 return usage();
             }
+        } catch (NoSuchElementException e) {
+            LOG.error("Got exception while handling MM request. Body: " + body + " Exception: ", e);
+            return usage();
         } catch (Exception e) {
             LOG.error("Got exception while handling MM request. Body: " + body + " Exception: ", e);
             return serverError();
@@ -71,7 +75,8 @@ public class MattermostRestController {
     }
 
     private MattermostResponseJson usage() {
-        String command = StringUtils.isNotBlank(mattermost.getCommand()) ? mattermost.getCommand() : "/yals";
+        String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand())) ?
+                mattermost.getCommand() : "/yals";
 
         return MattermostResponseJson.createWithText(Emoji.WARNING + "  Usage: " + command +
                 " http://mysuperlonglink.tld");

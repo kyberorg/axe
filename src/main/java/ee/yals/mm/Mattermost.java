@@ -6,10 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
 
@@ -20,7 +17,6 @@ import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
  */
 public class Mattermost {
     private static final Logger Log = Logger.getLogger(Mattermost.class);
-
 
     private String channelId = NO_VALUE;
     private String channelName = NO_VALUE;
@@ -44,13 +40,13 @@ public class Mattermost {
         Mattermost mm = new Mattermost();
         mm.parseBody(body);
         if (StringUtils.isBlank(mm.text) || mm.text.equals(NO_VALUE)) {
-            throw new IllegalStateException("Param 'text' is missing");
+            throw new NoSuchElementException("Got empty query (aka text) from MatterMost. Nothing to shorten");
         } else {
             mm.text = mm.decodeText(mm.text);
             //as the moment we use only first argument from query
             List<String> queryCommands = mm.extractCommandsFromMMQueryString();
             if (queryCommands.isEmpty()) {
-                throw new IllegalStateException("Got empty query (aka text) from MatterMost. Nothing to shorten");
+                throw new NoSuchElementException("Got empty query (aka text) from MatterMost. Nothing to shorten");
             } else {
                 mm.text = queryCommands.get(0);
             }

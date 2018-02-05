@@ -5,6 +5,8 @@ import ee.yals.test.utils.mock.MattermostMock;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
 import static org.junit.Assert.*;
 
@@ -67,7 +69,7 @@ public class MattermostTests {
         Mattermost.createFromResponseBody(" ");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldBeExceptionWhenRequestHasNoText() {
         String channelId = RandomStringUtils.randomAlphanumeric(6);
         String channelName = "channelName";
