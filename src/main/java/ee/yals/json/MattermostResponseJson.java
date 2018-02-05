@@ -42,7 +42,7 @@ public class MattermostResponseJson extends Json {
             mmJson.text = text;
             return mmJson;
         } else {
-            throw new IllegalArgumentException("Text must be either: valid URL, usage error message");
+            throw new IllegalArgumentException("Text must be either: valid URL, usage or error message");
         }
     }
 
