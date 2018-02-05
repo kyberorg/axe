@@ -175,8 +175,7 @@ public class MattermostRestControllerTest {
 
         String mmText = getMMText(result);
 
-        assertMMError(mmText);
-        assertTrue(mmText.contains("Usage"));
+        assertUsage(mmText);
     }
 
     @Test
@@ -247,7 +246,8 @@ public class MattermostRestControllerTest {
     }
 
     private void assertUsage(String mmText) {
-        assertTrue(mmText.contains("Usage"));
+        assertTrue("Text must contain info emoji", mmText.contains(Emoji.INFO));
+        assertTrue("Text must contain word 'Usage'", mmText.contains("Usage"));
     }
 
 }

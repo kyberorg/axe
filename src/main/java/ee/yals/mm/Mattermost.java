@@ -201,5 +201,6 @@ public class Mattermost {
         }
 
         public static final String WARNING = ":warning:";
+        public static final String INFO = ":information_source:";
     }
 }

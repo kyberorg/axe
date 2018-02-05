@@ -37,11 +37,12 @@ public class MattermostResponseJson extends Json {
 
         boolean containsUrl = UrlExtraValidator.isStringContainsUrl(text);
         boolean isErrorMessage = text.contains(Emoji.WARNING);
-        if (containsUrl || isErrorMessage) {
+        boolean isUsageMessage = (text.contains(Emoji.INFO) && text.contains("Usage"));
+        if (containsUrl || isErrorMessage || isUsageMessage) {
             mmJson.text = text;
             return mmJson;
         } else {
-            throw new IllegalArgumentException("Text must be either: valid URL or error message");
+            throw new IllegalArgumentException("Text must be either: valid URL, usage error message");
         }
     }
 

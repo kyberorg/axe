@@ -78,7 +78,7 @@ public class MattermostRestController {
         String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand())) ?
                 mattermost.getCommand() : "/yals";
 
-        return MattermostResponseJson.createWithText(Emoji.WARNING + "  Usage: " + command +
+        return MattermostResponseJson.createWithText(Emoji.INFO + "  Usage: " + command +
                 " http://mysuperlonglink.tld");
     }
 
