@@ -1,14 +1,15 @@
 package ee.yals.mm;
 
 import ee.yals.constants.App;
-import org.apache.commons.collections.list.UnmodifiableList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.NoSuchElementException;
 
 import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
+import static ee.yals.mm.MattermostArgumentSet.BROKEN_SET;
+import static ee.yals.mm.MattermostArgumentSet.EMPTY_SET;
 
 /**
  * Mattermost related code
@@ -28,28 +29,26 @@ public class Mattermost {
     private String userId = NO_VALUE;
     private String username = NO_VALUE;
 
+    private MattermostArgumentSet argumentSet = EMPTY_SET;
+
     private String param;
 
-    private Mattermost() {
+    private Mattermost(String body) {
+        this.parseBody(body);
+        this.parseText();
     }
 
     public static Mattermost createFromResponseBody(String body) {
         if (StringUtils.isBlank(body)) {
-            throw new IllegalArgumentException("Body is missing");
+            throw new IllegalStateException("Body is missing");
         }
-        Mattermost mm = new Mattermost();
-        mm.parseBody(body);
-        if (StringUtils.isBlank(mm.text) || mm.text.equals(NO_VALUE)) {
+
+        Mattermost mm = new Mattermost(body);
+
+        if (mm.argumentSet == EMPTY_SET) {
             throw new NoSuchElementException("Got empty query (aka text) from MatterMost. Nothing to shorten");
-        } else {
-            mm.text = mm.decodeText(mm.text);
-            //as the moment we use only first argument from query
-            List<String> queryCommands = mm.extractCommandsFromMMQueryString();
-            if (queryCommands.isEmpty()) {
-                throw new NoSuchElementException("Got empty query (aka text) from MatterMost. Nothing to shorten");
-            } else {
-                mm.text = queryCommands.get(0);
-            }
+        } else if (mm.argumentSet == BROKEN_SET) {
+            throw new IllegalArgumentException("Body must contain URL as first param");
         }
         return mm;
     }
@@ -90,6 +89,10 @@ public class Mattermost {
         return username;
     }
 
+    public MattermostArgumentSet getArgumentSet() {
+        return argumentSet;
+    }
+
     private void parseBody(String body) {
         String[] bodyParams = body.split("&");
         if (bodyParams.length == 0) {
@@ -98,28 +101,26 @@ public class Mattermost {
         for (String bodyParam : bodyParams) {
             this.param = bodyParam;
             if (isParamStartWith(Marker.CHANNEL_ID)) {
-                channelId = removeMarker(Marker.CHANNEL_ID);
+                channelId = decodeText(removeMarker(Marker.CHANNEL_ID));
             } else if (isParamStartWith(Marker.CHANNEL_NAME)) {
-                channelName = removeMarker(Marker.CHANNEL_NAME);
+                channelName = decodeText(removeMarker(Marker.CHANNEL_NAME));
             } else if (isParamStartWith(Marker.COMMAND)) {
-                command = removeMarker(Marker.COMMAND);
-                command = decodeText(command);
+                command = decodeText(removeMarker(Marker.COMMAND));
             } else if (isParamStartWith(Marker.TEAM_DOMAIN)) {
-                teamDomain = removeMarker(Marker.TEAM_DOMAIN);
+                teamDomain = decodeText(removeMarker(Marker.TEAM_DOMAIN));
             } else if (isParamStartWith(Marker.TEAM_ID)) {
-                teamId = removeMarker(Marker.TEAM_ID);
+                teamId = decodeText(removeMarker(Marker.TEAM_ID));
             } else if (isParamStartWith(Marker.TEXT)) {
-                text = removeMarker(Marker.TEXT);
+                text = decodeText(removeMarker(Marker.TEXT));
             } else if (isParamStartWith(Marker.TOKEN)) {
-                token = removeMarker(Marker.TOKEN);
+                token = decodeText(removeMarker(Marker.TOKEN));
             } else if (isParamStartWith(Marker.USER_ID)) {
-                userId = removeMarker(Marker.USER_ID);
+                userId = decodeText(removeMarker(Marker.USER_ID));
             } else if (isParamStartWith(Marker.USER_NAME)) {
-                username = removeMarker(Marker.USER_NAME);
+                username = decodeText(removeMarker(Marker.USER_NAME));
             } else {
                 Log.warn("String '" + this.param + "' doesn't match any pattern. Skipping...");
             }
-
         }
     }
 
@@ -127,15 +128,26 @@ public class Mattermost {
         return URLDecoder.decode(encodedString);
     }
 
-    private List<String> extractCommandsFromMMQueryString() {
-        List commands;
-        if (Objects.isNull(this.text) || StringUtils.isBlank(this.text)) {
-            commands = UnmodifiableList.decorate(new ArrayList());
-        } else {
-            String[] commandArray = this.text.split(" ");
-            commands = UnmodifiableList.decorate(Arrays.asList(commandArray));
+    private void parseText() {
+        if (StringUtils.isBlank(this.text) || this.text.equals(NO_VALUE)) {
+            this.argumentSet = MattermostArgumentSet.builder().buildEmpty();
+            return;
         }
-        return commands;
+
+        String[] arguments = this.text.split(" ");
+        if (arguments.length == 0) {
+            this.argumentSet = MattermostArgumentSet.builder().buildEmpty();
+            return;
+        }
+
+        String url = arguments[0];
+        String description = this.text.replace(url, "").trim();
+
+        if (StringUtils.isNotBlank(description)) {
+            this.argumentSet = MattermostArgumentSet.builderWithUrl(url).andDescription(description).build();
+        } else {
+            this.argumentSet = MattermostArgumentSet.builderWithUrl(url).build();
+        }
     }
 
     private boolean isParamStartWith(Marker marker) {

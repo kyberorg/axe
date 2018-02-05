@@ -54,17 +54,17 @@ public class MattermostTests {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldBeExceptionWhenRequestHasBlankBody() {
         Mattermost.createFromResponseBody("");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldBeExceptionWhenRequestHasNullBody() {
         Mattermost.createFromResponseBody(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldBeExceptionWhenRequestHasEmptyBody() {
         Mattermost.createFromResponseBody(" ");
     }
@@ -119,8 +119,8 @@ public class MattermostTests {
         assertEquals(uzer, mm.getUsername());
     }
 
-    @Test
-    public void shouldBeValidObjectWhenTextIsNotUrl() {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldBeExceptionWhenTextIsNotUrl() {
         String text = "notAnUrl";
         String token = RandomStringUtils.randomAlphanumeric(15);
         String userId = RandomStringUtils.randomAlphanumeric(6);
@@ -132,10 +132,7 @@ public class MattermostTests {
                 .withToken(token)
                 .withUserId(userId).withUsername(uzer);
 
-        Mattermost mm = Mattermost.createFromResponseBody(matterMock.toString());
-
-        assertEquals(text, mm.getText());
-        assertEquals(token, mm.getToken());
+        Mattermost.createFromResponseBody(matterMock.toString());
     }
 
     @Test
