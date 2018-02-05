@@ -43,6 +43,7 @@ public class MattermostRestController {
     public Json mm(@RequestBody String body, HttpServletRequest request) {
         this.request = request;
         try {
+            LOG.debug("Body: " + body);
             mattermost = Mattermost.createFromResponseBody(body);
             if (UrlValidator.getInstance().isValid(mattermost.getText())) {
                 Link savedLink = mmService.storeLink(mattermost.getText());
