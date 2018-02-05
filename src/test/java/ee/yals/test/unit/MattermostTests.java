@@ -5,6 +5,8 @@ import ee.yals.test.utils.mock.MattermostMock;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
 import static org.junit.Assert.*;
 
@@ -52,22 +54,22 @@ public class MattermostTests {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldBeExceptionWhenRequestHasBlankBody() {
         Mattermost.createFromResponseBody("");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldBeExceptionWhenRequestHasNullBody() {
         Mattermost.createFromResponseBody(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldBeExceptionWhenRequestHasEmptyBody() {
         Mattermost.createFromResponseBody(" ");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldBeExceptionWhenRequestHasNoText() {
         String channelId = RandomStringUtils.randomAlphanumeric(6);
         String channelName = "channelName";
@@ -117,8 +119,8 @@ public class MattermostTests {
         assertEquals(uzer, mm.getUsername());
     }
 
-    @Test
-    public void shouldBeValidObjectWhenTextIsNotUrl() {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldBeExceptionWhenTextIsNotUrl() {
         String text = "notAnUrl";
         String token = RandomStringUtils.randomAlphanumeric(15);
         String userId = RandomStringUtils.randomAlphanumeric(6);
@@ -130,10 +132,7 @@ public class MattermostTests {
                 .withToken(token)
                 .withUserId(userId).withUsername(uzer);
 
-        Mattermost mm = Mattermost.createFromResponseBody(matterMock.toString());
-
-        assertEquals(text, mm.getText());
-        assertEquals(token, mm.getToken());
+        Mattermost.createFromResponseBody(matterMock.toString());
     }
 
     @Test

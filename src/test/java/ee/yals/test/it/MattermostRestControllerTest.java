@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import static ee.yals.mm.Mattermost.Constants.AT;
 import static ee.yals.test.utils.TestUtils.assertContentType;
@@ -138,7 +139,7 @@ public class MattermostRestControllerTest {
     }
 
     @Test
-    public void forReplyWithStrangeBodyShouldReplyWithCorrectMMJsonAndErrorMessage() throws Exception {
+    public void forReplyWithStrangeBodyShouldReplyWithUsage() throws Exception {
         String strangeBody = "a=haba$b=more";
         MvcResult result = mockMvc.perform(
                 post(Endpoint.MM_API)
@@ -151,8 +152,7 @@ public class MattermostRestControllerTest {
 
         String mmText = getMMText(result);
 
-        assertMMError(mmText);
-        assertTrue("MatterMost Text must contain text Error", mmText.contains("Error"));
+        assertUsage(mmText);
     }
 
     @Test
@@ -176,8 +176,127 @@ public class MattermostRestControllerTest {
 
         String mmText = getMMText(result);
 
-        assertMMError(mmText);
-        assertTrue(mmText.contains("Usage"));
+        assertUsage(mmText);
+    }
+
+    @Test
+    public void whenArgIsOnlySingleSpaceShouldShowUsage() throws Exception {
+        MattermostMock matterMock = MattermostMock.create()
+                .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
+                .withCommand("yals")
+                .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withText("+")
+                .withToken(RandomStringUtils.randomAlphanumeric(15))
+                .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
+
+        MvcResult result = mockMvc.perform(
+                post(Endpoint.MM_API)
+                        .content(matterMock.toString())
+                        .header(Header.TEST, true))
+                .andExpect(status().is(200))
+                .andReturn();
+        assertTrue(isResultMattermostReplyJson(result));
+        assertContentType(MimeType.APPLICATION_JSON, result);
+
+        String mmText = getMMText(result);
+        assertUsage(mmText);
+    }
+
+    @Test
+    public void whenArgContainsOnlySpacesShouldShowUsage() throws Exception {
+        MattermostMock matterMock = MattermostMock.create()
+                .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
+                .withCommand("yals")
+                .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withText("+++")
+                .withToken(RandomStringUtils.randomAlphanumeric(15))
+                .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
+
+        MvcResult result = mockMvc.perform(
+                post(Endpoint.MM_API)
+                        .content(matterMock.toString())
+                        .header(Header.TEST, true))
+                .andExpect(status().is(200))
+                .andReturn();
+        assertTrue(isResultMattermostReplyJson(result));
+        assertContentType(MimeType.APPLICATION_JSON, result);
+
+        String mmText = getMMText(result);
+        assertUsage(mmText);
+    }
+
+    @Test
+    public void whenTextContainTwoArgsAndFirstIsNotLinkShouldShowUsage() throws Exception {
+        MattermostMock matterMock = MattermostMock.create()
+                .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
+                .withCommand("yals")
+                .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withText("First+Second")
+                .withToken(RandomStringUtils.randomAlphanumeric(15))
+                .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
+
+        MvcResult result = mockMvc.perform(
+                post(Endpoint.MM_API)
+                        .content(matterMock.toString())
+                        .header(Header.TEST, true))
+                .andExpect(status().is(200))
+                .andReturn();
+        assertTrue(isResultMattermostReplyJson(result));
+        assertContentType(MimeType.APPLICATION_JSON, result);
+
+        String mmText = getMMText(result);
+        assertUsage(mmText);
+    }
+
+    @Test
+    public void whenTextIsURLAndTextShouldReturnShortLinkAndDescription() throws Exception {
+        String description = "TestDescription";
+        MattermostMock matterMock = MattermostMock.create()
+                .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
+                .withCommand("yals")
+                .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withText("https%3A%2F%2Fyals.ee+" + description)
+                .withToken(RandomStringUtils.randomAlphanumeric(15))
+                .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
+
+        String matterRequest = matterMock.toString();
+
+        MvcResult result = mockMvc.perform(
+                post(Endpoint.MM_API)
+                        .content(matterRequest)
+                        .header(Header.TEST, true))
+                .andExpect(status().is(200))
+                .andReturn();
+        assertTrue("Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object",
+                isResultMattermostReplyJson(result));
+        String mmText = getMMText(result);
+        assertTrue("Text must contain description, if it is present", mmText.contains(description));
+    }
+
+    @Test
+    public void whenTextHasMultiWordDescriptionShouldReturnShortLinkAndMultiWordDescription() throws Exception {
+        String description = "Multi Test Description";
+        String encodedDescription = URLEncoder.encode(description, "UTF-8");
+        MattermostMock matterMock = MattermostMock.create()
+                .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
+                .withCommand("yals")
+                .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withText("https%3A%2F%2Fyals.ee+" + encodedDescription)
+                .withToken(RandomStringUtils.randomAlphanumeric(15))
+                .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
+
+        String matterRequest = matterMock.toString();
+
+        MvcResult result = mockMvc.perform(
+                post(Endpoint.MM_API)
+                        .content(matterRequest)
+                        .header(Header.TEST, true))
+                .andExpect(status().is(200))
+                .andReturn();
+        assertTrue("Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object",
+                isResultMattermostReplyJson(result));
+        String mmText = getMMText(result);
+        assertTrue("Text must contain description, if it is present", mmText.contains(description));
     }
 
     private boolean isResultMattermostReplyJson(MvcResult result) throws Exception {
@@ -198,6 +317,11 @@ public class MattermostRestControllerTest {
 
     private void assertMMError(String mmText) {
         assertTrue("Text must contain warning emoji", mmText.contains(Emoji.WARNING));
+    }
+
+    private void assertUsage(String mmText) {
+        assertTrue("Text must contain info emoji", mmText.contains(Emoji.INFO));
+        assertTrue("Text must contain word 'Usage'", mmText.contains("Usage"));
     }
 
 }
