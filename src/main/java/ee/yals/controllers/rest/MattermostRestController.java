@@ -84,7 +84,7 @@ public class MattermostRestController {
                 mattermost.getCommand() : "/yals";
 
         return MattermostResponseJson.createWithText(Emoji.INFO + "  Usage: " + command +
-                " http://mysuperlonglink.tld [My Link Description]");
+                " http://mysuperlonglink.tld [Optional Link Description]");
     }
 
     private MattermostResponseJson serverError() {
