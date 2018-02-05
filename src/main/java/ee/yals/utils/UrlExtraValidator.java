@@ -22,6 +22,11 @@ public class UrlExtraValidator {
         return validator.isValid(url) ? VALID : URL_NOT_VALID;
     }
 
+    public static boolean isUrl(String url) {
+        UrlValidator validator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
+        return validator.isValid(url);
+    }
+
     public static boolean isStringContainsUrl(String string) {
         if (StringUtils.isBlank(string)) {
             return false;

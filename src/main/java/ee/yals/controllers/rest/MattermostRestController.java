@@ -8,7 +8,6 @@ import ee.yals.mm.Mattermost.Emoji;
 import ee.yals.models.Link;
 import ee.yals.services.mm.MattermostService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static ee.yals.mm.Mattermost.Constants.AT;
@@ -43,18 +43,20 @@ public class MattermostRestController {
     public Json mm(@RequestBody String body, HttpServletRequest request) {
         this.request = request;
         try {
+            LOG.debug("Body: " + body);
             mattermost = Mattermost.createFromResponseBody(body);
-            if (UrlValidator.getInstance().isValid(mattermost.getText())) {
-                Link savedLink = mmService.storeLink(mattermost.getText());
-                if (Objects.nonNull(savedLink)) {
-                    return success(savedLink);
-                } else {
-                    LOG.error("Was unable to save link. Service returned NULL. Body: " + body);
-                    return serverError();
-                }
+            String mmUrl = mattermost.getArgumentSet().getUrl();
+
+            Link savedLink = mmService.storeLink(mmUrl);
+            if (Objects.nonNull(savedLink)) {
+                return success(savedLink);
             } else {
-                return usage();
+                LOG.error("Was unable to save link. Service returned NULL. Body: " + body);
+                return serverError();
             }
+        } catch (NoSuchElementException | IllegalArgumentException e) {
+            LOG.error("Got exception while handling MM request. Body: " + body + " Exception: ", e);
+            return usage();
         } catch (Exception e) {
             LOG.error("Got exception while handling MM request. Body: " + body + " Exception: ", e);
             return serverError();
@@ -62,18 +64,27 @@ public class MattermostRestController {
     }
 
     private MattermostResponseJson success(Link savedLink) {
-        String hostname = getServerHostname(request);
-        String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) && (!mattermost.getUsername().equals(NO_VALUE)) ?
-                "Okay " + AT + mattermost.getUsername() + ", " : "Okay, ";
+        String serverHostname = getServerHostname(request);
+        String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
 
-        return MattermostResponseJson.createWithText(userGreet + "here is your short link: " + hostname + "/" + savedLink.getIdent());
+        String linkDescription = mattermost.getArgumentSet().getDescription();
+        if (StringUtils.isBlank(linkDescription)) {
+            String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) && (!mattermost.getUsername().equals(NO_VALUE)) ?
+                    "Okay " + AT + mattermost.getUsername() + ", " : "Okay, ";
+            String greeting = userGreet + "here is your short link: ";
+
+            return MattermostResponseJson.createWithText(greeting + fullYalsLink);
+        } else {
+            return MattermostResponseJson.createWithText(fullYalsLink + " " + linkDescription);
+        }
     }
 
     private MattermostResponseJson usage() {
-        String command = StringUtils.isNotBlank(mattermost.getCommand()) ? mattermost.getCommand() : "/yals";
+        String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand())) ?
+                mattermost.getCommand() : "/yals";
 
-        return MattermostResponseJson.createWithText(Emoji.WARNING + "  Usage: " + command +
-                " http://mysuperlonglink.tld");
+        return MattermostResponseJson.createWithText(Emoji.INFO + "  Usage: " + command +
+                " http://mysuperlonglink.tld [Optional Link Description]");
     }
 
     private MattermostResponseJson serverError() {

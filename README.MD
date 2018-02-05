@@ -35,6 +35,13 @@ Just a simple link shortener like many others for friends.
 
 ## Release Notes
 
+### Version 2.3.1 (05/02/18)
+Mattermost multiple params support and fixes
+
+* Mattermost Bug: query with all spaces leaded to ":warning: Server Error" (#68)
+* Multiple param support (#69)
+* :warning: replaced with  :information_source: in Usage message (#70)
+
 ### Version 2.3 (31/01/18)
 Mattermost integration
 
