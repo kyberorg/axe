@@ -6,6 +6,6 @@ public class TokenGenerator {
     private TokenGenerator() {
     }
     public static String generateNew() {
-        return RandomStringUtils.randomAlphanumeric(20);
+        return RandomStringUtils.randomAlphabetic(20);
     }
 }
