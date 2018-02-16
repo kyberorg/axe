@@ -6,6 +6,7 @@ import ee.yals.models.User;
 import ee.yals.models.dao.SecretDao;
 import ee.yals.models.dao.UserDao;
 import ee.yals.test.YalsTest;
+import ee.yals.utils.Password;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class SecretsTest extends YalsTest {
     @Autowired
     private SecretDao secretDao;
 
+    @Autowired
+    private Password.Tester passwordTester;
+
     @Test
     public void canCreateNewSecret() {
         User user = createUser();
@@ -59,7 +63,7 @@ public class SecretsTest extends YalsTest {
         Optional<Secret> updatedSecret = secretDao.findSingleByUser(user);
 
         assertTrue(updatedSecret.isPresent());
-        assertEquals(updatedSecretString, updatedSecret.get().getPassword());
+        assertEquals(Password.EQUAL, passwordTester.test(updatedSecretString).forUser(user));
     }
 
     @Test(expected = ElementAlreadyExistsException.class)
