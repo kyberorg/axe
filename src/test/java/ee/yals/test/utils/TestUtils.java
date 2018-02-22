@@ -1,12 +1,14 @@
 package ee.yals.test.utils;
 
-import ee.yals.json.ErrorJson;
-import ee.yals.utils.AppUtils;
 import ee.yals.constants.Header;
 import ee.yals.constants.MimeType;
+import ee.yals.json.ErrorJson;
+import ee.yals.utils.AppUtils;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -17,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class TestUtils {
 
-    public static void assertResultIsJson(MvcResult result) throws Exception {
+    public static void assertResultIsJson(MvcResult result) {
         assertNotNull(result);
         assertNotNull(result.getResponse());
         assertTrue(result.getResponse().containsHeader(Header.CONTENT_TYPE));
@@ -47,6 +49,18 @@ public class TestUtils {
         assertEquals(mimeType, result.getResponse().getContentType());
     }
 
+    public static void assertErrorMessageContainsText(ErrorJson errorJson, String text) {
+        assertTrue("Given object is not a valid ErrorJson", isValidErrorJson(errorJson));
+        assertNotNull("No error found in " + ErrorJson.class.getSimpleName(), errorJson.getError());
+        String message = errorJson.getError().getErrorMessage();
+        assertTrue("No message found in " + ErrorJson.class.getSimpleName(), Objects.nonNull(message));
+        assertTrue("Given text wasn't found", message.contains(text));
+    }
+
+    public static void assertMockMvcAvailable(MockMvc mockMvc) {
+        assertNotNull("MockMvc is not available", mockMvc);
+    }
+
     public static String whichBrowser() {
         return System.getProperty(Selenide.Props.BROWSER, Selenide.Browser.HTMLUNIT);
     }
@@ -59,5 +73,10 @@ public class TestUtils {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private static boolean isValidErrorJson(Object errorJson) {
+        return !Objects.isNull(errorJson) && errorJson instanceof ErrorJson && !((ErrorJson) errorJson).equalsToEmptyObject();
+
     }
 }

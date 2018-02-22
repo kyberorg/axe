@@ -55,6 +55,11 @@ public class ErrorJson extends Json {
         return errorJson;
     }
 
+    public boolean equalsToEmptyObject() {
+        boolean errorIsNull = this.error == null;
+        boolean errorsAreEmpty = this.errors.isEmpty();
+        return errorIsNull && errorsAreEmpty;
+    }
 
     public Error getError() {
         return error;
