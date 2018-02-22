@@ -57,6 +57,6 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public boolean isTokenAlreadyExists(String token) {
         Optional<Token> tokenOptional = tokenDao.findSingleByToken(token);
-        return !tokenOptional.isPresent();
+        return tokenOptional.isPresent();
     }
 }
