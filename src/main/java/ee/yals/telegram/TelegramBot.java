@@ -35,6 +35,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
+        System.out.println("Using token: " + System.getProperty("telegram.bot.token", DUMMY_TOKEN));
         return System.getProperty("telegram.bot.token", DUMMY_TOKEN);
     }
 }
