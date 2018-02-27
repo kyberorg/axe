@@ -12,12 +12,14 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
  */
 public class TelegramBot extends TelegramLongPollingBot {
     private static final String DUMMY_TOKEN = "dummy:Token";
+
     @Override
     public void onUpdateReceived(Update update) {
         System.out.println("Update " + update.getMessage().getText());
 
         SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
-        sendMessage.setText("Terve");
+        sendMessage.setText("Terve " + update.getMessage().getFrom().getUserName() + " sinu sonum oli: " +
+                update.getMessage().getText());
 
         try {
             sendMessage(sendMessage);
