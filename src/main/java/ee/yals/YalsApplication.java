@@ -13,19 +13,21 @@ import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 @SpringBootApplication
 public class YalsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(YalsApplication.class, args);
-		telegram();
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(YalsApplication.class, args);
+        telegram();
+    }
 
-	private static void telegram() {
+    private static void telegram() {
+
         ApiContextInitializer.init();
-		TelegramBotsApi botsApi = new TelegramBotsApi();
-		TelegramBot bot = new TelegramBot();
-		try {
-			botsApi.registerBot(bot);
-		} catch (TelegramApiRequestException e) {
-			e.printStackTrace();
-		}
-	}
+        TelegramBotsApi botsApi = new TelegramBotsApi();
+        TelegramBot bot = new TelegramBot();
+        System.out.println("Using Telegram token: " + bot.getBotToken());
+        try {
+            botsApi.registerBot(bot);
+        } catch (TelegramApiRequestException e) {
+            e.printStackTrace();
+        }
+    }
 }

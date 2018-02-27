@@ -5,6 +5,8 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.util.Objects;
+
 /**
  * Telegram Bot
  *
@@ -35,7 +37,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        System.out.println("Using token: " + System.getProperty("telegram.bot.token", DUMMY_TOKEN));
-        return System.getProperty("telegram.token", DUMMY_TOKEN);
+        String token = System.getenv("TELEGRAM_TOKEN");
+        return Objects.isNull(token) ? DUMMY_TOKEN : token;
     }
 }
