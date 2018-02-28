@@ -3,11 +3,9 @@ package ee.yals.telegram;
 import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.api.objects.Update;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static ee.yals.constants.App.NO_VALUE;
-import static ee.yals.telegram.TelegramArguments.BROKEN_ARGS;
 import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
 
 /**
@@ -33,13 +31,7 @@ public class TelegramObject {
             throw new IllegalStateException("Update is missing");
         }
 
-        TelegramObject telegramObject = new TelegramObject(update);
-        if (telegramObject.arguments == EMPTY_ARGS) {
-            throw new NoSuchElementException("Got empty command from Telegram. Nothing to shorten");
-        } else if (telegramObject.arguments == BROKEN_ARGS) {
-            throw new IllegalArgumentException("UserMessage must contain URL as first param");
-        }
-        return telegramObject;
+        return new TelegramObject(update);
     }
 
     public TelegramArguments getArguments() {

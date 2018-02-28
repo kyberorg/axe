@@ -14,6 +14,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static ee.yals.services.telegram.TelegramServiceImpl.NO_INIT;
+import static ee.yals.telegram.TelegramArguments.BROKEN_ARGS;
+import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
 
 /**
  * Telegram Bot
@@ -31,6 +33,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private TelegramService telegramService;
 
     private Update update;
+    private TelegramObject telegramObject;
     @Override
     public void onUpdateReceived(Update update) {
         LOG.debug(TAG + "New Update " + update);
@@ -42,15 +45,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                 throw new IllegalStateException("Internal server error: ");
             }
 
-            TelegramObject telegramObject = TelegramObject.createFromUpdate(update);
+            telegramObject = TelegramObject.createFromUpdate(update);
             telegramService.init(telegramObject);
-            String url = telegramObject.getArguments().getUrl();
 
-            Link savedLink = telegramService.storeLink(url);
-            if (Objects.nonNull(savedLink)) {
-                message = telegramService.success(savedLink);
-            } else {
-                message = telegramService.serverError();
+            TelegramCommand telegramCommand = telegramObject.getCommand();
+            switch (telegramCommand) {
+                case YALS:
+                    message = doYals();
+                    break;
+                case START:
+                case USAGE:
+                case UNKNOWN:
+                    message = telegramService.usage();
+                    break;
+                default:
+                    message = telegramService.usage();
             }
 
         } catch (NoSuchElementException | IllegalArgumentException e) {
@@ -85,6 +94,25 @@ public class TelegramBot extends TelegramLongPollingBot {
     public String getBotToken() {
         String token = System.getenv("TELEGRAM_TOKEN");
         return Objects.isNull(token) ? DUMMY_TOKEN : token;
+    }
+
+    private String doYals() {
+        String message;
+        if (telegramObject.getArguments() == EMPTY_ARGS) {
+            throw new NoSuchElementException("Got empty command from Telegram. Nothing to shorten");
+        } else if (telegramObject.getArguments() == BROKEN_ARGS) {
+            throw new IllegalArgumentException("UserMessage must contain URL as first or second (when first is command) param");
+        }
+
+        String url = telegramObject.getArguments().getUrl();
+
+        Link savedLink = telegramService.storeLink(url);
+        if (Objects.nonNull(savedLink)) {
+            message = telegramService.success(savedLink);
+        } else {
+            message = telegramService.serverError();
+        }
+        return message;
     }
 
     private SendMessage createSendMessage(String message) {
