@@ -11,11 +11,6 @@ public class YalsApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(YalsApplication.class, args);
-        telegram();
     }
 
-    private static void telegram() {
-
-
-    }
 }
