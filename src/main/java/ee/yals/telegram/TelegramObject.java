@@ -79,19 +79,20 @@ public class TelegramObject {
         }
 
         this.command = TelegramCommand.createFromString(args[0]);
-        if (this.command == TelegramCommand.UNKNOWN) {
-            //message already without any command
-            this.arguments = createArgumentsFromMessageWithoutCommand(args[0]);
-        } else if (this.command == TelegramCommand.YALS) {
-            String cmd = args[0];
-            String userMessageWithoutCommand = this.userMessage.replace(cmd, "").trim();
-            if (StringUtils.isNotBlank(userMessageWithoutCommand)) {
-                this.arguments = createArgumentsFromMessageWithoutCommand(userMessageWithoutCommand);
-            } else {
-                this.arguments = TelegramArguments.builder().buildEmpty();
-            }
-        } else {
-            this.arguments = TelegramArguments.builder().buildEmpty();
+
+        switch (this.command) {
+            case NOT_A_COMMAND:
+                this.arguments = createArgumentsFromMessageWithoutCommand(this.userMessage);
+                break;
+            case YALS:
+                String remainedArgs = this.userMessage.replace(this.command.getCommandText(), "").trim();
+                this.arguments = createArgumentsFromMessageWithoutCommand(remainedArgs);
+                break;
+            case UNKNOWN:
+            case USAGE:
+            case START:
+            default:
+                this.arguments = TelegramArguments.builder().buildEmpty(); //no reason for manipulating with user message
         }
     }
 
