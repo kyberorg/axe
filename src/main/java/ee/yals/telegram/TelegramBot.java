@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -28,12 +29,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final String TAG = "[Telegram] ";
 
     private static final String DUMMY_TOKEN = "dummy:Token";
+    private static final Message NO_MESSAGE = new Message();
 
     @Autowired
     private TelegramService telegramService;
 
     private Update update;
     private TelegramObject telegramObject;
+
     @Override
     public void onUpdateReceived(Update update) {
         LOG.debug(TAG + "New Update " + update);
@@ -116,8 +119,21 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private SendMessage createSendMessage(String message) {
-        SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
+        Message telegramMessage = getMessage();
+        SendMessage sendMessage = new SendMessage().setChatId(telegramMessage.getChatId());
         sendMessage.setText(message);
         return sendMessage;
+    }
+
+    private Message getMessage() {
+        Message telegramMessage;
+        if (update.hasMessage()) {
+            telegramMessage = update.getMessage();
+        } else if (update.hasEditedMessage()) {
+            telegramMessage = update.getEditedMessage();
+        } else {
+            telegramMessage = NO_MESSAGE;
+        }
+        return telegramMessage;
     }
 }

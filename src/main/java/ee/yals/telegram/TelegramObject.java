@@ -97,11 +97,25 @@ public class TelegramObject {
 
     private TelegramArguments createArgumentsFromMessageWithoutCommand(String userMessageWithoutCommand) {
         TelegramArguments arguments;
-        String description = this.userMessage.replace(userMessageWithoutCommand, "").trim();
-        if (StringUtils.isBlank(description)) {
-            arguments = TelegramArguments.builderWithUrl(userMessageWithoutCommand).andDescription(description).build();
+        String[] args = userMessageWithoutCommand.split(" ");
+        String url = "";
+        String description = "";
+        if (args.length > 0) {
+            url = args[0];
+        }
+        if (args.length > 1) {
+            description = userMessageWithoutCommand.replace(userMessageWithoutCommand, "").trim();
+        }
+
+        if (StringUtils.isBlank(url)) {
+            arguments = TelegramArguments.EMPTY_ARGS;
         } else {
-            arguments = TelegramArguments.builderWithUrl(userMessageWithoutCommand).build();
+
+            if (StringUtils.isBlank(description)) {
+                arguments = TelegramArguments.builderWithUrl(url).andDescription(description).build();
+            } else {
+                arguments = TelegramArguments.builderWithUrl(url).build();
+            }
         }
         return arguments;
     }

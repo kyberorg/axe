@@ -40,7 +40,7 @@ public class TelegramServiceImpl implements TelegramService {
         String ident;
         do {
             ident = IdentGenerator.generateNewIdent();
-        } while (!linkRepo.findSingleByIdent(ident).isPresent());
+        } while (linkRepo.findSingleByIdent(ident).isPresent());
 
         Link link = Link.create(ident, longUrl);
         Link savedLink;
