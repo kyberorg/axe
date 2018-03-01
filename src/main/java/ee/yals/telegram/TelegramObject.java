@@ -1,6 +1,7 @@
 package ee.yals.telegram;
 
 import org.apache.commons.lang3.StringUtils;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 
 import java.util.Objects;
@@ -47,12 +48,22 @@ public class TelegramObject {
     }
 
     private void parseUpdate(Update update) {
-        if (Objects.nonNull(update) && update.hasMessage()) {
-            username = update.getMessage().getFrom().getUserName();
-            userMessage = update.getMessage().getText();
+        if (Objects.isNull(update)) {
+            userMessage = NO_VALUE;
+            return;
+        }
+        Message message;
+        if (update.hasMessage()) {
+            message = update.getMessage();
+        } else if (update.hasEditedMessage()) {
+            message = update.getEditedMessage();
         } else {
             userMessage = NO_VALUE;
+            return;
         }
+
+        username = message.getFrom().getUserName();
+        userMessage = message.getText();
     }
 
     private void parseUserMessage() {
