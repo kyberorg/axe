@@ -1,9 +1,10 @@
 package ee.yals.services.telegram;
 
+import com.vdurmont.emoji.EmojiParser;
+import ee.yals.constants.App.Emoji;
 import ee.yals.core.IdentGenerator;
 import ee.yals.models.Link;
 import ee.yals.models.dao.LinkRepo;
-import ee.yals.telegram.TelegramEmoji;
 import ee.yals.telegram.TelegramObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -79,7 +80,7 @@ public class TelegramServiceImpl implements TelegramService {
             return NO_INIT;
         }
         //FIXME usage
-        return TelegramEmoji.INFO + " usage";
+        return EmojiParser.parseToUnicode(Emoji.INFO + " usage");
     }
 
     @Override
@@ -87,6 +88,6 @@ public class TelegramServiceImpl implements TelegramService {
         if (!isInitDone) {
             return NO_INIT;
         }
-        return TelegramEmoji.WARNING + " serverError";
+        return EmojiParser.parseToUnicode(Emoji.WARNING + " serverError");
     }
 }

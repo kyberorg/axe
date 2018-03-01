@@ -129,6 +129,12 @@
 			<artifactId>telegrambots</artifactId>
 			<version>3.6</version>
 		</dependency>
+        <!-- Emoji Parser -->
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>3.1.3</version>
+        </dependency>
 
 		<!-- Spring Boot Tests -->
 		<dependency>
