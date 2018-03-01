@@ -104,14 +104,13 @@ public class TelegramObject {
             url = args[0];
         }
         if (args.length > 1) {
-            description = userMessageWithoutCommand.replace(userMessageWithoutCommand, "").trim();
+            description = userMessageWithoutCommand.replace(url, "").trim();
         }
 
         if (StringUtils.isBlank(url)) {
             arguments = TelegramArguments.EMPTY_ARGS;
         } else {
-
-            if (StringUtils.isBlank(description)) {
+            if (StringUtils.isNotBlank(description)) {
                 arguments = TelegramArguments.builderWithUrl(url).andDescription(description).build();
             } else {
                 arguments = TelegramArguments.builderWithUrl(url).build();

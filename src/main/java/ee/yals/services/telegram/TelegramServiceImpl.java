@@ -65,7 +65,7 @@ public class TelegramServiceImpl implements TelegramService {
         String linkDescription = telegramObject.getArguments().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
             String userGreet = (StringUtils.isNotBlank(telegramObject.getUsername()) && (!telegramObject.getUsername().equals(NO_VALUE))) ?
-                    "Okay" + AT + telegramObject.getUsername() + ", " : "Okay, ";
+                    "Okay " + AT + telegramObject.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
             return greeting + fullYalsLink;
         } else {
