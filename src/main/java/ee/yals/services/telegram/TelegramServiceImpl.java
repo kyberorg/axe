@@ -1,6 +1,7 @@
 package ee.yals.services.telegram;
 
 import com.vdurmont.emoji.EmojiParser;
+import ee.yals.constants.App;
 import ee.yals.constants.App.Emoji;
 import ee.yals.core.IdentGenerator;
 import ee.yals.models.Link;
@@ -79,8 +80,16 @@ public class TelegramServiceImpl implements TelegramService {
         if (!isInitDone) {
             return NO_INIT;
         }
-        //FIXME usage
-        return EmojiParser.parseToUnicode(Emoji.INFO + " usage");
+
+        String message = " This bot makes short links from long ones" +
+                App.NEW_LINE +
+                "https://mySuperLongLink.com" +
+                App.NEW_LINE +
+                "https://mySuperLongLink.com description" +
+                App.NEW_LINE +
+                "/usage - Show this message";
+
+        return EmojiParser.parseToUnicode(Emoji.INFO + message);
     }
 
     @Override
