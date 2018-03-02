@@ -83,7 +83,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         try {
-            sendMessage(createSendMessage(message));
+            execute(createSendMessage(message));
         } catch (TelegramApiException e) {
             LOG.error(TAG + "Failed to send telegram message. Message: " + message, e);
         }
