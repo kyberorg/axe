@@ -82,11 +82,13 @@ public class TelegramServiceImpl implements TelegramService {
         }
 
         String message = " This bot makes short links from long ones" +
-                App.NEW_LINE +
+                App.NEW_LINE + App.NEW_LINE +
                 "https://mySuperLongLink.com" +
-                App.NEW_LINE +
+                App.NEW_LINE + App.NEW_LINE +
+                "or" + 
+                App.NEW_LINE + App.NEW_LINE +
                 "https://mySuperLongLink.com description" +
-                App.NEW_LINE +
+                App.NEW_LINE + App.NEW_LINE +
                 "/usage - Show this message";
 
         return EmojiParser.parseToUnicode(Emoji.INFO + message);
