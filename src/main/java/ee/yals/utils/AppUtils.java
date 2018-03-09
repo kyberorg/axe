@@ -24,7 +24,7 @@ public class AppUtils {
      * @since 2.0
      */
     public static class HostHelper {
-        public static final String DUMMY_HOST = "DummyHost";
+        private static final String DUMMY_HOST = "DummyHost";
 
         private HostHelper() {
             throw new UnsupportedOperationException("Utility class");

@@ -3,7 +3,6 @@ package ee.yals.telegram;
 import ee.yals.Env;
 import ee.yals.models.Link;
 import ee.yals.services.telegram.TelegramService;
-import ee.yals.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +48,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             if (Objects.isNull(telegramService)) {
                 throw new IllegalStateException("Internal server error: ");
-            }
-
-            if (!isServerUrlAvailable()) {
-                throw new IllegalStateException("Internal server error: Server failed to initialize bot (Missing Server URL)");
             }
 
             telegramObject = TelegramObject.createFromUpdate(update);
@@ -145,8 +140,5 @@ public class TelegramBot extends TelegramLongPollingBot {
         return telegramMessage;
     }
 
-    private boolean isServerUrlAvailable() {
-        String serverHostname = AppUtils.HostHelper.getServerUrl();
-        return !serverHostname.equals(AppUtils.HostHelper.DUMMY_HOST);
-    }
+
 }
