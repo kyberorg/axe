@@ -7,6 +7,7 @@ import ee.yals.core.IdentGenerator;
 import ee.yals.models.Link;
 import ee.yals.models.dao.LinkRepo;
 import ee.yals.telegram.TelegramObject;
+import ee.yals.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,7 @@ public class TelegramServiceImpl implements TelegramService {
         if (!isInitDone) {
             return "Didn't correctly inited";
         }
-        //String serverHostname = getServerHostname(request);
-        String serverHostname = "https://yals.ee"; //FIXME
+        String serverHostname = AppUtils.HostHelper.getServerUrl();
         String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
 
         String linkDescription = telegramObject.getArguments().getDescription();

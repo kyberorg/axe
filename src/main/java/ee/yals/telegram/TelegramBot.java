@@ -1,7 +1,10 @@
 package ee.yals.telegram;
 
+import ee.yals.Env;
 import ee.yals.models.Link;
 import ee.yals.services.telegram.TelegramService;
+import ee.yals.utils.AppUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,6 +51,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 throw new IllegalStateException("Internal server error: ");
             }
 
+            if (!isServerUrlAvailable()) {
+                throw new IllegalStateException("Internal server error: Server failed to initialize bot (Missing Server URL)");
+            }
+
             telegramObject = TelegramObject.createFromUpdate(update);
             telegramService.init(telegramObject);
 
@@ -71,7 +78,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             message = telegramService.usage();
         } catch (IllegalStateException e) {
             LOG.error(TAG + "Exception", e);
-            message = "Internal error: not all components are available";
+            message = "Internal error: not all components are available. Bot currently not available";
         } catch (Exception e) {
             LOG.error(TAG + " Got unexpected exception while processing telegram update. Update: " + update, e);
             message = telegramService.serverError();
@@ -96,8 +103,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        String token = System.getenv("TELEGRAM_TOKEN");
-        return Objects.isNull(token) ? DUMMY_TOKEN : token;
+        String token = System.getenv(Env.TELEGRAM_TOKEN);
+        return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
     }
 
     private String doYals() {
@@ -136,5 +143,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             telegramMessage = NO_MESSAGE;
         }
         return telegramMessage;
+    }
+
+    private boolean isServerUrlAvailable() {
+        String serverHostname = AppUtils.HostHelper.getServerUrl();
+        return !serverHostname.equals(AppUtils.HostHelper.DUMMY_HOST);
     }
 }
