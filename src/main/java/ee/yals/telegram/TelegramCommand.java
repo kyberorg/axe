@@ -11,6 +11,8 @@ public enum TelegramCommand {
     START("/start"),
     USAGE("/usage"),
     YALS("/yals"),
+    YALST("/yalst"),
+    YALSL("/yalsl"),
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
@@ -33,9 +35,11 @@ public enum TelegramCommand {
             return NOT_A_COMMAND;
         }
 
+        boolean isYalsCommand = cmd.equals(YALS.commandString) || cmd.equals(YALST.commandString) || cmd.equals(YALSL.commandString);
+
         if (cmd.equals(START.commandString)) {
             return START;
-        } else if (cmd.equals(YALS.commandString)) {
+        } else if (isYalsCommand) {
             return YALS;
         } else if (cmd.equals(USAGE.commandString)) {
             return USAGE;
