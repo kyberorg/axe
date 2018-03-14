@@ -1,7 +1,8 @@
 pipeline {
-  agent none
+  agent any
   stages {
     stage('Init') {
+      agent any
       steps {
         sh '''echo "Starting building ${PROJECT}"
 
@@ -58,6 +59,7 @@ echo "Hostname: ${HOSTNAME}"
           }
         }
         stage('Collecting Info') {
+          agent any
           steps {
             sh '''echo "[Adding SCM info to Docker build]"
 
@@ -76,6 +78,7 @@ echo $VERY_LATEST_COMMIT
       }
     }
     stage('Build Docker image') {
+      agent any
       steps {
         sh '''echo "[Adding SCM info to Docker build]"
 
@@ -98,12 +101,14 @@ cat TAG
       }
     }
     stage('Release to DockerHub') {
+      agent any
       steps {
         sh '''echo "[Releasing image to DockerHub]"
 '''
       }
     }
     stage('Apply change to DEV') {
+      agent any
       steps {
         sleep 5
         sh '''echo "[Deploying artifact to DEV]"
