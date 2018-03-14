@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'maven:3.5.3-jdk-8'
+    }
+    
+  }
   stages {
     stage('Init') {
       agent any
@@ -24,23 +29,13 @@ echo "Hostname: ${HOSTNAME}"
       }
     }
     stage('Build') {
-      agent {
-        docker {
-          image 'maven:3.5.3-jdk-8'
-        }
-        
-      }
+      agent any
       steps {
         sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
       }
     }
     stage('Test') {
-      agent {
-        docker {
-          image 'maven:3.5.3-jdk-8'
-        }
-        
-      }
+      agent any
       steps {
         sh 'mvn test -B'
       }
@@ -48,12 +43,7 @@ echo "Hostname: ${HOSTNAME}"
     stage('Report Test Results') {
       parallel {
         stage('Report Test Results') {
-          agent {
-            docker {
-              image 'maven:3.5.3-jdk-8'
-            }
-            
-          }
+          agent any
           steps {
             junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
           }
