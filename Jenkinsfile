@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:3.5.3-jdk-8'
-    }
-    
-  }
+  agent none
   stages {
     stage('Init') {
       steps {
@@ -28,18 +23,56 @@ echo "Hostname: ${HOSTNAME}"
       }
     }
     stage('Build') {
+      agent {
+        docker {
+          image 'maven:3.5.3-jdk-8'
+        }
+        
+      }
       steps {
         sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
       }
     }
     stage('Test') {
+      agent {
+        docker {
+          image 'maven:3.5.3-jdk-8'
+        }
+        
+      }
       steps {
         sh 'mvn test -B'
       }
     }
     stage('Report Test Results') {
-      steps {
-        junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
+      parallel {
+        stage('Report Test Results') {
+          agent {
+            docker {
+              image 'maven:3.5.3-jdk-8'
+            }
+            
+          }
+          steps {
+            junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
+          }
+        }
+        stage('Collecting Info') {
+          steps {
+            sh '''echo "[Adding SCM info to Docker build]"
+
+echo "${GIT_COMMIT}" > COMMIT
+
+export VERY_LATEST_COMMIT=`git describe --tags $(git rev-list --tags --max-count=1)`
+
+echo $VERY_LATEST_COMMIT
+'''
+            waitUntil() {
+              fileExists 'COMMIT'
+            }
+            
+          }
+        }
       }
     }
     stage('Build Docker image') {
