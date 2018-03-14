@@ -39,7 +39,7 @@ echo "Hostname: ${HOSTNAME}"
     }
     stage('Report Test Results') {
       steps {
-        junit 'target/surefire-report/**/*.xml'
+        junit 'target/surefire-reports/**/*.xml'
       }
     }
     stage('Build Docker image') {
