@@ -52,5 +52,15 @@ pipeline {
                 sh 'cat abc.txt'
             }
         }
+        stage('Create Docker image') {
+            steps {
+                sh 'echo $HOSTNAME'
+            }
+        }
+        stage('Push Docker image') {
+            steps {
+                sh 'echo $HOSTNAME'
+            }
+        }
     }
 }
