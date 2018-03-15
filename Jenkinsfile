@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker('maven:3.5.3-jdk-8')
-    }
+    agent any
     stages {
         stage('Init') {
             steps {
