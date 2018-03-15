@@ -2,7 +2,6 @@ pipeline {
   agent any
   stages {
     stage('Init') {
-      agent any
       steps {
         sh '''echo "Starting building ${PROJECT}"
 
@@ -23,102 +22,24 @@ echo "Hostname: ${HOSTNAME}"
 '''
       }
     }
-    stage('Build') {
-      agent {
-        docker {
-          image 'maven:3.5.3-jdk-8'
+    withDockerContainer(image: 'maven:3.5.3-jdk-8', toolName: 'Docker') {
+        stage('Test') {
+          steps {
+            sh 'mvn test -B'
+          }
         }
-        
-      }
-      steps {
-        sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
-      }
-    }
-    stage('Test') {
-      agent {
-        docker {
-          image 'maven:3.5.3-jdk-8'
-        }
-        
-      }
-      steps {
-        sh 'mvn test -B'
-      }
-    }
-    stage('Report Test Results') {
-      parallel {
         stage('Report Test Results') {
-          agent {
-            docker {
-              image 'maven:3.5.3-jdk-8'
+            steps {
+                junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
             }
-            
-          }
-          steps {
-            junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
-          }
         }
-        stage('Collecting Info') {
-          agent any
-          steps {
-            sh '''echo "[Adding SCM info to Docker build]"
-
-echo "${GIT_COMMIT}" > COMMIT
-
-export VERY_LATEST_COMMIT=`git describe --tags $(git rev-list --tags --max-count=1)`
-
-echo $VERY_LATEST_COMMIT
-'''
-            waitUntil() {
-              fileExists 'COMMIT'
+        stage('Build') {
+            steps {
+                sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
+                archive 'target/*.jar
             }
-            
-          }
         }
-      }
-    }
-    stage('Build Docker image') {
-      agent any
-      steps {
-        sh '''echo "[Adding SCM info to Docker build]"
-
-echo "${GIT_COMMIT}" > COMMIT
-export VERY_LATEST_COMMIT=`git describe --tags $(git rev-list --tags --max-count=1)`
-export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
-
-echo "Verbose info. Commit $TRAVIS_COMMIT, Very last tag (all branches) $VERY_LATEST_COMMIT, Last tag (in current branch) $LATEST_COMMIT_IN_BRANCH"
-
-export TAG=`if [ "$G_BRANCH" == "master" ]; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
-echo $TAG > TAG
-
-cat COMMIT
-cat TAG
-'''
-        sh '''echo "[Preparing Docker Tag]"
-'''
-        sh '''echo "[Building Docker image]"
-'''
-      }
-    }
-    stage('Release to DockerHub') {
-      agent any
-      steps {
-        sh '''echo "[Releasing image to DockerHub]"
-'''
-      }
-    }
-    stage('Apply change to DEV') {
-      agent any
-      steps {
-        sleep 5
-        sh '''echo "[Deploying artifact to DEV]"
-# connect
-# go to directory
-# docker pull
-# docker-compose up -d'''
-      }
-    }
-  }
+    } 
   environment {
     PROJECT = 'Yals'
   }
