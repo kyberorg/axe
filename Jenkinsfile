@@ -6,23 +6,30 @@ pipeline {
                 sh 'echo $HOSTNAME'
             }
         }
-        withDockerContainer(image: 'maven:3.5.3-jdk-8', toolName: 'Docker') {
-            stage('Test') {
-                steps {
-                    sh 'echo $HOSTNAME'
-                }
+        stage('Test') {
+            agent {
+                docker('maven:3.5.3-jdk-8')
             }
-            stage('Results') {
-                steps {
-                    sh 'echo $HOSTNAME'
-                    //junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
-                    //archive 'target/*.jar'
-                }
+            steps {
+                sh 'echo $HOSTNAME'
             }
-            stage('Build') {
-                steps {
-                    sh 'echo $HOSTNAME'
-                }
+        }
+        stage('Results') {
+            agent {
+                docker('maven:3.5.3-jdk-8')
+            }
+            steps {
+                sh 'echo $HOSTNAME'
+                //junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
+                //archive 'target/*.jar'
+            }
+        }
+        stage('Build') {
+            agent {
+                docker('maven:3.5.3-jdk-8')
+            }
+            steps {
+                sh 'echo $HOSTNAME'
             }
         }
     }
