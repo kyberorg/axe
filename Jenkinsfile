@@ -1,17 +1,24 @@
 pipeline {
-    agent any
+    agent {
+        docker('maven:3.5.3-jdk-8')
+    }
     stages {
         stage('Init') {
             steps {
                 sh 'echo $HOSTNAME'
+                sh 'echo "Host (aka VM 0)" >> abc.txt'
             }
         }
         stage('Test') {
             agent {
-                docker('maven:3.5.3-jdk-8')
+                docker {
+                    reuseNode true
+                    image 'maven:3.5.3-jdk-8'
+                }
             }
             steps {
                 sh 'echo $HOSTNAME'
+                sh 'echo "VM 1" >> abc.txt'
             }
         }
         stage('Results') {
@@ -23,16 +30,22 @@ pipeline {
             }
             steps {
                 sh 'echo $HOSTNAME'
+                sh 'echo "VM 2" >> abc.txt'
                 //junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
-                //archive 'target/*.jar'
             }
         }
         stage('Build') {
             agent {
-                docker('maven:3.5.3-jdk-8')
+                docker {
+                    reuseNode true
+                    image 'maven:3.5.3-jdk-8'
+                }
             }
             steps {
                 sh 'echo $HOSTNAME'
+                sh 'echo "VM 3" >> abc.txt'
+                //archive 'target/*.jar'
+                archive('abc.txt')
             }
         }
     }
