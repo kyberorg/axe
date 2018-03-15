@@ -21,7 +21,10 @@ pipeline {
         }
         stage('Results') {
             agent {
-                docker('maven:3.5.3-jdk-8', reuseNode: true)
+                docker {
+                    reuseNode true
+                    image 'maven:3.5.3-jdk-8'
+                }
             }
             steps {
                 sh 'echo $HOSTNAME'
