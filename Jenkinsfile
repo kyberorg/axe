@@ -46,5 +46,11 @@ pipeline {
                 archive('abc.txt')
             }
         }
+        stage('Create Docker Tag') {
+            steps {
+                sh 'echo $HOSTNAME'
+                sh 'cat abc.txt'
+            }
+        }
     }
 }
