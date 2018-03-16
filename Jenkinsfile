@@ -12,7 +12,7 @@ pipeline {
                 docker {
                     reuseNode true
                     //image 'maven:3.5.3-jdk-8'
-                    image 'kyberorg/jobbari:0.1.2'
+                    image 'kyberorg/jobbari:0.2'
                 }
             }
             steps {
