@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Init') {
       steps {
-          sh name: "Executor Info", cmd: '''set +x
+          sh '''set +x
 echo "Starting building ${PROJECT}"
 echo ""
 MV=`mvn --version`
