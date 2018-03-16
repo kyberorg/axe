@@ -8,8 +8,12 @@ pipeline {
   }
   stages {
     stage('Init') {
+      environment {
+        name = 'Info'
+      }
       steps {
-        sh '''echo "Starting building ${PROJECT}"
+        sh '''set +x
+echo "Starting building ${PROJECT}"
 
 JV=`java -version`
 MV=`mvn --version`
