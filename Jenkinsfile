@@ -8,25 +8,20 @@ pipeline {
   }
   stages {
     stage('Init') {
-      environment {
-        name = 'Info'
-      }
       steps {
-        sh '''set +x
+          sh name: "Executor Info", cmd: '''set +x
 echo "Starting building ${PROJECT}"
-
-JV=`java -version`
+echo ""
 MV=`mvn --version`
 DV=`docker --version`
 
 # Internet available ?
 wget -q --tries=10 --timeout=20 --spider http://google.com
-if [[ $? -eq 0 ]]; then
+if [ "$?" -eq "0" ]; then
         NET_STATUS="Host Online"
 else
         NET_STATUS="Host Offline"
 fi
-
 
 echo "[Build info]"
 echo "Git branch: ${GIT_BRANCH}"
@@ -34,13 +29,14 @@ echo "Git commit: ${GIT_COMMIT}"
 echo "Jenkins Job #${BUILD_NUMBER}" 
 echo "Jenkins Job URL: ${BUILD_URL}"
 echo "Jenkins Tag: ${BUILD_TAG}"
-
+echo ""
 echo "[Worker info]"
 echo "Hostname: ${HOSTNAME}"
 echo "Net status: ${NET_STATUS}"
-echo "Java version: ${JV}"
-echo "Maven version: ${MV}"
-echo "Docker version: ${DV}"'''
+echo ""
+echo "Docker version: ${DV}"
+echo ""
+echo "Maven version: ${MV}"'''
       }
     }
     stage('Test') {
