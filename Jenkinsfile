@@ -1,5 +1,11 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            reuseNode true
+            //image 'maven:3.5.3-jdk-8'
+            image 'kyberorg/jobbari:0.2'
+        }
+    }
     stages {
         stage('Init') {
             steps {
@@ -8,25 +14,26 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
+            /*agent {
                 docker {
                     reuseNode true
                     //image 'maven:3.5.3-jdk-8'
                     image 'kyberorg/jobbari:0.2'
                 }
-            }
+            }*/
             steps {
                 sh 'echo $HOSTNAME'
+                sh 'mvn --version'
                 sh 'echo "VM 1" >> abc.txt'
             }
         }
         stage('Results') {
-            agent {
+            /*agent {
                 docker {
                     reuseNode true
-                    image 'kyberorg/jobbari:latest'
+                    image 'kyberorg/jobbari:0.2'
                 }
-            }
+            }*/
             steps {
                 sh 'echo $HOSTNAME'
                 sh 'echo "VM 2" >> abc.txt'
@@ -34,12 +41,12 @@ pipeline {
             }
         }
         stage('Build') {
-            agent {
+            /*agent {
                 docker {
                     reuseNode true
                     image 'kyberorg/jobbari:latest'
                 }
-            }
+            }*/
             steps {
                 sh 'echo $HOSTNAME'
                 sh 'echo "VM 3" >> abc.txt'
@@ -56,6 +63,7 @@ pipeline {
         stage('Create Docker image') {
             steps {
                 sh 'echo $HOSTNAME'
+                sh 'docker --version'
             }
         }
         stage('Push Docker image') {
