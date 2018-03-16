@@ -12,7 +12,7 @@ pipeline {
                 docker {
                     reuseNode true
                     //image 'maven:3.5.3-jdk-8'
-                    image 'kyberorg/jobari:jdk8-mvn353'
+                    image 'kyberorg/jobbari:latest'
                 }
             }
             steps {
@@ -24,7 +24,7 @@ pipeline {
             agent {
                 docker {
                     reuseNode true
-                    image 'kyberorg/jobari:jdk8-mvn353'
+                    image 'kyberorg/jobbari:latest'
                 }
             }
             steps {
@@ -37,7 +37,7 @@ pipeline {
             agent {
                 docker {
                     reuseNode true
-                    image 'kyberorg/jobari:jdk8-mvn353'
+                    image 'kyberorg/jobbari:latest'
                 }
             }
             steps {
