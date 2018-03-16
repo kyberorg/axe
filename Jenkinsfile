@@ -1,5 +1,8 @@
 pipeline {
-    agent any
+    agent docker {
+        reuseNode true
+        image 'maven:3.5.3-jdk-8'
+    }
     stages {
         stage('Init') {
             steps {
@@ -8,24 +11,24 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
+            /*agent {
                 docker {
                     reuseNode true
                     image 'maven:3.5.3-jdk-8'
                 }
-            }
+            }*/
             steps {
                 sh 'echo $HOSTNAME'
                 sh 'echo "VM 1" >> abc.txt'
             }
         }
         stage('Results') {
-            agent {
+            /*agent {
                 docker {
                     reuseNode true
                     image 'maven:3.5.3-jdk-8'
                 }
-            }
+            }*/
             steps {
                 sh 'echo $HOSTNAME'
                 sh 'echo "VM 2" >> abc.txt'
@@ -33,12 +36,12 @@ pipeline {
             }
         }
         stage('Build') {
-            agent {
+            /*agent {
                 docker {
                     reuseNode true
                     image 'maven:3.5.3-jdk-8'
                 }
-            }
+            }*/
             steps {
                 sh 'echo $HOSTNAME'
                 sh 'echo "VM 3" >> abc.txt'
