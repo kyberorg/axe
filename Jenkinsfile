@@ -9,11 +9,9 @@ pipeline {
   stages {
     stage('Init') {
       steps {
-        sh 'echo $HOSTNAME'
-        sh 'echo "Host (aka VM 0)" >> abc.txt'
         sh '''echo "Starting building ${PROJECT}"
 
-JV=`java --version`
+JV=`java -version`
 MV=`mvn --version`
 DV=`docker --version`
 
