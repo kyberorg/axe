@@ -55,7 +55,7 @@ echo "Maven version: ${MV}"'''
     }
     stage('Build') {
       steps {
-        sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
+        sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
         archive 'abc.txt'
       }
     }
