@@ -9,7 +9,11 @@ pipeline {
   stages {
     stage('Init') {
       steps {
-        sh '''set +x
+        sh '''##### Gathering info ####
+
+
+
+set +x
 echo "Starting building ${PROJECT}"
 echo ""
 MV=`mvn --version`
@@ -37,7 +41,6 @@ echo ""
 echo "Docker version: ${DV}"
 echo ""
 echo "Maven version: ${MV}"'''
-        echo 'Info about exectutor'
       }
     }
     stage('Test') {
