@@ -62,7 +62,6 @@ echo "Maven version: ${MV}"'''
     stage('Create Docker Tag') {
       steps {
         sh 'echo $HOSTNAME'
-        sh 'cat abc.txt'
       }
     }
     stage('Create Docker image') {
