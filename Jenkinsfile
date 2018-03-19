@@ -62,11 +62,21 @@ echo "Maven version: ${MV}"'''
     stage('Create Docker Tag') {
       steps {
         sh 'echo $HOSTNAME'
+        sh '''
+             export VERY_LATEST_COMMIT=`git describe --tags $(git rev-list --tags --max-count=1)`
+             export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
+             echo "Verbose info. Commit $TRAVIS_COMMIT, Very last tag (all branches) $VERY_LATEST_COMMIT, Last tag (in current branch) $LATEST_COMMIT_IN_BRANCH"
+             export TAG=`if [ "$G_BRANCH" == "master" ]; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
+          '''
       }
     }
     stage('Create Docker image') {
       steps {
         sh 'echo $HOSTNAME'
+        sh '''
+            echo ${GIT_COMMIT} > COMMIT
+            echo $TAG > TAG
+          '''
         sh 'docker --version'
       }
     }
