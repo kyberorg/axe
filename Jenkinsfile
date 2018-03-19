@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      image 'kyberorg/jobbari:1.0'
+      image 'kyberorg/jobbari:1.1'
     }
     
   }
