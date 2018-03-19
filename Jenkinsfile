@@ -63,6 +63,8 @@ echo "Maven version: ${MV}"'''
       steps {
         sh 'echo $HOSTNAME'
         sh '''
+             set +x
+             git status
              export VERY_LATEST_COMMIT=$(git describe --tags $(git rev-list --tags --max-count=1))
              export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
              echo "Verbose info. Commit $TRAVIS_COMMIT, Very last tag (all branches) $VERY_LATEST_COMMIT, Last tag (in current branch) $LATEST_COMMIT_IN_BRANCH"
