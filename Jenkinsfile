@@ -45,21 +45,17 @@ echo "Maven version: ${MV}"'''
     }
     stage('Test') {
       steps {
-        sh 'echo $HOSTNAME'
-        sh 'mvn --version'
-        sh 'echo "VM 1" >> abc.txt'
+        sh 'mvn test -B'
       }
     }
     stage('Results') {
       steps {
-        sh 'echo $HOSTNAME'
-        sh 'echo "VM 2" >> abc.txt'
+        junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
       }
     }
     stage('Build') {
       steps {
-        sh 'echo $HOSTNAME'
-        sh 'echo "VM 3" >> abc.txt'
+        sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
         archive 'abc.txt'
       }
     }
