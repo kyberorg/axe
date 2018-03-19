@@ -56,7 +56,7 @@ echo "Maven version: ${MV}"'''
     stage('Build') {
       steps {
         sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
-        archive 'abc.txt'
+        archive 'target/*.jar'
       }
     }
     stage('Create Docker Tag') {
