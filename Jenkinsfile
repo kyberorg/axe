@@ -49,7 +49,7 @@ git pull --tags
 export VERY_LATEST_COMMIT=$(git describe --tags $(git rev-list --tags --max-count=1))
 export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
 echo "Verbose info. Commit ${GIT_COMMIT}, Very last tag (all branches) ${VERY_LATEST_COMMIT}, Last tag (in current branch) ${LATEST_COMMIT_IN_BRANCH}"
-export TAG=`test "x${GIT_BRANCH}" = "xmaster"; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
+export TAG=`test "${GIT_BRANCH}" = "master"; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
 echo ${GIT_COMMIT} > COMMIT
 echo $TAG > TAG
 
@@ -77,7 +77,7 @@ git checkout -f ${GIT_COMMIT}'''
         sh 'echo $HOSTNAME'
         sh '''
              set +x
-             export DOCKER_TAG=`if [[ "${GIT_BRANCH}" == "master" ]]; then echo "stable"; elif [[ "${GIT_BRANCH}" == "trunk" ]]; then echo "latest"; else echo "${GIT_BRANCH-latest}"; fi`
+             export DOCKER_TAG=`test "${GIT_BRANCH}" = "master"; then echo "stable"; else test "${GIT_BRANCH}" = "trunk"; then echo "latest"; else echo "${GIT_BRANCH}-latest"; fi`
           '''
       }
     }
