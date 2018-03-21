@@ -81,7 +81,15 @@ git checkout -f ${GIT_COMMIT}'''
 #echo ${DOCKER_TAG} > DOCKER_TAG
 
 echo ${GIT_BRANCH}
-if test "${GIT_BRANCH}" = "master";then echo "TRUE"; else test "${GIT_BRANCH}" = "jenkins"; then "it works"; else echo "Other"; fi
+case ${GIT_BRANCH} in
+      master) echo "stable" ;;
+      trunk) echo "latest" ;;
+          *) echo "${GIT_BRANCH}-latest"
+esac
+
+
+
+
          '''
       }
     }
