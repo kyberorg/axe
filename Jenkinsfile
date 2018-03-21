@@ -41,7 +41,7 @@ echo ""
 echo "Docker version: ${DV}"
 echo ""
 echo "Maven version: ${MV}"'''
-          sh '''##### Preparing git info #####
+        sh '''##### Preparing git info #####
 
 set +x
 git checkout ${GIT_BRANCH}
@@ -75,12 +75,14 @@ git checkout -f ${GIT_COMMIT}'''
     stage('Create Docker Tag') {
       steps {
         sh 'echo $HOSTNAME'
-        sh '''
-             if test "${GIT_BRANCH}" = "master"; echo MASTER; else test "${GIT_BRANCH}" = "trunk"; echo TRUNK; else echo ${GIT_BRANCH}; fi
-             export DOCKER_TAG=`test "${GIT_BRANCH}" = "master"; echo "stable"; else test "${GIT_BRANCH}" = "trunk"; echo "latest"; else echo "${GIT_BRANCH}-latest"`
-             echo $DOCKER_TAG
-             echo ${DOCKER_TAG} > DOCKER_TAG
-          '''
+        sh '''#if test "${GIT_BRANCH}" = "master"; echo MASTER; else test "${GIT_BRANCH}" = "trunk"; echo TRUNK; else echo ${GIT_BRANCH}; fi
+#export DOCKER_TAG=`test "${GIT_BRANCH}" = "master"; echo "stable"; else test "${GIT_BRANCH}" = "trunk"; echo "latest"; else echo "${GIT_BRANCH}-latest"`
+#echo $DOCKER_TAG
+#echo ${DOCKER_TAG} > DOCKER_TAG
+
+echo ${GIT_BRANCH}
+if test "${GIT_BRANCH} = "jenkins"; echo "TRUE"; fi
+         '''
       }
     }
     stage('Create Docker image') {
