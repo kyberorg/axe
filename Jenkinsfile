@@ -3,6 +3,7 @@ pipeline {
     docker {
       reuseNode true
       image 'kyberorg/jobbari:1.3'
+      args '-u root'
     }
     
   }
