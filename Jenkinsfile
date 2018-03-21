@@ -78,13 +78,13 @@ git checkout -f ${GIT_COMMIT}'''
         sh 'echo $HOSTNAME'
         sh '''
              set +x
-             export DOCKER_TAG=`if [ "${GIT_BRANCH}" == "master" ]; then echo "stable"; elif [ "${GIT_BRANCH}" == "trunk" ]; then echo "latest"; else echo "${GIT_BRANCH-latest}"; fi`
+             export DOCKER_TAG=`if [[ "${GIT_BRANCH}" == "master" ]]; then echo "stable"; elif [[ "${GIT_BRANCH}" == "trunk" ]]; then echo "latest"; else echo "${GIT_BRANCH-latest}"; fi`
           '''
       }
     }
     stage('Create Docker image') {
       steps {
-        sh 'echo $DOCKER_TAG'
+        sh 'echo ${DOCKER_TAG}'
         sh 'docker --version'
       }
     }
