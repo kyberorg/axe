@@ -74,27 +74,25 @@ git checkout -f ${GIT_COMMIT}'''
     }
     stage('Create Docker Tag') {
       steps {
-        sh 'echo $HOSTNAME'
-        sh '''#if test "${GIT_BRANCH}" = "master"; echo MASTER; else test "${GIT_BRANCH}" = "trunk"; echo TRUNK; else echo ${GIT_BRANCH}; fi
-#export DOCKER_TAG=`test "${GIT_BRANCH}" = "master"; echo "stable"; else test "${GIT_BRANCH}" = "trunk"; echo "latest"; else echo "${GIT_BRANCH}-latest"`
-#echo $DOCKER_TAG
-#echo ${DOCKER_TAG} > DOCKER_TAG
-
-echo ${GIT_BRANCH}
+        sh '''set +x
 case ${GIT_BRANCH} in
       master) DOCKER_TAG="stable" ;;
       trunk) DOCKER_TAG="latest" ;;
           *) DOCKER_TAG="${GIT_BRANCH}-latest" ;;
 esac
 
-echo ${DOCKER_TAG}
-echo ${DOCKER_TAG} > DOCKER_TAG'''
+echo "Docker Tag: ${DOCKER_TAG}"
+echo ${DOCKER_TAG} > DOCKER_TAG
+'''
       }
     }
     stage('Create Docker image') {
       steps {
         sh '''set +x 
-            cat DOCKER_TAG'''
+DOCKER_TAG=`cat DOCKER_TAG`
+echo "Building Docker image with: $DOCKER_TAG"
+docker build -t $DOCKER_REPO:$DOCKER_TAG .
+'''
         sh 'docker --version'
       }
     }
@@ -106,5 +104,7 @@ echo ${DOCKER_TAG} > DOCKER_TAG'''
   }
   environment {
     PROJECT = 'Yals'
+    DOCKER_REPO = 'yals/kyberorg'
+    DOCKER_USER = 'kyberorg'
   }
 }
