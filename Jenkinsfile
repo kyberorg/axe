@@ -45,7 +45,6 @@ echo "Maven version: ${MV}"'''
 
 set +x
 git checkout ${GIT_BRANCH}
-ls -al
 git pull --tags
 export VERY_LATEST_COMMIT=$(git describe --tags $(git rev-list --tags --max-count=1))
 export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
@@ -79,14 +78,13 @@ git checkout -f ${GIT_COMMIT}'''
         sh 'echo $HOSTNAME'
         sh '''
              set +x
-             cat COMMIT
-             cat TAG
+             export DOCKER_TAG=`if [ "${GIT_BRANCH}" == "master" ]; then echo "stable"; elif [ "${GIT_BRANCH}" == "trunk" ]; then echo "latest"; else echo "${GIT_BRANCH-latest}"; fi`
           '''
       }
     }
     stage('Create Docker image') {
       steps {
-        sh 'echo $HOSTNAME'
+        sh 'echo $DOCKER_TAG'
         sh 'docker --version'
       }
     }
