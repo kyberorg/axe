@@ -82,15 +82,13 @@ git checkout -f ${GIT_COMMIT}'''
 
 echo ${GIT_BRANCH}
 case ${GIT_BRANCH} in
-      master) echo "stable" ;;
-      trunk) echo "latest" ;;
-          *) echo "${GIT_BRANCH}-latest"
+      master) DOCKER_TAG="stable" ;;
+      trunk) DOCKER_TAG="latest" ;;
+          *) DOCKER_TAG="${GIT_BRANCH}-latest" ;;
 esac
 
-
-
-
-         '''
+echo ${DOCKER_TAG}
+echo ${DOCKER_TAG} > DOCKER_TAG'''
       }
     }
     stage('Create Docker image') {
