@@ -54,7 +54,7 @@ echo ${GIT_COMMIT} > COMMIT
 echo $TAG > TAG
 
 git checkout -f ${GIT_COMMIT}'''
-        sh '''whoami
+        sh '''id
 service docker start'''
       }
     }
