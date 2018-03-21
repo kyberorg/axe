@@ -45,6 +45,7 @@ echo "Maven version: ${MV}"'''
 
 set +x
 git checkout ${GIT_BRANCH}
+ls -al
 git pull --tags
 export VERY_LATEST_COMMIT=$(git describe --tags $(git rev-list --tags --max-count=1))
 export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
