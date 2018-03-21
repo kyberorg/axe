@@ -78,12 +78,13 @@ git checkout -f ${GIT_COMMIT}'''
         sh '''
              set +x
              export DOCKER_TAG=`test "${GIT_BRANCH}" = "master"; then echo "stable"; else test "${GIT_BRANCH}" = "trunk"; then echo "latest"; else echo "${GIT_BRANCH}-latest"; fi`
+             echo ${DOCKER_TAG} > DOCKER_TAG
           '''
       }
     }
     stage('Create Docker image') {
       steps {
-        sh 'echo ${DOCKER_TAG}'
+        sh 'cat DOCKER_TAG'
         sh 'docker --version'
       }
     }
