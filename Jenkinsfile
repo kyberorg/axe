@@ -78,7 +78,7 @@ git checkout -f ${GIT_COMMIT}'''
         sh '''
              set +x
              if test "${GIT_BRANCH}" = "master"; echo MASTER; else test "${GIT_BRANCH}" = "trunk"; echo TRUNK; else echo ${GIT_BRANCH}; fi
-             export DOCKER_TAG=`test "${GIT_BRANCH}" = "master"; then echo "stable"; else test "${GIT_BRANCH}" = "trunk"; then echo "latest"; else echo "${GIT_BRANCH}-latest"`
+             export DOCKER_TAG=`test "${GIT_BRANCH}" = "master"; echo "stable"; else test "${GIT_BRANCH}" = "trunk"; echo "latest"; else echo "${GIT_BRANCH}-latest"`
              echo $DOCKER_TAG
              echo ${DOCKER_TAG} > DOCKER_TAG
           '''
