@@ -81,7 +81,7 @@ git checkout -f ${GIT_COMMIT}'''
 #echo ${DOCKER_TAG} > DOCKER_TAG
 
 echo ${GIT_BRANCH}
-if test "${GIT_BRANCH} = "jenkins"; echo "TRUE"; fi
+if test "${GIT_BRANCH}" = "jenkins"; echo "TRUE"; fi
          '''
       }
     }
