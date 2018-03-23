@@ -92,6 +92,7 @@ echo ${DOCKER_TAG} > DOCKER_TAG
       steps {
         sh '''set +x 
 service docker start
+service docker status
 '''
         sleep 3
         sh '''service docker status
