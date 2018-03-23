@@ -72,6 +72,7 @@ git checkout -f ${GIT_COMMIT}'''
       steps {
         sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
         archive 'target/*.jar'
+        sh 'chmod 777 target'
       }
     }
     stage('Create Docker Tag') {
