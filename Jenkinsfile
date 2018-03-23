@@ -93,7 +93,7 @@ echo ${DOCKER_TAG} > DOCKER_TAG
         sh '''set +x 
 service docker start
 '''
-        sleep 2
+        sleep 3
         sh '''service docker status
 
 DOCKER_TAG=`cat DOCKER_TAG`
