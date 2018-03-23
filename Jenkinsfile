@@ -92,11 +92,14 @@ echo ${DOCKER_TAG} > DOCKER_TAG
       steps {
         sh '''set +x 
 service docker start
+'''
+        sleep 3
+        sh '''service docker status
+
 DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
-docker build -t $DOCKER_REPO:$DOCKER_TAG .
+# docker build -t $DOCKER_REPO:$DOCKER_TAG .
 '''
-        sh 'docker --version'
       }
     }
     stage('Push Docker image') {
