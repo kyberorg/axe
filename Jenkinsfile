@@ -2,8 +2,8 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      image 'kyberorg/jobbari:1.3'
       args '-u root'
+      image 'kyberorg/jobbari:1.2.3'
     }
     
   }
@@ -55,8 +55,7 @@ echo ${GIT_COMMIT} > COMMIT
 echo $TAG > TAG
 
 git checkout -f ${GIT_COMMIT}'''
-        sh '''id
-service docker start'''
+        sh 'id'
       }
     }
     stage('Test') {
@@ -92,6 +91,7 @@ echo ${DOCKER_TAG} > DOCKER_TAG
     stage('Create Docker image') {
       steps {
         sh '''set +x 
+service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
