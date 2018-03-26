@@ -91,7 +91,6 @@ echo ${DOCKER_TAG} > DOCKER_TAG
     }
     stage('Create Docker image') {
       steps {
-          sh 'echo $HUB > PASSA'
         sh '''set +x 
 service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
@@ -102,7 +101,13 @@ docker build -t $DOCKER_REPO:$DOCKER_TAG .
     }
     stage('Push Docker image') {
       steps {
-        sh 'echo $HUB_PASSWORD && echo $HUB_USERNAME'
+        sh '''set +x
+echo "Logging in to Docker hub as $DOCKER_HUB_USR"
+docker login -u $DOCKER_HUB_USR -p $DOCKER_HUB_PSW
+echo "Pushing image to $DOCKER_REPO"
+docker push $DOCKER_REPO
+'''
+
       }
     }
   }
@@ -110,6 +115,6 @@ docker build -t $DOCKER_REPO:$DOCKER_TAG .
     PROJECT = 'Yals'
     DOCKER_REPO = 'yals/kyberorg'
     DOCKER_USER = 'kyberorg'
-      HUB = credentials('docker-hub')
+    DOCKER_HUB = credentials('docker-hub')
   }
 }
