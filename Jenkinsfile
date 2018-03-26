@@ -2,8 +2,8 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      image 'kyberorg/jobbari:1.2.3'
       args '-u root --privileged'
+      image 'kyberorg/jobbari:1.3'
     }
     
   }
@@ -109,7 +109,6 @@ docker login -u $DOCKER_HUB_USR -p $DOCKER_HUB_PSW
 echo "Pushing image to $DOCKER_REPO"
 docker push $DOCKER_REPO
 '''
-
       }
     }
   }
