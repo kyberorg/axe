@@ -2,8 +2,8 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      args '-u root'
       image 'kyberorg/jobbari:1.2.3'
+      args '-u root --privileged'
     }
     
   }
