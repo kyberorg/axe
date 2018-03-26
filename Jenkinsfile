@@ -55,7 +55,6 @@ echo ${GIT_COMMIT} > COMMIT
 echo $TAG > TAG
 
 git checkout -f ${GIT_COMMIT}'''
-        sh 'id'
       }
     }
     stage('Test') {
