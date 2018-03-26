@@ -92,6 +92,7 @@ echo ${DOCKER_TAG} > DOCKER_TAG
       steps {
         retry(3) {
            sh '''set +x 
+set+e
 service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
