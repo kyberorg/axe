@@ -91,12 +91,14 @@ echo ${DOCKER_TAG} > DOCKER_TAG
     }
     stage('Create Docker image') {
       steps {
-        sh '''set +x 
+        retry(3) {
+           sh '''set +x 
 service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
 '''
+        }
       }
     }
     stage('Push Docker image') {
