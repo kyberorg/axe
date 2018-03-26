@@ -104,7 +104,7 @@ docker build -t $DOCKER_REPO:$DOCKER_TAG .
             HUB = credentials('docker-hub')
         }
       steps {
-        sh 'echo $HUB'
+        sh 'echo $HUB_PASSWORD && echo $HUB_USERNAME'
       }
     }
   }
