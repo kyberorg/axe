@@ -113,7 +113,7 @@ docker push $DOCKER_REPO
   }
   environment {
     PROJECT = 'Yals'
-    DOCKER_REPO = 'yals/kyberorg'
+    DOCKER_REPO = 'kyberorg/yals'
     DOCKER_USER = 'kyberorg'
     DOCKER_HUB = credentials('docker-hub')
   }
