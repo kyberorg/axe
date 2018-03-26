@@ -91,7 +91,7 @@ echo ${DOCKER_TAG} > DOCKER_TAG
     }
     stage('Create Docker image') {
       steps {
-          sh 'echo $HUB_PASSWORD && echo $HUB_USERNAME'
+          sh 'echo $HUB > PASSA'
         sh '''set +x 
 service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
