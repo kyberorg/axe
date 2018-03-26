@@ -2,8 +2,8 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      image 'kyberorg/jobbari:1.2.3'
       args '-u root --privileged'
+      image 'kyberorg/jobbari:1.3'
     }
     
   }
@@ -90,14 +90,15 @@ echo ${DOCKER_TAG} > DOCKER_TAG
     }
     stage('Create Docker image') {
       steps {
-        retry(3) {
-           sh '''set +x 
+        retry(count: 3) {
+          sh '''set +x 
 service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
 '''
         }
+        
       }
     }
     stage('Push Docker image') {
@@ -108,7 +109,6 @@ docker login -u $DOCKER_HUB_USR -p $DOCKER_HUB_PSW
 echo "Pushing image to $DOCKER_REPO"
 docker push $DOCKER_REPO
 '''
-
       }
     }
   }
