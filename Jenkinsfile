@@ -47,10 +47,10 @@ echo "Maven version: ${MV}"'''
 set +x
 set +e
 
-case ${GIT_BRANCH} in 
+case env.BRANCH_NAME in 
     PR-*)
       echo ${GIT_COMMIT} > COMMIT 
-      echo ${GIT_BRANCH} > TAG 
+      echo env.BRANCH_NAME > TAG 
       ;;
     *)
       git checkout ${GIT_BRANCH}
