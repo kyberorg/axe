@@ -2,8 +2,8 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      args '-u root --privileged'
       image 'kyberorg/jobbari:1.3'
+      args '-u root --privileged'
     }
     
   }
@@ -87,6 +87,7 @@ esac
     stage('Create Docker Tag') {
       steps {
         sh '''set +x
+set +e
 case ${GIT_BRANCH} in
       master) DOCKER_TAG="stable" ;;
       trunk) DOCKER_TAG="latest" ;;
@@ -101,8 +102,8 @@ echo ${DOCKER_TAG} > DOCKER_TAG
     }
     stage('Create Docker image') {
       steps {
-        retry(3) {
-           sh '''set +x 
+        retry(count: 3) {
+          sh '''set +x 
 set +e
 service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
@@ -110,6 +111,7 @@ echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
 '''
         }
+        
       }
     }
     stage('Push Docker image') {
