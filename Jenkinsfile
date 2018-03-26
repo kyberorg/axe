@@ -46,6 +46,7 @@ echo "Maven version: ${MV}"'''
 
 set +x
 set +e
+echo $BRANCH_NAME
 
 case env.BRANCH_NAME in 
     PR-*)
