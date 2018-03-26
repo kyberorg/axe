@@ -101,7 +101,7 @@ docker build -t $DOCKER_REPO:$DOCKER_TAG .
     }
     stage('Push Docker image') {
         environment {
-            HUB = credentials('Docker Hub')
+            HUB = credentials('docker-hub')
         }
       steps {
         sh 'echo $HUB'
