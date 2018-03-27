@@ -70,11 +70,7 @@ esac
     stage('Test') {
       steps {
         sh 'mvn test -B'
-      }
-    }
-    stage('Results') {
-      steps {
-        junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
+        junit(testResults: 'target/surefire-reports/**/', allowEmptyResults: true)
       }
     }
     stage('Build') {
@@ -84,9 +80,10 @@ esac
         sh 'chmod ugo+w -R .'
       }
     }
-    stage('Create Docker Tag') {
+    stage('Docker image') {
       steps {
-        sh '''set +x
+        sh '''### Docker TAG ###
+set +x
 set +e
 case ${GIT_BRANCH} in
       master) DOCKER_TAG="stable" ;;
@@ -96,14 +93,10 @@ case ${GIT_BRANCH} in
 esac
 
 echo "Docker Tag: ${DOCKER_TAG}"
-echo ${DOCKER_TAG} > DOCKER_TAG
-'''
-      }
-    }
-    stage('Create Docker image') {
-      steps {
+echo ${DOCKER_TAG} > DOCKER_TAG'''
         retry(count: 3) {
-          sh '''set +x 
+          sh '''### Create Docker image ###
+set +x 
 set +e
 service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
@@ -114,9 +107,10 @@ docker build -t $DOCKER_REPO:$DOCKER_TAG .
         
       }
     }
-    stage('Push Docker image') {
+    stage('Push Docker') {
       steps {
-        sh '''set +x
+        sh '''### Push Docker image ###
+set +x
 echo "Logging in to Docker hub as $DOCKER_HUB_USR"
 docker login -u $DOCKER_HUB_USR -p $DOCKER_HUB_PSW
 echo "Pushing image to $DOCKER_REPO"
