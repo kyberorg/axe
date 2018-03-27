@@ -77,7 +77,7 @@ esac
       steps {
         sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
         archive 'target/*.jar'
-        sh 'chmod ugo+w -R .'
+        sh 'pwd && chmod ugo+w -R .'
       }
     }
     stage('Docker image') {
