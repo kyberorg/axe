@@ -70,7 +70,7 @@ esac
     stage('Test') {
       steps {
         sh 'mvn test -B'
-        junit(testResults: 'target/surefire-reports/**/', allowEmptyResults: true)
+        junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
       }
     }
     stage('Build') {
