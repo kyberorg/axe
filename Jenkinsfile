@@ -93,7 +93,9 @@ case ${GIT_BRANCH} in
 esac
 
 echo "Docker Tag: ${DOCKER_TAG}"
-echo ${DOCKER_TAG} > DOCKER_TAG'''
+echo ${DOCKER_TAG} > DOCKER_TAG
+chmod ugo+w DOCKER_TAG
+'''
         retry(count: 3) {
           sh '''### Create Docker image ###
 set +x 
