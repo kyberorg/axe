@@ -115,6 +115,7 @@ echo "Logging in to Docker hub as $DOCKER_HUB_USR"
 docker login -u $DOCKER_HUB_USR -p $DOCKER_HUB_PSW
 echo "Pushing image to $DOCKER_REPO"
 docker push $DOCKER_REPO
+
 '''
       }
     }
