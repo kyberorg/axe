@@ -1,6 +1,3 @@
-import java.nio.file.Files
-import java.nio.file.Paths
-
 pipeline {
   agent {
     docker {
@@ -128,7 +125,7 @@ docker push $DOCKER_REPO
       steps {
           build(job: 'DeployJob', parameters: [
                   [$class: 'StringParameterValue', name: 'PROJECT', value: String.valueOf(PROJECT).toLowerCase()],
-                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: Files.readAllLines(Paths.get("DOCKER_TAG")).get(0)]
+                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: String.valueOf(DOCKER_TAG).toLowerCase()]
           ], propagate: true, quietPeriod: 2)
       }
     }
@@ -137,6 +134,7 @@ docker push $DOCKER_REPO
     PROJECT = 'Yals'
     DOCKER_REPO = 'kyberorg/yals'
     DOCKER_USER = 'kyberorg'
+    DOCKER_TAG = 'latest'
     DOCKER_HUB = credentials('docker-hub')
   }
 }
