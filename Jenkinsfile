@@ -123,7 +123,7 @@ docker push $DOCKER_REPO
     }
     stage('Deploy') {
       steps {
-        sh 'ssh root@localhost -c "echo $HOSTNAME"'
+        sh 'ssh root@localhost -c "echo $HOSTNAME "'
       }
     }
   }
