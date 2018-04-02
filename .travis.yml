@@ -1,27 +1,48 @@
+sudo: required
+
+services:
+    - docker
+
 language: java
 
 sudo: required
 
 jdk: oraclejdk8
 
-before_deploy:
-    - "mvn -DskipTests package"
-    - export PACK=$(ls target/yals.jar)
-
-deploy:
-   provider: releases
-   api_key:
-      secure: $GH_TOKEN
-   file_glob: true
-   file: "${PACK}"
-   skip_cleanup: true
-   on:
-     repo: yadevee/yals
-     all_branches: true
-     tags: true
+env:
+   global:
+       - PROJECT=yals
+       - G_BRANCH=${TRAVIS_BRANCH}
+       - T_BUILD=${TRAVIS_JOB_NUMBER}
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - echo $TRAVIS_COMMIT > COMMIT
+
+    - export VERY_LATEST_COMMIT=`git describe --tags $(git rev-list --tags --max-count=1)`
+    - export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
+    - echo "Verbose info. Commit $TRAVIS_COMMIT, Very last tag (all branches) $VERY_LATEST_COMMIT, Last tag (in current branch) $LATEST_COMMIT_IN_BRANCH"
+    - export TAG=`if [ "$G_BRANCH" == "master" ]; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
+    - echo $TAG > TAG
+
+    - export D_REPO=${D_USER}/${PROJECT}
+    - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; else echo $TRAVIS_TAG; fi`
+    - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
+    - export IS_TAG_BUILD=`if [ "$G_TAG" != "-" ]; then echo "yes"; else echo "no"; fi`
+
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Building tagged build for tag $G_TAG" &&  docker build -t $D_REPO:$G_TAG .; fi
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Logging in to Docker hub as $D_USER" && docker login -u $D_USER -p $D_PASS; fi
+    - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Pushing image to $D_REPO" && docker push $D_REPO && exit 0; fi
+
+    - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
+    - echo "Building docker $D_REPO:travis-$T_BUILD"
+    - docker build -t $D_REPO:travis-$T_BUILD .
+    - echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"
+    - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG
+
+    - echo "Logging in to Docker hub as $D_USER"
+    - docker login -u $D_USER -p $D_PASS
+    - echo "Pushing image to $D_REPO"
+    - docker push $D_REPO
 
 notifications:
     email:

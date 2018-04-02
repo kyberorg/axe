@@ -3,8 +3,6 @@ package ee.yals.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * App-wide tools
  *
@@ -28,8 +26,8 @@ public class AppUtils {
             throw new UnsupportedOperationException("Utility class");
         }
 
-        public static String getHostFromRequest(HttpServletRequest request) {
-            return request.getServerName() + ":" + request.getServerPort();
+        public static String getAPIHostPort() {
+            return "localhost" + ":" + System.getProperty("server.port", "8080");
         }
     }
 }

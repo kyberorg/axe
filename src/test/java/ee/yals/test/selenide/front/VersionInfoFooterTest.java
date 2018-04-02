@@ -1,15 +1,13 @@
 package ee.yals.test.selenide.front;
 
-import ee.yals.utils.GitInfo;
 import ee.yals.test.selenide.UITest;
-import org.apache.commons.lang3.StringUtils;
+import ee.yals.utils.git.GitInfo;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.utils.selectors.FrontSelectors.Footer.*;
 import static junit.framework.Assert.assertNotNull;
 
 /**
@@ -19,8 +17,7 @@ import static junit.framework.Assert.assertNotNull;
  */
 public class VersionInfoFooterTest extends UITest {
 
-    @Autowired
-    private GitInfo gitInfoBean;
+    private GitInfo gitInfo = GitInfo.getInstance();
 
     @Before
     public void openUrl() {
@@ -32,29 +29,32 @@ public class VersionInfoFooterTest extends UITest {
         boolean shouldCommitInfoDisplayed = shouldCommitInfoBeDisplayed();
 
         if (shouldCommitInfoDisplayed) {
-            $("footer").shouldBe(visible);
+            FOOTER.shouldBe(visible);
         } else {
-            $("footer").shouldNotBe(visible);
+            FOOTER.shouldNotBe(visible);
         }
     }
 
     @Test
     public void footerHasAllRequiredElements() {
         if(shouldCommitInfoBeDisplayed()){
-            $("#version").shouldBe(visible);
-            $("#version").shouldHave(text("version")).shouldHave(text("commit"));
-            $("#version a").shouldBe(visible);
-            $("#version a").shouldNotBe(empty);
-            $("#version a").shouldHave(attribute("href"));
+            VERSION.shouldBe(visible);
+            VERSION.shouldHave(text("version")).shouldHave(text("commit"));
+            COMMIT_LINK.shouldBe(visible);
+            COMMIT_LINK.shouldNotBe(empty);
+            COMMIT_LINK.shouldHave(attribute("href"));
         }
     }
 
     private boolean shouldCommitInfoBeDisplayed() {
-        assertNotNull(this.gitInfoBean);
+        assertNotNull(this.gitInfo);
 
-        String latestCommit = gitInfoBean.getLatestCommitHash();
-        String latestTag = gitInfoBean.getLatestTag();
+        String latestCommit = gitInfo.getLatestCommitHash().trim();
+        String latestTag = gitInfo.getLatestTag().trim();
 
-        return StringUtils.isNoneBlank(latestCommit, latestTag);
+        boolean commitPresent = (!latestCommit.equals(GitInfo.NOTHING_FOUND_MARKER));
+        boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER));
+
+        return commitPresent && tagPresent;
     }
 }

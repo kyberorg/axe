@@ -1,9 +1,9 @@
 package ee.yals.test.utils;
 
-import ee.yals.json.ErrorJson;
-import ee.yals.utils.AppUtils;
 import ee.yals.constants.Header;
 import ee.yals.constants.MimeType;
+import ee.yals.json.ErrorJson;
+import ee.yals.utils.AppUtils;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  */
 public class TestUtils {
 
-    public static void assertResultIsJson(MvcResult result) throws Exception {
+    public static void assertResultIsJson(MvcResult result) {
         assertNotNull(result);
         assertNotNull(result.getResponse());
         assertTrue(result.getResponse().containsHeader(Header.CONTENT_TYPE));
@@ -44,7 +44,15 @@ public class TestUtils {
         assertNotNull(mimeType);
         assertNotNull(result);
         assertNotNull(result.getResponse());
-        assertEquals(mimeType, result.getResponse().getContentType());
+
+        String contentType = result.getResponse().getContentType();
+        String[] contentTypeParts = contentType.split(";");
+        if (contentTypeParts.length > 1) {
+            String onlyContentType = contentTypeParts[0];
+            assertEquals(mimeType, onlyContentType);
+        } else {
+            assertEquals(mimeType, result.getResponse().getContentType());
+        }
     }
 
     public static String whichBrowser() {

@@ -1,3 +1,25 @@
+body {
+    width: 99%;
+}
+
+@media all and (max-width: 768px) {
+    .mini-row {
+        padding: 1px;
+    }
+}
+
+@media all and (min-width: 768px) {
+    .mini-row {
+        padding: 5px;
+    }
+}
+
+@media (min-width: 992px) {
+    .mini-row {
+        padding: 15px;
+    }
+}
+
 .main {
     background: #f0f0f0;
     border: 1px solid #e3e3e3;
@@ -6,11 +28,23 @@
 
 .result {
     background: #dff0d8;
-    font-size: xx-large;
+    font-size: large;
     text-align: center;
     border: 1px solid #e3e3e3;
     border-radius: 4px;
     margin-top: 15px;
+}
+
+@media all and (min-width: 407px) {
+    .result {
+        font-size: x-large;
+    }
+}
+
+@media all and (min-width: 531px) {
+    .result {
+        font-size: xx-large;
+    }
 }
 
 .strong-link {
@@ -26,8 +60,47 @@
     height: 60px;
     background-color: #f5f5f5;
 }
+
+.under-footer {
+    display: none;
+}
+
+@media all and (max-height: 500px) {
+    .footer {
+        display: none;
+    }
+
+    .under-footer {
+        display: block;
+        line-height: 1px;
+    }
+}
+
 .footer .container {
     width: auto;
     max-width: 680px;
     padding-top: 15px;
 }
+
+.modal.fade.in .modal-body {
+    bottom: 0;
+    opacity: 1;
+}
+
+.modal-body {
+    bottom: -250px;
+    -webkit-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    text-align: center;
+}
+
+.in-same-line {
+    display: inline;
+}
+
+.overall-number-line {
+    align-content: right;
+}
+
