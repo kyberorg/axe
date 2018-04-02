@@ -1,3 +1,5 @@
+import java.nio.file.Files
+
 pipeline {
   agent {
     docker {
@@ -125,7 +127,7 @@ docker push $DOCKER_REPO
       steps {
           build(job: 'DeployJob', parameters: [
                   [$class: 'StringParameterValue', name: 'PROJECT', value: String.valueOf(PROJECT).toLowerCase()],
-                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: String.valueOf("latest")]
+                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: Files.readAllLines("DOCKER_TAG").get(0)]
           ], propagate: true, quietPeriod: 2)
       }
     }
