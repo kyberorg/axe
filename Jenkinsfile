@@ -121,11 +121,6 @@ docker push $DOCKER_REPO
 '''
       }
     }
-    stage('Deploy') {
-      steps {
-        sh 'ssh root@localhost -c "echo $HOSTNAME "'
-      }
-    }
   }
   environment {
     PROJECT = 'Yals'
