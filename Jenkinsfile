@@ -121,6 +121,11 @@ docker push $DOCKER_REPO
 '''
       }
     }
+    stage('Deploy') {
+      steps {
+        build(job: 'DeployJob', propagate: true, quietPeriod: 2)
+      }
+    }
   }
   environment {
     PROJECT = 'Yals'
