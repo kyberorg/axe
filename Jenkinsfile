@@ -124,7 +124,8 @@ docker push $DOCKER_REPO
     stage('Deploy') {
       steps {
           build(job: 'DeployJob', parameters: [
-                  [$class: 'StringParameterValue', name: 'PROJECT', value: String.valueOf(PROJECT)]
+                  [$class: 'StringParameterValue', name: 'PROJECT', value: String.valueOf(PROJECT)],
+                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: String.valueOf(DOCKER_TAG)]
           ], propagate: true, quietPeriod: 2)
       }
     }
