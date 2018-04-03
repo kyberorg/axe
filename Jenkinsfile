@@ -114,7 +114,6 @@ docker build -t $DOCKER_REPO:$DOCKER_TAG .
       steps {
         sh '''### Push Docker image ###
 set +x
-env
 echo "Logging in to Docker hub as $DOCKER_HUB_USR"
 docker login -u $DOCKER_HUB_USR -p $DOCKER_HUB_PSW
 echo "Pushing image to $DOCKER_REPO"
@@ -125,7 +124,6 @@ docker push $DOCKER_REPO
     }
     stage('Deploy') {
       steps {
-          sh 'env.DOCKER_TAG=`cat DOCKER_TAG`'
           build(job: 'DeployJob', parameters: [
                   [$class: 'StringParameterValue', name: 'PROJECT', value: String.valueOf(PROJECT).toLowerCase()],
                   [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: String.valueOf(DOCKER_TAG).toLowerCase()]
