@@ -95,6 +95,7 @@ esac
 echo "Docker Tag: ${DOCKER_TAG}"
 echo ${DOCKER_TAG} > DOCKER_TAG
 chmod ugo+w DOCKER_TAG
+export DOCKER_TAG=${DOCKER_TAG}
 '''
         retry(count: 3) {
           sh '''### Create Docker image ###
@@ -104,8 +105,6 @@ service docker start
 DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
-export DOCKER_TAG=$DOCKER_TAG
-
 '''
         }
         
