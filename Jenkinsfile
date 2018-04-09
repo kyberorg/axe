@@ -52,14 +52,18 @@ case $BRANCH_NAME in
       echo ${GIT_COMMIT} > COMMIT 
       echo $BRANCH_NAME > TAG 
       ;;
+    master)
+      git checkout $BRANCH_NAME
+      git pull --tags
+      export TAG=`git describe --tags --abbrev=0`
+      echo ${GIT_COMMIT} > COMMIT
+      echo $TAG > TAG
+      git checkout -f ${GIT_COMMIT} 1>/dev/null 2>/dev/null
+      ;;  
     *)
       git checkout $BRANCH_NAME
       git pull --tags
-      export VERY_LATEST_COMMIT=$(git describe --tags $(git rev-list --tags --max-count=1))
-      export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
-      echo "Verbose info. Commit ${GIT_COMMIT}, Very last tag (all branches) ${VERY_LATEST_COMMIT}, Last tag (in current branch) ${LATEST_COMMIT_IN_BRANCH}"
-      export TAG=`test "${BRANCH_NAME}" = "master"; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
-      echo "Exported Tag: ${TAG}"
+      export TAG=$(git describe --tags $(git rev-list --tags --max-count=1))      
       echo ${GIT_COMMIT} > COMMIT
       echo $TAG > TAG
       git checkout -f ${GIT_COMMIT} 1>/dev/null 2>/dev/null  
