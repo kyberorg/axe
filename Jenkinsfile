@@ -68,7 +68,15 @@ case $BRANCH_NAME in
       echo $TAG > TAG
       git checkout -f ${GIT_COMMIT} 1>/dev/null 2>/dev/null  
       ;;      
-esac           
+esac
+echo ""
+echo ""
+echo "### Git info ###"
+COMMIT=`cat COMMIT`
+TAG=`cat TAG`
+echo "COMMIT: ${COMMIT}"           
+echo "TAG: ${TAG}"
+           
 '''
       }
     }
