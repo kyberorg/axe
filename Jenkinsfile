@@ -102,7 +102,6 @@ export DOCKER_TAG=${DOCKER_TAG}
 set +x 
 set +e
 service docker start
-DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
 '''
@@ -124,9 +123,12 @@ docker push $DOCKER_REPO
     }
     stage('Deploy') {
       steps {
+          script {
+              env['dockerTag'] = sh(script: "cat DOCKER_TAG", returnStdout: true).trim()
+          }
           build(job: 'DeployJob', parameters: [
                   [$class: 'StringParameterValue', name: 'PROJECT', value: String.valueOf(PROJECT).toLowerCase()],
-                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: String.valueOf(DOCKER_TAG).toLowerCase()]
+                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: env['dockerTag'] ]
           ], propagate: true, quietPeriod: 2)
       }
     }
