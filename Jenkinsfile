@@ -102,6 +102,7 @@ export DOCKER_TAG=${DOCKER_TAG}
 set +x 
 set +e
 service docker start
+DOCKER_TAG=`cat DOCKER_TAG`
 echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
 '''
