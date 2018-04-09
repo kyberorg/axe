@@ -52,18 +52,31 @@ case $BRANCH_NAME in
       echo ${GIT_COMMIT} > COMMIT 
       echo $BRANCH_NAME > TAG 
       ;;
+    master)
+      git checkout $BRANCH_NAME
+      git pull --tags
+      export TAG=`git describe --tags --abbrev=0`
+      echo ${GIT_COMMIT} > COMMIT
+      echo $TAG > TAG
+      git checkout -f ${GIT_COMMIT} 1>/dev/null 2>/dev/null
+      ;;  
     *)
       git checkout $BRANCH_NAME
       git pull --tags
-      export VERY_LATEST_COMMIT=$(git describe --tags $(git rev-list --tags --max-count=1))
-      export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
-      echo "Verbose info. Commit ${GIT_COMMIT}, Very last tag (all branches) ${VERY_LATEST_COMMIT}, Last tag (in current branch) ${LATEST_COMMIT_IN_BRANCH}"
-      export TAG=`test "${BRANCH_NAME}" = "master"; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
+      export TAG=$(git describe --tags $(git rev-list --tags --max-count=1))      
       echo ${GIT_COMMIT} > COMMIT
       echo $TAG > TAG
-      git checkout -f ${GIT_COMMIT}  
+      git checkout -f ${GIT_COMMIT} 1>/dev/null 2>/dev/null  
       ;;      
-esac           
+esac
+echo ""
+echo ""
+echo "### Git info ###"
+COMMIT=`cat COMMIT`
+TAG=`cat TAG`
+echo "COMMIT: ${COMMIT}"           
+echo "TAG: ${TAG}"
+           
 '''
       }
     }
@@ -95,6 +108,7 @@ esac
 echo "Docker Tag: ${DOCKER_TAG}"
 echo ${DOCKER_TAG} > DOCKER_TAG
 chmod ugo+w DOCKER_TAG
+export DOCKER_TAG=${DOCKER_TAG}
 '''
         retry(count: 3) {
           sh '''### Create Docker image ###
@@ -119,6 +133,18 @@ echo "Pushing image to $DOCKER_REPO"
 docker push $DOCKER_REPO
 
 '''
+      }
+    }
+    stage('Deploy') {
+      steps {
+          script {
+              env['dockerTag'] = sh(script: "cat DOCKER_TAG", returnStdout: true).trim()
+          }
+          build(job: 'DeployJob', parameters: [
+                  [$class: 'StringParameterValue', name: 'FOLDER', value: String.valueOf(PROJECT).toLowerCase()],
+                  [$class: 'StringParameterValue', name: 'DOCKER_REPO', value: String.valueOf(DOCKER_REPO).toLowerCase() ],
+                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: env['dockerTag'] ]
+          ], propagate: true, quietPeriod: 2)
       }
     }
   }
