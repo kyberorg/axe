@@ -141,7 +141,8 @@ docker push $DOCKER_REPO
               env['dockerTag'] = sh(script: "cat DOCKER_TAG", returnStdout: true).trim()
           }
           build(job: 'DeployJob', parameters: [
-                  [$class: 'StringParameterValue', name: 'PROJECT', value: String.valueOf(PROJECT).toLowerCase()],
+                  [$class: 'StringParameterValue', name: 'FOLDER', value: String.valueOf(PROJECT).toLowerCase()],
+                  [$class: 'StringParameterValue', name: 'DOCKER_REPO', value: String.valueOf(DOCKER_REPO).toLowerCase() ],
                   [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: env['dockerTag'] ]
           ], propagate: true, quietPeriod: 2)
       }
