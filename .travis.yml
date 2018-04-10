@@ -4,6 +4,9 @@ services:
     - docker
 
 language: java
+
+sudo: required
+
 jdk: oraclejdk8
 
 env:
@@ -44,4 +47,3 @@ after_success:
 notifications:
     email:
        - asm@virtalab.net
-
