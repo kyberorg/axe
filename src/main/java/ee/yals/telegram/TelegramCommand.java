@@ -40,12 +40,34 @@ public enum TelegramCommand {
         if (cmd.equals(START.commandString)) {
             return START;
         } else if (isYalsCommand) {
-            return YALS;
+            TelegramCommand selectedCommand = UNKNOWN;
+            TelegramCommand[] yalsCommands = new TelegramCommand[]{YALS, YALSL, YALST};
+            for (TelegramCommand command : yalsCommands) {
+                if (cmd.equals(command.commandString)) {
+                    selectedCommand = command;
+                    break;
+                }
+            }
+            return selectedCommand;
         } else if (cmd.equals(USAGE.commandString)) {
             return USAGE;
         } else {
             return UNKNOWN;
         }
+    }
+
+    public boolean isYalsCommand() {
+        boolean isYals = false;
+        switch (this) {
+            case YALS:
+            case YALSL:
+            case YALST:
+                isYals = true;
+            default:
+                isYals = false;
+
+        }
+        return isYals;
     }
 
 }

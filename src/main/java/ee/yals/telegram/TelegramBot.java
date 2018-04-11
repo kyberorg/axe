@@ -57,6 +57,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             TelegramCommand telegramCommand = telegramObject.getCommand();
             switch (telegramCommand) {
                 case YALS:
+                case YALSL:
+                case YALST:
                 case NOT_A_COMMAND:
                     message = doYals();
                     break;
