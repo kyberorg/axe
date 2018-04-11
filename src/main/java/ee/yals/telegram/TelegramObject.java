@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import static ee.yals.constants.App.NO_VALUE;
 import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
+import static ee.yals.utils.AppUtils.BR;
 
 /**
  * Contains message, username and other useful info from {@link org.telegram.telegrambots.api.objects.Update}
@@ -122,11 +123,11 @@ public class TelegramObject {
 
     @Override
     public String toString() {
-        return TelegramObject.class.getSimpleName() + "[" +
-                TelegramArguments.class.getSimpleName() + "=" + arguments +
-                TelegramCommand.class.getSimpleName() + "=" + command +
-                "username=" + username +
-                "userMessage=" + userMessage +
+        return TelegramObject.class.getSimpleName() + "[" + BR +
+                TelegramArguments.class.getSimpleName() + "=" + arguments + BR +
+                TelegramCommand.class.getSimpleName() + "=" + command + BR +
+                "username=" + username + BR +
+                "userMessage=" + userMessage + BR +
                 "]";
     }
 }
