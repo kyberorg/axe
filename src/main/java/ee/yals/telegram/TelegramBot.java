@@ -51,6 +51,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             telegramObject = TelegramObject.createFromUpdate(update);
+            LOG.info("Created TelegramObject: " + telegramObject);
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();

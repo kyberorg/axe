@@ -89,4 +89,12 @@ public class TelegramArguments {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return TelegramArguments.class.getSimpleName() + "[" +
+                "url=" + url +
+                "description=" + description +
+                "]";
+    }
 }

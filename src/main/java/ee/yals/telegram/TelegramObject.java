@@ -119,4 +119,14 @@ public class TelegramObject {
         }
         return arguments;
     }
+
+    @Override
+    public String toString() {
+        return TelegramObject.class.getSimpleName() + "[" +
+                TelegramArguments.class.getSimpleName() + "=" + arguments +
+                TelegramCommand.class.getSimpleName() + "=" + command +
+                "username=" + username +
+                "userMessage=" + userMessage +
+                "]";
+    }
 }
