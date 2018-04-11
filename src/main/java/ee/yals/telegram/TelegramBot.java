@@ -55,20 +55,21 @@ public class TelegramBot extends TelegramLongPollingBot {
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
-            switch (telegramCommand) {
-                case YALS:
-                case YALSL:
-                case YALST:
-                case NOT_A_COMMAND:
-                    message = doYals();
-                    break;
-                case START:
-                case USAGE:
-                case UNKNOWN:
-                    message = telegramService.usage();
-                    break;
-                default:
-                    message = telegramService.usage();
+            if (telegramCommand.isYalsCommand()) {
+                message = doYals();
+            } else {
+                switch (telegramCommand) {
+                    case NOT_A_COMMAND:
+                        message = doYals();
+                        break;
+                    case START:
+                    case USAGE:
+                    case UNKNOWN:
+                        message = telegramService.usage();
+                        break;
+                    default:
+                        message = telegramService.usage();
+                }
             }
 
         } catch (NoSuchElementException | IllegalArgumentException e) {

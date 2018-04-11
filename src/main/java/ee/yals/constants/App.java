@@ -13,7 +13,7 @@ public class App {
     public static final String AND = "&";
     public static final String AT = "@";
     public static final String NO_VALUE = "_";
-    public static final String NEW_LINE = "\n";
+    public static final String NEW_LINE = System.getProperty("line.separator");
 
     public static class Emoji {
         private Emoji() {

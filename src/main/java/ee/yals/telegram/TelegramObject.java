@@ -6,9 +6,9 @@ import org.telegram.telegrambots.api.objects.Update;
 
 import java.util.Objects;
 
+import static ee.yals.constants.App.NEW_LINE;
 import static ee.yals.constants.App.NO_VALUE;
 import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
-import static ee.yals.utils.AppUtils.BR;
 
 /**
  * Contains message, username and other useful info from {@link org.telegram.telegrambots.api.objects.Update}
@@ -28,7 +28,7 @@ public class TelegramObject {
         this.parseUserMessage();
     }
 
-    public static TelegramObject createFromUpdate(Update update) {
+    static TelegramObject createFromUpdate(Update update) {
         if (Objects.isNull(update)) {
             throw new IllegalStateException("Update is missing");
         }
@@ -44,7 +44,7 @@ public class TelegramObject {
         return username;
     }
 
-    public TelegramCommand getCommand() {
+    TelegramCommand getCommand() {
         return command;
     }
 
@@ -125,11 +125,11 @@ public class TelegramObject {
 
     @Override
     public String toString() {
-        return TelegramObject.class.getSimpleName() + "[" + BR +
-                TelegramArguments.class.getSimpleName() + "=" + arguments + BR +
-                TelegramCommand.class.getSimpleName() + "=" + command + BR +
-                "username=" + username + BR +
-                "userMessage=" + userMessage + BR +
+        return TelegramObject.class.getSimpleName() + "[" + NEW_LINE +
+                TelegramArguments.class.getSimpleName() + "=" + arguments + NEW_LINE +
+                TelegramCommand.class.getSimpleName() + "=" + command + NEW_LINE +
+                "username=" + username + NEW_LINE +
+                "userMessage=" + userMessage + NEW_LINE +
                 "]";
     }
 }

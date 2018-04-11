@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-import static ee.yals.utils.AppUtils.BR;
+import static ee.yals.constants.App.NEW_LINE;
 
 /**
  * Combinations or params present at message in {@link TelegramObject}. Similar to Unix command line args.
@@ -50,11 +50,11 @@ public class TelegramArguments {
         return brokenArgs;
     }
 
-    public static Builder builderWithUrl(String url) {
+    static Builder builderWithUrl(String url) {
         return new Builder(url);
     }
 
-    public static Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -69,11 +69,11 @@ public class TelegramArguments {
             this.urlString = url;
         }
 
-        public TelegramArguments buildEmpty() {
+        TelegramArguments buildEmpty() {
             return EMPTY_ARGS;
         }
 
-        public Builder andDescription(String description) {
+        Builder andDescription(String description) {
             this.descriptionString = description;
             return this;
         }
@@ -94,9 +94,9 @@ public class TelegramArguments {
 
     @Override
     public String toString() {
-        return TelegramArguments.class.getSimpleName() + "[" + BR +
-                "url=" + url + BR +
-                "description=" + description + BR +
+        return TelegramArguments.class.getSimpleName() + "[" + NEW_LINE +
+                "url=" + url + NEW_LINE +
+                "description=" + description + NEW_LINE +
                 "]";
     }
 }

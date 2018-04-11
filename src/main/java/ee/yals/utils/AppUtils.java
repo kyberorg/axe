@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 public class AppUtils {
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
-    public static final String BR = System.getProperty("line.separator");
 
     private AppUtils() {
         throw new UnsupportedOperationException("Utility class");

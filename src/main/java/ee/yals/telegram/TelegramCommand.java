@@ -20,7 +20,7 @@ public enum TelegramCommand {
         return commandString;
     }
 
-    private String commandString;
+    private final String commandString;
 
     TelegramCommand(String cmd) {
         this.commandString = cmd;
@@ -57,12 +57,13 @@ public enum TelegramCommand {
     }
 
     public boolean isYalsCommand() {
-        boolean isYals = false;
+        boolean isYals;
         switch (this) {
             case YALS:
             case YALSL:
             case YALST:
                 isYals = true;
+                break;
             default:
                 isYals = false;
 
