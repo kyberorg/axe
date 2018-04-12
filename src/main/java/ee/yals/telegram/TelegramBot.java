@@ -29,7 +29,7 @@ import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
     private static final Logger LOG = Logger.getLogger(TelegramBot.class);
-    private static final String TAG = "[Telegram]";
+    private static final String TAG = "[Telegram Bot]";
 
     private static final String DUMMY_TOKEN = "dummy:Token";
     private static final Message NO_MESSAGE = new Message();
@@ -55,7 +55,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             telegramObject = TelegramObject.createFromUpdate(update);
 
-            LOG.debug(NEW_LINE + telegramObject);
+            LOG.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + NEW_LINE + telegramObject);
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
