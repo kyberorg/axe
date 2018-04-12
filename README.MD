@@ -35,6 +35,12 @@ Just a simple link shortener like many others for friends.
 
 ## Release Notes
 
+### Version 2.4 (12/04/18)
+Telegram Bot
+
+* Telegram Bot (#80)
+* Better logs (#84)
+
 ### Version 2.3.1 (05/02/18)
 Mattermost multiple params support and fixes
 
