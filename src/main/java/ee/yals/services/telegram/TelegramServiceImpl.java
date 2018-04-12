@@ -59,7 +59,7 @@ public class TelegramServiceImpl implements TelegramService {
     @Override
     public String success(Link savedLink) {
         if (!isInitDone) {
-            return "Didn't correctly inited";
+            return NO_INIT;
         }
         String serverHostname = AppUtils.HostHelper.getServerUrl();
         String fullYalsLink = serverHostname + "/" + savedLink.getIdent();

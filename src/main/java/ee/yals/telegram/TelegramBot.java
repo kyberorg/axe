@@ -75,15 +75,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (NoSuchElementException | IllegalArgumentException e) {
             LOG.error(TAG + "Got exception while handling incoming update", e);
             LOG.info(String.format("%s Author: %s, Message: %s", TAG, getMessage().getFrom().getUserName(), getMessage().getText()));
-            LOG.debug(TAG + " Update: " + update);
+            LOG.debug(TAG + "Update: " + update);
             message = telegramService.usage();
         } catch (IllegalStateException e) {
             LOG.error(TAG + "Exception", e);
             message = "Internal error: not all components are available. Bot currently not available";
         } catch (Exception e) {
-            LOG.error(TAG + " Got unexpected exception while processing telegram update", e);
+            LOG.error(TAG + "Got unexpected exception while processing telegram update", e);
             LOG.info(String.format("%s Author: %s, Message: %s", TAG, getMessage().getFrom().getUserName(), getMessage().getText()));
-            LOG.debug(TAG + " Update: " + update);
+            LOG.debug(TAG + "Update: " + update);
             message = telegramService.serverError();
         }
 

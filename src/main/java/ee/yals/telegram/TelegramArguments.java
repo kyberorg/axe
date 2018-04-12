@@ -15,7 +15,6 @@ import static ee.yals.constants.App.NEW_LINE;
  */
 public class TelegramArguments {
     static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
-
     static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
 
     private static TelegramArguments SELF = null;
