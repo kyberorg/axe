@@ -41,6 +41,7 @@ public class TelegramBotAutoConfig {
 
     @PostConstruct
     public void start() {
+        LOG.info("");
         LOG.info(TAG + "Registering telegram bot");
 
         boolean isBotAvailable = Objects.nonNull(telegramBot) && isServerUrlAvailable();
