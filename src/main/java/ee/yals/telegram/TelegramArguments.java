@@ -6,8 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-import static ee.yals.constants.App.NEW_LINE;
-
 /**
  * Combinations or params present at message in {@link TelegramObject}. Similar to Unix command line args.
  *
@@ -93,9 +91,9 @@ public class TelegramArguments {
 
     @Override
     public String toString() {
-        return TelegramArguments.class.getSimpleName() + "[" + NEW_LINE +
-                "url=" + url + NEW_LINE +
-                "description=" + description + NEW_LINE +
-                "]";
+        return TelegramArguments.class.getSimpleName() + "{" +
+                "url=" + url + ", " +
+                "description=" + description +
+                "}";
     }
 }
