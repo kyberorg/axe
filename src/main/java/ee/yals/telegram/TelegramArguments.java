@@ -93,9 +93,9 @@ public class TelegramArguments {
 
     @Override
     public String toString() {
-        return TelegramArguments.class.getSimpleName() + "[" + NEW_LINE +
-                "url=" + url + NEW_LINE +
+        return TelegramArguments.class.getSimpleName() + "{" +
+                "url=" + url + "," +
                 "description=" + description + NEW_LINE +
-                "]";
+                "}";
     }
 }
