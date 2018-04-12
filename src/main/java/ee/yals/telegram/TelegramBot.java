@@ -16,6 +16,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import static ee.yals.constants.App.NEW_LINE;
 import static ee.yals.services.telegram.TelegramServiceImpl.NO_INIT;
 import static ee.yals.telegram.TelegramArguments.BROKEN_ARGS;
 import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
@@ -28,7 +29,7 @@ import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
     private static final Logger LOG = Logger.getLogger(TelegramBot.class);
-    private static final String TAG = "[Telegram] ";
+    private static final String TAG = "[Telegram]";
 
     private static final String DUMMY_TOKEN = "dummy:Token";
     private static final Message NO_MESSAGE = new Message();
@@ -41,7 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        LOG.trace(TAG + "New Update " + update);
+        LOG.trace(TAG + " New Update " + update);
         this.update = update;
 
         String message;
@@ -54,7 +55,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             telegramObject = TelegramObject.createFromUpdate(update);
 
-            LOG.debug(telegramObject);
+            LOG.debug(NEW_LINE + telegramObject);
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
@@ -76,14 +77,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            LOG.error(TAG + "Got exception while handling incoming update." +
+            LOG.error(TAG + " Got exception while handling incoming update." +
                     " " + e.getClass().getName() + ": " + e.getMessage());
             message = telegramService.usage();
         } catch (IllegalStateException e) {
             message = "Internal error: not all components are available. Bot currently not available";
-            LOG.error(TAG + message + " " + e.getClass().getName() + ": " + e.getMessage());
+            LOG.error(TAG + " " + message + " " + e.getClass().getName() + ": " + e.getMessage());
         } catch (Exception e) {
-            LOG.error(TAG + "Got unexpected exception while processing telegram update" +
+            LOG.error(TAG + " Got unexpected exception while processing telegram update" +
                     " " + e.getClass().getName() + ": " + e.getMessage());
             message = telegramService.serverError();
         }
@@ -96,7 +97,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(createSendMessage(message));
         } catch (TelegramApiException e) {
-            LOG.error(TAG + "Failed to send telegram message. Message: " + message +
+            LOG.error(TAG + " Failed to send telegram message. Message: " + message +
                     " " + e.getClass().getName() + ": " + e.getMessage());
         }
     }
