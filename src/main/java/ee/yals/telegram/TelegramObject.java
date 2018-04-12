@@ -125,11 +125,11 @@ public class TelegramObject {
 
     @Override
     public String toString() {
-        return TelegramObject.class.getSimpleName() + "[" + NEW_LINE +
+        return TelegramObject.class.getSimpleName() + " {" + NEW_LINE +
                 TelegramArguments.class.getSimpleName() + "=" + arguments + NEW_LINE +
                 TelegramCommand.class.getSimpleName() + "=" + command + NEW_LINE +
                 "username=" + username + NEW_LINE +
                 "userMessage=" + userMessage + NEW_LINE +
-                "]";
+                "}";
     }
 }
