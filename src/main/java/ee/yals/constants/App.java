@@ -11,4 +11,16 @@ public class App {
 
     public static final String EQUAL = "=";
     public static final String AND = "&";
+    public static final String AT = "@";
+    public static final String NO_VALUE = "_";
+    public static final String NEW_LINE = System.getProperty("line.separator");
+
+    public static class Emoji {
+        private Emoji() {
+        }
+
+        public static final String WARNING = ":warning:";
+        public static final String INFO = ":information_source:";
+    }
+
 }
