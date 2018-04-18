@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      image 'kyberorg/jobbari:1.3'
+        image 'kyberorg/jobbari:1.5.0'
       args '-u root --privileged'
     }
     
@@ -55,7 +55,7 @@ case $BRANCH_NAME in
     master)
       git checkout $BRANCH_NAME
       git pull --tags
-      export TAG=`git describe --tags --abbrev=0`
+      export TAG=`python /opt/tag.py`
       echo ${GIT_COMMIT} > COMMIT
       echo $TAG > TAG
       git checkout -f ${GIT_COMMIT} 1>/dev/null 2>/dev/null
@@ -110,6 +110,7 @@ echo ${DOCKER_TAG} > DOCKER_TAG
 chmod ugo+w DOCKER_TAG
 export DOCKER_TAG=${DOCKER_TAG}
 '''
+           archive 'DOCKER_TAG'
         retry(count: 3) {
           sh '''### Create Docker image ###
 set +x 
