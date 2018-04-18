@@ -109,8 +109,9 @@ echo "Docker Tag: ${DOCKER_TAG}"
 echo ${DOCKER_TAG} > DOCKER_TAG
 chmod ugo+w DOCKER_TAG
 export DOCKER_TAG=${DOCKER_TAG}
+cp DOCKER_TAG DOCKER_TAG.txt
 '''
-           archive 'DOCKER_TAG'
+           archive 'DOCKER_TAG.txt'
         retry(count: 3) {
           sh '''### Create Docker image ###
 set +x 
