@@ -27,7 +27,7 @@ Just a simple link shortener like many others. Made for friends.
 
 * Run JAR with following options:
 
-``` java 
+``` java -jar yals.jar 
    -Ddb.type=H2 
    -Ddb.driver=org.h2.Driver
    -Ddb.url=jdbc:h2:mem:test
