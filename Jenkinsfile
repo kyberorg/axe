@@ -92,7 +92,6 @@ echo "TAG: ${TAG}"
     stage('Build') {
       steps {
         sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
-        archive 'target/*.jar'
         sh 'pwd && chmod ugo+w -R .'
       }
     }
@@ -144,7 +143,7 @@ docker push $DOCKER_REPO
       steps {
         script {
             env['dockerTag'] = sh(script: 'cat DOCKER_TAG', returnStdout: true).trim()
-            println env['dockerTag']
+            //println env['dockerTag']
         }
 
           build(job: 'DeployJob', parameters: [
