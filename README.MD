@@ -2,7 +2,7 @@
 
 # Yet another link shortener
 
-Just a simple link shortener like many others for friends.
+Just a simple link shortener like many others. Made for friends.
 
 ## For Developers
 ### How to start coding ?
