@@ -11,7 +11,8 @@ jdk: oraclejdk8
 
 env:
    global:
-       - PROJECT=yals
+       - D_ORG=yadevee
+       - D_PROJECT=yals
        - G_BRANCH=${TRAVIS_BRANCH}
        - T_BUILD=${TRAVIS_JOB_NUMBER}
 
@@ -24,7 +25,7 @@ after_success:
     - export TAG=`if [ "$G_BRANCH" == "master" ]; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
     - echo $TAG > TAG
 
-    - export D_REPO=${D_USER}/${PROJECT}
+    - export D_REPO=${D_ORG}/${D_PROJECT}
     - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; else echo $TRAVIS_TAG; fi`
     - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
     - export IS_TAG_BUILD=`if [ "$G_TAG" != "-" ]; then echo "yes"; else echo "no"; fi`
@@ -46,4 +47,4 @@ after_success:
 
 notifications:
     email:
-       - asm@virtalab.net
+       - kyberorg@yadev.ee
