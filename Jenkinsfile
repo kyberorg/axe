@@ -2,10 +2,10 @@ pipeline {
   agent {
     docker {
       reuseNode true
-      image 'kyberorg/jobbari:1.3'
+      image 'kyberorg/jobbari:1.5.0'
       args '-u root --privileged'
     }
-    
+
   }
   stages {
     stage('Init') {
@@ -55,7 +55,7 @@ case $BRANCH_NAME in
     master)
       git checkout $BRANCH_NAME
       git pull --tags
-      export TAG=`git describe --tags --abbrev=0`
+      export TAG=`python /opt/tag.py`
       echo ${GIT_COMMIT} > COMMIT
       echo $TAG > TAG
       git checkout -f ${GIT_COMMIT} 1>/dev/null 2>/dev/null
@@ -82,14 +82,16 @@ echo "TAG: ${TAG}"
     }
     stage('Test') {
       steps {
-        sh 'mvn test -B'
+        timeout(time: 7) {
+          sh 'mvn test -B'
+        }
+
         junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true)
       }
     }
     stage('Build') {
       steps {
         sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B -V'
-        archive 'target/*.jar'
         sh 'pwd && chmod ugo+w -R .'
       }
     }
@@ -109,7 +111,9 @@ echo "Docker Tag: ${DOCKER_TAG}"
 echo ${DOCKER_TAG} > DOCKER_TAG
 chmod ugo+w DOCKER_TAG
 export DOCKER_TAG=${DOCKER_TAG}
+cp DOCKER_TAG DOCKER_TAG.txt
 '''
+        archive 'DOCKER_TAG.txt'
         retry(count: 3) {
           sh '''### Create Docker image ###
 set +x 
@@ -120,7 +124,7 @@ echo "Building Docker image with: $DOCKER_TAG"
 docker build -t $DOCKER_REPO:$DOCKER_TAG .
 '''
         }
-        
+
       }
     }
     stage('Push Docker') {
@@ -137,13 +141,15 @@ docker push $DOCKER_REPO
     }
     stage('Deploy') {
       steps {
-          script {
-              env['dockerTag'] = sh(script: "cat DOCKER_TAG", returnStdout: true).trim()
-          }
+        script {
+            env['dockerTag'] = sh(script: 'cat DOCKER_TAG', returnStdout: true).trim()
+            //println env['dockerTag']
+        }
+
           build(job: 'DeployJob', parameters: [
                   [$class: 'StringParameterValue', name: 'FOLDER', value: String.valueOf(PROJECT).toLowerCase()],
-                  [$class: 'StringParameterValue', name: 'DOCKER_REPO', value: String.valueOf(DOCKER_REPO).toLowerCase() ],
-                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: env['dockerTag'] ]
+                  [$class: 'StringParameterValue', name: 'DOCKER_REPO', value: String.valueOf(DOCKER_REPO).toLowerCase()],
+                  [$class: 'StringParameterValue', name: 'DOCKER_TAG', value: env['dockerTag']]
           ], propagate: true, quietPeriod: 2)
       }
     }
