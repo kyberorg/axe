@@ -5,9 +5,8 @@ ADD ./target/yals.jar /app/
 COPY ./COMMIT /app/
 COPY ./TAG /app/
 COPY ./docker-entrypoint.sh /
-#RUN sh -c 'touch /docker-entrypoint.sh'
+RUN sh -c 'chmod +x ./docker-entrypoint.sh'
 RUN sh -c 'touch /app/yals.jar'
-#ENTRYPOINT docker-entrypoint.sh
-ENTRYPOINT ls -al
+ENTRYPOINT ls -al / && ls -al /app && ./docker-entrypoint.sh
 EXPOSE 8080
 
