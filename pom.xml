@@ -275,5 +275,11 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		<profile>
+			<id>noTesting</id>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+		</profile>
 	</profiles>
 </project>
