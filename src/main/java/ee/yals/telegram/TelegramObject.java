@@ -1,8 +1,8 @@
 package ee.yals.telegram;
 
 import org.apache.commons.lang3.StringUtils;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ import static ee.yals.constants.App.NO_VALUE;
 import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
 
 /**
- * Contains message, username and other useful info from {@link org.telegram.telegrambots.api.objects.Update}
+ * Contains message, username and other useful info from {@link org.telegram.telegrambots.meta.api.objects.Update}
  *
  * @since 2.4
  */
