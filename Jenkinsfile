@@ -20,7 +20,7 @@ pipeline {
                   if(prodMode) {
                      vaadin(prodModeProfile: 'production-mode',extraProfiles: 'noTesting')
                   } else {
-                     vaadin(extraProfiles: 'noTesting')
+                     vaadin(extraProfiles: 'noTesting', verbose: true)
                   }
                }
             }
