@@ -62,7 +62,7 @@ pipeline {
                         hookUrl = 'https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1';
                         break;
                  }
-                 // Not enabled yet
+                 // Not enabled yet until SpringBoot 2 migration completed
                  //deployToSwarm(hookUrl: hookUrl);
                }
             }
@@ -73,7 +73,7 @@ pipeline {
                  String url;
                  switch(env.BRANCH_NAME) {
                     case "latest":
-                        url = 'https://yals.ee';
+                        url = 'https://yals.eu';
                         break;
                     case "trunk":
                         url = 'https://qa.yals.eu';
@@ -82,7 +82,7 @@ pipeline {
                         url = 'https://dev.yals.eu';
                         break;
                  }
-                 // Not enabled yet
+                 // Not enabled yet before switching to TestContainers
                  //smartWait(url: url);
                  //testApp(url: url);
                }
