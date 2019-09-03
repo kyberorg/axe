@@ -11,11 +11,8 @@ public abstract class GitInfo {
     public static final String NOTHING_FOUND_MARKER = "-";
 
     public static GitInfo getInstance() {
-        DockerGitInfo dockerGitInfo = new DockerGitInfo();
         MavenGitInfo mavenGitInfo = new MavenGitInfo();
-        if (dockerGitInfo.isApplicable()) {
-            return dockerGitInfo;
-        } else if (mavenGitInfo.isApplicable()) {
+        if (mavenGitInfo.isApplicable()) {
             return mavenGitInfo;
         } else {
             return new NoGitInfo();
