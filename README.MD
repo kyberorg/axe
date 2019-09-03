@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=master)](https://travis-ci.org/yadevee/yals)
+[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Fmaster)](https://ci.yadev.eu/job/YalsGH/job/master/)
 
 # Yet another link shortener
 
@@ -17,7 +17,7 @@ Just a simple link shortener like many others. Made for friends.
 
 ### Trunk build status
 
-[![Build Status](https://travis-ci.org/yadevee/yals.svg?branch=trunk)](https://travis-ci.org/yadevee/yals)
+[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Ftrunk)](https://ci.yadev.eu/job/YalsGH/job/trunk/)
 [![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)
 
 ### How run application ?
