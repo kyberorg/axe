@@ -63,7 +63,7 @@ pipeline {
                         break;
                  }
                  // Not enabled yet until SpringBoot 2 migration completed
-                 //deployToSwarm(hookUrl: hookUrl);
+                 deployToSwarm(hookUrl: hookUrl);
                }
             }
         }
