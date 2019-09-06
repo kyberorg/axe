@@ -22,14 +22,16 @@ file_env() {
         unset "$fileVar"
 }
 
-file_env 'DB_PASS'
-file_env 'TELEGRAM_TOKEN'
+file_env 'YALS_DB_PASS'
+file_env 'YALS_TELEGRAM_TOKEN'
 
 # For DB checker
 file_env 'DB_HOST' 'yals_db'
 file_env 'DB_PORT' '3306'
 
 # DB checker
+echo "Connecting to $DB_HOST:$DB_PORT";
+
 while ! nc -z $DB_HOST $DB_PORT;
 do
  echo "Waiting for DB...";
