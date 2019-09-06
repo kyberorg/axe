@@ -4,36 +4,6 @@
 
 Just a simple link shortener like many others. Made for friends.
 
-## For Developers
-### How to start coding ?
-
-* Git clone ``` git clone repoUrl ```
-
-* Import into IDE as **Maven** project
-
-* Select all autodetected Spring facets
-
-* Use ``` YalsApplication.main() ``` as start point
-
-### Trunk build status
-
-[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Ftrunk)](https://ci.yadev.eu/job/YalsGH/job/trunk/)
-[![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)
-
-
-### How run application ?
-* Build with Maven with H2 profile enabled
-
-``` mvn -P h2 -Dskip.tests clean package```
-
-* Run JAR with following options:
-
-``` java -jar yals.jar 
-   -Ddb.type=H2 
-   -Ddb.driver=org.h2.Driver
-   -Ddb.url=jdbc:h2:mem:test
-```
-
 ## Release Notes
 
 ### Version 2.4 (12/04/18)
@@ -93,6 +63,47 @@ Second stable version
 
 * Makes short link from long one
 
-## Version 1.0 and less (01/04/16)
+### Version 1.0 and less (01/04/16)
 
 Can be found from [here](https://github.com/yadevee/yals-play/blob/trunk/README.md#yet-another-link-shortener)
+
+## For Developers
+### How to start coding ?
+
+* Git clone ``` git clone repoUrl ```
+
+* Import into IDE as **Maven** project
+
+* Select all autodetected Spring facets
+
+* Use ``` YalsApplication.main() ``` as start point
+
+### About: local profile
+To develop with locally running dockerized MySQL database use `local` profile.
+
+Profile can activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `local`
+
+MySQL can be started from `docker/localMySQL` directory by running:
+
+```
+docker-compose up -d
+``` 
+
+MySQL can be stopped from `docker/localMySQL` directory by running:
+
+```
+docker-compose down
+```
+
+### Logging
+To adjust logging we use ENV variables or `-D` vars: 
+
+* Use `LOG_LEVEL_CORE` or `-Dlog.level.core` for setting overall log level
+* Use `LOG_LEVEL_APP` or `-Dlog.level.app` for setting application (package: `ee.yals`) log level
+* Use `LOG_LEVEL_SPRING` or `-Dlog.level.spring` for setting Spring (package: `org.springframework`) log level
+* Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
+
+### Trunk build status
+
+[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Ftrunk)](https://ci.yadev.eu/job/YalsGH/job/trunk/)
+[![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)
