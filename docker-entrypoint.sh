@@ -22,7 +22,7 @@ file_env() {
         unset "$fileVar"
 }
 
-file_env 'YALS_DB_PASS'
+file_env 'YALS_DB_PASSWORD'
 file_env 'YALS_TELEGRAM_TOKEN'
 
 # For DB checker
