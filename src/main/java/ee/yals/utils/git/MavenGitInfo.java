@@ -15,13 +15,14 @@ public class MavenGitInfo extends GitInfo {
     /**
      * No reason for instance. Use {@link GitInfo#getInstance()} instead
      */
-    MavenGitInfo() { }
+    MavenGitInfo() {
+    }
 
     private GitRepoState gitRepoState = GitRepoState.getInstance();
 
     @Override
     boolean isApplicable() {
-        return Objects.nonNull(gitRepoState);
+        return Objects.nonNull(gitRepoState) && gitRepoState.correctlyInitialized();
     }
 
     @Override

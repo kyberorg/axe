@@ -8,8 +8,8 @@ import ee.yals.models.Link;
 import ee.yals.models.dao.LinkRepo;
 import ee.yals.telegram.TelegramObject;
 import ee.yals.utils.AppUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,8 @@ import static ee.yals.constants.App.NO_VALUE;
  * @since 2.4
  */
 @Service
+@Slf4j
 public class TelegramServiceImpl implements TelegramService {
-    private static final Logger LOG = Logger.getLogger(TelegramServiceImpl.class);
     public static final String NO_INIT = "Didn't correctly initialized. Did you run telegramService.init()?";
 
     @Autowired
@@ -50,7 +50,7 @@ public class TelegramServiceImpl implements TelegramService {
         try {
             savedLink = linkRepo.save(link);
         } catch (Exception e) {
-            LOG.error("Got exception while saving new Link " + link.toString(), e);
+            log.error("Got exception while saving new Link " + link.toString(), e);
             savedLink = null;
         }
         return savedLink;

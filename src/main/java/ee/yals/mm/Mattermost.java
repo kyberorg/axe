@@ -1,8 +1,8 @@
 package ee.yals.mm;
 
 import ee.yals.constants.App;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import java.net.URLDecoder;
 import java.util.NoSuchElementException;
@@ -16,8 +16,9 @@ import static ee.yals.mm.MattermostArgumentSet.EMPTY_SET;
  *
  * @since 2.3
  */
+@Slf4j
 public class Mattermost {
-    private static final Logger Log = Logger.getLogger(Mattermost.class);
+    private static final String TAG = "[MM]";
 
     private String channelId = NO_VALUE;
     private String channelName = NO_VALUE;
@@ -94,8 +95,10 @@ public class Mattermost {
     }
 
     private void parseBody(String body) {
+        log.debug(String.format("%s Parsing body", TAG));
         String[] bodyParams = body.split("&");
         if (bodyParams.length == 0) {
+            log.debug(String.format("%s Body has 0 params: nothing to do", TAG));
             return; //nothing to do
         }
         for (String bodyParam : bodyParams) {
@@ -119,7 +122,7 @@ public class Mattermost {
             } else if (isParamStartWith(Marker.USER_NAME)) {
                 username = decodeText(removeMarker(Marker.USER_NAME));
             } else {
-                Log.warn("String '" + this.param + "' doesn't match any pattern. Skipping...");
+                log.debug(String.format("%s String '%s' doesn't match any pattern. Skipping...", TAG, this.param));
             }
         }
     }
@@ -129,6 +132,7 @@ public class Mattermost {
     }
 
     private void parseText() {
+        log.debug(String.format("%s Parsing text", TAG));
         if (StringUtils.isBlank(this.text) || this.text.equals(NO_VALUE)) {
             this.argumentSet = MattermostArgumentSet.builder().buildEmpty();
             return;

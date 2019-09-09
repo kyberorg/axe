@@ -3,7 +3,7 @@ package ee.yals.services.mm;
 import ee.yals.core.IdentGenerator;
 import ee.yals.models.Link;
 import ee.yals.models.dao.LinkRepo;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
  * @since 2.3
  */
 @Service
+@Slf4j
 public class MattermostServiceImpl implements MattermostService {
-    private static final Logger LOG = Logger.getLogger(MattermostServiceImpl.class);
 
     @Autowired
     private LinkRepo repo;
@@ -26,7 +26,7 @@ public class MattermostServiceImpl implements MattermostService {
         try {
             savedLink = repo.save(link);
         } catch (Exception e) {
-            LOG.error("Got exception while saving new Link " + link.toString(), e);
+            log.error("Got exception while saving new Link " + link.toString(), e);
             savedLink = null;
         }
         return savedLink;

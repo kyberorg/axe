@@ -1,16 +1,17 @@
 package ee.yals.controllers.rest;
 
 import ee.yals.Endpoint;
+import ee.yals.core.IdentGenerator;
 import ee.yals.json.ErrorJson;
-import ee.yals.json.internal.Json;
 import ee.yals.json.StoreRequestJson;
 import ee.yals.json.StoreResponseJson;
-import ee.yals.result.StoreResult;
+import ee.yals.json.internal.Json;
 import ee.yals.result.GetResult;
+import ee.yals.result.StoreResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
-import ee.yals.core.IdentGenerator;
 import ee.yals.utils.UrlExtraValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +32,9 @@ import java.util.Set;
  * @since 1.0
  */
 @RestController
+@Slf4j
 public class StoreRestController {
+    private static final String TAG = "[API Store]";
 
     @Autowired
     @Qualifier("dbStorage")
@@ -40,11 +43,14 @@ public class StoreRestController {
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.STORE_API)
     public Json store(@RequestBody String body, HttpServletResponse response) {
+        log.info(String.format("%s got request: %s", TAG, body));
+
         StoreRequestJson storeInput;
         try {
             storeInput = AppUtils.GSON.fromJson(body, StoreRequestJson.class);
         } catch (Exception e) {
             response.setStatus(421);
+            log.info(String.format("%s unparseable JSON", TAG));
             return ErrorJson.createWithMessage("Unable to parse json");
         }
 
@@ -52,13 +58,15 @@ public class StoreRestController {
         Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
         Set<ConstraintViolation> errors1 = new HashSet<>();
         if (!errors.isEmpty()) {
+            log.info(String.format("%s Value Violations found: %s", TAG, errors));
             errors1.addAll(errors);
             response.setStatus(421);
             return ErrorJson.createFromSetOfErrors(errors1);
         }
 
         String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
-        if(! messageFromExtraValidator.equals(UrlExtraValidator.VALID)){
+        if (!messageFromExtraValidator.equals(UrlExtraValidator.VALID)) {
+            log.info(String.format("%s not valid URL: %s", TAG, messageFromExtraValidator));
             response.setStatus(421);
             return ErrorJson.createWithMessage(messageFromExtraValidator);
         }
@@ -68,6 +76,8 @@ public class StoreRestController {
         String ident;
         if (usingUsersIdent) {
             if (isIdentAlreadyExists(usersIdent)) {
+                log.info(String.format("%s User Ident '%s' already exists", TAG, usersIdent));
+                log.debug(String.format("%s Conflicting ident: %s", TAG, usersIdent));
                 response.setStatus(407); //conflict
                 return ErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent + " Try another one");
             } else {
@@ -81,9 +91,15 @@ public class StoreRestController {
 
         StoreResult result = linkService.storeNew(ident, storeInput.getLink());
         if (result instanceof StoreResult.Success) {
+            log.info(String.format("%s Saved. {\"ident\": %s, \"link\": %s}", TAG, ident, storeInput.getLink()));
             response.setStatus(201);
             return StoreResponseJson.create().withIdent(ident);
+        } else if (result instanceof StoreResult.Fail) {
+            log.error(String.format("%s Failed to save link: %s", TAG, storeInput.getLink()));
+            response.setStatus(500);
+            return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         } else {
+            log.error(String.format("%s Failed to save link: got unknown result object: %s", TAG, result));
             response.setStatus(500);
             return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         }

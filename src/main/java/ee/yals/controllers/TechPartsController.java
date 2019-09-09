@@ -23,4 +23,9 @@ public class TechPartsController {
         return "/s/humans.txt";
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE, produces = "text/html")
+    public String error() {
+        return "errors/500";
+    }
+
 }
