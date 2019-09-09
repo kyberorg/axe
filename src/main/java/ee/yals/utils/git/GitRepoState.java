@@ -15,6 +15,7 @@ import java.util.Properties;
 public class GitRepoState {
     private static final Logger LOG = Logger.getLogger(GitRepoState.class);
     private static GitRepoState SELF = null;
+    private static final String GIT_PROPERTIES_FILE = "git.properties";
 
     private Properties gitProperties = new Properties();
 
@@ -57,10 +58,14 @@ public class GitRepoState {
 
     private void init() {
         try {
-            SELF.gitProperties.load(SELF.getClass().getClassLoader().getResourceAsStream("git.properties"));
+            SELF.gitProperties.load(SELF.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
             SELF.publishFromProperties();
         } catch (IOException ioe) {
             LOG.error("Failed to init " + GitRepoState.class.getSimpleName(), ioe);
+            SELF.gitProperties.clear();
+        } catch (NullPointerException npe) {
+            LOG.error(String.format("'%s': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    GIT_PROPERTIES_FILE));
             SELF.gitProperties.clear();
         }
     }
