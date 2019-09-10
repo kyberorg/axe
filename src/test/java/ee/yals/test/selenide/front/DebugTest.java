@@ -1,5 +1,6 @@
 package ee.yals.test.selenide.front;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.AfterClass;
@@ -25,12 +26,21 @@ public class DebugTest {
         chrome.start();
         RemoteWebDriver driver = chrome.getWebDriver();
         WebDriverRunner.setWebDriver(driver);
+
+        Configuration.baseUrl = "https://dev.yals.eu";
     }
 
     @Test
     public void test() throws InterruptedException {
-        Selenide.open("http://dev.yals.eu");
+        Selenide.open("https://dev.yals.eu");
         $("#longUrl").setValue("https://vr.fi");
+        $("#shortenIt").click();
+    }
+
+    @Test
+    public void testTwo() throws InterruptedException {
+        Selenide.open("/");
+        $("#longUrl").setValue("http://automation-remarks.com/ganiaitie-tiesty-v-kontieinierie-s-testcontainers/");
         $("#shortenIt").click();
     }
 
