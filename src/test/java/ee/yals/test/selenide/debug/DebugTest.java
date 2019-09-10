@@ -19,7 +19,7 @@ public class DebugTest {
     public static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
                     .withDesiredCapabilities(DesiredCapabilities.chrome())
-                    .withRecordingMode(RECORD_ALL, new File("./target/"));
+                    .withRecordingMode(RECORD_ALL, new File("target"));
 
     @BeforeClass
     public static void setUp() {
