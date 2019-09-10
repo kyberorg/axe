@@ -5,8 +5,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Selenide.$;
-
 public class DebugTwoTest {
 
     @BeforeClass
@@ -17,15 +15,14 @@ public class DebugTwoTest {
     @Test
     public void testFullUrl() throws InterruptedException {
         Selenide.open("https://dev.yals.eu");
-        $("#longUrl").setValue("https://ci.yadev.eu/job/YalsGH/job/boot2/");
-        Core.clickIt();
+        Core.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/job/boot2/");
+
     }
 
     @Test
     public void testAbsolute() throws InterruptedException {
         Selenide.open("/");
-        $("#longUrl").setValue("https://ci.yadev.eu/job/YalsGH/");
-        Core.clickIt();
+        Core.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/");
     }
 
     @AfterClass

@@ -9,6 +9,8 @@ import org.testcontainers.containers.BrowserWebDriverContainer;
 import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
 
 public class Core {
@@ -28,6 +30,11 @@ public class Core {
 
     public static void clickIt() {
         $("#shortenIt").click();
+    }
+
+    static void pasteValueInFormAndSubmitIt(String link) {
+        LONG_URL_INPUT.setValue(link);
+        SUBMIT_BUTTON.click();
     }
 
     public static void tearDown() {
