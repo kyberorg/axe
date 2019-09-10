@@ -87,7 +87,7 @@ pipeline {
 
                  def testFailed = false;
                  try {
-                    sh 'mvn -Dport=7999 -Dtest=DebugTest clean test'
+                    sh 'mvn -Dport=7999 -Dtest=Debug* clean test'
                  } catch(err) {
                      //just continue to results instead of failing build just mark build as failed
                      testFailed = true;
