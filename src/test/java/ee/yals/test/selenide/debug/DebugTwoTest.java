@@ -16,10 +16,10 @@ import static com.codeborne.selenide.Selenide.$;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
 
 public class DebugTwoTest {
-    public static BrowserWebDriverContainer chrome =
+    private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
                     .withDesiredCapabilities(DesiredCapabilities.chrome())
-                    .withRecordingMode(RECORD_ALL, new File("./target/"));
+                    .withRecordingMode(RECORD_ALL, new File("target"));
 
     @BeforeClass
     public static void setUp() {
@@ -33,14 +33,14 @@ public class DebugTwoTest {
     @Test
     public void test() throws InterruptedException {
         Selenide.open("https://dev.yals.eu");
-        $("#longUrl").setValue("https://vr.fi");
+        $("#longUrl").setValue("https://ci.yadev.eu/job/YalsGH/job/boot2/");
         $("#shortenIt").click();
     }
 
     @Test
     public void testTwo() throws InterruptedException {
         Selenide.open("/");
-        $("#longUrl").setValue("http://automation-remarks.com/ganiaitie-tiesty-v-kontieinierie-s-testcontainers/");
+        $("#longUrl").setValue("https://ci.yadev.eu/job/YalsGH/");
         $("#shortenIt").click();
     }
 
