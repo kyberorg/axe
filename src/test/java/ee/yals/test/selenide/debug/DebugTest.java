@@ -31,14 +31,14 @@ public class DebugTest {
     }
 
     @Test
-    public void test() throws InterruptedException {
+    public void testFullWithSlash() throws InterruptedException {
         Selenide.open("https://dev.yals.eu");
-        $("#longUrl").setValue("https://vr.fi");
+        $("#longUrl").setValue("https://vr.fi/");
         $("#shortenIt").click();
     }
 
     @Test
-    public void testTwo() throws InterruptedException {
+    public void testAuto() throws InterruptedException {
         Selenide.open("/");
         $("#longUrl").setValue("http://automation-remarks.com/ganiaitie-tiesty-v-kontieinierie-s-testcontainers/");
         $("#shortenIt").click();

@@ -31,14 +31,14 @@ public class DebugTwoTest {
     }
 
     @Test
-    public void test() throws InterruptedException {
+    public void testFullUrl() throws InterruptedException {
         Selenide.open("https://dev.yals.eu");
         $("#longUrl").setValue("https://ci.yadev.eu/job/YalsGH/job/boot2/");
         $("#shortenIt").click();
     }
 
     @Test
-    public void testTwo() throws InterruptedException {
+    public void testAbsolute() throws InterruptedException {
         Selenide.open("/");
         $("#longUrl").setValue("https://ci.yadev.eu/job/YalsGH/");
         $("#shortenIt").click();
