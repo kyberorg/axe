@@ -29,4 +29,8 @@ public class Core {
     public static void clickIt() {
         $("#shortenIt").click();
     }
+
+    public static void tearDown() {
+        chrome.stop();
+    }
 }

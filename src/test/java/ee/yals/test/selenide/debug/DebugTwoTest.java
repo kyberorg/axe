@@ -1,22 +1,13 @@
 package ee.yals.test.selenide.debug;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testcontainers.containers.BrowserWebDriverContainer;
-
-import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
-import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
 
 public class DebugTwoTest {
-
 
     @BeforeClass
     public static void setUp() {
@@ -38,7 +29,7 @@ public class DebugTwoTest {
     }
 
     @AfterClass
-    public static void tearDown() throws Exception {
-        chrome.stop();
+    public static void tearDown() {
+        Core.tearDown();
     }
 }
