@@ -16,18 +16,11 @@ import static com.codeborne.selenide.Selenide.$;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
 
 public class DebugTwoTest {
-    private static BrowserWebDriverContainer chrome =
-            new BrowserWebDriverContainer()
-                    .withDesiredCapabilities(DesiredCapabilities.chrome())
-                    .withRecordingMode(RECORD_ALL, new File("target"));
+
 
     @BeforeClass
     public static void setUp() {
-        chrome.start();
-        RemoteWebDriver driver = chrome.getWebDriver();
-        WebDriverRunner.setWebDriver(driver);
-
-        Configuration.baseUrl = "https://dev.yals.eu";
+        Core.setUp();
     }
 
     @Test
