@@ -85,7 +85,8 @@ public class TechPartsTest {
         result = goForwardIsForwardUrlPerformExists(result);
 
         assertContentNotEmpty(result);
-        assertContentType(MimeType.OCTET_STREAM, result);
+        //in Spring boot 2 favicon has image/x-icon mimetype
+        assertContentType(MimeType.IMAGE_X_ICON, result);
     }
 
     private MvcResult goForwardIsForwardUrlPerformExists(MvcResult result) throws Exception {

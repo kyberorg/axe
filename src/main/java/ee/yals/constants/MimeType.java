@@ -15,4 +15,5 @@ public final class MimeType {
     public static final String TEXT_CSS = "text/css";
     public static final String OCTET_STREAM = "application/octet-stream";
     public static final String APPLICATION_JSON = "application/json";
+    public static final String IMAGE_X_ICON = "image/x-icon";
 }

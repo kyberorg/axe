@@ -15,7 +15,7 @@ import java.io.File;
 
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
-import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
+import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
 /**
  * Common stuff for all UI Test
@@ -27,7 +27,7 @@ public class UITest {
     private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
                     .withCapabilities(new ChromeOptions())
-                    .withRecordingMode(RECORD_ALL, new File(REPORT_DIRECTORY));
+                    .withRecordingMode(RECORD_FAILING, new File(REPORT_DIRECTORY));
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     public final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
