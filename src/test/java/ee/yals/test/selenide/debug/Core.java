@@ -35,8 +35,12 @@ public class Core {
             Testcontainers.exposeHostPorts(SERVER_PORT);
         }
         //debug information
-        System.out.printf("Application will start at %d", SERVER_PORT);
-        System.out.printf("Will test BASE_URL: %s", BASE_URL);
+        System.out.println("");
+        System.out.println("=== Debug Info ===");
+        System.out.println("");
+        System.out.println(String.format("Application will start at %d", SERVER_PORT));
+        System.out.println(String.format("Will test BASE_URL: %s", BASE_URL));
+        System.out.println("");
     }
 
     public static void clickIt() {
