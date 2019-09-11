@@ -2,8 +2,10 @@ package ee.yals.test.selenide;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
+import org.junit.Rule;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.Testcontainers;
@@ -30,21 +32,23 @@ public class UITest {
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     public final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
 
-    /* @Rule // automatically takes screenshot of every failed test
-    public ScreenShooter makeScreenShotsOnFail = ScreenShooter.failedTests()
-            .to(REPORT_DIRECTORY.getAbsolutePath());*/
+    @Rule
+    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 
     public static void setUp() {
-        chrome.start();
-        RemoteWebDriver driver = chrome.getWebDriver();
-        WebDriverRunner.setWebDriver(driver);
         Configuration.baseUrl = BASE_URL;
+        Configuration.reportsFolder = REPORT_DIRECTORY.getAbsolutePath();
+
         //expose ports if testing local URL
         if (BASE_URL.equals(LOCAL_URL)) {
             Testcontainers.exposeHostPorts(SERVER_PORT);
         }
         //debug information
         debugInfo();
+
+        chrome.start();
+        RemoteWebDriver driver = chrome.getWebDriver();
+        WebDriverRunner.setWebDriver(driver);
     }
 
     public static void pasteValueInFormAndSubmitIt(String link) {
