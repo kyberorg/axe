@@ -37,7 +37,8 @@ public class UITest {
 
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
-        Configuration.reportsFolder = REPORT_DIRECTORY.getAbsolutePath();
+        Configuration.screenshots = false;
+        //Configuration.reportsFolder = REPORT_DIRECTORY.getAbsolutePath();
 
         //expose ports if testing local URL
         if (BASE_URL.equals(LOCAL_URL)) {
