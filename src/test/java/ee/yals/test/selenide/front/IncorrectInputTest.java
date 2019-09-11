@@ -1,11 +1,18 @@
 package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.selenide.UITest.pasteValueInFormAndSubmitIt;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.*;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_DIV;
@@ -15,9 +22,17 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_DIV;
  *
  * @since 1.0
  */
-public class IncorrectInputTest extends UITest {
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class IncorrectInputTest {
     private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
     private static final String MALFORMED_URL_TEXT = "";
+
+    @BeforeClass
+    public static void setUp() {
+        UITest.setUp();
+    }
 
     @Before
     public void openUrl() {
@@ -96,6 +111,11 @@ public class IncorrectInputTest extends UITest {
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text("protocol not supported"));
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        UITest.tearDown();
     }
 
     private void errorBoxShouldAppear() {

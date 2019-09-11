@@ -2,14 +2,16 @@ package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.Selenide;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.Keys;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.selenide.UITest.pasteValueInFormAndSubmitIt;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_CLOSE;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
@@ -21,7 +23,15 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
  *
  * @since 1.0
  */
-public class MultiStepTest extends UITest {
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class MultiStepTest {
+
+    @BeforeClass
+    public static void setUp() {
+        UITest.setUp();
+    }
 
     @Before
     public void openUrl() {
@@ -60,7 +70,7 @@ public class MultiStepTest extends UITest {
 
     @Test
     public void copyLinkButtonShouldCopyShortLink() {
-        if (isBrowserHtmlUnit()) {
+        if (UITest.isBrowserHtmlUnit()) {
             Assume.assumeTrue("Paste (multi-key aka Ctrl+V) " +
                             "not working in " + Selenide.Browser.HTMLUNIT + ". Test ignored",
                     true);
@@ -89,5 +99,10 @@ public class MultiStepTest extends UITest {
 
         long numberAfterLinkSaved = Long.parseLong(OVERALL_LINKS_NUMBER.text());
         Assert.assertEquals(initialNumber + 1, numberAfterLinkSaved);
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        UITest.tearDown();
     }
 }

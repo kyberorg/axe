@@ -2,8 +2,14 @@ package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
 import ee.yals.utils.git.GitInfo;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -15,9 +21,17 @@ import static junit.framework.Assert.assertNotNull;
  *
  * @since 2.0
  */
-public class VersionInfoFooterTest extends UITest {
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class VersionInfoFooterTest {
 
     private GitInfo gitInfo = GitInfo.getInstance();
+
+    @BeforeClass
+    public static void setUp() {
+        UITest.setUp();
+    }
 
     @Before
     public void openUrl() {
@@ -37,7 +51,7 @@ public class VersionInfoFooterTest extends UITest {
 
     @Test
     public void footerHasAllRequiredElements() {
-        if(shouldCommitInfoBeDisplayed()){
+        if (shouldCommitInfoBeDisplayed()) {
             VERSION.shouldBe(visible);
             VERSION.shouldHave(text("version")).shouldHave(text("commit"));
             COMMIT_LINK.shouldBe(visible);
@@ -56,5 +70,10 @@ public class VersionInfoFooterTest extends UITest {
         boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER));
 
         return commitPresent && tagPresent;
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        UITest.tearDown();
     }
 }

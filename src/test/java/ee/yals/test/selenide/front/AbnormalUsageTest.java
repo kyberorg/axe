@@ -1,11 +1,18 @@
 package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.selenide.UITest.pasteValueInFormAndSubmitIt;
 import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
 
 /**
@@ -13,7 +20,16 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
  *
  * @since 2.0
  */
-public class AbnormalUsageTest extends UITest {
+
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class AbnormalUsageTest {
+
+    @BeforeClass
+    public static void setUp() {
+        UITest.setUp();
+    }
 
     @Test
     public void extraArgumentsShouldBeIgnored() {
@@ -25,5 +41,10 @@ public class AbnormalUsageTest extends UITest {
 
         RESULT_LINK.shouldNotBe(empty);
         RESULT_LINK.shouldNotHave(text(EXTRA_ARGUMENT));
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        UITest.tearDown();
     }
 }

@@ -2,6 +2,7 @@ package ee.yals.test.selenide.debug;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import ee.yals.test.selenide.UITest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,23 +18,23 @@ public class DebugTwoTest {
 
     @BeforeClass
     public static void setUp() {
-        Core.setUp();
+        UITest.setUp();
     }
 
     @Test
     public void testFullUrl() throws InterruptedException {
         Selenide.open(Configuration.baseUrl);
-        Core.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/job/boot2/");
+        UITest.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/job/boot2/");
     }
 
     @Test
     public void testAbsolute() throws InterruptedException {
         Selenide.open("/");
-        Core.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/");
+        UITest.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/");
     }
 
     @AfterClass
     public static void tearDown() {
-        Core.tearDown();
+        UITest.tearDown();
     }
 }

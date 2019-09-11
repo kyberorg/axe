@@ -6,11 +6,19 @@ import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
 import ee.yals.test.utils.selectors.Page404;
 import ee.yals.test.utils.selectors.VR;
+import org.junit.AfterClass;
 import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static ee.yals.test.selenide.UITest.isBrowserHtmlUnit;
+import static ee.yals.test.selenide.UITest.pasteValueInFormAndSubmitIt;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
 import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
@@ -20,7 +28,15 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
  *
  * @since 1.0
  */
-public class SlashUITest extends UITest {
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class SlashUITest {
+
+    @BeforeClass
+    public static void setUp() {
+        UITest.setUp();
+    }
 
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
@@ -72,6 +88,11 @@ public class SlashUITest extends UITest {
         open("/perkele");
         Page404.H1.shouldBe(exist);
         Page404.H1.shouldHave(text("404"));
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        UITest.tearDown();
     }
 
     private void verifyThatVROpened() {
