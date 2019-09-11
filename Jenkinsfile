@@ -87,7 +87,8 @@ pipeline {
 
                  def testFailed = false;
                  try {
-                    sh 'mvn -Dport=7999 -DtestUrl=https://dev.yals.eu -Dtest=*Input* clean test'
+                    //sh 'mvn -Dport=7999 -DtestUrl=https://dev.yals.eu -Dtest=*Input* clean test'
+                    sh 'mvn -Dport=7999 -DtestUrl=https://dev.yals.eu -Dtest=Debug* clean test'
                  } catch(err) {
                      //just continue to results instead of failing build just mark build as failed
                      testFailed = true;
