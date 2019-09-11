@@ -6,7 +6,7 @@ import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
 import org.junit.Rule;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.BrowserWebDriverContainer;
@@ -23,11 +23,11 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
  * @since 1.0
  */
 public class UITest {
-    private static File REPORT_DIRECTORY = new File(System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR));
+    private static String REPORT_DIRECTORY = System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
-                    .withDesiredCapabilities(DesiredCapabilities.chrome())
-                    .withRecordingMode(RECORD_ALL, REPORT_DIRECTORY);
+                    .withCapabilities(new ChromeOptions())
+                    .withRecordingMode(RECORD_ALL, new File(REPORT_DIRECTORY));
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     public final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
@@ -37,8 +37,7 @@ public class UITest {
 
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
-        //Configuration.screenshots = false;
-        Configuration.reportsFolder = REPORT_DIRECTORY.getAbsolutePath();
+        Configuration.reportsFolder = REPORT_DIRECTORY;
 
         //expose ports if testing local URL
         if (BASE_URL.equals(LOCAL_URL)) {
