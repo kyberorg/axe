@@ -5,14 +5,20 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
-import org.junit.ClassRule;
+import ee.yals.test.utils.YalsTestDescription;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Rule;
+import org.junit.rules.TestName;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.BrowserWebDriverContainer;
 
 import java.io.File;
+import java.util.Optional;
 
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
@@ -23,14 +29,15 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
  *
  * @since 1.0
  */
+@Slf4j
 public class UITest {
     private static String REPORT_DIRECTORY = System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+    private static BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_ALL;
 
-    @ClassRule
     private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
-                    .withCapabilities(new ChromeOptions())
-                    .withRecordingMode(RECORD_ALL, new File(REPORT_DIRECTORY));
+                    .withRecordingMode(TESTS_RECORDING_MODE, new File(REPORT_DIRECTORY))
+                    .withCapabilities(new ChromeOptions());
 
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
@@ -38,6 +45,24 @@ public class UITest {
 
     @Rule
     public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
+
+    @Rule
+    public TestName name = new TestName();
+
+    @Rule
+    public final TestRule watchman = new TestWatcher() {
+        @Override
+        protected void succeeded(Description description) {
+            super.succeeded(description);
+            chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.empty());
+        }
+
+        @Override
+        protected void failed(Throwable e, Description description) {
+            super.failed(e, description);
+            chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.of(e));
+        }
+    };
 
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
@@ -65,7 +90,7 @@ public class UITest {
     }
 
     public static void tearDown() {
-        //chrome.stop();
+
     }
 
     private static void debugInfo() {

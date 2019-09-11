@@ -17,8 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.selenide.UITest.isBrowserHtmlUnit;
-import static ee.yals.test.selenide.UITest.pasteValueInFormAndSubmitIt;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
 import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
@@ -31,7 +29,7 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class SlashUITest {
+public class SlashUITest extends UITest {
 
     @BeforeClass
     public static void setUp() {
