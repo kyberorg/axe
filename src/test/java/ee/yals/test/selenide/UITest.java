@@ -37,8 +37,8 @@ public class UITest {
 
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
-        Configuration.screenshots = false;
-        //Configuration.reportsFolder = REPORT_DIRECTORY.getAbsolutePath();
+        //Configuration.screenshots = false;
+        Configuration.reportsFolder = REPORT_DIRECTORY.getAbsolutePath();
 
         //expose ports if testing local URL
         if (BASE_URL.equals(LOCAL_URL)) {
@@ -47,7 +47,7 @@ public class UITest {
         //debug information
         debugInfo();
 
-        //chrome.start();
+        chrome.start();
         RemoteWebDriver driver = chrome.getWebDriver();
         WebDriverRunner.setWebDriver(driver);
     }
