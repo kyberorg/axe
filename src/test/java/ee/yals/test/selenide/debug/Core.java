@@ -16,12 +16,11 @@ import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
 
 public class Core {
-
+    private static File REPORT_DIRECTORY = new File(System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR));
     private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
                     .withDesiredCapabilities(DesiredCapabilities.chrome())
-                    .withRecordingMode(RECORD_ALL,
-                            new File(System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR)));
+                    .withRecordingMode(RECORD_ALL, REPORT_DIRECTORY);
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     private final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
@@ -56,8 +55,9 @@ public class Core {
         System.out.println("");
         System.out.println("=== Debug Info ===");
         System.out.println("");
-        System.out.println(String.format("Application will start at %d", SERVER_PORT));
         System.out.println(String.format("Will test BASE_URL: %s", BASE_URL));
+        System.out.println(String.format("Application will start at %d", SERVER_PORT));
+        System.out.println(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY));
         System.out.println("");
         System.out.println("==================");
         System.out.println("");
