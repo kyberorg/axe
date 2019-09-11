@@ -33,7 +33,7 @@ public class Selenide {
 
     public static class Defaults {
         public static final String BROWSER = Browser.HTMLUNIT;
-        public static final String REPORT_DIR = "target/selenide";
+        public static final String REPORT_DIR = "target";
     }
 
 }

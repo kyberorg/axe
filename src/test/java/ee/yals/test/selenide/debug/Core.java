@@ -20,7 +20,8 @@ public class Core {
     private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
                     .withDesiredCapabilities(DesiredCapabilities.chrome())
-                    .withRecordingMode(RECORD_ALL, new File("target"));
+                    .withRecordingMode(RECORD_ALL,
+                            new File(System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR)));
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     private final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
@@ -35,12 +36,7 @@ public class Core {
             Testcontainers.exposeHostPorts(SERVER_PORT);
         }
         //debug information
-        System.out.println("");
-        System.out.println("=== Debug Info ===");
-        System.out.println("");
-        System.out.println(String.format("Application will start at %d", SERVER_PORT));
-        System.out.println(String.format("Will test BASE_URL: %s", BASE_URL));
-        System.out.println("");
+        debugInfo();
     }
 
     public static void clickIt() {
@@ -54,5 +50,16 @@ public class Core {
 
     public static void tearDown() {
         chrome.stop();
+    }
+
+    private static void debugInfo() {
+        System.out.println("");
+        System.out.println("=== Debug Info ===");
+        System.out.println("");
+        System.out.println(String.format("Application will start at %d", SERVER_PORT));
+        System.out.println(String.format("Will test BASE_URL: %s", BASE_URL));
+        System.out.println("");
+        System.out.println("==================");
+        System.out.println("");
     }
 }
