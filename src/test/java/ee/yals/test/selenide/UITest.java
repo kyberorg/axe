@@ -2,10 +2,8 @@ package ee.yals.test.selenide;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
-import org.junit.Rule;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.Testcontainers;
@@ -31,9 +29,10 @@ public class UITest {
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     public final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
-    @Rule // automatically takes screenshot of every failed test
+
+    /* @Rule // automatically takes screenshot of every failed test
     public ScreenShooter makeScreenShotsOnFail = ScreenShooter.failedTests()
-            .to(REPORT_DIRECTORY.getAbsolutePath());
+            .to(REPORT_DIRECTORY.getAbsolutePath());*/
 
     public static void setUp() {
         chrome.start();
