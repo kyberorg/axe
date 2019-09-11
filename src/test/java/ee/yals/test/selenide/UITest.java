@@ -47,7 +47,7 @@ public class UITest {
         //debug information
         debugInfo();
 
-        chrome.start();
+        //chrome.start();
         RemoteWebDriver driver = chrome.getWebDriver();
         WebDriverRunner.setWebDriver(driver);
     }
