@@ -22,13 +22,13 @@ public class DebugOneTest {
     }
 
     @Test
-    public void testFullUrl() throws InterruptedException {
+    public void testFullUrl() {
         Selenide.open(Configuration.baseUrl);
         UITest.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/job/boot2/");
     }
 
     @Test
-    public void testAbsolute() throws InterruptedException {
+    public void testAbsolute() {
         Selenide.open("/");
         UITest.pasteValueInFormAndSubmitIt("https://ci.yadev.eu/job/YalsGH/");
     }

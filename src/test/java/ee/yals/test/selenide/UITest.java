@@ -62,7 +62,7 @@ public class UITest {
     }
 
     public static void tearDown() {
-        chrome.stop();
+        //chrome.stop();
     }
 
     private static void debugInfo() {
