@@ -34,6 +34,9 @@ public class Core {
         if (BASE_URL.equals(LOCAL_URL)) {
             Testcontainers.exposeHostPorts(SERVER_PORT);
         }
+        //debug information
+        System.out.printf("Application will start at %d", SERVER_PORT);
+        System.out.printf("Will test BASE_URL: %s", BASE_URL);
     }
 
     public static void clickIt() {
