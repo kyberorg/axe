@@ -4,7 +4,9 @@ import com.codeborne.selenide.Selenide;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.test.context.TestPropertySource;
 
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class DebugTwoTest {
 
     @BeforeClass

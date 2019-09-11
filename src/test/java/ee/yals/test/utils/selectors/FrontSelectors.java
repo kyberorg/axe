@@ -20,8 +20,7 @@ public class FrontSelectors {
         public static final SelenideElement MAIN_DIV = $("#main");
         public static final SelenideElement H2 = $("#main h2");
         public static final SelenideElement FORM = $("form");
-        public static final String INPUT_ID = "#longUrl";
-        public static final SelenideElement LONG_URL_INPUT = $(INPUT_ID);
+        public static final SelenideElement LONG_URL_INPUT = $("#longUrl");
         public static final SelenideElement SUBMIT_BUTTON = $("#shortenIt");
         public static final SelenideElement PUBLIC_ACCESS_BANNER = $("#publicAccessBanner");
     }

@@ -16,6 +16,8 @@ public class Selenide {
         public static final String TIMEOUT = "selenide.timeout";
         public static final String BASE_URL = "selenide.baseUrl";
         public static final String REPORT_DIR = "yals.selenide.reportdir";
+        public static final String SERVER_PORT = "port";
+        public static final String TEST_URL = "testUrl";
 
         @SuppressWarnings("unused") //documentation use only
         public static final String CHROME_WEBDRIVER = "webdriver.chrome.driver";
