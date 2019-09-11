@@ -5,6 +5,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit.ScreenShooter;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -15,7 +16,7 @@ import java.io.File;
 
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
-import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
+import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
 
 /**
  * Common stuff for all UI Test
@@ -24,10 +25,13 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
  */
 public class UITest {
     private static String REPORT_DIRECTORY = System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+
+    @ClassRule
     private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
                     .withCapabilities(new ChromeOptions())
-                    .withRecordingMode(RECORD_FAILING, new File(REPORT_DIRECTORY));
+                    .withRecordingMode(RECORD_ALL, new File(REPORT_DIRECTORY));
+
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     public final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
