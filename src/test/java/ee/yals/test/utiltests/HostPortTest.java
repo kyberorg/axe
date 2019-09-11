@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
 @WebAppConfiguration
-@TestPropertySource(locations = "classpath:test-app.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class HostPortTest {
     @Test
     public void apiHostMethodProvidesCorrectInternalAPILocation() {

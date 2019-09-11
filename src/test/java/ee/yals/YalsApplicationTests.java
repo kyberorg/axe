@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
-@TestPropertySource(locations = "classpath:test-app.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest
 public class YalsApplicationTests {
 

@@ -23,7 +23,7 @@ import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@TestPropertySource(locations = "classpath:test-app.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 public abstract class UITest {
 
     protected final static String BASE_URL = "http://localhost:8080";

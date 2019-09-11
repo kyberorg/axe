@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
 @WebAppConfiguration
-@TestPropertySource(locations = "classpath:test-app.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class SlashControllerTest {
 
     @Autowired
