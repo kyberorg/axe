@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
-import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -45,13 +44,10 @@ public class UITest {
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     public final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
 
-    @Rule
+    @Rule  // automatically takes screenshot of every failed test
     public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 
-    @Rule
-    public TestName name = new TestName();
-
-    @Rule
+    @Rule  // catching test result and triggering BrowserWebDriverContainer#afterTest() for saving test recordings
     public final TestRule watchman = new TestWatcher() {
         @Override
         protected void succeeded(Description description) {
@@ -83,12 +79,12 @@ public class UITest {
         WebDriverRunner.setWebDriver(driver);
     }
 
-    public static void pasteValueInFormAndSubmitIt(String link) {
+    protected static void pasteValueInFormAndSubmitIt(String link) {
         LONG_URL_INPUT.setValue(link);
         SUBMIT_BUTTON.click();
     }
 
-    public static boolean isBrowserHtmlUnit() {
+    protected static boolean isBrowserHtmlUnit() {
         return TestUtils.whichBrowser().equals(Selenide.Browser.HTMLUNIT);
     }
 

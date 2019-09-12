@@ -89,7 +89,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- In-memory database for testing purposes -->
+        <!-- In-memory database for default profile and testing purposes -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

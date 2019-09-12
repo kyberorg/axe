@@ -84,20 +84,6 @@ pipeline {
                  }
                  // Not enabled yet before switching to TestContainers
                  sleep(30);
-
-                 //def testFailed = false;
-                 //try {
-                 //   sh 'mvn -Dport=7999 -DtestUrl=https://dev.yals.eu -Dtest=*Input* clean test'
-                    //sh 'mvn -Dport=7999 -DtestUrl=https://dev.yals.eu -Dtest=Debug* clean test'
-                 //} catch(err) {
-                     //just continue to results instead of failing build just mark build as failed
-                 //    testFailed = true;
-                 //}
-                 //junit(testResults: 'target/surefire-reports/**/*.xml', allowEmptyResults: true);
-                 //archiveArtifacts(artifacts: 'target/*.flv', allowEmptyArchive: true);
-                 //if(testFailed) {
-                 //   error("Tests failed")
-                 //   }
                  testApp(url: url);
                }
             }

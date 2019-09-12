@@ -67,6 +67,49 @@ Second stable version
 
 Can be found from [here](https://github.com/yadevee/yals-play/blob/trunk/README.md#yet-another-link-shortener)
 
+## For Ops
+### How to Deploy app ?
+
+* Our docker image: `yadev/yals`
+
+* We need MySQL database to run
+
+#### Docker Swarm
+
+EnvVars: 
+
+* SPRING_PROFILES_ACTIVE: `dev,qa or prod`
+
+* DB_HOST: `hostname or service (container) name`
+
+* DB_NAME: `database name`
+
+* DB_USER: `username for database`
+
+* YALS_DB_PASSWORD or YALS_DB_PASSWORD_FILE: `password for db user`
+
+* YALS_TELEGRAM_TOKEN or YALS_TELEGRAM_TOKEN_FILE: `token for telegram bot`
+
+* SERVER_URL: `https://yals.tld`
+
+Optional EnvVars: 
+
+* LOG_LEVEL_APP: `see Logging part`
+
+* PORT: `start server at port other than 8080 `
+
+Ports: 
+
+* host port: `select yourself`
+
+* container port: `8080 (or PORT)`
+
+Secrets:
+
+* yals_db_password: `database password`
+
+* yals_telegram_token: `telegram bot token`
+
 ## For Developers
 ### How to start coding ?
 

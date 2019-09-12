@@ -19,8 +19,7 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
  */
 
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations = "classpa" +
-        "th:application-test.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class AbnormalUsageTest extends UITest {
 

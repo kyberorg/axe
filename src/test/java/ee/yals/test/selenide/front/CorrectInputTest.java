@@ -62,7 +62,7 @@ public class CorrectInputTest extends UITest {
     private void checkExpectedBehavior() {
         RESULT_DIV.shouldBe(visible);
         RESULT_LINK.shouldBe(visible);
-        RESULT_LINK.shouldHave(text(UITest.BASE_URL));
+        RESULT_LINK.shouldHave(text(BASE_URL));
         COPY_RESULT_ICON.shouldBe(visible);
         String actualText = RESULT_LINK.getText();
         String hrefValue = RESULT_LINK.getAttribute("href");

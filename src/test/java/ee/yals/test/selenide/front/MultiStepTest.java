@@ -64,7 +64,7 @@ public class MultiStepTest extends UITest {
 
     @Test
     public void copyLinkButtonShouldCopyShortLink() {
-        if (UITest.isBrowserHtmlUnit()) {
+        if (isBrowserHtmlUnit()) {
             Assume.assumeTrue("Paste (multi-key aka Ctrl+V) " +
                             "not working in " + Selenide.Browser.HTMLUNIT + ". Test ignored",
                     true);
