@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.selenide.UITest.pasteValueInFormAndSubmitIt;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_CLOSE;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
@@ -26,12 +25,7 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class MultiStepTest {
-
-    @BeforeClass
-    public static void setUp() {
-        UITest.setUp();
-    }
+public class MultiStepTest extends UITest {
 
     @Before
     public void openUrl() {
@@ -101,8 +95,4 @@ public class MultiStepTest {
         Assert.assertEquals(initialNumber + 1, numberAfterLinkSaved);
     }
 
-    @AfterClass
-    public static void tearDown() {
-        UITest.tearDown();
-    }
 }

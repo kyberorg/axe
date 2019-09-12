@@ -7,6 +7,8 @@ import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
 import ee.yals.test.utils.YalsTestDescription;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
@@ -22,7 +24,7 @@ import java.util.Optional;
 
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
-import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
+import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
 /**
  * Common stuff for all UI Test
@@ -32,7 +34,7 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
 @Slf4j
 public class UITest {
     private static String REPORT_DIRECTORY = System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
-    private static BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_ALL;
+    private static BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
 
     private static BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
@@ -64,6 +66,7 @@ public class UITest {
         }
     };
 
+    @BeforeClass
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
         Configuration.reportsFolder = REPORT_DIRECTORY;
@@ -89,8 +92,9 @@ public class UITest {
         return TestUtils.whichBrowser().equals(Selenide.Browser.HTMLUNIT);
     }
 
+    @AfterClass
     public static void tearDown() {
-
+        //actions after all tests
     }
 
     private static void debugInfo() {

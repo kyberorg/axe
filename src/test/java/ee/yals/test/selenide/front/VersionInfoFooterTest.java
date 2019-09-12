@@ -2,9 +2,7 @@ package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
 import ee.yals.utils.git.GitInfo;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,14 +22,9 @@ import static junit.framework.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class VersionInfoFooterTest {
+public class VersionInfoFooterTest extends UITest {
 
     private GitInfo gitInfo = GitInfo.getInstance();
-
-    @BeforeClass
-    public static void setUp() {
-        UITest.setUp();
-    }
 
     @Before
     public void openUrl() {
@@ -71,9 +64,5 @@ public class VersionInfoFooterTest {
 
         return commitPresent && tagPresent;
     }
-
-    @AfterClass
-    public static void tearDown() {
-        UITest.tearDown();
-    }
+    
 }

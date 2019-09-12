@@ -6,9 +6,7 @@ import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
 import ee.yals.test.utils.selectors.Page404;
 import ee.yals.test.utils.selectors.VR;
-import org.junit.AfterClass;
 import org.junit.Assume;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,11 +28,6 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class SlashUITest extends UITest {
-
-    @BeforeClass
-    public static void setUp() {
-        UITest.setUp();
-    }
 
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
@@ -73,7 +66,6 @@ public class SlashUITest extends UITest {
         open("/");
         pasteValueInFormAndSubmitIt("https://vr.fi");
 
-
         RESULT_LINK.shouldBe(visible);
         String linkText = RESULT_LINK.getText();
 
@@ -86,11 +78,6 @@ public class SlashUITest extends UITest {
         open("/perkele");
         Page404.H1.shouldBe(exist);
         Page404.H1.shouldHave(text("404"));
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        UITest.tearDown();
     }
 
     private void verifyThatVROpened() {

@@ -1,9 +1,7 @@
 package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.selenide.UITest.pasteValueInFormAndSubmitIt;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
 import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_TEXT;
 import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
@@ -27,12 +24,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class CorrectInputTest {
-
-    @BeforeClass
-    public static void setUp() {
-        UITest.setUp();
-    }
+public class CorrectInputTest extends UITest {
 
     @Before
     public void openUrl() {
@@ -65,11 +57,6 @@ public class CorrectInputTest {
         String link = "http://президент.рф";
         pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        UITest.tearDown();
     }
 
     private void checkExpectedBehavior() {

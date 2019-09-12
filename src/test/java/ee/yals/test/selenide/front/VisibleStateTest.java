@@ -26,12 +26,7 @@ import static org.junit.Assert.fail;
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class VisibleStateTest {
-
-    @BeforeClass
-    public static void setUp() {
-        UITest.setUp();
-    }
+public class VisibleStateTest extends UITest {
 
     @Before
     public void openUrl() {
@@ -140,8 +135,4 @@ public class VisibleStateTest {
         }
     }
 
-    @AfterClass
-    public static void tearDown() {
-        UITest.tearDown();
-    }
 }
