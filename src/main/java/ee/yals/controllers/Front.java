@@ -2,6 +2,7 @@ package ee.yals.controllers;
 
 import ee.yals.services.overall.OverallService;
 import ee.yals.utils.git.GitInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -41,8 +42,8 @@ public class Front {
         String latestCommit = gitInfo.getLatestCommitHash().trim();
         String latestTag = gitInfo.getLatestTag().trim();
 
-        boolean commitPresent = (!latestCommit.equals(GitInfo.NOTHING_FOUND_MARKER));
-        boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER));
+        boolean commitPresent = (!latestCommit.equals(GitInfo.NOTHING_FOUND_MARKER) && StringUtils.isNotBlank(latestCommit));
+        boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER) && StringUtils.isNotBlank(latestTag));
 
         boolean displayCommitInfo = commitPresent && tagPresent;
 
