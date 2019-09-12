@@ -3,9 +3,11 @@ package ee.yals.test.selenide.front;
 
 import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -20,6 +22,10 @@ import static org.junit.Assert.fail;
  *
  * @since 1.0
  */
+
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class VisibleStateTest extends UITest {
 
     @Before
@@ -128,4 +134,5 @@ public class VisibleStateTest extends UITest {
             fail("Number of saved links is not a valid number");
         }
     }
+
 }

@@ -1,6 +1,6 @@
 package ee.yals.utils.git;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -12,9 +12,10 @@ import java.util.Properties;
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 2.0
  */
+@Slf4j
 public class GitRepoState {
-    private static final Logger LOG = Logger.getLogger(GitRepoState.class);
     private static GitRepoState SELF = null;
+    private static final String GIT_PROPERTIES_FILE = "git.properties";
 
     private Properties gitProperties = new Properties();
 
@@ -55,19 +56,24 @@ public class GitRepoState {
         return SELF;
     }
 
+    public boolean correctlyInitialized() {
+        return !gitProperties.isEmpty();
+    }
+
     private void init() {
         try {
-            SELF.gitProperties.load(SELF.getClass().getClassLoader().getResourceAsStream("git.properties"));
+            SELF.gitProperties.load(SELF.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
             SELF.publishFromProperties();
         } catch (IOException ioe) {
-            LOG.error("Failed to init " + GitRepoState.class.getSimpleName(), ioe);
+            log.error("Failed to init " + GitRepoState.class.getSimpleName(), ioe);
+            SELF.gitProperties.clear();
+        } catch (NullPointerException npe) {
+            log.error(String.format("'%s': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    GIT_PROPERTIES_FILE));
             SELF.gitProperties.clear();
         }
     }
 
-    private boolean correctlyInitialized() {
-        return !gitProperties.isEmpty();
-    }
 
     private void publishFromProperties() {
         this.tags = String.valueOf(gitProperties.get("git.tags"));

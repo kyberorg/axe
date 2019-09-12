@@ -2,9 +2,9 @@ package ee.yals.services;
 
 import ee.yals.models.Link;
 import ee.yals.models.dao.LinkRepo;
-import ee.yals.result.StoreResult;
 import ee.yals.result.GetResult;
-import org.apache.log4j.Logger;
+import ee.yals.result.StoreResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,11 +16,10 @@ import java.util.Optional;
  *
  * @since 2.0
  */
+@Slf4j
 @Qualifier("dbStorage")
 @Component
 public class DbStorageLinkService implements LinkService {
-
-    private static final Logger LOGGER = Logger.getLogger(DbStorageLinkService.class);
 
     @Autowired
     private LinkRepo repo;
@@ -39,7 +38,7 @@ public class DbStorageLinkService implements LinkService {
             repo.save(linkObject);
             return new StoreResult.Success();
         } catch (Exception e) {
-            LOGGER.error("Exception on storing new " + Link.class.getSimpleName(), e);
+            log.error("Exception on storing new " + Link.class.getSimpleName(), e);
             return new StoreResult.Fail("Failed to add new record");
         }
 

@@ -3,6 +3,10 @@ package ee.yals.test.selenide.front;
 import ee.yals.test.selenide.UITest;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -17,6 +21,9 @@ import static org.junit.Assert.assertEquals;
  *
  * @since 1.0
  */
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CorrectInputTest extends UITest {
 
     @Before
@@ -25,34 +32,34 @@ public class CorrectInputTest extends UITest {
     }
 
     @Test
-    public void httpLink(){
+    public void httpLink() {
         String link = "http://virtadev.net";
         pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
     }
 
     @Test
-    public void httpsLink(){
+    public void httpsLink() {
         String link = "https://github.com/virtalab";
         pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
     }
 
     @Test
-    public void ftpLink(){
+    public void ftpLink() {
         String link = "ftp://ftp.yandex.ru";
         pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
     }
 
     @Test
-    public void cyrillicLink(){
+    public void cyrillicLink() {
         String link = "http://президент.рф";
         pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
     }
 
-    private void checkExpectedBehavior(){
+    private void checkExpectedBehavior() {
         RESULT_DIV.shouldBe(visible);
         RESULT_LINK.shouldBe(visible);
         RESULT_LINK.shouldHave(text(BASE_URL));

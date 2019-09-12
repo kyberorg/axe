@@ -7,8 +7,8 @@ import ee.yals.mm.Mattermost;
 import ee.yals.mm.Mattermost.Emoji;
 import ee.yals.models.Link;
 import ee.yals.services.mm.MattermostService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +28,9 @@ import static ee.yals.mm.Mattermost.Constants.NO_VALUE;
  * @since 2.3
  */
 @RestController
+@Slf4j
 public class MattermostRestController {
-
-    private static final Logger LOG = Logger.getLogger(MattermostRestController.class);
+    private static final String TAG = "[MM]";
 
     @Autowired
     private MattermostService mmService;
@@ -43,22 +43,25 @@ public class MattermostRestController {
     public Json mm(@RequestBody String body, HttpServletRequest request) {
         this.request = request;
         try {
-            LOG.debug("Body: " + body);
+            log.info(String.format("%s Got request from Mattermost. Body: %s", TAG, body));
+            log.debug(String.format("%s Parsing MM request", TAG));
             mattermost = Mattermost.createFromResponseBody(body);
             String mmUrl = mattermost.getArgumentSet().getUrl();
+            log.debug(String.format("%s Request Parsed. Saving link. mmUrl: %s", TAG, mmUrl));
 
             Link savedLink = mmService.storeLink(mmUrl);
             if (Objects.nonNull(savedLink)) {
+                log.info(String.format("%s Link saved. Replying back", TAG));
                 return success(savedLink);
             } else {
-                LOG.error("Was unable to save link. Service returned NULL. Body: " + body);
+                log.error(String.format("%s Was unable to save link. Service returned NULL. Body: %s", TAG, body));
                 return serverError();
             }
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            LOG.error("Got exception while handling MM request. Body: " + body + " Exception: ", e);
+            log.error(String.format("%s Got exception while handling request. Body: %s Exception: %s", TAG, body, e));
             return usage();
         } catch (Exception e) {
-            LOG.error("Got exception while handling MM request. Body: " + body + " Exception: ", e);
+            log.error(String.format("%s Unknown exception while handling request. Body: %s Exception: %s", TAG, body, e));
             return serverError();
         }
     }

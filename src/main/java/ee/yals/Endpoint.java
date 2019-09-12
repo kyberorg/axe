@@ -35,4 +35,7 @@ public class Endpoint {
 
     @RequestMethod(HttpMethod.GET)
     public static final String TEST_CSS = "/s/css/test.css";
+
+    @RequestMethod(HttpMethod.GET)
+    public static final String ERROR_PAGE = "/error";
 }

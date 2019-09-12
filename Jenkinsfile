@@ -63,7 +63,7 @@ pipeline {
                         break;
                  }
                  // Not enabled yet until SpringBoot 2 migration completed
-                 //deployToSwarm(hookUrl: hookUrl);
+                 deployToSwarm(hookUrl: hookUrl);
                }
             }
         }
@@ -83,10 +83,15 @@ pipeline {
                         break;
                  }
                  // Not enabled yet before switching to TestContainers
-                 //smartWait(url: url);
-                 //testApp(url: url);
+                 sleep(30);
+                 testApp(url: url);
                }
             }
+        }
+    }
+    post {
+        always {
+            cleanWs();
         }
     }
 }

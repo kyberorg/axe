@@ -12,13 +12,12 @@ public class Selenide {
     }
 
     public static class Props {
-        public static final String BROWSER = "selenide.browser";
+        static final String BROWSER = "selenide.browser";
         public static final String TIMEOUT = "selenide.timeout";
         public static final String BASE_URL = "selenide.baseUrl";
         public static final String REPORT_DIR = "yals.selenide.reportdir";
-
-        @SuppressWarnings("unused") //documentation use only
-        public static final String CHROME_WEBDRIVER = "webdriver.chrome.driver";
+        public static final String SERVER_PORT = "port";
+        public static final String TEST_URL = "testUrl";
     }
 
     @SuppressWarnings("unused") //documentation use only
@@ -30,8 +29,7 @@ public class Selenide {
     }
 
     public static class Defaults {
-        public static final String BROWSER = Browser.HTMLUNIT;
-        public static final String REPORT_DIR = "target/selenide";
+        public static final String REPORT_DIR = "target";
     }
 
 }

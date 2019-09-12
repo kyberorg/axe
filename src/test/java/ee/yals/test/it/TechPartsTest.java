@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:test-app.xml"})
 @WebAppConfiguration
-@TestPropertySource(locations = "classpath:test-app.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class TechPartsTest {
 
     @Autowired
@@ -85,7 +85,8 @@ public class TechPartsTest {
         result = goForwardIsForwardUrlPerformExists(result);
 
         assertContentNotEmpty(result);
-        assertContentType(MimeType.OCTET_STREAM, result);
+        //in Spring boot 2 favicon has image/x-icon mimetype
+        assertContentType(MimeType.IMAGE_X_ICON, result);
     }
 
     private MvcResult goForwardIsForwardUrlPerformExists(MvcResult result) throws Exception {

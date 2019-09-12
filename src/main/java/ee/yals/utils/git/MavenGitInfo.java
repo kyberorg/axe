@@ -15,13 +15,14 @@ public class MavenGitInfo extends GitInfo {
     /**
      * No reason for instance. Use {@link GitInfo#getInstance()} instead
      */
-    MavenGitInfo() { }
+    MavenGitInfo() {
+    }
 
     private GitRepoState gitRepoState = GitRepoState.getInstance();
 
     @Override
     boolean isApplicable() {
-        return Objects.nonNull(gitRepoState);
+        return Objects.nonNull(gitRepoState) && gitRepoState.correctlyInitialized();
     }
 
     @Override
@@ -31,6 +32,6 @@ public class MavenGitInfo extends GitInfo {
 
     @Override
     public String getLatestTag() {
-        return gitRepoState.closestTagName;
+        return gitRepoState.buildVersion; //we use here version from maven, because it is more stable then git tag
     }
 }

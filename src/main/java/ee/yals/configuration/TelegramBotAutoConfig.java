@@ -4,7 +4,7 @@ import ee.yals.Env;
 import ee.yals.telegram.TelegramBot;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.UrlExtraValidator;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +26,8 @@ import java.util.Objects;
  */
 @Configuration
 @ConditionalOnBean(TelegramBot.class)
+@Slf4j
 public class TelegramBotAutoConfig {
-    private static final Logger LOG = Logger.getLogger(TelegramBotAutoConfig.class);
     private static final String TAG = "[TelegramAutoConfig] ";
 
     private List<BotSession> sessions = new ArrayList<>();
@@ -41,21 +41,21 @@ public class TelegramBotAutoConfig {
 
     @PostConstruct
     public void start() {
-        LOG.info("");
-        LOG.info(TAG + "Registering telegram bot");
+        log.info("");
+        log.info(TAG + "Registering telegram bot");
 
         boolean isBotAvailable = Objects.nonNull(telegramBot) && isServerUrlAvailable();
         String botStatus = isBotAvailable ? "available" : "not available";
-        LOG.info(TAG + "Bot Status: " + botStatus);
+        log.info(TAG + "Bot Status: " + botStatus);
 
         if (isBotAvailable) {
             TelegramBotsApi api = new TelegramBotsApi();
-            LOG.info(TAG + "Bot token: " + telegramBot.getBotToken());
+            log.debug(TAG + "Bot token: " + telegramBot.getBotToken());
 
             try {
                 sessions.add(api.registerBot(telegramBot));
             } catch (TelegramApiRequestException e) {
-                LOG.error(TAG + "Failed to register bot", e);
+                log.error(TAG + "Failed to register bot", e);
             }
         }
     }
@@ -75,8 +75,8 @@ public class TelegramBotAutoConfig {
         if (isServerUrlPresentAndValid) {
             return true;
         } else {
-            LOG.error(String.format("%s Server URL is not valid or missing. Did ENV '%s' was set?", TAG, Env.SERVER_URL));
-            LOG.info(String.format("%s Server URL is %s", TAG, serverHostname));
+            log.error(String.format("%s Server URL is not valid or missing. Did ENV '%s' was set?", TAG, Env.SERVER_URL));
+            log.info(String.format("%s Server URL is %s", TAG, serverHostname));
             return false;
         }
     }

@@ -3,14 +3,14 @@ package ee.yals.telegram;
 import ee.yals.Env;
 import ee.yals.models.Link;
 import ee.yals.services.telegram.TelegramService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.NoSuchElementException;
@@ -27,8 +27,8 @@ import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
  * @since 2.4
  */
 @Component
+@Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
-    private static final Logger LOG = Logger.getLogger(TelegramBot.class);
     private static final String TAG = "[Telegram Bot]";
 
     private static final String DUMMY_TOKEN = "dummy:Token";
@@ -42,7 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        LOG.trace(TAG + " New Update " + update);
+        log.trace(TAG + " New Update " + update);
         this.update = update;
 
         String message;
@@ -51,11 +51,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 throw new IllegalStateException("Internal server error: ");
             }
 
-            LOG.debug(String.format("%s Update (Author: %s, Message: %s)", TAG, getMessage().getFrom().getUserName(), getMessage().getText()));
+            log.debug(String.format("%s Update (Author: %s, Message: %s)", TAG, getMessage().getFrom().getUserName(), getMessage().getText()));
 
             telegramObject = TelegramObject.createFromUpdate(update);
 
-            LOG.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + NEW_LINE + telegramObject);
+            log.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + NEW_LINE + telegramObject);
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
@@ -77,27 +77,27 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            LOG.error(TAG + " Got exception while handling incoming update." +
+            log.error(TAG + " Got exception while handling incoming update." +
                     " " + e.getClass().getName() + ": " + e.getMessage());
             message = telegramService.usage();
         } catch (IllegalStateException e) {
             message = "Internal error: not all components are available. Bot currently not available";
-            LOG.error(TAG + " " + message + " " + e.getClass().getName() + ": " + e.getMessage());
+            log.error(TAG + " " + message + " " + e.getClass().getName() + ": " + e.getMessage());
         } catch (Exception e) {
-            LOG.error(TAG + " Got unexpected exception while processing telegram update" +
+            log.error(TAG + " Got unexpected exception while processing telegram update" +
                     " " + e.getClass().getName() + ": " + e.getMessage());
             message = telegramService.serverError();
         }
 
         if (message.equals(NO_INIT)) {
-            LOG.error(NO_INIT);
+            log.error(NO_INIT);
             message = "Internal error: not all components are initialized";
         }
 
         try {
             execute(createSendMessage(message));
         } catch (TelegramApiException e) {
-            LOG.error(TAG + " Failed to send telegram message. Message: " + message +
+            log.error(TAG + " Failed to send telegram message. Message: " + message +
                     " " + e.getClass().getName() + ": " + e.getMessage());
         }
     }

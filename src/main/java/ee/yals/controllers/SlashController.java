@@ -4,13 +4,13 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import ee.yals.Endpoint;
 import ee.yals.controllers.internal.YalsController;
+import ee.yals.core.IdentGenerator;
 import ee.yals.json.LinkResponseJson;
 import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
-import ee.yals.core.IdentGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -28,8 +28,9 @@ import java.util.Objects;
  * @since 1.0
  */
 @Controller
+@Slf4j
 public class SlashController extends YalsController {
-    private static final Logger Log = Logger.getLogger(SlashController.class);
+    private static final String TAG = "[Web]";
 
     @Autowired
     @Qualifier("dbStorage")
@@ -41,8 +42,9 @@ public class SlashController extends YalsController {
         this.request = request;
         this.response = response;
 
-        Log.debug("Got ident: " + ident);
+        log.info(String.format("%s Got {\"Ident\": %s}", TAG, ident));
         if (StringUtils.isBlank(ident) || !ident.matches(IdentGenerator.VALID_IDENT_PATTERN)) {
+            log.info(String.format("%s Got malformed request. Replying with 404. {\"Ident\": %s}", TAG, ident));
             return render404();
         }
 
@@ -59,39 +61,39 @@ public class SlashController extends YalsController {
         HttpResponse<String> apiResponse;
 
         try {
-            Log.info(String.format("Searching for ident. Ident %s", ident));
+            log.debug(String.format("%s Searching for ident: '%s'", TAG, ident));
             String schema = request.getScheme() + "://";
             String url = schema + AppUtils.HostHelper.getAPIHostPort() + Endpoint.LINK_API + ident;
-            Log.info(String.format("Requesting API. URL: %s", url));
+            log.debug(String.format("%s Requesting API. URL: %s", TAG, url));
             apiResponse = Unirest.get(url).asString();
         } catch (Exception e) {
-            Log.error(String.format("Exception while searching for link by ident. Ident: %s", ident));
-            Log.error(e);
+            String message = String.format("%s Exception while searching for link by ident. Ident: %s", TAG, ident);
+            log.error(String.format("%s %s", TAG, message), e);
             return render500();
         }
 
         if (Objects.isNull(apiResponse)) {
-            Log.error("No reply from API");
+            log.error(TAG + " No reply from API");
             return render500();
         }
 
         switch (apiResponse.getStatus()) {
             case 200:
                 String link = extractLink(apiResponse);
-                Log.info(String.format("Got long URL. Redirecting to %s", link));
+                log.info(String.format("%s Got long URL. Redirecting to %s", TAG, link));
                 return redirect(link);
             case 400:
-                Log.info("Got malformed request. Replying with 404");
+                log.info(TAG + " Got malformed request. Replying with 404");
                 return render404Ident();
             case 404:
-                Log.info("No corresponding longURL found. Replying with 404");
+                log.info(TAG + " No corresponding longURL found. Replying with 404");
                 return render404Ident();
             case 500:
-                Log.info("Got internal error. Replying with 500");
+                log.info(TAG + " Got internal error. Replying with 500");
                 return render500();
             default:
-                Log.info(String.format("Got unknown status: %d. I don't know how to handle it. " +
-                        "Replying with 500", apiResponse.getStatus()));
+                log.info(String.format("%s Got unknown status: %d. I don't know how to handle it. " +
+                        "Replying with 500", TAG, apiResponse.getStatus()));
                 return render500();
         }
     }

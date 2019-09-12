@@ -8,6 +8,10 @@ import ee.yals.test.utils.selectors.Page404;
 import ee.yals.test.utils.selectors.VR;
 import org.junit.Assume;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -20,6 +24,9 @@ import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
  *
  * @since 1.0
  */
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class SlashUITest extends UITest {
 
     @Test
@@ -58,7 +65,6 @@ public class SlashUITest extends UITest {
 
         open("/");
         pasteValueInFormAndSubmitIt("https://vr.fi");
-
 
         RESULT_LINK.shouldBe(visible);
         String linkText = RESULT_LINK.getText();
