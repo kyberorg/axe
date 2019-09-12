@@ -2,6 +2,7 @@ package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
 import ee.yals.utils.git.GitInfo;
+import ee.yals.utils.git.NoGitInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static ee.yals.test.utils.selectors.FrontSelectors.Footer.*;
-import static junit.framework.Assert.assertNotNull;
 
 /**
  * Checking elements of footer with information about version
@@ -24,8 +24,6 @@ import static junit.framework.Assert.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class VersionInfoFooterTest extends UITest {
 
-    private GitInfo gitInfo = GitInfo.getInstance();
-
     @Before
     public void openUrl() {
         open("/");
@@ -33,18 +31,16 @@ public class VersionInfoFooterTest extends UITest {
 
     @Test
     public void footerDisplayedOnlyWhenTagAndVersionArePresent() {
-        boolean shouldCommitInfoDisplayed = shouldCommitInfoBeDisplayed();
-
-        if (shouldCommitInfoDisplayed) {
-            FOOTER.shouldBe(visible);
-        } else {
+        if (isLocalRunWithoutMaven()) {
             FOOTER.shouldNotBe(visible);
+        } else {
+            FOOTER.shouldBe(visible);
         }
     }
 
     @Test
     public void footerHasAllRequiredElements() {
-        if (shouldCommitInfoBeDisplayed()) {
+        if (isFooterVisible()) {
             VERSION.shouldBe(visible);
             VERSION.shouldHave(text("version")).shouldHave(text("commit"));
             COMMIT_LINK.shouldBe(visible);
@@ -53,16 +49,12 @@ public class VersionInfoFooterTest extends UITest {
         }
     }
 
-    private boolean shouldCommitInfoBeDisplayed() {
-        assertNotNull(this.gitInfo);
-
-        String latestCommit = gitInfo.getLatestCommitHash().trim();
-        String latestTag = gitInfo.getLatestTag().trim();
-
-        boolean commitPresent = (!latestCommit.equals(GitInfo.NOTHING_FOUND_MARKER));
-        boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER));
-
-        return commitPresent && tagPresent;
+    private boolean isFooterVisible() {
+        return !isLocalRunWithoutMaven();
     }
-    
+
+    private boolean isLocalRunWithoutMaven() {
+        //indicates than maven did not run and therefore generated nothing about git
+        return (GitInfo.getInstance() instanceof NoGitInfo);
+    }
 }

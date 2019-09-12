@@ -32,6 +32,6 @@ public class MavenGitInfo extends GitInfo {
 
     @Override
     public String getLatestTag() {
-        return gitRepoState.closestTagName;
+        return gitRepoState.buildVersion; //we use here version from maven, because it is more stable then git tag
     }
 }
