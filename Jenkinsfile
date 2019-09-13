@@ -1,4 +1,4 @@
-@Library('common-lib@1.0')_
+@Library('common-lib@1.1')_
 pipeline {
     agent any;
     stages {
@@ -74,17 +74,25 @@ pipeline {
                  switch(env.BRANCH_NAME) {
                     case "latest":
                         url = 'https://yals.eu';
+                        tokenCredId = 'YALS_TELEGRAM_TOKEN_PROD';
                         break;
                     case "trunk":
                         url = 'https://qa.yals.eu';
+                        tokenCredId = 'YALS_TELEGRAM_TOKEN_QA';
                         break;
                     default:
                         url = 'https://dev.yals.eu';
+                        tokenCredId = 'YALS_TELEGRAM_TOKEN_DEV';
                         break;
                  }
                  // Not enabled yet before switching to TestContainers
                  sleep(30);
-                 testApp(url: url);
+                 withCredentials([[ $class: 'UsernamePasswordMultiBinding', credentialsId: p.tokenCredId,
+                                      usernameVariable: 'BOT_NAME', passwordVariable: 'BOT_TOKEN'
+                   ]]) {
+                       def dParams = "-Dtest.telegram.botname=${env.BOT_NAME} -Dtest.telegram.token=${env.BOT_TOKEN}";
+                       testApp(url: url,dParams: dParams);
+                   }
                }
             }
         }
