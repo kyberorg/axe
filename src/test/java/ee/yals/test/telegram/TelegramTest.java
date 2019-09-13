@@ -36,6 +36,7 @@ abstract class TelegramTest {
         if (!isCorrectlyInitialized()) {
             log.warn("Cannot connect to Telegram with this bot name {} and/or token {}", botName, botToken);
         }
+
         String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
         urlString = String.format(urlString, botToken, botName, message);
 
@@ -54,7 +55,7 @@ abstract class TelegramTest {
         } catch (MalformedURLException e) {
             log.error("Internal error: Malformed Telegram API URL", e);
         } catch (IOException e) {
-            log.error("I/O error: Cannot open contact telegram bot. Do you have Internet access?");
+            log.error("I/O error: Cannot open contact telegram bot. Do you have Internet access?", e);
         }
         return response;
     }
