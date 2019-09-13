@@ -87,7 +87,7 @@ pipeline {
                  }
                  // Not enabled yet before switching to TestContainers
                  sleep(30);
-                 withCredentials([[ $class: 'UsernamePasswordMultiBinding', credentialsId: p.tokenCredId,
+                 withCredentials([[ $class: 'UsernamePasswordMultiBinding', credentialsId: tokenCredId,
                                       usernameVariable: 'BOT_NAME', passwordVariable: 'BOT_TOKEN'
                    ]]) {
                        def dParams = "-Dtest.telegram.botname=${env.BOT_NAME} -Dtest.telegram.token=${env.BOT_TOKEN}";
