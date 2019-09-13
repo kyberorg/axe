@@ -17,16 +17,19 @@ public class Endpoint {
     public static final String STORE_API = "/api/store";
 
     @RequestMethod(value = HttpMethod.GET, api = true)
-    public static final String LINK_API= "/api/link/";
-    public static final String LINK_API_MAPPING= "/api/link/{ident}";
-    public static final String LINK_API_BASE= "/api/link";
+    public static final String LINK_API = "/api/link/";
+    public static final String LINK_API_MAPPING = "/api/link/{ident}";
+    public static final String LINK_API_BASE = "/api/link";
 
     @RequestMethod(value = HttpMethod.POST, api = true)
     public static final String MM_API = "/api/mm";
 
+    @RequestMethod(value = HttpMethod.GET, api = true)
+    public static final String TELEGRAM_STATUS_API = "/api/tg/status";
+
     @RequestMethod(HttpMethod.GET)
     public static final String SLASH_BASE = "/";
-    public static final String SLASH= "/{ident}";
+    public static final String SLASH = "/{ident}";
 
     @RequestMethod(HttpMethod.GET)
     public static final String ROBOTS_TXT = "/robots.txt";
