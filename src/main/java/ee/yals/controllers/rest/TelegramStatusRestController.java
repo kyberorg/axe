@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class TelegramStatusRestController {
     private static final String TAG = "[API Telegram Status]";
+    private static final String ONLINE = "Online";
+    private static final String OFFLINE = "Offline";
 
     private TelegramBot bot;
 
@@ -31,8 +33,8 @@ public class TelegramStatusRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.TELEGRAM_STATUS_API)
-    public Json getBotStatus(@RequestBody String body, HttpServletResponse response) {
-        log.debug("{} got request: {}", TAG, body);
+    public Json getBotStatus() {
+        log.info("{} got request", TAG);
         if (bot == null) {
             //most likely you want want see it as application startup will fail
             log.error("Failed to autowire " + TelegramBot.class.getSimpleName());
@@ -41,7 +43,8 @@ public class TelegramStatusRestController {
 
         try {
             String botName = bot.getMe().getUserName();
-            String botStatus = bot.getMe().getBot() ? "Online" : "Offline";
+            String botStatus = bot.getMe().getBot() ? ONLINE : OFFLINE;
+            log.info("{} telegram bot is {}", TAG, botStatus);
             return TelegramStatusResponseJson.createWith(botName, botStatus);
         } catch (TelegramApiException e) {
             log.error("Got exception while ask info from bot", e);
