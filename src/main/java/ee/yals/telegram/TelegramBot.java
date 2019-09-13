@@ -31,7 +31,7 @@ import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
 public class TelegramBot extends TelegramLongPollingBot {
     private static final String TAG = "[Telegram Bot]";
 
-    private static final String DUMMY_TOKEN = "dummy:Token";
+    public static final String DUMMY_TOKEN = "dummy:Token";
     private static final Message NO_MESSAGE = new Message();
 
     @Autowired
