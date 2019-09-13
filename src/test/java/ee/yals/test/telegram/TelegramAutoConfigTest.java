@@ -38,6 +38,7 @@ public class TelegramAutoConfigTest {
             message.setText("/start").setChatId("123");
             try {
                 Object reply = bot.execute(message);
+                log.info("Reply object: " + reply.toString());
                 assertNotNull(reply);
             } catch (TelegramApiException e) {
                 log.error("Could not sent message", e);
