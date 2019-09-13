@@ -90,7 +90,7 @@ pipeline {
                  withCredentials([[ $class: 'UsernamePasswordMultiBinding', credentialsId: tokenCredId,
                                       usernameVariable: 'BOT_NAME', passwordVariable: 'BOT_TOKEN'
                    ]]) {
-                       def dParams = "-Dtest.telegram.botname=${env.BOT_NAME} -Dtest.telegram.token=${env.BOT_TOKEN}";
+                       def dParams = "-Dtelegram.botname=${env.BOT_NAME} -Dtelegram.token=${env.BOT_TOKEN}";
                        testApp(url: url,dParams: dParams);
                    }
                }

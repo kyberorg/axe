@@ -31,8 +31,7 @@ public class TelegramAutoConfigTest {
     @Autowired
     private TelegramBot bot;
 
-    //@Value("${test.telegram.botname}")
-    @Value("${server.port}")
+    @Value("${test.telegram.botname}")
     private String botName;
 
     @Test
