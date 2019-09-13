@@ -18,7 +18,7 @@ import java.net.URLConnection;
 
 @TestPropertySource(locations = "classpath:application-test.properties")
 @Slf4j
-class TelegramTest {
+abstract class TelegramTest {
     private static final String NO_BOT_NAME_MARKER = "dummyBot";
     private static final String NO_BOT_TOKEN_MARKER = "dummyToken";
     static final String EMPTY_RESPONSE = "_void_";

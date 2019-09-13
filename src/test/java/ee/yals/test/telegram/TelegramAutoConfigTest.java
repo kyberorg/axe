@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
  */
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest
 @Slf4j
 public class TelegramAutoConfigTest extends TelegramTest {
 
