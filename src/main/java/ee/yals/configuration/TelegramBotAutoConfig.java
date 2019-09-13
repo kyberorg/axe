@@ -75,7 +75,8 @@ public class TelegramBotAutoConfig {
         if (isServerUrlPresentAndValid) {
             return true;
         } else {
-            log.error(String.format("%s Server URL is not valid or missing. Did ENV '%s' was set?", TAG, Env.SERVER_URL));
+            log.error(String.format("%s Server URL is not valid or missing. Did '%s' property or ENV '%s' was set?",
+                    TAG, Env.SERVER_URL_PROPERTY, Env.SERVER_URL));
             log.info(String.format("%s Server URL is %s", TAG, serverHostname));
             return false;
         }

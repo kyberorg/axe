@@ -25,6 +25,7 @@ public class AppUtils {
      */
     public static class HostHelper {
         private static final String DUMMY_HOST = "DummyHost";
+        private static final String DUMMY_TOKEN = "dummyToken";
 
         private HostHelper() {
             throw new UnsupportedOperationException("Utility class");
@@ -35,8 +36,13 @@ public class AppUtils {
         }
 
         public static String getServerUrl() {
-            String env = System.getenv(Env.SERVER_URL);
-            return StringUtils.isNotBlank(env) ? env : DUMMY_HOST;
+            String serverUrl = System.getProperty(Env.SERVER_URL_PROPERTY, System.getenv(Env.SERVER_URL));
+            return StringUtils.isNotBlank(serverUrl) ? serverUrl : DUMMY_HOST;
+        }
+
+        public static String getTelegramToken() {
+            String token = System.getProperty(Env.TELEGRAM_TOKEN_PROPERTY, System.getenv(Env.TELEGRAM_TOKEN));
+            return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
         }
     }
 }

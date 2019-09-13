@@ -1,10 +1,9 @@
 package ee.yals.telegram;
 
-import ee.yals.Env;
 import ee.yals.models.Link;
 import ee.yals.services.telegram.TelegramService;
+import ee.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -31,7 +30,6 @@ import static ee.yals.telegram.TelegramArguments.EMPTY_ARGS;
 public class TelegramBot extends TelegramLongPollingBot {
     private static final String TAG = "[Telegram Bot]";
 
-    public static final String DUMMY_TOKEN = "dummyToken";
     private static final Message NO_MESSAGE = new Message();
 
     @Autowired
@@ -69,6 +67,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case START:
                     case USAGE:
                     case UNKNOWN:
+                        //noinspection DuplicateBranchesInSwitch (in the name of readable code)
                         message = telegramService.usage();
                         break;
                     default:
@@ -109,8 +108,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        String token = System.getenv(Env.TELEGRAM_TOKEN);
-        return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
+        return AppUtils.HostHelper.getTelegramToken();
     }
 
     private String doYals() {
