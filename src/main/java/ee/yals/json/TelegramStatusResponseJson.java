@@ -11,13 +11,16 @@ import lombok.RequiredArgsConstructor;
  * @since 2.5
  */
 @Data
-@RequiredArgsConstructor(staticName = "createWith")
+@RequiredArgsConstructor(staticName = "createWithStatus")
 public class TelegramStatusResponseJson extends Json {
-    @Since(2.5)
-    private final String name;
-
     @Since(2.5)
     private final String status;
 
+    @Since(2.5)
+    private String name;
 
+    public TelegramStatusResponseJson withBotName(String botName) {
+        this.name = botName;
+        return this;
+    }
 }

@@ -6,13 +6,10 @@ import ee.yals.json.TelegramStatusResponseJson;
 import ee.yals.json.internal.Json;
 import ee.yals.telegram.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Reports telegram bot status
@@ -43,12 +40,11 @@ public class TelegramStatusRestController {
 
         try {
             String botName = bot.getMe().getUserName();
-            String botStatus = bot.getMe().getBot() ? ONLINE : OFFLINE;
-            log.info("{} telegram bot is {}", TAG, botStatus);
-            return TelegramStatusResponseJson.createWith(botName, botStatus);
+            String botStatus = ONLINE;
+            log.info("{} telegram bot {} is {}", TAG, botName, botStatus);
+            return TelegramStatusResponseJson.createWithStatus(botStatus).withBotName(botName);
         } catch (TelegramApiException e) {
-            log.error("Got exception while ask info from bot", e);
-            return ErrorJson.createWithMessage("Internal error: bot gave no info");
+            return TelegramStatusResponseJson.createWithStatus(OFFLINE).withBotName("-");
         }
     }
 }
