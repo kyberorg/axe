@@ -1,6 +1,6 @@
 package ee.yals.configuration;
 
-import ee.yals.Env;
+import ee.yals.App;
 import ee.yals.telegram.TelegramBot;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.UrlExtraValidator;
@@ -70,12 +70,13 @@ public class TelegramBotAutoConfig {
     }
 
     private boolean isServerUrlAvailable() {
-        String serverHostname = AppUtils.HostHelper.getServerUrl();
+        String serverHostname = AppUtils.getServerUrl();
         boolean isServerUrlPresentAndValid = UrlExtraValidator.isUrl(serverHostname);
         if (isServerUrlPresentAndValid) {
             return true;
         } else {
-            log.error(String.format("%s Server URL is not valid or missing. Did ENV '%s' was set?", TAG, Env.SERVER_URL));
+            log.error(String.format("%s Server URL is not valid or missing. Did '%s' property or ENV '%s' was set?",
+                    TAG, App.Properties.SERVER_URL, App.Env.SERVER_URL));
             log.info(String.format("%s Server URL is %s", TAG, serverHostname));
             return false;
         }

@@ -88,15 +88,15 @@ EnvVars:
 
 * YALS_DB_PASSWORD or YALS_DB_PASSWORD_FILE: `password for db user`
 
-* YALS_TELEGRAM_TOKEN or YALS_TELEGRAM_TOKEN_FILE: `token for telegram bot`
-
-* SERVER_URL: `https://yals.tld`
+* TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
 
 Optional EnvVars: 
 
 * LOG_LEVEL_APP: `see Logging part`
 
 * PORT: `start server at port other than 8080 `
+
+* SERVER_URL: `https://yals.tld` (most likely don't needed as regulated by Spring profile)
 
 Ports: 
 
@@ -137,6 +137,8 @@ MySQL can be stopped from `docker/localMySQL` directory by running:
 ```
 docker-compose down
 ```
+
+Use `@yals_local_bot` and its token (currently can be requested from [kyberorg](mailto:kyberorg@yadev.eu)) for local run
 
 ### Logging
 To adjust logging we use ENV variables or `-D` vars: 

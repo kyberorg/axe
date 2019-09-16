@@ -1,4 +1,4 @@
-@Library('common-lib@1.0')_
+@Library('common-lib@1.1')_
 pipeline {
     agent any;
     stages {
@@ -62,7 +62,6 @@ pipeline {
                         hookUrl = 'https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1';
                         break;
                  }
-                 // Not enabled yet until SpringBoot 2 migration completed
                  deployToSwarm(hookUrl: hookUrl);
                }
             }
@@ -82,7 +81,6 @@ pipeline {
                         url = 'https://dev.yals.eu';
                         break;
                  }
-                 // Not enabled yet before switching to TestContainers
                  sleep(30);
                  testApp(url: url);
                }
