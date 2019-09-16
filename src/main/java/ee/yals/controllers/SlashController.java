@@ -11,7 +11,6 @@ import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,9 +31,13 @@ import java.util.Objects;
 public class SlashController extends YalsController {
     private static final String TAG = "[Web]";
 
-    @Autowired
-    @Qualifier("dbStorage")
-    private LinkService service;
+    private final LinkService service;
+    private final AppUtils appUtils;
+
+    public SlashController(@Qualifier("dbStorage") LinkService service, AppUtils appUtils) {
+        this.service = service;
+        this.appUtils = appUtils;
+    }
 
     @RequestMapping(method = RequestMethod.GET,
             value = Endpoint.SLASH)
@@ -63,7 +66,7 @@ public class SlashController extends YalsController {
         try {
             log.debug(String.format("%s Searching for ident: '%s'", TAG, ident));
             String schema = request.getScheme() + "://";
-            String url = schema + AppUtils.HostHelper.getAPIHostPort() + Endpoint.LINK_API + ident;
+            String url = schema + appUtils.getAPIHostPort() + Endpoint.LINK_API + ident;
             log.debug(String.format("%s Requesting API. URL: %s", TAG, url));
             apiResponse = Unirest.get(url).asString();
         } catch (Exception e) {
