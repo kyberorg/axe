@@ -1,20 +1,25 @@
 package ee.yals.utils.git;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Provides correct application version
  *
  * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 1.0
  */
+@Slf4j
 public abstract class GitInfo {
-    public static final String REPOSITORY = "https://github.com/yadevee/yals/commit/";
+    public static final String REPOSITORY = "https://github.com/yadevee/yals/commit";
     public static final String NOTHING_FOUND_MARKER = "-";
 
     public static GitInfo getInstance() {
         MavenGitInfo mavenGitInfo = new MavenGitInfo();
         if (mavenGitInfo.isApplicable()) {
+            log.trace("Will return {}", MavenGitInfo.class.getSimpleName());
             return mavenGitInfo;
         } else {
+            log.trace("Will return {}", NoGitInfo.class.getSimpleName());
             return new NoGitInfo();
         }
     }

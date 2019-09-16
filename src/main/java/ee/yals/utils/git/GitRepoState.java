@@ -13,11 +13,11 @@ import java.util.Properties;
  * @since 2.0
  */
 @Slf4j
-public class GitRepoState {
+class GitRepoState {
     private static GitRepoState SELF = null;
     private static final String GIT_PROPERTIES_FILE = "git.properties";
 
-    private Properties gitProperties = new Properties();
+    private final Properties gitProperties = new Properties();
 
     private GitRepoState() {
     }
@@ -43,7 +43,7 @@ public class GitRepoState {
     String buildHost;               // =${git.build.host}
     String buildVersion;             // =${git.build.version}
 
-    public static synchronized GitRepoState getInstance() {
+    static synchronized GitRepoState getInstance() {
         if (SELF == null) {
             SELF = new GitRepoState();
         } else if (SELF.correctlyInitialized()) {
@@ -56,13 +56,16 @@ public class GitRepoState {
         return SELF;
     }
 
-    public boolean correctlyInitialized() {
-        return !gitProperties.isEmpty();
+    boolean correctlyInitialized() {
+        boolean isCorrectlyInitialized = !gitProperties.isEmpty();
+        log.debug("{} is correctly initialized: {}", GitRepoState.class.getSimpleName(), isCorrectlyInitialized);
+        return isCorrectlyInitialized;
     }
 
     private void init() {
         try {
             SELF.gitProperties.load(SELF.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
+            log.trace("{}: parsed info from file: {}", GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);
             SELF.publishFromProperties();
         } catch (IOException ioe) {
             log.error("Failed to init " + GitRepoState.class.getSimpleName(), ioe);
