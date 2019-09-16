@@ -2,8 +2,8 @@ package ee.yals.test.telegram;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import ee.yals.App;
 import ee.yals.Endpoint;
+import ee.yals.constants.App;
 import ee.yals.json.TelegramStatusResponseJson;
 import ee.yals.test.utils.TestUtils;
 import ee.yals.utils.AppUtils;
@@ -41,8 +41,7 @@ public class TelegramAutoConfigTest {
             return;
         }
 
-        String statusApiEndpoint = String.format("%s%s", System.getProperty(App.Properties.TEST_URL),
-                Endpoint.TELEGRAM_STATUS_API);
+        String statusApiEndpoint = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.TELEGRAM_STATUS_API);
         HttpResponse<String> apiResponse;
         try {
             apiResponse = Unirest.get(statusApiEndpoint).asString();

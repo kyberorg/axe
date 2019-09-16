@@ -4,7 +4,6 @@ import ee.yals.models.Link;
 import ee.yals.services.telegram.TelegramService;
 import ee.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -32,11 +31,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private static final Message NO_MESSAGE = new Message();
 
-    @Autowired
-    private TelegramService telegramService;
+    private final TelegramService telegramService;
+    private final AppUtils appUtils;
 
     private Update update;
     private TelegramObject telegramObject;
+
+    public TelegramBot(TelegramService telegramService, AppUtils appUtils) {
+        this.telegramService = telegramService;
+        this.appUtils = appUtils;
+    }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -108,7 +112,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return AppUtils.getTelegramToken();
+        return appUtils.getTelegramToken();
     }
 
     private String doYals() {

@@ -2,47 +2,40 @@ package ee.yals.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import ee.yals.App;
+import ee.yals.constants.App;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 /**
  * App-wide tools
  *
  * @since 1.0
  */
+@Component
 public class AppUtils {
+
+    private Environment env;
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     private static final String DUMMY_HOST = "DummyHost";
     private static final String DUMMY_TOKEN = "dummyToken";
 
-    private AppUtils() {
-        throw new UnsupportedOperationException("Utility class");
+    public AppUtils(Environment env) {
+        this.env = env;
     }
 
-    /**
-     * Calculates host:port server running at
-     *
-     * @since 2.0
-     */
-    public static class HostHelper {
-
-        private HostHelper() {
-            throw new UnsupportedOperationException("Utility class");
-        }
-
-        public static String getAPIHostPort() {
-            return "localhost" + ":" + System.getProperty("server.port", "8080");
-        }
+    public String getAPIHostPort() {
+        return "localhost" + ":" + env.getProperty(App.Properties.SERVER_PORT, "8080");
     }
 
-    public static String getServerUrl() {
-        String serverUrl = System.getProperty(App.Properties.SERVER_URL, System.getenv(App.Env.SERVER_URL));
+    public String getServerUrl() {
+        String serverUrl = env.getProperty(App.Properties.SERVER_URL);
         return StringUtils.isNotBlank(serverUrl) ? serverUrl : DUMMY_HOST;
     }
 
-    public static String getTelegramToken() {
-        String token = System.getProperty(App.Properties.TELEGRAM_TOKEN, System.getenv(App.Env.TELEGRAM_TOKEN));
+    public String getTelegramToken() {
+        String token = env.getProperty(App.Properties.TELEGRAM_TOKEN);
         return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
     }
 }

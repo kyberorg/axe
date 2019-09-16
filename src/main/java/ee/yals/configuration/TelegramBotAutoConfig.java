@@ -1,11 +1,10 @@
 package ee.yals.configuration;
 
-import ee.yals.App;
+import ee.yals.constants.App;
 import ee.yals.telegram.TelegramBot;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.UrlExtraValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -32,11 +31,16 @@ public class TelegramBotAutoConfig {
 
     private List<BotSession> sessions = new ArrayList<>();
 
-    @Autowired
-    private TelegramBot telegramBot;
+    private final TelegramBot telegramBot;
+    private final AppUtils appUtils;
 
     static {
         ApiContextInitializer.init();
+    }
+
+    public TelegramBotAutoConfig(TelegramBot telegramBot, AppUtils appUtils) {
+        this.telegramBot = telegramBot;
+        this.appUtils = appUtils;
     }
 
     @PostConstruct
@@ -70,7 +74,7 @@ public class TelegramBotAutoConfig {
     }
 
     private boolean isServerUrlAvailable() {
-        String serverHostname = AppUtils.getServerUrl();
+        String serverHostname = appUtils.getServerUrl();
         boolean isServerUrlPresentAndValid = UrlExtraValidator.isUrl(serverHostname);
         if (isServerUrlPresentAndValid) {
             return true;
