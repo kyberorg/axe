@@ -10,7 +10,6 @@ import ee.yals.telegram.TelegramObject;
 import ee.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static ee.yals.constants.App.AT;
@@ -26,11 +25,17 @@ import static ee.yals.constants.App.NO_VALUE;
 public class TelegramServiceImpl implements TelegramService {
     public static final String NO_INIT = "Didn't correctly initialized. Did you run telegramService.init()?";
 
-    @Autowired
-    private LinkRepo linkRepo;
+    private final LinkRepo linkRepo;
+    private final AppUtils appUtils;
+
 
     private boolean isInitDone = false;
     private TelegramObject telegramObject;
+
+    public TelegramServiceImpl(LinkRepo linkRepo, AppUtils appUtils) {
+        this.linkRepo = linkRepo;
+        this.appUtils = appUtils;
+    }
 
     @Override
     public void init(TelegramObject telegramObject) {
@@ -61,7 +66,7 @@ public class TelegramServiceImpl implements TelegramService {
         if (!isInitDone) {
             return NO_INIT;
         }
-        String serverHostname = AppUtils.getServerUrl();
+        String serverHostname = appUtils.getServerUrl();
         String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
 
         String linkDescription = telegramObject.getArguments().getDescription();

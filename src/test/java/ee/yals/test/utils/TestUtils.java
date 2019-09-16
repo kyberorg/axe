@@ -1,6 +1,6 @@
 package ee.yals.test.utils;
 
-import ee.yals.App;
+import ee.yals.constants.App;
 import ee.yals.constants.Header;
 import ee.yals.constants.MimeType;
 import ee.yals.json.ErrorJson;
@@ -47,6 +47,7 @@ public class TestUtils {
         assertNotNull(result.getResponse());
 
         String contentType = result.getResponse().getContentType();
+        assertNotNull(contentType);
         String[] contentTypeParts = contentType.split(";");
         if (contentTypeParts.length > 1) {
             String onlyContentType = contentTypeParts[0];
@@ -60,8 +61,14 @@ public class TestUtils {
         return System.getProperty(Selenide.Props.BROWSER, Selenide.Browser.HTMLUNIT);
     }
 
+    public static String getTestUrl() {
+        final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
+        final String localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
+        return System.getProperty(Selenide.Props.TEST_URL, localUrl);
+    }
+
     public static boolean isLocalRun() {
-        String testUrl = System.getProperty(App.Properties.TEST_URL, "");
+        String testUrl = getTestUrl();
         String dockerHost = "host.testcontainers.internal";
         String localhost = "localhost";
 
