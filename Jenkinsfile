@@ -62,7 +62,6 @@ pipeline {
                         hookUrl = 'https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1';
                         break;
                  }
-                 // Not enabled yet until SpringBoot 2 migration completed
                  deployToSwarm(hookUrl: hookUrl);
                }
             }
@@ -74,25 +73,16 @@ pipeline {
                  switch(env.BRANCH_NAME) {
                     case "latest":
                         url = 'https://yals.eu';
-                        tokenCredId = 'YALS_TELEGRAM_TOKEN_PROD';
                         break;
                     case "trunk":
                         url = 'https://qa.yals.eu';
-                        tokenCredId = 'YALS_TELEGRAM_TOKEN_QA';
                         break;
                     default:
                         url = 'https://dev.yals.eu';
-                        tokenCredId = 'YALS_TELEGRAM_TOKEN_DEV';
                         break;
                  }
-                 // Not enabled yet before switching to TestContainers
                  sleep(30);
-                 withCredentials([[ $class: 'UsernamePasswordMultiBinding', credentialsId: tokenCredId,
-                                      usernameVariable: 'BOT_NAME', passwordVariable: 'BOT_TOKEN'
-                   ]]) {
-                       def dParams = "-Dtelegram.botname=${env.BOT_NAME} -Dtelegram.token=${env.BOT_TOKEN}";
-                       testApp(url: url,dParams: dParams);
-                   }
+                 testApp(url: url);
                }
             }
         }

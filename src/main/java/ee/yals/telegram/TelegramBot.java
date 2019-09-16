@@ -108,7 +108,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return AppUtils.HostHelper.getTelegramToken();
+        return AppUtils.getTelegramToken();
     }
 
     private String doYals() {

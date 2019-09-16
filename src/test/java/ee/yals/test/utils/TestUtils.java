@@ -1,5 +1,6 @@
 package ee.yals.test.utils;
 
+import ee.yals.App;
 import ee.yals.constants.Header;
 import ee.yals.constants.MimeType;
 import ee.yals.json.ErrorJson;
@@ -57,6 +58,14 @@ public class TestUtils {
 
     public static String whichBrowser() {
         return System.getProperty(Selenide.Props.BROWSER, Selenide.Browser.HTMLUNIT);
+    }
+
+    public static boolean isLocalRun() {
+        String testUrl = System.getProperty(App.Properties.TEST_URL, "");
+        String dockerHost = "host.testcontainers.internal";
+        String localhost = "localhost";
+
+        return (testUrl.contains(dockerHost) || testUrl.contains(localhost));
     }
 
     private static boolean isValidErrorJson(MvcResult mvcResult) throws Exception {

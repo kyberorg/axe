@@ -2,10 +2,10 @@ package ee.yals.test.telegram;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import ee.yals.App;
 import ee.yals.Endpoint;
-import ee.yals.json.LinkResponseJson;
 import ee.yals.json.TelegramStatusResponseJson;
-import ee.yals.test.utils.Selenide;
+import ee.yals.test.utils.TestUtils;
 import ee.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -26,18 +26,15 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest
 @Slf4j
-public class TelegramAutoConfigTest extends TelegramTest {
-
+public class TelegramAutoConfigTest {
 
     @Test
     public void sendStartCommandGivesNonEmptyReply() {
-        //TODO check status
-        if (isLocalRun()) {
-            log.info("Local run: telegram bot never started");
-            return;
+        if (TestUtils.isLocalRun()) {
+            log.info("Local run: telegram bot might not be started. Safe to ignore");
         }
 
-        String statusApiEndpoint = String.format("%s%s", System.getProperty(Selenide.Props.TEST_URL),
+        String statusApiEndpoint = String.format("%s%s", System.getProperty(App.Properties.TEST_URL),
                 Endpoint.TELEGRAM_STATUS_API);
         HttpResponse<String> apiResponse;
         try {
@@ -60,5 +57,4 @@ public class TelegramAutoConfigTest extends TelegramTest {
         TelegramStatusResponseJson json = AppUtils.GSON.fromJson(apiResponse.getBody(), TelegramStatusResponseJson.class);
         return json.getStatus();
     }
-
 }
