@@ -10,8 +10,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Objects;
-
 /**
  * Serves requests to index (/) page
  *
@@ -39,13 +37,6 @@ public class Front {
      */
     @RequestMapping("/")
     public String index(@ModelAttribute("params") ModelMap params) {
-        params.addAttribute("overallLinks", overallService.numberOfStoredLinks());
-
-        if (Objects.isNull(gitInfo)) {
-            log.debug("No Git Info - no reason to collect git params");
-            return "index";
-        }
-
         String latestCommit = gitInfo.getLatestCommitHash().trim();
         String latestTag = gitInfo.getLatestTag().trim();
 
@@ -62,6 +53,7 @@ public class Front {
         params.addAttribute("commitTag", latestTag);
         params.addAttribute("repository", GitInfo.REPOSITORY);
 
+        params.addAttribute("overallLinks", overallService.numberOfStoredLinks());
 
         return "index";
     }
