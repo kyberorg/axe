@@ -61,7 +61,7 @@ public class TelegramServiceImpl implements TelegramService {
         if (!isInitDone) {
             return NO_INIT;
         }
-        String serverHostname = AppUtils.HostHelper.getServerUrl();
+        String serverHostname = AppUtils.getServerUrl();
         String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
 
         String linkDescription = telegramObject.getArguments().getDescription();
@@ -85,7 +85,7 @@ public class TelegramServiceImpl implements TelegramService {
                 App.NEW_LINE + App.NEW_LINE +
                 "https://mySuperLongLink.com" +
                 App.NEW_LINE + App.NEW_LINE +
-                "or" + 
+                "or" +
                 App.NEW_LINE + App.NEW_LINE +
                 "https://mySuperLongLink.com description" +
                 App.NEW_LINE + App.NEW_LINE +
