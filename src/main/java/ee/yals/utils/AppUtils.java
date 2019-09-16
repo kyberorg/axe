@@ -3,7 +3,6 @@ package ee.yals.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ee.yals.App;
-import ee.yals.Env;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -38,12 +37,12 @@ public class AppUtils {
     }
 
     public static String getServerUrl() {
-        String serverUrl = System.getProperty(App.Properties.SERVER_URL, System.getenv(Env.SERVER_URL));
+        String serverUrl = System.getProperty(App.Properties.SERVER_URL, System.getenv(App.Env.SERVER_URL));
         return StringUtils.isNotBlank(serverUrl) ? serverUrl : DUMMY_HOST;
     }
 
     public static String getTelegramToken() {
-        String token = System.getProperty(App.Properties.TELEGRAM_TOKEN, System.getenv(Env.TELEGRAM_TOKEN));
+        String token = System.getProperty(App.Properties.TELEGRAM_TOKEN, System.getenv(App.Env.TELEGRAM_TOKEN));
         return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
     }
 }

@@ -15,4 +15,9 @@ public class App {
         public static final String SERVER_URL = "server.url";
         public static final String TEST_URL = "testUrl";
     }
+
+    public static class Env {
+        public static final String TELEGRAM_TOKEN = "TELEGRAM_TOKEN";
+        public static final String SERVER_URL = "SERVER_URL";
+    }
 }
