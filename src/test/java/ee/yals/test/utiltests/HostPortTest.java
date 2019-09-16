@@ -1,6 +1,6 @@
 package ee.yals.test.utiltests;
 
-import ee.yals.constants.App;
+import ee.yals.configuration.AppInfo;
 import ee.yals.utils.AppUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,13 +21,14 @@ public class HostPortTest {
     @Autowired
     private AppUtils appUtils;
 
+    @Autowired
+    private AppInfo appInfo;
+
     @Test
     public void apiHostMethodProvidesCorrectInternalAPILocation() {
-        String serverPortPropertyName = App.Properties.SERVER_PORT;
-        String serverPort = "8080";
-        String expectedHostPort = "localhost:8080";
+        int portApplicationWorksAt = appInfo.getPort();
+        String expectedHostPort = String.format("localhost:%d", portApplicationWorksAt);
 
-        System.setProperty(serverPortPropertyName, serverPort);
         String actualHostPort = appUtils.getAPIHostPort();
 
         assertEquals("Host Port Mismatch", expectedHostPort, actualHostPort);
