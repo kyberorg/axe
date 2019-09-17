@@ -36,6 +36,7 @@ public class IdnTest extends UITest {
         ElementsCollection results = $$("#res .g");
         results.shouldHave(sizeGreaterThan(1));
         results.get(0).shouldHave(text(".РФ - наш домен"));
+        assertTrue(false);
     }
 
     @Test
