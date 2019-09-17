@@ -59,7 +59,7 @@ pipeline {
                         hookUrl = 'https://docker.yatech.eu/api/webhooks/71721a7e-0d85-4735-8670-4f0afd18c0f7';
                         break;
                     default:
-                        hookUrl = 'https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1';
+                        hookUrl = "https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1?tag="+env.BRANCH_NAME;
                         break;
                  }
                  deployToSwarm(hookUrl: hookUrl);
