@@ -29,14 +29,14 @@ import static org.junit.Assert.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class IdnTest extends UITest {
 
-    @Test
+    //@Test
     public void openIt() {
         open("https://google.com");
         $(By.name("q")).val("http://кто.рф").pressEnter();
         ElementsCollection results = $$("#res .g");
         results.shouldHave(sizeGreaterThan(1));
         results.get(0).shouldHave(text(".РФ - наш домен"));
-        assertTrue(false);
+        assertTrue(false); //I need video and screenshot
     }
 
     @Test
@@ -50,7 +50,7 @@ public class IdnTest extends UITest {
         eggs.shouldBe(exist);
     }
 
-    @Test
+    //@Test
     public void swedishUrl() {
         pasteValueInFormAndSubmitIt("https://räksmörgås.josefsson.org");
 
@@ -64,7 +64,7 @@ public class IdnTest extends UITest {
         assertTrue(h1Text.contains(JosefssonOrg.H1_TEXT));
     }
 
-    @Test
+    //@Test
     public void finnishUrl() {
         pasteValueInFormAndSubmitIt("https://säa.fi");
 
@@ -79,7 +79,7 @@ public class IdnTest extends UITest {
         assertEquals(Foreca.LOGO_TITLE, titleAttributeOfLogoLink);
     }
 
-    @Test
+    //@Test
     public void arabicUrl() {
         pasteValueInFormAndSubmitIt("http://موقع.وزارة-الاتصالات.مصر/");
 
@@ -92,7 +92,7 @@ public class IdnTest extends UITest {
         title.should(have(text(EgyptianMinistryOfIT.TITLE_TEXT)));
     }
 
-    @Test
+    //@Test
     public void hindiUrl() {
         pasteValueInFormAndSubmitIt("http://महरोत्रा.com");
 
@@ -104,7 +104,7 @@ public class IdnTest extends UITest {
         title.should(have(text(Hindi.TITLE_TEXT)));
     }
 
-    @Test
+    //@Test
     public void taiwaneseUrl() {
         pasteValueInFormAndSubmitIt("http://中文.tw/");
 
@@ -115,7 +115,7 @@ public class IdnTest extends UITest {
         navTable.should(exist);
     }
 
-    @Test
+    //@Test
     public void norseUrl() {
         pasteValueInFormAndSubmitIt("http://www.nårsk.no/");
 
@@ -127,7 +127,7 @@ public class IdnTest extends UITest {
         title.should(have(text(Norsk.TITLE_TEXT)));
     }
 
-    @Test
+    //@Test
     public void polishUrl() {
         pasteValueInFormAndSubmitIt("http://żółć.pl");
 
@@ -139,7 +139,7 @@ public class IdnTest extends UITest {
         title.should(have(text(Zolc.TITLE_TEXT)));
     }
 
-    @Test
+    //@Test
     public void germanUrl() {
         pasteValueInFormAndSubmitIt("http://www.travemünde.de/");
 
@@ -151,7 +151,7 @@ public class IdnTest extends UITest {
         title.should(have(text(Travemunde.TITLE_TEXT)));
     }
 
-    @Test
+    //@Test
     public void estonianUrl() {
         pasteValueInFormAndSubmitIt("https://sõnaveeb.ee");
 
@@ -164,9 +164,9 @@ public class IdnTest extends UITest {
 
     }
 
-    @Test
+    //@Test
     public void multiLanguageUrl() {
-        pasteValueInFormAndSubmitIt("");
+        pasteValueInFormAndSubmitIt("http://€.linux.it");
 
         openSavedUrl();
 
