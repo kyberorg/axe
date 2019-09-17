@@ -1,6 +1,5 @@
 package ee.yals.test.selenide.front;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.pages.JosefssonOrg;
@@ -8,14 +7,12 @@ import ee.yals.test.utils.pages.KtoRf;
 import ee.yals.test.utils.pages.external.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.RESULT_LINK;
 import static org.junit.Assert.*;
 
@@ -29,16 +26,6 @@ import static org.junit.Assert.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class IdnTest extends UITest {
 
-    //@Test
-    public void openIt() {
-        open("https://google.com");
-        $(By.name("q")).val("http://кто.рф").pressEnter();
-        ElementsCollection results = $$("#res .g");
-        results.shouldHave(sizeGreaterThan(1));
-        results.get(0).shouldHave(text(".РФ - наш домен"));
-        assertTrue(false); //I need video and screenshot
-    }
-
     @Test
     public void russianUrl() {
         pasteValueInFormAndSubmitIt("http://кто.рф");
@@ -50,7 +37,7 @@ public class IdnTest extends UITest {
         eggs.shouldBe(exist);
     }
 
-    //@Test
+    @Test
     public void swedishUrl() {
         pasteValueInFormAndSubmitIt("https://räksmörgås.josefsson.org");
 
