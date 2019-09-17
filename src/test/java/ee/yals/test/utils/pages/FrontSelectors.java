@@ -1,4 +1,4 @@
-package ee.yals.test.utils.selectors;
+package ee.yals.test.utils.pages;
 
 import com.codeborne.selenide.SelenideElement;
 

@@ -4,8 +4,8 @@ import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.Selenide;
 import ee.yals.test.utils.TestUtils;
-import ee.yals.test.utils.selectors.Page404;
-import ee.yals.test.utils.selectors.VR;
+import ee.yals.test.utils.pages.Page404;
+import ee.yals.test.utils.pages.VR;
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
-import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
+import static ee.yals.test.utils.pages.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.pages.FrontSelectors.MainRow.SUBMIT_BUTTON;
+import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.RESULT_LINK;
 
 /**
  * Testing /(Slash) URL

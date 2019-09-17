@@ -21,8 +21,8 @@ import org.testcontainers.containers.BrowserWebDriverContainer;
 import java.io.File;
 import java.util.Optional;
 
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.SUBMIT_BUTTON;
+import static ee.yals.test.utils.pages.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.pages.FrontSelectors.MainRow.SUBMIT_BUTTON;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
 /**

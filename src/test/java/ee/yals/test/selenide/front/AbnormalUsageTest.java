@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
+import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.RESULT_LINK;
 
 /**
  * Tests unusual usage

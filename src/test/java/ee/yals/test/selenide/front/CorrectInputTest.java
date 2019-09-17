@@ -10,10 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_TEXT;
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
-import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
+import static ee.yals.test.utils.pages.FrontSelectors.ErrorRow.ERROR_MODAL;
+import static ee.yals.test.utils.pages.FrontSelectors.ErrorRow.ERROR_TEXT;
+import static ee.yals.test.utils.pages.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.*;
 import static org.junit.Assert.assertEquals;
 
 /**

@@ -10,9 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.*;
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
-import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_DIV;
+import static ee.yals.test.utils.pages.FrontSelectors.ErrorRow.*;
+import static ee.yals.test.utils.pages.FrontSelectors.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.RESULT_DIV;
 
 /**
  * Tries to fill some wrong values to longURL and tests reaction

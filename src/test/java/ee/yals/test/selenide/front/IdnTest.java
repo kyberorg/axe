@@ -2,8 +2,8 @@ package ee.yals.test.selenide.front;
 
 import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
-import ee.yals.test.utils.selectors.JosefssonOrg;
-import ee.yals.test.utils.selectors.KtoRf;
+import ee.yals.test.utils.pages.JosefssonOrg;
+import ee.yals.test.utils.pages.KtoRf;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_LINK;
+import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.RESULT_LINK;
 import static org.junit.Assert.assertTrue;
 
 /**
