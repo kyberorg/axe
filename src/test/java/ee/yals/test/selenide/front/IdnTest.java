@@ -5,6 +5,7 @@ import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.pages.JosefssonOrg;
 import ee.yals.test.utils.pages.KtoRf;
 import ee.yals.test.utils.pages.external.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,11 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class IdnTest extends UITest {
+
+    @Before
+    public void openUrl() {
+        open("/");
+    }
 
     @Test
     public void russianUrl() {
