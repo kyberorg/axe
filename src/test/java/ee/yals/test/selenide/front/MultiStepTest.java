@@ -1,9 +1,7 @@
 package ee.yals.test.selenide.front;
 
-import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.Selenide;
-import ee.yals.test.utils.selectors.KtoRf;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -100,17 +98,4 @@ public class MultiStepTest extends UITest {
         Assert.assertEquals(initialNumber + 1, numberAfterLinkSaved);
     }
 
-    @Test
-    public void submitRussianURLandClickOnShortLink() {
-        pasteValueInFormAndSubmitIt("http://кто.рф");
-
-        String shortLink = RESULT_LINK.text();
-        open(shortLink);
-        verifyThatKtoRFOpened();
-    }
-
-    private void verifyThatKtoRFOpened() {
-        SelenideElement eggs = KtoRf.DIV_EGGS;
-        eggs.shouldBe(exist);
-    }
 }
