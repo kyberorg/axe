@@ -12,6 +12,7 @@ import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.UrlExtraValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,8 +58,11 @@ public class StoreRestController {
             return ErrorJson.createWithMessage("Unable to parse json");
         }
 
-        //normalize URL if needed
-        storeInput.withLink(appUtils.makeFullUri(storeInput.getLink()).toString());
+        String linkToStore = storeInput.getLink();
+        if (StringUtils.isNotBlank(linkToStore)) {
+            //normalize URL if needed
+            storeInput.withLink(appUtils.makeFullUri(linkToStore).toString());
+        }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);

@@ -93,7 +93,7 @@ public class StoreControllerTest {
 
     @Test
     public void onRequestWithNotALinkStatusIs421() throws Exception {
-        String longLink = "notALink";
+        String longLink = "not a Link";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
