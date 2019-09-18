@@ -77,7 +77,7 @@ public class IdentRestController {
             if (!appUtils.isAscii(link)) {
                 // Handle international domains by detecting non-ascii and converting them to punycode
                 String punycodedUrl = appUtils.covertUnicodeToAscii(link);
-                log.info("{} encoding URL using punycode. Link: {} is now {}", TAG, link, punycodedUrl);
+                log.info("{} encoding URL using punycode. Link: {} transformed to {}", TAG, link, punycodedUrl);
                 link = punycodedUrl;
             }
             return LinkResponseJson.create().withLink(link);

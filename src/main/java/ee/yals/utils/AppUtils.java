@@ -47,11 +47,21 @@ public class AppUtils {
     }
 
     /**
+     * Checks string if it has ASCII symbols or not
+     *
+     * @param str any string
+     * @return true if contains only ASCII (std latin) symbols, false elsewhere
+     */
+    public boolean isAscii(String str) {
+        return CharMatcher.ascii().matchesAllOf(str);
+    }
+
+    /**
      * Code taken from {@link https://nealvs.wordpress.com/2016/01/18/how-to-convert-unicode-url-to-ascii-in-java/}
      *
      * @param url string with valid URL to convert
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
-     * if URL malformed or not URL (string "ERROR" will returned)
+     * @throws RuntimeException if URL malformed or not URL
      */
     public String covertUnicodeToAscii(String url) {
         if (url != null) {
@@ -80,14 +90,13 @@ public class AppUtils {
                 // Convert path from unicode to ascii encoding
                 url = new URI(url).toASCIIString();
             } catch (URISyntaxException e) {
-                log.warn("Got malformed URL {}", url);
-                return "ERROR";
+                String message = String.format("String '%s': malformed URL or not URL at all", url);
+                log.warn(message);
+                throw new RuntimeException(message, e);
             }
         }
         return url;
     }
 
-    public boolean isAscii(String str) {
-        return CharMatcher.ascii().matchesAllOf(str);
-    }
+
 }

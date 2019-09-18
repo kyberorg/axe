@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.pages.FrontSelectors.Footer.*;
+import static ee.yals.test.utils.pages.FrontPage.Footer.*;
 
 /**
  * Checking elements of footer with information about version

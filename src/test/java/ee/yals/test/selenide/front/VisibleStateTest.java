@@ -13,10 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static ee.yals.test.utils.pages.FrontSelectors.ErrorRow.ERROR_MODAL;
-import static ee.yals.test.utils.pages.FrontSelectors.MainRow.*;
-import static ee.yals.test.utils.pages.FrontSelectors.OverallRow.*;
-import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.RESULT_DIV;
+import static ee.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_MODAL;
+import static ee.yals.test.utils.pages.FrontPage.MainRow.*;
+import static ee.yals.test.utils.pages.FrontPage.OverallRow.*;
+import static ee.yals.test.utils.pages.FrontPage.ResultRow.RESULT_DIV;
 import static org.junit.Assert.fail;
 
 /**

@@ -14,11 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.pages.FrontSelectors.ErrorRow.ERROR_CLOSE;
-import static ee.yals.test.utils.pages.FrontSelectors.ErrorRow.ERROR_MODAL;
-import static ee.yals.test.utils.pages.FrontSelectors.MainRow.LONG_URL_INPUT;
-import static ee.yals.test.utils.pages.FrontSelectors.OverallRow.OVERALL_LINKS_NUMBER;
-import static ee.yals.test.utils.pages.FrontSelectors.ResultRow.*;
+import static ee.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_CLOSE;
+import static ee.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_MODAL;
+import static ee.yals.test.utils.pages.FrontPage.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.pages.FrontPage.OverallRow.OVERALL_LINKS_NUMBER;
+import static ee.yals.test.utils.pages.FrontPage.ResultRow.*;
 
 /**
  * Contains multi step tests for Front page

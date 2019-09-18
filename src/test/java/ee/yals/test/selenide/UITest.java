@@ -21,8 +21,8 @@ import org.testcontainers.containers.BrowserWebDriverContainer;
 import java.io.File;
 import java.util.Optional;
 
-import static ee.yals.test.utils.pages.FrontSelectors.MainRow.LONG_URL_INPUT;
-import static ee.yals.test.utils.pages.FrontSelectors.MainRow.SUBMIT_BUTTON;
+import static ee.yals.test.utils.pages.FrontPage.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.pages.FrontPage.MainRow.SUBMIT_BUTTON;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
 /**
@@ -42,7 +42,7 @@ public class UITest {
 
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
-    public final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
+    protected final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
 
     @Rule  // automatically takes screenshot of every failed test
     public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
