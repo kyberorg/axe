@@ -5,6 +5,7 @@ import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.pages.JosefssonOrg;
 import ee.yals.test.utils.pages.KtoRf;
 import ee.yals.test.utils.pages.external.*;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,7 @@ import static org.junit.Assert.*;
  *
  * @since 2.5
  */
+@Slf4j
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -82,7 +84,8 @@ public class IdnTest extends UITest {
         SelenideElement title = EgyptianMinistryOfIT.TITLE;
         assertNotNull(title);
         title.should(exist);
-        title.should(have(text(EgyptianMinistryOfIT.TITLE_TEXT)));
+        log.info("Title Text: " + title.text());
+        title.shouldHave(text(EgyptianMinistryOfIT.TITLE_TEXT));
     }
 
     //@Test
