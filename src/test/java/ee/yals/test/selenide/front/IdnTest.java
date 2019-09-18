@@ -82,24 +82,16 @@ public class IdnTest extends UITest {
         openSavedUrl();
 
         //verify that opens page of IT ministry of Egypt
-        SelenideElement title = EgyptianMinistryOfIT.TITLE;
-        assertNotNull(title);
-        title.should(exist);
-        log.info("Title Text: " + title.text());
-        log.info("Title Text by title(): " + Selenide.title());
-        title.shouldHave(text(EgyptianMinistryOfIT.TITLE_TEXT));
+        assertEquals(EgyptianMinistryOfIT.getTitleText(), Selenide.title());
     }
 
-    //@Test
+    @Test
     public void hindiUrl() {
         pasteValueInFormAndSubmitIt("http://महरोत्रा.com");
 
         openSavedUrl();
 
-        SelenideElement title = Hindi.TITLE;
-        assertNotNull(title);
-        title.should(exist);
-        title.should(have(text(Hindi.TITLE_TEXT)));
+        assertEquals(Hindi.getTitleText(), Selenide.title());
     }
 
     //@Test
