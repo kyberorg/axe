@@ -1,5 +1,6 @@
 package ee.yals.test.selenide.front;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.pages.JosefssonOrg;
@@ -85,6 +86,7 @@ public class IdnTest extends UITest {
         assertNotNull(title);
         title.should(exist);
         log.info("Title Text: " + title.text());
+        log.info("Title Text by title(): " + Selenide.title());
         title.shouldHave(text(EgyptianMinistryOfIT.TITLE_TEXT));
     }
 
