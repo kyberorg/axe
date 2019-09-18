@@ -1,11 +1,11 @@
-package ee.yals.test.utils.pages;
+package ee.yals.test.utils.pages.external;
 
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
 
 /**
- * Set of constant values with CSS selectors from page https://räksmörgås.josefsson.org/
+ * Page object for page https://räksmörgås.josefsson.org/
  *
  * @since 2.5
  */

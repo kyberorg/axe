@@ -3,8 +3,6 @@ package ee.yals.test.selenide.front;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
-import ee.yals.test.utils.pages.JosefssonOrg;
-import ee.yals.test.utils.pages.KtoRf;
 import ee.yals.test.utils.pages.external.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -67,12 +65,12 @@ public class IdnTest extends UITest {
         openSavedUrl();
 
         //verify that finnish sire opened (currently redirect to foreca.fi)
-        SelenideElement logo = Foreca.LOGO;
+        SelenideElement logo = ForecaFi.LOGO;
         assertNotNull(logo);
         logo.should(exist);
         logo.should(have(attribute("title")));
         String titleAttributeOfLogoLink = logo.attr("title");
-        assertEquals(Foreca.LOGO_TITLE, titleAttributeOfLogoLink);
+        assertEquals(ForecaFi.LOGO_TITLE, titleAttributeOfLogoLink);
     }
 
     @Test
@@ -86,85 +84,63 @@ public class IdnTest extends UITest {
     }
 
     @Test
-    public void hindiUrl() {
-        pasteValueInFormAndSubmitIt("http://महरोत्रा.com");
-
-        openSavedUrl();
-
-        assertEquals(Hindi.getTitleText(), Selenide.title());
-    }
-
-    //@Test
     public void taiwaneseUrl() {
         pasteValueInFormAndSubmitIt("http://中文.tw/");
 
         openSavedUrl();
 
-        SelenideElement navTable = Taiwan.NAV_TABLE;
+        SelenideElement navTable = ZhongwenTw.NAV_TABLE;
         assertNotNull(navTable);
         navTable.should(exist);
     }
 
-    //@Test
+    @Test
     public void norseUrl() {
         pasteValueInFormAndSubmitIt("http://www.nårsk.no/");
 
         openSavedUrl();
 
-        SelenideElement title = Norsk.TITLE;
-        assertNotNull(title);
-        title.should(exist);
-        title.should(have(text(Norsk.TITLE_TEXT)));
+        assertEquals(NorskNo.getTitleText(), Selenide.title());
     }
 
-    //@Test
+    @Test
     public void polishUrl() {
         pasteValueInFormAndSubmitIt("http://żółć.pl");
 
         openSavedUrl();
 
-        SelenideElement title = Zolc.TITLE;
-        assertNotNull(title);
-        title.should(exist);
-        title.should(have(text(Zolc.TITLE_TEXT)));
+        assertEquals(ZolcPl.getTitleText(), Selenide.title());
     }
 
-    //@Test
+    @Test
     public void germanUrl() {
         pasteValueInFormAndSubmitIt("http://www.travemünde.de/");
 
         openSavedUrl();
 
-        SelenideElement title = Travemunde.TITLE;
-        assertNotNull(title);
-        title.should(exist);
-        title.should(have(text(Travemunde.TITLE_TEXT)));
+        assertEquals(TravemundeDe.getTitleText(), Selenide.title());
     }
 
-    //@Test
+    @Test
     public void estonianUrl() {
         pasteValueInFormAndSubmitIt("https://sõnaveeb.ee");
 
         openSavedUrl();
 
-        SelenideElement title = Sonaveeb.TITLE;
-        assertNotNull(title);
-        title.should(exist);
-        title.should(have(text(Sonaveeb.TITLE_TEXT)));
-
+        assertEquals(SonaveebEe.getTitleText(), Selenide.title());
     }
 
-    //@Test
+    @Test
     public void multiLanguageUrl() {
         pasteValueInFormAndSubmitIt("http://€.linux.it");
 
         openSavedUrl();
 
         //verify that opens Euro Linux Page
-        SelenideElement h1 = EuroLinux.H1;
+        SelenideElement h1 = EuroLinuxIt.H1;
         assertNotNull(h1);
         h1.should(exist);
-        h1.should(have(text(EuroLinux.H1_TEXT)));
+        h1.should(have(text(EuroLinuxIt.H1_TEXT)));
     }
 
     private void openSavedUrl() {
