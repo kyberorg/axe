@@ -61,7 +61,11 @@ public class StoreRestController {
         String linkToStore = storeInput.getLink();
         if (StringUtils.isNotBlank(linkToStore)) {
             //normalize URL if needed
-            storeInput.withLink(appUtils.makeFullUri(linkToStore).toString());
+            try {
+                storeInput.withLink(appUtils.makeFullUri(linkToStore).toString());
+            } catch (RuntimeException e) {
+                //Malformed URL: will be handled by validators later on
+            }
         }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
