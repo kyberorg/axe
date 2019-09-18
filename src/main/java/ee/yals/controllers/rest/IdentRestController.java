@@ -7,9 +7,9 @@ import ee.yals.json.LinkResponseJson;
 import ee.yals.json.internal.Json;
 import ee.yals.result.GetResult;
 import ee.yals.services.LinkService;
+import ee.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +28,13 @@ import javax.servlet.http.HttpServletResponse;
 public class IdentRestController {
     private static final String TAG = "[API Get]";
 
-    @Autowired
-    @Qualifier("dbStorage")
-    private LinkService linkService;
+    private final LinkService linkService;
+    private final AppUtils appUtils;
+
+    public IdentRestController(@Qualifier("dbStorage") LinkService linkService, AppUtils appUtils) {
+        this.linkService = linkService;
+        this.appUtils = appUtils;
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = {
             Endpoint.LINK_API,
@@ -70,6 +74,12 @@ public class IdentRestController {
             response.setStatus(200);
             String link = ((GetResult.Success) result).getLink();
             log.info(String.format("%s Hit. {\"Ident\": %s, \"Link found\": %s}", TAG, ident, link));
+            if (!appUtils.isAscii(link)) {
+                // Handle international domains by detecting non-ascii and converting them to punycode
+                String punycodedUrl = appUtils.covertUnicodeToAscii(link);
+                log.info("{} encoding URL using punycode. Link: {} transformed to {}", TAG, link, punycodedUrl);
+                link = punycodedUrl;
+            }
             return LinkResponseJson.create().withLink(link);
         } else {
             log.error(String.format("%s unknown failure", TAG));

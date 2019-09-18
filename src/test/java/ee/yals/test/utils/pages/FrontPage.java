@@ -1,4 +1,4 @@
-package ee.yals.test.utils.selectors;
+package ee.yals.test.utils.pages;
 
 import com.codeborne.selenide.SelenideElement;
 
@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 2.2
  */
-public class FrontSelectors {
+public class FrontPage {
     public static class ErrorRow {
         public static final SelenideElement ERROR_MODAL = $("#errorModal");
         public static final SelenideElement ERROR_TEXT = $("#errorText");

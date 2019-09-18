@@ -3,7 +3,9 @@ package ee.yals.test.selenide.front;
 
 import com.codeborne.selenide.SelenideElement;
 import ee.yals.test.selenide.UITest;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -11,10 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.*;
-import static ee.yals.test.utils.selectors.FrontSelectors.OverallRow.*;
-import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.RESULT_DIV;
+import static ee.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_MODAL;
+import static ee.yals.test.utils.pages.FrontPage.MainRow.*;
+import static ee.yals.test.utils.pages.FrontPage.OverallRow.*;
+import static ee.yals.test.utils.pages.FrontPage.ResultRow.RESULT_DIV;
 import static org.junit.Assert.fail;
 
 /**

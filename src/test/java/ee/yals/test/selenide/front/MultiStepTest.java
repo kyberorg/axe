@@ -2,7 +2,10 @@ package ee.yals.test.selenide.front;
 
 import ee.yals.test.selenide.UITest;
 import ee.yals.test.utils.Selenide;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Keys;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,11 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_CLOSE;
-import static ee.yals.test.utils.selectors.FrontSelectors.ErrorRow.ERROR_MODAL;
-import static ee.yals.test.utils.selectors.FrontSelectors.MainRow.LONG_URL_INPUT;
-import static ee.yals.test.utils.selectors.FrontSelectors.OverallRow.OVERALL_LINKS_NUMBER;
-import static ee.yals.test.utils.selectors.FrontSelectors.ResultRow.*;
+import static ee.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_CLOSE;
+import static ee.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_MODAL;
+import static ee.yals.test.utils.pages.FrontPage.MainRow.LONG_URL_INPUT;
+import static ee.yals.test.utils.pages.FrontPage.OverallRow.OVERALL_LINKS_NUMBER;
+import static ee.yals.test.utils.pages.FrontPage.ResultRow.*;
 
 /**
  * Contains multi step tests for Front page
