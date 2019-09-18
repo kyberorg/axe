@@ -140,4 +140,17 @@ public class StoreControllerTest {
         assertNotNull(replyJson.getIdent());
     }
 
+    @Test
+    public void onRequestWithLinkWithoutProtocolStatusIs201() throws Exception {
+        String linkWithoutProtocol = "github.com/yadevee/yals/issues/50";
+        String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
+
+        assertNotNull(this.mockMvc);
+        MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
+                .andExpect(status().is(201))
+                .andReturn();
+
+        assertResultIsJson(result);
+    }
+
 }

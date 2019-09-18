@@ -59,6 +59,13 @@ public class CorrectInputTest extends UITest {
         checkExpectedBehavior();
     }
 
+    @Test
+    public void linkWithoutProtocol() {
+        String link = "www.kv.ee/2992207";
+        pasteValueInFormAndSubmitIt(link);
+        checkExpectedBehavior();
+    }
+
     private void checkExpectedBehavior() {
         RESULT_DIV.shouldBe(visible);
         RESULT_LINK.shouldBe(visible);
