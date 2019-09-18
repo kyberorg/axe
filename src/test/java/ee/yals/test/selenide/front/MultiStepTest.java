@@ -59,7 +59,7 @@ public class MultiStepTest extends UITest {
         RESULT_DIV.shouldBe(visible);
         LONG_URL_INPUT.shouldBe(empty);
 
-        pasteValueInFormAndSubmitIt("ggg");
+        pasteValueInFormAndSubmitIt("g&%g");
         RESULT_DIV.shouldNotBe(visible);
         RESULT_LINK.shouldBe(empty);
 

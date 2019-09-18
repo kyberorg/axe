@@ -62,7 +62,7 @@ public class IncorrectInputTest extends UITest {
 
     @Test
     public void shortVariantOfNotUrlInput() {
-        pasteValueInFormAndSubmitIt("ggg");
+        pasteValueInFormAndSubmitIt("g&%g");
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
@@ -71,7 +71,7 @@ public class IncorrectInputTest extends UITest {
 
     @Test
     public void longVariantOfNotUrlInput() {
-        pasteValueInFormAndSubmitIt("veryLongStringWhichIsNotURL");
+        pasteValueInFormAndSubmitIt("veryLongStringWhichIsNotURL%&");
 
         formIsClearedAndResultNotVisible();
         errorBoxShouldAppear();
@@ -88,7 +88,7 @@ public class IncorrectInputTest extends UITest {
     }
 
     @Test
-    public void urlWithSpecialCharsShallNotPass(){
+    public void urlWithSpecialCharsShallNotPass() {
         pasteValueInFormAndSubmitIt("http://f%&k.com");
 
         formIsClearedAndResultNotVisible();

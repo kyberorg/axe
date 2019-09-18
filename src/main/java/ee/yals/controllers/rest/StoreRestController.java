@@ -12,7 +12,7 @@ import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.UrlExtraValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,9 +36,13 @@ import java.util.Set;
 public class StoreRestController {
     private static final String TAG = "[API Store]";
 
-    @Autowired
-    @Qualifier("dbStorage")
-    private LinkService linkService;
+    private final LinkService linkService;
+    private final AppUtils appUtils;
+
+    public StoreRestController(@Qualifier("dbStorage") LinkService linkService, AppUtils appUtils) {
+        this.linkService = linkService;
+        this.appUtils = appUtils;
+    }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.STORE_API)
@@ -52,6 +56,16 @@ public class StoreRestController {
             response.setStatus(421);
             log.info(String.format("%s unparseable JSON", TAG));
             return ErrorJson.createWithMessage("Unable to parse json");
+        }
+
+        String linkToStore = storeInput.getLink();
+        if (StringUtils.isNotBlank(linkToStore)) {
+            //normalize URL if needed
+            try {
+                storeInput.withLink(appUtils.makeFullUri(linkToStore).toString());
+            } catch (RuntimeException e) {
+                //Malformed URL: will be handled by validators later on
+            }
         }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();

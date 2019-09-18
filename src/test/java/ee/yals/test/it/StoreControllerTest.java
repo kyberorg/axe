@@ -93,7 +93,7 @@ public class StoreControllerTest {
 
     @Test
     public void onRequestWithNotALinkStatusIs421() throws Exception {
-        String longLink = "notALink";
+        String longLink = "not a Link";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         assertNotNull(this.mockMvc);
@@ -138,6 +138,19 @@ public class StoreControllerTest {
 
         assertNotNull(replyJson);
         assertNotNull(replyJson.getIdent());
+    }
+
+    @Test
+    public void onRequestWithLinkWithoutProtocolStatusIs201() throws Exception {
+        String linkWithoutProtocol = "github.com/yadevee/yals/issues/50";
+        String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
+
+        assertNotNull(this.mockMvc);
+        MvcResult result = mockMvc.perform(post(Endpoint.STORE_API).content(correctJson))
+                .andExpect(status().is(201))
+                .andReturn();
+
+        assertResultIsJson(result);
     }
 
 }
