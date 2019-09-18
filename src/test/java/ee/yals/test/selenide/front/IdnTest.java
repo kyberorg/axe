@@ -59,7 +59,7 @@ public class IdnTest extends UITest {
 
     @Test
     public void finnishUrl() {
-        pasteValueInFormAndSubmitIt("https://säa.fi");
+        pasteValueInFormAndSubmitIt("https://sää.fi");
 
         openSavedUrl();
 
@@ -72,7 +72,7 @@ public class IdnTest extends UITest {
         assertEquals(Foreca.LOGO_TITLE, titleAttributeOfLogoLink);
     }
 
-    //@Test
+    @Test
     public void arabicUrl() {
         pasteValueInFormAndSubmitIt("http://موقع.وزارة-الاتصالات.مصر/");
 
