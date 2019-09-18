@@ -57,6 +57,28 @@ public class AppUtils {
     }
 
     /**
+     * Makes fully qualified URI resource from string with url.
+     *
+     * @param url string with valid URL
+     * @return URI from same URL if URL already has schema or URI from default http schema and requested URL
+     * @throws RuntimeException if string has not valid URL or not URL
+     */
+    public URI makeFullUri(String url) {
+        try {
+            URI uri = new URI(url);
+
+            if (uri.getScheme() == null) {
+                uri = new URI("http://" + url);
+            }
+            return uri;
+        } catch (URISyntaxException e) {
+            String message = String.format("String '%s': malformed URL or not URL at all", url);
+            log.warn(message);
+            throw new RuntimeException(message, e);
+        }
+    }
+
+    /**
      * Code taken from {@link https://nealvs.wordpress.com/2016/01/18/how-to-convert-unicode-url-to-ascii-in-java/}
      *
      * @param url string with valid URL to convert
@@ -72,13 +94,7 @@ public class AppUtils {
 
             URI uri;
             try {
-                uri = new URI(url);
-
-                boolean includeScheme = true;
-                if (uri.getScheme() == null) {
-                    uri = new URI("http://" + url);
-                    includeScheme = false;
-                }
+                uri = makeFullUri(url);
 
                 String scheme = uri.getScheme() != null ? uri.getScheme() + "://" : null;
                 String authority = uri.getRawAuthority() != null ? uri.getRawAuthority() : ""; // includes domain and port
@@ -86,7 +102,7 @@ public class AppUtils {
                 String queryString = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
 
                 // Must convert domain to punycode separately from the path
-                url = (includeScheme ? scheme : "") + IDN.toASCII(authority) + path + queryString;
+                url = scheme + IDN.toASCII(authority) + path + queryString;
                 // Convert path from unicode to ascii encoding
                 url = new URI(url).toASCIIString();
             } catch (URISyntaxException e) {

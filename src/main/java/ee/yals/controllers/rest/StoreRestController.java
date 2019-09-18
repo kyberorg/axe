@@ -12,7 +12,6 @@ import ee.yals.services.LinkService;
 import ee.yals.utils.AppUtils;
 import ee.yals.utils.UrlExtraValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,9 +35,13 @@ import java.util.Set;
 public class StoreRestController {
     private static final String TAG = "[API Store]";
 
-    @Autowired
-    @Qualifier("dbStorage")
-    private LinkService linkService;
+    private final LinkService linkService;
+    private final AppUtils appUtils;
+
+    public StoreRestController(@Qualifier("dbStorage") LinkService linkService, AppUtils appUtils) {
+        this.linkService = linkService;
+        this.appUtils = appUtils;
+    }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.STORE_API)
@@ -53,6 +56,9 @@ public class StoreRestController {
             log.info(String.format("%s unparseable JSON", TAG));
             return ErrorJson.createWithMessage("Unable to parse json");
         }
+
+        //normalize URL if needed
+        storeInput.withLink(appUtils.makeFullUri(storeInput.getLink()).toString());
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
