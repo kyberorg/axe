@@ -1,6 +1,7 @@
 package ee.yals.utils.git;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -9,18 +10,14 @@ import java.util.Properties;
  * Object with properties about the git repository state at build time.
  * This information is supplied by my plugin - <b>pl.project13.maven.git-commit-id-plugin</b>
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 2.0
  */
 @Slf4j
+@Component
 class GitRepoState {
-    private static GitRepoState SELF = null;
     private static final String GIT_PROPERTIES_FILE = "git.properties";
 
     private final Properties gitProperties = new Properties();
-
-    private GitRepoState() {
-    }
 
     String tags;                    // =${git.tags} // comma separated tag names
     String branch;                  // =${git.branch}
@@ -43,40 +40,28 @@ class GitRepoState {
     String buildHost;               // =${git.build.host}
     String buildVersion;             // =${git.build.version}
 
-    static synchronized GitRepoState getInstance() {
-        if (SELF == null) {
-            SELF = new GitRepoState();
-        } else if (SELF.correctlyInitialized()) {
-            //avoiding reading properties files once again
-            return SELF;
-        } else {
-            SELF.init();
-        }
-
-        return SELF;
+    public GitRepoState() {
+        init();
     }
 
-    boolean correctlyInitialized() {
-        boolean isCorrectlyInitialized = !gitProperties.isEmpty();
-        log.debug("{} is correctly initialized: {}", GitRepoState.class.getSimpleName(), isCorrectlyInitialized);
-        return isCorrectlyInitialized;
+    public boolean hasValues() {
+        return !gitProperties.isEmpty();
     }
 
     private void init() {
         try {
-            SELF.gitProperties.load(SELF.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
+            this.gitProperties.load(this.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
             log.trace("{}: parsed info from file: {}", GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);
-            SELF.publishFromProperties();
+            this.publishFromProperties();
         } catch (IOException ioe) {
             log.error("Failed to init " + GitRepoState.class.getSimpleName(), ioe);
-            SELF.gitProperties.clear();
+            this.gitProperties.clear();
         } catch (NullPointerException npe) {
             log.error(String.format("'%s': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
                     GIT_PROPERTIES_FILE));
-            SELF.gitProperties.clear();
+            this.gitProperties.clear();
         }
     }
-
 
     private void publishFromProperties() {
         this.tags = String.valueOf(gitProperties.get("git.tags"));

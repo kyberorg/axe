@@ -1,34 +1,29 @@
 package ee.yals.utils.git;
 
+import ee.yals.constants.App;
 import org.springframework.stereotype.Component;
 
 /**
  * Do nothing git info aka fallback, when other methods failed to apply.
- * Always responds with {@link GitInfo#NOTHING_FOUND_MARKER}
+ * Always responds with {@link ee.yals.constants.App#NO_VALUE}
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 2.0
  */
 @Component
-public class NoGitInfo extends GitInfo {
-    /**
-     * No reason for instance. Use {@link GitInfo#getInstance()} instead
-     */
-    NoGitInfo() {
-    }
+public class NoGitInfo implements GitInfo {
 
     @Override
-    boolean isApplicable() {
+    public boolean isApplicable() {
         return true;
     }
 
     @Override
     public String getLatestCommitHash() {
-        return GitInfo.NOTHING_FOUND_MARKER;
+        return App.NO_VALUE;
     }
 
     @Override
     public String getLatestTag() {
-        return GitInfo.NOTHING_FOUND_MARKER;
+        return App.NO_VALUE;
     }
 }

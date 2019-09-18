@@ -1,7 +1,8 @@
 package ee.yals.controllers;
 
+import ee.yals.constants.App;
+import ee.yals.services.GitService;
 import ee.yals.services.overall.OverallService;
-import ee.yals.utils.git.GitInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,12 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class Front {
     private static final String TAG = "[Front Page]";
 
-    private final GitInfo gitInfo = GitInfo.getInstance();
-
     private final OverallService overallService;
+    private final GitService gitService;
 
-    public Front(@Qualifier("dbOverallService") OverallService overallService) {
+    public Front(@Qualifier("dbOverallService") OverallService overallService, GitService gitService) {
         this.overallService = overallService;
+        this.gitService = gitService;
     }
 
     /**
@@ -37,21 +38,21 @@ public class Front {
      */
     @RequestMapping("/")
     public String index(@ModelAttribute("params") ModelMap params) {
-        String latestCommit = gitInfo.getLatestCommitHash().trim();
-        String latestTag = gitInfo.getLatestTag().trim();
+        String latestCommit = gitService.getGitInfoSource().getLatestCommitHash().trim();
+        String latestTag = gitService.getGitInfoSource().getLatestTag().trim();
 
-        boolean commitPresent = (!latestCommit.equals(GitInfo.NOTHING_FOUND_MARKER) && StringUtils.isNotBlank(latestCommit));
-        boolean tagPresent = (!latestTag.equals(GitInfo.NOTHING_FOUND_MARKER) && StringUtils.isNotBlank(latestTag));
+        boolean commitPresent = (!latestCommit.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestCommit));
+        boolean tagPresent = (!latestTag.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestTag));
 
         boolean displayCommitInfo = commitPresent && tagPresent;
-        log.debug("{} will I display footer: {}. Commit present: {}. Tag present: {} ",
+        log.trace("{} will I display footer: {}. Commit present: {}. Tag present: {} ",
                 TAG, displayCommitInfo, commitPresent, tagPresent);
 
         params.addAttribute("displayCommitInfo", displayCommitInfo);
         params.addAttribute("commitHash", latestCommit);
         params.addAttribute("commit", latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
         params.addAttribute("commitTag", latestTag);
-        params.addAttribute("repository", GitInfo.REPOSITORY);
+        params.addAttribute("repository", App.Git.REPOSITORY);
 
         params.addAttribute("overallLinks", overallService.numberOfStoredLinks());
 

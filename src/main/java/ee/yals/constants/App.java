@@ -36,4 +36,7 @@ public class App {
         public static final String SERVER_URL = "SERVER_URL";
     }
 
+    public static class Git {
+        public static final String REPOSITORY = "https://github.com/yadevee/yals/commit";
+    }
 }
