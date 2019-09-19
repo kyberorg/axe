@@ -41,5 +41,5 @@ public class Endpoint {
 
     @RequestMethod(HttpMethod.GET)
     public static final String ERROR_PAGE = "/error";
-    public static final String NOT_FOUND = "/404";
+    public static final String NOT_FOUND = "/errors/404";
 }
