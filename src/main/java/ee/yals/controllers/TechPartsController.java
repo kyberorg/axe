@@ -34,7 +34,7 @@ public class TechPartsController extends YalsController {
         return render500();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND, produces = "text/html")
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE, produces = "text/html")
     public String notFound(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
