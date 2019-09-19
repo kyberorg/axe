@@ -117,6 +117,12 @@ public class AppUtils {
         return url;
     }
 
+    /**
+     * Decodes URL from wiki/%D0%9E%D1%80%D0%B5%D1%81%D1%82 to wiki/Орест
+     *
+     * @param encodedUrl string with URL where encoded chars are present or not
+     * @return string with decoded URL or same string if URL has no chars to encode
+     */
     public String decodeUrl(String encodedUrl) {
         try {
             return URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString());
