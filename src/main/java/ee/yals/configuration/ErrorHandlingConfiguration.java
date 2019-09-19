@@ -12,8 +12,7 @@ public class ErrorHandlingConfiguration implements WebServerFactoryCustomizer<Co
     @Override
     public void customize(ConfigurableServletWebServerFactory factory) {
         factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/errors/404"));
-        factory.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/errors/500"));
-        factory.addErrorPages(new ErrorPage(HttpStatus.NOT_IMPLEMENTED, "/errors/501"));
+        factory.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error"));
         factory.addErrorPages(new ErrorPage("/error"));
     }
 }

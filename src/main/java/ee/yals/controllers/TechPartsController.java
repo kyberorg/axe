@@ -1,6 +1,7 @@
 package ee.yals.controllers;
 
 import ee.yals.Endpoint;
+import ee.yals.controllers.internal.YalsController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @since 2.0
  */
 @Controller
-public class TechPartsController {
+public class TechPartsController extends YalsController {
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.ROBOTS_TXT, produces = "text/plain")
     public String robots() {
@@ -24,8 +25,13 @@ public class TechPartsController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE, produces = "text/html")
-    public String error() {
-        return "errors/500";
+    public void error() {
+        render500();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND, produces = "text/html")
+    public void notFound() {
+        render404();
     }
 
 }
