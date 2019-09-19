@@ -63,7 +63,9 @@ public class StoreRestController {
             //normalize URL if needed
             try {
                 String cleanLink = appUtils.makeFullUri(linkToStore).toString();
+                log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, cleanLink);
                 String link = appUtils.decodeUrl(cleanLink);
+                log.trace("{} Link {} became {} after decoding", TAG, cleanLink, link);
                 storeInput.withLink(link);
             } catch (RuntimeException e) {
                 //Malformed URL: will be handled by validators later on
