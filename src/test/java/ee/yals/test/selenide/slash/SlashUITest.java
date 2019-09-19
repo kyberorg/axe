@@ -80,6 +80,13 @@ public class SlashUITest extends UITest {
         Page404.H1.shouldHave(text("404"));
     }
 
+    @Test
+    public void openSomethingNonExistingDeeperThanSingleLevel() {
+        open("/void/something/here");
+        Page404.H1.shouldBe(exist);
+        Page404.H1.shouldHave(text("404"));
+    }
+
     private void verifyThatVROpened() {
         SelenideElement vrLogo = VR.LOGO.find("img");
         vrLogo.shouldBe(exist);
