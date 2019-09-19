@@ -9,9 +9,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
 import java.net.IDN;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * App-wide tools
@@ -114,5 +117,13 @@ public class AppUtils {
         return url;
     }
 
+    public String decodeUrl(String encodedUrl) {
+        try {
+            return URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            log.error("Failed to decode URL", e);
+            throw new RuntimeException(e.getCause());
+        }
+    }
 
 }
