@@ -64,9 +64,7 @@ public class StoreRestController {
             try {
                 String cleanLink = appUtils.makeFullUri(linkToStore).toString();
                 log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, cleanLink);
-                String link = appUtils.decodeUrl(cleanLink);
-                log.trace("{} Link {} became {} after decoding", TAG, cleanLink, link);
-                storeInput.withLink(link);
+                storeInput.withLink(cleanLink);
             } catch (RuntimeException e) {
                 //Malformed URL: will be handled by validators later on
             }
@@ -105,6 +103,19 @@ public class StoreRestController {
             do {
                 ident = IdentGenerator.generateNewIdent();
             } while (isIdentAlreadyExists(ident));
+        }
+
+        //decoding URL before saving to DB
+        try {
+            String link = storeInput.getLink();
+            String decodedLink = appUtils.decodeUrl(link);
+            log.trace("{} Link {} became {} after decoding", TAG, link, decodedLink);
+            storeInput.withLink(decodedLink);
+        } catch (RuntimeException e) {
+            String message = "Problem with URL decoding";
+            log.error(message, e);
+            response.setStatus(500);
+            return ErrorJson.createWithMessage(message);
         }
 
         StoreResult result = linkService.storeNew(ident, storeInput.getLink());
