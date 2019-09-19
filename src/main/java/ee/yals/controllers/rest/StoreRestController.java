@@ -62,9 +62,9 @@ public class StoreRestController {
         if (StringUtils.isNotBlank(linkToStore)) {
             //normalize URL if needed
             try {
-                String cleanLink = appUtils.makeFullUri(linkToStore).toString();
-                log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, cleanLink);
-                storeInput.withLink(cleanLink);
+                String fullUrl = appUtils.makeFullUri(linkToStore).toString();
+                log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
+                storeInput.withLink(fullUrl);
             } catch (RuntimeException e) {
                 //Malformed URL: will be handled by validators later on
             }
@@ -107,9 +107,9 @@ public class StoreRestController {
 
         //decoding URL before saving to DB
         try {
-            String link = storeInput.getLink();
-            String decodedLink = appUtils.decodeUrl(link);
-            log.trace("{} Link {} became {} after decoding", TAG, link, decodedLink);
+            String currentLink = storeInput.getLink();
+            String decodedLink = appUtils.decodeUrl(currentLink);
+            log.trace("{} Link {} became {} after decoding", TAG, currentLink, decodedLink);
             storeInput.withLink(decodedLink);
         } catch (RuntimeException e) {
             String message = "Problem with URL decoding";
