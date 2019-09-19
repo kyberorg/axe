@@ -15,7 +15,7 @@
     </div>
     <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
         <h1>404 - No Such Page Exception</h1>
-        <p class="lead">We don't have such page at you site. Really. <br>
+        <p class="lead">We don't have such page at our site. Really. <br>
             Make sure you copypasted it fully and without extra characters</p>
         <img src="/s/images/404.jpg" alt="No such page really...">
     </div>
