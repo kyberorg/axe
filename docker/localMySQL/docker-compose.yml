@@ -9,7 +9,7 @@ services:
     image: mariadb:10.4
     volumes:
       # Adjust me (/tmp/yalsdb - is folder on host)
-      - /tmp/yalsdb:/var/lib/mysql
+      - yalsdb:/var/lib/mysql
       - ./my.cnf:/etc/alternatives/my.cnf
     restart: always
     ports:

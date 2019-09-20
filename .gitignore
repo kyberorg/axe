@@ -46,3 +46,4 @@ server.pid
 /dist/
 .cache
 .mvn
+docker/localMySQL/yalsdb
