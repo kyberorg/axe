@@ -53,6 +53,7 @@ public class Front {
         params.addAttribute("commit", latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
         params.addAttribute("commitTag", latestTag);
         params.addAttribute("repository", App.Git.REPOSITORY);
+
         log.debug("{} Yals saved {} links", TAG, overallService.numberOfStoredLinks());
         params.addAttribute("overallLinks", overallService.numberOfStoredLinks());
 
