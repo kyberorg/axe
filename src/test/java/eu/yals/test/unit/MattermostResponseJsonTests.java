@@ -17,7 +17,7 @@ public class MattermostResponseJsonTests {
 
     @Test
     public void validJsonContainsIconTextAndUsername() {
-        MattermostResponseJson mmJson = MattermostResponseJson.createWithText("https://yals.ee");
+        MattermostResponseJson mmJson = MattermostResponseJson.createWithText("https://yals.eu");
         assertTrue("Icon is absent", StringUtils.isNotBlank(mmJson.getIconUrl()));
         assertTrue("Icon is not URL", GenericValidator.isUrl(mmJson.getIconUrl()));
 
@@ -28,7 +28,7 @@ public class MattermostResponseJsonTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void cannotReplaceIconWithStringWhichIsNotUrl() {
-        MattermostResponseJson.createWithText("https://yals.ee")
+        MattermostResponseJson.createWithText("https://yals.eu")
                 .replaceIconWith("Not an URL");
     }
 
@@ -39,13 +39,13 @@ public class MattermostResponseJsonTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void cannotAddGoToLocationWhenItIsNotUrl() {
-        MattermostResponseJson.createWithText("https://yals.ee")
+        MattermostResponseJson.createWithText("https://yals.eu")
                 .addGotoLocation("Not an URL");
     }
 
     @Test
     public void assertUserContainsYals() {
-        MattermostResponseJson mmJson = MattermostResponseJson.createWithText("https://yals.ee");
+        MattermostResponseJson mmJson = MattermostResponseJson.createWithText("https://yals.eu");
         assertNotNull("Username is absent", mmJson.getUsername());
         assertTrue("Username do not contain word 'Yals'", mmJson.getUsername().contains("Yals"));
     }

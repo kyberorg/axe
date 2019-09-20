@@ -205,7 +205,7 @@ public class Mattermost {
 
         public static final String AT = "@";
         public static final String NO_VALUE = "_";
-        public static final String BOT_ICON = "https://yals.ee/favicon.ico";
+        public static final String BOT_ICON = "https://yals.eu/favicon.ico";
         public static final String BOT_NAME = "YalsBot";
         public static final String SUPPORT_URL = "https://github.com/yadevee/yals/issues";
     }

@@ -61,7 +61,7 @@ public class MattermostRestControllerTest {
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
-                .withText("https%3A%2F%2Fyals.ee")
+                .withText("https%3A%2F%2Fyals.eu")
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
@@ -84,7 +84,7 @@ public class MattermostRestControllerTest {
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
-                .withText("https%3A%2F%2Fyals.ee+") //Space encodes as +
+                .withText("https%3A%2F%2Fyals.eu+") //Space encodes as +
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
@@ -110,7 +110,7 @@ public class MattermostRestControllerTest {
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
-                .withText("https%3A%2F%2Fyals.ee")
+                .withText("https%3A%2F%2Fyals.eu")
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername(uzer);
 
@@ -256,7 +256,7 @@ public class MattermostRestControllerTest {
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
-                .withText("https%3A%2F%2Fyals.ee+" + description)
+                .withText("https%3A%2F%2Fyals.eu+" + description)
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
@@ -282,7 +282,7 @@ public class MattermostRestControllerTest {
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
-                .withText("https%3A%2F%2Fyals.ee+" + encodedDescription)
+                .withText("https%3A%2F%2Fyals.eu+" + encodedDescription)
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 

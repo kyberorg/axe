@@ -33,8 +33,8 @@ public class AppUtilsTest {
 
     @Test
     public void decodeFullyLatinUrl() {
-        String url = "https://yals.ee";
-        String expectedResult = "https://yals.ee";
+        String url = "https://yals.eu";
+        String expectedResult = "https://yals.eu";
 
         assertEquals(expectedResult, appUtils.decodeUrl(url));
     }

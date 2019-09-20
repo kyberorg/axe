@@ -19,7 +19,7 @@ public class MattermostTests {
 
     @Test
     public void shouldBeValidObjectFromValidRequest() {
-        String host = "yals.ee";
+        String host = "yals.eu";
         String text = "https%3A%2F%2F" + host;
 
         String channelId = RandomStringUtils.randomAlphanumeric(6);
@@ -93,7 +93,7 @@ public class MattermostTests {
 
     @Test
     public void shouldBeValidObjectWithMissingFieldsWhenAreNotPresentIsBody() {
-        String host = "yals.ee";
+        String host = "yals.eu";
         String text = "https%3A%2F%2F" + host;
 
         String token = RandomStringUtils.randomAlphanumeric(15);
@@ -137,7 +137,7 @@ public class MattermostTests {
 
     @Test
     public void urlInTextShouldBeDecodedIfValidUrl() {
-        String text = "https%3A%2F%2Fyals.ee";
+        String text = "https%3A%2F%2Fyals.eu";
         String token = RandomStringUtils.randomAlphanumeric(15);
         String userId = RandomStringUtils.randomAlphanumeric(6);
         String uzer = "uzer";
