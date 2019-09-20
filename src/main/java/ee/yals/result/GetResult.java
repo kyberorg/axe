@@ -56,7 +56,7 @@ public interface GetResult {
         private Throwable exception;
 
         public DatabaseDown() {
-            this.errorMessage = "Database id DOWN";
+            this.errorMessage = "Database is DOWN";
         }
 
         public DatabaseDown withException(Throwable e) {
