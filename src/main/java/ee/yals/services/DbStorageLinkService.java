@@ -7,6 +7,7 @@ import ee.yals.result.StoreResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -26,7 +27,17 @@ public class DbStorageLinkService implements LinkService {
 
     @Override
     public GetResult getLink(String ident) {
-        Optional<Link> result = repo.findSingleByIdent(ident);
+        Optional<Link> result;
+        try {
+            result = repo.findSingleByIdent(ident);
+        } catch (Exception e) {
+            if (e instanceof DataAccessResourceFailureException) {
+                return new GetResult.DatabaseDown().withException(e);
+            } else {
+                return new GetResult.Fail().withException(e);
+            }
+        }
+
         return result.<GetResult>map(link -> new GetResult.Success(link.getLink()))
                 .orElseGet(GetResult.NotFound::new);
     }
@@ -38,8 +49,12 @@ public class DbStorageLinkService implements LinkService {
             repo.save(linkObject);
             return new StoreResult.Success();
         } catch (Exception e) {
-            log.error("Exception on storing new " + Link.class.getSimpleName(), e);
-            return new StoreResult.Fail("Failed to add new record");
+            if (e instanceof DataAccessResourceFailureException) {
+                return new StoreResult.DatabaseDown().withException(e);
+            } else {
+                log.error("Exception on storing new " + Link.class.getSimpleName(), e);
+                return new StoreResult.Fail("Failed to add new record");
+            }
         }
 
     }

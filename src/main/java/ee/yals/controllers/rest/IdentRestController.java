@@ -81,6 +81,10 @@ public class IdentRestController {
                 link = punycodedUrl;
             }
             return LinkResponseJson.create().withLink(link);
+        } else if (result instanceof GetResult.DatabaseDown) {
+            response.setStatus(503);
+            log.error("{} Database is DOWN", TAG, ((GetResult.DatabaseDown) result).getException());
+            return ErrorJson.createWithMessage("The server is currently unable to handle the request");
         } else {
             log.error(String.format("%s unknown failure", TAG));
             log.debug(String.format("%s got unknown result object: %s", TAG, result));
