@@ -46,9 +46,13 @@ public class TelegramServiceImpl implements TelegramService {
     @Override
     public Link storeLink(String longUrl) {
         String ident;
-        do {
-            ident = IdentGenerator.generateNewIdent();
-        } while (linkRepo.findSingleByIdent(ident).isPresent());
+        try {
+            do {
+                ident = IdentGenerator.generateNewIdent();
+            } while (linkRepo.findSingleByIdent(ident).isPresent());
+        } catch (Exception e) {
+            return null;
+        }
 
         Link link = Link.create(ident, longUrl);
         Link savedLink;

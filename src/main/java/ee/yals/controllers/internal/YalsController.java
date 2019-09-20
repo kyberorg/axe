@@ -32,6 +32,11 @@ public class YalsController {
         return "errors/500";
     }
 
+    protected String render503() {
+        response.setStatus(503);
+        return "errors/503";
+    }
+
     protected String redirect(String url) {
         response.setStatus(302);
         response.setHeader(Header.LOCATION, url);

@@ -127,6 +127,10 @@ public class StoreRestController {
             log.error(String.format("%s Failed to save link: %s", TAG, storeInput.getLink()));
             response.setStatus(500);
             return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+        } else if (result instanceof StoreResult.DatabaseDown) {
+            response.setStatus(503);
+            log.error("{} Database is DOWN", TAG, ((StoreResult.DatabaseDown) result).getException());
+            return ErrorJson.createWithMessage("The server is currently unable to handle the request ");
         } else {
             log.error(String.format("%s Failed to save link: got unknown result object: %s", TAG, result));
             response.setStatus(500);

@@ -56,8 +56,12 @@ public class SlashController extends YalsController {
             GetResult getResult = service.getLink(ident);
             if (getResult instanceof GetResult.Success) {
                 return redirect(((GetResult.Success) getResult).getLink());
-            } else {
+            } else if (getResult instanceof GetResult.NotFound) {
                 return render404Ident();
+            } else if (getResult instanceof GetResult.DatabaseDown) {
+                return render503();
+            } else {
+                return render500();
             }
         }
 
@@ -94,6 +98,9 @@ public class SlashController extends YalsController {
             case 500:
                 log.info(TAG + " Got internal error. Replying with 500");
                 return render500();
+            case 503:
+                log.info("{} Database is DOWN. Replying with 503", TAG);
+                return render503();
             default:
                 log.info(String.format("%s Got unknown status: %d. I don't know how to handle it. " +
                         "Replying with 500", TAG, apiResponse.getStatus()));

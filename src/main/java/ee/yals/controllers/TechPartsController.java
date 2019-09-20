@@ -3,9 +3,11 @@ package ee.yals.controllers;
 import ee.yals.Endpoint;
 import ee.yals.controllers.internal.YalsController;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,6 +33,14 @@ public class TechPartsController extends YalsController {
     public String error(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
+
+        Object exception = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        if (exception instanceof Exception) {
+            Exception cause = (Exception) ((Exception) exception).getCause();
+            if (cause instanceof CannotCreateTransactionException) {
+                return render503();
+            }
+        }
         return render500();
     }
 
