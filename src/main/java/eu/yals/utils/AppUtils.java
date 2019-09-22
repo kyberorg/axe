@@ -132,4 +132,7 @@ public class AppUtils {
         }
     }
 
+    public boolean isTelegramEnabled() {
+        return Boolean.parseBoolean(env.getProperty(App.Properties.TELEGRAM_ENABLED, "false"));
+    }
 }

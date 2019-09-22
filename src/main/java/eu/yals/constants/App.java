@@ -25,6 +25,7 @@ public class App {
     }
 
     public static class Properties {
+        public static final String TELEGRAM_ENABLED = "telegram.enabled";
         public static final String TELEGRAM_TOKEN = "telegram.token";
         public static final String SERVER_URL = "server.url";
         public static final String SERVER_PORT = "server.port";
@@ -32,6 +33,7 @@ public class App {
     }
 
     public static class Env {
+        public static final String TELEGRAM_ENABLED = "TELEGRAM_ENABLED";
         public static final String TELEGRAM_TOKEN = "TELEGRAM_TOKEN";
         public static final String SERVER_URL = "SERVER_URL";
     }

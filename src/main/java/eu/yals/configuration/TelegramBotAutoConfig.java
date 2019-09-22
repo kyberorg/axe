@@ -45,7 +45,11 @@ public class TelegramBotAutoConfig {
 
     @PostConstruct
     public void start() {
-        log.info("");
+        if (!appUtils.isTelegramEnabled()) {
+            log.info("{} Telegram bot is disabled", TAG);
+            return;
+        }
+
         log.info(TAG + "Registering telegram bot");
 
         boolean isBotAvailable = Objects.nonNull(telegramBot) && isServerUrlAvailable();

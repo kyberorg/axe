@@ -5,6 +5,7 @@ import eu.yals.json.ErrorJson;
 import eu.yals.json.TelegramStatusResponseJson;
 import eu.yals.json.internal.Json;
 import eu.yals.telegram.TelegramBot;
+import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,9 +25,11 @@ public class TelegramStatusRestController {
     private static final String OFFLINE = "Offline";
 
     private TelegramBot bot;
+    private AppUtils appUtils;
 
-    public TelegramStatusRestController(TelegramBot bot) {
+    public TelegramStatusRestController(TelegramBot bot, AppUtils appUtils) {
         this.bot = bot;
+        this.appUtils = appUtils;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.TELEGRAM_STATUS_API)
@@ -36,6 +39,11 @@ public class TelegramStatusRestController {
             //most likely you want want see it as application startup will fail
             log.error("Failed to autowire " + TelegramBot.class.getSimpleName());
             return ErrorJson.createWithMessage("Internal error: bot is missing");
+        }
+
+        if (!appUtils.isTelegramEnabled()) {
+            log.info("{} Telegram Bot is disabled", TAG);
+            return TelegramStatusResponseJson.createWithStatus(OFFLINE).withBotName("-");
         }
 
         try {

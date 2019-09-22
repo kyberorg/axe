@@ -88,6 +88,8 @@ EnvVars:
 
 * YALS_DB_PASSWORD or YALS_DB_PASSWORD_FILE: `password for db user`
 
+* TELEGRAM_ENABLED `enables telegram bot init`
+
 * TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
 
 Optional EnvVars: 
