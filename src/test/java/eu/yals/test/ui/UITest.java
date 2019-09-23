@@ -33,11 +33,11 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
  */
 @Slf4j
 public class UITest {
-    private static String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
-    private static long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Selenide.TIMEOUT, Selenide.Defaults.TIMEOUT));
-    private static BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
+    private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+    private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Selenide.TIMEOUT, Selenide.Defaults.TIMEOUT));
+    private static final BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
 
-    private static BrowserWebDriverContainer chrome =
+    private static final BrowserWebDriverContainer chrome =
             new BrowserWebDriverContainer()
                     .withRecordingMode(TESTS_RECORDING_MODE, new File(REPORT_DIRECTORY))
                     .withCapabilities(new ChromeOptions());
