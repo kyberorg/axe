@@ -41,7 +41,7 @@ public class TelegramStatusRestController {
             return ErrorJson.createWithMessage("Internal error: bot is missing");
         }
 
-        if (!appUtils.isTelegramEnabled()) {
+        if (appUtils.isTelegramDisabled()) {
             log.info("{} Telegram Bot is disabled", TAG);
             return TelegramStatusResponseJson.createWithStatus(OFFLINE).withBotName("-");
         }

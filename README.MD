@@ -88,8 +88,6 @@ EnvVars:
 
 * YALS_DB_PASSWORD or YALS_DB_PASSWORD_FILE: `password for db user`
 
-* TELEGRAM_ENABLED `enables telegram bot init`
-
 * TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
 
 Optional EnvVars: 
@@ -99,6 +97,8 @@ Optional EnvVars:
 * PORT: `start server at port other than 8080 `
 
 * SERVER_URL: `https://yals.tld` (most likely don't needed as regulated by Spring profile)
+
+* TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 
 Ports: 
 

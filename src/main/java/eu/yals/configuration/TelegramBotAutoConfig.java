@@ -45,8 +45,8 @@ public class TelegramBotAutoConfig {
 
     @PostConstruct
     public void start() {
-        if (!appUtils.isTelegramEnabled()) {
-            log.info("{} Telegram bot is disabled", TAG);
+        if (appUtils.isTelegramDisabled()) {
+            log.info("{} Telegram bot is disabled. Skipping configuration...", TAG);
             return;
         }
 
