@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class MattermostMock {
 
-    private ArrayList<String> collector;
-    private StringBuilder sb = new StringBuilder();
+    private final ArrayList<String> collector;
+    private final StringBuilder sb = new StringBuilder();
 
     private MattermostMock() {
         collector = new ArrayList<>(8);

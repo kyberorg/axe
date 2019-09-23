@@ -29,7 +29,7 @@ import java.util.Objects;
 public class TelegramBotAutoConfig {
     private static final String TAG = "[TelegramAutoConfig] ";
 
-    private List<BotSession> sessions = new ArrayList<>();
+    private final List<BotSession> sessions = new ArrayList<>();
 
     private final TelegramBot telegramBot;
     private final AppUtils appUtils;
@@ -70,7 +70,7 @@ public class TelegramBotAutoConfig {
 
     @PreDestroy
     public void stop() {
-        sessions.stream().forEach(session -> {
+        sessions.forEach(session -> {
             if (session != null) {
                 session.stop();
             }

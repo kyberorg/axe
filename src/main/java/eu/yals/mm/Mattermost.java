@@ -4,10 +4,10 @@ import eu.yals.constants.App;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
-
-import static eu.yals.mm.Mattermost.Constants.NO_VALUE;
 
 /**
  * Mattermost related code
@@ -18,15 +18,15 @@ import static eu.yals.mm.Mattermost.Constants.NO_VALUE;
 public class Mattermost {
     private static final String TAG = "[MM]";
 
-    private String channelId = NO_VALUE;
-    private String channelName = NO_VALUE;
-    private String command = NO_VALUE;
-    private String teamDomain = NO_VALUE;
-    private String teamId = NO_VALUE;
-    private String text = NO_VALUE;
-    private String token = NO_VALUE;
-    private String userId = NO_VALUE;
-    private String username = NO_VALUE;
+    private String channelId = App.NO_VALUE;
+    private String channelName = App.NO_VALUE;
+    private String command = App.NO_VALUE;
+    private String teamDomain = App.NO_VALUE;
+    private String teamId = App.NO_VALUE;
+    private String text = App.NO_VALUE;
+    private String token = App.NO_VALUE;
+    private String userId = App.NO_VALUE;
+    private String username = App.NO_VALUE;
 
     private MattermostArgumentSet argumentSet = MattermostArgumentSet.EMPTY_SET;
 
@@ -126,12 +126,17 @@ public class Mattermost {
     }
 
     private String decodeText(String encodedString) {
-        return URLDecoder.decode(encodedString);
+        try {
+            return URLDecoder.decode(encodedString, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            log.warn("{} Failed to decode {}. Returning same encoded text", TAG, encodedString);
+            return encodedString;
+        }
     }
 
     private void parseText() {
         log.debug("{} Parsing text", TAG);
-        if (StringUtils.isBlank(this.text) || this.text.equals(NO_VALUE)) {
+        if (StringUtils.isBlank(this.text) || this.text.equals(App.NO_VALUE)) {
             this.argumentSet = MattermostArgumentSet.builder().buildEmpty();
             return;
         }
@@ -171,7 +176,7 @@ public class Mattermost {
         USER_ID("user_id"),
         USER_NAME("user_name");
 
-        private String value;
+        private final String value;
 
         Marker(String value) {
             this.value = value;
@@ -187,7 +192,7 @@ public class Mattermost {
         EPHEMERAL("ephemeral"),
         IN_CHANNEL("in_channel");
 
-        private String value;
+        private final String value;
 
         ResponseType(String value) {
             this.value = value;
@@ -197,24 +202,5 @@ public class Mattermost {
         public String toString() {
             return value;
         }
-    }
-
-    public static class Constants {
-        private Constants() {
-        }
-
-        public static final String AT = "@";
-        public static final String NO_VALUE = "_";
-        public static final String BOT_ICON = "https://yals.eu/favicon.ico";
-        public static final String BOT_NAME = "YalsBot";
-        public static final String SUPPORT_URL = "https://github.com/yadevee/yals/issues";
-    }
-
-    public static class Emoji {
-        private Emoji() {
-        }
-
-        public static final String WARNING = ":warning:";
-        public static final String INFO = ":information_source:";
     }
 }

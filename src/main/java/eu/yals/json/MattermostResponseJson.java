@@ -1,11 +1,12 @@
 package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.yals.constants.App;
 import eu.yals.controllers.rest.MattermostRestController;
 import eu.yals.json.internal.Json;
 import eu.yals.mm.Mattermost;
-import eu.yals.mm.Mattermost.Emoji;
 import eu.yals.utils.UrlExtraValidator;
+import lombok.Getter;
 import org.apache.commons.validator.GenericValidator;
 
 /**
@@ -15,20 +16,25 @@ import org.apache.commons.validator.GenericValidator;
  */
 public class MattermostResponseJson extends Json {
 
+    @Getter
     @JsonProperty("icon_url")
-    private String iconUrl = Mattermost.Constants.BOT_ICON;
+    private String iconUrl = App.Mattermost.BOT_ICON;
 
+    @Getter
     @JsonProperty("text")
     private String text;
 
+    @Getter
     @JsonProperty("response_type")
     private String responseType = Mattermost.ResponseType.IN_CHANNEL.toString();
 
+    @Getter
     @JsonProperty("goto_location")
     private String gotoLocation;
 
+    @Getter
     @JsonProperty("username")
-    private String username = Mattermost.Constants.BOT_NAME;
+    private final String username = App.Mattermost.BOT_NAME;
 
     private MattermostResponseJson() {
     }
@@ -37,8 +43,8 @@ public class MattermostResponseJson extends Json {
         MattermostResponseJson mmJson = new MattermostResponseJson();
 
         boolean containsUrl = UrlExtraValidator.isStringContainsUrl(text);
-        boolean isErrorMessage = text.contains(Emoji.WARNING);
-        boolean isUsageMessage = (text.contains(Emoji.INFO) && text.contains("Usage"));
+        boolean isErrorMessage = text.contains(App.Emoji.WARNING);
+        boolean isUsageMessage = (text.contains(App.Emoji.INFO) && text.contains("Usage"));
         if (containsUrl || isErrorMessage || isUsageMessage) {
             mmJson.text = text;
             return mmJson;
@@ -47,6 +53,7 @@ public class MattermostResponseJson extends Json {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue") //by design
     public MattermostResponseJson replaceIconWith(String iconUrl) {
         if (GenericValidator.isUrl(iconUrl)) {
             this.iconUrl = iconUrl;
@@ -69,27 +76,5 @@ public class MattermostResponseJson extends Json {
         this.responseType = responseType.toString();
         return this;
     }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getIconUrl() {
-        return iconUrl;
-    }
-
-    public String getResponseType() {
-        return responseType;
-    }
-
-    public String getGotoLocation() {
-        return gotoLocation;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-
 
 }

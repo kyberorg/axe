@@ -3,6 +3,8 @@ package eu.yals.test.ui;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit.ScreenShooter;
+import eu.yals.constants.App;
+import eu.yals.test.TestApp;
 import eu.yals.test.TestUtils;
 import eu.yals.test.ui.pageobjects.FrontPage;
 import eu.yals.test.utils.Selenide;
@@ -31,8 +33,8 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
  */
 @Slf4j
 public class UITest {
-    private static String REPORT_DIRECTORY = System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
-    private static long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(Selenide.Props.TIMEOUT, Selenide.Defaults.TIMEOUT));
+    private static String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+    private static long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Selenide.TIMEOUT, Selenide.Defaults.TIMEOUT));
     private static BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
 
     private static BrowserWebDriverContainer chrome =
@@ -40,9 +42,9 @@ public class UITest {
                     .withRecordingMode(TESTS_RECORDING_MODE, new File(REPORT_DIRECTORY))
                     .withCapabilities(new ChromeOptions());
 
-    private final static int SERVER_PORT = Integer.parseInt(System.getProperty(Selenide.Props.SERVER_PORT, "8080"));
+    private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
-    protected final static String BASE_URL = System.getProperty(Selenide.Props.TEST_URL, LOCAL_URL);
+    protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
     @Rule  // automatically takes screenshot of every failed test
     public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
@@ -92,17 +94,19 @@ public class UITest {
     @AfterClass
     public static void tearDown() {
         //actions after all tests
+        log.info("Testing is Done");
     }
 
     private static void debugInfo() {
-        System.out.println("");
-        System.out.println("=== Debug Info ===");
-        System.out.println("");
-        System.out.println(String.format("Will test BASE_URL: %s", BASE_URL));
-        System.out.println(String.format("Application will start at %d", SERVER_PORT));
-        System.out.println(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY));
-        System.out.println("");
-        System.out.println("==================");
-        System.out.println("");
+        String debugInfo = "" + App.NEW_LINE +
+                "=== Debug Info ===" +
+                App.NEW_LINE +
+                String.format("Will test BASE_URL: %s", BASE_URL) +
+                String.format("Application will start at %d", SERVER_PORT) +
+                String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY) +
+                App.NEW_LINE +
+                "==================" +
+                App.NEW_LINE;
+        System.out.println(debugInfo);
     }
 }

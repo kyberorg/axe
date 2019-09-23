@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class AppUtils {
 
-    private Environment env;
+    private final Environment env;
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     private static final String DUMMY_HOST = "DummyHost";

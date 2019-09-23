@@ -1,10 +1,10 @@
 package eu.yals.controllers.rest;
 
 import eu.yals.Endpoint;
+import eu.yals.constants.App;
 import eu.yals.json.MattermostResponseJson;
 import eu.yals.json.internal.Json;
 import eu.yals.mm.Mattermost;
-import eu.yals.mm.Mattermost.Emoji;
 import eu.yals.models.Link;
 import eu.yals.services.mm.MattermostService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-import static eu.yals.mm.Mattermost.Constants.AT;
-import static eu.yals.mm.Mattermost.Constants.NO_VALUE;
 
 /**
  * MatterMost chat endpoint
@@ -74,8 +72,8 @@ public class MattermostRestController {
 
         String linkDescription = mattermost.getArgumentSet().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
-            String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) && (!mattermost.getUsername().equals(NO_VALUE)) ?
-                    "Okay " + AT + mattermost.getUsername() + ", " : "Okay, ";
+            String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) && (!mattermost.getUsername().equals(App.NO_VALUE)) ?
+                    "Okay " + App.AT + mattermost.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
 
             return MattermostResponseJson.createWithText(greeting + fullYalsLink);
@@ -88,13 +86,13 @@ public class MattermostRestController {
         String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand())) ?
                 mattermost.getCommand() : "/yals";
 
-        return MattermostResponseJson.createWithText(Emoji.INFO + "  Usage: " + command +
+        return MattermostResponseJson.createWithText(App.Emoji.INFO + "  Usage: " + command +
                 " http://mysuperlonglink.tld [Optional Link Description]");
     }
 
     private MattermostResponseJson serverError() {
-        return MattermostResponseJson.createWithText(Emoji.WARNING + " Server Error")
-                .addGotoLocation(Mattermost.Constants.SUPPORT_URL);
+        return MattermostResponseJson.createWithText(App.Emoji.WARNING + " Server Error")
+                .addGotoLocation(App.Mattermost.SUPPORT_URL);
     }
 
     private String getServerHostname(HttpServletRequest request) {

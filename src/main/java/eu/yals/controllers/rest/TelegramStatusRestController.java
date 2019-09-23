@@ -24,8 +24,8 @@ public class TelegramStatusRestController {
     private static final String ONLINE = "Online";
     private static final String OFFLINE = "Offline";
 
-    private TelegramBot bot;
-    private AppUtils appUtils;
+    private final TelegramBot bot;
+    private final AppUtils appUtils;
 
     public TelegramStatusRestController(TelegramBot bot, AppUtils appUtils) {
         this.bot = bot;

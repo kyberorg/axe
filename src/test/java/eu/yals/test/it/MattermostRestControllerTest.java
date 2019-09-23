@@ -1,11 +1,11 @@
 package eu.yals.test.it;
 
 import eu.yals.Endpoint;
+import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.controllers.rest.MattermostRestController;
 import eu.yals.json.MattermostResponseJson;
-import eu.yals.mm.Mattermost.Emoji;
 import eu.yals.test.utils.mock.MattermostMock;
 import eu.yals.utils.AppUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -26,7 +26,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import static eu.yals.mm.Mattermost.Constants.AT;
 import static eu.yals.test.TestUtils.assertContentType;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -126,7 +125,7 @@ public class MattermostRestControllerTest {
         assertContentType(MimeType.APPLICATION_JSON, result);
 
         String mmText = getMMText(result);
-        assertTrue("Mattermost test should have username in message", mmText.contains(AT + uzer));
+        assertTrue("Mattermost test should have username in message", mmText.contains(App.AT + uzer));
     }
 
 
@@ -317,11 +316,11 @@ public class MattermostRestControllerTest {
     }
 
     private void assertMMError(String mmText) {
-        assertTrue("Text must contain warning emoji", mmText.contains(Emoji.WARNING));
+        assertTrue("Text must contain warning emoji", mmText.contains(App.Emoji.WARNING));
     }
 
     private void assertUsage(String mmText) {
-        assertTrue("Text must contain info emoji", mmText.contains(Emoji.INFO));
+        assertTrue("Text must contain info emoji", mmText.contains(App.Emoji.INFO));
         assertTrue("Text must contain word 'Usage'", mmText.contains("Usage"));
     }
 

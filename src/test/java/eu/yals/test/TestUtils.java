@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
  *
  * @since 2.0
  */
+@SuppressWarnings("ConstantConditions") //false positive
 public class TestUtils {
 
     public static void assertResultIsJson(MvcResult result) {
@@ -59,13 +60,13 @@ public class TestUtils {
     }
 
     public static String whichBrowser() {
-        return System.getProperty(Selenide.Props.BROWSER, Selenide.Browser.HTMLUNIT);
+        return System.getProperty(TestApp.Selenide.BROWSER, Selenide.Browser.HTMLUNIT);
     }
 
     public static String getTestUrl() {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         final String localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
-        return System.getProperty(Selenide.Props.TEST_URL, localUrl);
+        return System.getProperty(TestApp.Properties.TEST_URL, localUrl);
     }
 
     public static boolean isLocalRun() {

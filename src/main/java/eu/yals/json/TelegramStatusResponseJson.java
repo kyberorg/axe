@@ -3,6 +3,7 @@ package eu.yals.json;
 import com.google.gson.annotations.Since;
 import eu.yals.json.internal.Json;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.5
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor(staticName = "createWithStatus")
 public class TelegramStatusResponseJson extends Json {
     @Since(2.5)

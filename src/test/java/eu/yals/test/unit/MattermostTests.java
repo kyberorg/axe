@@ -1,5 +1,6 @@
 package eu.yals.test.unit;
 
+import eu.yals.constants.App;
 import eu.yals.mm.Mattermost;
 import eu.yals.test.utils.mock.MattermostMock;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import java.util.NoSuchElementException;
 
-import static eu.yals.mm.Mattermost.Constants.NO_VALUE;
 import static org.junit.Assert.*;
 
 /**
@@ -108,11 +108,11 @@ public class MattermostTests {
 
         Mattermost mm = Mattermost.createFromResponseBody(matterMock.toString());
 
-        assertEquals(NO_VALUE, mm.getChannelId());
-        assertEquals(NO_VALUE, mm.getChannelName());
-        assertEquals(NO_VALUE, mm.getCommand());
-        assertEquals(NO_VALUE, mm.getTeamDomain());
-        assertEquals(NO_VALUE, mm.getTeamId());
+        assertEquals(App.NO_VALUE, mm.getChannelId());
+        assertEquals(App.NO_VALUE, mm.getChannelName());
+        assertEquals(App.NO_VALUE, mm.getCommand());
+        assertEquals(App.NO_VALUE, mm.getTeamDomain());
+        assertEquals(App.NO_VALUE, mm.getTeamId());
         assertTrue(mm.getText().contains(host));
         assertEquals(token, mm.getToken());
         assertEquals(userId, mm.getUserId());

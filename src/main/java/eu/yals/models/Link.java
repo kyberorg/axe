@@ -11,8 +11,8 @@ import javax.persistence.*;
 @Table(name = "links")
 public class Link {
 
-    public static final String IDENT_COLUMN = "ident";
-    public static final String LINK_COLUMN = "link";
+    private static final String IDENT_COLUMN = "ident";
+    private static final String LINK_COLUMN = "link";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
