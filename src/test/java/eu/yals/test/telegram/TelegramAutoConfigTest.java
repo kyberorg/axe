@@ -5,7 +5,7 @@ import com.mashape.unirest.http.Unirest;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.json.TelegramStatusResponseJson;
-import eu.yals.test.utils.TestUtils;
+import eu.yals.test.TestUtils;
 import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

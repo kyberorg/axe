@@ -1,8 +1,8 @@
-package eu.yals.test.selenide.front;
+package eu.yals.test.ui.pages.front;
 
 import eu.yals.services.GitService;
-import eu.yals.test.selenide.UITest;
-import eu.yals.test.utils.pages.FrontPage;
+import eu.yals.test.ui.UITest;
+import eu.yals.test.ui.pageobjects.FrontPage;
 import eu.yals.utils.git.NoGitInfo;
 import org.junit.Before;
 import org.junit.Test;

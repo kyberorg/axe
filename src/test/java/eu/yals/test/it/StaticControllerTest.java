@@ -3,7 +3,7 @@ package eu.yals.test.it;
 import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
-import eu.yals.test.utils.TestUtils;
+import eu.yals.test.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -12,9 +12,8 @@ public class Selenide {
     }
 
     public static class Props {
-        static final String BROWSER = "selenide.browser";
+        public static final String BROWSER = "selenide.browser";
         public static final String TIMEOUT = "selenide.timeout";
-        public static final String BASE_URL = "selenide.baseUrl";
         public static final String REPORT_DIR = "yals.selenide.reportdir";
         public static final String SERVER_PORT = "port";
         public static final String TEST_URL = "testUrl";
@@ -30,6 +29,7 @@ public class Selenide {
 
     public static class Defaults {
         public static final String REPORT_DIR = "target";
+        public static final String TIMEOUT = "4000";
     }
 
 }

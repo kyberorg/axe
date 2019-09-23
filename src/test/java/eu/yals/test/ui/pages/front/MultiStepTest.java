@@ -1,10 +1,10 @@
-package eu.yals.test.selenide.front;
+package eu.yals.test.ui.pages.front;
 
 import com.codeborne.selenide.SelenideElement;
-import eu.yals.test.selenide.UITest;
+import eu.yals.test.ui.UITest;
+import eu.yals.test.ui.pageobjects.FrontPage;
+import eu.yals.test.ui.pageobjects.external.Wikipedia;
 import eu.yals.test.utils.Selenide;
-import eu.yals.test.utils.pages.FrontPage;
-import eu.yals.test.utils.pages.external.Wikipedia;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;

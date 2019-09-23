@@ -1,4 +1,4 @@
-package eu.yals.test.utils.pages.external;
+package eu.yals.test.ui.pageobjects.external;
 
 import com.codeborne.selenide.SelenideElement;
 

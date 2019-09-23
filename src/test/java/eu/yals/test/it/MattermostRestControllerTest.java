@@ -27,7 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import static eu.yals.mm.Mattermost.Constants.AT;
-import static eu.yals.test.utils.TestUtils.assertContentType;
+import static eu.yals.test.TestUtils.assertContentType;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

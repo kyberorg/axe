@@ -1,12 +1,12 @@
-package eu.yals.test.selenide;
+package eu.yals.test.ui;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit.ScreenShooter;
+import eu.yals.test.TestUtils;
+import eu.yals.test.ui.pageobjects.FrontPage;
 import eu.yals.test.utils.Selenide;
-import eu.yals.test.utils.TestUtils;
 import eu.yals.test.utils.YalsTestDescription;
-import eu.yals.test.utils.pages.FrontPage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -32,6 +32,7 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
 @Slf4j
 public class UITest {
     private static String REPORT_DIRECTORY = System.getProperty(Selenide.Props.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+    private static long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(Selenide.Props.TIMEOUT, Selenide.Defaults.TIMEOUT));
     private static BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
 
     private static BrowserWebDriverContainer chrome =
@@ -65,6 +66,7 @@ public class UITest {
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
         Configuration.reportsFolder = REPORT_DIRECTORY;
+        Configuration.timeout = SELENIDE_TIMEOUT;
 
         //expose ports if testing local URL
         if (BASE_URL.equals(LOCAL_URL)) {

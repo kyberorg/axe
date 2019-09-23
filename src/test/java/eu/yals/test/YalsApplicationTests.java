@@ -1,4 +1,4 @@
-package eu.yals;
+package eu.yals.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

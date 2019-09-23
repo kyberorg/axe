@@ -4,7 +4,7 @@ import eu.yals.Endpoint;
 import eu.yals.json.EmptyJson;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
-import eu.yals.test.utils.TestUtils;
+import eu.yals.test.TestUtils;
 import eu.yals.utils.AppUtils;
 import org.junit.Before;
 import org.junit.Test;

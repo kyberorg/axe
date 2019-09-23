@@ -1,6 +1,6 @@
-package eu.yals.test.selenide.front;
+package eu.yals.test.ui.pages.front;
 
-import eu.yals.test.selenide.UITest;
+import eu.yals.test.ui.UITest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_MODAL;
-import static eu.yals.test.utils.pages.FrontPage.ErrorRow.ERROR_TEXT;
-import static eu.yals.test.utils.pages.FrontPage.MainRow.LONG_URL_INPUT;
-import static eu.yals.test.utils.pages.FrontPage.ResultRow.*;
+import static eu.yals.test.ui.pageobjects.FrontPage.ErrorRow.ERROR_MODAL;
+import static eu.yals.test.ui.pageobjects.FrontPage.ErrorRow.ERROR_TEXT;
+import static eu.yals.test.ui.pageobjects.FrontPage.MainRow.LONG_URL_INPUT;
+import static eu.yals.test.ui.pageobjects.FrontPage.ResultRow.*;
 import static org.junit.Assert.assertEquals;
 
 /**

@@ -1,9 +1,10 @@
-package eu.yals.test.utils;
+package eu.yals.test;
 
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
+import eu.yals.test.utils.Selenide;
 import eu.yals.utils.AppUtils;
 import org.springframework.test.web.servlet.MvcResult;
 
