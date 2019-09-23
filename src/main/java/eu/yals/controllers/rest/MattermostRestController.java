@@ -9,7 +9,6 @@ import eu.yals.models.Link;
 import eu.yals.services.mm.MattermostService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,12 +31,15 @@ import static eu.yals.mm.Mattermost.Constants.NO_VALUE;
 public class MattermostRestController {
     private static final String TAG = "[MM]";
 
-    @Autowired
-    private MattermostService mmService;
+    private final MattermostService mmService;
 
     private Mattermost mattermost;
 
     private HttpServletRequest request;
+
+    public MattermostRestController(MattermostService mmService) {
+        this.mmService = mmService;
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.MM_API)
     public Json mm(@RequestBody String body, HttpServletRequest request) {

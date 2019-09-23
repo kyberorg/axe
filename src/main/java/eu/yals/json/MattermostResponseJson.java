@@ -9,7 +9,7 @@ import eu.yals.utils.UrlExtraValidator;
 import org.apache.commons.validator.GenericValidator;
 
 /**
- * {@link MattermostRestController} outcoming JSON
+ * {@link MattermostRestController} outgoing JSON
  *
  * @since 2.3
  */

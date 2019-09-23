@@ -5,7 +5,6 @@ import eu.yals.core.IdentGenerator;
 import eu.yals.models.Link;
 import eu.yals.models.dao.LinkRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,8 +16,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MattermostServiceImpl implements MattermostService {
 
-    @Autowired
-    private LinkRepo repo;
+    private final LinkRepo repo;
+
+    public MattermostServiceImpl(LinkRepo repo) {
+        this.repo = repo;
+    }
 
     @Override
     public Link storeLink(String longUrl) {

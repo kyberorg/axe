@@ -4,7 +4,7 @@ import com.google.gson.annotations.Since;
 import eu.yals.json.internal.Json;
 
 /**
- * Store Endpoint outcoming JSON
+ * Store Endpoint outgoing JSON
  *
  * @since 1.0
  */

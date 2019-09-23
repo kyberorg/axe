@@ -3,7 +3,6 @@ package eu.yals.services;
 import eu.yals.result.GetResult;
 import eu.yals.result.StoreResult;
 import eu.yals.storage.LinkStorage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +15,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocalStorageLinkService implements LinkService {
 
-    @Autowired
-    private LinkStorage storage;
+    private final LinkStorage storage;
+
+    public LocalStorageLinkService(LinkStorage storage) {
+        this.storage = storage;
+    }
 
     @Override
     public GetResult getLink(String ident) {

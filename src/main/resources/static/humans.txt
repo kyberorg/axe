@@ -1,6 +1,6 @@
 /* TEAM */
     Idea and developer: Alexander Muravya (aka Kyberorg)
-    Contact: asm [at] virtalab [dot] org
+    Contact: alex [at] voima [dot] ee
     Twitter: @kyberorg
     Facebook: alexandr.muravya
     VK: kyberorg

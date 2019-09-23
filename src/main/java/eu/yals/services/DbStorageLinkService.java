@@ -5,7 +5,6 @@ import eu.yals.models.dao.LinkRepo;
 import eu.yals.result.GetResult;
 import eu.yals.result.StoreResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Component;
@@ -22,8 +21,11 @@ import java.util.Optional;
 @Component
 public class DbStorageLinkService implements LinkService {
 
-    @Autowired
-    private LinkRepo repo;
+    private final LinkRepo repo;
+
+    public DbStorageLinkService(LinkRepo repo) {
+        this.repo = repo;
+    }
 
     @Override
     public GetResult getLink(String ident) {
