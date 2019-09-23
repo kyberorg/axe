@@ -7,6 +7,11 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+/**
+ * Mapping Error Statuses to Error Pages
+ *
+ * @since 2.5
+ */
 @Component
 public class ErrorHandlingConfiguration implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
 

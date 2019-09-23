@@ -60,7 +60,7 @@ public class ErrorJson extends Json {
         return error;
     }
 
-    public List<Error> getErrors(){
+    public List<Error> getErrors() {
         return errors;
     }
 
@@ -95,7 +95,7 @@ public class ErrorJson extends Json {
             return errorMessage;
         }
 
-        public String getField(){
+        public String getField() {
             return field;
         }
     }

@@ -10,7 +10,8 @@ import org.apache.commons.validator.routines.UrlValidator;
  */
 public class UrlExtraValidator {
     private static final String URL_MARKER = "://";
-    private UrlExtraValidator(){
+
+    private UrlExtraValidator() {
         throw new UnsupportedOperationException("Utility class");
     }
 

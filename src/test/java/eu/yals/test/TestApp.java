@@ -1,5 +1,10 @@
 package eu.yals.test;
 
+/**
+ * Test Application constants, pretty same as {@link eu.yals.constants.App}, but only stuff used in testing scope
+ *
+ * @since 2.5
+ */
 public class TestApp {
     public static class Properties {
         public static final String TEST_URL = "testUrl";

@@ -26,11 +26,11 @@ import static org.junit.Assert.assertTrue;
  *
  * @since 2.5
  */
+@Slf4j
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest
 @ContextConfiguration
-@Slf4j
 public class TelegramAutoConfigTest {
 
     @Test

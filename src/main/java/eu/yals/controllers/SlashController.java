@@ -26,8 +26,8 @@ import java.util.Objects;
  *
  * @since 1.0
  */
-@Controller
 @Slf4j
+@Controller
 public class SlashController extends YalsController {
     private static final String TAG = "[Web]";
 

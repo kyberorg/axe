@@ -9,7 +9,6 @@ import java.util.Objects;
 /**
  * Service which queries from DB about totals
  *
- * @author Alexander Muravya (alexander.muravya@kuehne-nagel.com)
  * @since 2.1
  */
 @Qualifier("dbOverallService")
@@ -24,7 +23,7 @@ public class DbStorageOverallService implements OverallService {
 
     @Override
     public long numberOfStoredLinks() {
-        if(Objects.nonNull(repo)){
+        if (Objects.nonNull(repo)) {
             return repo.count();
         } else {
             return 0;

@@ -7,7 +7,7 @@ package eu.yals.constants;
  */
 public final class Header {
 
-    private Header(){
+    private Header() {
         throw new UnsupportedOperationException("Utility class");
     }
 

@@ -15,10 +15,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 /**
  * Reports telegram bot status
  *
- * @since 1.0
+ * @since 2.5
  */
-@RestController
 @Slf4j
+@RestController
 public class TelegramStatusRestController {
     private static final String TAG = "[API Telegram Status]";
     private static final String ONLINE = "Online";

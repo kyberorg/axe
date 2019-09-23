@@ -23,11 +23,11 @@ import java.util.Objects;
  *
  * @since 2.4
  */
-@Configuration
-@ConditionalOnBean(TelegramBot.class)
 @Slf4j
+@ConditionalOnBean(TelegramBot.class)
+@Configuration
 public class TelegramBotAutoConfig {
-    private static final String TAG = "[TelegramAutoConfig] ";
+    private static final String TAG = "[TelegramAutoConfig]";
 
     private final List<BotSession> sessions = new ArrayList<>();
 
@@ -50,20 +50,20 @@ public class TelegramBotAutoConfig {
             return;
         }
 
-        log.info(TAG + "Registering telegram bot");
+        log.info("{} Registering telegram bot", TAG);
 
         boolean isBotAvailable = Objects.nonNull(telegramBot) && isServerUrlAvailable();
         String botStatus = isBotAvailable ? "available" : "not available";
-        log.info(TAG + "Bot Status: " + botStatus);
+        log.info("{} Bot Status: {}", TAG, botStatus);
 
         if (isBotAvailable) {
             TelegramBotsApi api = new TelegramBotsApi();
-            log.debug(TAG + "Bot token: " + telegramBot.getBotToken());
+            log.debug("{} Bot token: {}", TAG, telegramBot.getBotToken());
 
             try {
                 sessions.add(api.registerBot(telegramBot));
             } catch (TelegramApiRequestException e) {
-                log.error(TAG + "Failed to register bot", e);
+                log.error("{} Failed to register bot", TAG, e);
             }
         }
     }

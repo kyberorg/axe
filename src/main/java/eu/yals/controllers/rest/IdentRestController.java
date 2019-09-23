@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @since 1.0
  */
-@RestController
 @Slf4j
+@RestController
 public class IdentRestController {
     private static final String TAG = "[API Get]";
 
@@ -91,6 +91,5 @@ public class IdentRestController {
             response.setStatus(500);
             return ErrorJson.createWithMessage("Unexpected Server error");
         }
-
     }
 }

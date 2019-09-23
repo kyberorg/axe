@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface RequestMethod {
     HttpMethod value();
+
     boolean api() default false;
 }

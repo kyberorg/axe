@@ -20,7 +20,7 @@ public class MattermostArgumentSet {
     private String description = null;
 
 
-    public static MattermostArgumentSet.Builder builder() {
+    static MattermostArgumentSet.Builder builder() {
         return new Builder();
     }
 
@@ -61,7 +61,7 @@ public class MattermostArgumentSet {
         return brokenSet;
     }
 
-    public static Builder builderWithUrl(String url) {
+    static Builder builderWithUrl(String url) {
         return new Builder(url);
     }
 
@@ -76,11 +76,11 @@ public class MattermostArgumentSet {
             this.urlString = url;
         }
 
-        public MattermostArgumentSet buildEmpty() {
+        MattermostArgumentSet buildEmpty() {
             return EMPTY_SET;
         }
 
-        public Builder andDescription(String description) {
+        Builder andDescription(String description) {
             this.descriptionString = description;
             return this;
         }

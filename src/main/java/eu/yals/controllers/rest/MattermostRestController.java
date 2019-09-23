@@ -24,8 +24,8 @@ import java.util.Objects;
  *
  * @since 2.3
  */
-@RestController
 @Slf4j
+@RestController
 public class MattermostRestController {
     private static final String TAG = "[MM]";
 

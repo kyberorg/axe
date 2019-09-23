@@ -31,8 +31,8 @@ import java.util.Set;
  *
  * @since 1.0
  */
-@RestController
 @Slf4j
+@RestController
 public class StoreRestController {
     private static final String TAG = "[API Store]";
 
@@ -145,5 +145,4 @@ public class StoreRestController {
         GetResult searchResult = linkService.getLink(ident);
         return (searchResult instanceof GetResult.Success);
     }
-
 }

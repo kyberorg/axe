@@ -81,7 +81,7 @@ public class IdentControllerTest {
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(get(Endpoint.LINK_API + "notStoredIdent"))
                 .andExpect(status().is(404))
-        .andReturn();
+                .andReturn();
         TestUtils.assertResultIsErrorJson(result);
     }
 
@@ -114,5 +114,4 @@ public class IdentControllerTest {
         replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
         return replyJson.getIdent();
     }
-
 }
