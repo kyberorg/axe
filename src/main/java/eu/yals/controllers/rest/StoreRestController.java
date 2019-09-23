@@ -72,12 +72,11 @@ public class StoreRestController {
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
-        Set<ConstraintViolation> errors1 = new HashSet<>();
         if (!errors.isEmpty()) {
             log.info("{} Value Violations found: {}", TAG, errors);
-            errors1.addAll(errors);
+            Set<ConstraintViolation> errorSet = new HashSet<>(errors);
             response.setStatus(421);
-            return ErrorJson.createFromSetOfErrors(errors1);
+            return ErrorJson.createFromSetOfErrors(errorSet);
         }
 
         String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
