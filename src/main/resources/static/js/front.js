@@ -7,8 +7,8 @@ function cleanForm() {
     $("#longUrl").val("");
 }
 
-function cleanResults(){
-    $("#resultLink").html("").attr("href","");
+function cleanResults() {
+    $("#resultLink").html("").attr("href", "");
     $("#result").addClass('invisible');
 }
 
@@ -22,7 +22,7 @@ function sendLink(long_url) {
 
     var longUrl = long_url.trim();
     var json = {
-        link : longUrl
+        link: longUrl
     };
     doPost(storeLinkRoute, json, onSuccessStoreLink, onFailStoreLink);
 }
@@ -30,9 +30,9 @@ function sendLink(long_url) {
 function onSuccessStoreLink(data, textStatus, jqXHR) {
     cleanErrors();
     cleanForm();
-    if(jqXHR.status === 201) {
+    if (jqXHR.status === 201) {
         var ident = data.ident;
-        if(ident === undefined || ident.trim().length === 0) {
+        if (ident === undefined || ident.trim().length === 0) {
             showError("Internal error. Got malformed reply from server");
             return;
         }
@@ -55,7 +55,7 @@ function onFailStoreLink(jqXHR, textStatus, errorThrown) {
         if (reply.errors !== undefined) {
             if (reply.errors.length > 0) {
                 $.each(reply.errors, function (index, value) {
-                    if(value.field === "link"){
+                    if (value.field === "link") {
                         value.field = "Long URL";
                     }
                     errors.push(value.field + " " + value.errorMessage);
@@ -66,7 +66,7 @@ function onFailStoreLink(jqXHR, textStatus, errorThrown) {
         }
 
         var errorText = "Validation failed <BR>";
-        if(errors.length >= 0) {
+        if (errors.length >= 0) {
             errorText += "Errors: <BR>";
             $.each(errors, function (index, value) {
                 errorText += value + "<BR>";

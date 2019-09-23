@@ -1,6 +1,6 @@
 /* TEAM */
     Idea and developer: Alexander Muravya (aka Kyberorg)
-    Contact: asm [at] virtalab [dot] org
+    Contact: kyberorg [at] yadev [dot] eu
     Twitter: @kyberorg
     Facebook: alexandr.muravya
     VK: kyberorg
@@ -12,7 +12,6 @@
     Spring Developers (for Spring Boot)
 
 /* SITE */
-    Last update: 2017/12/29
     Language: English
     Standards: HTML5, CSS3
     Components: Spring framework, jQuery, Twitter Bootstrap, Java, Selenide

@@ -98,6 +98,8 @@ Optional EnvVars:
 
 * SERVER_URL: `https://yals.tld` (most likely don't needed as regulated by Spring profile)
 
+* TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
+
 Ports: 
 
 * host port: `select yourself`
