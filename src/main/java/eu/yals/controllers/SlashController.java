@@ -45,9 +45,9 @@ public class SlashController extends YalsController {
         this.request = request;
         this.response = response;
 
-        log.info(String.format("%s Got {\"Ident\": %s}", TAG, ident));
+        log.info("{} Got {\"Ident\": {}}", TAG, ident);
         if (StringUtils.isBlank(ident) || !ident.matches(IdentGenerator.VALID_IDENT_PATTERN)) {
-            log.info(String.format("%s Got malformed request. Replying with 404. {\"Ident\": %s}", TAG, ident));
+            log.info("{} Got malformed request. Replying with 404. {\"Ident\": {}}", TAG, ident);
             return render404();
         }
 
@@ -68,42 +68,41 @@ public class SlashController extends YalsController {
         HttpResponse<String> apiResponse;
 
         try {
-            log.debug(String.format("%s Searching for ident: '%s'", TAG, ident));
+            log.debug("{} Searching for ident: '{}'", TAG, ident);
             String schema = request.getScheme() + "://";
             String url = schema + appUtils.getAPIHostPort() + Endpoint.LINK_API + ident;
-            log.debug(String.format("%s Requesting API. URL: %s", TAG, url));
+            log.debug("{} Requesting API. URL: {}", TAG, url);
             apiResponse = Unirest.get(url).asString();
         } catch (Exception e) {
-            String message = String.format("%s Exception while searching for link by ident. Ident: %s", TAG, ident);
-            log.error(String.format("%s %s", TAG, message), e);
+            log.error("{} Exception while searching for link by ident. Ident: {}", TAG, ident, e);
             return render500();
         }
 
         if (Objects.isNull(apiResponse)) {
-            log.error(TAG + " No reply from API");
+            log.error("{} No reply from API", TAG);
             return render500();
         }
 
         switch (apiResponse.getStatus()) {
             case 200:
                 String link = extractLink(apiResponse);
-                log.info(String.format("%s Got long URL. Redirecting to %s", TAG, link));
+                log.info("{} Got long URL. Redirecting to {}", TAG, link);
                 return redirect(link);
             case 400:
-                log.info(TAG + " Got malformed request. Replying with 404");
+                log.info("{} Got malformed request. Replying with 404", TAG);
                 return render404Ident();
             case 404:
-                log.info(TAG + " No corresponding longURL found. Replying with 404");
+                log.info("{} No corresponding longURL found. Replying with 404", TAG);
                 return render404Ident();
             case 500:
-                log.info(TAG + " Got internal error. Replying with 500");
+                log.info("{} Got internal error. Replying with 500", TAG);
                 return render500();
             case 503:
                 log.info("{} Database is DOWN. Replying with 503", TAG);
                 return render503();
             default:
-                log.info(String.format("%s Got unknown status: %d. I don't know how to handle it. " +
-                        "Replying with 500", TAG, apiResponse.getStatus()));
+                log.info("{} Got unknown status: {}. I don't know how to handle it. Replying with 500",
+                        TAG, apiResponse.getStatus());
                 return render500();
         }
     }

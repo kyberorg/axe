@@ -47,14 +47,14 @@ public class StoreRestController {
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.STORE_API)
     public Json store(@RequestBody String body, HttpServletResponse response) {
-        log.info(String.format("%s got request: %s", TAG, body));
+        log.info("{} got request: {}", TAG, body);
 
         StoreRequestJson storeInput;
         try {
             storeInput = AppUtils.GSON.fromJson(body, StoreRequestJson.class);
         } catch (Exception e) {
             response.setStatus(421);
-            log.info(String.format("%s unparseable JSON", TAG));
+            log.info("{} unparseable JSON", TAG);
             return ErrorJson.createWithMessage("Unable to parse json");
         }
 
@@ -74,7 +74,7 @@ public class StoreRestController {
         Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
         Set<ConstraintViolation> errors1 = new HashSet<>();
         if (!errors.isEmpty()) {
-            log.info(String.format("%s Value Violations found: %s", TAG, errors));
+            log.info("{} Value Violations found: {}", TAG, errors);
             errors1.addAll(errors);
             response.setStatus(421);
             return ErrorJson.createFromSetOfErrors(errors1);
@@ -82,7 +82,7 @@ public class StoreRestController {
 
         String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
         if (!messageFromExtraValidator.equals(UrlExtraValidator.VALID)) {
-            log.info(String.format("%s not valid URL: %s", TAG, messageFromExtraValidator));
+            log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
             response.setStatus(421);
             return ErrorJson.createWithMessage(messageFromExtraValidator);
         }
@@ -92,8 +92,8 @@ public class StoreRestController {
         String ident;
         if (usingUsersIdent) {
             if (isIdentAlreadyExists(usersIdent)) {
-                log.info(String.format("%s User Ident '%s' already exists", TAG, usersIdent));
-                log.debug(String.format("%s Conflicting ident: %s", TAG, usersIdent));
+                log.info("{} User Ident '{}' already exists", TAG, usersIdent);
+                log.debug("{} Conflicting ident: {}", TAG, usersIdent);
                 response.setStatus(407); //conflict
                 return ErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent + " Try another one");
             } else {
@@ -120,11 +120,11 @@ public class StoreRestController {
 
         StoreResult result = linkService.storeNew(ident, storeInput.getLink());
         if (result instanceof StoreResult.Success) {
-            log.info(String.format("%s Saved. {\"ident\": %s, \"link\": %s}", TAG, ident, storeInput.getLink()));
+            log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, storeInput.getLink());
             response.setStatus(201);
             return StoreResponseJson.create().withIdent(ident);
         } else if (result instanceof StoreResult.Fail) {
-            log.error(String.format("%s Failed to save link: %s", TAG, storeInput.getLink()));
+            log.error("{} Failed to save link: {}", TAG, storeInput.getLink());
             response.setStatus(500);
             return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         } else if (result instanceof StoreResult.DatabaseDown) {
@@ -132,7 +132,7 @@ public class StoreRestController {
             log.error("{} Database is DOWN", TAG, ((StoreResult.DatabaseDown) result).getException());
             return ErrorJson.createWithMessage("The server is currently unable to handle the request ");
         } else {
-            log.error(String.format("%s Failed to save link: got unknown result object: %s", TAG, result));
+            log.error("{} Failed to save link: got unknown result object: {}", TAG, result);
             response.setStatus(500);
             return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         }

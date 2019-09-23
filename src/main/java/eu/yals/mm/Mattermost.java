@@ -93,10 +93,10 @@ public class Mattermost {
     }
 
     private void parseBody(String body) {
-        log.debug(String.format("%s Parsing body", TAG));
+        log.debug("{} Parsing body", TAG);
         String[] bodyParams = body.split("&");
         if (bodyParams.length == 0) {
-            log.debug(String.format("%s Body has 0 params: nothing to do", TAG));
+            log.debug("{} Body has 0 params: nothing to do", TAG);
             return; //nothing to do
         }
         for (String bodyParam : bodyParams) {
@@ -120,7 +120,7 @@ public class Mattermost {
             } else if (isParamStartWith(Marker.USER_NAME)) {
                 username = decodeText(removeMarker(Marker.USER_NAME));
             } else {
-                log.debug(String.format("%s String '%s' doesn't match any pattern. Skipping...", TAG, this.param));
+                log.debug("{} String '{}' doesn't match any pattern. Skipping...", TAG, this.param);
             }
         }
     }
@@ -130,7 +130,7 @@ public class Mattermost {
     }
 
     private void parseText() {
-        log.debug(String.format("%s Parsing text", TAG));
+        log.debug("{} Parsing text", TAG);
         if (StringUtils.isBlank(this.text) || this.text.equals(NO_VALUE)) {
             this.argumentSet = MattermostArgumentSet.builder().buildEmpty();
             return;

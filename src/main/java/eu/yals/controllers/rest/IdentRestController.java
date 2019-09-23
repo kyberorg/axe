@@ -50,30 +50,30 @@ public class IdentRestController {
 
             })
     public Json getLink(@PathVariable("ident") String ident, HttpServletResponse response) {
-        log.info(String.format("%s got request: {\"Ident\": %s}", TAG, ident));
+        log.info("{} got request: {\"Ident\": {}}", TAG, ident);
 
         if (StringUtils.isBlank(ident)) {
-            log.info(String.format("%s Got empty ident", TAG));
+            log.info("{} Got empty ident", TAG);
             response.setStatus(400);
             return ErrorJson.createWithMessage("Request should be like this: " + Endpoint.LINK_API_MAPPING + " And ident should not be empty");
         }
 
         boolean isIdentValid = ident.matches(IdentGenerator.VALID_IDENT_PATTERN);
         if (!isIdentValid) {
-            log.error(String.format("%s Request has not valid ident: %s", TAG, ident));
+            log.error("{} Request has not valid ident: {}", TAG, ident);
             response.setStatus(400);
             return ErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string");
         }
 
         GetResult result = linkService.getLink(ident);
         if (result instanceof GetResult.NotFound) {
-            log.info(String.format("%s Miss {\"Ident\": %s}", TAG, ident));
+            log.info("{} Miss {\"Ident\": {}}", TAG, ident);
             response.setStatus(404);
             return ErrorJson.createWithMessage(((GetResult.NotFound) result).getErrorMessage());
         } else if (result instanceof GetResult.Success) {
             response.setStatus(200);
             String link = ((GetResult.Success) result).getLink();
-            log.info(String.format("%s Hit. {\"Ident\": %s, \"Link found\": %s}", TAG, ident, link));
+            log.info("{} Hit. {\"Ident\": {}, \"Link found\": {}}", TAG, ident, link);
             if (!appUtils.isAscii(link)) {
                 // Handle international domains by detecting non-ascii and converting them to punycode
                 String punycodedUrl = appUtils.covertUnicodeToAscii(link);
@@ -86,8 +86,8 @@ public class IdentRestController {
             log.error("{} Database is DOWN", TAG, ((GetResult.DatabaseDown) result).getException());
             return ErrorJson.createWithMessage("The server is currently unable to handle the request");
         } else {
-            log.error(String.format("%s unknown failure", TAG));
-            log.debug(String.format("%s got unknown result object: %s", TAG, result));
+            log.error("{} unknown failure", TAG);
+            log.debug("{} got unknown result object: {}", TAG, result);
             response.setStatus(500);
             return ErrorJson.createWithMessage("Unexpected Server error");
         }

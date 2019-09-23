@@ -51,7 +51,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 throw new IllegalStateException("Internal server error: ");
             }
 
-            log.debug(String.format("%s Update (Author: %s, Message: %s)", TAG, getMessage().getFrom().getUserName(), getMessage().getText()));
+            log.debug("{} Update (Author: {}, Message: {})", TAG, getMessage().getFrom().getUserName(), getMessage().getText());
 
             telegramObject = TelegramObject.createFromUpdate(update);
 

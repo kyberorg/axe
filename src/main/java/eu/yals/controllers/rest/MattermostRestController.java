@@ -43,25 +43,25 @@ public class MattermostRestController {
     public Json mm(@RequestBody String body, HttpServletRequest request) {
         this.request = request;
         try {
-            log.info(String.format("%s Got request from Mattermost. Body: %s", TAG, body));
-            log.debug(String.format("%s Parsing MM request", TAG));
+            log.info("{} Got request from Mattermost. Body: {}", TAG, body);
+            log.debug("{} Parsing MM request", TAG);
             mattermost = Mattermost.createFromResponseBody(body);
             String mmUrl = mattermost.getArgumentSet().getUrl();
-            log.debug(String.format("%s Request Parsed. Saving link. mmUrl: %s", TAG, mmUrl));
+            log.debug("{} Request Parsed. Saving link. mmUrl: {}", TAG, mmUrl);
 
             Link savedLink = mmService.storeLink(mmUrl);
             if (Objects.nonNull(savedLink)) {
-                log.info(String.format("%s Link saved. Replying back", TAG));
+                log.info("{} Link saved. Replying back", TAG);
                 return success(savedLink);
             } else {
-                log.error(String.format("%s Was unable to save link. Service returned NULL. Body: %s", TAG, body));
+                log.error("{} Was unable to save link. Service returned NULL. Body: {}", TAG, body);
                 return serverError();
             }
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            log.error(String.format("%s Got exception while handling request. Body: %s Exception: %s", TAG, body, e));
+            log.error("{} Got exception while handling request. Body: {} Exception: {}", TAG, body, e);
             return usage();
         } catch (Exception e) {
-            log.error(String.format("%s Unknown exception while handling request. Body: %s Exception: %s", TAG, body, e));
+            log.error("{} Unknown exception while handling request. Body: {} Exception: {}", TAG, body, e);
             return serverError();
         }
     }

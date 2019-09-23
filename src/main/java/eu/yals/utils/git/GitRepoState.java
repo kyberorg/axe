@@ -57,8 +57,8 @@ class GitRepoState {
             log.error("Failed to init " + GitRepoState.class.getSimpleName(), ioe);
             this.gitProperties.clear();
         } catch (NullPointerException npe) {
-            log.error(String.format("'%s': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
-                    GIT_PROPERTIES_FILE));
+            log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    GIT_PROPERTIES_FILE);
             this.gitProperties.clear();
         }
     }
