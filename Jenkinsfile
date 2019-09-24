@@ -53,10 +53,10 @@ pipeline {
                  String hookUrl;
                  switch(env.BRANCH_NAME) {
                     case "latest":
-                        hookUrl = 'noUrl';
+                        hookUrl = 'https://docker.yatech.eu/api/webhooks/febd279f-822a-4598-a7d8-588e65851228?tag=latest';
                         break;
                     case "trunk":
-                        hookUrl = 'https://docker.yatech.eu/api/webhooks/71721a7e-0d85-4735-8670-4f0afd18c0f7';
+                        hookUrl = 'https://docker.yatech.eu/api/webhooks/71721a7e-0d85-4735-8670-4f0afd18c0f7?tag=trunk';
                         break;
                     default:
                         hookUrl = "https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1?tag="+env.BRANCH_NAME;
