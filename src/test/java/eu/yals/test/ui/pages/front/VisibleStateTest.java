@@ -48,6 +48,11 @@ public class VisibleStateTest extends UITest {
     }
 
     @Test
+    public void qrCodeBlockIsHidden() {
+        FrontPage.QrCodeRow.QR_CODE_DIV.shouldNotBe(visible);
+    }
+
+    @Test
     public void formHasFieldAndButton() {
         SelenideElement formField = FrontPage.MainRow.FORM.find(FrontPage.MainRow.INPUT_ID);
 
