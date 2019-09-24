@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<@head.meta></@head.meta>
+    <@head.meta></@head.meta>
     <title>Link shortener for friends</title>
 
-<@head.css></@head.css>
+    <@head.css></@head.css>
 
-<@head.donkey></@head.donkey>
+    <@head.donkey></@head.donkey>
 </head>
 <body>
 <@js.jquery></@js.jquery>
@@ -52,7 +52,7 @@
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
         <div id="overallLinks" class="main col-xs-12 col-sm-10 col-md-8 col-lg-6">
             <span id="overallLinksText">
-                Yals already saved <span id="overallLinksNum">${params.overallLinks}</span> links
+                Yals already saved <span id="overallLinksNum">${params.overallLinks?string.computer}</span> links
             </span>
         </div>
         <div class="col-xs-0 col-sm-1 col-md-2 col-lg-3"></div>
@@ -72,16 +72,16 @@
 </div>
 
 <#if (params.displayCommitInfo)>
-<footer class="footer">
-    <div class="container">
+    <footer class="footer">
+        <div class="container">
         <span id="version" class="text-muted">
             Version ${params.commitTag} (code based on commit
             <a href="${params.repository}/${params.commitHash}">
             ${params.commit}</a>)
         </span>
-    </div>
-</footer>
-<div class="under-footer">&nbsp;</div>
+        </div>
+    </footer>
+    <div class="under-footer">&nbsp;</div>
 </#if >
 
 <!-- Link copied modal -->
