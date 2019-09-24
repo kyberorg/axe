@@ -5,6 +5,18 @@
 Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
+### Version 2.5 (24/09/19)
+Bug Fixes
+
+* Links without http:// prefix are supported (#50)
+* Links from Russian Wikipedia are supported (#92)
+* Application moved to Spring Boot 2 (#101)
+* IDN aka URLs with non-latin symbols are supported (#102)
+* Application can correctly handle Database disconnects at runtime (#104)
+* Removed double slash in git commit link (#105)
+* Footer no more flaky (#106)
+* Telegram auto config working stable (#108)
+* Link counter shows without space after 1000 links saved (#122) 
 
 ### Version 2.4 (12/04/18)
 Telegram Bot
