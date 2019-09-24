@@ -5,7 +5,7 @@
 
     <groupId>ee.yals</groupId>
     <artifactId>yals</artifactId>
-    <version>2.5</version>
+    <version>2.5.1</version>
     <packaging>jar</packaging>
 
     <name>yals</name>
@@ -148,14 +148,14 @@
         <dependency>
             <groupId>com.vdurmont</groupId>
             <artifactId>emoji-java</artifactId>
-            <version>5.1.0</version>
+            <version>5.1.1</version>
         </dependency>
 
         <!-- Lombok: code auto generation -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
+            <version>1.18.10</version>
         </dependency>
 
         <!-- Spring Boot Tests -->
@@ -169,7 +169,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>5.3.0</version>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
 

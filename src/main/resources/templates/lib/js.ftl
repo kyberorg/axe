@@ -1,6 +1,6 @@
 <#macro jquery>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/s/js/jq/jquery_1.11.3.min.js"></script>
+    <script src="/s/js/jq/jquery_3.4.1.min.js"></script>
 </#macro>
 
 <#macro jquery_bootstrap>
