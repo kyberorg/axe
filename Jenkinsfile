@@ -52,7 +52,7 @@ pipeline {
                script {
                  String hookUrl;
                  switch(env.BRANCH_NAME) {
-                    case "latest":
+                    case "master":
                         hookUrl = 'https://docker.yatech.eu/api/webhooks/febd279f-822a-4598-a7d8-588e65851228?tag=latest';
                         break;
                     case "trunk":
@@ -71,7 +71,7 @@ pipeline {
                script {
                  String url;
                  switch(env.BRANCH_NAME) {
-                    case "latest":
+                    case "master":
                         url = 'https://yals.eu';
                         break;
                     case "trunk":
