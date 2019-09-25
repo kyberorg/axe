@@ -27,6 +27,10 @@ public class Endpoint {
     @RequestMethod(value = HttpMethod.GET, api = true)
     public static final String TELEGRAM_STATUS_API = "/api/tg/status";
 
+    @RequestMethod(value = HttpMethod.GET, api = true)
+    public static final String QR_CODE_API_BASE = "/api/qrCode/";
+    public static final String QR_CODE_API = QR_CODE_API_BASE + "{ident}";
+
     @RequestMethod(HttpMethod.GET)
     public static final String SLASH_BASE = "/";
     public static final String SLASH = "/{ident}";
