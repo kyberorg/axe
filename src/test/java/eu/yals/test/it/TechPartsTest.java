@@ -42,7 +42,7 @@ public class TechPartsTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).dispatchOptions(true).build();
     }
 
     @Test
@@ -71,18 +71,6 @@ public class TechPartsTest {
 
         TestUtils.assertContentNotEmpty("humans.txt are empty", result);
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
-    }
-
-    @Test
-    public void isAcceptHeaderJsonAppReturnJsonWhenNothingFound() throws Exception {
-        assertNotNull(this.mockMvc);
-        MvcResult result = mockMvc.perform(get("/void/notFound")
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON))
-                .andExpect(status().is(404))
-                .andReturn();
-
-        TestUtils.assertContentNotEmpty(result);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test

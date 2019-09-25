@@ -1,5 +1,7 @@
 package eu.yals.test;
 
+import com.mashape.unirest.http.Headers;
+import com.mashape.unirest.http.HttpResponse;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
@@ -36,6 +38,12 @@ public class TestUtils {
         assertContentNotEmpty("Content is empty", result);
     }
 
+    public static void assertContentNotEmpty(HttpResponse<String> response) {
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertNotEquals("", response.getBody().trim());
+    }
+
     public static void assertContentNotEmpty(String message, MvcResult result) throws UnsupportedEncodingException {
         assertNotNull(result);
         assertNotNull(result.getResponse());
@@ -59,13 +67,38 @@ public class TestUtils {
         }
     }
 
+    public static void assertContentType(String mimeType, HttpResponse<String> response) {
+        assertNotNull(mimeType);
+        assertNotNull(response);
+
+        Headers headers = response.getHeaders();
+        assertNotNull(headers);
+        String contentType = headers.getFirst(Header.CONTENT_TYPE);
+        assertNotNull(contentType);
+        String[] contentTypeParts = contentType.split(";");
+        if (contentTypeParts.length > 1) {
+            String onlyContentType = contentTypeParts[0];
+            assertEquals(mimeType, onlyContentType);
+        } else {
+            assertEquals(mimeType, contentType);
+        }
+    }
+
     public static String whichBrowser() {
         return System.getProperty(TestApp.Selenide.BROWSER, Selenide.Browser.HTMLUNIT);
     }
 
     public static String getTestUrl() {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
-        final String localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
+        final String localUrl;
+        String runMode = System.getProperty(TestApp.Properties.RUN_MODE, TestApp.RunMode.LOCAL.name());
+
+        if (runMode.equals(TestApp.RunMode.CONTAINER.name())) {
+            localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
+        } else {
+            localUrl = String.format("http://localhost:%d", serverPort);
+        }
+
         return System.getProperty(TestApp.Properties.TEST_URL, localUrl);
     }
 

@@ -80,6 +80,7 @@ public class UITest {
         chrome.start();
         RemoteWebDriver driver = chrome.getWebDriver();
         WebDriverRunner.setWebDriver(driver);
+        System.setProperty(TestApp.Properties.RUN_MODE, TestApp.RunMode.CONTAINER.name());
     }
 
     protected static void pasteValueInFormAndSubmitIt(String link) {
