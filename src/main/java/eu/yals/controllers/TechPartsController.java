@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -47,19 +48,22 @@ public class TechPartsController extends YalsController {
         return render500();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE,
-            produces = {MimeType.TEXT_PLAIN, MimeType.APPLICATION_JSON})
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE)
     public String notFound(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
 
-        response.setStatus(404);
+        return render404();
+    }
 
-        if (clientAcceptsJson(request)) {
-            return ErrorJson.createWithMessage("Not Found").toString();
-        } else {
-            return render404();
-        }
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE, produces = MimeType.APPLICATION_JSON)
+    @ResponseBody
+    public String notFoundJson(HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
+
+        response.setStatus(404);
+        return ErrorJson.createWithMessage("Not Found").toString();
     }
 
     private boolean clientAcceptsJson(HttpServletRequest request) {
