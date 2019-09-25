@@ -24,10 +24,10 @@ import static org.junit.Assert.assertEquals;
 public class TechPartsTest extends UnirestTest {
 
     private static final String ALWAYS_NOT_FOUND_LOCATION = "/void/notFound";
+    private static final String ALWAYS_NOT_FOUND_API_LOCATION = "/api/void/notFound";
 
     @Test
     public void isAcceptHeaderJsonAppReturnJsonWhenNothingFound() throws Exception {
-
         HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
                 .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
                 .asString();
@@ -36,5 +36,48 @@ public class TechPartsTest extends UnirestTest {
 
         TestUtils.assertContentNotEmpty(response);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+    }
+
+    @Test
+    public void byDefaultAppReturnHtmlWhenNothingFound() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
+                .asString();
+
+        assertEquals(404, response.getStatus());
+
+        TestUtils.assertContentNotEmpty(response);
+        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
+    }
+
+    @Test
+    public void onApiRequestWithHeaderAppReturnJsonWhenNothingFound() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
+                .asString();
+
+        assertEquals(404, response.getStatus());
+
+        TestUtils.assertContentNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+    }
+
+    @Test
+    public void onApiRequestWithoutHeadersAppReturnJsonWhenNothingFound() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
+                .asString();
+
+        assertEquals(404, response.getStatus());
+
+        TestUtils.assertContentNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+    }
+
+    @Test
+    public void onApiRequestWithNonJsonAcceptHeaderAppReturns406WhenNothingFound() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
+                .header(Header.ACCEPT, MimeType.APPLICATION_XML)
+                .asString();
+
+        assertEquals(406, response.getStatus());
     }
 }

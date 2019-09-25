@@ -54,7 +54,7 @@ public class TechPartsController extends YalsController {
         this.request = request;
         this.response = response;
 
-        if (clientWantsJson(request)) {
+        if (isApiRequest(request) || clientWantsJson(request)) {
             return Endpoint.API_NOT_FOUND_PAGE;
         }
 
@@ -79,6 +79,15 @@ public class TechPartsController extends YalsController {
         } else {
             return acceptHeader.equals(MimeType.APPLICATION_JSON);
         }
+    }
 
+    private boolean isApiRequest(HttpServletRequest request) {
+        String requestUrl;
+        try {
+            requestUrl = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+        } catch (Exception e) {
+            return false;
+        }
+        return requestUrl.startsWith("/api");
     }
 }
