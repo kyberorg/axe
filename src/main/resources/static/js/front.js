@@ -10,6 +10,9 @@ function cleanForm() {
 function cleanResults() {
     $("#resultLink").html("").attr("href", "");
     $("#result").addClass('invisible');
+
+    $("#qrCode img").attr('src', "");
+    $("#qrCode").addClass('invisible');
 }
 
 function showError(errorMessage) {
@@ -40,6 +43,7 @@ function onSuccessStoreLink(data, textStatus, jqXHR) {
         $("#resultLink").html(window.location.origin + "/" + ident).attr("href", ident);
         $("#result").removeClass('invisible');
         updateCounter();
+        generateQRCode(ident);
     }
 }
 
@@ -97,6 +101,34 @@ function updateCounter() {
         counter.text(parseInt(currentNum) + 1);
     } else {
         console.error("Failed to update counter. Current counter value is not a number")
+    }
+}
+
+function generateQRCode(ident) {
+    var qrCodeGeneratorRoute = "/api/qrCode/" + ident;
+    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
+}
+
+function onSuccessGenerateQRCode(data, textStatus, jqXHR) {
+    if (jqXHR.status === 200) {
+        var qrCode = data.qrCode;
+        if (qrCode === undefined || qrCode.trim().length === 0) {
+            showError("Internal error. Got malformed reply from QR generator");
+            return;
+        }
+
+        $("#qrCode img").attr('src', qrCode);
+        $("#qrCode").removeClass('invisible');
+    }
+}
+
+function onFailGenerateQRCode(jqXHR, textStatus, errorThrown) {
+    //TODO do it better
+    if (jqXHR !== null) {
+        var replyRaw = jqXHR.responseText;
+        console.debug("QR Code Reply JSON: " + replyRaw);
+        console.debug("QR Code Reply TextStatus: " + textStatus);
+        console.debug("QR Code Reply ErrorThrown: " + errorThrown);
     }
 }
 
