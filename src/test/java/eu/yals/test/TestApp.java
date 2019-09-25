@@ -9,7 +9,7 @@ public class TestApp {
     public static class Properties {
         public static final String TEST_URL = "testUrl";
         public static final String SERVER_PORT = "port";
-        public static final String RUN_MODE = "runMode";
+        public static final String TEST_RUN_MODE = "test.runMode";
     }
 
     public static class Selenide {

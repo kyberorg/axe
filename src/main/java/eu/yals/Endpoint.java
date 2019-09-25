@@ -35,6 +35,8 @@ public class Endpoint {
     public static final String ROBOTS_TXT = "/robots.txt";
     public static final String HUMANS_TXT = "/humans.txt";
     public static final String FAVICON_ICO = "/favicon.ico";
+
+    // those two endpoints are used only in tests to simulate application error
     public static final String FAIL_ENDPOINT = "/failPoint";
     public static final String FAIL_API_ENDPOINT = "/api/failPoint";
 
@@ -46,5 +48,5 @@ public class Endpoint {
     public static final String ERROR_PAGE_FOR_API_BASE = "/error/api/";
     public static final String ERROR_PAGE_FOR_API = ERROR_PAGE_FOR_API_BASE + "{status}";
     public static final String NOT_FOUND_PAGE = "/errors/404";
-    public static final String API_NOT_FOUND_PAGE = "/errors/404api";
+    public static final String NOT_FOUND_PAGE_FOR_API = "/errors/404api";
 }

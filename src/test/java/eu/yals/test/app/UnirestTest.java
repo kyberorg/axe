@@ -15,6 +15,7 @@ public class UnirestTest {
 
     @BeforeClass
     public static void setUp() {
-        System.setProperty(TestApp.Properties.RUN_MODE, TestApp.RunMode.LOCAL.name());
+        //application runs and accessible locally aka localhost
+        System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name());
     }
 }

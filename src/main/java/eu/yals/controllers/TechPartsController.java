@@ -6,6 +6,7 @@ import eu.yals.constants.MimeType;
 import eu.yals.controllers.internal.YalsController;
 import eu.yals.json.ErrorJson;
 import eu.yals.json.internal.Json;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @since 2.0
  */
+@Slf4j
 @Controller
 public class TechPartsController extends YalsController {
 
@@ -35,6 +37,11 @@ public class TechPartsController extends YalsController {
         return "/s/humans.txt";
     }
 
+    /**
+     * This endpoint meant to be used only in application tests for simulating application fails
+     *
+     * @return always throws RuntimeException
+     */
     @RequestMapping(method = RequestMethod.GET, value = {Endpoint.FAIL_ENDPOINT, Endpoint.FAIL_API_ENDPOINT})
     public String iWillAlwaysFail() {
         throw new RuntimeException("I will always fail");
@@ -68,7 +75,7 @@ public class TechPartsController extends YalsController {
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE_FOR_API, produces = MimeType.APPLICATION_JSON)
     @ResponseBody
-    public Json errorForApi(@PathVariable("status") int status, HttpServletRequest request, HttpServletResponse response) {
+    public Json errorForApi(@PathVariable("status") int status, HttpServletResponse response) {
         response.setStatus(status);
         if (status == 503) {
             return ErrorJson.createWithMessage("Server is unavailable");
@@ -83,14 +90,13 @@ public class TechPartsController extends YalsController {
         this.response = response;
 
         if (isApiRequest(request) || clientWantsJson(request)) {
-            return Endpoint.API_NOT_FOUND_PAGE;
+            return Endpoint.NOT_FOUND_PAGE_FOR_API;
         }
 
         return render404();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = {Endpoint.API_NOT_FOUND_PAGE, Endpoint.NOT_FOUND_PAGE},
-            produces = MimeType.APPLICATION_JSON)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE_FOR_API, produces = MimeType.APPLICATION_JSON)
     @ResponseBody
     public Json notFoundJson(HttpServletResponse response) {
 
@@ -112,6 +118,7 @@ public class TechPartsController extends YalsController {
         try {
             requestUrl = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
         } catch (Exception e) {
+            log.error("Failed to determine request URL which caused an error", e);
             return false;
         }
         return requestUrl.startsWith("/api");

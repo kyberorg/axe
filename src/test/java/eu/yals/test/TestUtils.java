@@ -67,7 +67,7 @@ public class TestUtils {
         }
     }
 
-    public static void assertContentType(String mimeType, HttpResponse<String> response) {
+    public static void assertResponseBodyNotEmpty(String mimeType, HttpResponse<String> response) {
         assertNotNull(mimeType);
         assertNotNull(response);
 
@@ -75,6 +75,8 @@ public class TestUtils {
         assertNotNull(headers);
         String contentType = headers.getFirst(Header.CONTENT_TYPE);
         assertNotNull(contentType);
+
+        //following needed because in may contain something like 'application/json;encoding=UTF8'
         String[] contentTypeParts = contentType.split(";");
         if (contentTypeParts.length > 1) {
             String onlyContentType = contentTypeParts[0];
@@ -91,7 +93,7 @@ public class TestUtils {
     public static String getTestUrl() {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         final String localUrl;
-        String runMode = System.getProperty(TestApp.Properties.RUN_MODE, TestApp.RunMode.LOCAL.name());
+        String runMode = System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name());
 
         if (runMode.equals(TestApp.RunMode.CONTAINER.name())) {
             localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);

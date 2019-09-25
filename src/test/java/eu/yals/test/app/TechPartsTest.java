@@ -28,7 +28,7 @@ public class TechPartsTest extends UnirestTest {
     private static final String ALWAYS_NOT_FOUND_API_LOCATION = "/api/void/notFound";
 
     @Test
-    public void ifAcceptHeaderJsonAppReturnJsonWhenNothingFound() throws Exception {
+    public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenNothingFound() throws Exception {
         HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
                 .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
                 .asString();
@@ -36,7 +36,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(404, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(404, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.TEXT_HTML, response);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(404, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -70,11 +70,11 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(404, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
-    public void onApiRequestWithNonJsonAcceptHeaderAppReturns406WhenNothingFound() throws Exception {
+    public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenNothingFound() throws Exception {
         HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
                 .header(Header.ACCEPT, MimeType.APPLICATION_XML)
                 .asString();
@@ -91,7 +91,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(500, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(500, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.TEXT_HTML, response);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(500, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -125,11 +125,11 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(500, response.getStatus());
 
         TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
-    public void onApiRequestWithNonJsonAcceptHeaderAppReturns406WhenFailed() throws Exception {
+    public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenFailed() throws Exception {
         HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
                 .header(Header.ACCEPT, MimeType.APPLICATION_XML)
                 .asString();
