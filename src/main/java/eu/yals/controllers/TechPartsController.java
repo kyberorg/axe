@@ -5,6 +5,7 @@ import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.controllers.internal.YalsController;
 import eu.yals.json.ErrorJson;
+import eu.yals.json.internal.Json;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,20 +54,25 @@ public class TechPartsController extends YalsController {
         this.request = request;
         this.response = response;
 
+        if (clientWantsJson(request)) {
+            return Endpoint.API_NOT_FOUND_PAGE;
+        }
+
         return render404();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE, produces = MimeType.APPLICATION_JSON)
+    @RequestMapping(method = RequestMethod.GET, value = {Endpoint.API_NOT_FOUND_PAGE, Endpoint.NOT_FOUND_PAGE},
+            produces = MimeType.APPLICATION_JSON)
     @ResponseBody
-    public String notFoundJson(HttpServletRequest request, HttpServletResponse response) {
+    public Json notFoundJson(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
 
         response.setStatus(404);
-        return ErrorJson.createWithMessage("Not Found").toString();
+        return ErrorJson.createWithMessage("Page Not Found");
     }
 
-    private boolean clientAcceptsJson(HttpServletRequest request) {
+    private boolean clientWantsJson(HttpServletRequest request) {
         String acceptHeader = request.getHeader(Header.ACCEPT);
         if (acceptHeader == null) {
             return false;
