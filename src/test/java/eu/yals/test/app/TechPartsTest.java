@@ -2,6 +2,7 @@ package eu.yals.test.app;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.test.TestUtils;
@@ -80,4 +81,17 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(406, response.getStatus());
     }
+
+    @Test
+    public void isAcceptHeaderJsonAppReturnJsonWhenFailed() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT)
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
+                .asString();
+
+        assertEquals(500, response.getStatus());
+
+        TestUtils.assertContentNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+    }
+
 }
