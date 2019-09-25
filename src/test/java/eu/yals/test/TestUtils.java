@@ -38,7 +38,7 @@ public class TestUtils {
         assertContentNotEmpty("Content is empty", result);
     }
 
-    public static void assertContentNotEmpty(HttpResponse<String> response) {
+    public static void assertResponseBodyNotEmpty(HttpResponse<String> response) {
         assertNotNull(response);
         assertNotNull(response.getBody());
         assertNotEquals("", response.getBody().trim());
@@ -67,7 +67,7 @@ public class TestUtils {
         }
     }
 
-    public static void assertResponseBodyNotEmpty(String mimeType, HttpResponse<String> response) {
+    public static void assertContentType(String mimeType, HttpResponse<String> response) {
         assertNotNull(mimeType);
         assertNotNull(response);
 

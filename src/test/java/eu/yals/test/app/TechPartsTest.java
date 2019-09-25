@@ -35,8 +35,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(404, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -46,8 +46,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(404, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.TEXT_HTML, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
     }
 
     @Test
@@ -58,8 +58,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(404, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -69,8 +69,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(404, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -90,8 +90,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(500, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -101,8 +101,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(500, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.TEXT_HTML, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
     }
 
     @Test
@@ -113,8 +113,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(500, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
@@ -124,8 +124,8 @@ public class TechPartsTest extends UnirestTest {
 
         assertEquals(500, response.getStatus());
 
-        TestUtils.assertContentNotEmpty(response);
-        TestUtils.assertResponseBodyNotEmpty(MimeType.APPLICATION_JSON, response);
+        TestUtils.assertResponseBodyNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
     }
 
     @Test
