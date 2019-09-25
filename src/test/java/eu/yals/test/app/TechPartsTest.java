@@ -28,7 +28,7 @@ public class TechPartsTest extends UnirestTest {
     private static final String ALWAYS_NOT_FOUND_API_LOCATION = "/api/void/notFound";
 
     @Test
-    public void isAcceptHeaderJsonAppReturnJsonWhenNothingFound() throws Exception {
+    public void ifAcceptHeaderJsonAppReturnJsonWhenNothingFound() throws Exception {
         HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
                 .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
                 .asString();
@@ -83,7 +83,7 @@ public class TechPartsTest extends UnirestTest {
     }
 
     @Test
-    public void isAcceptHeaderJsonAppReturnJsonWhenFailed() throws Exception {
+    public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenFailed() throws Exception {
         HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT)
                 .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
                 .asString();
@@ -94,4 +94,46 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
     }
 
+    @Test
+    public void byDefaultAppReturnHtmlWhenFailed() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT)
+                .asString();
+
+        assertEquals(500, response.getStatus());
+
+        TestUtils.assertContentNotEmpty(response);
+        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
+    }
+
+    @Test
+    public void onApiRequestWithHeaderAppReturnJsonWhenFailed() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
+                .asString();
+
+        assertEquals(500, response.getStatus());
+
+        TestUtils.assertContentNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+    }
+
+    @Test
+    public void onApiRequestWithoutHeadersAppReturnJsonWhenFailed() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
+                .asString();
+
+        assertEquals(500, response.getStatus());
+
+        TestUtils.assertContentNotEmpty(response);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+    }
+
+    @Test
+    public void onApiRequestWithNonJsonAcceptHeaderAppReturns406WhenFailed() throws Exception {
+        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
+                .header(Header.ACCEPT, MimeType.APPLICATION_XML)
+                .asString();
+
+        assertEquals(406, response.getStatus());
+    }
 }

@@ -36,6 +36,7 @@ public class Endpoint {
     public static final String HUMANS_TXT = "/humans.txt";
     public static final String FAVICON_ICO = "/favicon.ico";
     public static final String FAIL_ENDPOINT = "/failPoint";
+    public static final String FAIL_API_ENDPOINT = "/api/failPoint";
 
     @RequestMethod(HttpMethod.GET)
     public static final String TEST_CSS = "/s/css/test.css";

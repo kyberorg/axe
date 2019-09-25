@@ -35,8 +35,8 @@ public class TechPartsController extends YalsController {
         return "/s/humans.txt";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.FAIL_ENDPOINT)
-    public String iWillAlwaysFail(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(method = RequestMethod.GET, value = {Endpoint.FAIL_ENDPOINT, Endpoint.FAIL_API_ENDPOINT})
+    public String iWillAlwaysFail() {
         throw new RuntimeException("I will always fail");
     }
 
@@ -45,22 +45,35 @@ public class TechPartsController extends YalsController {
         this.request = request;
         this.response = response;
 
+        int status = 500;
+
         Object exception = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
         if (exception instanceof Exception) {
             Exception cause = (Exception) ((Exception) exception).getCause();
             if (cause instanceof CannotCreateTransactionException) {
-                return render503();
+                status = 503;
             }
         }
-        return render500();
+
+        if (isApiRequest(request) || clientWantsJson(request)) {
+            return Endpoint.ERROR_PAGE_FOR_API_BASE + status;
+        }
+
+        if (status == 503) {
+            return render503();
+        } else {
+            return render500();
+        }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE_FOR_API)
-    public Json errorForApi(@PathVariable("") int status, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE_FOR_API, produces = MimeType.APPLICATION_JSON)
+    @ResponseBody
+    public Json errorForApi(@PathVariable("status") int status, HttpServletRequest request, HttpServletResponse response) {
+        response.setStatus(status);
         if (status == 503) {
-            return ErrorJson.createWithMessage("503");
+            return ErrorJson.createWithMessage("Server is unavailable");
         } else {
-            return ErrorJson.createWithMessage("500");
+            return ErrorJson.createWithMessage("Server Error");
         }
     }
 
