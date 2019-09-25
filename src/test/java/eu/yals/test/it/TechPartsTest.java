@@ -74,6 +74,18 @@ public class TechPartsTest {
     }
 
     @Test
+    public void isAcceptHeaderJsonAppReturnJsonWhenNothingFound() throws Exception {
+        assertNotNull(this.mockMvc);
+        MvcResult result = mockMvc.perform(get("/void/notFound")
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON))
+                .andExpect(status().is(404))
+                .andReturn();
+
+        TestUtils.assertContentNotEmpty(result);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
+    }
+
+    @Test
     public void faviconIsPresentAndIcon() throws Exception {
         assertNotNull(this.mockMvc);
         MvcResult result = mockMvc.perform(get(Endpoint.FAVICON_ICO)

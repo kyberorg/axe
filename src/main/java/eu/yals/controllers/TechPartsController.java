@@ -1,7 +1,10 @@
 package eu.yals.controllers;
 
 import eu.yals.Endpoint;
+import eu.yals.constants.Header;
+import eu.yals.constants.MimeType;
 import eu.yals.controllers.internal.YalsController;
+import eu.yals.json.ErrorJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,11 +47,28 @@ public class TechPartsController extends YalsController {
         return render500();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE, produces = "text/html")
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.NOT_FOUND_PAGE,
+            produces = {MimeType.TEXT_PLAIN, MimeType.APPLICATION_JSON})
     public String notFound(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-        return render404();
+
+        response.setStatus(404);
+
+        if (clientAcceptsJson(request)) {
+            return ErrorJson.createWithMessage("Not Found").toString();
+        } else {
+            return render404();
+        }
     }
 
+    private boolean clientAcceptsJson(HttpServletRequest request) {
+        String acceptHeader = request.getHeader(Header.ACCEPT);
+        if (acceptHeader == null) {
+            return false;
+        } else {
+            return acceptHeader.equals(MimeType.APPLICATION_JSON);
+        }
+
+    }
 }
