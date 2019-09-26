@@ -35,6 +35,12 @@ body {
     margin-top: 15px;
 }
 
+.qr-box {
+    text-align: center;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+}
+
 @media all and (min-width: 407px) {
     .result {
         font-size: x-large;
@@ -65,7 +71,7 @@ body {
     display: none;
 }
 
-@media all and (max-height: 500px) {
+@media all and (max-height: 753px) {
     .footer {
         display: none;
     }
