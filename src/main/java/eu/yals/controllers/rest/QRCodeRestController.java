@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Generate QR from short link
+ * Generates QR from short link
  *
  * @since 2.6
  */
