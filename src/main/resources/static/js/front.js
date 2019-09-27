@@ -11,7 +11,7 @@ function cleanResults() {
     $("#resultLink").html("").attr("href", "");
     $("#result").addClass('invisible');
 
-    $("#qrCode img").attr('src', "");
+    $("#qrCode img").attr("src", "");
     $("#qrCode").addClass('invisible');
 }
 
@@ -105,13 +105,16 @@ function updateCounter() {
 }
 
 function calculateQRCodeSize() {
-    var w = $(window).width();
+    var browserWidth = $(window).width();
+    var defaultQRBlockSize = 371;
+    var defaultQRCodeSize = 350;
+    var qrBlockRatio = 0.943; //350/371
 
     var size;
-    if (w > 371) {
-        size = 350;
+    if (browserWidth > defaultQRBlockSize) {
+        size = defaultQRCodeSize;
     } else {
-        size = w * 0.943;
+        size = browserWidth * qrBlockRatio;
     }
 
     return size;
@@ -137,7 +140,10 @@ function onSuccessGenerateQRCode(data, textStatus, jqXHR) {
 }
 
 function onFailGenerateQRCode(jqXHR, textStatus, errorThrown) {
-    //TODO do it better
+    showError("Internal error. Got malformed reply from QR generator");
+    $("#qrCode img").attr("src", "");
+    $("#qrCode").addClass('invisible');
+
     if (jqXHR !== null) {
         var replyRaw = jqXHR.responseText;
         console.debug("QR Code Reply JSON: " + replyRaw);
