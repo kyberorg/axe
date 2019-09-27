@@ -105,23 +105,21 @@ function updateCounter() {
 }
 
 function calculateQRCodeSize() {
-    var h = $(window).height();
     var w = $(window).width();
 
-    var min = (h < w) ? h : w;
-
-    if (min > 730) {
-        return 350;
-    } else if (min < 380) {
-        return 1;
+    var size;
+    if (w > 371) {
+        size = 350;
     } else {
-        return 730 - min;
+        size = w * 0.943;
     }
+
+    return size;
 }
 
 function generateQRCode(ident) {
     var size = calculateQRCodeSize();
-    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + size;
+    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size);
     doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
 }
 

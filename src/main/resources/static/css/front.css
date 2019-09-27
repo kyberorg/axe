@@ -71,7 +71,7 @@ body {
     display: none;
 }
 
-@media all and (max-height: 750px) {
+@media all and (max-height: 800px) {
     .footer {
         display: none;
     }
