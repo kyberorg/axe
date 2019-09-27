@@ -104,8 +104,24 @@ function updateCounter() {
     }
 }
 
+function calculateQRCodeSize() {
+    var h = $(window).height();
+    var w = $(window).width();
+
+    var min = (h < w) ? h : w;
+
+    if (min > 730) {
+        return 350;
+    } else if (min < 380) {
+        return 1;
+    } else {
+        return 730 - min;
+    }
+}
+
 function generateQRCode(ident) {
-    var qrCodeGeneratorRoute = "/api/qrCode/" + ident;
+    var size = calculateQRCodeSize();
+    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + size;
     doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
 }
 
