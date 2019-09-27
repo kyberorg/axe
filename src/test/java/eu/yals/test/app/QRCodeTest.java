@@ -31,10 +31,10 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class QrCodeTest {
+public class QRCodeTest {
 
     @Test
-    public void onRequestQrCodeForValidIdentAppGivesValidPngQrCode() throws Exception {
+    public void onRequestQRCodeForValidIdentAppGivesValidPngQRCode() throws Exception {
         final String ident = getValidIdent();
 
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
@@ -46,11 +46,11 @@ public class QrCodeTest {
         assertNotNull(body.getObject());
 
         String qrCode = body.getObject().getString("qrCode");
-        assertValidQrCode(qrCode);
+        assertValidQRCode(qrCode);
     }
 
     @Test
-    public void onRequestQrCodeWithNonExistingIdentAppGives404() throws Exception {
+    public void onRequestQRCodeWithNonExistingIdentAppGives404() throws Exception {
         final String ident = "NotReallyValidIdent";
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
 
@@ -58,7 +58,7 @@ public class QrCodeTest {
     }
 
     @Test
-    public void onRequestQrCodeWithOnlyNumbersAppGives404() throws Exception {
+    public void onRequestQRCodeWithOnlyNumbersAppGives404() throws Exception {
         final int ident = 1234;
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
 
@@ -66,14 +66,14 @@ public class QrCodeTest {
     }
 
     @Test
-    public void onRequestQrCodeWithNullAppGives404() throws Exception {
+    public void onRequestQRCodeWithNullAppGives404() throws Exception {
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + null).asJson();
 
         assertEquals(404, qrAPIResponse.getStatus());
     }
 
     @Test
-    public void onRequestQrCodeWithValidIdentAndSizeAppGivesQrCodeWithRequestedSize() throws Exception {
+    public void onRequestQRCodeWithValidIdentAndSizeAppGivesQRCodeWithRequestedSize() throws Exception {
         final String ident = getValidIdent();
         final int size = 100;
 
@@ -85,12 +85,12 @@ public class QrCodeTest {
         JsonNode body = qrAPIResponse.getBody();
         String qrCode = body.getObject().getString("qrCode");
 
-        assertValidQrCode(qrCode);
-        assertQrCodeHasExactSize(size, qrCode);
+        assertValidQRCode(qrCode);
+        assertQRCodeHasExactSize(size, qrCode);
     }
 
     @Test
-    public void onRequestQrCodeWithValidIdentAndNegativeSizeAppGives400() throws Exception {
+    public void onRequestQRCodeWithValidIdentAndNegativeSizeAppGives400() throws Exception {
         final String ident = "IdentOne";
         final int size = -1;
 
@@ -101,7 +101,7 @@ public class QrCodeTest {
     }
 
     @Test
-    public void onRequestQrCodeWithValidIdentAndZeroSizeAppGives400() throws Exception {
+    public void onRequestQRCodeWithValidIdentAndZeroSizeAppGives400() throws Exception {
         final String ident = "IdentOne";
         final int size = 0;
 
@@ -112,7 +112,7 @@ public class QrCodeTest {
     }
 
     @Test
-    public void onRequestQrCodeWithValidIdentAndStringSizeAppGives400() throws Exception {
+    public void onRequestQRCodeWithValidIdentAndStringSizeAppGives400() throws Exception {
         final String ident = "IdentOne";
         final String size = "size";
 
@@ -123,7 +123,7 @@ public class QrCodeTest {
     }
 
     @Test
-    public void onRequestQrCodeToMultiLevelRequestAppGives404() throws Exception {
+    public void onRequestQRCodeToMultiLevelRequestAppGives404() throws Exception {
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + "/void/void2/dd").asJson();
 
         assertEquals(404, qrAPIResponse.getStatus());
@@ -145,7 +145,7 @@ public class QrCodeTest {
         return body.getObject().getString("ident");
     }
 
-    private void assertValidQrCode(String qrCode) {
+    private void assertValidQRCode(String qrCode) {
         assertTrue("QR find, but cannot be empty", StringUtils.isNotBlank(qrCode));
 
         String[] qrCodeParts = qrCode.split(";");
@@ -166,7 +166,7 @@ public class QrCodeTest {
         }
     }
 
-    private void assertQrCodeHasExactSize(int size, String qrCode) throws IOException {
+    private void assertQRCodeHasExactSize(int size, String qrCode) throws IOException {
         String imageString = qrCode.split(",")[1];
         Base64.Decoder decoder = Base64.getDecoder();
         byte[] decodedImage = decoder.decode(imageString);

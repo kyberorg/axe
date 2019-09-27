@@ -37,7 +37,7 @@ public class QRCodeRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.QR_CODE_API)
     @ResponseBody
-    public Json getQrCode(@PathVariable("ident") String ident, HttpServletResponse response) {
+    public Json getQRCode(@PathVariable("ident") String ident, HttpServletResponse response) {
         this.response = response;
 
         Json testResult = testIdentExist(ident);
@@ -54,12 +54,12 @@ public class QRCodeRestController {
             return ErrorJson.createWithMessage("Failed to generate QR code. Internal error");
         }
         response.setStatus(200);
-        return QRCodeResponseJson.withQrCode(qrCode);
+        return QRCodeResponseJson.withQRCode(qrCode);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.CUSTOM_SIZE_QR_CODE_API)
     @ResponseBody
-    public Json getQrCodeWithCustomSize(@PathVariable("ident") String ident,
+    public Json getQRCodeWithCustomSize(@PathVariable("ident") String ident,
                                         @PathVariable("size") int size,
                                         HttpServletResponse response) {
         this.response = response;
@@ -87,7 +87,7 @@ public class QRCodeRestController {
         }
 
         response.setStatus(200);
-        return QRCodeResponseJson.withQrCode(qrCode);
+        return QRCodeResponseJson.withQRCode(qrCode);
 
     }
 

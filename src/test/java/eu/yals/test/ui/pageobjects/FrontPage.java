@@ -38,7 +38,7 @@ public class FrontPage {
         public static final SelenideElement COPY_RESULT_ICON = $("#copyLink");
     }
 
-    public static class QrCodeRow {
+    public static class QRCodeRow {
         public static final SelenideElement QR_CODE_DIV = $("#qrCode");
         public static final SelenideElement QR_CODE = $("#qrCode img");
     }

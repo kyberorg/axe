@@ -49,7 +49,7 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void qrCodeBlockIsHidden() {
-        FrontPage.QrCodeRow.QR_CODE_DIV.shouldNotBe(visible);
+        FrontPage.QRCodeRow.QR_CODE_DIV.shouldNotBe(visible);
     }
 
     @Test

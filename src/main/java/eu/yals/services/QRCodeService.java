@@ -65,8 +65,8 @@ public class QRCodeService {
         return base64Marker + "," + encoder.encodeToString(qrCode);
     }
 
-    private String doPng(String base64encodedQrCode) {
+    private String doPng(String base64encodedQRCode) {
         final String pngMarker = "data:image/png";
-        return pngMarker + ";" + base64encodedQrCode;
+        return pngMarker + ";" + base64encodedQRCode;
     }
 }

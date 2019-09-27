@@ -6,12 +6,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * QrCode Endpoint outgoing JSON
+ * QR Code Endpoint outgoing JSON
  *
  * @since 2.6
  */
 @EqualsAndHashCode(callSuper = true)
-@Data(staticConstructor = "withQrCode")
+@Data(staticConstructor = "withQRCode")
 public class QRCodeResponseJson extends Json {
     @Since(2.6)
     private final String qrCode;
