@@ -39,10 +39,10 @@ public class QRCodeService {
     }
 
     /**
-     * Produces PNG with QR code, where encoded short link
+     * Produces PNG with QR code, where encoded short link, with given size
      *
      * @param ident string with ident, which will added to server url
-     * @param size  QR code size
+     * @param size  positive integer with QR code size.
      * @return ready base64 encoded png with data:image/png stamp
      */
     public String getQRCodeFromIdent(String ident, int size) throws WriterException, IOException {

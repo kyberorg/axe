@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Generates QR from short link
@@ -25,6 +26,7 @@ import java.io.IOException;
 @RestController
 public class QRCodeRestController {
     private static final String TAG = "[API QR Code]";
+
     private QRCodeService qrCodeService;
     private LinkService linkService;
 
@@ -45,16 +47,17 @@ public class QRCodeRestController {
             return testResult;
         }
 
-        String qrCode;
-        try {
-            qrCode = qrCodeService.getQRCodeFromIdent(ident);
-        } catch (IOException | WriterException e) {
-            log.error("{} Failed to generate QR code", TAG, e);
+        Optional<String> qrCode = getQRCode(ident, QRCodeService.DEFAULT_SIZE);
+        Json result;
+        if (qrCode.isPresent()) {
+            response.setStatus(200);
+            result = QRCodeResponseJson.withQRCode(qrCode.get());
+        } else {
             response.setStatus(500);
-            return ErrorJson.createWithMessage("Failed to generate QR code. Internal error");
+            result = ErrorJson.createWithMessage("Failed to generate QR code. Internal error");
         }
-        response.setStatus(200);
-        return QRCodeResponseJson.withQRCode(qrCode);
+        return result;
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.CUSTOM_SIZE_QR_CODE_API)
@@ -64,31 +67,26 @@ public class QRCodeRestController {
                                         HttpServletResponse response) {
         this.response = response;
 
-        //testing size
-        if (size <= 0) {
-            log.error("{} invalid size {}. Replying 400", TAG, size);
-            response.setStatus(400);
-            return ErrorJson.createWithMessage("Size must be positive number");
+        Json sizeTestResult = testSize(size);
+        if (sizeTestResult instanceof ErrorJson) {
+            return sizeTestResult;
         }
 
-        //testing ident
-        Json testResult = testIdentExist(ident);
-        if (testResult instanceof ErrorJson) {
-            return testResult;
+        Json identTestResult = testIdentExist(ident);
+        if (identTestResult instanceof ErrorJson) {
+            return identTestResult;
         }
 
-        String qrCode;
-        try {
-            qrCode = qrCodeService.getQRCodeFromIdent(ident, size);
-        } catch (IOException | WriterException e) {
-            log.error("{} Failed to generate QR code", TAG, e);
+        Optional<String> qrCode = getQRCode(ident, size);
+        Json result;
+        if (qrCode.isPresent()) {
+            response.setStatus(200);
+            result = QRCodeResponseJson.withQRCode(qrCode.get());
+        } else {
             response.setStatus(500);
-            return ErrorJson.createWithMessage("Failed to generate QR code. Internal error");
+            result = ErrorJson.createWithMessage("Failed to generate QR code. Internal error");
         }
-
-        response.setStatus(200);
-        return QRCodeResponseJson.withQRCode(qrCode);
-
+        return result;
     }
 
     private Json testIdentExist(String ident) {
@@ -111,13 +109,22 @@ public class QRCodeRestController {
         }
     }
 
-    private String getQRCode(String ident, int size) throws IOException, WriterException {
-        return qrCodeService.getQRCodeFromIdent(ident, size);
+    private Json testSize(int sizeToTest) {
+        if (sizeToTest <= 0) {
+            log.error("{} invalid size {}. Replying 400", TAG, sizeToTest);
+            response.setStatus(400);
+            return ErrorJson.createWithMessage("Size must be positive number");
+        } else {
+            return EmptyJson.create();
+        }
     }
 
-    private String getQRCode(String ident) throws IOException, WriterException {
-        return getQRCode(ident, QRCodeService.DEFAULT_SIZE);
+    private Optional<String> getQRCode(String ident, int size) {
+        try {
+            return Optional.of(qrCodeService.getQRCodeFromIdent(ident, size));
+        } catch (WriterException | IOException e) {
+            log.error("{} Failed to generate QR code", TAG, e);
+            return Optional.empty();
+        }
     }
-
-
 }
