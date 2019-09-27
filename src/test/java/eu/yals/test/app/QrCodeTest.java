@@ -13,6 +13,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Base64;
 
 import static eu.yals.test.app.UnirestTest.TEST_URL;
@@ -43,6 +47,86 @@ public class QrCodeTest {
 
         String qrCode = body.getObject().getString("qrCode");
         assertValidQrCode(qrCode);
+    }
+
+    @Test
+    public void onRequestQrCodeWithNonExistingIdentAppGives404() throws Exception {
+        final String ident = "NotReallyValidIdent";
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
+
+        assertEquals(404, qrAPIResponse.getStatus());
+    }
+
+    @Test
+    public void onRequestQrCodeWithOnlyNumbersAppGives404() throws Exception {
+        final int ident = 1234;
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
+
+        assertEquals(404, qrAPIResponse.getStatus());
+    }
+
+    @Test
+    public void onRequestQrCodeWithNullAppGives404() throws Exception {
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + null).asJson();
+
+        assertEquals(404, qrAPIResponse.getStatus());
+    }
+
+    @Test
+    public void onRequestQrCodeWithValidIdentAndSizeAppGivesQrCodeWithRequestedSize() throws Exception {
+        final String ident = getValidIdent();
+        final int size = 100;
+
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .asJson();
+
+        assertEquals(200, qrAPIResponse.getStatus());
+
+        JsonNode body = qrAPIResponse.getBody();
+        String qrCode = body.getObject().getString("qrCode");
+
+        assertValidQrCode(qrCode);
+        assertQrCodeHasExactSize(size, qrCode);
+    }
+
+    @Test
+    public void onRequestQrCodeWithValidIdentAndNegativeSizeAppGives400() throws Exception {
+        final String ident = "IdentOne";
+        final int size = -1;
+
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .asJson();
+
+        assertEquals(400, qrAPIResponse.getStatus());
+    }
+
+    @Test
+    public void onRequestQrCodeWithValidIdentAndZeroSizeAppGives400() throws Exception {
+        final String ident = "IdentOne";
+        final int size = 0;
+
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .asJson();
+
+        assertEquals(400, qrAPIResponse.getStatus());
+    }
+
+    @Test
+    public void onRequestQrCodeWithValidIdentAndStringSizeAppGives400() throws Exception {
+        final String ident = "IdentOne";
+        final String size = "size";
+
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .asJson();
+
+        assertEquals(400, qrAPIResponse.getStatus());
+    }
+
+    @Test
+    public void onRequestQrCodeToMultiLevelRequestAppGives404() throws Exception {
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + "/void/void2/dd").asJson();
+
+        assertEquals(404, qrAPIResponse.getStatus());
     }
 
     private String getValidIdent() throws Exception {
@@ -80,5 +164,18 @@ public class QrCodeTest {
         } else {
             fail("Malformed QR code: " + qrCode);
         }
+    }
+
+    private void assertQrCodeHasExactSize(int size, String qrCode) throws IOException {
+        String imageString = qrCode.split(",")[1];
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] decodedImage = decoder.decode(imageString);
+        ByteArrayInputStream bis = new ByteArrayInputStream(decodedImage);
+        BufferedImage image = ImageIO.read(bis);
+        bis.close();
+
+        //QR code is square
+        assertEquals("Width is wrong", size, image.getWidth());
+        assertEquals("Height is wrong", size, image.getHeight());
     }
 }

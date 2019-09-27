@@ -49,6 +49,8 @@ public class TechPartsController extends YalsController {
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE)
     public String error(HttpServletRequest request, HttpServletResponse response) {
+        final String TAG = "[Error Controller]";
+
         this.request = request;
         this.response = response;
 
@@ -58,7 +60,18 @@ public class TechPartsController extends YalsController {
         if (exception instanceof Exception) {
             Exception cause = (Exception) ((Exception) exception).getCause();
             if (cause instanceof CannotCreateTransactionException) {
+                log.error("{} Database is DOWN", TAG, cause);
                 status = 503;
+            } else {
+                log.error("{} Fatal Error is {}", TAG, cause.getMessage(), cause);
+            }
+        } else {
+            Object statusCode = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+            log.error("{} Unknown Error with status {}", TAG, statusCode);
+            try {
+                status = (int) statusCode;
+            } catch (ClassCastException e) {
+                status = 500;
             }
         }
 
@@ -66,10 +79,14 @@ public class TechPartsController extends YalsController {
             return Endpoint.ERROR_PAGE_FOR_API_BASE + status;
         }
 
-        if (status == 503) {
-            return render503();
-        } else {
-            return render500();
+        switch (status) {
+            case 400:
+                return render400();
+            case 503:
+                return render503();
+            case 500:
+            default:
+                return render500();
         }
     }
 
@@ -77,10 +94,15 @@ public class TechPartsController extends YalsController {
     @ResponseBody
     public Json errorForApi(@PathVariable("status") int status, HttpServletResponse response) {
         response.setStatus(status);
-        if (status == 503) {
-            return ErrorJson.createWithMessage("Server is unavailable");
-        } else {
-            return ErrorJson.createWithMessage("Server Error");
+
+        switch (status) {
+            case 400:
+                return ErrorJson.createWithMessage("Bad request");
+            case 503:
+                return ErrorJson.createWithMessage("Server is unavailable");
+            case 500:
+            default:
+                return ErrorJson.createWithMessage("Server Error");
         }
     }
 
