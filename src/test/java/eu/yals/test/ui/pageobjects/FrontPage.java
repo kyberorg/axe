@@ -38,6 +38,11 @@ public class FrontPage {
         public static final SelenideElement COPY_RESULT_ICON = $("#copyLink");
     }
 
+    public static class QRCodeRow {
+        public static final SelenideElement QR_CODE_DIV = $("#qrCode");
+        public static final SelenideElement QR_CODE = $("#qrCode img");
+    }
+
     public static class Footer {
         public static final SelenideElement FOOTER = $("footer");
         public static final SelenideElement VERSION = $("#version");

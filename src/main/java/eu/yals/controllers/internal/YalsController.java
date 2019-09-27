@@ -17,6 +17,11 @@ public class YalsController {
     protected HttpServletRequest request;
     protected HttpServletResponse response;
 
+    protected String render400() {
+        response.setStatus(400);
+        return "errors/400";
+    }
+
     protected String render404() {
         response.setStatus(404);
         return "errors/404";
