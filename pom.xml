@@ -5,7 +5,7 @@
 
     <groupId>ee.yals</groupId>
     <artifactId>yals</artifactId>
-    <version>2.5.1</version>
+    <version>2.6</version>
     <packaging>jar</packaging>
 
     <name>yals</name>
@@ -156,6 +156,18 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.10</version>
+        </dependency>
+
+        <!-- QA Code generation -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.0</version>
         </dependency>
 
         <!-- Spring Boot Tests -->

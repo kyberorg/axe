@@ -33,7 +33,7 @@ public class IncorrectInputTest extends UITest {
     public void emptyInput() {
         pasteValueInFormAndSubmitIt("");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
     }
@@ -42,7 +42,7 @@ public class IncorrectInputTest extends UITest {
     public void singleSpace() {
         pasteValueInFormAndSubmitIt(" ");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
 
@@ -52,7 +52,7 @@ public class IncorrectInputTest extends UITest {
     public void twoSpaces() {
         pasteValueInFormAndSubmitIt("  ");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
 
@@ -62,7 +62,7 @@ public class IncorrectInputTest extends UITest {
     public void shortVariantOfNotUrlInput() {
         pasteValueInFormAndSubmitIt("g&%g");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(and("short and notURL text", text(MALFORMED_URL_TEXT)));
     }
@@ -71,7 +71,7 @@ public class IncorrectInputTest extends UITest {
     public void longVariantOfNotUrlInput() {
         pasteValueInFormAndSubmitIt("veryLongStringWhichIsNotURL%&");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
@@ -80,7 +80,7 @@ public class IncorrectInputTest extends UITest {
     public void urlWithSpacesShallNotPass() {
         pasteValueInFormAndSubmitIt("http://site with spaces.com");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
@@ -89,7 +89,7 @@ public class IncorrectInputTest extends UITest {
     public void urlWithSpecialCharsShallNotPass() {
         pasteValueInFormAndSubmitIt("http://f%&k.com");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
@@ -98,7 +98,7 @@ public class IncorrectInputTest extends UITest {
     public void urlWithBadProtocolShallNotPass() {
         pasteValueInFormAndSubmitIt("file:///etc/passwd");
 
-        formIsClearedAndResultNotVisible();
+        formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text("protocol not supported"));
     }
@@ -109,8 +109,9 @@ public class IncorrectInputTest extends UITest {
         FrontPage.ErrorRow.ERROR_CLOSE.shouldBe(visible);
     }
 
-    private void formIsClearedAndResultNotVisible() {
+    private void formIsClearedResultAndQRCodeAreNotVisible() {
         FrontPage.MainRow.LONG_URL_INPUT.shouldBe(empty);
         FrontPage.ResultRow.RESULT_DIV.shouldNotBe(visible);
+        FrontPage.QRCodeRow.QR_CODE_DIV.shouldNotBe(visible);
     }
 }

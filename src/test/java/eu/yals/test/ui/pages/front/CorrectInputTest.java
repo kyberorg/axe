@@ -13,8 +13,11 @@ import static com.codeborne.selenide.Selenide.open;
 import static eu.yals.test.ui.pageobjects.FrontPage.ErrorRow.ERROR_MODAL;
 import static eu.yals.test.ui.pageobjects.FrontPage.ErrorRow.ERROR_TEXT;
 import static eu.yals.test.ui.pageobjects.FrontPage.MainRow.LONG_URL_INPUT;
+import static eu.yals.test.ui.pageobjects.FrontPage.QRCodeRow.QR_CODE;
+import static eu.yals.test.ui.pageobjects.FrontPage.QRCodeRow.QR_CODE_DIV;
 import static eu.yals.test.ui.pageobjects.FrontPage.ResultRow.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tries to input valid values and checks returned result
@@ -81,6 +84,10 @@ public class CorrectInputTest extends UITest {
         String actualText = RESULT_LINK.getText();
         String hrefValue = RESULT_LINK.getAttribute("href");
         assertEquals("link in 'href' value is not same as link shown text", actualText, hrefValue);
+
+        QR_CODE_DIV.shouldBe(visible);
+        QR_CODE.shouldBe(visible);
+        assertTrue(QR_CODE.isImage());
 
         LONG_URL_INPUT.shouldBe(empty);
 
