@@ -5,6 +5,14 @@
 Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
+
+### Version 2.6 (30/09/19)
+QR Code
+
+* Added QR code with short link (#134)
+* Added REST API Endpoint, which generates QR code from ident and optional size: 
+`/api/qrCode/{ident}/{size}`
+
 ### Version 2.5.1 (25/09/19)
 Updates and better error handling
 
