@@ -1,7 +1,6 @@
-FROM yasys/db-aware-openjdk:latest
+FROM yasys/db-aware-openjdk:1.0
 VOLUME /tmp
-MAINTAINER Alexander Muravya (aka kyberorg) <kyberorg@yadev.eu>
-ADD ./target/yals.jar /app/
+COPY ./target/yals.jar /app/
 COPY ./docker-entrypoint.sh /
 RUN sh -c 'chmod +x /docker-entrypoint.sh'
 ENTRYPOINT ./docker-entrypoint.sh
