@@ -25,9 +25,9 @@ function updateCounter() {
     var currentNum = counter.text();
 
     if ($.isNumeric(currentNum)) {
-        counter.text(parseInt(currentNum) + 1);
+        counter.text(parseInt(currentNum, 10) + 1);
     } else {
-        console.error("Failed to update counter. Current counter value is not a number")
+        console.error("Failed to update counter. Current counter value is not a number");
     }
 }
 
@@ -47,22 +47,29 @@ function calculateQRCodeSize() {
     return size;
 }
 
-function generateQRCode(ident) {
-    var size = calculateQRCodeSize();
-    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size, 10);
-    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
-}
-
 function onFailGenerateQRCode(jqXHR, textStatus, errorThrown) {
     showError("Internal error. Got malformed reply from QR generator");
     $("#qrCode img").attr("src", "");
-    $("#qrCode").addClass('invisible');
+    $("#qrCode").addClass("invisible");
 
     if (jqXHR !== null) {
         var replyRaw = jqXHR.responseText;
         console.debug("QR Code Reply JSON: " + replyRaw);
         console.debug("QR Code Reply TextStatus: " + textStatus);
         console.debug("QR Code Reply ErrorThrown: " + errorThrown);
+    }
+}
+
+function onSuccessGenerateQRCode(data, textStatus, jqXHR) {
+    if (jqXHR.status === 200) {
+        var qrCode = data.qrCode;
+        if (qrCode.trim().length === 0) {
+            showError("Internal error. Got malformed reply from QR generator");
+            return;
+        }
+
+        $("#qrCode img").attr("src", qrCode);
+        $("#qrCode").removeClass("invisible");
     }
 }
 
@@ -80,19 +87,6 @@ function onSuccessStoreLink(data, textStatus, jqXHR) {
         $("#result").removeClass("invisible");
         updateCounter();
         generateQRCode(ident);
-    }
-}
-
-function onSuccessGenerateQRCode(data, textStatus, jqXHR) {
-    if (jqXHR.status === 200) {
-        var qrCode = data.qrCode;
-        if (qrCode.trim().length === 0) {
-            showError("Internal error. Got malformed reply from QR generator");
-            return;
-        }
-
-        $("#qrCode img").attr("src", qrCode);
-        $("#qrCode").removeClass("invisible");
     }
 }
 
@@ -137,6 +131,12 @@ function sendLink(longUrl) {
         link: longUrl
     };
     doPost(storeLinkRoute, json, onSuccessStoreLink, onFailStoreLink);
+}
+
+function generateQRCode(ident) {
+    var size = calculateQRCodeSize();
+    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size, 10);
+    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
 }
 
 function copyLinkToClipboard() {
