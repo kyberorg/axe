@@ -134,7 +134,7 @@ Profile can activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `loc
 
 MySQL can be started from `docker/localMySQL` directory by running:
 
-```
+```shell script
 docker-compose up -d
 ``` 
 
