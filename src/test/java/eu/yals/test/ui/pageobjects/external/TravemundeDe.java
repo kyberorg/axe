@@ -6,7 +6,7 @@ package eu.yals.test.ui.pageobjects.external;
  * @since 2.5
  */
 public class TravemundeDe {
-    private static final String TITLE_TEXT = "Ostseeheilbad Travemünde";
+    private static final String TITLE_TEXT = "Hansestadt Lübeck";
 
     public static String getTitleText() {
         return TITLE_TEXT;
