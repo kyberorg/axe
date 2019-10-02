@@ -7,12 +7,12 @@ package eu.yals.constants;
  */
 public final class Header {
 
-    private Header() {
-        throw new UnsupportedOperationException("Utility class");
-    }
-
     public static final String LOCATION = "Location";
     public static final String TEST = "Tezt";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String ACCEPT = "Accept";
+
+    private Header() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 }

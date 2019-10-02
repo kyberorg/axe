@@ -6,10 +6,6 @@ package eu.yals.constants;
  * @since 2.3
  */
 public class App {
-    private App() {
-        throw new UnsupportedOperationException("Utility class");
-    }
-
     public static final String EQUAL = "=";
     public static final String AND = "&";
     public static final String AT = "@";
@@ -41,5 +37,9 @@ public class App {
 
     public static class Git {
         public static final String REPOSITORY = "https://github.com/yadevee/yals/commit";
+    }
+
+    private App() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }
