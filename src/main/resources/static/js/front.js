@@ -47,6 +47,12 @@ function calculateQRCodeSize() {
     return size;
 }
 
+function generateQRCode(ident) {
+    var size = calculateQRCodeSize();
+    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size, 10);
+    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
+}
+
 function onFailGenerateQRCode(jqXHR, textStatus, errorThrown) {
     showError("Internal error. Got malformed reply from QR generator");
     $("#qrCode img").attr("src", "");
@@ -131,12 +137,6 @@ function sendLink(longUrl) {
         link: longUrl
     };
     doPost(storeLinkRoute, json, onSuccessStoreLink, onFailStoreLink);
-}
-
-function generateQRCode(ident) {
-    var size = calculateQRCodeSize();
-    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size, 10);
-    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
 }
 
 function copyLinkToClipboard() {
