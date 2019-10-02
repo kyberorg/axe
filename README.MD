@@ -140,7 +140,7 @@ docker-compose up -d
 
 MySQL can be stopped from `docker/localMySQL` directory by running:
 
-```
+```shell script
 docker-compose down
 ```
 
