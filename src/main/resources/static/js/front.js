@@ -20,17 +20,6 @@ function showError(errorMessage) {
     $("#errorModal").modal("show");
 }
 
-function updateCounter() {
-    var counter = $("#overallLinksNum");
-    var currentNum = counter.text();
-
-    if ($.isNumeric(currentNum)) {
-        counter.text(parseInt(currentNum, 10) + 1);
-    } else {
-        console.error("Failed to update counter. Current counter value is not a number");
-    }
-}
-
 function calculateQRCodeSize() {
     var browserWidth = $(window).width();
     var defaultQRBlockSize = 371;
@@ -45,12 +34,6 @@ function calculateQRCodeSize() {
     }
 
     return size;
-}
-
-function generateQRCode(ident) {
-    var size = calculateQRCodeSize();
-    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size, 10);
-    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
 }
 
 function onFailGenerateQRCode(jqXHR, textStatus, errorThrown) {
@@ -78,6 +61,24 @@ function onSuccessGenerateQRCode(data, textStatus, jqXHR) {
         $("#qrCode").removeClass("invisible");
     }
 }
+
+function updateCounter() {
+    var counter = $("#overallLinksNum");
+    var currentNum = counter.text();
+
+    if ($.isNumeric(currentNum)) {
+        counter.text(parseInt(currentNum, 10) + 1);
+    } else {
+        console.error("Failed to update counter. Current counter value is not a number");
+    }
+}
+
+function generateQRCode(ident) {
+    var size = calculateQRCodeSize();
+    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size, 10);
+    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
+}
+
 
 function onSuccessStoreLink(data, textStatus, jqXHR) {
     cleanErrors();
