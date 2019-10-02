@@ -47,4 +47,4 @@ server.pid
 .cache
 .mvn
 docker/localMySQL/yalsdb
-node_modules
+/node_modules/
