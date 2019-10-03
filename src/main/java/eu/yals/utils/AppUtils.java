@@ -89,9 +89,9 @@ public class AppUtils {
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
      * @throws IllegalArgumentException if URL malformed or not URL
      */
-    public String covertUnicodeToAscii(String rawUrl) {
-        if (rawUrl != null) {
-            String url = rawUrl.trim();
+    public String covertUnicodeToAscii(String url) {
+        if (url != null) {
+            url = url.trim();
 
             // Handle international domains by detecting non-ascii and converting them to punycode
             if (isAscii(url)) return url;
@@ -115,7 +115,7 @@ public class AppUtils {
                 throw new IllegalArgumentException(message, e);
             }
         }
-        return rawUrl;
+        return url;
     }
 
     /**
