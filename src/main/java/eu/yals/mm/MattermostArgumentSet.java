@@ -80,7 +80,7 @@ public class MattermostArgumentSet {
             return EMPTY_SET;
         }
 
-        Builder andDescription(String description) {
+        public Builder andDescription(String description) {
             this.descriptionString = description;
             return this;
         }

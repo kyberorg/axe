@@ -48,7 +48,7 @@ class GitRepoState {
         init();
     }
 
-    boolean hasValues() {
+    public boolean hasValues() {
         return !gitProperties.isEmpty();
     }
 

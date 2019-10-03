@@ -65,7 +65,7 @@ public class AppUtils {
      *
      * @param url string with valid URL
      * @return URI from same URL if URL already has schema or URI from default http schema and requested URL
-     * @throws RuntimeException if string has not valid URL or not URL
+     * @throws IllegalArgumentException if string has not valid URL or not URL
      */
     public URI makeFullUri(String url) {
         try {
@@ -78,20 +78,20 @@ public class AppUtils {
         } catch (URISyntaxException e) {
             String message = String.format("String '%s': malformed URL or not URL at all", url);
             log.warn(message);
-            throw new RuntimeException(message, e);
+            throw new IllegalArgumentException(message, e);
         }
     }
 
     /**
      * Code taken from {@link https://nealvs.wordpress.com/2016/01/18/how-to-convert-unicode-url-to-ascii-in-java/}
      *
-     * @param url string with valid URL to convert
+     * @param rawUrl string with valid URL to convert
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
      * @throws IllegalArgumentException if URL malformed or not URL
      */
-    public String covertUnicodeToAscii(String url) {
-        if (url != null) {
-            url = url.trim();
+    public String covertUnicodeToAscii(String rawUrl) {
+        if (rawUrl != null) {
+            String url = rawUrl.trim();
 
             // Handle international domains by detecting non-ascii and converting them to punycode
             if (isAscii(url)) return url;
@@ -115,7 +115,7 @@ public class AppUtils {
                 throw new IllegalArgumentException(message, e);
             }
         }
-        return url;
+        return rawUrl;
     }
 
     /**

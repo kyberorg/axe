@@ -70,7 +70,7 @@ public class ErrorJson extends Json {
         String field;
 
         @Since(1.0)
-        String errorMessage;
+        public String errorMessage;
 
         public static Error create() {
             return new Error();

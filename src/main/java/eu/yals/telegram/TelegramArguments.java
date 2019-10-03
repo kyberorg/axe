@@ -47,15 +47,15 @@ public class TelegramArguments {
         return brokenArgs;
     }
 
-    static Builder builderWithUrl(String url) {
+    public static Builder builderWithUrl(String url) {
         return new Builder(url);
     }
 
-    static Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    static class Builder {
+    public static class Builder {
         private String urlString;
         private String descriptionString;
 
