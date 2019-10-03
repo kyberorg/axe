@@ -66,7 +66,7 @@ public enum TelegramCommand {
                 break;
             default:
                 isYals = false;
-
+                break;
         }
         return isYals;
     }

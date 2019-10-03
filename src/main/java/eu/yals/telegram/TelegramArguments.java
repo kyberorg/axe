@@ -12,8 +12,8 @@ import java.util.Objects;
  * @since 2.4
  */
 public class TelegramArguments {
-    static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
-    static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
+    public static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
+    public static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
 
     private static TelegramArguments SELF = null;
 

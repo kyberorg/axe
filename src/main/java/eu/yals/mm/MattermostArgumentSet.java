@@ -11,8 +11,8 @@ import java.util.Objects;
  * @since 2.3.1
  */
 public class MattermostArgumentSet {
-    static final MattermostArgumentSet EMPTY_SET = MattermostArgumentSet.emptySet();
-    static final MattermostArgumentSet BROKEN_SET = MattermostArgumentSet.brokenSet();
+    public static final MattermostArgumentSet EMPTY_SET = MattermostArgumentSet.emptySet();
+    public static final MattermostArgumentSet BROKEN_SET = MattermostArgumentSet.brokenSet();
 
     private static MattermostArgumentSet SELF = null;
 
@@ -20,7 +20,7 @@ public class MattermostArgumentSet {
     private String description = null;
 
 
-    static MattermostArgumentSet.Builder builder() {
+    public static MattermostArgumentSet.Builder builder() {
         return new Builder();
     }
 
@@ -61,11 +61,11 @@ public class MattermostArgumentSet {
         return brokenSet;
     }
 
-    static Builder builderWithUrl(String url) {
+    public static Builder builderWithUrl(String url) {
         return new Builder(url);
     }
 
-    static class Builder {
+    public static class Builder {
         private String urlString;
         private String descriptionString;
 
@@ -76,7 +76,7 @@ public class MattermostArgumentSet {
             this.urlString = url;
         }
 
-        MattermostArgumentSet buildEmpty() {
+        public MattermostArgumentSet buildEmpty() {
             return EMPTY_SET;
         }
 
