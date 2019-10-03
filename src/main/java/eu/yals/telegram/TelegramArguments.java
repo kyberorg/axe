@@ -66,11 +66,11 @@ public class TelegramArguments {
             this.urlString = url;
         }
 
-        TelegramArguments buildEmpty() {
+        public TelegramArguments buildEmpty() {
             return EMPTY_ARGS;
         }
 
-        Builder andDescription(String description) {
+        public Builder andDescription(String description) {
             this.descriptionString = description;
             return this;
         }

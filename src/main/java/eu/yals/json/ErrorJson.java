@@ -67,7 +67,7 @@ public class ErrorJson extends Json {
     @Since(1.0)
     public static class Error {
         @Since(1.0)
-        String field;
+        public String field;
 
         @Since(1.0)
         public String errorMessage;
