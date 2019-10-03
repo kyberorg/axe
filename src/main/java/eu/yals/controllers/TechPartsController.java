@@ -44,7 +44,7 @@ public class TechPartsController extends YalsController {
      */
     @RequestMapping(method = RequestMethod.GET, value = {Endpoint.FAIL_ENDPOINT, Endpoint.FAIL_API_ENDPOINT})
     public String iWillAlwaysFail() {
-        throw new RuntimeException("I will always fail");
+        throw new UnsupportedOperationException("I will always fail");
     }
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE)

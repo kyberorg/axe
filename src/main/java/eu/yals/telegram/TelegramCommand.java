@@ -16,11 +16,11 @@ public enum TelegramCommand {
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
+    private final String commandString;
+
     public String getCommandText() {
         return commandString;
     }
-
-    private final String commandString;
 
     TelegramCommand(String cmd) {
         this.commandString = cmd;

@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import eu.yals.Endpoint;
 import eu.yals.json.StoreRequestJson;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.HttpStatusException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -138,7 +139,8 @@ public class QRCodeTest {
                 .asJson();
         if (response.getStatus() != 201) {
             log.error("Store API fail");
-            throw new RuntimeException("Could not get short link from Store API");
+            throw new HttpStatusException("Could not get short link from Store API",
+                    response.getStatus(), TEST_URL + Endpoint.STORE_API);
         }
 
         JsonNode body = response.getBody();
