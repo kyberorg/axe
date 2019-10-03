@@ -1,6 +1,6 @@
 function cleanErrors() {
     $("#errorText").html("");
-    $("#errorModal").modal('hide');
+    $("#errorModal").modal("hide");
 }
 
 function cleanForm() {
@@ -9,49 +9,99 @@ function cleanForm() {
 
 function cleanResults() {
     $("#resultLink").html("").attr("href", "");
-    $("#result").addClass('invisible');
+    $("#result").addClass("invisible");
 
     $("#qrCode img").attr("src", "");
-    $("#qrCode").addClass('invisible');
+    $("#qrCode").addClass("invisible");
 }
 
 function showError(errorMessage) {
     $("#errorText").html(errorMessage);
-    $("#errorModal").modal('show');
+    $("#errorModal").modal("show");
 }
 
-function sendLink(long_url) {
-    var storeLinkRoute = "/api/store";
+function calculateQRCodeSize() {
+    var browserWidth = $(window).width();
+    var defaultQRBlockSize = 371;
+    var defaultQRCodeSize = 350;
+    var qrBlockRatio = 0.943; //350/371
 
-    var longUrl = long_url.trim();
-    var json = {
-        link: longUrl
-    };
-    doPost(storeLinkRoute, json, onSuccessStoreLink, onFailStoreLink);
+    var size;
+    if (browserWidth > defaultQRBlockSize) {
+        size = defaultQRCodeSize;
+    } else {
+        size = browserWidth * qrBlockRatio;
+    }
+
+    return size;
 }
+
+function onFailGenerateQRCode(jqXHR, textStatus, errorThrown) {
+    showError("Internal error. Got malformed reply from QR generator");
+    $("#qrCode img").attr("src", "");
+    $("#qrCode").addClass("invisible");
+
+    if (jqXHR !== null) {
+        var replyRaw = jqXHR.responseText;
+        console.debug("QR Code Reply JSON: " + replyRaw);
+        console.debug("QR Code Reply TextStatus: " + textStatus);
+        console.debug("QR Code Reply ErrorThrown: " + errorThrown);
+    }
+}
+
+function onSuccessGenerateQRCode(data, textStatus, jqXHR) {
+    if (jqXHR.status === 200) {
+        var qrCode = data.qrCode;
+        if (qrCode.trim().length === 0) {
+            showError("Internal error. Got malformed reply from QR generator");
+            return;
+        }
+
+        $("#qrCode img").attr("src", qrCode);
+        $("#qrCode").removeClass("invisible");
+    }
+}
+
+function updateCounter() {
+    var counter = $("#overallLinksNum");
+    var currentNum = counter.text();
+
+    if ($.isNumeric(currentNum)) {
+        counter.text(parseInt(currentNum, 10) + 1);
+    } else {
+        console.error("Failed to update counter. Current counter value is not a number");
+    }
+}
+
+function generateQRCode(ident) {
+    var size = calculateQRCodeSize();
+    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size, 10);
+    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
+}
+
 
 function onSuccessStoreLink(data, textStatus, jqXHR) {
     cleanErrors();
     cleanForm();
     if (jqXHR.status === 201) {
         var ident = data.ident;
-        if (ident === undefined || ident.trim().length === 0) {
+        if (ident === null || ident.trim().length === 0) {
             showError("Internal error. Got malformed reply from server");
             return;
         }
 
         $("#resultLink").html(window.location.origin + "/" + ident).attr("href", ident);
-        $("#result").removeClass('invisible');
+        $("#result").removeClass("invisible");
         updateCounter();
         generateQRCode(ident);
     }
 }
 
 function onFailStoreLink(jqXHR, textStatus, errorThrown) {
-    if (jqXHR !== null || jqXHR !== undefined) {
+    if (jqXHR !== null) {
 
         var replyRaw = jqXHR.responseText;
-        console.log("Reply JSON: " + replyRaw);
+        console.debug("Reply JSON: " + replyRaw);
         var reply = JSON.parse(replyRaw);
 
         var errors = [];
@@ -80,6 +130,16 @@ function onFailStoreLink(jqXHR, textStatus, errorThrown) {
     }
 }
 
+function sendLink(longUrl) {
+    var storeLinkRoute = "/api/store";
+
+    longUrl = longUrl.trim();
+    var json = {
+        link: longUrl
+    };
+    doPost(storeLinkRoute, json, onSuccessStoreLink, onFailStoreLink);
+}
+
 function copyLinkToClipboard() {
     var $temp = $("<input>");
     $("body").append($temp);
@@ -87,69 +147,10 @@ function copyLinkToClipboard() {
     document.execCommand("copy");
     $temp.remove();
 
-    $("#linkCopiedModal").modal('show');
+    $("#linkCopiedModal").modal("show");
     setTimeout(function () {
-        $("#linkCopiedModal").modal('hide');
+        $("#linkCopiedModal").modal("hide");
     }, 1000);
-}
-
-function updateCounter() {
-    var counter = $("#overallLinksNum");
-    var currentNum = counter.text();
-
-    if ($.isNumeric(currentNum)) {
-        counter.text(parseInt(currentNum) + 1);
-    } else {
-        console.error("Failed to update counter. Current counter value is not a number")
-    }
-}
-
-function calculateQRCodeSize() {
-    var browserWidth = $(window).width();
-    var defaultQRBlockSize = 371;
-    var defaultQRCodeSize = 350;
-    var qrBlockRatio = 0.943; //350/371
-
-    var size;
-    if (browserWidth > defaultQRBlockSize) {
-        size = defaultQRCodeSize;
-    } else {
-        size = browserWidth * qrBlockRatio;
-    }
-
-    return size;
-}
-
-function generateQRCode(ident) {
-    var size = calculateQRCodeSize();
-    var qrCodeGeneratorRoute = "/api/qrCode/" + ident + "/" + parseInt(size);
-    doGet(qrCodeGeneratorRoute, onSuccessGenerateQRCode, onFailGenerateQRCode);
-}
-
-function onSuccessGenerateQRCode(data, textStatus, jqXHR) {
-    if (jqXHR.status === 200) {
-        var qrCode = data.qrCode;
-        if (qrCode === undefined || qrCode.trim().length === 0) {
-            showError("Internal error. Got malformed reply from QR generator");
-            return;
-        }
-
-        $("#qrCode img").attr('src', qrCode);
-        $("#qrCode").removeClass('invisible');
-    }
-}
-
-function onFailGenerateQRCode(jqXHR, textStatus, errorThrown) {
-    showError("Internal error. Got malformed reply from QR generator");
-    $("#qrCode img").attr("src", "");
-    $("#qrCode").addClass('invisible');
-
-    if (jqXHR !== null) {
-        var replyRaw = jqXHR.responseText;
-        console.debug("QR Code Reply JSON: " + replyRaw);
-        console.debug("QR Code Reply TextStatus: " + textStatus);
-        console.debug("QR Code Reply ErrorThrown: " + errorThrown);
-    }
 }
 
 function handleForm(e) {
@@ -160,9 +161,9 @@ function handleForm(e) {
     var isFormValid = true;
 
     var longUrl = $("#longUrl").val();
-    console.log("Got long URL: " + longUrl);
+    console.debug("Got long URL: " + longUrl);
     cleanForm();
-    if (longUrl === undefined || longUrl.trim().length === 0) {
+    if (longUrl.trim().length === 0) {
         var errorMessage = "Long URL cannot be empty";
         showError(errorMessage);
         isFormValid = false;
@@ -173,7 +174,7 @@ function handleForm(e) {
 }
 
 $(document).ready(function () {
-    $("#shortenIt").on('click', handleForm);
+    $("#shortenIt").on("click", handleForm);
     $('[data-toggle="tooltip"]').tooltip();
-    $("#copyLink").on('click', copyLinkToClipboard);
+    $("#copyLink").on("click", copyLinkToClipboard);
 });

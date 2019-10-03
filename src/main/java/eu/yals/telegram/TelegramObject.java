@@ -27,7 +27,7 @@ public class TelegramObject {
         this.parseUserMessage();
     }
 
-    static TelegramObject createFromUpdate(Update update) {
+    public static TelegramObject createFromUpdate(Update update) {
         if (Objects.isNull(update)) {
             throw new IllegalStateException("Update is missing");
         }
@@ -43,7 +43,7 @@ public class TelegramObject {
         return username;
     }
 
-    TelegramCommand getCommand() {
+    public TelegramCommand getCommand() {
         return command;
     }
 
@@ -95,6 +95,7 @@ public class TelegramObject {
             case START:
             default:
                 this.arguments = TelegramArguments.builder().buildEmpty(); //no reason for manipulating with user message
+                break;
         }
     }
 

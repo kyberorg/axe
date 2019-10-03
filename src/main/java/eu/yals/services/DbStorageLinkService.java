@@ -32,12 +32,10 @@ public class DbStorageLinkService implements LinkService {
         Optional<Link> result;
         try {
             result = repo.findSingleByIdent(ident);
+        } catch (DataAccessResourceFailureException e) {
+            return new GetResult.DatabaseDown().withException(e);
         } catch (Exception e) {
-            if (e instanceof DataAccessResourceFailureException) {
-                return new GetResult.DatabaseDown().withException(e);
-            } else {
-                return new GetResult.Fail().withException(e);
-            }
+            return new GetResult.Fail().withException(e);
         }
 
         return result.<GetResult>map(link -> new GetResult.Success(link.getLink()))
@@ -50,13 +48,11 @@ public class DbStorageLinkService implements LinkService {
         try {
             repo.save(linkObject);
             return new StoreResult.Success();
+        } catch (DataAccessResourceFailureException e) {
+            return new StoreResult.DatabaseDown().withException(e);
         } catch (Exception e) {
-            if (e instanceof DataAccessResourceFailureException) {
-                return new StoreResult.DatabaseDown().withException(e);
-            } else {
-                log.error("Exception on storing new " + Link.class.getSimpleName(), e);
-                return new StoreResult.Fail("Failed to add new record");
-            }
+            log.error("Exception on storing new " + Link.class.getSimpleName(), e);
+            return new StoreResult.Fail("Failed to add new record");
         }
 
     }

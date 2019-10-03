@@ -9,9 +9,6 @@ import eu.yals.documentation.RequestMethod;
  * @since 2.0
  */
 public class Endpoint {
-    private Endpoint() {
-        throw new UnsupportedOperationException("Utility class");
-    }
 
     @RequestMethod(value = HttpMethod.POST, api = true)
     public static final String STORE_API = "/api/store";
@@ -54,4 +51,8 @@ public class Endpoint {
     public static final String ERROR_PAGE_FOR_API = ERROR_PAGE_FOR_API_BASE + "{status}";
     public static final String NOT_FOUND_PAGE = "/errors/404";
     public static final String NOT_FOUND_PAGE_FOR_API = "/errors/404api";
+
+    private Endpoint() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 }

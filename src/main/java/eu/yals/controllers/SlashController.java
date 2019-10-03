@@ -53,16 +53,7 @@ public class SlashController extends YalsController {
 
         //This workaround for tests
         if (hasTestHeader()) {
-            GetResult getResult = service.getLink(ident);
-            if (getResult instanceof GetResult.Success) {
-                return redirect(((GetResult.Success) getResult).getLink());
-            } else if (getResult instanceof GetResult.NotFound) {
-                return render404Ident();
-            } else if (getResult instanceof GetResult.DatabaseDown) {
-                return render503();
-            } else {
-                return render500();
-            }
+            return workaroundForTests(ident);
         }
 
         HttpResponse<String> apiResponse;
@@ -110,5 +101,18 @@ public class SlashController extends YalsController {
     private String extractLink(HttpResponse<String> apiResponse) {
         LinkResponseJson linkJson = AppUtils.GSON.fromJson(apiResponse.getBody(), LinkResponseJson.class);
         return linkJson.getLink();
+    }
+
+    private String workaroundForTests(String ident) {
+        GetResult getResult = service.getLink(ident);
+        if (getResult instanceof GetResult.Success) {
+            return redirect(((GetResult.Success) getResult).getLink());
+        } else if (getResult instanceof GetResult.NotFound) {
+            return render404Ident();
+        } else if (getResult instanceof GetResult.DatabaseDown) {
+            return render503();
+        } else {
+            return render500();
+        }
     }
 }

@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
  * @since 2.5.1
  */
 public class UnirestTest {
-    static final String TEST_URL = TestUtils.getTestUrl();
+    public static final String TEST_URL = TestUtils.getTestUrl();
 
     @BeforeClass
     public static void setUp() {

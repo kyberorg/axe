@@ -12,8 +12,8 @@ import java.util.Objects;
  * @since 2.4
  */
 public class TelegramArguments {
-    static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
-    static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
+    public static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
+    public static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
 
     private static TelegramArguments SELF = null;
 
@@ -47,15 +47,15 @@ public class TelegramArguments {
         return brokenArgs;
     }
 
-    static Builder builderWithUrl(String url) {
+    public static Builder builderWithUrl(String url) {
         return new Builder(url);
     }
 
-    static Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    static class Builder {
+    public static class Builder {
         private String urlString;
         private String descriptionString;
 
@@ -66,11 +66,11 @@ public class TelegramArguments {
             this.urlString = url;
         }
 
-        TelegramArguments buildEmpty() {
+        public TelegramArguments buildEmpty() {
             return EMPTY_ARGS;
         }
 
-        Builder andDescription(String description) {
+        public Builder andDescription(String description) {
             this.descriptionString = description;
             return this;
         }

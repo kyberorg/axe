@@ -48,7 +48,7 @@ public class MattermostRestControllerTest {
     private MockMvc mockMvc;
 
     @Before
-    public void setup() {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
@@ -313,10 +313,6 @@ public class MattermostRestControllerTest {
         String body = result.getResponse().getContentAsString();
         MattermostResponseJson mmJson = AppUtils.GSON.fromJson(body, MattermostResponseJson.class);
         return mmJson.getText();
-    }
-
-    private void assertMMError(String mmText) {
-        assertTrue("Text must contain warning emoji", mmText.contains(App.Emoji.WARNING));
     }
 
     private void assertUsage(String mmText) {

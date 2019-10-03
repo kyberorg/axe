@@ -67,16 +67,16 @@ public class ErrorJson extends Json {
     @Since(1.0)
     public static class Error {
         @Since(1.0)
-        String field;
+        public String field;
 
         @Since(1.0)
-        String errorMessage;
+        public String errorMessage;
 
-        static Error create() {
+        public static Error create() {
             return new Error();
         }
 
-        static Error create(@NotNull ConstraintViolation violation) {
+        public static Error create(@NotNull ConstraintViolation violation) {
             Error error = new Error();
             if (Objects.nonNull(violation.getPropertyPath())) {
                 error.field = violation.getPropertyPath().toString();
@@ -85,7 +85,7 @@ public class ErrorJson extends Json {
             return error;
         }
 
-        Error message(String errorText) {
+        public Error message(String errorText) {
             this.field = "";
             this.errorMessage = errorText;
             return this;

@@ -44,7 +44,7 @@ public class SlashControllerTest {
     private MockMvc mockMvc;
 
     @Before
-    public void setup() {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
