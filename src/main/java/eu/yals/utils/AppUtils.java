@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import eu.yals.constants.App;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.codec.EncodingException;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -86,7 +87,7 @@ public class AppUtils {
      *
      * @param url string with valid URL to convert
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
-     * @throws RuntimeException if URL malformed or not URL
+     * @throws IllegalArgumentException if URL malformed or not URL
      */
     public String covertUnicodeToAscii(String url) {
         if (url != null) {
@@ -111,7 +112,7 @@ public class AppUtils {
             } catch (URISyntaxException e) {
                 String message = String.format("String '%s': malformed URL or not URL at all", url);
                 log.warn(message);
-                throw new RuntimeException(message, e);
+                throw new IllegalArgumentException(message, e);
             }
         }
         return url;
@@ -127,8 +128,9 @@ public class AppUtils {
         try {
             return URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
-            log.error("Failed to decode URL", e);
-            throw new RuntimeException(e.getCause());
+            String message = "Failed to decode URL";
+            log.error(message, e);
+            throw new EncodingException(message, e.getCause());
         }
     }
 

@@ -6,7 +6,6 @@ import eu.yals.test.ui.UITest;
 import eu.yals.test.ui.pageobjects.FrontPage;
 import eu.yals.test.ui.pageobjects.external.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,7 +80,7 @@ public class IdnTest extends UITest {
         openSavedUrl();
 
         //verify that opens page of IT ministry of Egypt
-        Assert.assertEquals(EgyptianMinistryOfIT.getTitleText(), Selenide.title());
+        assertEquals(EgyptianMinistryOfIT.getTitleText(), Selenide.title());
     }
 
     @Test
