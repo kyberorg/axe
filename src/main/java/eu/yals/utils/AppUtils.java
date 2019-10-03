@@ -85,7 +85,7 @@ public class AppUtils {
     /**
      * Code taken from {@link https://nealvs.wordpress.com/2016/01/18/how-to-convert-unicode-url-to-ascii-in-java/}
      *
-     * @param rawUrl string with valid URL to convert
+     * @param url string with valid URL to convert
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
      * @throws IllegalArgumentException if URL malformed or not URL
      */
