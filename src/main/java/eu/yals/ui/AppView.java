@@ -37,7 +37,7 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> imple
         WebBrowser browser = VaadinSession.getCurrent().getBrowser();
         if (browser.isAndroid() || browser.isIOS()) {
             menuBuilder.addToSection(Section.HEADER,
-                    new LeftHeaderItem("Yet another link shortener", "Version 2.7", "/frontend/images/logo.png"));
+                    new LeftHeaderItem("Yet another link shortener", "Version 2.7", "/images/logo.png"));
         }
 
         //items
