@@ -10,7 +10,7 @@ pipeline {
                } else {
                   def prodMode = false;
                   try {
-                     timeout(time: 10, unit: 'SECONDS') {
+                     timeout(time: 20, unit: 'SECONDS') {
                         prodMode = input(message: 'Production Mode', ok: 'Build',
                         parameters:[ booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'True')]);
                      }
