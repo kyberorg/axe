@@ -33,8 +33,8 @@ public class Endpoint {
     public static final String CUSTOM_SIZE_QR_CODE_API = QR_CODE_API + "/" + "{size}";
 
     @RequestMethod(HttpMethod.GET)
-    public static final String SLASH_BASE = "/";
-    public static final String SLASH = "/{ident}";
+    public static final String SLASH_BASE = "/app";
+    public static final String SLASH = "/app/{ident}";
 
     @RequestMethod(HttpMethod.GET)
     public static final String ROBOTS_TXT = "/robots.txt";
