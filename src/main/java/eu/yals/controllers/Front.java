@@ -57,6 +57,6 @@ public class Front {
         log.trace("{} Yals saved {} links", TAG, overallService.numberOfStoredLinks());
         params.addAttribute("overallLinks", overallService.numberOfStoredLinks());
 
-        return "index";
+        return "idx";
     }
 }

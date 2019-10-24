@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +39,8 @@ public class SlashController extends YalsController {
         this.appUtils = appUtils;
     }
 
-    //@RequestMapping(method = RequestMethod.GET,
-    //        value = Endpoint.SLASH)
+    @RequestMapping(method = RequestMethod.GET,
+            value = Endpoint.SLASH)
     public String slash(@PathVariable("ident") String ident, HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
