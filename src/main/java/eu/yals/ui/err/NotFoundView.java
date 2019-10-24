@@ -1,5 +1,6 @@
-package eu.yals.ui;
+package eu.yals.ui.err;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -9,14 +10,14 @@ import eu.yals.core.IdentGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @SpringComponent
 @UIScope
-@Route("vaadin")
-public class CatchAllView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
-    public CatchAllView() {
-
-    }
+@Route("404")
+public class NotFoundView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
 
     @Override
     public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NotFoundException> parameter) {
@@ -26,12 +27,16 @@ public class CatchAllView extends VerticalLayout implements HasErrorParameter<No
         } else {
             boolean isIdentValid = path.matches(IdentGenerator.VALID_IDENT_PATTERN);
             if (isIdentValid) {
-                event.rerouteTo(Endpoint.SLASH_BASE + "/" + path);
+                List<String> p = new ArrayList<>();
+                p.add(path);
+                event.rerouteTo(Endpoint.SLASH_VAADIN, p);
             } else {
-                event.rerouteTo(Endpoint.NOT_FOUND_PAGE);
+                //not a ident
+                add(new Text("404 - No such page"));
+                return 404;
             }
         }
 
-        return 307;
+        return 302;
     }
 }

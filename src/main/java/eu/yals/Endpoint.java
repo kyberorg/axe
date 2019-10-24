@@ -34,6 +34,7 @@ public class Endpoint {
 
     @RequestMethod(HttpMethod.GET)
     public static final String SLASH_BASE = "/app";
+    public static final String SLASH_VAADIN = "app";
     public static final String SLASH = "/app/{ident}";
 
     @RequestMethod(HttpMethod.GET)

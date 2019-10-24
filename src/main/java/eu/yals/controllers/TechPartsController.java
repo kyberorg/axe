@@ -67,9 +67,9 @@ public class TechPartsController extends YalsController {
             }
         } else {
             Object statusCode = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-            log.error("{} Unknown Error with status {}", TAG, statusCode);
             try {
                 status = (int) statusCode;
+                log.trace("{} Unknown Error with status {}", TAG, statusCode);
             } catch (ClassCastException e) {
                 status = 500;
             }
