@@ -15,7 +15,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
 
-@Route(value = "", layout = AppView.class)
+@Route(value = "/vaa", layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
 public class HomeView extends VerticalLayout {
