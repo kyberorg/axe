@@ -19,7 +19,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @UIScope
 @Push
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
-@PWA(name = "Yals", shortName = "yals", iconPath = "images/logo.png",
+@PWA(name = "Yals", shortName = "yals",
         offlinePath = "offline-page.html",
         offlineResources = {"images/logo.png"},
         description = "Yet another link shortener")
