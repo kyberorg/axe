@@ -36,7 +36,7 @@ public class Front {
      *               In template they are reachable using 'params' name (set as annotation value)
      * @return Template (FTL) name
      */
-    @RequestMapping("/")
+    @RequestMapping("/old")
     public String index(@ModelAttribute("params") ModelMap params) {
         String latestCommit = gitService.getGitInfoSource().getLatestCommitHash().trim();
         String latestTag = gitService.getGitInfoSource().getLatestTag().trim();
