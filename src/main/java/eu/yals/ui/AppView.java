@@ -42,6 +42,7 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> imple
 
         //items
         menuBuilder.add(new LeftNavigationItem(HomeView.class));
+        menuBuilder.add(new LeftNavigationItem(SampleView.class));
 
         builder.withAppMenu(menuBuilder.build());
 
