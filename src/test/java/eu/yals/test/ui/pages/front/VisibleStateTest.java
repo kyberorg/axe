@@ -90,6 +90,12 @@ public class VisibleStateTest extends UITest {
         FrontPage.MainRow.H2.shouldBe(exist);
     }
 
+    @Test //this is tmp test
+    public void mainDivShouldHaveH1() {
+        FrontPage.MainRow.HW.shouldBe(exist);
+        FrontPage.MainRow.HW.shouldHave(text("It works"));
+    }
+
     @Test
     public void inputFieldHasLabel() {
         SelenideElement label = FrontPage.MainRow.LONG_URL_INPUT.parent().find("label");

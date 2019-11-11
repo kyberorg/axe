@@ -24,6 +24,8 @@ public class FrontPage {
         public static final SelenideElement LONG_URL_INPUT = $("#longUrl");
         public static final SelenideElement SUBMIT_BUTTON = $("#shortenIt");
         public static final SelenideElement PUBLIC_ACCESS_BANNER = $("#publicAccessBanner");
+
+        public static final SelenideElement HW = $("#home h1");
     }
 
     public static class OverallRow {
