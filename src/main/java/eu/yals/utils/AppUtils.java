@@ -3,6 +3,8 @@ package eu.yals.utils;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.WebBrowser;
 import eu.yals.constants.App;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -134,5 +136,11 @@ public class AppUtils {
 
     public boolean isTelegramDisabled() {
         return !Boolean.parseBoolean(env.getProperty(App.Properties.TELEGRAM_ENABLED, "false"));
+    }
+
+    public boolean isMobile(VaadinSession vaadinSession) {
+        WebBrowser browser = vaadinSession.getBrowser();
+        assert browser != null;
+        return browser.isIOS() || browser.isAndroid();
     }
 }
