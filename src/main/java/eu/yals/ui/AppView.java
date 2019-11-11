@@ -19,10 +19,10 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @UIScope
 @Push
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
-@PWA(name = "Yals", shortName = "yals",
+@PWA(name = "Yet another link shortener", shortName = "yals",
         offlinePath = "offline-page.html",
         offlineResources = {"images/logo.png"},
-        description = "Yet another link shortener")
+        description = "Yet another link shortener for friends")
 
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> implements PageConfigurator {
