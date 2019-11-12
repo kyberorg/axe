@@ -20,6 +20,7 @@ public class HomeViewCss {
 
     public void applyOverallAreaStyle(HasStyle overallArea) {
         overallArea.getStyle().set("background", "#f0f0f0");
+        overallArea.getStyle().set("padding-left", "1em");
         applyBorder(overallArea);
     }
 

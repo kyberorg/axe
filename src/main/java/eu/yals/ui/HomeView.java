@@ -48,7 +48,7 @@ public class HomeView extends VerticalLayout {
     private String latestCommit;
     private String latestTag;
 
-    private TextField linkCounter;
+    private Span linkCounter;
 
     public HomeView(AppUtils appUtils, HomeViewCss css, @Qualifier("dbOverallService") OverallService overallService, GitService gitService) {
         this.appUtils = appUtils;
@@ -101,7 +101,7 @@ public class HomeView extends VerticalLayout {
 
     private void applyLoadState() {
         long linksStored = overallService.numberOfStoredLinks();
-        linkCounter.setValue(Long.toString(linksStored));
+        linkCounter.setText(Long.toString(linksStored));
 
         mainRow.setVisible(true);
         overallRow.setVisible(true);
@@ -149,9 +149,9 @@ public class HomeView extends VerticalLayout {
     }
 
     private HorizontalLayout overallArea() {
-        TextField overallText = new TextField("Yals already saved ");
-        linkCounter = new TextField();
-        TextField links = new TextField(" links");
+        Span overallText = new Span("Yals already saved ");
+        linkCounter = new Span();
+        Span links = new Span(" links");
 
         HorizontalLayout overallArea = new HorizontalLayout(overallText, linkCounter, links);
         homeViewCss.applyOverallAreaStyle(overallArea);
