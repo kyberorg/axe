@@ -9,11 +9,16 @@ import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
 import com.github.appreciated.app.layout.entity.Section;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.server.*;
+import com.vaadin.flow.server.InitialPageSettings;
+import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.PageConfigurator;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+import eu.yals.services.GitService;
+import eu.yals.utils.AppUtils;
 
 @SpringComponent
 @UIScope
@@ -23,10 +28,15 @@ import com.vaadin.flow.theme.lumo.Lumo;
         offlinePath = "offline-page.html",
         offlineResources = {"images/logo.png"},
         description = "Yet another link shortener for friends")
-
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> implements PageConfigurator {
-    public AppView() {
+    private final AppUtils appUtils;
+    private final GitService gitService;
+
+    public AppView(AppUtils appUtils, GitService gitService) {
+        this.appUtils = appUtils;
+        this.gitService = gitService;
+
         AppLayoutBuilder<LeftLayouts.LeftHybrid> builder = AppLayoutBuilder
                 .get(LeftLayouts.LeftHybrid.class)
                 .withTitle("YALS");
@@ -34,10 +44,11 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> imple
         LeftAppMenuBuilder menuBuilder = LeftAppMenuBuilder.get();
 
         //title
-        WebBrowser browser = VaadinSession.getCurrent().getBrowser();
-        if (browser.isAndroid() || browser.isIOS()) {
+        if (appUtils.isMobile(VaadinSession.getCurrent())) {
             menuBuilder.addToSection(Section.HEADER,
-                    new LeftHeaderItem("Yet another link shortener", "Version 2.7", "/images/logo.png"));
+                    new LeftHeaderItem("Yet another link shortener",
+                            String.format("Version %s", gitService.getGitInfoSource().getLatestTag()),
+                            "/images/logo.png"));
         }
 
         //items
