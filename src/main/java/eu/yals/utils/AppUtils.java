@@ -143,4 +143,8 @@ public class AppUtils {
         assert browser != null;
         return browser.isIOS() || browser.isAndroid();
     }
+
+    public boolean isNotMobile(VaadinSession vaadinSession) {
+        return !isMobile(vaadinSession);
+    }
 }
