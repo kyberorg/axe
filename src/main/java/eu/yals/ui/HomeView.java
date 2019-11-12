@@ -70,6 +70,7 @@ public class HomeView extends VerticalLayout {
 
         board.addRow(firstRow);
         board.addRow(mainRow);
+        board.addRow(overallRow);
         board.addRow(resultRow);
         board.addRow(qrCodeRow);
 
