@@ -15,21 +15,28 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import eu.yals.constants.App;
 import eu.yals.services.GitService;
 import eu.yals.services.overall.OverallService;
 import eu.yals.ui.css.HomeViewCss;
 import eu.yals.utils.AppUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+@Slf4j
 @SpringComponent
 @UIScope
 @Route(value = "", layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
 public class HomeView extends VerticalLayout {
+    private static final String TAG = "[Front Page]";
 
     private final Board board = new Board();
     private final Row firstRow = new Row();
     private final Row mainRow = new Row();
+    private final Row overallRow = new Row();
     private final Row resultRow = new Row();
     private final Row qrCodeRow = new Row();
 
@@ -38,7 +45,12 @@ public class HomeView extends VerticalLayout {
     private final OverallService overallService;
     private final GitService gitService;
 
-    public HomeView(AppUtils appUtils, HomeViewCss css, OverallService overallService, GitService gitService) {
+    private String latestCommit;
+    private String latestTag;
+
+    private TextField linkCounter;
+
+    public HomeView(AppUtils appUtils, HomeViewCss css, @Qualifier("dbOverallService") OverallService overallService, GitService gitService) {
         this.appUtils = appUtils;
         this.homeViewCss = css;
         this.overallService = overallService;
@@ -52,23 +64,31 @@ public class HomeView extends VerticalLayout {
 
     private void init() {
         mainRow.add(emptyDiv(), mainArea(), emptyDiv());
+        overallRow.add(emptyDiv(), overallArea(), emptyDiv());
         resultRow.add(emptyDiv(), resultArea(), emptyDiv());
         qrCodeRow.add(emptyDiv(), qrCodeArea(), emptyDiv());
 
         board.addRow(firstRow);
         board.addRow(mainRow);
+        board.addRow(overallRow);
         board.addRow(resultRow);
         board.addRow(qrCodeRow);
 
         add(board);
-        if (appUtils.isMobile(VaadinSession.getCurrent())) {
-            add(footer());
+        if (appUtils.isNotMobile(VaadinSession.getCurrent())) {
+            prepareGitInfoForFooter();
+            if (displayFooter()) {
+                add(footer());
+            }
         }
     }
 
     private void applyStyle() {
         mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
         homeViewCss.applyRowStyle(mainRow);
+
+        overallRow.setComponentSpan(overallRow.getComponentAt(1), 2);
+        homeViewCss.applyRowStyle(overallRow);
 
         resultRow.setComponentSpan(resultRow.getComponentAt(1), 2);
         homeViewCss.applyRowStyle(resultRow);
@@ -80,7 +100,29 @@ public class HomeView extends VerticalLayout {
     }
 
     private void applyLoadState() {
+        long linksStored = overallService.numberOfStoredLinks();
+        linkCounter.setValue(Long.toString(linksStored));
 
+        mainRow.setVisible(true);
+        overallRow.setVisible(true);
+        resultRow.setVisible(false);
+        qrCodeRow.setVisible(false);
+    }
+
+    private void prepareGitInfoForFooter() {
+        latestCommit = gitService.getGitInfoSource().getLatestCommitHash().trim();
+        latestTag = gitService.getGitInfoSource().getLatestTag().trim();
+    }
+
+    private boolean displayFooter() {
+        boolean commitPresent = (!latestCommit.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestCommit));
+        boolean tagPresent = (!latestTag.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestTag));
+
+        boolean displayCommitInfo = commitPresent && tagPresent;
+        log.trace("{} will I display footer: {}. Commit present: {}. Tag present: {} ",
+                TAG, displayCommitInfo, commitPresent, tagPresent);
+
+        return displayCommitInfo;
     }
 
     private Div emptyDiv() {
@@ -90,20 +132,30 @@ public class HomeView extends VerticalLayout {
     }
 
     private VerticalLayout mainArea() {
-        H2 title = new H2("Yet another layout");
-        Span subtitle = new Span("... for someone");
+        H2 title = new H2("Yet another link shortener");
+        Span subtitle = new Span("... for friends");
         homeViewCss.makeSubtitleItalic(subtitle);
 
-        TextField textField = new TextField("Paste something here:");
-        textField.setPlaceholder("link this...");
+        TextField textField = new TextField("Your very long URL here:");
+        textField.setPlaceholder("http://mysuperlongurlhere.tld");
         textField.setWidthFull();
 
-        Span note = new Span("Note: you are free for all");
+        Span note = new Span("Note: all links considered as public and can be used by anyone");
 
-        Button button = new Button("Click me!");
+        Button button = new Button("Shorten it!");
         VerticalLayout mainArea = new VerticalLayout(title, subtitle, textField, note, button);
         homeViewCss.applyMainAreaStyle(mainArea);
         return mainArea;
+    }
+
+    private HorizontalLayout overallArea() {
+        TextField overallText = new TextField("Yals already saved ");
+        linkCounter = new TextField();
+        TextField links = new TextField(" links");
+
+        HorizontalLayout overallArea = new HorizontalLayout(overallText, linkCounter, links);
+        homeViewCss.applyOverallAreaStyle(overallArea);
+        return overallArea;
     }
 
     private HorizontalLayout resultArea() {
@@ -138,8 +190,9 @@ public class HomeView extends VerticalLayout {
     private HorizontalLayout footer() {
         HorizontalLayout footer = new HorizontalLayout();
 
-        Span versionStart = new Span("Version 2.7 (based on commit ");
-        Anchor commit = new Anchor("https://github.com/yadevee/yals/commit/45eba45", "45eba45");
+        Span versionStart = new Span(String.format("Version %s (based on commit ", this.latestTag));
+        Anchor commit = new Anchor(String.format("%s/%s", App.Git.REPOSITORY, this.latestCommit),
+                latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
         Span versionEnd = new Span(")");
 
         Span version = new Span(versionStart, commit, versionEnd);

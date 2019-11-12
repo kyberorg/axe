@@ -18,6 +18,11 @@ public class HomeViewCss {
         applyBorder(mainArea);
     }
 
+    public void applyOverallAreaStyle(HasStyle overallArea) {
+        overallArea.getStyle().set("background", "#f0f0f0");
+        applyBorder(overallArea);
+    }
+
     public void applyResultAreaStyle(HasStyle resultArea) {
         resultArea.getStyle().set("background", "#dff0d8");
         resultArea.getStyle().set("font-size", "xx-large");
