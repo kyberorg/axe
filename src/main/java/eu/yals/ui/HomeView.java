@@ -144,6 +144,7 @@ public class HomeView extends VerticalLayout {
 
         Button button = new Button("Shorten it!");
         VerticalLayout mainArea = new VerticalLayout(title, subtitle, textField, note, button);
+        mainArea.setId("mainArea");
         homeViewCss.applyMainAreaStyle(mainArea);
         return mainArea;
     }
