@@ -17,10 +17,8 @@ public class FrontPage {
     }
 
     public static class MainRow {
-        public static final SelenideElement MAIN_DIV = $("#mainArea");
+        public static final SelenideElement MAIN_AREA = $("#mainArea");
         public static final SelenideElement H2 = $("#mainArea h2");
-        public static final SelenideElement FORM = $("form");
-        public static final String INPUT_ID = "#longUrl";
         public static final SelenideElement LONG_URL_INPUT = $("#mainArea vaadin-text-field input");
         public static final SelenideElement SUBMIT_BUTTON = $("#mainArea vaadin-button");
         public static final SelenideElement PUBLIC_ACCESS_BANNER = $("#publicAccessBanner");

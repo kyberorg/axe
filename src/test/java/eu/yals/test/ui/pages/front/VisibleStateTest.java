@@ -13,7 +13,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.title;
 import static org.junit.Assert.fail;
 
 /**
@@ -39,7 +40,7 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void mainBlockIsVisible() {
-        FrontPage.MainRow.MAIN_DIV.shouldBe(visible);
+        FrontPage.MainRow.MAIN_AREA.shouldBe(visible);
     }
 
     @Test
@@ -53,30 +54,28 @@ public class VisibleStateTest extends UITest {
     }
 
     @Test
-    public void formHasFieldAndButton() {
-        SelenideElement formField = FrontPage.MainRow.FORM.find(FrontPage.MainRow.INPUT_ID);
+    public void mainAreaHasFieldAndButton() {
+        SelenideElement inputField = FrontPage.MainRow.MAIN_AREA.find("vaadin-text-field");
+        inputField.shouldBe(exist);
 
-        formField.shouldBe(exist);
-        formField.shouldHave(type("text"));
-
-        SelenideElement button = FrontPage.MainRow.FORM.find("button");
+        SelenideElement button = FrontPage.MainRow.MAIN_AREA.find("button");
         button.shouldBe(exist);
     }
 
     @Test
     public void formHasOnlyOneButton() {
-        FrontPage.MainRow.FORM.findAll("button").shouldHaveSize(1);
+        FrontPage.MainRow.MAIN_AREA.findAll("button").shouldHaveSize(1);
     }
 
     @Test
     public void inputAndButtonAreNotDisabled() {
-        FrontPage.MainRow.FORM.find(FrontPage.MainRow.INPUT_ID).shouldNotBe(disabled);
-        FrontPage.MainRow.FORM.find("button").shouldNotBe(disabled);
+        FrontPage.MainRow.LONG_URL_INPUT.shouldNotBe(disabled);
+        FrontPage.MainRow.SUBMIT_BUTTON.shouldNotBe(disabled);
     }
 
     @Test
     public void inputShouldHavePlaceholder() {
-        $("form").find(FrontPage.MainRow.INPUT_ID).shouldHave(attribute("placeholder"));
+        FrontPage.MainRow.LONG_URL_INPUT.shouldHave(attribute("placeholder"));
     }
 
     @Test
@@ -100,7 +99,7 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void buttonIsPrimaryAndHasText() {
-        FrontPage.MainRow.SUBMIT_BUTTON.has(attribute("theme", "primary")); //This class make button blue
+        FrontPage.MainRow.SUBMIT_BUTTON.has(attribute("theme", "primary")); //This theme makes button blue
         FrontPage.MainRow.SUBMIT_BUTTON.shouldHave(text("Shorten it!"));
     }
 
@@ -108,9 +107,6 @@ public class VisibleStateTest extends UITest {
     public void publicAccessBannerIsPresentAndHasNeededText() {
         FrontPage.MainRow.PUBLIC_ACCESS_BANNER.shouldBe(visible);
         FrontPage.MainRow.PUBLIC_ACCESS_BANNER.shouldHave(text("public"));
-
-        SelenideElement form = FrontPage.MainRow.PUBLIC_ACCESS_BANNER.closest("form");
-        form.should(exist);
     }
 
     @Test
