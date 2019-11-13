@@ -141,12 +141,13 @@ public class HomeView extends VerticalLayout {
         textField.setPlaceholder("http://mysuperlongurlhere.tld");
         textField.setWidthFull();
 
-        Span note = new Span("Note: all links considered as public and can be used by anyone");
+        Span publicAccessBanner = new Span("Note: all links considered as public and can be used by anyone");
+        publicAccessBanner.setId("publicAccessBanner");
 
         Button button = new Button("Shorten it!");
         button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        
-        VerticalLayout mainArea = new VerticalLayout(title, subtitle, textField, note, button);
+
+        VerticalLayout mainArea = new VerticalLayout(title, subtitle, textField, publicAccessBanner, button);
         mainArea.setId("mainArea");
         homeViewCss.applyMainAreaStyle(mainArea);
         return mainArea;
