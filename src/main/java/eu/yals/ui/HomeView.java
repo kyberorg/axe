@@ -144,6 +144,8 @@ public class HomeView extends VerticalLayout {
         Span note = new Span("Note: all links considered as public and can be used by anyone");
 
         Button button = new Button("Shorten it!");
+        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        
         VerticalLayout mainArea = new VerticalLayout(title, subtitle, textField, note, button);
         mainArea.setId("mainArea");
         homeViewCss.applyMainAreaStyle(mainArea);
@@ -169,7 +171,6 @@ public class HomeView extends VerticalLayout {
         homeViewCss.makeLinkStrong(link);
 
         Button click = new Button(VaadinIcon.PASTE.create());
-        click.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         homeViewCss.applyResultAreaStyle(resultArea);
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
