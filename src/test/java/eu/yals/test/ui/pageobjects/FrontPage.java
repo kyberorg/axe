@@ -22,10 +22,8 @@ public class FrontPage {
         public static final SelenideElement FORM = $("form");
         public static final String INPUT_ID = "#longUrl";
         public static final SelenideElement LONG_URL_INPUT = $("#mainArea vaadin-text-field input");
-        public static final SelenideElement SUBMIT_BUTTON = $("#mainArea vaadin-button button");
+        public static final SelenideElement SUBMIT_BUTTON = $("#mainArea vaadin-button");
         public static final SelenideElement PUBLIC_ACCESS_BANNER = $("#publicAccessBanner");
-
-        public static final SelenideElement HW = $("#home h1");
     }
 
     public static class OverallRow {
