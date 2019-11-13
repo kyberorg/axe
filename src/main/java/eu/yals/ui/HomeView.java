@@ -5,6 +5,7 @@ import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -168,6 +169,7 @@ public class HomeView extends VerticalLayout {
         homeViewCss.makeLinkStrong(link);
 
         Button click = new Button(VaadinIcon.PASTE.create());
+        click.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         homeViewCss.applyResultAreaStyle(resultArea);
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
