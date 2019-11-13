@@ -64,7 +64,7 @@ public class VisibleStateTest extends UITest {
 
     @Test
     public void formHasOnlyOneButton() {
-        FrontPage.MainRow.MAIN_AREA.findAll("button").shouldHaveSize(1);
+        FrontPage.MainRow.MAIN_AREA.findAll("vaadin-button").shouldHaveSize(1);
     }
 
     @Test
