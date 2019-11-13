@@ -58,7 +58,7 @@ public class VisibleStateTest extends UITest {
         SelenideElement inputField = FrontPage.MainRow.MAIN_AREA.find("vaadin-text-field");
         inputField.shouldBe(exist);
 
-        SelenideElement button = FrontPage.MainRow.MAIN_AREA.find("button");
+        SelenideElement button = FrontPage.MainRow.MAIN_AREA.find("vaadin-button");
         button.shouldBe(exist);
     }
 
