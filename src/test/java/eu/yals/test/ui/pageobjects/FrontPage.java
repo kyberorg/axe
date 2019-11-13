@@ -1,6 +1,8 @@
 package eu.yals.test.ui.pageobjects;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -19,7 +21,7 @@ public class FrontPage {
     public static class MainRow {
         public static final SelenideElement MAIN_AREA = $("#mainArea");
         public static final SelenideElement H2 = $("#mainArea h2");
-        public static final SelenideElement LONG_URL_INPUT = $("#mainArea vaadin-text-field input");
+        public static final SelenideElement LONG_URL_INPUT = getVaadinInput($("#mainArea vaadin-text-field"));
         public static final SelenideElement SUBMIT_BUTTON = $("#mainArea vaadin-button");
         public static final SelenideElement PUBLIC_ACCESS_BANNER = $("#publicAccessBanner");
     }
@@ -45,6 +47,16 @@ public class FrontPage {
         public static final SelenideElement FOOTER = $("footer");
         public static final SelenideElement VERSION = $("#version");
         public static final SelenideElement COMMIT_LINK = $("#version a");
+    }
 
+    private static SelenideElement getVaadinInput(SelenideElement vaadinTextField) {
+        SelenideElement shadowRoot = shadowRootFor(vaadinTextField);
+        SelenideElement textFieldInputContainer = shadowRoot.find("div.vaadin-text-field-container div#vaadin-text-field-input-0");
+        return textFieldInputContainer.find("slot[name='input'] input");
+    }
+
+    private static SelenideElement shadowRootFor(SelenideElement element) {
+        WebElement ele = Selenide.executeJavaScript("return arguments[0].shadowRoot", element);
+        return $(ele);
     }
 }
