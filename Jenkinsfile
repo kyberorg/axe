@@ -63,10 +63,11 @@ pipeline {
                         break;
                  }
                  deployToSwarm(hookUrl: hookUrl);
+                 sleep(30); //pause for application to be started
                }
             }
         }
-        stage('UI Tests') {
+        stage('App Tests') {
             steps {
                script {
                  String url;
@@ -81,20 +82,30 @@ pipeline {
                         url = 'https://dev.yals.eu';
                         break;
                  }
-                 sleep(30);
-
-                 //Vaadin Tests
-                 try {
-                    sh "mvn -DtestUrl=$url '-Dtest=eu.yals.test.ui.vaadin.*IT' clean verify"
-                 } catch(err) {
-                    //just continue to results instead of failing build just mark build as failed
-                 }
-
-                 testApp(url: url);
-
+                 testApp(url: url, dParams: '-Dtest=!eu.yals.test.ui.pages.*', actions: 'clean test');
                }
             }
         }
+        stage('UI Tests') {
+            steps {
+               script {
+                  String url;
+                  switch(env.BRANCH_NAME) {
+                    case "master":
+                      url = 'https://yals.eu';
+                      break;
+                    case "trunk":
+                      url = 'https://qa.yals.eu';
+                      break;
+                    default:
+                      url = 'https://dev.yals.eu';
+                      break;
+               }
+               testApp(url: url, dParams: '-Dtest=eu.yals.test.ui.vaadin.*', actions: 'clean verify')
+            }
+        }
+    }
+
     }
     post {
         always {
