@@ -1,6 +1,6 @@
 package eu.yals.test.ui.vaadin;
 
-import com.vaadin.flow.component.html.testbench.H1Element;
+import com.vaadin.flow.component.html.testbench.H2Element;
 import com.vaadin.testbench.annotations.BrowserConfiguration;
 import com.vaadin.testbench.annotations.RunOnHub;
 import com.vaadin.testbench.parallel.BrowserUtil;
@@ -38,7 +38,7 @@ public class PocIT extends ParallelTest {
 
     @Test
     public void testVaadin() {
-        String title = $(H1Element.class).first().getText();
+        String title = $(H2Element.class).first().getText();
         Assert.assertEquals("Yet another link shortener", title);
     }
 }
