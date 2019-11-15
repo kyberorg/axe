@@ -1,4 +1,4 @@
-@Library('common-lib@1.1')_
+@Library('common-lib@1.2')_
 pipeline {
     agent any;
     stages {
