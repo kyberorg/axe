@@ -212,6 +212,11 @@
             <version>1.12.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-testbench</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
