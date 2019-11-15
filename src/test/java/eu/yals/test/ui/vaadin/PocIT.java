@@ -14,7 +14,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.ArrayList;
 import java.util.List;
 
-@RunOnHub
+//@RunOnHub
+@RunOnHub("ci.yadev.eu")
 public class PocIT extends ParallelTest {
 
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));

@@ -104,8 +104,8 @@ public class UITest {
         String debugInfo = "" + App.NEW_LINE +
                 "=== Debug Info ===" +
                 App.NEW_LINE +
-                String.format("Will test BASE_URL: %s", BASE_URL) +
-                String.format("Application will start at %d", SERVER_PORT) +
+                String.format("Will test BASE_URL: %s", BASE_URL) + App.NEW_LINE +
+                String.format("Application will start at %d", SERVER_PORT) + App.NEW_LINE +
                 String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY) +
                 App.NEW_LINE +
                 "==================" +
