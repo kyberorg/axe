@@ -83,6 +83,7 @@ pipeline {
                  }
                  sleep(30);
                  testApp(url: url);
+                 sh "mvn -DtestUrl=$url '-Dtest=eu.yals.test.ui.vaadin.*IT' clean verify"
                }
             }
         }
