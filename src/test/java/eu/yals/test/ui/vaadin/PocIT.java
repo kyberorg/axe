@@ -7,7 +7,6 @@ import org.junit.Test;
 
 @RunOnHub("ci.yadev.eu") //TODO customize
 public class PocIT extends VaadinTest<HomeViewElement> {
-
     @Override
     protected HomeViewElement openView() {
         return $(HomeViewElement.class).waitForFirst();
@@ -17,7 +16,7 @@ public class PocIT extends VaadinTest<HomeViewElement> {
     public void testVaadin() {
         HomeViewElement homeView = openView();
 
-        String title = homeView.TITLE.getText();
-        Assert.assertEquals("Yet another link shortener", title);
+        String titleText = homeView.TITLE.getText();
+        Assert.assertEquals("Yet another link shortener", titleText);
     }
 }
