@@ -34,8 +34,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class HomeView extends VerticalLayout {
     private static final String TAG = "[Front Page]";
 
-    public static final String VIEW_ID = "home-view";
-    public static final String MAIN_ROW_ID = "main-row";
+    public static final String VIEW_ID = "homeView";
+    public static final String MAIN_AREA_ID = "mainArea";
 
     private final Board board = new Board();
     private final Row firstRow = new Row();
@@ -60,18 +60,14 @@ public class HomeView extends VerticalLayout {
         this.overallService = overallService;
         this.gitService = gitService;
 
-        setIds();
         init();
         applyStyle();
         applyLoadState();
     }
 
-    public void setIds() {
-        this.setId(VIEW_ID);
-        mainRow.setId(MAIN_ROW_ID);
-    }
-
     private void init() {
+        this.setId(VIEW_ID);
+
         mainRow.add(emptyDiv(), mainArea(), emptyDiv());
         overallRow.add(emptyDiv(), overallArea(), emptyDiv());
         resultRow.add(emptyDiv(), resultArea(), emptyDiv());
@@ -156,7 +152,7 @@ public class HomeView extends VerticalLayout {
         button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         VerticalLayout mainArea = new VerticalLayout(title, subtitle, textField, publicAccessBanner, button);
-        mainArea.setId("mainArea");
+        mainArea.setId(MAIN_AREA_ID);
         homeViewCss.applyMainAreaStyle(mainArea);
         return mainArea;
     }
