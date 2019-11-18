@@ -34,8 +34,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class HomeView extends VerticalLayout {
     private static final String TAG = "[Front Page]";
 
-    public static final String VIEW_ID = "homeView";
-    public static final String MAIN_AREA_ID = "mainArea";
+    public static final String VIEW_ID = "home-view";
+    public static final String MAIN_AREA_ID = "main-area";
 
     private final Board board = new Board();
     private final Row firstRow = new Row();
