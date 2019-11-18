@@ -9,13 +9,19 @@ import eu.yals.ui.HomeView;
 @Attribute(name = "id", value = HomeView.VIEW_ID)
 public class HomeViewElement extends TestBenchElement {
 
+    public static class MainRowElement extends TestBenchElement {
+        public final RowElement SELF = $(RowElement.class).id(HomeView.MAIN_ROW_ID);
+        public final H2Element TITLE = SELF.$(H2Element.class).first();
+    }
+
     //main area
-    public final RowElement MAIN_ROW = $(RowElement.class).id(HomeView.MAIN_ROW_ID);
-    public final H2Element TITLE = $(H2Element.class).first();
+    public MainRowElement getMainRow() {
+        return new MainRowElement();
+    }
 
 
     //TODO remove after PoC
     public void focusOnTitle() {
-        TITLE.focus();
+        getMainRow().TITLE.focus();
     }
 }

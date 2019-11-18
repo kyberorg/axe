@@ -30,7 +30,7 @@ public class PocIT extends VaadinTest<HomeViewElement> {
     public void testVaadin() {
         HomeViewElement homeView = $(HomeViewElement.class).first();
 
-        String title = homeView.TITLE.getText();
+        String title = homeView.getMainRow().TITLE.getText();
         Assert.assertEquals("Yet another link shortener", title);
     }
 }
