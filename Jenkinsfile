@@ -83,7 +83,7 @@ pipeline {
                             break;
                     }
                     testApp(url: url, dParams: '-Dtest=!eu.yals.test.ui.pages.**', actions: 'clean test',
-                            artifacts: "target/**", failStep: false);
+                            artifacts: "target/*.png", failStep: false);
                 }
             }
         }
