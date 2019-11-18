@@ -4,8 +4,10 @@ import com.vaadin.flow.component.html.testbench.H2Element;
 import com.vaadin.flow.component.orderedlayout.testbench.VerticalLayoutElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.annotations.Attribute;
+import com.vaadin.testbench.elementsbase.Element;
 import eu.yals.ui.HomeView;
 
+@Element("vaadin-vertical-layout")
 @Attribute(name = "id", value = HomeView.VIEW_ID)
 public class HomeViewElement extends TestBenchElement {
 
