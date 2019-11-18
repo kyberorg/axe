@@ -7,9 +7,9 @@ import com.vaadin.testbench.annotations.Attribute;
 import eu.yals.ui.HomeView;
 
 @Attribute(name = "id", value = HomeView.VIEW_ID)
-public class HomeViewPage extends TestBenchElement {
+public class HomeViewElement extends TestBenchElement {
 
-    public final H2Element title = getMainArea().title;
+    public final H2Element TITLE = getMainArea().title;
 
     private MainRowElement getMainArea() {
         return new MainRowElement();
@@ -19,6 +19,5 @@ public class HomeViewPage extends TestBenchElement {
         private final RowElement self = $(RowElement.class).id(HomeView.MAIN_ROW_ID);
         private final H2Element title = self.$(H2Element.class).first();
     }
-
 
 }

@@ -60,7 +60,7 @@ public class HomeView extends VerticalLayout {
         this.overallService = overallService;
         this.gitService = gitService;
 
-
+        setIds();
         init();
         applyStyle();
         applyLoadState();
