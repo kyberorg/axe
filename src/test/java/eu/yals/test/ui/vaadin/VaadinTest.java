@@ -1,7 +1,6 @@
 package eu.yals.test.ui.vaadin;
 
 import com.vaadin.testbench.Parameters;
-import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.annotations.BrowserConfiguration;
 import com.vaadin.testbench.parallel.BrowserUtil;
@@ -9,7 +8,6 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import org.junit.Before;
-import org.junit.Rule;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.ArrayList;
@@ -20,9 +18,6 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
-
-    @Rule
-    public ScreenshotOnFailureRule rule = new ScreenshotOnFailureRule(this, true);
 
     @Before
     public void setup() throws Exception {
