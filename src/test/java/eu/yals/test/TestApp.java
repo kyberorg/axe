@@ -7,7 +7,7 @@ package eu.yals.test;
  */
 public class TestApp {
     public static class Properties {
-        public static final String TEST_URL = "testUrl";
+        public static final String TEST_URL = "test.url";
         public static final String SERVER_PORT = "port";
         public static final String TEST_RUN_MODE = "test.runMode";
     }
