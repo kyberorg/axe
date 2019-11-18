@@ -1,10 +1,11 @@
 package eu.yals.test.ui.vaadin;
 
+import com.vaadin.testbench.annotations.RunOnHub;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewPage;
 import org.junit.Assert;
 import org.junit.Test;
 
-
+@RunOnHub("ci.yadev.eu") //TODO customize
 public class PocIT extends VaadinTest<HomeViewPage> {
 
     @Override
