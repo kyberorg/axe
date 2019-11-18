@@ -9,7 +9,7 @@ import org.junit.Test;
 public class PocIT extends VaadinTest<HomeViewElement> {
     @Override
     protected HomeViewElement openView() {
-        return $(HomeViewElement.class).waitForFirst();
+        return $(HomeViewElement.class).first();
     }
 
     @Test
