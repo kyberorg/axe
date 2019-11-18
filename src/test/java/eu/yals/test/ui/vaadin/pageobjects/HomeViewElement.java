@@ -1,14 +1,10 @@
 package eu.yals.test.ui.vaadin.pageobjects;
 
 import com.vaadin.flow.component.html.testbench.H2Element;
-import com.vaadin.flow.component.orderedlayout.testbench.VerticalLayoutElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.annotations.Attribute;
-import com.vaadin.testbench.elementsbase.Element;
-import eu.yals.ui.HomeView;
 
-@Element("vaadin-vertical-layout")
-@Attribute(name = "id", value = HomeView.VIEW_ID)
+@Attribute(name = "id", value = "home-view")
 public class HomeViewElement extends TestBenchElement {
 
     public final H2Element TITLE = getMainArea().title;
@@ -17,9 +13,9 @@ public class HomeViewElement extends TestBenchElement {
         return new MainAreaElement();
     }
 
+    @Attribute(name = "id", value = "main-area")
     public static class MainAreaElement extends TestBenchElement {
-        private final VerticalLayoutElement self = $(VerticalLayoutElement.class).id(HomeView.MAIN_AREA_ID);
-        private final H2Element title = self.$(H2Element.class).first();
+        private final H2Element title = this.$(H2Element.class).first();
     }
 
 }
