@@ -82,7 +82,7 @@ pipeline {
                             url = 'https://dev.yals.eu';
                             break;
                     }
-                    testApp(url: url, dParams: '-Dtest=!eu.yals.test.ui.pages.**,!eu.yals.test.ui.vaadin.**', actions: 'clean test', failStep: false);
+                    testApp(url: url, dParams: '-Dtest=!eu.yals.test.ui.pages.**', actions: 'clean test', failStep: false);
                 }
             }
         }
