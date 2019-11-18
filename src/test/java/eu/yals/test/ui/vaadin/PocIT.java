@@ -1,23 +1,23 @@
 package eu.yals.test.ui.vaadin;
 
 import com.vaadin.testbench.annotations.RunOnHub;
-import eu.yals.test.ui.vaadin.pageobjects.HomeViewPage;
+import eu.yals.test.ui.vaadin.pageobjects.HomeViewElement;
 import org.junit.Assert;
 import org.junit.Test;
 
 @RunOnHub("ci.yadev.eu") //TODO customize
-public class PocIT extends VaadinTest<HomeViewPage> {
+public class PocIT extends VaadinTest<HomeViewElement> {
 
     @Override
-    protected HomeViewPage openView() {
-        return $(HomeViewPage.class).waitForFirst();
+    protected HomeViewElement openView() {
+        return $(HomeViewElement.class).waitForFirst();
     }
 
     @Test
     public void testVaadin() {
-        HomeViewPage homeView = $(HomeViewPage.class).first();
+        HomeViewElement homeView = openView();
 
-        String title = homeView.title.getText();
+        String title = homeView.TITLE.getText();
         Assert.assertEquals("Yet another link shortener", title);
     }
 }
