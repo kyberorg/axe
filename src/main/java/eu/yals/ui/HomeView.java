@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Icon(VaadinIcon.HOME)
 public class HomeView extends VerticalLayout {
     private static final String TAG = "[Front Page]";
+    public static final String VIEW_ID = "home-view";
 
     private final Board board = new Board();
     private final Row firstRow = new Row();
@@ -57,7 +58,7 @@ public class HomeView extends VerticalLayout {
         this.overallService = overallService;
         this.gitService = gitService;
 
-        setId("root");
+        setId(VIEW_ID);
         init();
         applyStyle();
         applyLoadState();
