@@ -26,5 +26,8 @@ public class PocIT extends VaadinTest<HomeViewElement> {
         //TODO move to TestWatcher
         Cookie cookie2 = new Cookie("zaleniumTestPassed", "true");
         getDriver().manage().addCookie(cookie2);
+
+        Cookie cookie3 = new Cookie("zaleniumTestName", "true");
+        getDriver().manage().addCookie(cookie3);
     }
 }
