@@ -8,7 +8,7 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -24,13 +24,13 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
     protected List<DesiredCapabilities> browsers;
-    private String testName;
+    private static String testName;
 
-    @Rule
-    public TestRule watcher = new TestWatcher() {
+    @ClassRule
+    public static TestRule watcher = new TestWatcher() {
         protected void starting(Description description) {
-            System.out.println("Starting test: " + description.getMethodName());
-            testName = description.getMethodName();
+            System.out.println("Starting test: " + description.getDisplayName());
+            testName = description.getDisplayName();
         }
     };
 
@@ -47,16 +47,14 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         browsers = new ArrayList<>();
         browsers.add(BrowserUtil.chrome());
         browsers.add(BrowserUtil.firefox());
+        setTestName(testName);
         return browsers;
     }
 
     private void setTestName(String testName) {
-        DesiredCapabilities nameCapability = new DesiredCapabilities();
-        nameCapability.setCapability("name", testName);
-        getBrowserConfiguration().add(nameCapability);
-
         for (DesiredCapabilities browser : browsers) {
             browser.setCapability("testFileNameTemplate", "{testName}_{browser}_{testStatus}");
+            browser.setCapability("name", testName);
         }
     }
 
