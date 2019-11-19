@@ -82,8 +82,17 @@ pipeline {
                             url = 'https://dev.yals.eu';
                             break;
                     }
-                    testApp(url: url, dParams: '-Dtest=!eu.yals.test.ui.pages.**', actions: 'clean test',
-                            artifacts: "target/*.png", failStep: false);
+                    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
+                                      usernameVariable: 'USR', passwordVariable: 'PASS'
+                                     ]]) {
+
+                        testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='${USR}':'${PASS}'@ci.yadev.eu " +
+                                '-Dtest=!eu.yals.test.ui.pages.**',
+                                actions: 'clean test',
+                                artifacts: "target/*.png", failStep: false);
+                    }
+
+
                 }
             }
         }
