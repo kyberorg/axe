@@ -43,11 +43,10 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
 
     @BrowserConfiguration
     public List<DesiredCapabilities> getBrowserConfiguration() {
-
+        System.out.println("Setting browsers");
         browsers = new ArrayList<>();
         browsers.add(BrowserUtil.chrome());
         browsers.add(BrowserUtil.firefox());
-        setTestName(testName);
         return browsers;
     }
 
@@ -56,9 +55,9 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         nameCapability.setCapability("name", testName);
         getBrowserConfiguration().add(nameCapability);
 
-       /* for (DesiredCapabilities browser : browsers) {
+        for (DesiredCapabilities browser : browsers) {
             browser.setCapability("testFileNameTemplate", "{testName}_{browser}_{testStatus}");
-        }*/
+        }
     }
 
     protected abstract E openView();
