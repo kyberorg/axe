@@ -245,7 +245,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
+                <!--<executions>
                     <execution>
                         <id>pre-integration-test</id>
                         <goals>
@@ -258,7 +258,7 @@
                             <goal>stop</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

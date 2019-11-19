@@ -8,6 +8,10 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.ArrayList;
@@ -19,6 +23,17 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
+    protected List<DesiredCapabilities> browsers;
+    private String testName;
+
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(Description description) {
+            System.out.println("Starting test: " + description.getMethodName());
+            testName = description.getMethodName();
+        }
+    };
+
     @Before
     public void setup() throws Exception {
         super.setup();
@@ -28,10 +43,21 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
 
     @BrowserConfiguration
     public List<DesiredCapabilities> getBrowserConfiguration() {
-        List<DesiredCapabilities> browsers = new ArrayList<>();
+        System.out.println("Setting browsers");
+        browsers = new ArrayList<>();
         browsers.add(BrowserUtil.chrome());
         browsers.add(BrowserUtil.firefox());
         return browsers;
+    }
+
+    private void setTestName(String testName) {
+        DesiredCapabilities nameCapability = new DesiredCapabilities();
+        nameCapability.setCapability("name", testName);
+        getBrowserConfiguration().add(nameCapability);
+
+        for (DesiredCapabilities browser : browsers) {
+            browser.setCapability("testFileNameTemplate", "{testName}_{browser}_{testStatus}");
+        }
     }
 
     protected abstract E openView();
