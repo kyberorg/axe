@@ -22,8 +22,8 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     @Before
     public void setup() throws Exception {
         super.setup();
-        getDriver().get(BASE_URL);
         Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
+        getDriver().get(BASE_URL);
     }
 
     @BrowserConfiguration

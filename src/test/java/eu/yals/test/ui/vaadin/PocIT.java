@@ -9,17 +9,14 @@ import org.junit.Test;
 public class PocIT extends VaadinTest<HomeViewElement> {
     @Override
     protected HomeViewElement openView() {
-        return $(HomeViewElement.class).first();
+        return $(HomeViewElement.class).waitForFirst();
     }
 
     @Test
     public void testVaadin() {
-       /* HomeViewElement homeView = openView();
+        HomeViewElement homeView = openView();
 
-        String titleText = homeView.TITLE.getText();
-        Assert.assertEquals("Yet another link shortener", titleText);*/
-
-        HomeViewElement homeViewElement = new HomeViewElement();
-        Assert.assertTrue(homeViewElement.MAIN_AREA.isDisplayed());
+        String titleText = homeView.getTitle().getText();
+        Assert.assertEquals("Yet another link shortener", titleText);
     }
 }
