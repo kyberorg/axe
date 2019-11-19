@@ -2,8 +2,6 @@ package eu.yals.test.ui.vaadin;
 
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
-import com.vaadin.testbench.annotations.BrowserConfiguration;
-import com.vaadin.testbench.parallel.BrowserUtil;
 import com.vaadin.testbench.parallel.ParallelTest;
 import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
@@ -17,7 +15,6 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTest {
@@ -53,14 +50,6 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         }
     };
 
-    @BrowserConfiguration
-    public List<DesiredCapabilities> setBrowser() {
-        browsers = new ArrayList<>();
-        browsers.add(BrowserUtil.chrome());
-        //browsers.add(BrowserUtil.firefox());
-        return browsers;
-    }
-
     @Before
     public void setup() throws Exception {
         addTestNameToDriver();
@@ -69,9 +58,6 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
 
         getDriver().get(BASE_URL);
-
-        Cookie cookie = new Cookie("zaleniumMessage", testName);
-        getDriver().manage().addCookie(cookie);
     }
 
     private void addTestNameToDriver() throws IllegalAccessException, ClassCastException {
@@ -79,7 +65,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         do {
             if (parallelTest == null) break;
             parallelTest = parallelTest.getSuperclass();
-        } while (parallelTest.getSimpleName().equals("ParallelTest"));
+        } while (!parallelTest.getSimpleName().equals("ParallelTest"));
 
         if (parallelTest == null) return;
 
