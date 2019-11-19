@@ -87,6 +87,7 @@ pipeline {
                                      ]]) {
 
                         testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='${USR}':'${PASS}'@ci.yadev.eu " +
+                                '-Dsauce.user=void -Dsauce.sauceAccessKey=void' +
                                 '-Dtest=!eu.yals.test.ui.pages.**',
                                 actions: 'clean test',
                                 artifacts: "target/*.png", failStep: false);
