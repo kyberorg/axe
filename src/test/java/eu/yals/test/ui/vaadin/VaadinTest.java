@@ -46,6 +46,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         browsers = new ArrayList<>();
         browsers.add(BrowserUtil.chrome());
         browsers.add(BrowserUtil.firefox());
+        setTestName("myTests");
         return browsers;
     }
 
