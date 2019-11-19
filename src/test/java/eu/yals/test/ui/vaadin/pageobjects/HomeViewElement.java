@@ -8,13 +8,11 @@ import eu.yals.ui.HomeView;
 @Attribute(name = "id", value = HomeView.VIEW_ID)
 public class HomeViewElement extends TestBenchElement {
 
-    public H2Element getTitle() {
+    public H2Element getTitleField() {
         return getMainArea().$(H2Element.class).first();
     }
 
-    public TestBenchElement getMainArea() {
+    private TestBenchElement getMainArea() {
         return $(TestBenchElement.class).id(HomeView.MAIN_AREA_ID);
     }
-
-
 }
