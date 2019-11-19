@@ -8,7 +8,7 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -26,11 +26,11 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     protected List<DesiredCapabilities> browsers;
     private static String testName;
 
-    @ClassRule
-    public static TestRule watcher = new TestWatcher() {
+    @Rule
+    public TestRule watcher = new TestWatcher() {
         protected void starting(Description description) {
-            System.out.println("Starting test: " + description.getDisplayName());
-            testName = description.getDisplayName();
+            System.out.println("Starting test: " + description.getMethodName());
+            testName = description.getMethodName();
         }
     };
 
