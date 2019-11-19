@@ -54,6 +54,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     private void setTestName(String testName) {
         for (DesiredCapabilities browser : browsers) {
             browser.setCapability("name", testName);
+            browser.setCapability("testFileNameTemplate", "{testName}_{browser}_{testStatus}");
         }
     }
 
