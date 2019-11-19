@@ -24,12 +24,13 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
     protected List<DesiredCapabilities> browsers;
+    private String testName;
 
     @Rule
     public TestRule watcher = new TestWatcher() {
         protected void starting(Description description) {
             System.out.println("Starting test: " + description.getMethodName());
-            setTestName(description.getMethodName());
+            testName = description.getMethodName();
         }
     };
 
@@ -46,7 +47,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         browsers = new ArrayList<>();
         browsers.add(BrowserUtil.chrome());
         browsers.add(BrowserUtil.firefox());
-        setTestName("myTests");
+        setTestName(testName);
         return browsers;
     }
 
