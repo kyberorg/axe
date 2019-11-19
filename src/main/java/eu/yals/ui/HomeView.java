@@ -159,12 +159,16 @@ public class HomeView extends VerticalLayout {
     }
 
     private HorizontalLayout overallArea() {
-        Span overallText = new Span("Yals already saved ");
-        overallText.setId(IDs.OVERALL_LINKS_TEXT);
-        linkCounter = new Span();
-        Span links = new Span(" links");
+        Span overallTextStart = new Span("Yals already saved ");
 
-        HorizontalLayout overallArea = new HorizontalLayout(overallText, linkCounter, links);
+        linkCounter = new Span();
+        linkCounter.setId(IDs.OVERALL_LINKS_NUMBER);
+        Span overallTextEnd = new Span(" links");
+
+        Span overallText = new Span(overallTextStart, linkCounter, overallTextEnd);
+        overallText.setId(IDs.OVERALL_LINKS_TEXT);
+
+        HorizontalLayout overallArea = new HorizontalLayout(overallText);
         overallArea.setId(IDs.OVERALL_AREA);
         homeViewCss.applyOverallAreaStyle(overallArea);
         return overallArea;
@@ -237,6 +241,7 @@ public class HomeView extends VerticalLayout {
 
         public static final String OVERALL_AREA = "overallArea";
         public static final String OVERALL_LINKS_TEXT = "overallLinksText";
+        public static final String OVERALL_LINKS_NUMBER = "overallLinksNum";
 
         public static final String RESULT_AREA = "resultArea";
 

@@ -13,6 +13,10 @@ import eu.yals.ui.HomeView;
 @Attribute(name = "id", value = HomeView.IDs.VIEW_ID)
 public class HomeViewElement extends TestBenchElement {
 
+    public TestBenchElement getMainArea() {
+        return $(TestBenchElement.class).id(HomeView.IDs.MAIN_AREA);
+    }
+
     public H2Element getTitleField() {
         return getMainArea().$(H2Element.class).id(HomeView.IDs.TITLE);
     }
@@ -33,8 +37,20 @@ public class HomeViewElement extends TestBenchElement {
         return getMainArea().$(ButtonElement.class).id(HomeView.IDs.SUBMIT_BUTTON);
     }
 
+    public TestBenchElement getOverallArea() {
+        return $(TestBenchElement.class).id(HomeView.IDs.OVERALL_AREA);
+    }
+
     public SpanElement getOverallLinksTextField() {
         return getOverallArea().$(SpanElement.class).id(HomeView.IDs.OVERALL_LINKS_TEXT);
+    }
+
+    public SpanElement getOverallLinksNumber() {
+        return getOverallArea().$(SpanElement.class).id(HomeView.IDs.OVERALL_LINKS_NUMBER);
+    }
+
+    public TestBenchElement getResultArea() {
+        return $(TestBenchElement.class).id(HomeView.IDs.RESULT_AREA);
     }
 
     public AnchorElement getShortLinkField() {
@@ -45,8 +61,16 @@ public class HomeViewElement extends TestBenchElement {
         return getResultArea().$(ButtonElement.class).id(HomeView.IDs.COPY_LINK_BUTTON);
     }
 
+    public TestBenchElement getQRCodeArea() {
+        return $(TestBenchElement.class).id(HomeView.IDs.QR_CODE_AREA);
+    }
+
     public ImageElement getQRCode() {
         return getQRCodeArea().$(ImageElement.class).id(HomeView.IDs.QR_CODE);
+    }
+
+    public TestBenchElement getFooter() {
+        return $(TestBenchElement.class).id(HomeView.IDs.FOOTER);
     }
 
     public SpanElement getVersionField() {
@@ -55,25 +79,5 @@ public class HomeViewElement extends TestBenchElement {
 
     public AnchorElement getCommitLink() {
         return getFooter().$(AnchorElement.class).id(HomeView.IDs.COMMIT_LINK);
-    }
-
-    public TestBenchElement getMainArea() {
-        return $(TestBenchElement.class).id(HomeView.IDs.MAIN_AREA);
-    }
-
-    public TestBenchElement getOverallArea() {
-        return $(TestBenchElement.class).id(HomeView.IDs.OVERALL_AREA);
-    }
-
-    public TestBenchElement getResultArea() {
-        return $(TestBenchElement.class).id(HomeView.IDs.RESULT_AREA);
-    }
-
-    public TestBenchElement getQRCodeArea() {
-        return $(TestBenchElement.class).id(HomeView.IDs.QR_CODE_AREA);
-    }
-
-    public TestBenchElement getFooter() {
-        return $(TestBenchElement.class).id(HomeView.IDs.FOOTER);
     }
 }
