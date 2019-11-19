@@ -86,7 +86,7 @@ pipeline {
                                       usernameVariable: 'USR', passwordVariable: 'PASS'
                                      ]]) {
 
-                        testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=${USR}:${PASS}'@ci.yadev.eu " +
+                        testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='${USR}':'${PASS}'@ci.yadev.eu " +
                                 '-Dtest=!eu.yals.test.ui.pages.**',
                                 actions: 'clean test',
                                 artifacts: "target/*.png", failStep: false);
