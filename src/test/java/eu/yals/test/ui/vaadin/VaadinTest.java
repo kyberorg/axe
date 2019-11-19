@@ -22,7 +22,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
 
     @BeforeClass
     public static void setHub() {
-        System.setProperty("com.vaadin.testbench.Parameters.hubHostname", "ci.yadev.eu");
+        //System.setProperty("com.vaadin.testbench.Parameters.hubHostname", "ci.yadev.eu");
     }
 
     @Before
