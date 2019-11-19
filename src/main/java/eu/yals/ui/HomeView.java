@@ -34,9 +34,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class HomeView extends VerticalLayout {
     private static final String TAG = "[Front Page]";
 
-    public static final String VIEW_ID = "home-view";
-    public static final String MAIN_AREA_ID = "main-area";
-
     private final Board board = new Board();
     private final Row firstRow = new Row();
     private final Row mainRow = new Row();
@@ -66,7 +63,7 @@ public class HomeView extends VerticalLayout {
     }
 
     private void init() {
-        this.setId(VIEW_ID);
+        this.setId(IDs.VIEW_ID);
 
         mainRow.add(emptyDiv(), mainArea(), emptyDiv());
         overallRow.add(emptyDiv(), overallArea(), emptyDiv());
@@ -138,55 +135,70 @@ public class HomeView extends VerticalLayout {
 
     private VerticalLayout mainArea() {
         H2 title = new H2("Yet another link shortener");
+        title.setId(IDs.TITLE);
         Span subtitle = new Span("... for friends");
+        subtitle.setId(IDs.SUBTITLE);
         homeViewCss.makeSubtitleItalic(subtitle);
 
-        TextField textField = new TextField("Your very long URL here:");
-        textField.setPlaceholder("http://mysuperlongurlhere.tld");
-        textField.setWidthFull();
+        TextField input = new TextField("Your very long URL here:");
+        input.setId(IDs.INPUT);
+        input.setPlaceholder("http://mysuperlongurlhere.tld");
+        input.setWidthFull();
 
         Span publicAccessBanner = new Span("Note: all links considered as public and can be used by anyone");
-        publicAccessBanner.setId("publicAccessBanner");
+        publicAccessBanner.setId(IDs.BANNER);
 
-        Button button = new Button("Shorten it!");
-        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Button submitButton = new Button("Shorten it!");
+        submitButton.setId(IDs.SUBMIT_BUTTON);
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        VerticalLayout mainArea = new VerticalLayout(title, subtitle, textField, publicAccessBanner, button);
-        mainArea.setId(MAIN_AREA_ID);
+        VerticalLayout mainArea = new VerticalLayout(title, subtitle, input, publicAccessBanner, submitButton);
+        mainArea.setId(IDs.MAIN_AREA);
         homeViewCss.applyMainAreaStyle(mainArea);
         return mainArea;
     }
 
     private HorizontalLayout overallArea() {
-        Span overallText = new Span("Yals already saved ");
-        linkCounter = new Span();
-        Span links = new Span(" links");
+        Span overallTextStart = new Span("Yals already saved ");
 
-        HorizontalLayout overallArea = new HorizontalLayout(overallText, linkCounter, links);
+        linkCounter = new Span();
+        linkCounter.setId(IDs.OVERALL_LINKS_NUMBER);
+        Span overallTextEnd = new Span(" links");
+
+        Span overallText = new Span(overallTextStart, linkCounter, overallTextEnd);
+        overallText.setId(IDs.OVERALL_LINKS_TEXT);
+
+        HorizontalLayout overallArea = new HorizontalLayout(overallText);
+        overallArea.setId(IDs.OVERALL_AREA);
         homeViewCss.applyOverallAreaStyle(overallArea);
         return overallArea;
     }
 
     private HorizontalLayout resultArea() {
         HorizontalLayout resultArea = new HorizontalLayout();
+        resultArea.setId(IDs.RESULT_AREA);
 
         Span emptySpan = new Span();
 
-        Anchor link = new Anchor("https://yals.eu/gMKyrJ", "https://yals.eu/gMKyrJ");
-        homeViewCss.makeLinkStrong(link);
+        Anchor shortLink = new Anchor("https://yals.eu/gMKyrJ", "https://yals.eu/gMKyrJ");
+        shortLink.setId(IDs.SHORT_LINK);
+        homeViewCss.makeLinkStrong(shortLink);
 
-        Button click = new Button(VaadinIcon.PASTE.create());
+        Button copyLinkButton = new Button(VaadinIcon.PASTE.create());
+        copyLinkButton.setId(IDs.COPY_LINK_BUTTON);
 
         homeViewCss.applyResultAreaStyle(resultArea);
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        resultArea.add(emptySpan, link, click);
+        resultArea.add(emptySpan, shortLink, copyLinkButton);
         return resultArea;
     }
 
     private Div qrCodeArea() {
         Div qrCodeArea = new Div();
+        qrCodeArea.setId(IDs.QR_CODE_AREA);
         Image qrCode = new Image();
+        qrCode.setId(IDs.QR_CODE);
         qrCode.setSrc("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeAQAAAADlUEq3AAABVklEQVR42u3aSw6DIBCAYRIP4JG8ukfyACRTZR4Qa9qumiH5WZiin6spAwMW+b3VAgaDwWAwGJwQ78Wa3Tvsl7UVnB737rFIwyd5eApOi6s9vR6UTdrl6l5/AfBMuIW7jV8wGPxP3LtVZ8mf8jM4DY5lz6551y5f1kjgNLg3nTSPPkw/1SngNFgza4R2L4uMlQh4FtyqjsWzrVaQzykXnAxr85LR58saXXB23CI9ZFsfunrZBJwer73MOOO7xS7OpuMXnB1fze4psZhbLQlOj+/vHubaHsCHbXBwFixRa8SAPU2kYQFnx+1e0Y03j75tCSzvxSM4H76V/7HisTJyBWfH4xacB15PpsCT4OhqEeLZFjwP7sfBdTiFaikXPBUW8QP94kP3fYYFJ8a7nwnrHoAtZsH58ZhyLdyefJ9KD3A2fD8OFhlfW8HZMd8/g8FgMBgMnhC/AP4haj2FcNJGAAAAAElFTkSuQmCC");
         qrCode.setAlt("qrCode");
 
@@ -198,13 +210,16 @@ public class HomeView extends VerticalLayout {
 
     private HorizontalLayout footer() {
         HorizontalLayout footer = new HorizontalLayout();
+        footer.setId(IDs.FOOTER);
 
         Span versionStart = new Span(String.format("Version %s (based on commit ", this.latestTag));
         Anchor commit = new Anchor(String.format("%s/%s", App.Git.REPOSITORY, this.latestCommit),
                 latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
+        commit.setId(IDs.COMMIT_LINK);
         Span versionEnd = new Span(")");
 
         Span version = new Span(versionStart, commit, versionEnd);
+        version.setId(IDs.VERSION);
         homeViewCss.paintVersion(version);
 
         homeViewCss.applyFooterStyle(footer);
@@ -215,4 +230,29 @@ public class HomeView extends VerticalLayout {
         return footer;
     }
 
+    public static class IDs {
+        public static final String VIEW_ID = "homeView";
+        public static final String MAIN_AREA = "mainArea";
+        public static final String TITLE = "siteTitle";
+        public static final String SUBTITLE = "subTitle";
+        public static final String INPUT = "longUrlInput";
+        public static final String BANNER = "publicAccessBanner";
+        public static final String SUBMIT_BUTTON = "submitButton";
+
+        public static final String OVERALL_AREA = "overallArea";
+        public static final String OVERALL_LINKS_TEXT = "overallLinksText";
+        public static final String OVERALL_LINKS_NUMBER = "overallLinksNum";
+
+        public static final String RESULT_AREA = "resultArea";
+
+        public static final String SHORT_LINK = "shortLink";
+        public static final String COPY_LINK_BUTTON = "copyLink";
+
+        public static final String QR_CODE_AREA = "qrCodeArea";
+        public static final String QR_CODE = "qrCode";
+
+        public static final String FOOTER = "footer";
+        public static final String VERSION = "version";
+        public static final String COMMIT_LINK = "commitLink";
+    }
 }
