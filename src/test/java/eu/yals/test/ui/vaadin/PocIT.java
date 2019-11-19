@@ -1,5 +1,6 @@
 package eu.yals.test.ui.vaadin;
 
+import com.vaadin.testbench.parallel.TestNameSuffix;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewElement;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,6 +12,7 @@ public class PocIT extends VaadinTest<HomeViewElement> {
         return $(HomeViewElement.class).waitForFirst();
     }
 
+    @TestNameSuffix(property = "MySuperTest")
     @Test
     public void testVaadin() {
         HomeViewElement homeView = openView();
@@ -24,5 +26,8 @@ public class PocIT extends VaadinTest<HomeViewElement> {
         //TODO move to TestWatcher
         Cookie cookie2 = new Cookie("zaleniumTestPassed", "true");
         getDriver().manage().addCookie(cookie2);
+
+        Cookie cookie3 = new Cookie("zaleniumTestName", "true");
+        getDriver().manage().addCookie(cookie3);
     }
 }
