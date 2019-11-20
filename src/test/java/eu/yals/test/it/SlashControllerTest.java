@@ -1,91 +1,66 @@
 package eu.yals.test.it;
 
+import com.mashape.unirest.http.HttpResponse;
 import eu.yals.Endpoint;
 import eu.yals.constants.Header;
-import eu.yals.constants.MimeType;
 import eu.yals.controllers.SlashController;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
+import eu.yals.test.TestUtils;
 import eu.yals.utils.AppUtils;
-import org.junit.Before;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for {@link SlashController}
  *
  * @since 1.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath*:test-app.xml"})
-@WebAppConfiguration
-@TestPropertySource(locations = "classpath:application-test.properties")
+
+@Slf4j
 public class SlashControllerTest {
 
-    @Autowired
-    private WebApplicationContext wac;
-
-    private MockMvc mockMvc;
-
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-    }
-
     @Test
-    public void storeURLAndCheckIfRedirectToSameURL() throws Exception {
+    public void storeURLAndCheckIfRedirectToSameURL() {
         String url = "https://eesti.ee";
         String ident = store(url);
         assertNotNull(ident);
 
-        MvcResult result = mockMvc.perform(
-                get(Endpoint.SLASH_BASE + ident)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(302))
-                .andReturn();
+        HttpResponse<String> response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+        log.debug("Response: {}", response);
+        if (response == null) return;
 
-        String locationHeader = result.getResponse().getHeader("Location");
-        assertNotNull(locationHeader);
-
-        assertEquals(url, locationHeader);
+        Assert.assertEquals(302, response.getStatus());
+        Assert.assertTrue(response.getHeaders().containsKey(Header.LOCATION));
+        String location = response.getHeaders().getFirst(Header.LOCATION);
+        Assert.assertTrue("Got empty " + Header.LOCATION + " header",
+                StringUtils.isNotBlank(location));
     }
 
     @Test
-    public void requestWithIdentThatNotStoredGivesStatus404() throws Exception {
+    public void requestWithIdentThatNotStoredGivesStatus404() {
         String ident = "habaHaba";
 
-        mockMvc.perform(
-                get(Endpoint.SLASH_BASE + ident)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(404));
-
+        HttpResponse<String> response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+        log.debug("Response: {}", response);
+        if (response == null) return;
+        Assert.assertEquals(404, response.getStatus());
     }
 
-    private String store(String urlToStore) throws Exception {
+    private String store(String urlToStore) {
         String request = StoreRequestJson.create().withLink(urlToStore).toString();
-        MvcResult storeResult = mockMvc.perform(post(Endpoint.STORE_API)
-                .contentType(MimeType.APPLICATION_JSON).content(request))
-                .andExpect(status().is(201))
-                .andReturn();
 
-        String responseBody = storeResult.getResponse().getContentAsString();
+        HttpResponse<String> response = TestUtils.unirestPost(Endpoint.STORE_API, request);
+        log.debug("Response: {}", response);
+        if (response == null) throw new NullPointerException("Store Requested Failed: got nothing in return");
+        Assert.assertEquals(201, response.getStatus());
+
+        String responseBody = response.getBody();
         assertNotNull(responseBody);
         assertFalse(responseBody.trim().isEmpty());
 
@@ -93,11 +68,4 @@ public class SlashControllerTest {
         assertNotNull(replyJson);
         return replyJson.getIdent();
     }
-
-    public void homePageDisplaysCorrectly() throws Exception {
-        assertNotNull(this.mockMvc);
-        mockMvc.perform(get(Endpoint.SLASH_BASE))
-                .andExpect(view().name("index"));
-    }
-
 }
