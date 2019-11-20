@@ -113,7 +113,7 @@ public class TestUtils {
         try {
             return Unirest.get(endpoint).asString();
         } catch (Exception e) {
-            String errorMessage = "Failed to Request API. Communication error";
+            String errorMessage = "Failed to Request API. Communication error.Endpoint: " + endpoint;
             fail(errorMessage);
             //MalformedURLException means configuration error
             assertFalse(e.getCause() instanceof MalformedURLException);
@@ -128,9 +128,9 @@ public class TestUtils {
     public static HttpResponse<String> unirestPost(String endpoint, Object payload, String mimeType) {
         endpoint = normalizeUrl(endpoint);
         try {
-            return Unirest.post(endpoint).asString();
+            return Unirest.post(endpoint).header("Content-Type", mimeType).body(payload).asString();
         } catch (Exception e) {
-            String errorMessage = "Failed to Request API. Communication error";
+            String errorMessage = "Failed to Request API. Communication error. Endpoint: " + endpoint;
             fail(errorMessage);
             //MalformedURLException means configuration error
             assertFalse(e.getCause() instanceof MalformedURLException);

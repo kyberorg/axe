@@ -7,6 +7,7 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
 import eu.yals.Endpoint;
@@ -50,23 +51,10 @@ public class SlashView extends VerticalLayout implements HasUrlParameter<String>
             return;
         }
 
-        /*//This workaround for tests
-        if (hasTestHeader()) {
-            GetResult getResult = service.getLink(ident);
-            if (getResult instanceof GetResult.Success) {
-                return redirect(((GetResult.Success) getResult).getLink());
-            } else if (getResult instanceof GetResult.NotFound) {
-                return render404Ident();
-            } else if (getResult instanceof GetResult.DatabaseDown) {
-                return render503();
-            } else {
-                return render500();
-            }
-        }*/
-
         HttpResponse<String> apiResponse;
         VaadinRequest vaadinRequest = VaadinService.getCurrentRequest();
         HttpServletRequest request = ((VaadinServletRequest) vaadinRequest).getHttpServletRequest();
+        VaadinResponse vaadinResponse = VaadinResponse.getCurrent();
 
         try {
             log.debug("{} Searching for ident: '{}'", TAG, ident);
@@ -89,23 +77,28 @@ public class SlashView extends VerticalLayout implements HasUrlParameter<String>
         switch (apiResponse.getStatus()) {
             case 200:
                 String link = extractLink(apiResponse);
+                vaadinResponse.setStatus(200);
                 log.info("{} Got long URL. Redirecting to {}", TAG, link);
                 event.forwardTo(link);
                 return;
             case 400:
-                log.info("{} Got malformed request. Replying with 404", TAG);
+                log.info("{} Got malformed request. Replying with 400", TAG);
+                vaadinResponse.setStatus(400);
                 event.rerouteTo(IdentNotFoundView.class);
                 return;
             case 404:
                 log.info("{} No corresponding longURL found. Replying with 404", TAG);
+                vaadinResponse.setStatus(404);
                 event.rerouteTo(IdentNotFoundView.class);
                 return;
             case 500:
                 log.info("{} Got internal error. Replying with 500", TAG);
+                vaadinResponse.setStatus(500);
                 event.rerouteTo(ServerErrorView.class);
                 return;
             case 503:
                 log.info("{} Database is DOWN. Replying with 503", TAG);
+                vaadinResponse.setStatus(503);
                 event.rerouteTo(AppDownView.class);
                 return;
             default:

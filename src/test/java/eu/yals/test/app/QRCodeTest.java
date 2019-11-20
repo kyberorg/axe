@@ -7,10 +7,6 @@ import eu.yals.Endpoint;
 import eu.yals.json.StoreRequestJson;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -28,9 +24,6 @@ import static org.junit.Assert.*;
  * @since 2.6
  */
 @Slf4j
-@RunWith(SpringRunner.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class QRCodeTest {
 
     @Test
