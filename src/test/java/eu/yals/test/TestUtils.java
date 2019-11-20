@@ -2,6 +2,7 @@ package eu.yals.test;
 
 import com.mashape.unirest.http.Headers;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
@@ -11,6 +12,7 @@ import eu.yals.utils.AppUtils;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -59,14 +61,8 @@ public class TestUtils {
         assertNotNull(result.getResponse());
 
         String contentType = result.getResponse().getContentType();
-        assertNotNull(contentType);
-        String[] contentTypeParts = contentType.split(";");
-        if (contentTypeParts.length > 1) {
-            String onlyContentType = contentTypeParts[0];
-            assertEquals(mimeType, onlyContentType);
-        } else {
-            assertEquals(mimeType, result.getResponse().getContentType());
-        }
+        String actualMimeType = extractMime(contentType);
+        assertEquals(mimeType, actualMimeType);
     }
 
     public static void assertContentType(String mimeType, HttpResponse<String> response) {
@@ -76,16 +72,8 @@ public class TestUtils {
         Headers headers = response.getHeaders();
         assertNotNull(headers);
         String contentType = headers.getFirst(Header.CONTENT_TYPE);
-        assertNotNull(contentType);
-
-        //following needed because in may contain something like 'application/json;encoding=UTF8'
-        String[] contentTypeParts = contentType.split(";");
-        if (contentTypeParts.length > 1) {
-            String onlyContentType = contentTypeParts[0];
-            assertEquals(mimeType, onlyContentType);
-        } else {
-            assertEquals(mimeType, contentType);
-        }
+        String actualMimeType = extractMime(contentType);
+        assertEquals(mimeType, actualMimeType);
     }
 
     public static String whichBrowser() {
@@ -118,6 +106,35 @@ public class TestUtils {
         SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd-HHmm");
         Date date = new Date(System.currentTimeMillis());
         return formatter.format(date);
+    }
+
+    public static HttpResponse<String> unirestGet(String endpoint) {
+        try {
+            return Unirest.get(endpoint).asString();
+        } catch (Exception e) {
+            String errorMessage = "Failed to Request API. Communication error";
+            fail(errorMessage);
+            //MalformedURLException means configuration error
+            assertFalse(e.getCause() instanceof MalformedURLException);
+            return null;
+        }
+    }
+
+    /**
+     * Following needed because in may contain something like 'application/json;encoding=UTF8'
+     *
+     * @param contentType Content-Type header like 'application/json;encoding=UTF8'
+     * @return string which contains content type without encoding
+     */
+    private static String extractMime(String contentType) {
+        assertNotNull(contentType);
+
+        String[] contentTypeParts = contentType.split(";");
+        if (contentTypeParts.length > 1) {
+            return contentTypeParts[0];
+        } else {
+            return contentType;
+        }
     }
 
     private static boolean isValidErrorJson(MvcResult mvcResult) throws Exception {

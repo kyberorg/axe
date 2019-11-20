@@ -27,11 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class TechPartsController extends YalsController {
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.ROBOTS_TXT, produces = "text/plain")
-    public String robots() {
-        return "/s/robots.txt";
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.HUMANS_TXT, produces = "text/plain")
     public String humans() {
         return "/s/humans.txt";
