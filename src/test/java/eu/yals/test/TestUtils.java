@@ -2,6 +2,7 @@ package eu.yals.test;
 
 import com.mashape.unirest.http.Headers;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
@@ -11,6 +12,7 @@ import eu.yals.utils.AppUtils;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -104,6 +106,18 @@ public class TestUtils {
         SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd-HHmm");
         Date date = new Date(System.currentTimeMillis());
         return formatter.format(date);
+    }
+
+    public static HttpResponse<String> unirestGet(String endpoint) {
+        try {
+            return Unirest.get(endpoint).asString();
+        } catch (Exception e) {
+            String errorMessage = "Failed to Request API. Communication error";
+            fail(errorMessage);
+            //MalformedURLException means configuration error
+            assertFalse(e.getCause() instanceof MalformedURLException);
+            return null;
+        }
     }
 
     /**
