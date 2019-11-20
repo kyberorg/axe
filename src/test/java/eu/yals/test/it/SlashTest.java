@@ -3,7 +3,6 @@ package eu.yals.test.it;
 import com.mashape.unirest.http.HttpResponse;
 import eu.yals.Endpoint;
 import eu.yals.constants.Header;
-import eu.yals.controllers.SlashController;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
 import eu.yals.test.TestUtils;
@@ -17,13 +16,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests for {@link SlashController}
+ * Tests for {@link Endpoint#SLASH}
  *
  * @since 1.0
  */
 
 @Slf4j
-public class SlashControllerTest {
+public class SlashTest {
 
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {

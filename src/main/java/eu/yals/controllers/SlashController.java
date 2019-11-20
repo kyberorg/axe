@@ -12,7 +12,7 @@ import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Slf4j
-@Controller
+@Component
 public class SlashController extends YalsController {
     private static final String TAG = "[Web]";
 
