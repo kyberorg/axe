@@ -109,6 +109,7 @@ public class TestUtils {
     }
 
     public static HttpResponse<String> unirestGet(String endpoint) {
+        endpoint = normalizeUrl(endpoint);
         try {
             return Unirest.get(endpoint).asString();
         } catch (Exception e) {
@@ -125,6 +126,7 @@ public class TestUtils {
     }
 
     public static HttpResponse<String> unirestPost(String endpoint, Object payload, String mimeType) {
+        endpoint = normalizeUrl(endpoint);
         try {
             return Unirest.post(endpoint).asString();
         } catch (Exception e) {
@@ -161,5 +163,9 @@ public class TestUtils {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private static String normalizeUrl(String endpoint) {
+        return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
     }
 }
