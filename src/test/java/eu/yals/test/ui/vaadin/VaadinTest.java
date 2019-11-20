@@ -12,10 +12,8 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTest {
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
@@ -23,7 +21,6 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
-    protected List<DesiredCapabilities> browsers;
     private static String testName;
 
     @Rule

@@ -87,7 +87,7 @@ pipeline {
                                      ]]) {
 
                         testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='${USR}':'${PASS}'@ci.yadev.eu " +
-                                '-Dbrowsers.include=firefox,chrome ' +
+                                '-Dcom.vaadin.testbench.Parameters.gridBrowsers=chrome ' +
                                 '-Dtest=!eu.yals.test.ui.pages.**',
                                 actions: 'clean test',
                                 artifacts: "target/*.png", failStep: false);
