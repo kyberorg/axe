@@ -6,6 +6,7 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
@@ -15,11 +16,14 @@ import org.openqa.selenium.Cookie;
 
 import java.lang.reflect.Field;
 
+@Slf4j
 public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTest {
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
-    private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+    private final static String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
+
+    private final static String BUILD_NAME = System.getProperty(TestApp.Properties.BUILD_NAME, Selenide.Defaults.BUILD_NAME);
 
     private static String testName;
 
@@ -29,6 +33,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         protected void starting(Description description) {
             super.starting(description);
             testName = setTestNameFromTestDescription(description);
+            log.info(String.format("Starting build '%s'. Test: '%s", BUILD_NAME, testName));
         }
 
         @Override
@@ -40,7 +45,6 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
 
         @Override
         protected void failed(Throwable e, Description description) {
-            //super.failed(e, description);
             Cookie cookie = new Cookie("zaleniumTestPassed", "false");
             getDriver().manage().addCookie(cookie);
 
@@ -79,6 +83,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         SetupDriver sd = (SetupDriver) driverConfigurationField.get(this);
         if (sd == null || sd.getDesiredCapabilities() == null) return;
         sd.getDesiredCapabilities().setCapability("name", testName);
+        sd.getDesiredCapabilities().setCapability("build", BUILD_NAME);
     }
 
     protected abstract E openView();
