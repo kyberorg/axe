@@ -82,18 +82,20 @@ pipeline {
                             url = 'https://dev.yals.eu';
                             break;
                     }
+                    def buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
                     withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
                                       usernameVariable: 'USR', passwordVariable: 'PASS'
                                      ]]) {
 
                         testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='${USR}':'${PASS}'@ci.yadev.eu " +
                                 '-Dcom.vaadin.testbench.Parameters.gridBrowsers=chrome ' +
+                                "-Dtest.buildName=${buildName} " +
                                 '-Dtest=!eu.yals.test.ui.pages.**',
                                 actions: 'clean test',
                                 artifacts: "target/*.png", failStep: false);
                     }
 
-
+                    echo("Please find tests at https://tests.yadev.eu/dashboard/?q=" + buildName);
                 }
             }
         }

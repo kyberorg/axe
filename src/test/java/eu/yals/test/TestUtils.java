@@ -11,6 +11,8 @@ import eu.yals.utils.AppUtils;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -110,6 +112,12 @@ public class TestUtils {
         String localhost = "localhost";
 
         return (testUrl.contains(dockerHost) || testUrl.contains(localhost));
+    }
+
+    public static String timeStamp() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd-HHmm");
+        Date date = new Date(System.currentTimeMillis());
+        return formatter.format(date);
     }
 
     private static boolean isValidErrorJson(MvcResult mvcResult) throws Exception {
