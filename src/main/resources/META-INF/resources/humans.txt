@@ -10,10 +10,11 @@
     JetBrains (for IDEA)
     Codeborne (for Selenide and DevClub)
     Spring Developers (for Spring Boot)
+    Vaadin (for Vaadin and TestBench)
 
 /* SITE */
     Language: English
     Standards: HTML5, CSS3
-    Components: Spring framework, jQuery, Twitter Bootstrap, Java, Selenide
+    Components: Spring framework, Vaadin, Java, Vaadin TestBench, Zalenium
     Software: IDEA
     Hosted on: Hetzner
