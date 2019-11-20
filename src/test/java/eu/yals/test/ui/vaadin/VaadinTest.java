@@ -7,24 +7,28 @@ import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTest {
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
+    private final static String BROWSERS = System.getProperty(TestApp.Properties.TEST_BROWSER, Selenide.Defaults.BROWSERS);
 
-    protected List<DesiredCapabilities> browsers;
     private static String testName;
+
+    @BeforeClass
+    public void setBrowsers() {
+        Parameters.setGridBrowsers(BROWSERS);
+    }
 
     @Rule
     public final TestRule watchman = new TestWatcher() {

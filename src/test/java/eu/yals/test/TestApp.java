@@ -10,6 +10,7 @@ public class TestApp {
         public static final String TEST_URL = "test.url";
         public static final String SERVER_PORT = "port";
         public static final String TEST_RUN_MODE = "test.runMode";
+        public static final String TEST_BROWSER = "test.browsers";
     }
 
     public static class Selenide {
