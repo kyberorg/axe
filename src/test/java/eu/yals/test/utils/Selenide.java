@@ -19,7 +19,6 @@ public class Selenide {
         public static final String REPORT_DIR = "target";
         public static final String TIMEOUT = "4000";
         public static final String HUB_LOCATION = "ci.yadev.eu";
-        public static final String BROWSERS = "chrome";
     }
 
 }
