@@ -120,6 +120,22 @@ public class TestUtils {
         }
     }
 
+    public static HttpResponse<String> unirestPost(String endpoint, Object payload) {
+        return unirestPost(endpoint, payload, MimeType.APPLICATION_JSON);
+    }
+
+    public static HttpResponse<String> unirestPost(String endpoint, Object payload, String mimeType) {
+        try {
+            return Unirest.post(endpoint).asString();
+        } catch (Exception e) {
+            String errorMessage = "Failed to Request API. Communication error";
+            fail(errorMessage);
+            //MalformedURLException means configuration error
+            assertFalse(e.getCause() instanceof MalformedURLException);
+            return null;
+        }
+    }
+
     /**
      * Following needed because in may contain something like 'application/json;encoding=UTF8'
      *
