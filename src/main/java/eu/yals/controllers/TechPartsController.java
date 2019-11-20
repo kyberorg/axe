@@ -27,11 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class TechPartsController extends YalsController {
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.HUMANS_TXT, produces = "text/plain")
-    public String humans() {
-        return "/s/humans.txt";
-    }
-
     /**
      * This endpoint meant to be used only in application tests for simulating application fails
      *
