@@ -121,14 +121,14 @@ public class TestUtils {
         }
     }
 
-    public static HttpResponse<String> unirestPost(String endpoint, Object payload) {
+    public static HttpResponse<String> unirestPost(String endpoint, String payload) {
         return unirestPost(endpoint, payload, MimeType.APPLICATION_JSON);
     }
 
-    public static HttpResponse<String> unirestPost(String endpoint, Object payload, String mimeType) {
+    public static HttpResponse<String> unirestPost(String endpoint, String payload, String mimeType) {
         endpoint = normalizeUrl(endpoint);
         try {
-            return Unirest.post(endpoint).header("Content-Type", mimeType).body(payload).asString();
+            return Unirest.post(endpoint).header(Header.CONTENT_TYPE, mimeType).body(payload).asString();
         } catch (Exception e) {
             String errorMessage = "Failed to Request API. Communication error. Endpoint: " + endpoint;
             fail(errorMessage);
