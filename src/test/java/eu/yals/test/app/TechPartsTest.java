@@ -7,10 +7,6 @@ import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.test.TestUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,9 +15,6 @@ import static org.junit.Assert.assertEquals;
  *
  * @since 2.5.1
  */
-@RunWith(SpringRunner.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class TechPartsTest extends UnirestTest {
 
     private static final String ALWAYS_NOT_FOUND_LOCATION = "/void/notFound";
