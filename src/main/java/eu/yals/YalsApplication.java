@@ -3,6 +3,7 @@ package eu.yals;
 import com.vaadin.flow.server.VaadinServlet;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
+import eu.yals.utils.AppUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -27,6 +28,10 @@ public class YalsApplication {
         ServletRegistrationBean bean = new ServletRegistrationBean<>(new VaadinServlet() {
             @Override
             protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+                if (!AppUtils.clientWantsJson(req)) {
+                    resp.setStatus(406);
+                    return;
+                }
                 resp.setStatus(404);
                 resp.setContentType(MimeType.APPLICATION_JSON);
                 resp.getWriter().write(ErrorJson.createWithMessage("Endpoint not found").toString());
