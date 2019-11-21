@@ -3,6 +3,7 @@ package eu.yals.ui.err;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -10,6 +11,7 @@ import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.core.IdentGenerator;
 import eu.yals.ui.AppView;
+import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,7 +34,12 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     @Override
     public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NotFoundException> parameter) {
         String path = event.getLocation().getPath();
-        if (path.equals(Endpoint.SLASH_VAADIN)) {
+        boolean identNotFound = path.equals(Endpoint.SLASH_VAADIN);
+        if (identNotFound) {
+            if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
+                VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE_FOR_API);
+                return 302;
+            }
             text.setText("404 - No such link found");
             return 404;
         }
@@ -47,6 +54,10 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
                 event.rerouteTo(Endpoint.SLASH_VAADIN, p);
                 return 302;
             } else {
+                if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
+                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE_FOR_API);
+                    return 302;
+                }
                 //not a ident
                 if (isApiRequest(path)) {
                     //api call

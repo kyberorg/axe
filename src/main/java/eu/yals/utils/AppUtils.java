@@ -3,6 +3,7 @@ package eu.yals.utils;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
 import eu.yals.constants.App;
@@ -37,13 +38,14 @@ public class AppUtils {
     private static final String DUMMY_HOST = "DummyHost";
     private static final String DUMMY_TOKEN = "dummyToken";
 
+    public static boolean clientWantsJson(VaadinRequest vaadinRequest) {
+        String acceptHeader = vaadinRequest.getHeader(Header.ACCEPT);
+        return clientWantsJson(acceptHeader);
+    }
+
     public static boolean clientWantsJson(HttpServletRequest request) {
         String acceptHeader = request.getHeader(Header.ACCEPT);
-        if (acceptHeader == null) {
-            return false;
-        } else {
-            return acceptHeader.equals(MimeType.APPLICATION_JSON);
-        }
+        return clientWantsJson(acceptHeader);
     }
 
     public static boolean isApiRequest(HttpServletRequest request) {
@@ -170,5 +172,14 @@ public class AppUtils {
 
     public boolean isNotMobile(VaadinSession vaadinSession) {
         return !isMobile(vaadinSession);
+    }
+
+    private static boolean clientWantsJson(String acceptHeader) {
+        if (acceptHeader == null) {
+            return false;
+        } else {
+            return acceptHeader.equals(MimeType.APPLICATION_JSON);
+        }
+
     }
 }
