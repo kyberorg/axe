@@ -1,6 +1,7 @@
 package eu.yals;
 
 import com.vaadin.flow.server.VaadinServlet;
+import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
 import eu.yals.utils.AppUtils;
@@ -28,7 +29,8 @@ public class YalsApplication {
         ServletRegistrationBean bean = new ServletRegistrationBean<>(new VaadinServlet() {
             @Override
             protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-                if (!AppUtils.clientWantsJson(req)) {
+                boolean hasAcceptHeader = req.getHeader(Header.ACCEPT) != null;
+                if (hasAcceptHeader && !AppUtils.clientWantsJson(req)) {
                     resp.setStatus(406);
                     return;
                 }
