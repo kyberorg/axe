@@ -6,11 +6,15 @@ import com.google.gson.GsonBuilder;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
 import eu.yals.constants.App;
+import eu.yals.constants.Header;
+import eu.yals.constants.MimeType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.IDN;
 import java.net.URI;
@@ -32,6 +36,26 @@ public class AppUtils {
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     private static final String DUMMY_HOST = "DummyHost";
     private static final String DUMMY_TOKEN = "dummyToken";
+
+    public static boolean clientWantsJson(HttpServletRequest request) {
+        String acceptHeader = request.getHeader(Header.ACCEPT);
+        if (acceptHeader == null) {
+            return false;
+        } else {
+            return acceptHeader.equals(MimeType.APPLICATION_JSON);
+        }
+    }
+
+    public static boolean isApiRequest(HttpServletRequest request) {
+        String requestUrl;
+        try {
+            requestUrl = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+        } catch (Exception e) {
+            log.error("Failed to determine request URL which caused an error", e);
+            return false;
+        }
+        return requestUrl.startsWith("/api");
+    }
 
     public AppUtils(Environment env) {
         this.env = env;
