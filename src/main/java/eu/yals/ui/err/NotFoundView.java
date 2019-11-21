@@ -54,6 +54,10 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
                 event.rerouteTo(Endpoint.SLASH_VAADIN, p);
                 return 302;
             } else {
+                if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
+                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE_FOR_API);
+                    return 302;
+                }
                 //not a ident
                 if (isApiRequest(path)) {
                     //api call
