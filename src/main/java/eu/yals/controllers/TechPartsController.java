@@ -1,22 +1,11 @@
 package eu.yals.controllers;
 
 import eu.yals.Endpoint;
-import eu.yals.constants.Header;
-import eu.yals.constants.MimeType;
 import eu.yals.controllers.internal.YalsController;
-import eu.yals.json.ErrorJson;
-import eu.yals.json.internal.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.CannotCreateTransactionException;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Handles tech resources such as robots.txt, humans.txt and favicon.ico
@@ -37,7 +26,7 @@ public class TechPartsController extends YalsController {
         throw new RuntimeException("I will always fail");
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE)
+  /*  @RequestMapping(method = RequestMethod.GET, value = Endpoint.ERROR_PAGE)
     public String error(HttpServletRequest request, HttpServletResponse response) {
         final String TAG = "[Error Controller]";
 
@@ -59,7 +48,7 @@ public class TechPartsController extends YalsController {
             Object statusCode = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
             try {
                 status = (int) statusCode;
-                log.trace("{} Unknown Error with status {}", TAG, statusCode);
+                //log.trace("{} Unknown Error with status {}", TAG, statusCode);
             } catch (ClassCastException e) {
                 status = 500;
             }
@@ -70,6 +59,8 @@ public class TechPartsController extends YalsController {
         }
 
         switch (status) {
+            case 300-399:
+                return "";
             case 400:
                 return render400();
             case 503:
@@ -134,5 +125,5 @@ public class TechPartsController extends YalsController {
             return false;
         }
         return requestUrl.startsWith("/api");
-    }
+    }*/
 }

@@ -6,8 +6,13 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
+import eu.yals.Endpoint;
 
-@Route("500")
+@SpringComponent
+@UIScope
+@Route(Endpoint.ERROR_PAGE)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception> {
 
     public ServerErrorView() {
