@@ -5,6 +5,7 @@ import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
 import eu.yals.utils.AppUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -29,7 +30,7 @@ public class YalsApplication {
         ServletRegistrationBean bean = new ServletRegistrationBean<>(new VaadinServlet() {
             @Override
             protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-                boolean hasAcceptHeader = req.getHeader(Header.ACCEPT) != null;
+                boolean hasAcceptHeader = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
                 if (hasAcceptHeader && !AppUtils.clientWantsJson(req)) {
                     resp.setStatus(406);
                     return;
