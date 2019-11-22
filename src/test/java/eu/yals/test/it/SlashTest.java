@@ -1,6 +1,7 @@
 package eu.yals.test.it;
 
-import com.mashape.unirest.http.HttpResponse;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.json.StoreRequestJson;
@@ -12,8 +13,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import java.net.MalformedURLException;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link Endpoint#SLASH}
@@ -30,7 +32,19 @@ public class SlashTest {
         String ident = store(url);
         assertNotNull(ident);
 
-        HttpResponse<String> response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+        HttpResponse<String> response;
+        try {
+            response = Unirest.get(url)
+                    .asString();
+        } catch (Exception e) {
+            String errorMessage = "Failed to Request API. Communication error.Endpoint: " + url;
+            fail(errorMessage);
+            //MalformedURLException means configuration error
+            assertFalse(e.getCause() instanceof MalformedURLException);
+            return;
+        }
+
+        response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
         log.debug("Response: {}", response);
         if (response == null) return;
 

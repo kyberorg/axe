@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 
 /**
  * Tests, where we run application same ways in {@link eu.yals.test.ui.UITest}
- * and test by doing requests using {@link com.mashape.unirest.http.Unirest}
+ * and test by doing requests using {@link kong.unirest.Unirest}
  *
  * @since 2.5.1
  */

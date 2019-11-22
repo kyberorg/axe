@@ -37,144 +37,144 @@ let stats;
 
 const watchDogPrefix = '--watchDogPort=';
 let watchDogPort = process.argv.find(v => v.indexOf(watchDogPrefix) >= 0);
-if (watchDogPort) {
+if (watchDogPort){
     watchDogPort = watchDogPort.substr(watchDogPrefix.length);
 }
 
 const net = require('net');
 
-function setupWatchDog() {
+function setupWatchDog(){
     var client = new net.Socket();
-    client.connect(watchDogPort, 'localhost', function () {
+    client.connect(watchDogPort, 'localhost', function() {
         console.debug('Watchdog connected.');
     });
 
-    client.on('error', function () {
+    client.on('error', function(){
         console.log("Watchdog connection error. Terminating webpack process...");
         client.destroy();
         process.exit(0);
     });
 
-    client.on('close', function () {
+    client.on('close', function() {
         client.destroy();
         console.debug('Watchdog connection closed. Trying to re-run watchdog.');
         setupWatchDog();
-    });
+    });  
 }
 
-if (watchDogPort) {
+if (watchDogPort){
     setupWatchDog();
 }
 
 
 exports = {
-    frontendFolder: `${frontendFolder}`,
-    buildFolder: `${buildFolder}`,
-    confFolder: `${confFolder}`
+  frontendFolder: `${frontendFolder}`,
+  buildFolder: `${buildFolder}`,
+  confFolder: `${confFolder}`
 };
 
 module.exports = {
-    mode: 'production',
-    context: frontendFolder,
-    entry: {
-        bundle: fileNameOfTheFlowGeneratedMainEntryPoint
-    },
+  mode: 'production',
+  context: frontendFolder,
+  entry: {
+    bundle: fileNameOfTheFlowGeneratedMainEntryPoint
+  },
 
-    output: {
-        filename: `${build}/vaadin-[name]-[contenthash].cache.js`,
-        path: mavenOutputFolderForFlowBundledFiles
-    },
+  output: {
+    filename: `${build}/vaadin-[name]-[contenthash].cache.js`,
+    path: mavenOutputFolderForFlowBundledFiles
+  },
 
-    resolve: {
-        alias: {
-            Frontend: frontendFolder
-        }
-    },
+  resolve: {
+    alias: {
+      Frontend: frontendFolder
+    }
+  },
 
-    devServer: {
-        // webpack-dev-server serves ./ ,  webpack-generated,  and java webapp
-        contentBase: [mavenOutputFolderForFlowBundledFiles, 'src/main/webapp'],
-        after: function (app, server) {
-            app.get(`/stats.json`, function (req, res) {
-                res.json(stats.toJson());
-            });
-            app.get(`/stats.hash`, function (req, res) {
-                res.json(stats.toJson().hash.toString());
-            });
-            app.get(`/stop`, function (req, res) {
-                // eslint-disable-next-line no-console
-                console.log("Stopped 'webpack-dev-server'");
-                process.exit(0);
-            });
-        }
-    },
+  devServer: {
+    // webpack-dev-server serves ./ ,  webpack-generated,  and java webapp
+    contentBase: [mavenOutputFolderForFlowBundledFiles, 'src/main/webapp'],
+    after: function(app, server) {
+      app.get(`/stats.json`, function(req, res) {
+        res.json(stats.toJson());
+      });
+      app.get(`/stats.hash`, function(req, res) {
+        res.json(stats.toJson().hash.toString());
+      });
+      app.get(`/stop`, function(req, res) {
+        // eslint-disable-next-line no-console
+        console.log("Stopped 'webpack-dev-server'");
+        process.exit(0);
+      });
+    }
+  },
 
-    module: {
-        rules: [
-            { // Files that Babel has to transpile
-                test: /\.js$/,
-                use: [BabelMultiTargetPlugin.loader()]
-            },
-            {
-                test: /\.css$/i,
-                use: ['raw-loader']
-            }
-        ]
-    },
-    performance: {
-        maxEntrypointSize: 2097152, // 2MB
-        maxAssetSize: 2097152 // 2MB
-    },
-    plugins: [
-        // Generate compressed bundles
-        new CompressionPlugin(),
-
-        // Transpile with babel, and produce different bundles per browser
-        new BabelMultiTargetPlugin({
-            babel: {
-                presetOptions: {
-                    useBuiltIns: false // polyfills are provided from webcomponents-loader.js
-                }
-            },
-            targets: {
-                'es6': { // Evergreen browsers
-                    browsers: [
-                        // It guarantees that babel outputs pure es6 in bundle and in stats.json
-                        // In the case of browsers no supporting certain feature it will be
-                        // covered by the webcomponents-loader.js
-                        'last 1 Chrome major versions'
-                    ],
-                },
-                'es5': { // IE11
-                    browsers: [
-                        'ie 11'
-                    ],
-                    tagAssetsWithKey: true, // append a suffix to the file name
-                }
-            }
-        }),
-
-        // Generates the stats file for flow `@Id` binding.
-        function (compiler) {
-            compiler.hooks.afterEmit.tapAsync("FlowIdPlugin", (compilation, done) => {
-                if (!devMode) {
-                    // eslint-disable-next-line no-console
-                    console.log("         Emitted " + statsFile)
-                    fs.writeFile(statsFile, JSON.stringify(compilation.getStats().toJson(), null, 1), done);
-                } else {
-                    // eslint-disable-next-line no-console
-                    console.log("         Serving the 'stats.json' file dynamically.");
-                    stats = compilation.getStats();
-                    done();
-                }
-            });
-        },
-
-        // Copy webcomponents polyfills. They are not bundled because they
-        // have its own loader based on browser quirks.
-        new CopyWebpackPlugin([{
-            from: `${baseDir}/node_modules/@webcomponents/webcomponentsjs`,
-            to: `${build}/webcomponentsjs/`
-        }]),
+  module: {
+    rules: [
+      { // Files that Babel has to transpile
+        test: /\.js$/,
+        use: [BabelMultiTargetPlugin.loader()]
+      },
+      {
+        test: /\.css$/i,
+        use: ['raw-loader']
+      }
     ]
+  },
+  performance: {
+    maxEntrypointSize: 2097152, // 2MB
+    maxAssetSize: 2097152 // 2MB
+  },
+  plugins: [
+    // Generate compressed bundles
+    new CompressionPlugin(),
+
+    // Transpile with babel, and produce different bundles per browser
+    new BabelMultiTargetPlugin({
+      babel: {
+        presetOptions: {
+          useBuiltIns: false // polyfills are provided from webcomponents-loader.js
+        }
+      },
+      targets: {
+        'es6': { // Evergreen browsers
+          browsers: [
+            // It guarantees that babel outputs pure es6 in bundle and in stats.json
+            // In the case of browsers no supporting certain feature it will be
+            // covered by the webcomponents-loader.js
+            'last 1 Chrome major versions'
+          ],
+        },
+        'es5': { // IE11
+          browsers: [
+            'ie 11'
+          ],
+          tagAssetsWithKey: true, // append a suffix to the file name
+        }
+      }
+    }),
+
+    // Generates the stats file for flow `@Id` binding.
+    function (compiler) {
+      compiler.hooks.afterEmit.tapAsync("FlowIdPlugin", (compilation, done) => {
+        if (!devMode) {
+          // eslint-disable-next-line no-console
+          console.log("         Emitted " + statsFile)
+          fs.writeFile(statsFile, JSON.stringify(compilation.getStats().toJson(), null, 1), done);
+        } else {
+          // eslint-disable-next-line no-console
+          console.log("         Serving the 'stats.json' file dynamically.");
+          stats = compilation.getStats();
+          done();
+        }
+      });
+    },
+
+    // Copy webcomponents polyfills. They are not bundled because they
+    // have its own loader based on browser quirks.
+    new CopyWebpackPlugin([{
+      from: `${baseDir}/node_modules/@webcomponents/webcomponentsjs`,
+      to: `${build}/webcomponentsjs/`
+    }]),
+  ]
 };

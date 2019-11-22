@@ -1,8 +1,8 @@
 package eu.yals.test;
 
-import com.mashape.unirest.http.Headers;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
+import kong.unirest.Headers;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
