@@ -1,12 +1,13 @@
 package eu.yals.test.it;
 
-import com.mashape.unirest.http.HttpResponse;
 import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
 import eu.yals.test.TestUtils;
 import eu.yals.utils.AppUtils;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,11 +27,16 @@ public class SlashTest {
 
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {
-        String url = "https://eesti.ee";
+        String url = "https://ci.yadev.eu";
         String ident = store(url);
         assertNotNull(ident);
 
-        HttpResponse<String> response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+        HttpResponse<String> response;
+
+        Unirest.config().reset().followRedirects(false);
+        response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+        Unirest.config().reset().followRedirects(true);
+
         log.debug("Response: {}", response);
         if (response == null) return;
 

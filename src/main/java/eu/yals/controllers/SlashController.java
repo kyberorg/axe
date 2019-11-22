@@ -1,7 +1,5 @@
 package eu.yals.controllers;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import eu.yals.Endpoint;
 import eu.yals.controllers.internal.YalsController;
 import eu.yals.core.IdentGenerator;
@@ -9,6 +7,8 @@ import eu.yals.json.LinkResponseJson;
 import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
 import eu.yals.utils.AppUtils;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;

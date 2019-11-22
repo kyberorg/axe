@@ -1,8 +1,8 @@
 package eu.yals.test.app;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
 import eu.yals.Endpoint;
 import eu.yals.json.StoreRequestJson;
 import lombok.extern.slf4j.Slf4j;
