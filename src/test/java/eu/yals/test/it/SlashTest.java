@@ -26,7 +26,7 @@ public class SlashTest {
 
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {
-        String url = "https://eesti.ee";
+        String url = "https://ci.yadev.eu";
         String ident = store(url);
         assertNotNull(ident);
 
