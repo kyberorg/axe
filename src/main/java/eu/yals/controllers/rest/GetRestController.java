@@ -25,13 +25,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Slf4j
 @RestController
-public class IdentRestController {
+public class GetRestController {
     private static final String TAG = "[API Get]";
 
     private final LinkService linkService;
     private final AppUtils appUtils;
 
-    public IdentRestController(@Qualifier("dbStorage") LinkService linkService, AppUtils appUtils) {
+    public GetRestController(@Qualifier("dbStorage") LinkService linkService, AppUtils appUtils) {
         this.linkService = linkService;
         this.appUtils = appUtils;
     }
