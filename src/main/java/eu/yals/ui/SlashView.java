@@ -45,7 +45,6 @@ public class SlashView extends VerticalLayout implements HasUrlParameter<String>
         if (searchResult instanceof GetResult.Success) {
             String link = ((GetResult.Success) searchResult).getLink();
             log.info("{} Got long URL. Redirecting to {}", TAG, link);
-            //event.getUI().getPage().setLocation(link);
             event.rerouteToError(ArithmeticException.class, link);
         } else if (searchResult instanceof GetResult.NotFound) {
             log.info("{} No corresponding longURL found. Replying with 404", TAG);
