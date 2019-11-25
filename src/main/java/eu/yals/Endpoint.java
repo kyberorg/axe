@@ -52,6 +52,7 @@ public class Endpoint {
     @RequestMethod(HttpMethod.GET)
     public static final String ERROR_PAGE = "/error";
     public static final String ERROR_PAGE_FOR_API_BASE = "/error/api/";
+    public static final String VAADIN_ERROR_PAGE = "/error/500";
     public static final String ERROR_PAGE_FOR_API = ERROR_PAGE_FOR_API_BASE + "{status}";
     public static final String NOT_FOUND_PAGE = "/errors/404";
     public static final String NOT_FOUND_PAGE_FOR_API = "/errors/404api";
