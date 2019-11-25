@@ -37,6 +37,7 @@ public class YalsErrorController implements ErrorController {
         this.response = resp;
 
         rawException = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
         cause = getCause();
         findErrorAndStatus();
 
