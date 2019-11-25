@@ -12,7 +12,7 @@ import eu.yals.Endpoint;
 
 @SpringComponent
 @UIScope
-@Route(Endpoint.ERROR_PAGE)
+@Route(Endpoint.VAADIN_ERROR_PAGE)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception> {
 
     public ServerErrorView() {
