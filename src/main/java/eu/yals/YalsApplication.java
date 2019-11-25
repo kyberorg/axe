@@ -44,6 +44,7 @@ public class YalsApplication {
         return bean;
     }
 
+    @Bean
     public ServletRegistrationBean errorServletBean() {
         ServletRegistrationBean bean = new ServletRegistrationBean<>(new VaadinServlet() {
             @Override
