@@ -16,6 +16,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.services.GitService;
 import eu.yals.services.overall.OverallService;
@@ -28,7 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Slf4j
 @SpringComponent
 @UIScope
-@Route(value = "", layout = AppView.class)
+@Route(value = Endpoint.HOME_PAGE, layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
 public class HomeView extends VerticalLayout {

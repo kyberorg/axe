@@ -33,9 +33,13 @@ public class Endpoint {
     public static final String CUSTOM_SIZE_QR_CODE_API = QR_CODE_API + "/" + "{size}";
 
     @RequestMethod(HttpMethod.GET)
+    public static final String HOME_PAGE = "";
     public static final String SLASH_BASE = "/";
     public static final String SLASH_VAADIN = "app";
     public static final String SLASH = "/app/{ident}";
+    public static final String REDIRECTOR = "redirector";
+
+    public static final String SAMPLE = "sample";
 
     @RequestMethod(HttpMethod.GET)
     public static final String ROBOTS_TXT = "/robots.txt";
@@ -50,10 +54,10 @@ public class Endpoint {
     public static final String TEST_CSS = "/s/css/test.css";
 
     @RequestMethod(HttpMethod.GET)
-    public static final String ERROR_PAGE = "/error";
+    public static final String ERROR_PAGE = "error";
     public static final String ERROR_PAGE_FOR_API_BASE = "/error/api/";
-    public static final String VAADIN_ERROR_PAGE = "/errors/500";
-    public static final String ERROR_PAGE_FOR_API = ERROR_PAGE_FOR_API_BASE + "{status}";
-    public static final String NOT_FOUND_PAGE = "/errors/404";
+    public static final String VAADIN_ERROR_PAGE = "errors/500";
+    public static final String VAADIN_APPLICATION_ERROR_PAGE = "errors/503";
+    public static final String NOT_FOUND_PAGE = "errors/404";
     public static final String NOT_FOUND_PAGE_FOR_API = "/errors/404api";
 }
