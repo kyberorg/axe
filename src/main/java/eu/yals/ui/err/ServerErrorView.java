@@ -9,10 +9,11 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
+import eu.yals.ui.AppView;
 
 @SpringComponent
 @UIScope
-@Route(Endpoint.VAADIN_ERROR_PAGE)
+@Route(value = Endpoint.VAADIN_ERROR_PAGE, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception> {
 
     public ServerErrorView() {
