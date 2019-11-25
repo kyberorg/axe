@@ -2,59 +2,30 @@ package eu.yals.test.it;
 
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
-import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.controllers.rest.MattermostRestController;
 import eu.yals.json.MattermostResponseJson;
+import eu.yals.test.TestUtils;
 import eu.yals.test.utils.mock.MattermostMock;
 import eu.yals.utils.AppUtils;
+import kong.unirest.HttpResponse;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import static eu.yals.test.TestUtils.assertContentType;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.*;
 
 /**
  * Usage tests for {@link MattermostRestController}
  *
  * @since 2.3
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath*:test-app.xml"})
-@WebAppConfiguration
-@TestPropertySource(locations = "classpath:application-test.properties")
-public class MattermostRestControllerTest {
-
-    @Autowired
-    private WebApplicationContext wac;
-
-    private MockMvc mockMvc;
-
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-    }
+public class MattermostRestTest {
 
     @Test
-    public void toNormalPayloadShouldReplyWith200AndCorrectJsonAndWithContentType() throws Exception {
+    public void toNormalPayloadShouldReplyWith200AndCorrectJsonAndWithContentType() {
 
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
@@ -66,18 +37,16 @@ public class MattermostRestControllerTest {
 
         String matterRequest = matterMock.toString();
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterRequest)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterRequest, MimeType.APPLICATION_JSON);
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test
-    public void toPayloadWithTrailingSpaceShouldReplyCorrectJson() throws Exception {
+    public void toPayloadWithTrailingSpaceShouldReplyCorrectJson() {
 
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
@@ -89,19 +58,17 @@ public class MattermostRestControllerTest {
 
         String matterRequest = matterMock.toString();
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterRequest)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterRequest, MimeType.APPLICATION_JSON);
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
 
     @Test
-    public void toPayloadWithUsernameShouldReplyWithCorrectJsonAndTextContainsThisUser() throws Exception {
+    public void toPayloadWithUsernameShouldReplyWithCorrectJsonAndTextContainsThisUser() {
 
         String uzer = "uzer";
 
@@ -115,12 +82,10 @@ public class MattermostRestControllerTest {
 
         String matterRequest = matterMock.toString();
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterRequest)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterRequest, MimeType.APPLICATION_JSON);
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -130,23 +95,22 @@ public class MattermostRestControllerTest {
 
 
     @Test
-    public void forReplyWithoutBodyShouldReplyWith400() throws Exception {
-        mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(400))
-                .andReturn();
+    public void forReplyWithoutBodyShouldReplyWith400() {
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, "", MimeType.APPLICATION_JSON);
+
+        assertNotNull(result);
+        assertEquals(400, result.getStatus());
     }
 
     @Test
-    public void forReplyWithStrangeBodyShouldReplyWithUsage() throws Exception {
+    public void forReplyWithStrangeBodyShouldReplyWithUsage() {
         String strangeBody = "a=haba$b=more";
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(strangeBody)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, strangeBody, MimeType.APPLICATION_JSON);
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
+
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -156,7 +120,7 @@ public class MattermostRestControllerTest {
     }
 
     @Test
-    public void forReplyWhereTextIsNotLinkShouldReplyWithCorrectMMJsonAndErrorMessageWithUsage() throws Exception {
+    public void forReplyWhereTextIsNotLinkShouldReplyWithCorrectMMJsonAndErrorMessageWithUsage() {
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
@@ -165,12 +129,11 @@ public class MattermostRestControllerTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterMock.toString())
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterMock.toString());
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
+
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -180,7 +143,7 @@ public class MattermostRestControllerTest {
     }
 
     @Test
-    public void whenArgIsOnlySingleSpaceShouldShowUsage() throws Exception {
+    public void whenArgIsOnlySingleSpaceShouldShowUsage() {
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
@@ -189,12 +152,11 @@ public class MattermostRestControllerTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterMock.toString())
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterMock.toString());
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
+
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -203,7 +165,7 @@ public class MattermostRestControllerTest {
     }
 
     @Test
-    public void whenArgContainsOnlySpacesShouldShowUsage() throws Exception {
+    public void whenArgContainsOnlySpacesShouldShowUsage() {
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
@@ -212,12 +174,12 @@ public class MattermostRestControllerTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterMock.toString())
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterMock.toString());
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
+
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -226,7 +188,7 @@ public class MattermostRestControllerTest {
     }
 
     @Test
-    public void whenTextContainTwoArgsAndFirstIsNotLinkShouldShowUsage() throws Exception {
+    public void whenTextContainTwoArgsAndFirstIsNotLinkShouldShowUsage() {
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
@@ -235,12 +197,10 @@ public class MattermostRestControllerTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterMock.toString())
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterMock.toString());
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -249,7 +209,7 @@ public class MattermostRestControllerTest {
     }
 
     @Test
-    public void whenTextIsURLAndTextShouldReturnShortLinkAndDescription() throws Exception {
+    public void whenTextIsURLAndTextShouldReturnShortLinkAndDescription() {
         String description = "TestDescription";
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
@@ -261,12 +221,10 @@ public class MattermostRestControllerTest {
 
         String matterRequest = matterMock.toString();
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterRequest)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterMock.toString());
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
         assertTrue("Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object",
                 isResultMattermostReplyJson(result));
         String mmText = getMMText(result);
@@ -287,20 +245,18 @@ public class MattermostRestControllerTest {
 
         String matterRequest = matterMock.toString();
 
-        MvcResult result = mockMvc.perform(
-                post(Endpoint.MM_API)
-                        .content(matterRequest)
-                        .header(Header.TEST, true))
-                .andExpect(status().is(200))
-                .andReturn();
+        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.MM_API, matterMock.toString());
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatus());
         assertTrue("Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object",
                 isResultMattermostReplyJson(result));
         String mmText = getMMText(result);
         assertTrue("Text must contain description, if it is present", mmText.contains(description));
     }
 
-    private boolean isResultMattermostReplyJson(MvcResult result) throws Exception {
-        String body = result.getResponse().getContentAsString();
+    private boolean isResultMattermostReplyJson(HttpResponse<String> result) {
+        String body = result.getBody();
         try {
             MattermostResponseJson mmJson = AppUtils.GSON.fromJson(body, MattermostResponseJson.class);
             return mmJson != null;
@@ -309,8 +265,8 @@ public class MattermostRestControllerTest {
         }
     }
 
-    private String getMMText(MvcResult result) throws UnsupportedEncodingException {
-        String body = result.getResponse().getContentAsString();
+    private String getMMText(HttpResponse<String> result) {
+        String body = result.getBody();
         MattermostResponseJson mmJson = AppUtils.GSON.fromJson(body, MattermostResponseJson.class);
         return mmJson.getText();
     }

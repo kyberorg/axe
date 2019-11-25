@@ -1,17 +1,17 @@
 package eu.yals.test;
 
-import kong.unirest.Headers;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
 import eu.yals.test.utils.Selenide;
 import eu.yals.utils.AppUtils;
-import org.springframework.test.web.servlet.MvcResult;
+import kong.unirest.Headers;
+import kong.unirest.HttpRequestWithBody;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,46 +23,23 @@ import static org.junit.Assert.*;
  *
  * @since 2.0
  */
-@SuppressWarnings("ConstantConditions") //false positive
 public class TestUtils {
 
-    public static void assertResultIsJson(MvcResult result) {
+    public static void assertResultIsJson(HttpResponse<String> result) {
         assertNotNull(result);
-        assertNotNull(result.getResponse());
-        assertTrue(result.getResponse().containsHeader(Header.CONTENT_TYPE));
-        assertFalse(result.getResponse().getHeader(Header.CONTENT_TYPE).isEmpty());
-        assertTrue(result.getResponse().getHeader(Header.CONTENT_TYPE).contains(MimeType.APPLICATION_JSON));
+        assertTrue(result.getHeaders().containsKey(Header.CONTENT_TYPE));
+        assertFalse(result.getHeaders().get(Header.CONTENT_TYPE).isEmpty());
+        assertTrue(result.getHeaders().get(Header.CONTENT_TYPE).contains(MimeType.APPLICATION_JSON));
     }
 
-    public static void assertResultIsErrorJson(MvcResult result) throws Exception {
+    public static void assertResultIsErrorJson(HttpResponse<String> result) {
         assertTrue("Response is not valid " + ErrorJson.class.getSimpleName(), TestUtils.isValidErrorJson(result));
-    }
-
-    public static void assertContentNotEmpty(MvcResult result) throws UnsupportedEncodingException {
-        assertContentNotEmpty("Content is empty", result);
     }
 
     public static void assertResponseBodyNotEmpty(HttpResponse<String> response) {
         assertNotNull(response);
         assertNotNull(response.getBody());
         assertNotEquals("", response.getBody().trim());
-    }
-
-    public static void assertContentNotEmpty(String message, MvcResult result) throws UnsupportedEncodingException {
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
-        assertNotNull(result.getResponse().getContentAsString());
-        assertNotEquals(message, "", result.getResponse().getContentAsString().trim());
-    }
-
-    public static void assertContentType(String mimeType, MvcResult result) {
-        assertNotNull(mimeType);
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
-
-        String contentType = result.getResponse().getContentType();
-        String actualMimeType = extractMime(contentType);
-        assertEquals(mimeType, actualMimeType);
     }
 
     public static void assertContentType(String mimeType, HttpResponse<String> response) {
@@ -127,8 +104,15 @@ public class TestUtils {
 
     public static HttpResponse<String> unirestPost(String endpoint, String payload, String mimeType) {
         endpoint = normalizeUrl(endpoint);
+        HttpRequestWithBody post = Unirest.post(endpoint);
+        if (payload != null) { //only NULL is not accepted, sometimes there is need to send "" request
+            post.body(payload);
+        }
+        if (StringUtils.isNotBlank(mimeType)) {
+            post.header(Header.CONTENT_TYPE, mimeType);
+        }
         try {
-            return Unirest.post(endpoint).header(Header.CONTENT_TYPE, mimeType).body(payload).asString();
+            return post.asString();
         } catch (Exception e) {
             String errorMessage = "Failed to Request API. Communication error. Endpoint: " + endpoint;
             fail(errorMessage);
@@ -155,8 +139,8 @@ public class TestUtils {
         }
     }
 
-    private static boolean isValidErrorJson(MvcResult mvcResult) throws Exception {
-        String body = mvcResult.getResponse().getContentAsString();
+    private static boolean isValidErrorJson(HttpResponse<String> result) {
+        String body = result.getBody();
         try {
             ErrorJson errorJson = AppUtils.GSON.fromJson(body, ErrorJson.class);
             return errorJson != null;
@@ -166,6 +150,7 @@ public class TestUtils {
     }
 
     private static String normalizeUrl(String endpoint) {
+        assertNotNull(endpoint);
         return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
     }
 }
