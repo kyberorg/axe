@@ -11,6 +11,7 @@ public final class MimeType {
         throw new UnsupportedOperationException("Utility class");
     }
 
+    public static final String ALL = "*/*";
     public static final String TEXT_PLAIN = "text/plain";
     public static final String TEXT_HTML = "text/html";
     public static final String TEXT_CSS = "text/css";

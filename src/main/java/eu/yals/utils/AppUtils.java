@@ -59,6 +59,16 @@ public class AppUtils {
         return requestUrl.startsWith("/api");
     }
 
+    public static boolean hasAcceptHeader(HttpServletRequest req) {
+        boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
+        if (acceptHeaderPresent) {
+            boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
+            return hasExactMimeType;
+        } else {
+            return false;
+        }
+    }
+
     public AppUtils(Environment env) {
         this.env = env;
     }
