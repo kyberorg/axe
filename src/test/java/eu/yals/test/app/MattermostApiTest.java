@@ -1,4 +1,4 @@
-package eu.yals.test.it;
+package eu.yals.test.app;
 
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  *
  * @since 2.3
  */
-public class MattermostRestTest {
+public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void toNormalPayloadShouldReplyWith200AndCorrectJsonAndWithContentType() {

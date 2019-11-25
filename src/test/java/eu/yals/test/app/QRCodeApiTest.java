@@ -1,10 +1,11 @@
 package eu.yals.test.app;
 
+import eu.yals.Endpoint;
+import eu.yals.json.StoreRequestJson;
+import eu.yals.services.QRCodeService;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
-import eu.yals.Endpoint;
-import eu.yals.json.StoreRequestJson;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
@@ -24,10 +25,10 @@ import static org.junit.Assert.*;
  * @since 2.6
  */
 @Slf4j
-public class QRCodeTest {
+public class QRCodeApiTest {
 
     @Test
-    public void onRequestQRCodeForValidIdentAppGivesValidPngQRCode() throws Exception {
+    public void onRequestQRCodeForValidIdentAppGivesValidPngQRCode() {
         final String ident = getValidIdent();
 
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
@@ -43,7 +44,24 @@ public class QRCodeTest {
     }
 
     @Test
-    public void onRequestQRCodeWithNonExistingIdentAppGives404() throws Exception {
+    public void onRequestQRCodeForValidIdentAppGivesValidPngQRCodeWithDefaultSize() throws Exception {
+        final String ident = getValidIdent();
+
+        HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
+
+        assertEquals(200, qrAPIResponse.getStatus());
+
+        JsonNode body = qrAPIResponse.getBody();
+        assertNotNull(body);
+        assertNotNull(body.getObject());
+
+        String qrCode = body.getObject().getString("qrCode");
+        assertValidQRCode(qrCode);
+        assertQRCodeHasExactSize(QRCodeService.DEFAULT_SIZE, qrCode);
+    }
+
+    @Test
+    public void onRequestQRCodeWithNonExistingIdentAppGives404() {
         final String ident = "NotReallyValidIdent";
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
 
@@ -51,7 +69,7 @@ public class QRCodeTest {
     }
 
     @Test
-    public void onRequestQRCodeWithOnlyNumbersAppGives404() throws Exception {
+    public void onRequestQRCodeWithOnlyNumbersAppGives404() {
         final int ident = 1234;
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident).asJson();
 
@@ -59,7 +77,7 @@ public class QRCodeTest {
     }
 
     @Test
-    public void onRequestQRCodeWithNullAppGives404() throws Exception {
+    public void onRequestQRCodeWithNullAppGives404() {
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + null).asJson();
 
         assertEquals(404, qrAPIResponse.getStatus());
@@ -83,7 +101,7 @@ public class QRCodeTest {
     }
 
     @Test
-    public void onRequestQRCodeWithValidIdentAndNegativeSizeAppGives400() throws Exception {
+    public void onRequestQRCodeWithValidIdentAndNegativeSizeAppGives400() {
         final String ident = "IdentOne";
         final int size = -1;
 
@@ -94,7 +112,7 @@ public class QRCodeTest {
     }
 
     @Test
-    public void onRequestQRCodeWithValidIdentAndZeroSizeAppGives400() throws Exception {
+    public void onRequestQRCodeWithValidIdentAndZeroSizeAppGives400() {
         final String ident = "IdentOne";
         final int size = 0;
 
@@ -105,7 +123,7 @@ public class QRCodeTest {
     }
 
     @Test
-    public void onRequestQRCodeWithValidIdentAndStringSizeAppGives400() throws Exception {
+    public void onRequestQRCodeWithValidIdentAndStringSizeAppGives400() {
         final String ident = "IdentOne";
         final String size = "size";
 
@@ -116,13 +134,13 @@ public class QRCodeTest {
     }
 
     @Test
-    public void onRequestQRCodeToMultiLevelRequestAppGives404() throws Exception {
+    public void onRequestQRCodeToMultiLevelRequestAppGives404() {
         HttpResponse<JsonNode> qrAPIResponse = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + "/void/void2/dd").asJson();
 
         assertEquals(404, qrAPIResponse.getStatus());
     }
 
-    private String getValidIdent() throws Exception {
+    private String getValidIdent() {
         final String longUrlToSave = "https://github.com/yadevee/yals/issues";
         StoreRequestJson storeRequest = StoreRequestJson.create().withLink(longUrlToSave);
 
