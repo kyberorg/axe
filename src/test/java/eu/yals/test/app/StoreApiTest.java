@@ -1,4 +1,4 @@
-package eu.yals.test.it;
+package eu.yals.test.app;
 
 import eu.yals.Endpoint;
 import eu.yals.json.EmptyJson;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  *
  * @since 1.0
  */
-public class StoreApiTest {
+public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithoutBodyStatusIs400() {

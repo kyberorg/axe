@@ -1,4 +1,4 @@
-package eu.yals.test.it;
+package eu.yals.test.app;
 
 import eu.yals.Endpoint;
 import eu.yals.constants.Header;
@@ -17,13 +17,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests for {@link Endpoint#SLASH}
+ * Tests for {@link Endpoint#S}
  *
  * @since 1.0
  */
 
 @Slf4j
-public class SlashTest {
+public class SlashEndpointTest {
 
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {

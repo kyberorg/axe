@@ -1,4 +1,4 @@
-package eu.yals.test.it;
+package eu.yals.test.app;
 
 import eu.yals.Endpoint;
 import eu.yals.controllers.rest.GetRestController;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  *
  * @since 1.0
  */
-public class GetApiTest {
+public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithoutIdentStatusIs400() {
