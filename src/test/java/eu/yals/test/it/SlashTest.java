@@ -33,9 +33,9 @@ public class SlashTest {
 
         HttpResponse<String> response;
 
-        Unirest.config().followRedirects(false);
+        Unirest.config().reset().followRedirects(false);
         response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
-        Unirest.config().followRedirects(true);
+        Unirest.config().reset().followRedirects(true);
 
         log.debug("Response: {}", response);
         if (response == null) return;
