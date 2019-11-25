@@ -5,7 +5,6 @@ import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
 import eu.yals.utils.AppUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -30,8 +29,9 @@ public class YalsApplication {
         ServletRegistrationBean bean = new ServletRegistrationBean<>(new VaadinServlet() {
             @Override
             protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-                boolean hasAcceptHeader = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
+                boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
                 if (hasAcceptHeader && !AppUtils.clientWantsJson(req)) {
+                    resp.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON);
                     resp.setStatus(406);
                     return;
                 }
@@ -43,33 +43,4 @@ public class YalsApplication {
         bean.setLoadOnStartup(1);
         return bean;
     }
-
-    @Bean
-    public ServletRegistrationBean errorServletBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean<>(new VaadinServlet() {
-            @Override
-            protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-                boolean hasAcceptHeader = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
-                boolean clientWantsHtml = (hasAcceptHeader && req.getHeader(Header.ACCEPT).equals(MimeType.TEXT_HTML));
-                if (hasAcceptHeader) {
-                    if (clientWantsHtml) {
-                        resp.setStatus(301);
-                        resp.setHeader(Header.LOCATION, Endpoint.VAADIN_ERROR_PAGE);
-                    } else if (AppUtils.clientWantsJson(req)) {
-                        resp.setStatus(500);
-                        resp.setContentType(MimeType.APPLICATION_JSON);
-                        resp.getWriter().write(ErrorJson.createWithMessage("Server to ").toString());
-                    } else {
-                        resp.setStatus(406);
-                    }
-                } else {
-                    resp.setStatus(301);
-                    resp.setHeader(Header.LOCATION, Endpoint.VAADIN_ERROR_PAGE);
-                }
-            }
-        }, Endpoint.ERROR_PAGE);
-        bean.setLoadOnStartup(2);
-        return bean;
-    }
-
 }

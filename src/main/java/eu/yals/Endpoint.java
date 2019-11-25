@@ -54,8 +54,7 @@ public class Endpoint {
     public static final String TEST_CSS = "/s/css/test.css";
 
     @RequestMethod(HttpMethod.GET)
-    public static final String ERROR_PAGE = "error";
-    public static final String ERROR_PAGE_FOR_API_BASE = "/error/api/";
+    public static final String ERROR_PAGE = "/error";
     public static final String VAADIN_ERROR_PAGE = "errors/500";
     public static final String VAADIN_APPLICATION_ERROR_PAGE = "errors/503";
     public static final String NOT_FOUND_PAGE = "errors/404";
