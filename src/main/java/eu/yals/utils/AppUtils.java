@@ -69,6 +69,31 @@ public class AppUtils {
         }
     }
 
+    /**
+     * This is needed to handle shit like {@literal text/html,application/xhtml+xml,application/xml;q=0.9,**;q=0.8}
+     *
+     * @param req request
+     * @return true - any part Accept Header contains {@link MimeType#TEXT_HTML}, false elsewhere
+     */
+    public static boolean clientWantsHtml(HttpServletRequest req) {
+        boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
+        if (acceptHeaderPresent) {
+            String rawAcceptHeader = req.getHeader(Header.ACCEPT);
+            String[] parts = rawAcceptHeader.split(",");
+            if (parts.length < 1) {
+                return false;
+            }
+            for (String mimeType : parts) {
+                if (mimeType.equals(MimeType.TEXT_HTML)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
     public AppUtils(Environment env) {
         this.env = env;
     }

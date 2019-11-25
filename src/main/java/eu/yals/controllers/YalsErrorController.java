@@ -36,6 +36,7 @@ public class YalsErrorController implements ErrorController {
         this.request = req;
         this.response = resp;
 
+        status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         rawException = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
         path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
         cause = getCause();
@@ -44,7 +45,6 @@ public class YalsErrorController implements ErrorController {
         YalsErrorJson errorJson = createErrorJson();
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
-        boolean clientWantsHtml = (hasAcceptHeader && req.getHeader(Header.ACCEPT).equals(MimeType.TEXT_HTML));
         boolean isApiCall = AppUtils.isApiRequest(req);
 
         if (isApiCall) {
@@ -60,7 +60,7 @@ public class YalsErrorController implements ErrorController {
         }
 
         if (hasAcceptHeader) {
-            if (clientWantsHtml) {
+            if (AppUtils.clientWantsHtml(request)) {
                 redirectToVaadinErrorPage(errorJson);
             } else if (AppUtils.clientWantsJson(req)) {
                 responseWithJson(errorJson);
@@ -76,20 +76,26 @@ public class YalsErrorController implements ErrorController {
     private Throwable getCause() {
         if (rawException == null) {
             log.error("{} Have you set exception before calling getCause() ?", TAG);
-            return new Exception("No exception: internal error processing bug");
+            return new Exception("No exception, just something else");
         }
         return ((Exception) rawException).getCause();
     }
 
     private void findErrorAndStatus() {
+
         if (cause instanceof CannotCreateTransactionException) {
             log.error("{} Database is DOWN", TAG, cause);
             error = "Application is down";
             status = 503;
         } else {
-            log.error("{} Fatal Error is {}", TAG, cause.getMessage(), cause);
-            error = "Internal Server Error";
-            status = 500;
+            if (request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE) != null) {
+                status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+                error = "Error Code: " + status;
+            } else {
+                log.error("{} Fatal Error is {}", TAG, cause.getMessage(), cause);
+                error = "Internal Server Error";
+                status = 500;
+            }
         }
     }
 
