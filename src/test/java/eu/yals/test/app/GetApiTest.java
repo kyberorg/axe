@@ -20,7 +20,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithoutIdentStatusIs400() {
-        HttpResponse<String> result = TestUtils.unirestGet(Endpoint.LINK_API);
+        HttpResponse<String> result = uniGet(Endpoint.LINK_API);
         assertNotNull(result);
         assertEquals(400, result.getStatus());
 
@@ -29,7 +29,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithSpaceIdentStatusIs400() {
-        HttpResponse<String> result = TestUtils.unirestGet(Endpoint.LINK_API + " ");
+        HttpResponse<String> result = uniGet(Endpoint.LINK_API + " ");
         assertNotNull(result);
         assertEquals(400, result.getStatus());
         TestUtils.assertResultIsErrorJson(result);
@@ -37,7 +37,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithSpecialCharIdentStatusIs400() {
-        HttpResponse<String> result = TestUtils.unirestGet(Endpoint.LINK_API + "%#");
+        HttpResponse<String> result = uniGet(Endpoint.LINK_API + "%#");
         assertNotNull(result);
         assertEquals(400, result.getStatus());
         TestUtils.assertResultIsErrorJson(result);
@@ -45,7 +45,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithNotExistingIdentStatusIs404() {
-        HttpResponse<String> result = TestUtils.unirestGet(Endpoint.LINK_API + "notStoredIdent");
+        HttpResponse<String> result = uniGet(Endpoint.LINK_API + "notStoredIdent");
         assertNotNull(result);
         assertEquals(404, result.getStatus());
         TestUtils.assertResultIsErrorJson(result);
@@ -56,7 +56,7 @@ public class GetApiTest extends UnirestTest {
         String longLink = "http://virtadev.net"; //That very long, really
         String ident = store(longLink);
 
-        HttpResponse<String> result = TestUtils.unirestGet(Endpoint.LINK_API + ident);
+        HttpResponse<String> result = uniGet(Endpoint.LINK_API + ident);
         assertNotNull(result);
         assertEquals(200, result.getStatus());
 
@@ -67,7 +67,7 @@ public class GetApiTest extends UnirestTest {
 
         String requestJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, requestJson);
+        HttpResponse<String> result = uniPost(Endpoint.STORE_API, requestJson);
         assertNotNull(result);
         assertEquals(201, result.getStatus());
 

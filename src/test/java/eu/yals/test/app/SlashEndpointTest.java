@@ -4,7 +4,6 @@ import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
-import eu.yals.test.TestUtils;
 import eu.yals.utils.AppUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -23,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
  */
 
 @Slf4j
-public class SlashEndpointTest {
+public class SlashEndpointTest extends UnirestTest {
 
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {
@@ -34,7 +33,7 @@ public class SlashEndpointTest {
         HttpResponse<String> response;
 
         Unirest.config().reset().followRedirects(false);
-        response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+        response = uniGet(Endpoint.SLASH_BASE + ident);
         Unirest.config().reset().followRedirects(true);
 
         log.debug("Response: {}", response);
@@ -51,7 +50,7 @@ public class SlashEndpointTest {
     public void requestWithIdentThatNotStoredGivesStatus404() {
         String ident = "habaHaba";
 
-        HttpResponse<String> response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+        HttpResponse<String> response = uniGet(Endpoint.SLASH_BASE + ident);
         log.debug("Response: {}", response);
         if (response == null) return;
         Assert.assertEquals(404, response.getStatus());
@@ -60,7 +59,7 @@ public class SlashEndpointTest {
     private String store(String urlToStore) {
         String request = StoreRequestJson.create().withLink(urlToStore).toString();
 
-        HttpResponse<String> response = TestUtils.unirestPost(Endpoint.STORE_API, request);
+        HttpResponse<String> response = uniPost(Endpoint.STORE_API, request);
         log.debug("Response: {}", response);
         if (response == null) throw new NullPointerException("Store Requested Failed: got nothing in return");
         Assert.assertEquals(201, response.getStatus());

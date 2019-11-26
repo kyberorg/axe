@@ -7,12 +7,8 @@ import eu.yals.json.ErrorJson;
 import eu.yals.test.utils.Selenide;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
-import kong.unirest.HttpRequestWithBody;
 import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
-import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
-import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -85,41 +81,9 @@ public class TestUtils {
         return formatter.format(date);
     }
 
-    public static HttpResponse<String> unirestGet(String endpoint) {
-        endpoint = normalizeUrl(endpoint);
-        try {
-            return Unirest.get(endpoint).asString();
-        } catch (Exception e) {
-            String errorMessage = "Failed to Request API. Communication error.Endpoint: " + endpoint;
-            fail(errorMessage);
-            //MalformedURLException means configuration error
-            assertFalse(e.getCause() instanceof MalformedURLException);
-            return null;
-        }
-    }
-
-    public static HttpResponse<String> unirestPost(String endpoint, String payload) {
-        return unirestPost(endpoint, payload, MimeType.APPLICATION_JSON);
-    }
-
-    public static HttpResponse<String> unirestPost(String endpoint, String payload, String mimeType) {
-        endpoint = normalizeUrl(endpoint);
-        HttpRequestWithBody post = Unirest.post(endpoint);
-        if (payload != null) { //only NULL is not accepted, sometimes there is need to send "" request
-            post.body(payload);
-        }
-        if (StringUtils.isNotBlank(mimeType)) {
-            post.header(Header.CONTENT_TYPE, mimeType);
-        }
-        try {
-            return post.asString();
-        } catch (Exception e) {
-            String errorMessage = "Failed to Request API. Communication error. Endpoint: " + endpoint;
-            fail(errorMessage);
-            //MalformedURLException means configuration error
-            assertFalse(e.getCause() instanceof MalformedURLException);
-            return null;
-        }
+    public static String normalizeUrl(String endpoint) {
+        assertNotNull(endpoint);
+        return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
     }
 
     /**
@@ -149,8 +113,5 @@ public class TestUtils {
         }
     }
 
-    private static String normalizeUrl(String endpoint) {
-        assertNotNull(endpoint);
-        return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
-    }
+
 }

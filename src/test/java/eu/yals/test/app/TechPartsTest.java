@@ -137,7 +137,7 @@ public class TechPartsTest extends UnirestTest {
     @Test
     public void robotsTxtIsPresentAndText() {
         String robotsTxt = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.ROBOTS_TXT);
-        HttpResponse<String> response = TestUtils.unirestGet(robotsTxt);
+        HttpResponse<String> response = uniGet(robotsTxt);
         log.debug("Response: {}", response);
         if (response == null) return;
 
@@ -151,7 +151,7 @@ public class TechPartsTest extends UnirestTest {
     @Test
     public void humansTxtIsPresentAndText() {
         String humansTxt = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.HUMANS_TXT);
-        HttpResponse<String> response = TestUtils.unirestGet(humansTxt);
+        HttpResponse<String> response = uniGet(humansTxt);
         log.debug("Response: {}", response);
         if (response == null) return;
 
@@ -165,7 +165,7 @@ public class TechPartsTest extends UnirestTest {
     @Test
     public void faviconIsPresentAndIcon() {
         String favIcon = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.FAVICON_ICO);
-        HttpResponse<String> response = TestUtils.unirestGet(favIcon);
+        HttpResponse<String> response = uniGet(favIcon);
         log.debug("Response: {}", response);
         if (response == null) return;
 
