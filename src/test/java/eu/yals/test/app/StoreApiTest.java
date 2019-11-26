@@ -6,7 +6,9 @@ import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
 import eu.yals.test.TestUtils;
 import eu.yals.utils.AppUtils;
+import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,25 +18,38 @@ import static org.junit.Assert.*;
  *
  * @since 1.0
  */
+@SuppressWarnings("unchecked")
 public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithoutBodyStatusIs400() {
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, null);
+        HttpRequest request = Unirest.post(Endpoint.STORE_API);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(400, result.getStatus());
     }
 
     @Test
     public void onRequestWithEmptyBodyStatusIs400() {
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, "");
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body("");
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(400, result.getStatus());
     }
 
     @Test
     public void onRequestWithNonJsonBodyStatusIs421() {
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, "not a JSON");
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body("not a JSON");
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
@@ -43,7 +58,11 @@ public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithJSONWithoutLinkParamStatusIs421() {
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, EmptyJson.create().toString());
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(EmptyJson.create().toString());
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
@@ -55,7 +74,11 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, correctJson);
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
@@ -67,7 +90,11 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "not a Link";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, correctJson);
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
@@ -78,7 +105,11 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "http://virtadev.net"; //That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, correctJson);
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(201, result.getStatus());
 
@@ -90,7 +121,11 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "http://virtadev.net"; //That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, correctJson);
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(201, result.getStatus());
 
@@ -115,7 +150,11 @@ public class StoreApiTest extends UnirestTest {
         String linkWithoutProtocol = "github.com/yadevee/yals/issues/50";
         String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
 
-        HttpResponse<String> result = TestUtils.unirestPost(Endpoint.STORE_API, correctJson);
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         assertNotNull(result);
         assertEquals(201, result.getStatus());
 

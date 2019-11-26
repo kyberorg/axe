@@ -4,8 +4,8 @@ import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
-import eu.yals.test.TestUtils;
 import eu.yals.utils.AppUtils;
+import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests for {@link Endpoint#S}
+ * Tests for {@link Endpoint#SLASH}
  *
  * @since 1.0
  */
 
+@SuppressWarnings("unchecked")
 @Slf4j
-public class SlashEndpointTest {
+public class SlashEndpointTest extends UnirestTest {
 
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {
@@ -31,18 +32,21 @@ public class SlashEndpointTest {
         String ident = store(url);
         assertNotNull(ident);
 
-        HttpResponse<String> response;
-
         Unirest.config().reset().followRedirects(false);
-        response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
+
+        HttpRequest request = Unirest.get(Endpoint.SLASH_BASE + ident);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
         Unirest.config().reset().followRedirects(true);
 
-        log.debug("Response: {}", response);
-        if (response == null) return;
+        log.debug("Response: {}", result);
+        if (result == null) return;
 
-        Assert.assertEquals(302, response.getStatus());
-        Assert.assertTrue(response.getHeaders().containsKey(Header.LOCATION));
-        String location = response.getHeaders().getFirst(Header.LOCATION);
+        Assert.assertEquals(302, result.getStatus());
+        Assert.assertTrue(result.getHeaders().containsKey(Header.LOCATION));
+        String location = result.getHeaders().getFirst(Header.LOCATION);
         Assert.assertTrue("Got empty " + Header.LOCATION + " header",
                 StringUtils.isNotBlank(location));
     }
@@ -51,21 +55,29 @@ public class SlashEndpointTest {
     public void requestWithIdentThatNotStoredGivesStatus404() {
         String ident = "habaHaba";
 
-        HttpResponse<String> response = TestUtils.unirestGet(Endpoint.SLASH_BASE + ident);
-        log.debug("Response: {}", response);
-        if (response == null) return;
-        Assert.assertEquals(404, response.getStatus());
+        HttpRequest request = Unirest.get(Endpoint.SLASH_BASE + ident);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        log.debug("Response: {}", result);
+        if (result == null) return;
+        Assert.assertEquals(404, result.getStatus());
     }
 
     private String store(String urlToStore) {
-        String request = StoreRequestJson.create().withLink(urlToStore).toString();
+        String requestBody = StoreRequestJson.create().withLink(urlToStore).toString();
 
-        HttpResponse<String> response = TestUtils.unirestPost(Endpoint.STORE_API, request);
-        log.debug("Response: {}", response);
-        if (response == null) throw new NullPointerException("Store Requested Failed: got nothing in return");
-        Assert.assertEquals(201, response.getStatus());
+        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(requestBody);
+        HttpResponse<String> result = request.asString();
 
-        String responseBody = response.getBody();
+        logRequestAndResponse(request, result, TAG);
+
+        log.debug("Response: {}", result);
+        if (result == null) throw new NullPointerException("Store Requested Failed: got nothing in return");
+        Assert.assertEquals(201, result.getStatus());
+
+        String responseBody = result.getBody();
         assertNotNull(responseBody);
         assertFalse(responseBody.trim().isEmpty());
 

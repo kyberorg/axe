@@ -4,6 +4,7 @@ import eu.yals.Endpoint;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.test.TestUtils;
+import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @since 2.5.1
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 public class TechPartsTest extends UnirestTest {
 
@@ -26,154 +28,186 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenNothingFound() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(404, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        assertEquals(404, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test
     public void byDefaultAppReturnHtmlWhenNothingFound() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(404, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
+        assertEquals(404, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.TEXT_HTML, result);
     }
 
     @Test
     public void onApiRequestWithHeaderAppReturnJsonWhenNothingFound() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(404, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        assertEquals(404, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test
     public void onApiRequestWithoutHeadersAppReturnJsonWhenNothingFound() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(404, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        assertEquals(404, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test
     public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenNothingFound() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
-                .header(Header.ACCEPT, MimeType.APPLICATION_XML)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
+                .header(Header.ACCEPT, MimeType.APPLICATION_XML);
 
-        assertEquals(406, response.getStatus());
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(406, result.getStatus());
     }
 
     @Test
     public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenFailed() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT)
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
 
-        assertEquals(500, response.getStatus());
+        HttpResponse<String> result = request.asString();
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(500, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test
     public void byDefaultAppReturnHtmlWhenFailed() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(500, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.TEXT_HTML, response);
+        assertEquals(500, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.TEXT_HTML, result);
     }
 
     @Test
     public void onApiRequestWithHeaderAppReturnJsonWhenFailed() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
+                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(500, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        assertEquals(500, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test
     public void onApiRequestWithoutHeadersAppReturnJsonWhenFailed() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(500, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        TestUtils.assertResponseBodyNotEmpty(response);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, response);
+        assertEquals(500, result.getStatus());
+
+        TestUtils.assertResponseBodyNotEmpty(result);
+        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
     @Test
     public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenFailed() {
-        HttpResponse<String> response = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
-                .header(Header.ACCEPT, MimeType.APPLICATION_XML)
-                .asString();
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
+                .header(Header.ACCEPT, MimeType.APPLICATION_XML);
+        HttpResponse<String> result = request.asString();
 
-        assertEquals(406, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(406, result.getStatus());
     }
 
     @Test
     public void robotsTxtIsPresentAndText() {
         String robotsTxt = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.ROBOTS_TXT);
-        HttpResponse<String> response = TestUtils.unirestGet(robotsTxt);
-        log.debug("Response: {}", response);
-        if (response == null) return;
+        HttpRequest request = Unirest.get(robotsTxt);
+        HttpResponse<String> result = request.asString();
 
-        Assert.assertEquals(200, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        String body = response.getBody();
+        log.debug("Response: {}", result);
+        if (result == null) return;
+
+        Assert.assertEquals(200, result.getStatus());
+
+        String body = result.getBody();
         Assert.assertTrue("robots.txt is empty", StringUtils.isNotBlank(body));
-        TestUtils.assertContentType(MimeType.TEXT_PLAIN, response);
+        TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
     @Test
     public void humansTxtIsPresentAndText() {
         String humansTxt = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.HUMANS_TXT);
-        HttpResponse<String> response = TestUtils.unirestGet(humansTxt);
-        log.debug("Response: {}", response);
-        if (response == null) return;
+        HttpRequest request = Unirest.get(humansTxt);
+        HttpResponse<String> result = request.asString();
 
-        Assert.assertEquals(200, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
+        log.debug("Response: {}", result);
+        if (result == null) return;
 
-        String body = response.getBody();
+        Assert.assertEquals(200, result.getStatus());
+
+        String body = result.getBody();
         Assert.assertTrue("humans.txt is empty", StringUtils.isNotBlank(body));
-        TestUtils.assertContentType(MimeType.TEXT_PLAIN, response);
+        TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
     @Test
     public void faviconIsPresentAndIcon() {
         String favIcon = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.FAVICON_ICO);
-        HttpResponse<String> response = TestUtils.unirestGet(favIcon);
-        log.debug("Response: {}", response);
-        if (response == null) return;
+        HttpRequest request = Unirest.get(favIcon);
+        HttpResponse<String> result = request.asString();
 
-        Assert.assertEquals(200, response.getStatus());
+        logRequestAndResponse(request, result, TAG);
+        log.debug("Response: {}", result);
+        if (result == null) return;
 
-        String body = response.getBody();
+        Assert.assertEquals(200, result.getStatus());
+
+        String body = result.getBody();
         Assert.assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
         //in Spring boot 2 favicon has image/x-icon mimetype
-        TestUtils.assertContentType(MimeType.IMAGE_X_ICON, response);
+        TestUtils.assertContentType(MimeType.IMAGE_X_ICON, result);
     }
 }
