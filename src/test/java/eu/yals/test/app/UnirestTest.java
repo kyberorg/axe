@@ -1,11 +1,9 @@
 package eu.yals.test.app;
 
 import eu.yals.constants.App;
-import eu.yals.test.TestApp;
 import eu.yals.test.TestUtils;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.BeforeClass;
 
@@ -17,22 +15,11 @@ import org.junit.BeforeClass;
  */
 @Slf4j
 public class UnirestTest {
-    static final String TEST_URL = TestUtils.getTestUrl();
+    protected static final String TEST_URL = TestUtils.getTestUrl();
     public static String TAG = "[Unirest]";
 
     @BeforeClass
     public static void setUp() {
-        //application runs and accessible locally aka localhost
-        System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name());
-
-        Unirest.config().instrumentWith(requestSummary -> {
-            long startNanos = System.nanoTime();
-            return (responseSummary, exception) -> log.info("{} path: {} status: {} time: {}",
-                    TAG,
-                    requestSummary.getRawPath(),
-                    responseSummary.getStatus(),
-                    System.nanoTime() - startNanos);
-        });
     }
 
     public void logRequestAndResponse(HttpRequest request, HttpResponse response, String tag) {
