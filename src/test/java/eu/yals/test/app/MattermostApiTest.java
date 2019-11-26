@@ -2,12 +2,15 @@ package eu.yals.test.app;
 
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
+import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.controllers.rest.MattermostRestController;
 import eu.yals.json.MattermostResponseJson;
 import eu.yals.test.utils.mock.MattermostMock;
 import eu.yals.utils.AppUtils;
+import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
@@ -21,6 +24,7 @@ import static org.junit.Assert.*;
  *
  * @since 2.3
  */
+@SuppressWarnings("unchecked")
 public class MattermostApiTest extends UnirestTest {
 
     @Test
@@ -36,7 +40,10 @@ public class MattermostApiTest extends UnirestTest {
 
         String matterRequest = matterMock.toString();
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterRequest, MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterRequest).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -57,7 +64,10 @@ public class MattermostApiTest extends UnirestTest {
 
         String matterRequest = matterMock.toString();
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterRequest, MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterRequest).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -81,7 +91,10 @@ public class MattermostApiTest extends UnirestTest {
 
         String matterRequest = matterMock.toString();
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterRequest, MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterRequest).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -95,7 +108,10 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void forReplyWithoutBodyShouldReplyWith400() {
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, "", MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body("").header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(400, result.getStatus());
@@ -105,7 +121,10 @@ public class MattermostApiTest extends UnirestTest {
     public void forReplyWithStrangeBodyShouldReplyWithUsage() {
         String strangeBody = "a=haba$b=more";
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, strangeBody, MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(strangeBody).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -128,7 +147,11 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterMock.toString());
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterMock.toString())
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -151,7 +174,12 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterMock.toString());
+
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterMock.toString())
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -174,7 +202,11 @@ public class MattermostApiTest extends UnirestTest {
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterMock.toString());
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterMock.toString())
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -196,7 +228,11 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterMock.toString());
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterMock.toString())
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -220,7 +256,11 @@ public class MattermostApiTest extends UnirestTest {
 
         String matterRequest = matterMock.toString();
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterMock.toString());
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterMock.toString())
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());
@@ -244,7 +284,11 @@ public class MattermostApiTest extends UnirestTest {
 
         String matterRequest = matterMock.toString();
 
-        HttpResponse<String> result = uniPost(Endpoint.MM_API, matterMock.toString());
+        HttpRequest request = Unirest.post(Endpoint.MM_API).body(matterMock.toString())
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
         assertEquals(200, result.getStatus());

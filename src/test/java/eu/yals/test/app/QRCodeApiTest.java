@@ -1,8 +1,11 @@
 package eu.yals.test.app;
 
 import eu.yals.Endpoint;
+import eu.yals.constants.Header;
+import eu.yals.constants.MimeType;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.services.QRCodeService;
+import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -23,6 +26,7 @@ import static org.junit.Assert.*;
  *
  * @since 2.6
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 public class QRCodeApiTest extends UnirestTest {
 
@@ -30,11 +34,15 @@ public class QRCodeApiTest extends UnirestTest {
     public void onRequestQRCodeForValidIdentAppGivesValidPngQRCode() {
         final String ident = getValidIdent();
 
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(200, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        JsonNode body = qrAPIResponse.getBody();
+        assertEquals(200, result.getStatus());
+
+        JsonNode body = result.getBody();
         assertNotNull(body);
         assertNotNull(body.getObject());
 
@@ -46,11 +54,15 @@ public class QRCodeApiTest extends UnirestTest {
     public void onRequestQRCodeForValidIdentAppGivesValidPngQRCodeWithDefaultSize() throws Exception {
         final String ident = getValidIdent();
 
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(200, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        JsonNode body = qrAPIResponse.getBody();
+        assertEquals(200, result.getStatus());
+
+        JsonNode body = result.getBody();
         assertNotNull(body);
         assertNotNull(body.getObject());
 
@@ -62,24 +74,36 @@ public class QRCodeApiTest extends UnirestTest {
     @Test
     public void onRequestQRCodeWithNonExistingIdentAppGives404() {
         final String ident = "NotReallyValidIdent";
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(404, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(404, result.getStatus());
     }
 
     @Test
     public void onRequestQRCodeWithOnlyNumbersAppGives404() {
         final int ident = 1234;
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(404, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(404, result.getStatus());
     }
 
     @Test
     public void onRequestQRCodeWithNullAppGives404() {
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + null);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + null)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(404, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(404, result.getStatus());
     }
 
     @Test
@@ -87,11 +111,15 @@ public class QRCodeApiTest extends UnirestTest {
         final String ident = getValidIdent();
         final int size = 100;
 
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(200, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
 
-        JsonNode body = qrAPIResponse.getBody();
+        assertEquals(200, result.getStatus());
+
+        JsonNode body = result.getBody();
         String qrCode = body.getObject().getString("qrCode");
 
         assertValidQRCode(qrCode);
@@ -103,9 +131,13 @@ public class QRCodeApiTest extends UnirestTest {
         final String ident = "IdentOne";
         final int size = -1;
 
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(400, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(400, result.getStatus());
     }
 
     @Test
@@ -113,9 +145,14 @@ public class QRCodeApiTest extends UnirestTest {
         final String ident = "IdentOne";
         final int size = 0;
 
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(400, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+
+        assertEquals(400, result.getStatus());
     }
 
     @Test
@@ -123,31 +160,41 @@ public class QRCodeApiTest extends UnirestTest {
         final String ident = "IdentOne";
         final String size = "size";
 
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + ident + "/" + size)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(400, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(400, result.getStatus());
     }
 
     @Test
     public void onRequestQRCodeToMultiLevelRequestAppGives404() {
-        HttpResponse<JsonNode> qrAPIResponse = uniGetJson(TEST_URL + Endpoint.QR_CODE_API_BASE + "/void/void2/dd");
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.QR_CODE_API_BASE + "/void/void2/dd")
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpResponse<JsonNode> result = request.asJson();
 
-        assertEquals(404, qrAPIResponse.getStatus());
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(404, result.getStatus());
     }
 
     private String getValidIdent() {
         final String longUrlToSave = "https://github.com/yadevee/yals/issues";
         StoreRequestJson storeRequest = StoreRequestJson.create().withLink(longUrlToSave);
 
-        HttpResponse<JsonNode> response = Unirest.put(TEST_URL + Endpoint.STORE_API)
-                .body(storeRequest.toString())
-                .asJson();
-        if (response.getStatus() != 201) {
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(storeRequest.toString());
+        HttpResponse<JsonNode> result = request.asJson();
+
+        logRequestAndResponse(request, result, TAG);
+
+        if (result.getStatus() != 201) {
             log.error("Store API fail");
             throw new RuntimeException("Could not get short link from Store API");
         }
 
-        JsonNode body = response.getBody();
+        JsonNode body = result.getBody();
         return body.getObject().getString("ident");
     }
 
