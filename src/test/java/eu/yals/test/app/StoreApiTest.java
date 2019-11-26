@@ -23,7 +23,7 @@ public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithoutBodyStatusIs400() {
-        HttpRequest request = Unirest.post(Endpoint.STORE_API);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -34,7 +34,7 @@ public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithEmptyBodyStatusIs400() {
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body("");
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body("");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -45,7 +45,7 @@ public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithNonJsonBodyStatusIs421() {
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body("not a JSON");
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body("not a JSON");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -58,7 +58,7 @@ public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithJSONWithoutLinkParamStatusIs421() {
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(EmptyJson.create().toString());
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(EmptyJson.create().toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -74,7 +74,7 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -90,7 +90,7 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "not a Link";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -105,7 +105,7 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "http://virtadev.net"; //That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -121,7 +121,7 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "http://virtadev.net"; //That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -150,7 +150,7 @@ public class StoreApiTest extends UnirestTest {
         String linkWithoutProtocol = "github.com/yadevee/yals/issues/50";
         String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
 
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

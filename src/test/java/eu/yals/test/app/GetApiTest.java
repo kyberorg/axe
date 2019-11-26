@@ -24,7 +24,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithoutIdentStatusIs400() {
-        HttpRequest request = Unirest.get(Endpoint.LINK_API);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -37,7 +37,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithSpaceIdentStatusIs400() {
-        HttpRequest request = Unirest.get(Endpoint.LINK_API + " ");
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + " ");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -49,7 +49,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithSpecialCharIdentStatusIs400() {
-        HttpRequest request = Unirest.get(Endpoint.LINK_API + "%#");
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + "%#");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -61,7 +61,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithNotExistingIdentStatusIs404() {
-        HttpRequest request = Unirest.get(Endpoint.LINK_API + "notStoredIdent");
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + "notStoredIdent");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -76,7 +76,7 @@ public class GetApiTest extends UnirestTest {
         String longLink = "http://virtadev.net"; //That very long, really
         String ident = store(longLink);
 
-        HttpRequest request = Unirest.get(Endpoint.LINK_API + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -90,7 +90,7 @@ public class GetApiTest extends UnirestTest {
     private String store(String longLink) {
         String requestJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(Endpoint.STORE_API).body(requestJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(requestJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

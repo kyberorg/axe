@@ -160,8 +160,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void robotsTxtIsPresentAndText() {
-        String robotsTxt = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.ROBOTS_TXT);
-        HttpRequest request = Unirest.get(robotsTxt);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ROBOTS_TXT);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -178,8 +177,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void humansTxtIsPresentAndText() {
-        String humansTxt = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.HUMANS_TXT);
-        HttpRequest request = Unirest.get(humansTxt);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.HUMANS_TXT);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -195,8 +193,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void faviconIsPresentAndIcon() {
-        String favIcon = String.format("%s%s", TestUtils.getTestUrl(), Endpoint.FAVICON_ICO);
-        HttpRequest request = Unirest.get(favIcon);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAVICON_ICO);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
