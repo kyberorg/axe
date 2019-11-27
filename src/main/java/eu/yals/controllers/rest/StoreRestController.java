@@ -37,15 +37,13 @@ public class StoreRestController {
     private static final String TAG = "[API Store]";
 
     private final LinkService linkService;
-    private final AppUtils appUtils;
 
-    public StoreRestController(@Qualifier("dbStorage") LinkService linkService, AppUtils appUtils) {
+    public StoreRestController(@Qualifier("dbStorage") LinkService linkService) {
         this.linkService = linkService;
-        this.appUtils = appUtils;
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
-            value = Endpoint.STORE_API)
+            value = Endpoint.Api.STORE_API)
     public Json store(@RequestBody String body, HttpServletResponse response) {
         log.info("{} got request: {}", TAG, body);
 
@@ -62,7 +60,7 @@ public class StoreRestController {
         if (StringUtils.isNotBlank(linkToStore)) {
             //normalize URL if needed
             try {
-                String fullUrl = appUtils.makeFullUri(linkToStore).toString();
+                String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
                 log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
                 storeInput.withLink(fullUrl);
             } catch (RuntimeException e) {
@@ -107,7 +105,7 @@ public class StoreRestController {
         //decoding URL before saving to DB
         try {
             String currentLink = storeInput.getLink();
-            String decodedLink = appUtils.decodeUrl(currentLink);
+            String decodedLink = AppUtils.decodeUrl(currentLink);
             log.trace("{} Link {} became {} after decoding", TAG, currentLink, decodedLink);
             storeInput.withLink(decodedLink);
         } catch (RuntimeException e) {

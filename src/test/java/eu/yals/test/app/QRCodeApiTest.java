@@ -172,7 +172,7 @@ public class QRCodeApiTest extends UnirestTest {
         final String longUrlToSave = "https://github.com/yadevee/yals/issues";
         StoreRequestJson storeRequest = StoreRequestJson.create().withLink(longUrlToSave);
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(storeRequest.toString());
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(storeRequest.toString());
         HttpResponse<JsonNode> result = request.asJson();
 
         logRequestAndResponse(request, result, TAG);

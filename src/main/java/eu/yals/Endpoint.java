@@ -26,17 +26,29 @@ public class Endpoint {
     /**
      * Endpoints or values used in Application tests only
      */
-    public static class TestOnly {
+    public static class ForTests {
         public static final String SLASH_BASE = "/";
+        public static final String LINK_API = Api.LINK_API + "/";
     }
 
-    @RequestMethod(value = HttpMethod.POST, api = true)
-    public static final String STORE_API = "/api/store";
+    /**
+     * API Endpoints
+     */
+    public static class Api {
+        /**
+         * API for storing links.
+         * <p>
+         * POST /api/store
+         */
+        public static final String STORE_API = "/api/store";
 
-    @RequestMethod(value = HttpMethod.GET, api = true)
-    public static final String LINK_API = "/api/link/";
-    public static final String LINK_API_MAPPING = "/api/link/{ident}";
-    public static final String LINK_API_BASE = "/api/link";
+        /**
+         * API for Getting links
+         * <p>
+         * GET /api/link/{ident}
+         */
+        public static final String LINK_API = "/api/link";
+    }
 
     @RequestMethod(value = HttpMethod.POST, api = true)
     public static final String MM_API = "/api/mm";

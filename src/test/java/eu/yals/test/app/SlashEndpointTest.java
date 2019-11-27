@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
-import static eu.yals.Endpoint.TestOnly.SLASH_BASE;
+import static eu.yals.Endpoint.ForTests.SLASH_BASE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -65,7 +65,7 @@ public class SlashEndpointTest extends UnirestTest {
     private String store(String urlToStore) {
         String requestBody = StoreRequestJson.create().withLink(urlToStore).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(requestBody);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestBody);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

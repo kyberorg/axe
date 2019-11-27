@@ -27,7 +27,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithoutIdentStatusIs400() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -40,7 +40,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithSpaceIdentStatusIs400() {
-        String url = TEST_URL + Endpoint.LINK_API + " ";
+        String url = TEST_URL + Endpoint.ForTests.LINK_API + " ";
         HttpRequest request = Unirest.get(AppUtils.covertUnicodeToAscii(url));
         HttpResponse<String> result = request.asString();
 
@@ -54,7 +54,7 @@ public class GetApiTest extends UnirestTest {
     @Test
     public void onRequestWithSpecialCharIdentStatusIs400() throws UnsupportedEncodingException {
         String specChars = "%#";
-        String url = TEST_URL + Endpoint.LINK_API + URLEncoder.encode(specChars, "UTF-8"); //because '%' should be encoded
+        String url = TEST_URL + Endpoint.ForTests.LINK_API + URLEncoder.encode(specChars, "UTF-8"); //because '%' should be encoded
         HttpRequest request = Unirest.get(url);
         HttpResponse<String> result = request.asString();
 
@@ -67,7 +67,7 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithNotExistingIdentStatusIs404() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + "notStoredIdent");
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + "notStoredIdent");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -82,7 +82,7 @@ public class GetApiTest extends UnirestTest {
         String longLink = "http://virtadev.net"; //That very long, really
         String ident = store(longLink);
 
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -96,7 +96,7 @@ public class GetApiTest extends UnirestTest {
     private String store(String longLink) {
         String requestJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(requestJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

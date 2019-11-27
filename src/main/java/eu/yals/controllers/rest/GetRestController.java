@@ -29,16 +29,14 @@ public class GetRestController {
     private static final String TAG = "[API Get]";
 
     private final LinkService linkService;
-    private final AppUtils appUtils;
 
-    public GetRestController(@Qualifier("dbStorage") LinkService linkService, AppUtils appUtils) {
+    public GetRestController(@Qualifier("dbStorage") LinkService linkService) {
         this.linkService = linkService;
-        this.appUtils = appUtils;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = {
-            Endpoint.LINK_API,
-            Endpoint.LINK_API_BASE
+            Endpoint.Api.LINK_API,
+            Endpoint.Api.LINK_API + "/"
     })
     public Json getLink(HttpServletResponse response) {
         return getLink("", response);
@@ -46,7 +44,7 @@ public class GetRestController {
 
     @RequestMapping(method = RequestMethod.GET,
             value = {
-                    Endpoint.LINK_API_MAPPING,
+                    Endpoint.Api.LINK_API + "/{ident}",
 
             })
     public Json getLink(@PathVariable("ident") String ident, HttpServletResponse response) {
@@ -55,7 +53,7 @@ public class GetRestController {
         if (StringUtils.isBlank(ident)) {
             log.info("{} Got empty ident", TAG);
             response.setStatus(400);
-            return ErrorJson.createWithMessage("Request should be like this: " + Endpoint.LINK_API_MAPPING + " And ident should not be empty");
+            return ErrorJson.createWithMessage("Request should be like this: " + Endpoint.Api.LINK_API + "/{ident}" + " and ident should not be empty");
         }
 
         boolean isIdentValid = ident.matches(IdentGenerator.VALID_IDENT_PATTERN);
@@ -74,9 +72,9 @@ public class GetRestController {
             response.setStatus(200);
             String link = ((GetResult.Success) result).getLink();
             log.info("{} Hit. {\"Ident\": {}, \"Link found\": {}}", TAG, ident, link);
-            if (!appUtils.isAscii(link)) {
+            if (!AppUtils.isAscii(link)) {
                 // Handle international domains by detecting non-ascii and converting them to punycode
-                String punycodedUrl = appUtils.covertUnicodeToAscii(link);
+                String punycodedUrl = AppUtils.covertUnicodeToAscii(link);
                 log.info("{} encoding URL using punycode. Link: {} transformed to {}", TAG, link, punycodedUrl);
                 link = punycodedUrl;
             }
