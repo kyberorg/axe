@@ -48,13 +48,21 @@ public class Endpoint {
          * GET /api/link/{ident}
          */
         public static final String LINK_API = "/api/link";
+
+        /**
+         * Mattermost API
+         * <p>
+         * POST /api/mm
+         */
+        public static final String MM_API = "/api/mm";
+
+        /**
+         * Show availability of Telegram API
+         * <p>
+         * GET /api/tg/status
+         */
+        public static final String TELEGRAM_STATUS_API = "/api/tg/status";
     }
-
-    @RequestMethod(value = HttpMethod.POST, api = true)
-    public static final String MM_API = "/api/mm";
-
-    @RequestMethod(value = HttpMethod.GET, api = true)
-    public static final String TELEGRAM_STATUS_API = "/api/tg/status";
 
     @RequestMethod(value = HttpMethod.GET, api = true)
     public static final String QR_CODE_API_BASE = "/api/qrCode/";
