@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  */
 @SuppressWarnings("unchecked")
 public class GetApiTest extends UnirestTest {
-    public static final String TAG = "[GetApiTest]";
+    public static final String TAG = "[" + GetApiTest.class.getSimpleName() + "]";
 
     @Test
     public void onRequestWithoutIdentStatusIs400() {
@@ -53,7 +53,9 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithSpecialCharIdentStatusIs400() throws UnsupportedEncodingException {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + URLEncoder.encode("%#", "UTF-8"));
+        String specChars = "%#";
+        String url = TEST_URL + Endpoint.LINK_API + URLEncoder.encode(specChars, "UTF-8"); //because '%' should be encoded
+        HttpRequest request = Unirest.get(url);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -88,7 +90,7 @@ public class GetApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(200, result.getStatus());
 
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsJson(result);
     }
 
     private String store(String longLink) {

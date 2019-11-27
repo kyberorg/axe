@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 @SuppressWarnings("unchecked")
 @Slf4j
 public class SlashEndpointTest extends UnirestTest {
+    public static final String TAG = "[" + SlashEndpointTest.class.getSimpleName() + "]";
 
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {
@@ -40,9 +41,6 @@ public class SlashEndpointTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         Unirest.config().reset().followRedirects(true);
-
-        log.debug("Response: {}", result);
-        if (result == null) return;
 
         Assert.assertEquals(302, result.getStatus());
         Assert.assertTrue(result.getHeaders().containsKey(Header.LOCATION));
@@ -60,8 +58,6 @@ public class SlashEndpointTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        log.debug("Response: {}", result);
-        if (result == null) return;
         Assert.assertEquals(404, result.getStatus());
     }
 
@@ -73,8 +69,6 @@ public class SlashEndpointTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        log.debug("Response: {}", result);
-        if (result == null) throw new NullPointerException("Store Requested Failed: got nothing in return");
         Assert.assertEquals(201, result.getStatus());
 
         String responseBody = result.getBody();
