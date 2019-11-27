@@ -118,7 +118,7 @@ public class AppUtils {
      * @param str any string
      * @return true if contains only ASCII (std latin) symbols, false elsewhere
      */
-    public boolean isAscii(String str) {
+    public static boolean isAscii(String str) {
         return CharMatcher.ascii().matchesAllOf(str);
     }
 
@@ -129,7 +129,7 @@ public class AppUtils {
      * @return URI from same URL if URL already has schema or URI from default http schema and requested URL
      * @throws RuntimeException if string has not valid URL or not URL
      */
-    public URI makeFullUri(String url) {
+    public static URI makeFullUri(String url) {
         try {
             URI uri = new URI(url);
 
@@ -151,7 +151,7 @@ public class AppUtils {
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
      * @throws RuntimeException if URL malformed or not URL
      */
-    public String covertUnicodeToAscii(String url) {
+    public static String covertUnicodeToAscii(String url) {
         if (url != null) {
             url = url.trim();
 
@@ -186,7 +186,7 @@ public class AppUtils {
      * @param encodedUrl string with URL where encoded chars are present or not
      * @return string with decoded URL or same string if URL has no chars to encode
      */
-    public String decodeUrl(String encodedUrl) {
+    public static String decodeUrl(String encodedUrl) {
         try {
             return URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
