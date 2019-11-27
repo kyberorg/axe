@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @SpringComponent
 @UIScope
-@Route(value = Endpoint.NOT_FOUND_PAGE, layout = AppView.class)
+@Route(value = Endpoint.UI.PAGE_404, layout = AppView.class)
 public class NotFoundView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
 
     Span text = new Span();
@@ -34,10 +34,10 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     @Override
     public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NotFoundException> parameter) {
         String path = event.getLocation().getPath();
-        boolean identNotFound = path.equals(Endpoint.UI.SLASH_IDENT);
+        boolean identNotFound = path.equals(Endpoint.TNT.SLASH_IDENT);
         if (identNotFound) {
             if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
-                VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE_FOR_API);
+                VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.Api.PAGE_404);
                 return 302;
             }
             text.setText("404 - No such link found");
@@ -51,20 +51,20 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
             if (isIdentValid) {
                 List<String> param = new ArrayList<>();
                 param.add(path);
-                event.rerouteTo(Endpoint.UI.SLASH_IDENT, param);
+                event.rerouteTo(Endpoint.TNT.SLASH_IDENT, param);
                 return 302;
             } else {
                 if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
-                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE_FOR_API);
+                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.Api.PAGE_404);
                     return 302;
                 }
                 //not a ident
                 if (isApiRequest(path)) {
                     //api call
-                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE_FOR_API);
+                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.Api.PAGE_404);
                     return 302;
                 } else {
-                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE);
+                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.UI.PAGE_404);
                     return 404;
                 }
             }

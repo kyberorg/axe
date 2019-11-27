@@ -21,7 +21,7 @@ public class TechPartsController extends YalsController {
      *
      * @return always throws RuntimeException
      */
-    @RequestMapping(method = RequestMethod.GET, value = {Endpoint.FAIL_ENDPOINT, Endpoint.FAIL_API_ENDPOINT})
+    @RequestMapping(method = RequestMethod.GET, value = {Endpoint.ForTests.FAIL_ENDPOINT, Endpoint.ForTests.FAIL_API_ENDPOINT})
     public String iWillAlwaysFail() {
         throw new RuntimeException("I will always fail");
     }

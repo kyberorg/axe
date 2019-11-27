@@ -14,7 +14,7 @@ import eu.yals.constants.Header;
 
 @SpringComponent
 @UIScope
-@Route(Endpoint.REDIRECTOR)
+@Route(Endpoint.TNT.REDIRECTOR)
 public class RedirectToLinkView extends VerticalLayout implements HasErrorParameter<ArithmeticException> {
 
     public RedirectToLinkView() {

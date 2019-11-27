@@ -31,7 +31,7 @@ public class YalsErrorController implements ErrorController {
     String error;
     String path;
 
-    @RequestMapping(Endpoint.ERROR_PAGE)
+    @RequestMapping(Endpoint.TNT.ERROR_PAGE)
     public void handleError(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.request = req;
         this.response = resp;
@@ -109,7 +109,7 @@ public class YalsErrorController implements ErrorController {
 
     @Override
     public String getErrorPath() {
-        return Endpoint.ERROR_PAGE;
+        return Endpoint.TNT.ERROR_PAGE;
     }
 
 
@@ -126,6 +126,6 @@ public class YalsErrorController implements ErrorController {
 
     private void redirectToVaadinErrorPage(YalsErrorJson json) {
         response.setStatus(301);
-        response.setHeader(Header.LOCATION, Endpoint.VAADIN_ERROR_PAGE + "/" + encodeJson(json));
+        response.setHeader(Header.LOCATION, Endpoint.UI.ERROR_PAGE_500 + "/" + encodeJson(json));
     }
 }
