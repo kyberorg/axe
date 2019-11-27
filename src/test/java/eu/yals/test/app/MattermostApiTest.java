@@ -26,11 +26,12 @@ import static org.junit.Assert.*;
  */
 @SuppressWarnings("unchecked")
 public class MattermostApiTest extends UnirestTest {
+    public static final String TAG = "[" + MattermostApiTest.class.getSimpleName() + "]";
 
     @Test
     public void toNormalPayloadShouldReplyWith200AndCorrectJsonAndWithContentType() {
 
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -38,10 +39,8 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        String matterRequest = matterMock.toString();
-
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
-                .body(matterRequest).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -54,8 +53,7 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void toPayloadWithTrailingSpaceShouldReplyCorrectJson() {
-
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -63,10 +61,9 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        String matterRequest = matterMock.toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
-                .body(matterRequest).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -80,10 +77,9 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void toPayloadWithUsernameShouldReplyWithCorrectJsonAndTextContainsThisUser() {
-
         String uzer = "uzer";
 
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -91,10 +87,8 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername(uzer);
 
-        String matterRequest = matterMock.toString();
-
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
-                .body(matterRequest).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -112,7 +106,8 @@ public class MattermostApiTest extends UnirestTest {
     @Test
     public void forReplyWithoutBodyShouldReplyWith400() {
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
-                .body("").header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+                .body("")
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -126,7 +121,8 @@ public class MattermostApiTest extends UnirestTest {
         String strangeBody = "a=haba$b=more";
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
-                .body(strangeBody).header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+                .body(strangeBody)
+                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -144,7 +140,7 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void forReplyWhereTextIsNotLinkShouldReplyWithCorrectMMJsonAndErrorMessageWithUsage() {
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -153,8 +149,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
-                .body(matterMock.toString())
-                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -172,7 +167,7 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void whenArgIsOnlySingleSpaceShouldShowUsage() {
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -182,8 +177,7 @@ public class MattermostApiTest extends UnirestTest {
 
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
-                .body(matterMock.toString())
-                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -200,7 +194,7 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void whenArgContainsOnlySpacesShouldShowUsage() {
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -209,7 +203,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API).body(matterMock.toString())
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API).body(matterPayload.toString())
                 .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
 
@@ -227,7 +221,7 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void whenTextContainTwoArgsAndFirstIsNotLinkShouldShowUsage() {
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -235,8 +229,8 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API).body(matterMock.toString())
-                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -253,7 +247,7 @@ public class MattermostApiTest extends UnirestTest {
     @Test
     public void whenTextIsURLAndTextShouldReturnShortLinkAndDescription() {
         String description = "TestDescription";
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -261,10 +255,8 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        String matterRequest = matterMock.toString();
-
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API).body(matterMock.toString())
-                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -281,7 +273,7 @@ public class MattermostApiTest extends UnirestTest {
     public void whenTextHasMultiWordDescriptionShouldReturnShortLinkAndMultiWordDescription() throws Exception {
         String description = "Multi Test Description";
         String encodedDescription = URLEncoder.encode(description, "UTF-8");
-        MattermostMock matterMock = MattermostMock.create()
+        MattermostMock matterPayload = MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6)).withChannelName("channelName")
                 .withCommand("yals")
                 .withTeamDomain("myTeam").withTeamId(RandomStringUtils.randomAlphanumeric(6))
@@ -289,10 +281,8 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        String matterRequest = matterMock.toString();
-
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API).body(matterMock.toString())
-                .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+                .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

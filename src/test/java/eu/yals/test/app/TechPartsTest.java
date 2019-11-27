@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 @SuppressWarnings("unchecked")
 @Slf4j
 public class TechPartsTest extends UnirestTest {
+    public static final String TAG = "[" + TechPartsTest.class.getSimpleName() + "]";
 
     private static final String ALWAYS_NOT_FOUND_LOCATION = "/void/notFound";
     private static final String ALWAYS_NOT_FOUND_API_LOCATION = "/api/void/notFound";

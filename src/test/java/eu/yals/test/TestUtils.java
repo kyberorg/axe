@@ -107,11 +107,13 @@ public class TestUtils {
         String body = result.getBody();
         try {
             ErrorJson errorJson = AppUtils.GSON.fromJson(body, ErrorJson.class);
-            return errorJson != null;
+            assertNotNull(errorJson);
+            boolean hasNotEmptyErrorField = errorJson.getError() != null;
+            boolean hasNotEmptyErrorsField = errorJson.getErrors() != null;
+
+            return hasNotEmptyErrorField || (hasNotEmptyErrorsField && errorJson.getErrors().size() > 0);
         } catch (Exception e) {
             return false;
         }
     }
-
-
 }
