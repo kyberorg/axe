@@ -29,6 +29,7 @@ public class Endpoint {
     public static class ForTests {
         public static final String SLASH_BASE = "/";
         public static final String LINK_API = Api.LINK_API + "/";
+        public static final String QR_CODE_API = Api.QR_CODE_API + "/";
     }
 
     /**
@@ -62,15 +63,16 @@ public class Endpoint {
          * GET /api/tg/status
          */
         public static final String TELEGRAM_STATUS_API = "/api/tg/status";
+
+        /**
+         * QR Code API
+         * <p>
+         * GET /api/qrCode/{ident}/{size}
+         */
+        public static final String QR_CODE_API = "/api/qrCode";
     }
 
-    @RequestMethod(value = HttpMethod.GET, api = true)
-    public static final String QR_CODE_API_BASE = "/api/qrCode/";
-    public static final String QR_CODE_API = QR_CODE_API_BASE + "{ident}";
-    public static final String CUSTOM_SIZE_QR_CODE_API = QR_CODE_API + "/" + "{size}";
-
     @RequestMethod(HttpMethod.GET)
-
     public static final String SLASH_VAADIN = "app";
     public static final String SLASH = "/app/{ident}";
     public static final String REDIRECTOR = "redirector";
