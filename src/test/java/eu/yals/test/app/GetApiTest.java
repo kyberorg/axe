@@ -11,6 +11,9 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.junit.Test;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import static org.junit.Assert.*;
 
 /**
@@ -37,7 +40,8 @@ public class GetApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithSpaceIdentStatusIs400() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + " ");
+        String url = TEST_URL + Endpoint.LINK_API + " ";
+        HttpRequest request = Unirest.get(AppUtils.covertUnicodeToAscii(url));
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -48,8 +52,8 @@ public class GetApiTest extends UnirestTest {
     }
 
     @Test
-    public void onRequestWithSpecialCharIdentStatusIs400() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + "%#");
+    public void onRequestWithSpecialCharIdentStatusIs400() throws UnsupportedEncodingException {
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.LINK_API + URLEncoder.encode("%#", "UTF-8"));
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
