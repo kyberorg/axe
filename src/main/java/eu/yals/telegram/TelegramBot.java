@@ -2,7 +2,6 @@ package eu.yals.telegram;
 
 import eu.yals.models.Link;
 import eu.yals.services.telegram.TelegramService;
-import eu.yals.services.telegram.TelegramServiceImpl;
 import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -90,8 +89,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             message = telegramService.serverError();
         }
 
-        if (message.equals(TelegramServiceImpl.NO_INIT)) {
-            log.error(TelegramServiceImpl.NO_INIT);
+        if (message.equals(TelegramService.NO_INIT)) {
+            log.error(TelegramService.NO_INIT);
             message = "Internal error: not all components are initialized";
         }
 

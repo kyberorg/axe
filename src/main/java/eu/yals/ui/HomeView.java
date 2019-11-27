@@ -24,7 +24,6 @@ import eu.yals.ui.css.HomeViewCss;
 import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 @Slf4j
 @SpringComponent
@@ -42,7 +41,6 @@ public class HomeView extends VerticalLayout {
     private final Row resultRow = new Row();
     private final Row qrCodeRow = new Row();
 
-    private final AppUtils appUtils;
     private final HomeViewCss homeViewCss;
     private final OverallService overallService;
     private final GitService gitService;
@@ -52,8 +50,7 @@ public class HomeView extends VerticalLayout {
 
     private Span linkCounter;
 
-    public HomeView(AppUtils appUtils, HomeViewCss css, @Qualifier("dbOverallService") OverallService overallService, GitService gitService) {
-        this.appUtils = appUtils;
+    public HomeView(HomeViewCss css, OverallService overallService, GitService gitService) {
         this.homeViewCss = css;
         this.overallService = overallService;
         this.gitService = gitService;
@@ -78,7 +75,7 @@ public class HomeView extends VerticalLayout {
         board.addRow(qrCodeRow);
 
         add(board);
-        if (appUtils.isNotMobile(VaadinSession.getCurrent())) {
+        if (AppUtils.isNotMobile(VaadinSession.getCurrent())) {
             prepareGitInfoForFooter();
             if (displayFooter()) {
                 add(footer());
