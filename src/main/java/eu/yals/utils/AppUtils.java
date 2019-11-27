@@ -38,16 +38,40 @@ public class AppUtils {
     private static final String DUMMY_HOST = "DummyHost";
     private static final String DUMMY_TOKEN = "dummyToken";
 
-    public static boolean clientWantsJson(VaadinRequest vaadinRequest) {
-        String acceptHeader = vaadinRequest.getHeader(Header.ACCEPT);
-        return clientWantsJson(acceptHeader);
+    public AppUtils(Environment env) {
+        this.env = env;
     }
 
+    /**
+     * Determine if client wants to receive JSON from us
+     *
+     * @param request valid {@link HttpServletRequest} request
+     * @return true, if clients {@link Header#ACCEPT} contains {@link MimeType#APPLICATION_JSON} mime type,
+     * false - elsewhere
+     */
     public static boolean clientWantsJson(HttpServletRequest request) {
         String acceptHeader = request.getHeader(Header.ACCEPT);
         return clientWantsJson(acceptHeader);
     }
 
+    /**
+     * Determines if client wants to receive JSON from us. Vaadin implementation
+     *
+     * @param vaadinRequest valid {@link VaadinRequest} from VaadinServlet
+     * @return true, if clients {@link Header#ACCEPT} contains {@link MimeType#APPLICATION_JSON} mime type,
+     * false - elsewhere
+     */
+    public static boolean clientWantsJson(VaadinRequest vaadinRequest) {
+        String acceptHeader = vaadinRequest.getHeader(Header.ACCEPT);
+        return clientWantsJson(acceptHeader);
+    }
+
+    /**
+     * Determines if request came from API or not
+     *
+     * @param request valid {@link HttpServletRequest} request
+     * @return true, if request contains api part in URL, false - elsewhere
+     */
     public static boolean isApiRequest(HttpServletRequest request) {
         String requestUrl;
         try {
@@ -59,6 +83,13 @@ public class AppUtils {
         return requestUrl.startsWith("/api");
     }
 
+    /**
+     * Determines if client's request has {@link Header#ACCEPT} header with exact {@link MimeType}
+     *
+     * @param req valid {@link HttpServletRequest} request
+     * @return true, if request has {@link Header#ACCEPT} header and it value is not wildcard
+     * (aka accept all) {@link MimeType#ALL}, false - elsewhere
+     */
     public static boolean hasAcceptHeader(HttpServletRequest req) {
         boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
         if (acceptHeaderPresent) {
@@ -94,23 +125,11 @@ public class AppUtils {
         }
     }
 
-    public AppUtils(Environment env) {
-        this.env = env;
-    }
 
     public String getAPIHostPort() {
         return "localhost" + ":" + env.getProperty(App.Properties.SERVER_PORT, "8080");
     }
 
-    public String getServerUrl() {
-        String serverUrl = env.getProperty(App.Properties.SERVER_URL);
-        return StringUtils.isNotBlank(serverUrl) ? serverUrl : DUMMY_HOST;
-    }
-
-    public String getTelegramToken() {
-        String token = env.getProperty(App.Properties.TELEGRAM_TOKEN);
-        return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
-    }
 
     /**
      * Checks string if it has ASCII symbols or not
@@ -195,19 +214,42 @@ public class AppUtils {
         }
     }
 
-    public boolean isTelegramDisabled() {
-        return !Boolean.parseBoolean(env.getProperty(App.Properties.TELEGRAM_ENABLED, "false"));
-    }
-
-    public boolean isMobile(VaadinSession vaadinSession) {
+    /**
+     * Determines if client uses mobile OS (Android or iOS) to access site
+     *
+     * @param vaadinSession valid {@link VaadinSession} from UI
+     * @return true, if client browser works on mobile operating system (Android or iOS), false - otherwise
+     */
+    public static boolean isMobile(VaadinSession vaadinSession) {
         WebBrowser browser = vaadinSession.getBrowser();
         assert browser != null;
         return browser.isIOS() || browser.isAndroid();
     }
 
-    public boolean isNotMobile(VaadinSession vaadinSession) {
+    /**
+     * Opposite of {@link #isMobile(VaadinSession)}
+     *
+     * @param vaadinSession valid {@link VaadinSession} from UI
+     * @return true, if client browser works on desktop operating system, false - otherwise
+     */
+    public static boolean isNotMobile(VaadinSession vaadinSession) {
         return !isMobile(vaadinSession);
     }
+
+    public String getServerUrl() {
+        String serverUrl = env.getProperty(App.Properties.SERVER_URL);
+        return StringUtils.isNotBlank(serverUrl) ? serverUrl : DUMMY_HOST;
+    }
+
+    public String getTelegramToken() {
+        String token = env.getProperty(App.Properties.TELEGRAM_TOKEN);
+        return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
+    }
+
+    public boolean isTelegramDisabled() {
+        return !Boolean.parseBoolean(env.getProperty(App.Properties.TELEGRAM_ENABLED, "false"));
+    }
+
 
     private static boolean clientWantsJson(String acceptHeader) {
         if (acceptHeader == null) {

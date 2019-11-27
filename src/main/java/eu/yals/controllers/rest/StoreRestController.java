@@ -13,7 +13,6 @@ import eu.yals.utils.AppUtils;
 import eu.yals.utils.UrlExtraValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,7 +37,7 @@ public class StoreRestController {
 
     private final LinkService linkService;
 
-    public StoreRestController(@Qualifier("dbStorage") LinkService linkService) {
+    public StoreRestController(LinkService linkService) {
         this.linkService = linkService;
     }
 

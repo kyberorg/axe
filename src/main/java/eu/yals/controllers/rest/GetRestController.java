@@ -10,7 +10,6 @@ import eu.yals.services.LinkService;
 import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +29,7 @@ public class GetRestController {
 
     private final LinkService linkService;
 
-    public GetRestController(@Qualifier("dbStorage") LinkService linkService) {
+    public GetRestController(LinkService linkService) {
         this.linkService = linkService;
     }
 
@@ -42,11 +41,7 @@ public class GetRestController {
         return getLink("", response);
     }
 
-    @RequestMapping(method = RequestMethod.GET,
-            value = {
-                    Endpoint.Api.LINK_API + "/{ident}",
-
-            })
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.LINK_API + "/{ident}")
     public Json getLink(@PathVariable("ident") String ident, HttpServletResponse response) {
         log.info("{} got request: {\"Ident\": {}}", TAG, ident);
 
