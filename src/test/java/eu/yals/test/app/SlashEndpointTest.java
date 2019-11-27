@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
-import static eu.yals.Endpoint.ForTests.SLASH_BASE;
+import static eu.yals.Endpoint.TestOnly.SLASH_BASE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
