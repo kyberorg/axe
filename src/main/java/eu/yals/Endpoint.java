@@ -13,6 +13,17 @@ public class Endpoint {
         throw new UnsupportedOperationException("Utility class");
     }
 
+    public static class UI {
+        /**
+         * Application home page
+         */
+        public static final String HOME_PAGE = "";
+    }
+
+    public static class ForTests {
+        public static final String SLASH_BASE = "/";
+    }
+
     @RequestMethod(value = HttpMethod.POST, api = true)
     public static final String STORE_API = "/api/store";
 
@@ -33,8 +44,7 @@ public class Endpoint {
     public static final String CUSTOM_SIZE_QR_CODE_API = QR_CODE_API + "/" + "{size}";
 
     @RequestMethod(HttpMethod.GET)
-    public static final String HOME_PAGE = "";
-    public static final String SLASH_BASE = "/";
+    
     public static final String SLASH_VAADIN = "app";
     public static final String SLASH = "/app/{ident}";
     public static final String REDIRECTOR = "redirector";

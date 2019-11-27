@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
+import static eu.yals.Endpoint.ForTests.SLASH_BASE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -35,7 +36,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(false);
 
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.SLASH_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -53,7 +54,7 @@ public class SlashEndpointTest extends UnirestTest {
     public void requestWithIdentThatNotStoredGivesStatus404() {
         String ident = "habaHaba";
 
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.SLASH_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
