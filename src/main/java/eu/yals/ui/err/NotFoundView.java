@@ -15,6 +15,8 @@ import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
         boolean identNotFound = path.equals(Endpoint.TNT.SLASH_IDENT);
         if (identNotFound) {
             if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
-                VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.Api.PAGE_404);
+                VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
                 return 302;
             }
             text.setText("404 - No such link found");
@@ -61,7 +63,7 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
                 //not a ident
                 if (isApiRequest(path)) {
                     //api call
-                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.Api.PAGE_404);
+                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
                     return 302;
                 } else {
                     VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.UI.PAGE_404);
@@ -73,6 +75,18 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
 
     private boolean isApiRequest(String path) {
         return path.startsWith("api");
+    }
+
+    private String api404Endpoint(BeforeEnterEvent event) {
+        String method = VaadinRequest.getCurrent().getMethod();
+        String path = event.getLocation().getPath();
+
+        try {
+            return String.format("%s?method=%s&path=%s", Endpoint.Api.PAGE_404, method,
+                    URLEncoder.encode(path, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            return Endpoint.Api.PAGE_404;
+        }
     }
 
 }
