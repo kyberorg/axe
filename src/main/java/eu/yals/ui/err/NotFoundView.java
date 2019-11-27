@@ -34,7 +34,7 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     @Override
     public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NotFoundException> parameter) {
         String path = event.getLocation().getPath();
-        boolean identNotFound = path.equals(Endpoint.SLASH_VAADIN);
+        boolean identNotFound = path.equals(Endpoint.UI.SLASH_IDENT);
         if (identNotFound) {
             if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
                 VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.NOT_FOUND_PAGE_FOR_API);
@@ -49,9 +49,9 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
         } else {
             boolean isIdentValid = path.matches(IdentGenerator.VALID_IDENT_PATTERN);
             if (isIdentValid) {
-                List<String> p = new ArrayList<>();
-                p.add(path);
-                event.rerouteTo(Endpoint.SLASH_VAADIN, p);
+                List<String> param = new ArrayList<>();
+                param.add(path);
+                event.rerouteTo(Endpoint.UI.SLASH_IDENT, param);
                 return 302;
             } else {
                 if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {

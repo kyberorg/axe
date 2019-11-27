@@ -21,6 +21,10 @@ public class Endpoint {
          * Application home page
          */
         public static final String HOME_PAGE = "";
+        /**
+         * Workaround for "/{ident}" endpoint. Not intended to be accessed directly
+         */
+        public static final String SLASH_IDENT = "app";
     }
 
     /**
@@ -73,6 +77,7 @@ public class Endpoint {
     }
 
     @RequestMethod(HttpMethod.GET)
+    @Deprecated
     public static final String SLASH_VAADIN = "app";
     public static final String SLASH = "/app/{ident}";
     public static final String REDIRECTOR = "redirector";

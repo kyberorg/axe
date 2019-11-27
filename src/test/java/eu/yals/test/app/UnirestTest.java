@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
  * @since 2.5.1
  */
 @Slf4j
-public class UnirestTest {
+public abstract class UnirestTest {
     protected static final String TEST_URL = TestUtils.getTestUrl();
     public static String TAG = "[Unirest]";
 
