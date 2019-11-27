@@ -25,7 +25,7 @@ public class TestUtils {
         assertNotNull(result);
         assertTrue(result.getHeaders().containsKey(Header.CONTENT_TYPE));
         assertFalse(result.getHeaders().get(Header.CONTENT_TYPE).isEmpty());
-        assertTrue(result.getHeaders().get(Header.CONTENT_TYPE).contains(MimeType.APPLICATION_JSON));
+        assertTrue(result.getHeaders().getFirst(Header.CONTENT_TYPE).contains(MimeType.APPLICATION_JSON));
     }
 
     public static void assertResultIsErrorJson(HttpResponse<String> result) {
