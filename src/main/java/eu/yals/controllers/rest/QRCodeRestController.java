@@ -10,7 +10,6 @@ import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
 import eu.yals.services.QRCodeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +31,7 @@ public class QRCodeRestController {
 
     private HttpServletResponse response;
 
-    public QRCodeRestController(QRCodeService qrCodeService, @Qualifier("dbStorage") LinkService linkService) {
+    public QRCodeRestController(QRCodeService qrCodeService, LinkService linkService) {
         this.qrCodeService = qrCodeService;
         this.linkService = linkService;
     }

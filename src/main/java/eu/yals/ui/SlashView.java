@@ -14,7 +14,6 @@ import eu.yals.ui.err.AppDownView;
 import eu.yals.ui.err.ServerErrorView;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class SlashView extends VerticalLayout implements HasUrlParameter<String>
 
     private final LinkService linkService;
 
-    public SlashView(@Qualifier("dbStorage") LinkService linkService) {
+    public SlashView(LinkService linkService) {
         this.linkService = linkService;
     }
 
