@@ -39,7 +39,7 @@ public class MattermostRestController {
         this.mmService = mmService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = Endpoint.MM_API)
+    @RequestMapping(method = RequestMethod.POST, value = Endpoint.Api.MM_API)
     public Json mm(@RequestBody String body, HttpServletRequest request) {
         this.request = request;
         try {
@@ -97,6 +97,6 @@ public class MattermostRestController {
 
     private String getServerHostname(HttpServletRequest request) {
         String requestUrl = request.getRequestURL().toString();
-        return requestUrl.replace(Endpoint.MM_API, "");
+        return requestUrl.replace(Endpoint.Api.MM_API, "");
     }
 }

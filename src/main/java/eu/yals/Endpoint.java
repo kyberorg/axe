@@ -1,8 +1,5 @@
 package eu.yals;
 
-import eu.yals.documentation.HttpMethod;
-import eu.yals.documentation.RequestMethod;
-
 /**
  * List of application endpoints
  *
@@ -13,50 +10,132 @@ public class Endpoint {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    @RequestMethod(value = HttpMethod.POST, api = true)
-    public static final String STORE_API = "/api/store";
+    /**
+     * Endpoints accessible via browser
+     */
+    public static class UI {
+        /**
+         * Application home page
+         */
+        public static final String HOME_PAGE = "";
 
-    @RequestMethod(value = HttpMethod.GET, api = true)
-    public static final String LINK_API = "/api/link/";
-    public static final String LINK_API_MAPPING = "/api/link/{ident}";
-    public static final String LINK_API_BASE = "/api/link";
+        /**
+         * Page that will appear, when user hits location which is not exist nor served by application
+         */
+        public static final String PAGE_404 = "errors/404";
 
-    @RequestMethod(value = HttpMethod.POST, api = true)
-    public static final String MM_API = "/api/mm";
+        /**
+         * Page that will shown when application hits server-side error
+         */
+        public static final String ERROR_PAGE_500 = "errors/500";
 
-    @RequestMethod(value = HttpMethod.GET, api = true)
-    public static final String TELEGRAM_STATUS_API = "/api/tg/status";
+        /**
+         * Page that will shown when application hits fatal error and became unaccessible
+         */
+        public static final String ERROR_PAGE_503 = "errors/503";
+    }
 
-    @RequestMethod(value = HttpMethod.GET, api = true)
-    public static final String QR_CODE_API_BASE = "/api/qrCode/";
-    public static final String QR_CODE_API = QR_CODE_API_BASE + "{ident}";
-    public static final String CUSTOM_SIZE_QR_CODE_API = QR_CODE_API + "/" + "{size}";
+    /**
+     * API Endpoints
+     */
+    public static class Api {
+        /**
+         * API for storing links.
+         * <p>
+         * POST /api/store
+         */
+        public static final String STORE_API = "/api/store";
 
-    @RequestMethod(HttpMethod.GET)
-    public static final String HOME_PAGE = "";
-    public static final String SLASH_BASE = "/";
-    public static final String SLASH_VAADIN = "app";
-    public static final String SLASH = "/app/{ident}";
-    public static final String REDIRECTOR = "redirector";
+        /**
+         * API for Getting links
+         * <p>
+         * GET /api/link/{ident}
+         */
+        public static final String LINK_API = "/api/link";
 
-    public static final String SAMPLE = "sample";
+        /**
+         * Mattermost API
+         * <p>
+         * POST /api/mm
+         */
+        public static final String MM_API = "/api/mm";
 
-    @RequestMethod(HttpMethod.GET)
-    public static final String ROBOTS_TXT = "/robots.txt";
-    public static final String HUMANS_TXT = "/humans.txt";
-    public static final String FAVICON_ICO = "/favicon.ico";
+        /**
+         * Show availability of Telegram API
+         * <p>
+         * GET /api/tg/status
+         */
+        public static final String TELEGRAM_STATUS_API = "/api/tg/status";
 
-    // those two endpoints are used only in tests to simulate application error
-    public static final String FAIL_ENDPOINT = "/failPoint";
-    public static final String FAIL_API_ENDPOINT = "/api/failPoint";
+        /**
+         * QR Code API
+         * <p>
+         * GET /api/qrCode/{ident}/{size}
+         */
+        public static final String QR_CODE_API = "/api/qrCode";
 
-    @RequestMethod(HttpMethod.GET)
-    public static final String TEST_CSS = "/s/css/test.css";
+        /**
+         * Page 404 for API requests
+         */
+        public static final String PAGE_404 = "/errors/404api";
+    }
 
-    @RequestMethod(HttpMethod.GET)
-    public static final String ERROR_PAGE = "/error";
-    public static final String VAADIN_ERROR_PAGE = "errors/500";
-    public static final String VAADIN_APPLICATION_ERROR_PAGE = "errors/503";
-    public static final String NOT_FOUND_PAGE = "errors/404";
-    public static final String NOT_FOUND_PAGE_FOR_API = "/errors/404api";
+    public static class Static {
+        /**
+         * Old good file for search engines
+         */
+        public static final String ROBOTS_TXT = "/robots.txt";
+
+        /**
+         * Because there are not only robots behind the scenes
+         */
+        public static final String HUMANS_TXT = "/humans.txt";
+
+        /**
+         * Application icon
+         */
+        public static final String FAVICON_ICO = "/favicon.ico";
+    }
+
+    /**
+     * Tech and temp
+     */
+    public static class TNT {
+        /**
+         * Workaround for "/{ident}" endpoint. Not intended to be accessed directly
+         */
+        public static final String SLASH_IDENT = "app";
+
+        /**
+         * Endpoint for redirecting to long links. Not intended to be accessed directly
+         */
+        public static final String REDIRECTOR = "redirector";
+
+        /**
+         * Catch-all errors endpoint. Served by:
+         * <p>
+         * {@link eu.yals.controllers.YalsErrorController}
+         */
+        public static final String ERROR_PAGE = "/error";
+
+        /**
+         * Temporary location with old UI
+         */
+        public static final String SAMPLE = "sample";
+    }
+
+    /**
+     * Endpoints or values used in Application tests only
+     */
+    public static class ForTests {
+        public static final String SLASH_BASE = "/";
+        public static final String LINK_API = Api.LINK_API + "/";
+        public static final String QR_CODE_API = Api.QR_CODE_API + "/";
+
+        // those two endpoints are used only in tests to simulate application error
+        public static final String FAIL_ENDPOINT = "/failPoint";
+        public static final String FAIL_API_ENDPOINT = "/api/failPoint";
+    }
+
+
 }

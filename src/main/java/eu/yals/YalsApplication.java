@@ -39,7 +39,7 @@ public class YalsApplication {
                 resp.setContentType(MimeType.APPLICATION_JSON);
                 resp.getWriter().write(ErrorJson.createWithMessage("Endpoint not found").toString());
             }
-        }, Endpoint.NOT_FOUND_PAGE_FOR_API);
+        }, Endpoint.Api.PAGE_404);
         bean.setLoadOnStartup(1);
         return bean;
     }

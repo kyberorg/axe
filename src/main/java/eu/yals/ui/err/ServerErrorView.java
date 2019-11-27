@@ -17,7 +17,7 @@ import java.util.Date;
 
 @SpringComponent
 @UIScope
-@Route(value = Endpoint.VAADIN_ERROR_PAGE, layout = AppView.class)
+@Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception>, HasUrlParameter<String> {
 
     private final H1 title = new H1("Hups...Something went wrong");

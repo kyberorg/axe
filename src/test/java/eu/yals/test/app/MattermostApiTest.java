@@ -39,7 +39,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
@@ -62,7 +62,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
@@ -87,7 +87,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername(uzer);
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
@@ -105,7 +105,7 @@ public class MattermostApiTest extends UnirestTest {
 
     @Test
     public void forReplyWithoutBodyShouldReplyWith400() {
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body("")
                 .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
@@ -120,7 +120,7 @@ public class MattermostApiTest extends UnirestTest {
     public void forReplyWithStrangeBodyShouldReplyWithUsage() {
         String strangeBody = "a=haba$b=more";
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(strangeBody)
                 .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
@@ -148,7 +148,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
@@ -176,7 +176,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
@@ -203,7 +203,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API).body(matterPayload.toString())
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API).body(matterPayload.toString())
                 .header(Header.CONTENT_TYPE, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
 
@@ -229,7 +229,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
@@ -255,7 +255,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 
@@ -281,7 +281,7 @@ public class MattermostApiTest extends UnirestTest {
                 .withToken(RandomStringUtils.randomAlphanumeric(15))
                 .withUserId(RandomStringUtils.randomAlphanumeric(6)).withUsername("uzer");
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.MM_API)
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                 .body(matterPayload.toString());
         HttpResponse<String> result = request.asString();
 

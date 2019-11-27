@@ -13,11 +13,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
+import static eu.yals.Endpoint.ForTests.SLASH_BASE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests for {@link Endpoint#SLASH}
+ * Tests for /{ident}
  *
  * @since 1.0
  */
@@ -35,7 +36,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(false);
 
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.SLASH_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -53,7 +54,7 @@ public class SlashEndpointTest extends UnirestTest {
     public void requestWithIdentThatNotStoredGivesStatus404() {
         String ident = "habaHaba";
 
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.SLASH_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -64,7 +65,7 @@ public class SlashEndpointTest extends UnirestTest {
     private String store(String urlToStore) {
         String requestBody = StoreRequestJson.create().withLink(urlToStore).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.STORE_API).body(requestBody);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestBody);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

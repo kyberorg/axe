@@ -95,7 +95,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenFailed() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT)
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_ENDPOINT)
                 .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
 
         HttpResponse<String> result = request.asString();
@@ -110,7 +110,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void byDefaultAppReturnHtmlWhenFailed() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_ENDPOINT);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_ENDPOINT);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -123,7 +123,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void onApiRequestWithHeaderAppReturnJsonWhenFailed() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT)
                 .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
 
@@ -137,7 +137,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void onApiRequestWithoutHeadersAppReturnJsonWhenFailed() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -150,7 +150,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenFailed() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAIL_API_ENDPOINT)
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT)
                 .header(Header.ACCEPT, MimeType.APPLICATION_XML);
         HttpResponse<String> result = request.asString();
 
@@ -161,7 +161,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void robotsTxtIsPresentAndText() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ROBOTS_TXT);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.ROBOTS_TXT);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -178,7 +178,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void humansTxtIsPresentAndText() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.HUMANS_TXT);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.HUMANS_TXT);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -194,7 +194,7 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void faviconIsPresentAndIcon() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.FAVICON_ICO);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.FAVICON_ICO);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Slf4j
 @SpringComponent
 @UIScope
-@Route(value = Endpoint.HOME_PAGE, layout = AppView.class)
+@Route(value = Endpoint.UI.HOME_PAGE, layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
 public class HomeView extends VerticalLayout {

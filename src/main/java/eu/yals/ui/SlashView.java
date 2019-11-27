@@ -20,7 +20,7 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 @Controller
 @UIScope
-@Route(Endpoint.SLASH_VAADIN)
+@Route(Endpoint.TNT.SLASH_IDENT)
 public class SlashView extends VerticalLayout implements HasUrlParameter<String> {
     private static final String TAG = "[Vaadin Web]";
 

@@ -32,7 +32,7 @@ public class TelegramStatusRestController {
         this.appUtils = appUtils;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.TELEGRAM_STATUS_API)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.TELEGRAM_STATUS_API)
     public Json getBotStatus() {
         log.info("{} got request", TAG);
         if (bot == null) {

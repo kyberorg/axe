@@ -37,7 +37,7 @@ public class QRCodeRestController {
         this.linkService = linkService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.QR_CODE_API)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.QR_CODE_API + "/{ident}")
     @ResponseBody
     public Json getQRCode(@PathVariable("ident") String ident, HttpServletResponse response) {
         this.response = response;
@@ -60,7 +60,7 @@ public class QRCodeRestController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.CUSTOM_SIZE_QR_CODE_API)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.QR_CODE_API + "/{ident}/{size}")
     @ResponseBody
     public Json getQRCodeWithCustomSize(@PathVariable("ident") String ident,
                                         @PathVariable("size") int size,
