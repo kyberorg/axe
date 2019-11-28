@@ -30,12 +30,8 @@ import eu.yals.utils.AppUtils;
         description = "Yet another link shortener for friends")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> implements PageConfigurator {
-    private final AppUtils appUtils;
-    private final GitService gitService;
 
-    public AppView(AppUtils appUtils, GitService gitService) {
-        this.appUtils = appUtils;
-        this.gitService = gitService;
+    public AppView(GitService gitService) {
 
         AppLayoutBuilder<LeftLayouts.LeftHybrid> builder = AppLayoutBuilder
                 .get(LeftLayouts.LeftHybrid.class)
@@ -44,7 +40,7 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> imple
         LeftAppMenuBuilder menuBuilder = LeftAppMenuBuilder.get();
 
         //title
-        if (appUtils.isMobile(VaadinSession.getCurrent())) {
+        if (AppUtils.isMobile(VaadinSession.getCurrent())) {
             menuBuilder.addToSection(Section.HEADER,
                     new LeftHeaderItem("Yet another link shortener",
                             String.format("Version %s", gitService.getGitInfoSource().getLatestTag()),

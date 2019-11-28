@@ -18,7 +18,6 @@ import java.net.URLDecoder;
 @Slf4j
 @Controller
 public class Page404ForApi {
-    @SuppressWarnings("FieldCanBeLocal")
     private final String TAG = "[Page 404 For API]";
 
     @RequestMapping(Endpoint.Api.PAGE_404)
