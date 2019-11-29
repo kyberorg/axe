@@ -2,7 +2,6 @@ package eu.yals.telegram;
 
 import eu.yals.models.Link;
 import eu.yals.services.telegram.TelegramService;
-import eu.yals.services.telegram.TelegramServiceImpl;
 import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
