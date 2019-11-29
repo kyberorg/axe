@@ -89,8 +89,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             message = telegramService.serverError();
         }
 
-        if (message.equals(TelegramServiceImpl.NO_INIT)) {
-            log.error(TelegramServiceImpl.NO_INIT);
+        if (message.equals(TelegramService.NO_INIT)) {
+            log.error(TelegramService.NO_INIT);
             message = "Internal error: not all components are initialized";
         }
 
