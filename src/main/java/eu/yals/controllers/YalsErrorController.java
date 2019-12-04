@@ -1,10 +1,12 @@
 package eu.yals.controllers;
 
 import eu.yals.Endpoint;
+import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.YalsErrorJson;
 import eu.yals.utils.AppUtils;
+import eu.yals.utils.YalsErrorKeeper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -15,21 +17,26 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Base64;
 
 @Slf4j
 @Controller
 public class YalsErrorController implements ErrorController {
+    public static final String NO_EXCEPTION = "No exception, just something else";
     private final String TAG = "[Error Controller]";
 
     HttpServletRequest request;
     HttpServletResponse response;
+    YalsErrorKeeper errorKeeper;
 
     Object rawException;
     Throwable cause;
     int status;
     String error;
     String path;
+
+    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper) {
+        this.errorKeeper = yalsErrorKeeper;
+    }
 
     @RequestMapping(Endpoint.TNT.ERROR_PAGE)
     public void handleError(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -42,7 +49,16 @@ public class YalsErrorController implements ErrorController {
         cause = getCause();
         findErrorAndStatus();
 
+        if (status < 400) {
+            //there is no error
+            logRequest(false);
+            return;
+        } else {
+            logRequest(true);
+        }
+
         YalsErrorJson errorJson = createErrorJson();
+        String errorId = errorKeeper.send(errorJson);
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         boolean isApiCall = AppUtils.isApiRequest(req);
@@ -61,7 +77,7 @@ public class YalsErrorController implements ErrorController {
 
         if (hasAcceptHeader) {
             if (AppUtils.clientWantsHtml(request)) {
-                redirectToVaadinErrorPage(errorJson);
+                redirectToVaadinErrorPage(errorId);
             } else if (AppUtils.clientWantsJson(req)) {
                 responseWithJson(errorJson);
             } else {
@@ -69,20 +85,19 @@ public class YalsErrorController implements ErrorController {
                 resp.setStatus(406);
             }
         } else {
-            redirectToVaadinErrorPage(errorJson);
+            //html
+            redirectToVaadinErrorPage(errorId);
         }
     }
 
     private Throwable getCause() {
         if (rawException == null) {
-            log.error("{} Have you set exception before calling getCause() ?", TAG);
-            return new Exception("No exception, just something else");
+            return new NoSuchFieldException(NO_EXCEPTION);
         }
         return ((Exception) rawException).getCause();
     }
 
     private void findErrorAndStatus() {
-
         if (cause instanceof CannotCreateTransactionException) {
             log.error("{} Database is DOWN", TAG, cause);
             error = "Application is down";
@@ -112,6 +127,18 @@ public class YalsErrorController implements ErrorController {
         return Endpoint.TNT.ERROR_PAGE;
     }
 
+    private void logRequest(boolean realError) {
+        boolean isException = !(rawException instanceof NoSuchFieldException);
+        if (realError) {
+            if (isException) {
+                log.info("{} Status: {}. Path: {}. Exception: {}", TAG, status, path, rawException);
+            } else {
+                log.info("{} Status: {}. Path: {}", TAG, status, path);
+            }
+        } else {
+            log.trace("{} Status: {}. Path: {}", TAG, status, path);
+        }
+    }
 
     private void responseWithJson(YalsErrorJson json) throws IOException {
         response.setStatus(status);
@@ -119,13 +146,12 @@ public class YalsErrorController implements ErrorController {
         response.getWriter().write(json.toString());
     }
 
-    private String encodeJson(YalsErrorJson json) {
-        byte[] bytes = json.toString().getBytes();
-        return Base64.getEncoder().encodeToString(bytes);
+    private void redirectToVaadinErrorPage(String errorId) {
+        response.setStatus(301);
+        response.setHeader(Header.LOCATION, getHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
     }
 
-    private void redirectToVaadinErrorPage(YalsErrorJson json) {
-        response.setStatus(301);
-        response.setHeader(Header.LOCATION, Endpoint.UI.ERROR_PAGE_500 + "/" + encodeJson(json));
+    private String getHost() {
+        return request.getRequestURI().replace(getErrorPath(), "");
     }
 }
