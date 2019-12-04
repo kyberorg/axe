@@ -42,4 +42,8 @@ public class App {
     public static class Git {
         public static final String REPOSITORY = "https://github.com/yadevee/yals/commit";
     }
+
+    public static class Params {
+        public static final String ERROR_ID = "errorId";
+    }
 }
