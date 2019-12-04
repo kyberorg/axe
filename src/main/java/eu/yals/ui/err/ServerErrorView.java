@@ -25,7 +25,6 @@ import java.util.Optional;
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception>, HasUrlParameter<String> {
     private YalsErrorKeeper errorKeeper;
-    private YalsErrorJson yalsError;
 
     private final H1 title = new H1();
     private final Span when = new Span();
@@ -46,6 +45,12 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         message.setText("No message available");
     }
 
+    /**
+     * EntryPoint from {@link YalsErrorController}
+     *
+     * @param event     Vaadin Event with location, payload
+     * @param parameter string goes after errors/500. We ignore it, because we use queryParams instead
+     */
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
         YalsErrorJson yalsError = getYalsError(event);
@@ -67,6 +72,13 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         }
     }
 
+    /**
+     * This method sets HTTP Code, based on payload, if no payload - status is 500
+     *
+     * @param event     same event as {@link #setParameter(BeforeEvent, String)}
+     * @param parameter payload with status as String
+     * @return http status
+     */
     @Override
     public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<Exception> parameter) {
         int status;
