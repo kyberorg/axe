@@ -7,32 +7,29 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
-import eu.yals.constants.App;
 import eu.yals.controllers.YalsErrorController;
 import eu.yals.json.YalsErrorJson;
 import eu.yals.ui.AppView;
-import eu.yals.utils.YalsErrorKeeper;
+import eu.yals.utils.GuiUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception>, HasUrlParameter<String> {
-    private YalsErrorKeeper errorKeeper;
+    private GuiUtils guiUtils;
 
     private final H1 title = new H1();
     private final Span when = new Span();
     private final Span what = new Span();
     private final Span message = new Span();
 
-    public ServerErrorView(YalsErrorKeeper errorKeeper) {
-        this.errorKeeper = errorKeeper;
+    public ServerErrorView(GuiUtils guiUtils) {
+        this.guiUtils = guiUtils;
 
         init();
         add(title, when, what, message);
@@ -53,7 +50,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
      */
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        YalsErrorJson yalsError = getYalsError(event);
+        YalsErrorJson yalsError = guiUtils.getYalsErrorFromEvent(event);
         if (Objects.isNull(yalsError)) {
             event.rerouteToError(Exception.class);
             return;
@@ -81,33 +78,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
      */
     @Override
     public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<Exception> parameter) {
-        int status;
-        if (parameter != null && parameter.hasCustomMessage()) {
-            String statusString = parameter.getCustomMessage();
-            try {
-                status = Integer.parseInt(statusString);
-            } catch (Exception e) {
-                status = 500;
-            }
-        } else {
-            status = 500;
-        }
-        return status;
-    }
-
-    private YalsErrorJson getYalsError(BeforeEvent event) {
-        QueryParameters queryParameters = event.getLocation().getQueryParameters();
-        if (queryParameters.getParameters().isEmpty()) return null;
-        boolean errorIdKeyIsPresent = queryParameters.getParameters().containsKey(App.Params.ERROR_ID);
-        if (!errorIdKeyIsPresent) return null;
-
-        List<String> errorIdValues = queryParameters.getParameters().get(App.Params.ERROR_ID);
-        boolean errorIdKeyHasSingleValue = errorIdValues.size() == 1;
-        if (!errorIdKeyHasSingleValue) return null;
-
-        String errorId = errorIdValues.get(0);
-        Optional<YalsErrorJson> yalsErrorOptional = errorKeeper.get(errorId);
-        return yalsErrorOptional.orElse(null);
+        return guiUtils.parseStatusFromErrorParameter(parameter, 500);
     }
 
     private void fillUIWithValuesFromError(YalsErrorJson yalsError) {
