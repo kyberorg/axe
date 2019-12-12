@@ -23,6 +23,7 @@ import java.util.List;
 @Slf4j
 @SpringComponent
 @UIScope
+@PageTitle("Yals: Error 404")
 @Route(value = Endpoint.UI.PAGE_404, layout = AppView.class)
 public class NotFoundView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
 

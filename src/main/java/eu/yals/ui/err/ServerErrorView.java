@@ -21,6 +21,7 @@ import java.util.Objects;
 
 @SpringComponent
 @UIScope
+@PageTitle("Yals: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception>, HasUrlParameter<String> {
     private GuiUtils guiUtils;
@@ -41,10 +42,14 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     }
 
     private void init() {
-        image.setSrc("images/500.jpg");
+
         title.setText("Hups...Something went wrong");
+
+        image.setSrc("images/500.jpg");
+
         when.setText(new Date().toString());
         what.setText("There was an unexpected error");
+
         message.setText("");
         trace.setText("");
         trace.setEnabled(false);
