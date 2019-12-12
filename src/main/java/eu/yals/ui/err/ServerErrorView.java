@@ -1,6 +1,10 @@
 package eu.yals.ui.err;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
@@ -10,6 +14,7 @@ import eu.yals.Endpoint;
 import eu.yals.controllers.YalsErrorController;
 import eu.yals.json.YalsErrorJson;
 import eu.yals.ui.AppView;
+import eu.yals.utils.AppUtils;
 import eu.yals.utils.GuiUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -19,27 +24,64 @@ import java.util.Objects;
 
 @SpringComponent
 @UIScope
+@PageTitle("Yals: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception>, HasUrlParameter<String> {
     private GuiUtils guiUtils;
 
     private final H1 title = new H1();
+    private final Span subTitle = new Span();
+
+    private final Image image = new Image();
+
+    private final Accordion techInfo = new Accordion();
+
     private final Span when = new Span();
     private final Span what = new Span();
     private final Span message = new Span();
+    private final Span trace = new Span();
 
     public ServerErrorView(GuiUtils guiUtils) {
         this.guiUtils = guiUtils;
 
         init();
-        add(title, when, what, message);
+        add(title, subTitle, image, techInfo);
+        //this.setJustifyContentMode(JustifyContentMode.CENTER);
+        this.setAlignItems(Alignment.CENTER);
     }
 
     private void init() {
-        title.setText("Hups...Something went wrong");
+        title.setText("Something is technically wrong");
+        subTitle.setText("Sorry, it is not you, it is us. We will take a look into...");
+
+        image.setSrc("images/500.jpg");
+        image.setAlt("Error 500 Image");
+        image.addClickListener(this::onImageClick);
+
+        techInfo.setVisible(false);
+        initTechInfo();
+    }
+
+    private void onImageClick(ClickEvent<Image> imageClickEvent) {
+        image.setVisible(false);
+        techInfo.setVisible(true);
+    }
+
+    private void initTechInfo() {
         when.setText(new Date().toString());
         what.setText("There was an unexpected error");
-        message.setText("No message available");
+
+        //TODO only in DevMode and disable if empty
+        message.setText("");
+        trace.setText("");
+        trace.setEnabled(false);
+
+        techInfo.add("What happened?", what).setOpened(true);
+        techInfo.add("When happened?", when).setOpened(true);
+
+        //TODO only in DevMode and disable if empty
+        techInfo.add("Exception message", message).setOpened(true);
+        techInfo.add("Trace", trace).setOpened(false);
     }
 
     /**
@@ -88,6 +130,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         if (StringUtils.isNotBlank(yalsError.getError())) {
             what.setText(yalsError.getError());
         }
+        //TODO only in DevMode
         if (StringUtils.isNotBlank(yalsError.getMessage())) {
             boolean notExceptionalSituation = yalsError.getMessage().equals(YalsErrorController.NO_EXCEPTION);
             if (notExceptionalSituation) {
@@ -96,6 +139,11 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
                 message.setText(yalsError.getMessage());
             }
         }
+        if (yalsError.getThrowable() != null) {
+            trace.setText(AppUtils.stackTraceToString(yalsError.getThrowable()));
+            trace.setEnabled(true);
+        }
     }
+
 
 }

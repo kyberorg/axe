@@ -20,8 +20,12 @@ public class YalsErrorJson {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String path;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Throwable throwable = null;
+
     @Override
     public String toString() {
         return new Gson().toJson(this);
     }
+
 }
