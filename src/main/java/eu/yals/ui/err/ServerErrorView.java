@@ -1,6 +1,7 @@
 package eu.yals.ui.err;
 
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
@@ -10,6 +11,7 @@ import eu.yals.Endpoint;
 import eu.yals.controllers.YalsErrorController;
 import eu.yals.json.YalsErrorJson;
 import eu.yals.ui.AppView;
+import eu.yals.utils.AppUtils;
 import eu.yals.utils.GuiUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -24,22 +26,29 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     private GuiUtils guiUtils;
 
     private final H1 title = new H1();
+    private final Image image = new Image();
+
     private final Span when = new Span();
     private final Span what = new Span();
     private final Span message = new Span();
+    private final Span trace = new Span();
 
     public ServerErrorView(GuiUtils guiUtils) {
         this.guiUtils = guiUtils;
 
         init();
-        add(title, when, what, message);
+        add(image, title, when, what, message, trace);
     }
 
     private void init() {
+        image.setSrc("images/500.jpg");
         title.setText("Hups...Something went wrong");
         when.setText(new Date().toString());
         what.setText("There was an unexpected error");
-        message.setText("No message available");
+        message.setText("");
+        trace.setText("");
+        trace.setEnabled(false);
+
     }
 
     /**
@@ -88,6 +97,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         if (StringUtils.isNotBlank(yalsError.getError())) {
             what.setText(yalsError.getError());
         }
+        //TODO only in DevMode
         if (StringUtils.isNotBlank(yalsError.getMessage())) {
             boolean notExceptionalSituation = yalsError.getMessage().equals(YalsErrorController.NO_EXCEPTION);
             if (notExceptionalSituation) {
@@ -95,6 +105,10 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
             } else {
                 message.setText(yalsError.getMessage());
             }
+        }
+        if (yalsError.getThrowable() != null) {
+            trace.setText(AppUtils.stackTraceToString(yalsError.getThrowable()));
+            trace.setEnabled(true);
         }
     }
 

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.IDN;
 import java.net.URI;
@@ -236,6 +238,12 @@ public class AppUtils {
         return !isMobile(vaadinSession);
     }
 
+    public static String stackTraceToString(Throwable e) {
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
+    }
+
     public String getServerUrl() {
         String serverUrl = env.getProperty(App.Properties.SERVER_URL);
         return StringUtils.isNotBlank(serverUrl) ? serverUrl : DUMMY_HOST;
@@ -257,6 +265,6 @@ public class AppUtils {
         } else {
             return acceptHeader.equals(MimeType.APPLICATION_JSON);
         }
-
     }
+
 }

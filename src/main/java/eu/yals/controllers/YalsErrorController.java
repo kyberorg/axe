@@ -119,6 +119,9 @@ public class YalsErrorController implements ErrorController {
         errorJson.setStatus(status);
         errorJson.setError(error);
         errorJson.setPath(path);
+        if(! (cause instanceof NoSuchFieldException)) {
+            errorJson.setThrowable(cause);
+        }
         return errorJson;
     }
 
