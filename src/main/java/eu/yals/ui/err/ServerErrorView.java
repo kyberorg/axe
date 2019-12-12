@@ -37,7 +37,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         this.guiUtils = guiUtils;
 
         init();
-        add(image, title, when, what, message, trace);
+        add(title, image, when, what, message, trace);
     }
 
     private void init() {
