@@ -1,5 +1,8 @@
 package eu.yals.ui.err;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -27,7 +30,12 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     private GuiUtils guiUtils;
 
     private final H1 title = new H1();
+    private final Span subTitle = new Span();
+
+    private final Button imageTrigger = new Button();
     private final Image image = new Image();
+
+    private final Accordion techInfo = new Accordion();
 
     private final Span when = new Span();
     private final Span what = new Span();
@@ -38,22 +46,39 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         this.guiUtils = guiUtils;
 
         init();
-        add(title, image, when, what, message, trace);
+        add(title, subTitle, imageTrigger);
+        this.setJustifyContentMode(JustifyContentMode.CENTER);
+        this.setAlignItems(Alignment.CENTER);
     }
 
     private void init() {
-
-        title.setText("Hups...Something went wrong");
+        title.setText("Something is technically wrong");
+        subTitle.setText("Sorry, it is not you, it is us. We will take a look into...");
 
         image.setSrc("images/500.jpg");
+        image.setAlt("Error 500 Image");
+        imageTrigger.setIcon(image);
+        imageTrigger.addClickListener(this::onImageClick);
 
+        techInfo.setVisible(false);
+        initTechInfo();
+    }
+
+    private void initTechInfo() {
         when.setText(new Date().toString());
         what.setText("There was an unexpected error");
 
+        //TODO only in DevMode
         message.setText("");
         trace.setText("");
         trace.setEnabled(false);
 
+        techInfo.add("When?", when).setOpened(true);
+        techInfo.add("What?", what).setOpened(true);
+
+        //TODO only in DevMode
+        techInfo.add("Exception message", message).setOpened(true);
+        techInfo.add("Trace", trace).setOpened(false);
     }
 
     /**
@@ -115,6 +140,11 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
             trace.setText(AppUtils.stackTraceToString(yalsError.getThrowable()));
             trace.setEnabled(true);
         }
+    }
+
+    private void onImageClick(ClickEvent<Button> buttonClickEvent) {
+        imageTrigger.setVisible(false);
+        techInfo.setVisible(true);
     }
 
 }
