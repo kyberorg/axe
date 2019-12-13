@@ -46,8 +46,8 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         this.guiUtils = guiUtils;
 
         init();
-        add(title, subTitle, imageTrigger);
-        this.setJustifyContentMode(JustifyContentMode.CENTER);
+        add(title, subTitle, imageTrigger, techInfo);
+        //this.setJustifyContentMode(JustifyContentMode.CENTER);
         this.setAlignItems(Alignment.CENTER);
     }
 
@@ -68,15 +68,15 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         when.setText(new Date().toString());
         what.setText("There was an unexpected error");
 
-        //TODO only in DevMode
+        //TODO only in DevMode and disable if empty
         message.setText("");
         trace.setText("");
         trace.setEnabled(false);
 
-        techInfo.add("When?", when).setOpened(true);
-        techInfo.add("What?", what).setOpened(true);
+        techInfo.add("What happened?", what).setOpened(true);
+        techInfo.add("When happened?", when).setOpened(true);
 
-        //TODO only in DevMode
+        //TODO only in DevMode and disable if empty
         techInfo.add("Exception message", message).setOpened(true);
         techInfo.add("Trace", trace).setOpened(false);
     }
