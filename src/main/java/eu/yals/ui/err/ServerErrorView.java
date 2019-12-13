@@ -32,7 +32,6 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     private final H1 title = new H1();
     private final Span subTitle = new Span();
 
-    private final Button imageTrigger = new Button();
     private final Image image = new Image();
 
     private final Accordion techInfo = new Accordion();
@@ -46,7 +45,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         this.guiUtils = guiUtils;
 
         init();
-        add(title, subTitle, imageTrigger, techInfo);
+        add(title, subTitle, image, techInfo);
         //this.setJustifyContentMode(JustifyContentMode.CENTER);
         this.setAlignItems(Alignment.CENTER);
     }
@@ -57,11 +56,15 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
 
         image.setSrc("images/500.jpg");
         image.setAlt("Error 500 Image");
-        imageTrigger.setIcon(image);
-        imageTrigger.addClickListener(this::onImageClick);
+        image.addClickListener(this::onImageClick);
 
         techInfo.setVisible(false);
         initTechInfo();
+    }
+
+    private void onImageClick(ClickEvent<Image> imageClickEvent) {
+        image.setVisible(false);
+        techInfo.setVisible(true);
     }
 
     private void initTechInfo() {
@@ -142,9 +145,5 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         }
     }
 
-    private void onImageClick(ClickEvent<Button> buttonClickEvent) {
-        imageTrigger.setVisible(false);
-        techInfo.setVisible(true);
-    }
 
 }
