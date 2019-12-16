@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
 import eu.yals.Endpoint;
+import eu.yals.exception.YalsException;
 
 @Route(value = Endpoint.TNT.SAMPLE, layout = AppView.class)
 @Caption("Example")
@@ -51,6 +52,8 @@ public class SampleView extends VerticalLayout {
         if (!browser.isIOS() && !browser.isAndroid()) {
             add(footer);
         }
+        throw new YalsException("Git fucked up")
+                .withMessageToUser("This is simulation of Git fail. No reason for panic");
     }
 
     private void css() {

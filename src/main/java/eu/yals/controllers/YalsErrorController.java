@@ -4,8 +4,10 @@ import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
+import eu.yals.exception.error.YalsError;
 import eu.yals.json.YalsErrorJson;
 import eu.yals.utils.AppUtils;
+import eu.yals.utils.ErrorUtils;
 import eu.yals.utils.YalsErrorKeeper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -24,18 +26,20 @@ public class YalsErrorController implements ErrorController {
     public static final String NO_EXCEPTION = "No exception, just something else";
     private final String TAG = "[Error Controller]";
 
+    YalsErrorKeeper errorKeeper;
+    ErrorUtils errorUtils;
+
     HttpServletRequest request;
     HttpServletResponse response;
-    YalsErrorKeeper errorKeeper;
 
     Object rawException;
     Throwable cause;
     int status;
-    String error;
     String path;
 
-    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper) {
+    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils) {
         this.errorKeeper = yalsErrorKeeper;
+        this.errorUtils = errorUtils;
     }
 
     @RequestMapping(Endpoint.TNT.ERROR_PAGE)
@@ -43,11 +47,11 @@ public class YalsErrorController implements ErrorController {
         this.request = req;
         this.response = resp;
 
-        status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         rawException = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
         path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
-        cause = getCause();
-        findErrorAndStatus();
+        status = getCorrectStatus();
+
+        //cause = getCause();
 
         if (status < 400) {
             //there is no error
@@ -57,11 +61,20 @@ public class YalsErrorController implements ErrorController {
             logRequest(true);
         }
 
-        YalsErrorJson errorJson = createErrorJson();
-        String errorId = errorKeeper.send(errorJson);
+        ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException((Throwable) rawException)
+                .addStatus(status)
+                .addPath(path)
+                .build();
+        YalsError yalsError = errorUtils.convertExceptionToYalsError(args);
+
+        YalsErrorJson errorJson = YalsErrorJson.createFromYalsError(yalsError);
+        String errorId = storeYalsError(yalsError);
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         boolean isApiCall = AppUtils.isApiRequest(req);
+
+        log.debug("{} Has Accept Header: {}", TAG, hasAcceptHeader);
+        log.debug("{} Is API Call: {}", TAG, isApiCall);
 
         if (isApiCall) {
             boolean clientHasNoAcceptHeader = !hasAcceptHeader;
@@ -90,48 +103,38 @@ public class YalsErrorController implements ErrorController {
         }
     }
 
-    private Throwable getCause() {
-        if (rawException == null) {
-            return new NoSuchFieldException(NO_EXCEPTION);
-        }
-        return ((Exception) rawException).getCause();
-    }
-
-    private void findErrorAndStatus() {
-        if (cause instanceof CannotCreateTransactionException) {
-            log.error("{} Database is DOWN", TAG, cause);
-            error = "Application is down";
-            status = 503;
-        } else {
-            if (request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE) != null) {
-                status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-                error = "Error Code: " + status;
-            } else {
-                log.error("{} Fatal Error is {}", TAG, cause.getMessage(), cause);
-                error = "Internal Server Error";
-                status = 500;
-            }
-        }
-    }
-
-    private YalsErrorJson createErrorJson() {
-        YalsErrorJson errorJson = YalsErrorJson.withMessage(cause.getMessage());
-        errorJson.setStatus(status);
-        errorJson.setError(error);
-        errorJson.setPath(path);
-        if(! (cause instanceof NoSuchFieldException)) {
-            errorJson.setThrowable(cause);
-        }
-        return errorJson;
-    }
-
     @Override
     public String getErrorPath() {
         return Endpoint.TNT.ERROR_PAGE;
     }
 
+    private int getCorrectStatus() {
+        if (request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE) == null) {
+            status = 500;
+        } else {
+            try {
+                status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+            } catch (Exception e) {
+                status = 500;
+            }
+
+            //DB is DOWN
+            if (cause instanceof CannotCreateTransactionException) {
+                status = 503;
+            }
+        }
+        return status;
+    }
+
+    /*private Throwable getCause() {
+        if (rawException == null) {
+            return new NoException();
+        }
+        return ((Exception) rawException).getCause();
+    }*/
+
     private void logRequest(boolean realError) {
-        boolean isException = !(rawException instanceof NoSuchFieldException);
+        boolean isException = (rawException != null);
         if (realError) {
             if (isException) {
                 log.info("{} Status: {}. Path: {}. Exception: {}", TAG, status, path, rawException);
@@ -143,6 +146,10 @@ public class YalsErrorController implements ErrorController {
         }
     }
 
+    private String storeYalsError(YalsError yalsError) {
+        return errorKeeper.send(yalsError);
+    }
+
     private void responseWithJson(YalsErrorJson json) throws IOException {
         response.setStatus(status);
         response.setContentType(MimeType.APPLICATION_JSON);
@@ -150,11 +157,9 @@ public class YalsErrorController implements ErrorController {
     }
 
     private void redirectToVaadinErrorPage(String errorId) {
+        String host = request.getRequestURI().replace(getErrorPath(), "");
         response.setStatus(301);
-        response.setHeader(Header.LOCATION, getHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
+        response.setHeader(Header.LOCATION, host + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
     }
 
-    private String getHost() {
-        return request.getRequestURI().replace(getErrorPath(), "");
-    }
 }
