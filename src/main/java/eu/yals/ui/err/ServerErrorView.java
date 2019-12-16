@@ -2,7 +2,6 @@ package eu.yals.ui.err;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.accordion.Accordion;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -11,6 +10,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
+import eu.yals.YalsException;
 import eu.yals.controllers.YalsErrorController;
 import eu.yals.json.YalsErrorJson;
 import eu.yals.ui.AppView;
@@ -26,7 +26,7 @@ import java.util.Objects;
 @UIScope
 @PageTitle("Yals: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
-public class ServerErrorView extends VerticalLayout implements HasErrorParameter<Exception>, HasUrlParameter<String> {
+public class ServerErrorView extends VerticalLayout implements HasErrorParameter<YalsException>, HasUrlParameter<String> {
     private GuiUtils guiUtils;
 
     private final H1 title = new H1();
@@ -94,7 +94,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
         YalsErrorJson yalsError = guiUtils.getYalsErrorFromEvent(event);
         if (Objects.isNull(yalsError)) {
-            event.rerouteToError(Exception.class);
+            event.rerouteToError(YalsException.class, Integer.toString(500));
             return;
         }
 
@@ -107,7 +107,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
                 return;
             default:
                 fillUIWithValuesFromError(yalsError);
-                event.rerouteToError(Exception.class, Integer.toString(yalsError.getStatus()));
+                event.rerouteToError(YalsException.class, Integer.toString(yalsError.getStatus()));
         }
     }
 
@@ -119,7 +119,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
      * @return http status
      */
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<Exception> parameter) {
+    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<YalsException> parameter) {
         return guiUtils.parseStatusFromErrorParameter(parameter, 500);
     }
 

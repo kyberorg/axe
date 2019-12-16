@@ -112,6 +112,7 @@ public class HomeView extends VerticalLayout {
     private void prepareGitInfoForFooter() {
         latestCommit = gitService.getGitInfoSource().getLatestCommitHash().trim();
         latestTag = gitService.getGitInfoSource().getLatestTag().trim();
+        throw new RuntimeException("Git fucked up");
     }
 
     private boolean displayFooter() {

@@ -1,6 +1,7 @@
 package eu.yals.controllers;
 
 import eu.yals.Endpoint;
+import eu.yals.YalsException;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
@@ -119,7 +120,7 @@ public class YalsErrorController implements ErrorController {
         errorJson.setStatus(status);
         errorJson.setError(error);
         errorJson.setPath(path);
-        if(! (cause instanceof NoSuchFieldException)) {
+        if (!(cause instanceof NoSuchFieldException)) {
             errorJson.setThrowable(cause);
         }
         return errorJson;

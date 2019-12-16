@@ -34,7 +34,7 @@ public class GuiUtils {
         return yalsErrorOptional.orElse(null);
     }
 
-    public int parseStatusFromErrorParameter(ErrorParameter<Exception> parameter, int defaultStatus) {
+    public int parseStatusFromErrorParameter(ErrorParameter<? extends Exception> parameter, int defaultStatus) {
         int status;
         if (parameter != null && parameter.hasCustomMessage()) {
             String statusString = parameter.getCustomMessage();
