@@ -51,6 +51,7 @@ public class SampleView extends VerticalLayout {
         if (!browser.isIOS() && !browser.isAndroid()) {
             add(footer);
         }
+        throw new RuntimeException("Git fucked up");
     }
 
     private void css() {
