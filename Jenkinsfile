@@ -40,7 +40,7 @@ pipeline {
                     tags << tag;
 
                     dockerBuild(repo: repo, tags: tags);
-                    dockerLogin(creds: 'docker-hub');
+                    dockerLogin(creds: 'hub-docker');
                     dockerPush();
                     dockerLogout();
                     dockerClean();
