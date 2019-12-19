@@ -1,11 +1,14 @@
 package eu.yals.exception;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
+
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class YalsException extends RuntimeException {
 
-    @Getter
     private String messageToUser;
 
     public YalsException() {

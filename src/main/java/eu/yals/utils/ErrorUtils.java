@@ -1,5 +1,6 @@
 package eu.yals.utils;
 
+import com.bugsnag.Bugsnag;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.QueryParameters;
@@ -19,9 +20,11 @@ import java.util.Optional;
 public class ErrorUtils {
 
     private YalsErrorKeeper errorKeeper;
+    private Bugsnag bugsnag;
 
-    public ErrorUtils(YalsErrorKeeper errorKeeper) {
+    public ErrorUtils(YalsErrorKeeper errorKeeper, Bugsnag bugsnag) {
         this.errorKeeper = errorKeeper;
+        this.bugsnag = bugsnag;
     }
 
     public YalsError getYalsErrorFromEvent(BeforeEvent event) {
@@ -99,6 +102,20 @@ public class ErrorUtils {
 
         yalsErrorBuilder.addRawException(exception);
         return yalsErrorBuilder.build();
+    }
+
+    public void reportToBugsnag(YalsError yalsError) {
+        YalsException yalsException = new YalsException("Yals Error: " + yalsError.getId());
+        final String tabName = "Yals Error";
+        bugsnag.addCallback(report -> {
+            report.addToTab(tabName, "id", yalsError.getId());
+            report.addToTab(tabName, "Timestamp", yalsError.getTimeStamp());
+            report.addToTab(tabName, "Message to user", yalsError.getMessageToUser());
+            report.addToTab(tabName, "Tech Message", yalsError.getTechMessage());
+            report.addToTab(tabName, "HTTP Status", yalsError.getHttpStatus());
+            report.addToTab(tabName, "Raw Exception", yalsError.getRawException());
+        });
+        bugsnag.notify(yalsException);
     }
 
     private void enrichTechMessageWithStatusAndPath(StringBuilder techMessage, Args args) {

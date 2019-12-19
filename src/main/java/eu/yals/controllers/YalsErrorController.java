@@ -1,6 +1,5 @@
 package eu.yals.controllers;
 
-import com.bugsnag.Bugsnag;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
@@ -24,12 +23,10 @@ import java.io.IOException;
 @Slf4j
 @Controller
 public class YalsErrorController implements ErrorController {
-    public static final String NO_EXCEPTION = "No exception, just something else";
     private final String TAG = "[Error Controller]";
 
     YalsErrorKeeper errorKeeper;
     ErrorUtils errorUtils;
-    Bugsnag bugsnag;
 
     HttpServletRequest request;
     HttpServletResponse response;
@@ -39,10 +36,9 @@ public class YalsErrorController implements ErrorController {
     int status;
     String path;
 
-    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils, Bugsnag bugsnag) {
+    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils) {
         this.errorKeeper = yalsErrorKeeper;
         this.errorUtils = errorUtils;
-        this.bugsnag = bugsnag;
     }
 
     @RequestMapping(Endpoint.TNT.ERROR_PAGE)
@@ -73,7 +69,7 @@ public class YalsErrorController implements ErrorController {
         YalsErrorJson errorJson = YalsErrorJson.createFromYalsError(yalsError);
         String errorId = storeYalsError(yalsError);
 
-        bugsnag.notify(yalsError.getRawException());
+        errorUtils.reportToBugsnag(yalsError);
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         boolean isApiCall = AppUtils.isApiRequest(req);

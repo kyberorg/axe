@@ -35,6 +35,7 @@ public class App {
         public static final String SERVER_PORT = "server.port";
         public static final String PROXY_HOST = "http.proxyHost";
         public static final String PROXY_PORT = "http.proxyPort";
+        public static final String APPLICATION_STAGE = "application.stage";
     }
 
     public static class Env {
