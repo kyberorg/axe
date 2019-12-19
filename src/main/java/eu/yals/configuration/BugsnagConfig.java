@@ -3,6 +3,7 @@ package eu.yals.configuration;
 import com.bugsnag.Bugsnag;
 import com.bugsnag.BugsnagSpringConfiguration;
 import eu.yals.constants.App;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +13,11 @@ import org.springframework.core.env.Environment;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
+@Slf4j
 @Configuration
 @Import(BugsnagSpringConfiguration.class)
 public class BugsnagConfig {
+    private static final String TAG = "[BugsnagConfig]";
     private static final String NO_TOKEN = "noToken";
 
     private final Environment env;
@@ -30,6 +33,7 @@ public class BugsnagConfig {
     @Bean
     public Bugsnag bugsnag() {
         String bugsnagToken = env.getProperty(App.Env.BUGSNAG_TOKEN, NO_TOKEN);
+        log.info("{} Initialing Bugsnag with token {}", TAG, bugsnagToken);
         bugsnag = new Bugsnag(bugsnagToken);
         if (hasProxy()) {
             setProxy();

@@ -12,4 +12,9 @@ public class YalsError {
     private String techMessage;
     private int httpStatus = 500;
     private Throwable rawException;
+
+    @Override
+    public String toString() {
+        return YalsError.class.getSimpleName() + ": " + getTechMessage();
+    }
 }
