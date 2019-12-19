@@ -190,6 +190,13 @@
             <version>4.0.0.rc1</version>
         </dependency>
 
+        <!-- BugSnag: error reporting -->
+        <dependency>
+            <groupId>com.bugsnag</groupId>
+            <version>[3.0,4.0)</version>
+            <artifactId>bugsnag-spring</artifactId>
+        </dependency>
+
         <!-- Spring Boot Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
