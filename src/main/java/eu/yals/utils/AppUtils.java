@@ -258,6 +258,13 @@ public class AppUtils {
         return !Boolean.parseBoolean(env.getProperty(App.Properties.TELEGRAM_ENABLED, "false"));
     }
 
+    public boolean isProductionModeActivated() {
+        return Boolean.parseBoolean(env.getProperty(App.Properties.VAADIN_PROD_MODE, "false"));
+    }
+
+    public boolean isDevelopmentModeActivated() {
+        return !isProductionModeActivated();
+    }
 
     private static boolean clientWantsJson(String acceptHeader) {
         if (acceptHeader == null) {

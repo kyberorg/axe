@@ -9,10 +9,12 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
+import eu.yals.constants.Header;
 import eu.yals.controllers.YalsErrorController;
 import eu.yals.exception.GeneralServerException;
 import eu.yals.exception.error.YalsError;
@@ -32,7 +34,8 @@ import java.util.Optional;
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>, HasUrlParameter<String> {
     private static final String HTML_MODE = "innerHTML";
-    private ErrorUtils errorUtils;
+    private final ErrorUtils errorUtils;
+    private final AppUtils appUtils;
 
     private final H1 title = new H1();
     private final Span subTitle = new Span();
@@ -51,8 +54,9 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     private final Span message = new Span();
     private final Span trace = new Span();
 
-    public ServerErrorView(ErrorUtils errorUtils) {
+    public ServerErrorView(ErrorUtils errorUtils, AppUtils appUtils) {
         this.errorUtils = errorUtils;
+        this.appUtils = appUtils;
 
         init();
         add(title, subTitle, image, techInfo);
@@ -80,7 +84,6 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         when.setText(new Date().toString());
         what.setText("There was an unexpected error");
 
-        //TODO only in DevMode and disable if empty
         message.setText("");
         trace.setText("");
         trace.setEnabled(false);
@@ -88,12 +91,14 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         userMessagePanel = techInfo.add("What happened?", what);
         timeStampPanel = techInfo.add("When happened?", when);
 
-        //TODO only in DevMode and disable if empty
-        techMessagePanel = techInfo.add("Tech message", message);
-        tracePanel = techInfo.add("Trace", trace);
-        //TODO else "How can I help" section
+        if (appUtils.isDevelopmentModeActivated() || hasDevHeader()) {
+            techMessagePanel = techInfo.add("Tech message", message);
+            tracePanel = techInfo.add("Trace", trace);
 
-        triggerPanelsByTextInside(userMessagePanel, timeStampPanel, techMessagePanel, tracePanel);
+            triggerPanelsByTextInside(techMessagePanel, tracePanel);
+        }
+
+        triggerPanelsByTextInside(userMessagePanel, timeStampPanel);
     }
 
     private void triggerPanelsByTextInside(AccordionPanel... panels) {
@@ -158,24 +163,37 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
             what.setText(yalsError.getMessageToUser());
         }
 
-        //TODO only in DevMode or with Developer Header
-        if (StringUtils.isNotBlank(yalsError.getTechMessage())) {
-            String techMessage = yalsError.getTechMessage();
-            String techMessageForWeb = techMessage
-                    .replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
-                    .replaceAll(";", App.WEB_NEW_LINE)
-                    .replaceAll("nested exception is", "&emsp;->");
+        triggerPanelsByTextInside(userMessagePanel, timeStampPanel);
 
-            message.getElement().setProperty(HTML_MODE, techMessageForWeb);
+        if (appUtils.isDevelopmentModeActivated() || hasDevHeader()) {
+
+            if (StringUtils.isNotBlank(yalsError.getTechMessage())) {
+                String techMessage = yalsError.getTechMessage();
+                String techMessageForWeb = techMessage
+                        .replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
+                        .replaceAll(";", App.WEB_NEW_LINE)
+                        .replaceAll("nested exception is", "&emsp;->");
+
+                message.getElement().setProperty(HTML_MODE, techMessageForWeb);
+            }
+            if (yalsError.getRawException() != null) {
+                String traceMessage = AppUtils.stackTraceToString(yalsError.getRawException());
+                String traceForWeb = traceMessage.replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
+                        .replaceAll("at ", "&emsp;&emsp;at ");
+
+                trace.getElement().setProperty(HTML_MODE, traceForWeb);
+            }
+            triggerPanelsByTextInside(techMessagePanel, tracePanel);
         }
-        if (yalsError.getRawException() != null) {
-            String traceMessage = AppUtils.stackTraceToString(yalsError.getRawException());
-            String traceForWeb = traceMessage.replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
-                    .replaceAll("at ", "&emsp;&emsp;at ");
+    }
 
-            trace.getElement().setProperty(HTML_MODE, traceForWeb);
+    private boolean hasDevHeader() {
+        String xDeveloper = VaadinRequest.getCurrent().getHeader(Header.X_DEVELOPER);
+        if (StringUtils.isBlank(xDeveloper)) {
+            return false;
+        } else {
+            return Boolean.parseBoolean(xDeveloper);
         }
 
-        triggerPanelsByTextInside(userMessagePanel, timeStampPanel, techMessagePanel, tracePanel);
     }
 }
