@@ -33,6 +33,8 @@ public class App {
         public static final String TELEGRAM_TOKEN = "telegram.token";
         public static final String SERVER_URL = "server.url";
         public static final String SERVER_PORT = "server.port";
+        public static final String PROXY_HOST = "http.proxyHost";
+        public static final String PROXY_PORT = "http.proxyPort";
     }
 
     public static class Env {
