@@ -58,9 +58,11 @@ public class ErrorUtils {
     }
 
     public YalsError convertExceptionToYalsError(ErrorUtils.Args args) {
-        Throwable exception = args.getException();
+        Throwable exceptionFromArgs = args.getException();
         boolean hasStatus = args.getStatus() != Args.NO_STATUS;
         YalsErrorBuilder yalsErrorBuilder;
+
+        Throwable exception = findRootCause(exceptionFromArgs);
 
         if (exception == null) {
             //tech message
@@ -116,6 +118,15 @@ public class ErrorUtils {
             report.addToTab(tabName, "Raw Exception", yalsError.getRawException());
         });
         bugsnag.notify(yalsException);
+    }
+
+    public static Throwable findRootCause(Throwable throwable) {
+        if (throwable == null) return null;
+        Throwable rootCause = throwable;
+        while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+            rootCause = rootCause.getCause();
+        }
+        return rootCause;
     }
 
     private void enrichTechMessageWithStatusAndPath(StringBuilder techMessage, Args args) {
