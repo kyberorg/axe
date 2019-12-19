@@ -24,6 +24,7 @@ file_env() {
 
 file_env 'YALS_DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
+file_env 'BUGSNAG_TOKEN'
 
 # For DB checker
 file_env 'DB_HOST' 'yals_db'
