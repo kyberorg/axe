@@ -1,5 +1,6 @@
 package eu.yals.ui.special;
 
+import com.bugsnag.Bugsnag;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
@@ -27,10 +28,12 @@ public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasE
 
     private YalsErrorKeeper yalsErrorKeeper;
     private ErrorUtils errorUtils;
+    private Bugsnag bugsnag;
 
-    public CatchAllVaadinExceptionsView(YalsErrorKeeper errorKeeper, ErrorUtils errorUtils) {
+    public CatchAllVaadinExceptionsView(YalsErrorKeeper errorKeeper, ErrorUtils errorUtils, Bugsnag bugsnag) {
         this.yalsErrorKeeper = errorKeeper;
         this.errorUtils = errorUtils;
+        this.bugsnag =bugsnag;
     }
 
     @Override
@@ -45,6 +48,8 @@ public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasE
         YalsError yalsError = errorUtils.convertExceptionToYalsError(args);
 
         String errorId = yalsErrorKeeper.send(yalsError);
+
+        bugsnag.notify(yalsError.getRawException());
 
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
                 getMyHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);

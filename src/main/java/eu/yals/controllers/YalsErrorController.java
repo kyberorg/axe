@@ -1,5 +1,6 @@
 package eu.yals.controllers;
 
+import com.bugsnag.Bugsnag;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
@@ -28,6 +29,7 @@ public class YalsErrorController implements ErrorController {
 
     YalsErrorKeeper errorKeeper;
     ErrorUtils errorUtils;
+    Bugsnag bugsnag;
 
     HttpServletRequest request;
     HttpServletResponse response;
@@ -37,9 +39,10 @@ public class YalsErrorController implements ErrorController {
     int status;
     String path;
 
-    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils) {
+    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils, Bugsnag bugsnag) {
         this.errorKeeper = yalsErrorKeeper;
         this.errorUtils = errorUtils;
+        this.bugsnag = bugsnag;
     }
 
     @RequestMapping(Endpoint.TNT.ERROR_PAGE)
@@ -69,6 +72,8 @@ public class YalsErrorController implements ErrorController {
 
         YalsErrorJson errorJson = YalsErrorJson.createFromYalsError(yalsError);
         String errorId = storeYalsError(yalsError);
+
+        bugsnag.notify(yalsError.getRawException());
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         boolean isApiCall = AppUtils.isApiRequest(req);
