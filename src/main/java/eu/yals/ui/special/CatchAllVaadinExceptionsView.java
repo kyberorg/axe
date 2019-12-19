@@ -13,6 +13,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
+import eu.yals.exception.YalsException;
 import eu.yals.exception.error.YalsError;
 import eu.yals.utils.ErrorUtils;
 import eu.yals.utils.YalsErrorKeeper;
@@ -49,7 +50,7 @@ public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasE
 
         String errorId = yalsErrorKeeper.send(yalsError);
 
-        bugsnag.notify(yalsError.getRawException());
+        bugsnag.notify(new YalsException(yalsError));
 
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
                 getMyHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);

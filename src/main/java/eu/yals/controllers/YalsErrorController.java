@@ -5,6 +5,7 @@ import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
+import eu.yals.exception.YalsException;
 import eu.yals.exception.error.YalsError;
 import eu.yals.json.YalsErrorJson;
 import eu.yals.utils.AppUtils;
@@ -73,7 +74,7 @@ public class YalsErrorController implements ErrorController {
         YalsErrorJson errorJson = YalsErrorJson.createFromYalsError(yalsError);
         String errorId = storeYalsError(yalsError);
 
-        bugsnag.notify(yalsError.getRawException());
+        bugsnag.notify(new YalsException(yalsError));
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         boolean isApiCall = AppUtils.isApiRequest(req);
