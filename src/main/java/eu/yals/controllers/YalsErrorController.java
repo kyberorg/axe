@@ -50,8 +50,6 @@ public class YalsErrorController implements ErrorController {
         path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
         status = getCorrectStatus();
 
-        //cause = getCause();
-
         if (status < 400) {
             //there is no error
             logRequest(false);
@@ -126,13 +124,6 @@ public class YalsErrorController implements ErrorController {
         }
         return status;
     }
-
-    /*private Throwable getCause() {
-        if (rawException == null) {
-            return new NoException();
-        }
-        return ((Exception) rawException).getCause();
-    }*/
 
     private void logRequest(boolean realError) {
         boolean isException = (rawException != null);

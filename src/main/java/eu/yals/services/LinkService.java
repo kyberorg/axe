@@ -7,6 +7,7 @@ import eu.yals.result.StoreResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.Optional;
 
@@ -46,13 +47,11 @@ public class LinkService {
         try {
             repo.save(linkObject);
             return new StoreResult.Success();
+        } catch (CannotCreateTransactionException e) {
+            return new StoreResult.DatabaseDown().withException(e);
         } catch (Exception e) {
-            if (e instanceof DataAccessResourceFailureException) {
-                return new StoreResult.DatabaseDown().withException(e);
-            } else {
-                log.error("Exception on storing new " + Link.class.getSimpleName(), e);
-                return new StoreResult.Fail("Failed to add new record");
-            }
+            log.error("Exception on storing new " + Link.class.getSimpleName(), e);
+            return new StoreResult.Fail("Failed to add new record");
         }
 
     }
