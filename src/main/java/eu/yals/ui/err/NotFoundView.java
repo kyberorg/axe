@@ -36,6 +36,7 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     public NotFoundView() {
         init();
         add(title, subTitle, image);
+        this.setAlignItems(Alignment.CENTER);
     }
 
     private void init() {
