@@ -30,7 +30,6 @@ public class AppDownView extends VerticalLayout implements HasErrorParameter<Can
 
         image.setSrc("images/503.png");
         image.setAlt("Error 503 Image");
-
     }
 
     @Override

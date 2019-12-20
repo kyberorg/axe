@@ -1,5 +1,7 @@
 package eu.yals.ui.err;
 
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
@@ -27,11 +29,21 @@ import java.util.List;
 @Route(value = Endpoint.UI.PAGE_404, layout = AppView.class)
 public class NotFoundView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
 
-    Span text = new Span();
+    private final H1 title = new H1();
+    private final Span subTitle = new Span();
+    private final Image image = new Image();
 
     public NotFoundView() {
-        text.setText("404 - No such page found");
-        add(text);
+        init();
+        add(title, subTitle, image);
+    }
+
+    private void init() {
+        title.setText("404 - No Such Page Exception");
+        subTitle.setText("We don't have such page at our site. Really.");
+
+        image.setSrc("images/404.jpg");
+        image.setAlt("Error 404 Image");
     }
 
     @Override
@@ -43,7 +55,9 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
                 VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
                 return 302;
             }
-            text.setText("404 - No such link found");
+            subTitle.setText("We don't have long link that match your short link. " +
+                    "Make sure you copypasted it fully and without extra characters");
+
             return 404;
         }
         if (StringUtils.isBlank(path)) {

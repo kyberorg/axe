@@ -194,6 +194,5 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         } else {
             return Boolean.parseBoolean(xDeveloper);
         }
-
     }
 }
