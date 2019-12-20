@@ -28,12 +28,14 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
+import static eu.yals.utils.AppUtils.HTML_MODE;
+
 @SpringComponent
 @UIScope
 @PageTitle("Yals: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>, HasUrlParameter<String> {
-    private static final String HTML_MODE = "innerHTML";
+
     private final ErrorUtils errorUtils;
     private final AppUtils appUtils;
 
@@ -51,8 +53,8 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
 
     private final Span when = new Span();
     private final Span what = new Span();
-    private final Span message = new Span();
-    private final Span trace = new Span();
+    private final Span messageSpan = new Span();
+    private final Span traceSpan = new Span();
 
     public ServerErrorView(ErrorUtils errorUtils, AppUtils appUtils) {
         this.errorUtils = errorUtils;
@@ -84,24 +86,52 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         when.setText(new Date().toString());
         what.setText("There was an unexpected error");
 
-        message.setText("");
-        trace.setText("");
-        trace.setEnabled(false);
+        messageSpan.setText("");
+        traceSpan.setText("");
+        traceSpan.setEnabled(false);
 
         userMessagePanel = techInfo.add("What happened?", what);
         timeStampPanel = techInfo.add("When happened?", when);
+        triggerPanelsBasedOnTextInside(userMessagePanel, timeStampPanel);
 
         if (appUtils.isDevelopmentModeActivated() || hasDevHeader()) {
-            techMessagePanel = techInfo.add("Tech message", message);
-            tracePanel = techInfo.add("Trace", trace);
-
-            triggerPanelsByTextInside(techMessagePanel, tracePanel);
+            techMessagePanel = techInfo.add("Tech message", messageSpan);
+            tracePanel = techInfo.add("Trace", traceSpan);
+            triggerPanelsBasedOnTextInside(techMessagePanel, tracePanel);
         }
-
-        triggerPanelsByTextInside(userMessagePanel, timeStampPanel);
     }
 
-    private void triggerPanelsByTextInside(AccordionPanel... panels) {
+    private void fillUIWithValuesFromError(YalsError yalsError) {
+        if (StringUtils.isNotBlank(yalsError.getTimeStamp())) {
+            when.setText(yalsError.getTimeStamp());
+        }
+        if (StringUtils.isNotBlank(yalsError.getMessageToUser())) {
+            what.setText(yalsError.getMessageToUser());
+        }
+        triggerPanelsBasedOnTextInside(userMessagePanel, timeStampPanel);
+
+        if (appUtils.isDevelopmentModeActivated() || hasDevHeader()) {
+            if (StringUtils.isNotBlank(yalsError.getTechMessage())) {
+                String techMessage = formatTechMessage(yalsError.getTechMessage());
+
+                appUtils.pasteHtmlToComponent(techMessage, messageSpan);
+            }
+            if (yalsError.getRawException() != null) {
+                String traceMessage = AppUtils.stackTraceToString(yalsError.getRawException());
+                String trace = formatTrace(traceMessage);
+
+                appUtils.pasteHtmlToComponent(trace, traceSpan);
+            }
+            triggerPanelsBasedOnTextInside(techMessagePanel, tracePanel);
+        }
+    }
+
+    /**
+     * Disables given accordion panels if they are empty, enables otherwise
+     *
+     * @param panels initialised accordion panels
+     */
+    private void triggerPanelsBasedOnTextInside(AccordionPanel... panels) {
         for (AccordionPanel panel : panels) {
             Optional<Component> elementWithText = panel.getContent().findFirst();
             if (elementWithText.isPresent()) {
@@ -114,6 +144,27 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
                 panel.setEnabled(false);
             }
         }
+    }
+
+    private boolean hasDevHeader() {
+        String xDeveloper = VaadinRequest.getCurrent().getHeader(Header.X_DEVELOPER);
+        if (StringUtils.isBlank(xDeveloper)) {
+            return false;
+        } else {
+            return Boolean.parseBoolean(xDeveloper);
+        }
+    }
+
+    private String formatTechMessage(String techMessage) {
+        return techMessage
+                .replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
+                .replaceAll(";", App.WEB_NEW_LINE)
+                .replaceAll("nested exception is", "&emsp;->");
+    }
+
+    private String formatTrace(String traceMessage) {
+        return traceMessage.replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
+                .replaceAll("at ", "&emsp;&emsp;at ");
     }
 
     /**
@@ -155,44 +206,5 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         return errorUtils.parseStatusFromErrorParameter(parameter, 500);
     }
 
-    private void fillUIWithValuesFromError(YalsError yalsError) {
-        if (StringUtils.isNotBlank(yalsError.getTimeStamp())) {
-            when.setText(yalsError.getTimeStamp());
-        }
-        if (StringUtils.isNotBlank(yalsError.getMessageToUser())) {
-            what.setText(yalsError.getMessageToUser());
-        }
 
-        triggerPanelsByTextInside(userMessagePanel, timeStampPanel);
-
-        if (appUtils.isDevelopmentModeActivated() || hasDevHeader()) {
-
-            if (StringUtils.isNotBlank(yalsError.getTechMessage())) {
-                String techMessage = yalsError.getTechMessage();
-                String techMessageForWeb = techMessage
-                        .replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
-                        .replaceAll(";", App.WEB_NEW_LINE)
-                        .replaceAll("nested exception is", "&emsp;->");
-
-                message.getElement().setProperty(HTML_MODE, techMessageForWeb);
-            }
-            if (yalsError.getRawException() != null) {
-                String traceMessage = AppUtils.stackTraceToString(yalsError.getRawException());
-                String traceForWeb = traceMessage.replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
-                        .replaceAll("at ", "&emsp;&emsp;at ");
-
-                trace.getElement().setProperty(HTML_MODE, traceForWeb);
-            }
-            triggerPanelsByTextInside(techMessagePanel, tracePanel);
-        }
-    }
-
-    private boolean hasDevHeader() {
-        String xDeveloper = VaadinRequest.getCurrent().getHeader(Header.X_DEVELOPER);
-        if (StringUtils.isBlank(xDeveloper)) {
-            return false;
-        } else {
-            return Boolean.parseBoolean(xDeveloper);
-        }
-    }
 }

@@ -25,8 +25,8 @@ import java.io.IOException;
 public class YalsErrorController implements ErrorController {
     private final String TAG = "[Error Controller]";
 
-    YalsErrorKeeper errorKeeper;
-    ErrorUtils errorUtils;
+    private final YalsErrorKeeper errorKeeper;
+    private final ErrorUtils errorUtils;
 
     HttpServletRequest request;
     HttpServletResponse response;

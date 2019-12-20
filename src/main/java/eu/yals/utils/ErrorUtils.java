@@ -16,11 +16,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
+import static eu.yals.constants.App.NO_STATUS;
+
 @Component
 public class ErrorUtils {
 
-    private YalsErrorKeeper errorKeeper;
-    private Bugsnag bugsnag;
+    private final YalsErrorKeeper errorKeeper;
+    private final Bugsnag bugsnag;
 
     public ErrorUtils(YalsErrorKeeper errorKeeper, Bugsnag bugsnag) {
         this.errorKeeper = errorKeeper;
@@ -59,7 +61,7 @@ public class ErrorUtils {
 
     public YalsError convertExceptionToYalsError(ErrorUtils.Args args) {
         Throwable exceptionFromArgs = args.getException();
-        boolean hasStatus = args.getStatus() != Args.NO_STATUS;
+        boolean hasStatus = args.getStatus() != NO_STATUS;
         YalsErrorBuilder yalsErrorBuilder;
 
         Throwable exception = findRootCause(exceptionFromArgs);
@@ -130,7 +132,7 @@ public class ErrorUtils {
     }
 
     private void enrichTechMessageWithStatusAndPath(StringBuilder techMessage, Args args) {
-        boolean hasStatus = args.getStatus() != Args.NO_STATUS;
+        boolean hasStatus = args.getStatus() != NO_STATUS;
         boolean hasPath = StringUtils.isNotBlank(args.getPath());
         if (hasStatus) {
             techMessage.append(App.NEW_LINE).append("Status: ").append(args.getStatus());
@@ -143,8 +145,6 @@ public class ErrorUtils {
 
     @Data
     public static class Args {
-        public static final int NO_STATUS = -1;
-
         Throwable exception;
         int status = NO_STATUS;
         String path;
@@ -152,7 +152,7 @@ public class ErrorUtils {
 
     public static class ArgsBuilder {
         private Throwable th;
-        private int status = Args.NO_STATUS;
+        private int status = NO_STATUS;
         private String path;
 
         public static ArgsBuilder withException(Throwable th) {
@@ -174,7 +174,7 @@ public class ErrorUtils {
         public Args build() {
             Args args = new Args();
             args.exception = th;
-            if (status != Args.NO_STATUS) {
+            if (status != NO_STATUS) {
                 args.status = status;
             }
             if (StringUtils.isNotBlank(path)) {
