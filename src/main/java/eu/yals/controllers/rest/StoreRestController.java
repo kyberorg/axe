@@ -126,7 +126,7 @@ public class StoreRestController {
         } else if (result instanceof StoreResult.DatabaseDown) {
             response.setStatus(503);
             log.error("{} Database is DOWN", TAG, ((StoreResult.DatabaseDown) result).getException());
-            return ErrorJson.createWithMessage("The server is currently unable to handle the request ");
+            return ErrorJson.createWithMessage("The server is currently unable to handle the request");
         } else {
             log.error("{} Failed to save link: got unknown result object: {}", TAG, result);
             response.setStatus(500);
