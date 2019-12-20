@@ -55,11 +55,11 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
             if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
                 VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
                 return 302;
+            } else {
+                subTitle.setText("We don't have long link that match your short link. " +
+                        "Make sure you copypasted it fully and without extra characters");
+                return 404;
             }
-            subTitle.setText("We don't have long link that match your short link. " +
-                    "Make sure you copypasted it fully and without extra characters");
-
-            return 404;
         }
         if (StringUtils.isBlank(path)) {
             event.rerouteTo("/");

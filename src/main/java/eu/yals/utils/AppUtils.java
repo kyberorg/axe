@@ -37,6 +37,7 @@ public class AppUtils {
     private final Environment env;
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
+    public static final String HTML_MODE = "innerHTML";
     private static final String DUMMY_HOST = "DummyHost";
     private static final String DUMMY_TOKEN = "dummyToken";
 
@@ -95,7 +96,8 @@ public class AppUtils {
     public static boolean hasAcceptHeader(HttpServletRequest req) {
         boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
         if (acceptHeaderPresent) {
-            boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
+            @SuppressWarnings("UnnecessaryLocalVariable") //increase readability
+                    boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
             return hasExactMimeType;
         } else {
             return false;
@@ -127,7 +129,11 @@ public class AppUtils {
         }
     }
 
-
+    /**
+     * Provides URL base for calling API from application internally
+     *
+     * @return string (localhost:<port>)
+     */
     public String getAPIHostPort() {
         return "localhost" + ":" + env.getProperty(App.Properties.SERVER_PORT, "8080");
     }
@@ -264,6 +270,11 @@ public class AppUtils {
 
     public boolean isDevelopmentModeActivated() {
         return !isProductionModeActivated();
+    }
+
+    public void pasteHtmlToComponent(String stringWithHtml, com.vaadin.flow.component.Component component) {
+
+        component.getElement().setProperty(HTML_MODE, stringWithHtml);
     }
 
     private static boolean clientWantsJson(String acceptHeader) {

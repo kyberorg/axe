@@ -98,8 +98,9 @@ Can be found from [here](https://github.com/yadevee/yals-play/blob/trunk/README.
 
 * Our docker image: `yadev/yals`
 
-* We need MySQL database to run
+* We need H2 (default profile) or MySQL database (local profile) to run
 
+* We use [BugSnag](https://app.bugsnag.com/yadev/yals/errors) for capturing bugs. So token from Bugsnag needed.
 #### Docker Swarm
 
 EnvVars: 
@@ -115,6 +116,8 @@ EnvVars:
 * YALS_DB_PASSWORD or YALS_DB_PASSWORD_FILE: `password for db user`
 
 * TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
+
+* BUGSNAG_TOKEN or BUGSNAG_TOKEN_FILE: `token for BugSnag`
 
 Optional EnvVars: 
 
@@ -139,6 +142,12 @@ Secrets:
 * yals_telegram_token: `telegram bot token`
 
 ## For Developers
+### Common info ###
+
+* We use [slack](https://app.slack.com/client/TRVM22544/CRW52SCLQ)
+
+* We use [BugSnag](https://app.bugsnag.com/yadev/yals/errors)
+
 ### How to start coding ?
 
 * Git clone ``` git clone repoUrl ```
@@ -147,7 +156,7 @@ Secrets:
 
 * Select all autodetected Spring facets
 
-* Use ``` YalsApplication.main() ``` as start point
+* Use ``` YalsApplication.main() ``` to run application in IDE
 
 ### About: local profile
 To develop with locally running dockerized MySQL database use `local` profile.

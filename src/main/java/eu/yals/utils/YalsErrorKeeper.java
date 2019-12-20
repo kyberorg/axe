@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static eu.yals.constants.App.NO_STATUS;
+
 /**
  * Post for keeping error object
  */
@@ -49,7 +51,7 @@ public class YalsErrorKeeper {
             logMessage.append("Tech message: ").append(yalsError.getTechMessage()).append(App.NEW_LINE);
         }
 
-        if (yalsError.getHttpStatus() != ErrorUtils.Args.NO_STATUS) {
+        if (yalsError.getHttpStatus() != NO_STATUS) {
             logMessage.append("Status: ").append(yalsError.getHttpStatus()).append(App.NEW_LINE);
         }
         if (yalsError.getRawException() != null) {
