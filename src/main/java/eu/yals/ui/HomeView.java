@@ -3,7 +3,6 @@ package eu.yals.ui;
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
@@ -317,10 +316,14 @@ public class HomeView extends VerticalLayout {
         linkCounter.setText(String.valueOf(currentNumber + 1));
     }
 
-    //TODO this is not working function
     private int calculateQRCodeSize() {
         int[] browserWidthInfo = new int[1];
-        UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> browserWidthInfo[0] = details.getScreenWidth());
+        if (getUI().isPresent()) {
+            int[] finalBrowserWidthInfo = browserWidthInfo;
+            getUI().get().getPage().retrieveExtendedClientDetails(details -> finalBrowserWidthInfo[0] = details.getScreenWidth());
+        } else {
+            browserWidthInfo = new int[]{0};
+        }
         int browserWidth = browserWidthInfo[0];
 
         int defaultQRBlockSize = 371;
