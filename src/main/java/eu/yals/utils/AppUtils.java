@@ -97,7 +97,7 @@ public class AppUtils {
         boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
         if (acceptHeaderPresent) {
             @SuppressWarnings("UnnecessaryLocalVariable") //increase readability
-            boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
+                    boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
             return hasExactMimeType;
         } else {
             return false;
@@ -129,7 +129,11 @@ public class AppUtils {
         }
     }
 
-
+    /**
+     * Provides URL base for calling API from application internally
+     *
+     * @return string (localhost:<port>)
+     */
     public String getAPIHostPort() {
         return "localhost" + ":" + env.getProperty(App.Properties.SERVER_PORT, "8080");
     }
