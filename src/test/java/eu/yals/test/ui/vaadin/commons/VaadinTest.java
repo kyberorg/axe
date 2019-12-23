@@ -1,4 +1,4 @@
-package eu.yals.test.ui.vaadin;
+package eu.yals.test.ui.vaadin.commons;
 
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
@@ -61,6 +61,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         getDriver().get(BASE_URL);
     }
 
+    @SuppressWarnings("rawtypes")
     private void addTestNameToDriver() throws IllegalAccessException, ClassCastException {
         Class parallelTest = getClass();
         do {

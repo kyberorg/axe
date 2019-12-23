@@ -1,4 +1,4 @@
-package eu.yals.test.ui.vaadin;
+package eu.yals.test.ui.vaadin.commons;
 
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewElement;
 

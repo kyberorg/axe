@@ -1,5 +1,6 @@
 package eu.yals.test.ui.vaadin;
 
+import eu.yals.test.ui.vaadin.commons.SlashCommons;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewElement;
 import eu.yals.test.ui.vaadin.pageobjects.external.VR;
 import org.junit.Assert;
