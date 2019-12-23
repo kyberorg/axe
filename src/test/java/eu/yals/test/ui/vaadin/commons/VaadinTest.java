@@ -1,5 +1,6 @@
 package eu.yals.test.ui.vaadin.commons;
 
+import com.codeborne.selenide.WebDriverRunner;
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.parallel.ParallelTest;
@@ -59,10 +60,8 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
 
         getDriver().get(BASE_URL);
-    }
-
-    public void open(String relativeOrAbsoluteUrl) {
-        getDriver().get(relativeOrAbsoluteUrl);
+        //init selenide as well
+        WebDriverRunner.setWebDriver(getDriver());
     }
 
     @SuppressWarnings("rawtypes")

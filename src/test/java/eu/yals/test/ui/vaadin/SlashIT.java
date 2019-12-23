@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
+import static com.codeborne.selenide.Selenide.open;
+
 
 public class SlashIT extends SlashCommons {
     @Override
