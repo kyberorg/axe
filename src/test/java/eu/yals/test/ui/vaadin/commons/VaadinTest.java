@@ -1,5 +1,6 @@
 package eu.yals.test.ui.vaadin.commons;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
@@ -62,6 +63,7 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         getDriver().get(BASE_URL);
         //init selenide as well
         WebDriverRunner.setWebDriver(getDriver());
+        Configuration.baseUrl = BASE_URL;
     }
 
     @SuppressWarnings("rawtypes")
