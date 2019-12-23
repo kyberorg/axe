@@ -61,6 +61,10 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         getDriver().get(BASE_URL);
     }
 
+    public void open(String relativeOrAbsoluteUrl) {
+        getDriver().get(relativeOrAbsoluteUrl);
+    }
+
     @SuppressWarnings("rawtypes")
     private void addTestNameToDriver() throws IllegalAccessException, ClassCastException {
         Class parallelTest = getClass();
