@@ -132,10 +132,10 @@ public class AppUtils {
     /**
      * Provides URL base for calling API from application internally
      *
-     * @return string (localhost:<port>)
+     * @return string (https://localhost:<port>)
      */
     public String getAPIHostPort() {
-        return "localhost" + ":" + env.getProperty(App.Properties.SERVER_PORT, "8080");
+        return "http://localhost" + ":" + env.getProperty(App.Properties.SERVER_PORT, "8080");
     }
 
 

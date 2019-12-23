@@ -3,6 +3,7 @@ package eu.yals.ui;
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
@@ -45,6 +46,7 @@ public class HomeView extends VerticalLayout {
     private final Row overallRow = new Row();
     private final Row resultRow = new Row();
     private final Row qrCodeRow = new Row();
+    private HorizontalLayout footer = null;
 
     private final HomeViewCss homeViewCss;
     private final OverallService overallService;
@@ -90,7 +92,8 @@ public class HomeView extends VerticalLayout {
         if (AppUtils.isNotMobile(VaadinSession.getCurrent())) {
             prepareGitInfoForFooter();
             if (displayFooter()) {
-                add(footer());
+                footer = footer();
+                add(footer);
             }
         }
     }
@@ -192,18 +195,21 @@ public class HomeView extends VerticalLayout {
 
         Span emptySpan = new Span();
 
-        shortLink = new Anchor("https://yals.eu/gMKyrJ", "https://yals.eu/gMKyrJ");
+        shortLink = new Anchor("", "");
         shortLink.setId(IDs.SHORT_LINK);
         homeViewCss.makeLinkStrong(shortLink);
 
-        Button copyLinkButton = new Button(VaadinIcon.PASTE.create());
-        copyLinkButton.setId(IDs.COPY_LINK_BUTTON);
-        copyLinkButton.addClickListener(this::copyLinkToClipboard);
+        com.vaadin.flow.component.icon.Icon copyLinkImage;
+        copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.PASTE);
+        copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
+        copyLinkImage.addClickListener(this::copyLinkToClipboard);
+
 
         homeViewCss.applyResultAreaStyle(resultArea);
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-        resultArea.add(emptySpan, shortLink, copyLinkButton);
+        resultArea.add(emptySpan, shortLink, copyLinkImage);
         return resultArea;
     }
 
@@ -213,7 +219,7 @@ public class HomeView extends VerticalLayout {
 
         qrCode = new Image();
         qrCode.setId(IDs.QR_CODE);
-        qrCode.setSrc("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeAQAAAADlUEq3AAABVklEQVR42u3aSw6DIBCAYRIP4JG8ukfyACRTZR4Qa9qumiH5WZiin6spAwMW+b3VAgaDwWAwGJwQ78Wa3Tvsl7UVnB737rFIwyd5eApOi6s9vR6UTdrl6l5/AfBMuIW7jV8wGPxP3LtVZ8mf8jM4DY5lz6551y5f1kjgNLg3nTSPPkw/1SngNFgza4R2L4uMlQh4FtyqjsWzrVaQzykXnAxr85LR58saXXB23CI9ZFsfunrZBJwer73MOOO7xS7OpuMXnB1fze4psZhbLQlOj+/vHubaHsCHbXBwFixRa8SAPU2kYQFnx+1e0Y03j75tCSzvxSM4H76V/7HisTJyBWfH4xacB15PpsCT4OhqEeLZFjwP7sfBdTiFaikXPBUW8QP94kP3fYYFJ8a7nwnrHoAtZsH58ZhyLdyefJ9KD3A2fD8OFhlfW8HZMd8/g8FgMBgMnhC/AP4haj2FcNJGAAAAAElFTkSuQmCC");
+        qrCode.setSrc("");
         qrCode.setAlt("qrCode");
 
         homeViewCss.applyQrCodeAreaStyle(qrCodeArea);
@@ -246,7 +252,6 @@ public class HomeView extends VerticalLayout {
 
     private void onSaveLink(ClickEvent<Button> buttonClickEvent) {
         cleanErrors();
-        cleanResults();
 
         boolean isFormValid = true;
         String longUrl = input.getValue();
@@ -258,13 +263,16 @@ public class HomeView extends VerticalLayout {
             showError(errorMessage);
             isFormValid = false;
         }
+        //TODO URL validation
+
         if (isFormValid) {
+            cleanResults();
             sendLink(longUrl);
         }
     }
 
-    private void copyLinkToClipboard(ClickEvent<Button> buttonClickEvent) {
-         //TODO https://vaadin.com/directory/component/v-clipboard/samples
+    private void copyLinkToClipboard(ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
+        //TODO https://vaadin.com/directory/component/v-clipboard/samples
     }
 
     private void sendLink(String link) {
@@ -285,7 +293,8 @@ public class HomeView extends VerticalLayout {
             JsonNode json = response.getBody();
             String ident = json.getObject().getString("ident");
             if (StringUtils.isNotBlank(ident)) {
-                shortLink.setTarget(appUtils.getServerUrl() + "/" + ident);
+                shortLink.setText(appUtils.getServerUrl() + "/" + ident);
+                shortLink.setHref(ident);
                 resultRow.setVisible(true);
                 updateCounter();
                 generateQRCode(ident);
@@ -308,25 +317,37 @@ public class HomeView extends VerticalLayout {
         linkCounter.setText(String.valueOf(currentNumber + 1));
     }
 
+    //TODO this is not working function
     private int calculateQRCodeSize() {
-        double browserWidth = Double.parseDouble(getWidth());
+        int[] browserWidthInfo = new int[1];
+        UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> browserWidthInfo[0] = details.getScreenWidth());
+        int browserWidth = browserWidthInfo[0];
+
         int defaultQRBlockSize = 371;
         int defaultQRCodeSize = 350;
-        double qrBlockRatio = 0.943; //350/371
+        float qrBlockRatio = 0.943f; //350/371
 
         int size;
         if (browserWidth > defaultQRBlockSize) {
             size = defaultQRCodeSize;
         } else {
-            size = (int) (browserWidth * qrBlockRatio);
+            size = Math.round(browserWidth * qrBlockRatio);
         }
         return size;
     }
 
     private void generateQRCode(String ident) {
         int size = calculateQRCodeSize();
-        String qrCodeGeneratorRoute = String.format("%s/%s/%s/%d", appUtils.getServerUrl(), Endpoint.Api.QR_CODE_API,
-                ident, size);
+        String qrCodeGeneratorRoute;
+        if (size == 0) {
+            qrCodeGeneratorRoute = String.format("%s/%s/%s", appUtils.getAPIHostPort(), Endpoint.Api.QR_CODE_API,
+                    ident);
+        } else {
+            qrCodeGeneratorRoute = String.format("%s/%s/%s/%d", appUtils.getAPIHostPort(), Endpoint.Api.QR_CODE_API,
+                    ident, size);
+        }
+
+
         HttpResponse<JsonNode> response = Unirest.get(qrCodeGeneratorRoute).asJson();
         if (response.isSuccess()) {
             onSuccessGenerateQRCode(response);
@@ -341,6 +362,7 @@ public class HomeView extends VerticalLayout {
             if (StringUtils.isNotBlank(qrCode)) {
                 this.qrCode.setSrc(qrCode);
                 qrCodeRow.setVisible(true);
+                if (footer != null) footer.setVisible(false);
             } else {
                 showError("Internal error. Got malformed reply from QR generator");
             }
@@ -371,7 +393,7 @@ public class HomeView extends VerticalLayout {
 
     private void cleanResults() {
         shortLink.setHref("");
-        shortLink.setTarget("");
+        shortLink.setText("");
         resultRow.setVisible(false);
 
         qrCode.setSrc("");
