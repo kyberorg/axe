@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.open;
 
 
@@ -60,6 +61,7 @@ public class SlashIT extends SlashCommons {
 
     private void verifyThatPage404Opened() {
         NotFoundViewElement page404 = $(NotFoundViewElement.class).waitForFirst();
-        Assert.assertTrue(page404.getTitle().getText().contains("404"));
+        page404.getTitle().asSelenideElement().shouldBe(exist);
+        Assert.assertTrue(page404.getTitle().asTestBenchElement().getText().contains("404"));
     }
 }
