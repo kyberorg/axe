@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 
 public class PocObject {
     private TestBenchElement testBenchElement;
-    private WebElement webElement;
     private SelenideElement selenideElement;
 
 
@@ -17,15 +16,20 @@ public class PocObject {
 
     private PocObject(TestBenchElement testBenchElement) {
         this.testBenchElement = testBenchElement;
-        this.webElement = testBenchElement.getWrappedElement();
-        this.selenideElement = Selenide.$(this.webElement);
+        WebElement webElement = testBenchElement.getWrappedElement();
+        this.selenideElement = Selenide.$(webElement);
     }
 
-    public TestBenchElement asTestBenchElement() {
+    public TestBenchElement asTBE() {
         return this.testBenchElement;
     }
 
-    public SelenideElement asSelenideElement() {
+    public SelenideElement asSE() {
         return this.selenideElement;
+    }
+
+    //like public H1Element as(H1Element.class) method
+    public <T extends TestBenchElement> T as(Class<T> clazz) {
+        return clazz.cast(this.testBenchElement);
     }
 }
