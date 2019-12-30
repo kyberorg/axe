@@ -7,10 +7,15 @@ import com.vaadin.flow.component.html.testbench.ImageElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
 import com.vaadin.testbench.TestBenchTestCase;
 import eu.yals.test.ui.vaadin.tech.ElementConverter;
+import org.openqa.selenium.WebDriver;
 
 public class NotFoundViewPageObject extends TestBenchTestCase {
-    public static NotFoundViewPageObject getPageObject() {
-        return new NotFoundViewPageObject();
+    public NotFoundViewPageObject(WebDriver driver) {
+        setDriver(driver);
+    }
+
+    public static NotFoundViewPageObject getPageObject(WebDriver driver) {
+        return new NotFoundViewPageObject(driver);
     }
 
     public final SelenideElement TITLE = ElementConverter.get().convert(getTitle());
