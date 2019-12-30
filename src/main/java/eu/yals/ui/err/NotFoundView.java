@@ -22,8 +22,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.yals.ui.err.NotFoundView.IDs.VIEW_ID;
-
 @Slf4j
 @SpringComponent
 @UIScope
@@ -42,7 +40,7 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     }
 
     private void init() {
-        setId(VIEW_ID);
+        this.setId(IDs.VIEW_ID);
 
         title.setText("404 - No Such Page Exception");
         subTitle.setText("We don't have such page at our site. Really.");
