@@ -1,11 +1,9 @@
 package eu.yals.test.ui.vaadin;
 
-import com.codeborne.selenide.SelenideElement;
-import com.vaadin.flow.component.html.testbench.H1Element;
 import eu.yals.test.ui.vaadin.commons.SlashCommons;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewElement;
+import eu.yals.test.ui.vaadin.pageobjects.NotFoundViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.external.VR;
-import eu.yals.test.ui.vaadin.tech.ElementConverter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -62,14 +60,14 @@ public class SlashIT extends SlashCommons {
     }
 
     private void verifyThatPage404Opened() {
-       /* NotFoundViewElement page404 = $(NotFoundViewElement.class).onPage().waitForFirst();
+        NotFoundViewPageObject page404 = NotFoundViewPageObject.getPageObject();
         page404.TITLE.shouldBe(exist);
-        Assert.assertTrue(page404.getTitle().getText().contains("404"));*/
+        Assert.assertTrue(page404.getTitle().getText().contains("404"));
 
-        H1Element title = $(H1Element.class).first();
+       /* H1Element title = $(H1Element.class).first();
         SelenideElement titleSE = ElementConverter.get().convert(title);
 
         titleSE.should(exist);
-        Assert.assertTrue(title.getText().contains("404"));
+        Assert.assertTrue(title.getText().contains("404"));*/
     }
 }

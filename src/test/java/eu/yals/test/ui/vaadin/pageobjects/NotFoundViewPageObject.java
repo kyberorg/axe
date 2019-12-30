@@ -5,13 +5,13 @@ import com.codeborne.selenide.SelenideElement;
 import com.vaadin.flow.component.html.testbench.H1Element;
 import com.vaadin.flow.component.html.testbench.ImageElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
-import com.vaadin.testbench.TestBenchElement;
-import com.vaadin.testbench.annotations.Attribute;
+import com.vaadin.testbench.TestBenchTestCase;
 import eu.yals.test.ui.vaadin.tech.ElementConverter;
-import eu.yals.ui.err.NotFoundView;
 
-@Attribute(name = "id", value = NotFoundView.IDs.VIEW_ID)
-public class NotFoundViewElement extends TestBenchElement {
+public class NotFoundViewPageObject extends TestBenchTestCase {
+    public static NotFoundViewPageObject getPageObject() {
+        return new NotFoundViewPageObject();
+    }
 
     public final SelenideElement TITLE = ElementConverter.get().convert(getTitle());
 
