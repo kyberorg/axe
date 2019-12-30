@@ -5,11 +5,11 @@ import com.codeborne.selenide.SelenideElement;
 import com.vaadin.flow.component.html.testbench.H1Element;
 import com.vaadin.flow.component.html.testbench.ImageElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
-import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.testbench.parallel.ParallelTest;
 import eu.yals.test.ui.vaadin.tech.ElementConverter;
 import org.openqa.selenium.WebDriver;
 
-public class NotFoundViewPageObject extends TestBenchTestCase {
+public class NotFoundViewPageObject extends ParallelTest {
     public NotFoundViewPageObject(WebDriver driver) {
         setDriver(driver);
     }
