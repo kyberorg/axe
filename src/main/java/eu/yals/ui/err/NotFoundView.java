@@ -108,6 +108,6 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     }
 
     public static class IDs {
-        public static final String VIEW_ID = "NotFoundView";
+        public static final String VIEW_ID = "notFoundView";
     }
 }
