@@ -60,7 +60,7 @@ public class SlashIT extends SlashCommons {
     }
 
     private void verifyThatPage404Opened() {
-        NotFoundViewElement page404 = $(NotFoundViewElement.class).onPage().first();
+        NotFoundViewElement page404 = $(NotFoundViewElement.class).onPage().waitForFirst();
         page404.TITLE.shouldBe(exist);
         Assert.assertTrue(page404.getTitle().getText().contains("404"));
     }
