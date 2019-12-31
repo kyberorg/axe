@@ -5,18 +5,10 @@ import com.codeborne.selenide.SelenideElement;
 import com.vaadin.flow.component.html.testbench.H1Element;
 import com.vaadin.flow.component.html.testbench.ImageElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
-import com.vaadin.testbench.parallel.ParallelTest;
+import com.vaadin.testbench.TestBenchElement;
 import eu.yals.test.ui.vaadin.tech.ElementConverter;
-import org.openqa.selenium.WebDriver;
 
-public class NotFoundViewPageObject extends ParallelTest {
-    public NotFoundViewPageObject(WebDriver driver) {
-        setDriver(driver);
-    }
-
-    public static NotFoundViewPageObject getPageObject(WebDriver driver) {
-        return new NotFoundViewPageObject(driver);
-    }
+public class NotFoundViewPageObject extends TestBenchElement {
 
     public final SelenideElement TITLE = ElementConverter.get().convert(getTitle());
 

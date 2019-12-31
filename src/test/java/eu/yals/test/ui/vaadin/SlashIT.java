@@ -60,7 +60,7 @@ public class SlashIT extends SlashCommons {
     }
 
     private void verifyThatPage404Opened() {
-        NotFoundViewPageObject page404 = NotFoundViewPageObject.getPageObject(getDriver());
+        NotFoundViewPageObject page404 = getNotFoundView();
         page404.TITLE.shouldBe(exist);
         Assert.assertTrue(page404.getTitle().getText().contains("404"));
 
@@ -69,5 +69,9 @@ public class SlashIT extends SlashCommons {
 
         titleSE.should(exist);
         Assert.assertTrue(title.getText().contains("404"));*/
+    }
+
+    private NotFoundViewPageObject getNotFoundView() {
+        return $(NotFoundViewPageObject.class).onPage().first();
     }
 }
