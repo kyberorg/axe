@@ -81,7 +81,9 @@ public class HomeViewElement extends TestBenchElement {
         return getFooter().$(AnchorElement.class).id(HomeView.IDs.COMMIT_LINK);
     }
 
-    public NotFoundViewPageObject getNotFoundView() {
-        return $(NotFoundViewPageObject.class).onPage().first();
+    public void pasteValueInFormAndSubmitIt(String link) {
+        getInputField().setValue(link);
+        getSubmitButton().click();
     }
+
 }

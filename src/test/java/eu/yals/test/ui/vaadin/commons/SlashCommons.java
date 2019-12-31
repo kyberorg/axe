@@ -18,10 +18,4 @@ public class SlashCommons extends VaadinTest<HomeViewElement> {
         Assert.assertTrue(true);
     }
 
-    protected void pasteValueInFormAndSubmitIt(String link) {
-        HomeViewElement homeView = openView();
-        homeView.getInputField().setValue(link);
-        homeView.getSubmitButton().click();
-    }
-
 }

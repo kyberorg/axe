@@ -14,7 +14,6 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 public class SlashIT extends SlashCommons {
-    private HomeViewElement homeView;
 
     @Override
     protected HomeViewElement openView() {
@@ -24,7 +23,7 @@ public class SlashIT extends SlashCommons {
     @Test
     public void saveLinkAndClickOnResult() {
         HomeViewElement homeView = openView();
-        pasteValueInFormAndSubmitIt("https://vr.fi");
+        homeView.pasteValueInFormAndSubmitIt("https://vr.fi");
 
         homeView.getShortLinkField().click();
 
@@ -34,7 +33,7 @@ public class SlashIT extends SlashCommons {
     @Test
     public void saveLinkAndCopyValueAndOpenIt() {
         HomeViewElement homeView = openView();
-        pasteValueInFormAndSubmitIt("https://vr.fi");
+        homeView.pasteValueInFormAndSubmitIt("https://vr.fi");
 
         String shortUrl = homeView.getShortLinkField().getText();
         Assert.assertTrue(StringUtils.isNotBlank(shortUrl));
@@ -45,7 +44,7 @@ public class SlashIT extends SlashCommons {
 
     @Test
     public void openSomethingNonExisting() {
-        homeView = openView();
+        HomeViewElement homeView = openView();
         open("/perkele");
         verifyThatPage404Opened();
     }
@@ -63,7 +62,7 @@ public class SlashIT extends SlashCommons {
     }
 
     private void verifyThatPage404Opened() {
-        NotFoundViewPageObject page404 = homeView.getNotFoundView();
+        NotFoundViewPageObject page404 = new NotFoundViewPageObject(getDriver());
         page404.TITLE.shouldBe(exist);
         Assert.assertTrue(page404.getTitle().getText().contains("404"));
 
