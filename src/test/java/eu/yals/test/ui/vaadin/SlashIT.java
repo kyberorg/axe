@@ -14,6 +14,8 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 public class SlashIT extends SlashCommons {
+    private HomeViewElement homeView;
+
     @Override
     protected HomeViewElement openView() {
         return $(HomeViewElement.class).waitForFirst();
@@ -43,6 +45,7 @@ public class SlashIT extends SlashCommons {
 
     @Test
     public void openSomethingNonExisting() {
+        homeView = openView();
         open("/perkele");
         verifyThatPage404Opened();
     }
@@ -60,7 +63,7 @@ public class SlashIT extends SlashCommons {
     }
 
     private void verifyThatPage404Opened() {
-        NotFoundViewPageObject page404 = getNotFoundView();
+        NotFoundViewPageObject page404 = homeView.getNotFoundView();
         page404.TITLE.shouldBe(exist);
         Assert.assertTrue(page404.getTitle().getText().contains("404"));
 
@@ -69,9 +72,5 @@ public class SlashIT extends SlashCommons {
 
         titleSE.should(exist);
         Assert.assertTrue(title.getText().contains("404"));*/
-    }
-
-    private NotFoundViewPageObject getNotFoundView() {
-        return $(NotFoundViewPageObject.class).onPage().first();
     }
 }

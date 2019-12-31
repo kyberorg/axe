@@ -80,4 +80,8 @@ public class HomeViewElement extends TestBenchElement {
     public AnchorElement getCommitLink() {
         return getFooter().$(AnchorElement.class).id(HomeView.IDs.COMMIT_LINK);
     }
+
+    public NotFoundViewPageObject getNotFoundView() {
+        return $(NotFoundViewPageObject.class).onPage().first();
+    }
 }
