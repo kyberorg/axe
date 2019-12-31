@@ -62,14 +62,8 @@ public class SlashIT extends SlashCommons {
     }
 
     private void verifyThatPage404Opened() {
-        NotFoundViewPageObject page404 = new NotFoundViewPageObject(getDriver());
-        page404.TITLE.shouldBe(exist);
-        Assert.assertTrue(page404.getTitle().getText().contains("404"));
-
-       /* H1Element title = $(H1Element.class).first();
-        SelenideElement titleSE = ElementConverter.get().convert(title);
-
-        titleSE.should(exist);
-        Assert.assertTrue(title.getText().contains("404"));*/
+        NotFoundViewPageObject page404 = NotFoundViewPageObject.getPageObject(getDriver());
+        page404.se(page404.TITLE).should(exist);
+        Assert.assertTrue(page404.getTitleText().contains("404"));
     }
 }
