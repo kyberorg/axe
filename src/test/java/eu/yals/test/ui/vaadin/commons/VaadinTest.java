@@ -1,6 +1,7 @@
 package eu.yals.test.ui.vaadin.commons;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
@@ -15,6 +16,7 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Field;
 
@@ -93,6 +95,11 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
     }
 
     protected abstract E openView();
+
+    protected SelenideElement selenideElement(TestBenchElement testBenchElement) {
+        WebElement webElement = testBenchElement.getWrappedElement();
+        return com.codeborne.selenide.Selenide.$(webElement);
+    }
 
     private String setTestNameFromTestDescription(Description description) {
         String rawMethodName = description.getMethodName();
