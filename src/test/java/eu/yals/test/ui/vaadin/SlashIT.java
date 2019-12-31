@@ -1,6 +1,6 @@
 package eu.yals.test.ui.vaadin;
 
-import eu.yals.test.ui.vaadin.commons.SlashCommons;
+import eu.yals.test.ui.vaadin.commons.VaadinTest;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewElement;
 import eu.yals.test.ui.vaadin.pageobjects.NotFoundViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.external.VR;
@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.open;
 
 
-public class SlashIT extends SlashCommons {
+public class SlashIT extends VaadinTest<HomeViewElement> {
 
     @Override
     protected HomeViewElement openView() {
