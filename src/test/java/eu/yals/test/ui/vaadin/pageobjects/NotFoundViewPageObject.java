@@ -9,10 +9,6 @@ import org.openqa.selenium.WebDriver;
 
 public class NotFoundViewPageObject extends YalsPageObject {
 
-    public H1Element TITLE = $(H1Element.class).first();
-    public SpanElement SUBTITLE = $(SpanElement.class).first();
-    public ImageElement IMAGE = $(ImageElement.class).first();
-
     public static NotFoundViewPageObject getPageObject(WebDriver driver) {
         return new NotFoundViewPageObject(driver);
     }
@@ -22,7 +18,19 @@ public class NotFoundViewPageObject extends YalsPageObject {
     }
 
     public String getTitleText() {
-        return TITLE.getText();
+        return getTitle().getText();
     }
 
+    //elements
+    public H1Element getTitle() {
+        return $(H1Element.class).first();
+    }
+
+    public SpanElement getSubtitle() {
+        return $(SpanElement.class).first();
+    }
+
+    public ImageElement getImage() {
+        return $(ImageElement.class).first();
+    }
 }
