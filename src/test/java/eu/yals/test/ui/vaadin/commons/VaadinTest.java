@@ -9,12 +9,15 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
+import eu.yals.test.utils.elements.VaadinElement;
+import eu.yals.test.utils.elements.YalsElement;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 
@@ -22,91 +25,104 @@ import java.lang.reflect.Field;
 
 @Slf4j
 public abstract class VaadinTest extends ParallelTest {
-    private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
-    private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
-    private final static String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
-    protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
+  private static final int SERVER_PORT =
+      Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
+  private static final String LOCAL_URL =
+      String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
+  private static final String REPORT_DIRECTORY =
+      System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+  protected static final String BASE_URL =
+      System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
-    private final static String BUILD_NAME = System.getProperty(TestApp.Properties.BUILD_NAME, Selenide.Defaults.BUILD_NAME);
+  private static final String BUILD_NAME =
+      System.getProperty(TestApp.Properties.BUILD_NAME, Selenide.Defaults.BUILD_NAME);
 
-    private static String testName;
+  private static String testName;
 
-    @Rule
-    public final TestRule watchman = new TestWatcher() {
+  @Rule
+  public final TestRule watchman =
+      new TestWatcher() {
         @Override
         protected void starting(Description description) {
-            super.starting(description);
-            testName = setTestNameFromTestDescription(description);
-            log.info(String.format("Starting build '%s'. Test: '%s", BUILD_NAME, testName));
+          super.starting(description);
+          testName = setTestNameFromTestDescription(description);
+          log.info(String.format("Starting build '%s'. Test: '%s", BUILD_NAME, testName));
         }
 
         @Override
         protected void succeeded(Description description) {
-            super.succeeded(description);
-            Cookie cookie = new Cookie("zaleniumTestPassed", "true");
-            getDriver().manage().addCookie(cookie);
+          super.succeeded(description);
+          Cookie cookie = new Cookie("zaleniumTestPassed", "true");
+          getDriver().manage().addCookie(cookie);
         }
 
         @Override
         protected void failed(Throwable e, Description description) {
-            Cookie cookie = new Cookie("zaleniumTestPassed", "false");
-            getDriver().manage().addCookie(cookie);
-
+          Cookie cookie = new Cookie("zaleniumTestPassed", "false");
+          getDriver().manage().addCookie(cookie);
         }
-    };
+      };
 
-    @Before
-    public void setup() throws Exception {
-        addTestNameToDriver();
+  @Before
+  public void setup() throws Exception {
+    addTestNameToDriver();
 
-        super.setup();
-        Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
+    super.setup();
+    Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
 
-        getDriver().get(BASE_URL);
-        //init selenide as well
-        WebDriverRunner.setWebDriver(getDriver());
-        Configuration.baseUrl = BASE_URL;
+    getDriver().get(BASE_URL);
+    // init selenide as well
+    WebDriverRunner.setWebDriver(getDriver());
+    Configuration.baseUrl = BASE_URL;
+  }
+
+  @SuppressWarnings("rawtypes")
+  private void addTestNameToDriver() throws IllegalAccessException, ClassCastException {
+    Class parallelTest = getClass();
+    do {
+      if (parallelTest == null) break;
+      parallelTest = parallelTest.getSuperclass();
+    } while (!parallelTest.getSimpleName().equals("ParallelTest"));
+
+    if (parallelTest == null) return;
+
+    Field[] parallelTestFields = parallelTest.getDeclaredFields();
+
+    Field driverConfigurationField = null;
+    for (Field f : parallelTestFields) {
+      if (f.getName().equals("driverConfiguration")) {
+        driverConfigurationField = f;
+      }
     }
+    if (driverConfigurationField == null) return;
+    driverConfigurationField.setAccessible(true);
+    SetupDriver sd = (SetupDriver) driverConfigurationField.get(this);
+    if (sd == null || sd.getDesiredCapabilities() == null) return;
+    sd.getDesiredCapabilities().setCapability("name", testName);
+    sd.getDesiredCapabilities().setCapability("build", BUILD_NAME);
+  }
 
-    @SuppressWarnings("rawtypes")
-    private void addTestNameToDriver() throws IllegalAccessException, ClassCastException {
-        Class parallelTest = getClass();
-        do {
-            if (parallelTest == null) break;
-            parallelTest = parallelTest.getSuperclass();
-        } while (!parallelTest.getSimpleName().equals("ParallelTest"));
+  protected SelenideElement selenideElement(TestBenchElement testBenchElement) {
+    WebElement webElement = testBenchElement.getWrappedElement();
+    return com.codeborne.selenide.Selenide.$(webElement);
+  }
 
-        if (parallelTest == null) return;
+  protected YalsElement $ya(String cssSelector) {
+    return YalsElement.wrap(findElement(By.cssSelector(cssSelector)));
+  }
 
-        Field[] parallelTestFields = parallelTest.getDeclaredFields();
+  protected VaadinElement $ve(TestBenchElement element) {
+    return VaadinElement.wrap(element);
+  }
 
-        Field driverConfigurationField = null;
-        for (Field f : parallelTestFields) {
-            if (f.getName().equals("driverConfiguration")) {
-                driverConfigurationField = f;
-            }
-        }
-        if (driverConfigurationField == null) return;
-        driverConfigurationField.setAccessible(true);
-        SetupDriver sd = (SetupDriver) driverConfigurationField.get(this);
-        if (sd == null || sd.getDesiredCapabilities() == null) return;
-        sd.getDesiredCapabilities().setCapability("name", testName);
-        sd.getDesiredCapabilities().setCapability("build", BUILD_NAME);
+  private String setTestNameFromTestDescription(Description description) {
+    String rawMethodName = description.getMethodName();
+    String[] methodAndBrowserInfo = rawMethodName.split("\\[");
+    if (methodAndBrowserInfo.length > 0) {
+      String method = methodAndBrowserInfo[0];
+      return String.format("%s.%s", description.getTestClass().getName(), method);
+    } else {
+      return String.format("%s.%s", description.getTestClass().getName(), rawMethodName);
     }
-
-    protected SelenideElement selenideElement(TestBenchElement testBenchElement) {
-        WebElement webElement = testBenchElement.getWrappedElement();
-        return com.codeborne.selenide.Selenide.$(webElement);
-    }
-
-    private String setTestNameFromTestDescription(Description description) {
-        String rawMethodName = description.getMethodName();
-        String[] methodAndBrowserInfo = rawMethodName.split("\\[");
-        if (methodAndBrowserInfo.length > 0) {
-            String method = methodAndBrowserInfo[0];
-            return String.format("%s.%s", description.getTestClass().getName(), method);
-        } else {
-            return String.format("%s.%s", description.getTestClass().getName(), rawMethodName);
-        }
-    }
+  }
 }

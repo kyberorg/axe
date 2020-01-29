@@ -1,22 +1,21 @@
-package eu.yals.test.utils;
+package eu.yals.test.utils.elements;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
-public class YalsTestMethods {
+public class YalsElement {
   private WebElement webElement;
 
-
-  public static YalsTestMethods fromWebElement(WebElement element) {
-    return new YalsTestMethods(element);
+  public static YalsElement wrap(WebElement element) {
+    return new YalsElement(element);
   }
 
-  protected YalsTestMethods(WebElement element) {
+  protected YalsElement(WebElement element) {
     this.webElement = element;
   }
 
-  public void attr(String attributeName, String exceptedValue) {
+  public void attrValue(String attributeName, String exceptedValue) {
     Assert.assertNotNull("No such element found", webElement);
 
     String attributeValue = webElement.getAttribute(attributeName);

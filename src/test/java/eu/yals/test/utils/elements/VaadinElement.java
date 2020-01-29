@@ -1,16 +1,16 @@
-package eu.yals.test.utils;
+package eu.yals.test.utils.elements;
 
 import com.vaadin.testbench.TestBenchElement;
 import org.junit.Assert;
 
-public class VaadinTestMethods extends YalsTestMethods {
+public class VaadinElement extends YalsElement {
   private TestBenchElement testBenchElement;
 
-  public static VaadinTestMethods fromVaadinElement(TestBenchElement element) {
-    return new VaadinTestMethods(element);
+  public static VaadinElement wrap(TestBenchElement element) {
+    return new VaadinElement(element);
   }
 
-  public VaadinTestMethods(TestBenchElement element) {
+  public VaadinElement(TestBenchElement element) {
     super(element);
     this.testBenchElement = element;
   }
