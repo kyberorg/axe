@@ -21,7 +21,7 @@ import org.openqa.selenium.WebElement;
 import java.lang.reflect.Field;
 
 @Slf4j
-public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTest {
+public abstract class VaadinTest extends ParallelTest {
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     private final static String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
@@ -93,8 +93,6 @@ public abstract class VaadinTest<E extends TestBenchElement> extends ParallelTes
         sd.getDesiredCapabilities().setCapability("name", testName);
         sd.getDesiredCapabilities().setCapability("build", BUILD_NAME);
     }
-
-    protected abstract E openView();
 
     protected SelenideElement selenideElement(TestBenchElement testBenchElement) {
         WebElement webElement = testBenchElement.getWrappedElement();
