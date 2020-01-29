@@ -21,7 +21,7 @@ public class HomeViewPageObject extends YalsPageObject {
   }
 
   public void pasteValueInFormAndSubmitIt(String link) {
-    getInputField().setValue(link);
+    getInput().setValue(link);
     getSubmitButton().click();
   }
 
@@ -29,19 +29,19 @@ public class HomeViewPageObject extends YalsPageObject {
     return $(TestBenchElement.class).id(HomeView.IDs.MAIN_AREA);
   }
 
-  public H2Element getTitleField() {
+  public H2Element getTitle() {
     return getMainArea().$(H2Element.class).id(HomeView.IDs.TITLE);
   }
 
-  public SpanElement getSubtitleField() {
+  public SpanElement getSubtitle() {
     return getMainArea().$(SpanElement.class).id(HomeView.IDs.SUBTITLE);
   }
 
-  public TextFieldElement getInputField() {
+  public TextFieldElement getInput() {
     return getMainArea().$(TextFieldElement.class).id(HomeView.IDs.INPUT);
   }
 
-  public SpanElement getPublicAccessBannerField() {
+  public SpanElement getPublicAccessBanner() {
     return getMainArea().$(SpanElement.class).id(HomeView.IDs.BANNER);
   }
 
@@ -53,7 +53,7 @@ public class HomeViewPageObject extends YalsPageObject {
     return $(TestBenchElement.class).id(HomeView.IDs.OVERALL_AREA);
   }
 
-  public SpanElement getOverallLinksTextField() {
+  public SpanElement getOverallLinksText() {
     return getOverallArea().$(SpanElement.class).id(HomeView.IDs.OVERALL_LINKS_TEXT);
   }
 
@@ -65,7 +65,7 @@ public class HomeViewPageObject extends YalsPageObject {
     return $(TestBenchElement.class).id(HomeView.IDs.RESULT_AREA);
   }
 
-  public AnchorElement getShortLinkField() {
+  public AnchorElement getShortLink() {
     return getResultArea().$(AnchorElement.class).id(HomeView.IDs.SHORT_LINK);
   }
 
@@ -85,7 +85,7 @@ public class HomeViewPageObject extends YalsPageObject {
     return $(TestBenchElement.class).id(HomeView.IDs.FOOTER);
   }
 
-  public SpanElement getVersionField() {
+  public SpanElement getVersion() {
     return getFooter().$(SpanElement.class).id(HomeView.IDs.VERSION);
   }
 

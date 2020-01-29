@@ -1,7 +1,6 @@
 package eu.yals.test.ui.vaadin.commons;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
@@ -19,7 +18,6 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Field;
 
@@ -102,16 +100,11 @@ public abstract class VaadinTest extends ParallelTest {
     sd.getDesiredCapabilities().setCapability("build", BUILD_NAME);
   }
 
-  protected SelenideElement selenideElement(TestBenchElement testBenchElement) {
-    WebElement webElement = testBenchElement.getWrappedElement();
-    return com.codeborne.selenide.Selenide.$(webElement);
-  }
-
-  protected YalsElement $ya(String cssSelector) {
+  protected YalsElement $$(String cssSelector) {
     return YalsElement.wrap(findElement(By.cssSelector(cssSelector)));
   }
 
-  protected VaadinElement $ve(TestBenchElement element) {
+  protected VaadinElement $$(TestBenchElement element) {
     return VaadinElement.wrap(element);
   }
 

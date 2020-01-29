@@ -14,7 +14,7 @@ public class PocIT extends VaadinTest {
   public void testVaadin() {
     HomeViewPageObject homeView = getHomeViewPageObject();
 
-    String titleText = homeView.getTitleField().getText();
+    String titleText = homeView.getTitle().getText();
     Assert.assertEquals("Yet another link shortener", titleText);
   }
 }

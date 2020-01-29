@@ -1,14 +1,13 @@
 package eu.yals.test.ui.vaadin;
 
+import com.vaadin.testbench.TestBenchElement;
 import eu.yals.test.ui.vaadin.commons.VaadinTest;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.NotFoundViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.external.VR;
 import eu.yals.test.utils.elements.VaadinElement;
 import eu.yals.test.utils.elements.YalsElement;
-import org.junit.Assert;
 import org.junit.Test;
-import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -19,22 +18,37 @@ public class SlashIT extends VaadinTest {
   }
 
   @Test
-  public void saveLinkAndClickOnResult() {
+  public void urlWithJustSlashWillOpenFrontPage() {
+    open("/");
     HomeViewPageObject homePage = getHomePage();
+
+    $$(homePage.getInput()).shouldExist();
+    $$(homePage.getSubmitButton()).shouldExist();
+  }
+
+  @Test
+  public void saveLinkAndClickOnResult() {
+    open("/");
+    HomeViewPageObject homePage = getHomePage();
+
     homePage.pasteValueInFormAndSubmitIt("https://vr.fi");
 
-    homePage.getShortLinkField().click();
+    TestBenchElement shortLink = homePage.getShortLink();
+
+    $$(shortLink).shouldBeDisplayed();
+    shortLink.click();
 
     verifyThatVROpened();
   }
 
   @Test
   public void saveLinkAndCopyValueAndOpenIt() {
+    open("/");
     HomeViewPageObject homePage = getHomePage();
-    homePage.pasteValueInFormAndSubmitIt("https://vr.fi");
 
-    String shortUrl = homePage.getShortLinkField().getText();
-    Assert.assertTrue(StringUtils.isNotBlank(shortUrl));
+    homePage.pasteValueInFormAndSubmitIt("https://vr.fi");
+    $$(homePage.getShortLink()).shouldBeDisplayed();
+    String shortUrl = homePage.getShortLink().getText();
 
     open(shortUrl);
     verifyThatVROpened();
@@ -53,13 +67,13 @@ public class SlashIT extends VaadinTest {
   }
 
   private void verifyThatVROpened() {
-    YalsElement logo = $ya(VR.LOGO);
-    logo.attrValue("alt", "VR");
+    YalsElement logo = $$(VR.LOGO);
+    logo.shouldHaveAttr("alt", "VR");
   }
 
   private void verifyThatPage404Opened() {
     NotFoundViewPageObject page404 = NotFoundViewPageObject.getPageObject(getDriver());
-    VaadinElement title = $ve(page404.getTitle());
+    VaadinElement title = $$(page404.getTitle());
 
     title.shouldBeDisplayed();
     title.textHas("404");
