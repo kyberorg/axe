@@ -63,8 +63,8 @@ public class SlashIT extends VaadinTest<HomeViewElement> {
 
     private void verifyThatPage404Opened() {
         NotFoundViewPageObject page404 = NotFoundViewPageObject.getPageObject(getDriver());
-
-        selenideElement(page404.getTitle()).should(exist);
+        Assert.assertTrue(page404.getTitle().isDisplayed());
+        //selenideElement(page404.getTitle()).should(exist);
         Assert.assertTrue(page404.getTitleText().contains("404"));
     }
 }
