@@ -10,7 +10,6 @@ import com.vaadin.testbench.TestBenchElement;
 import eu.yals.ui.HomeView;
 import org.openqa.selenium.WebDriver;
 
-// @Attribute(name = "id", value = HomeView.IDs.VIEW_ID)
 public class HomeViewPageObject extends YalsPageObject {
 
   public static HomeViewPageObject getPageObject(WebDriver driver) {
