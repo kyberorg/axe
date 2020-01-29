@@ -1,6 +1,6 @@
-package eu.yals.test.ui.vaadin;
+package eu.yals.test.ui.vaadin.pages;
 
-import eu.yals.test.ui.vaadin.commons.VaadinTest;
+import eu.yals.test.ui.vaadin.VaadinTest;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
 import org.junit.Assert;
 import org.junit.Test;

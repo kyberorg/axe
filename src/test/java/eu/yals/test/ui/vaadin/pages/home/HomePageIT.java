@@ -1,7 +1,7 @@
-package eu.yals.test.ui.vaadin;
+package eu.yals.test.ui.vaadin.pages.home;
 
 import com.vaadin.testbench.TestBenchElement;
-import eu.yals.test.ui.vaadin.commons.VaadinTest;
+import eu.yals.test.ui.vaadin.VaadinTest;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.NotFoundViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.external.VR;
@@ -9,18 +9,20 @@ import eu.yals.test.utils.elements.VaadinElement;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Selenide.open;
-
-public class SlashIT extends VaadinTest {
+public class HomePageIT extends VaadinTest {
 
   protected HomeViewPageObject getHomePage() {
     return HomeViewPageObject.getPageObject(getDriver());
   }
 
+  private HomeViewPageObject openHomePage() {
+    open("/");
+    return getHomePage();
+  }
+
   @Test
   public void urlWithJustSlashWillOpenFrontPage() {
-    open("/");
-    HomeViewPageObject homePage = getHomePage();
+    HomeViewPageObject homePage = openHomePage();
 
     $$(homePage.getInput()).shouldExist();
     $$(homePage.getSubmitButton()).shouldExist();
@@ -28,8 +30,7 @@ public class SlashIT extends VaadinTest {
 
   @Test
   public void saveLinkAndClickOnResult() {
-    open("/");
-    HomeViewPageObject homePage = getHomePage();
+    HomeViewPageObject homePage = openHomePage();
 
     homePage.pasteValueInFormAndSubmitIt("https://vr.fi");
 
@@ -43,8 +44,7 @@ public class SlashIT extends VaadinTest {
 
   @Test
   public void saveLinkAndCopyValueAndOpenIt() {
-    open("/");
-    HomeViewPageObject homePage = getHomePage();
+    HomeViewPageObject homePage = openHomePage();
 
     homePage.pasteValueInFormAndSubmitIt("https://vr.fi");
     $$(homePage.getShortLink()).shouldBeDisplayed();

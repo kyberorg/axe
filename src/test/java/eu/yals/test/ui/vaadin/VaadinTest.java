@@ -1,4 +1,4 @@
-package eu.yals.test.ui.vaadin.commons;
+package eu.yals.test.ui.vaadin;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
@@ -74,6 +74,18 @@ public abstract class VaadinTest extends ParallelTest {
     Configuration.baseUrl = BASE_URL;
   }
 
+  protected void open(String relativeOrAbsoluteUrl) {
+    getDriver().get(relativeOrAbsoluteUrl);
+  }
+
+  protected YalsElement $$(String cssSelector) {
+    return YalsElement.wrap(findElement(By.cssSelector(cssSelector)));
+  }
+
+  protected VaadinElement $$(TestBenchElement element) {
+    return VaadinElement.wrap(element);
+  }
+
   @SuppressWarnings("rawtypes")
   private void addTestNameToDriver() throws IllegalAccessException, ClassCastException {
     Class parallelTest = getClass();
@@ -98,14 +110,6 @@ public abstract class VaadinTest extends ParallelTest {
     if (sd == null || sd.getDesiredCapabilities() == null) return;
     sd.getDesiredCapabilities().setCapability("name", testName);
     sd.getDesiredCapabilities().setCapability("build", BUILD_NAME);
-  }
-
-  protected YalsElement $$(String cssSelector) {
-    return YalsElement.wrap(findElement(By.cssSelector(cssSelector)));
-  }
-
-  protected VaadinElement $$(TestBenchElement element) {
-    return VaadinElement.wrap(element);
   }
 
   private String setTestNameFromTestDescription(Description description) {
