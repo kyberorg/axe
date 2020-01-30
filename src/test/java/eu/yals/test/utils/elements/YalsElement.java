@@ -40,4 +40,15 @@ public class YalsElement {
         String.format("Text: '%s' has no '%s'", webElement.getText(), phrase),
         webElement.getText().contains(phrase));
   }
+
+  public void shouldNotBeEmpty() {
+    shouldExist();
+    Assert.assertTrue(StringUtils.isNotBlank(webElement.getText()));
+  }
+
+  public void shouldNotHaveText(String textToAvoid) {
+    shouldExist();
+    Assert.assertNotNull(webElement.getText());
+    Assert.assertFalse(webElement.getText().contains(textToAvoid));
+  }
 }
