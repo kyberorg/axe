@@ -75,7 +75,13 @@ public abstract class VaadinTest extends ParallelTest {
   }
 
   protected void open(String relativeOrAbsoluteUrl) {
-    getDriver().get(relativeOrAbsoluteUrl);
+    final String PROTOCOL_MARKER = "://";
+    boolean isUrlAbsolute = relativeOrAbsoluteUrl.contains(PROTOCOL_MARKER);
+    if(isUrlAbsolute) {
+      getDriver().get(relativeOrAbsoluteUrl);
+    } else {
+      getDriver().get(BASE_URL + relativeOrAbsoluteUrl);
+    }
   }
 
   protected YalsElement $$(String cssSelector) {
