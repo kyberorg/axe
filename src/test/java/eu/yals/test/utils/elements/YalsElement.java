@@ -46,9 +46,24 @@ public class YalsElement {
     Assert.assertTrue(StringUtils.isNotBlank(webElement.getText()));
   }
 
+  public void shouldBeEmpty() {
+    shouldExist();
+    Assert.assertTrue(StringUtils.isBlank(webElement.getText()));
+  }
+
+  public void shouldHaveText(String text) {
+    shouldExist();
+    Assert.assertNotNull(webElement.getText());
+    Assert.assertTrue(webElement.getText().contains(text));
+  }
+
   public void shouldNotHaveText(String textToAvoid) {
     shouldExist();
     Assert.assertNotNull(webElement.getText());
     Assert.assertFalse(webElement.getText().contains(textToAvoid));
+  }
+
+  public boolean isImage() {
+    return (webElement.getTagName().equalsIgnoreCase("img"));
   }
 }
