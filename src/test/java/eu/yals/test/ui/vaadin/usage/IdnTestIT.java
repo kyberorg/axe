@@ -21,6 +21,7 @@ public class IdnTestIT extends VaadinTest {
 
   @Test
   public void russianUrl() {
+    openUrl();
     homeView.pasteValueInFormAndSubmitIt("http://кто.рф");
 
     openSavedUrl();
