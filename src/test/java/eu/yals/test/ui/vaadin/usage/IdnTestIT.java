@@ -64,12 +64,6 @@ public class IdnTestIT extends VaadinTest {
   }
 
   @Test
-  public void norseUrl() {
-    storeAndOpenSavedUrl("http://www.nårsk.no/");
-    Assert.assertEquals(NorskNo.TITLE_TEXT, getPageTitle());
-  }
-
-  @Test
   public void polishUrl() {
     storeAndOpenSavedUrl("http://żółć.pl");
     Assert.assertEquals(ZolcPl.TITLE_TEXT, getPageTitle());
