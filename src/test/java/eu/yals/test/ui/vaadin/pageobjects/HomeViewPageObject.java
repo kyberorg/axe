@@ -25,6 +25,10 @@ public class HomeViewPageObject extends YalsPageObject {
     getSubmitButton().click();
   }
 
+  public String getSavedUrl() {
+    return getShortLink().getText();
+  }
+
   public TestBenchElement getMainArea() {
     return $(TestBenchElement.class).id(HomeView.IDs.MAIN_AREA);
   }
