@@ -2,7 +2,9 @@ package eu.yals.test.ui.vaadin.usage;
 
 import eu.yals.test.ui.vaadin.VaadinTest;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
+import org.junit.Assert;
 import org.junit.Test;
+import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -84,7 +86,9 @@ public class CorrectInputTest extends VaadinTest {
     $$(homeView.getQRCode()).shouldBeDisplayed();
     assertTrue("QR code is not image", $$(homeView.getQRCode()).isImage());
 
-    $$(homeView.getInput()).shouldBeEmpty();
+    // TODO assertEmpty vms
+    Assert.assertTrue(
+        "Log URL Input is not empty", StringUtils.isBlank(homeView.getInput().getValue()));
 
     // TODO error modal should not visible
     // TODO error text should be empty
