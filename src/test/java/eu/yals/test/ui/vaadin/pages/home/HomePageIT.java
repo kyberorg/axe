@@ -9,6 +9,11 @@ import eu.yals.test.utils.elements.VaadinElement;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Test;
 
+/**
+ * Testing /(Slash) URL
+ *
+ * @since 1.0
+ */
 public class HomePageIT extends VaadinTest {
 
   protected HomeViewPageObject getHomePage() {

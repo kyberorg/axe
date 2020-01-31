@@ -5,6 +5,11 @@ import eu.yals.test.ui.vaadin.VaadinTest;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
 import org.junit.Test;
 
+/**
+ * Tests unusual usage
+ *
+ * @since 2.0
+ */
 public class AbnormalUsageTest extends VaadinTest {
 
     @Test
