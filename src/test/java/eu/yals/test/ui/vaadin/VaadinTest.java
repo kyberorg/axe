@@ -68,7 +68,7 @@ public abstract class VaadinTest extends ParallelTest {
     super.setup();
     Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
 
-    getDriver().get(BASE_URL);
+    //getDriver().get(BASE_URL);
     // init selenide as well
     WebDriverRunner.setWebDriver(getDriver());
     Configuration.baseUrl = BASE_URL;
