@@ -31,7 +31,7 @@ public class YalsElement {
 
   public void shouldBeDisplayed() {
     shouldExist();
-    Assert.assertTrue(webElement.isDisplayed());
+    Assert.assertTrue("Element is not displayed", webElement.isDisplayed());
   }
 
   public void textHas(String phrase) {
@@ -43,24 +43,24 @@ public class YalsElement {
 
   public void shouldNotBeEmpty() {
     shouldExist();
-    Assert.assertTrue(StringUtils.isNotBlank(webElement.getText()));
+    Assert.assertTrue("Text is empty", StringUtils.isNotBlank(webElement.getText()));
   }
 
   public void shouldBeEmpty() {
     shouldExist();
-    Assert.assertTrue(StringUtils.isBlank(webElement.getText()));
+    Assert.assertTrue("Text is not empty", StringUtils.isBlank(webElement.getText()));
   }
 
   public void shouldHaveText(String text) {
     shouldExist();
-    Assert.assertNotNull(webElement.getText());
-    Assert.assertTrue(webElement.getText().contains(text));
+    Assert.assertNotNull("Text is empty", webElement.getText());
+    Assert.assertTrue("Text does not have " + text, webElement.getText().contains(text));
   }
 
   public void shouldNotHaveText(String textToAvoid) {
     shouldExist();
-    Assert.assertNotNull(webElement.getText());
-    Assert.assertFalse(webElement.getText().contains(textToAvoid));
+    Assert.assertNotNull("Text is empty", webElement.getText());
+    Assert.assertFalse("Text have " + textToAvoid, webElement.getText().contains(textToAvoid));
   }
 
   public boolean isImage() {

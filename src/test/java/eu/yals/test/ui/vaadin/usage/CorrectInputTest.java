@@ -78,7 +78,7 @@ public class CorrectInputTest extends VaadinTest {
 
     $$(homeView.getQRCodeArea()).shouldBeDisplayed();
     $$(homeView.getQRCode()).shouldBeDisplayed();
-    assertTrue($$(homeView.getQRCode()).isImage());
+    assertTrue("QR code is not image", $$(homeView.getQRCode()).isImage());
 
     $$(homeView.getInput()).shouldBeEmpty();
 

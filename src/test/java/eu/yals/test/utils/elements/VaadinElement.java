@@ -1,6 +1,5 @@
 package eu.yals.test.utils.elements;
 
-import com.vaadin.flow.component.html.testbench.ImageElement;
 import com.vaadin.testbench.TestBenchElement;
 
 public class VaadinElement extends YalsElement {
@@ -13,10 +12,5 @@ public class VaadinElement extends YalsElement {
   public VaadinElement(TestBenchElement element) {
     super(element);
     this.testBenchElement = element;
-  }
-
-  @Override
-  public boolean isImage() {
-    return testBenchElement instanceof ImageElement;
   }
 }
