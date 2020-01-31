@@ -14,7 +14,7 @@ import org.junit.Test;
  *
  * @since 1.0
  */
-public class HomePageIT extends VaadinTest {
+public class HomePageTestIT extends VaadinTest {
 
   protected HomeViewPageObject getHomePage() {
     return HomeViewPageObject.getPageObject(getDriver());

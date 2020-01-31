@@ -10,7 +10,7 @@ import org.junit.Test;
  *
  * @since 2.0
  */
-public class AbnormalUsageTest extends VaadinTest {
+public class AbnormalUsageTestIT extends VaadinTest {
 
     @Test
     public void extraArgumentsShouldBeIgnored() {

@@ -11,7 +11,7 @@ import org.junit.Test;
  *
  * @since 2.5
  */
-public class IdnTest extends VaadinTest {
+public class IdnTestIT extends VaadinTest {
   private HomeViewPageObject homeView;
 
   public void openUrl() {

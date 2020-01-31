@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @since 1.0
  */
-public class CorrectInputTest extends VaadinTest {
+public class CorrectInputTestIT extends VaadinTest {
   private HomeViewPageObject homeView;
 
   public void openUrl() {
