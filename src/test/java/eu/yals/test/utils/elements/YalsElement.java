@@ -15,14 +15,20 @@ public class YalsElement {
     this.webElement = element;
   }
 
+  public void shouldHaveAttr(String attributeName) {
+    shouldHaveAttr(attributeName, "");
+  }
+
   public void shouldHaveAttr(String attributeName, String exceptedValue) {
     Assert.assertNotNull("No such element found", webElement);
 
     String attributeValue = webElement.getAttribute(attributeName);
     Assert.assertNotNull(String.format("No such attribute '%s'", attributeName), attributeValue);
-    Assert.assertTrue("Attribute is empty", StringUtils.isNotBlank(attributeValue));
 
-    Assert.assertEquals(exceptedValue, attributeValue);
+    if (StringUtils.isNotBlank(exceptedValue)) {
+      Assert.assertTrue("Attribute is empty", StringUtils.isNotBlank(attributeValue));
+      Assert.assertEquals(exceptedValue, attributeValue);
+    }
   }
 
   public void shouldExist() {
