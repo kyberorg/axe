@@ -29,6 +29,16 @@ public class HomeViewPageObject extends YalsPageObject {
     return getShortLink().getText();
   }
 
+  public long getNumberOfSavedLinks() {
+    long linksCount;
+    try {
+      linksCount = Long.parseLong(getOverallLinksNumber().getText());
+    } catch (NumberFormatException e) {
+      linksCount = 0;
+    }
+    return linksCount;
+  }
+
   public TestBenchElement getMainArea() {
     return $(TestBenchElement.class).id(HomeView.IDs.MAIN_AREA);
   }

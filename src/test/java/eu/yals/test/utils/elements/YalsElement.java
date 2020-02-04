@@ -34,6 +34,11 @@ public class YalsElement {
     Assert.assertTrue("Element is not displayed", webElement.isDisplayed());
   }
 
+  public void shouldNotBeDisplayed() {
+    shouldExist();
+    Assert.assertFalse("Element is displayed", webElement.isDisplayed());
+  }
+
   public void textHas(String phrase) {
     shouldExist();
     Assert.assertTrue(
