@@ -65,13 +65,16 @@ public class YalsElement {
   public void shouldHaveText(String text) {
     shouldExist();
     Assert.assertNotNull("Text is empty", webElement.getText());
-    Assert.assertTrue("Text does not have " + text, webElement.getText().contains(text));
+    Assert.assertTrue(
+        "Text does not have " + text, StringUtils.containsIgnoreCase(webElement.getText(), text));
   }
 
   public void shouldNotHaveText(String textToAvoid) {
     shouldExist();
     Assert.assertNotNull("Text is empty", webElement.getText());
-    Assert.assertFalse("Text have " + textToAvoid, webElement.getText().contains(textToAvoid));
+    Assert.assertFalse(
+        "Text have " + textToAvoid,
+        StringUtils.containsIgnoreCase(webElement.getText(), textToAvoid));
   }
 
   public boolean isImage() {
