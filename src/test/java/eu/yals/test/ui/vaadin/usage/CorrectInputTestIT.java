@@ -68,7 +68,7 @@ public class CorrectInputTestIT extends HomePageTest {
     $$(homeView.getShortLink()).shouldBeDisplayed();
     $$(homeView.getShortLink()).shouldHaveText(BASE_URL);
 
-    // TODO copy Result icon should be visible
+    $$(homeView.getCopyLinkButton()).shouldBeDisplayed();
 
     String actualText = homeView.getShortLink().getText();
     String hrefValue = homeView.getShortLink().getAttribute("href");
@@ -80,7 +80,6 @@ public class CorrectInputTestIT extends HomePageTest {
 
     TestUtils.assertEmpty("Log URL Input is not empty", homeView.getInput().getValue());
 
-    // TODO error modal should not visible
-    // TODO error text should be empty
+    assertThatErrorNotificationIsNotVisible();
   }
 }

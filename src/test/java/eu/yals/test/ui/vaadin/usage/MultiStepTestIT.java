@@ -1,5 +1,6 @@
 package eu.yals.test.ui.vaadin.usage;
 
+import com.vaadin.flow.component.button.testbench.ButtonElement;
 import eu.yals.test.ui.vaadin.HomePageTest;
 import eu.yals.test.ui.vaadin.pageobjects.external.Wikipedia;
 import eu.yals.test.utils.elements.YalsElement;
@@ -17,7 +18,10 @@ public class MultiStepTestIT extends HomePageTest {
   public void closeButtonReallyClosesErrorNotification() {
     openHomePage();
     homeView.pasteValueInFormAndSubmitIt(" ");
-    // FIXME impl
+    Assert.assertTrue(homeView.getErrorNotification().isOpen());
+    ButtonElement closeButton = homeView.getErrorNotification().$(ButtonElement.class).first();
+    closeButton.click();
+    assertThatErrorNotificationIsNotVisible();
   }
 
   @Test

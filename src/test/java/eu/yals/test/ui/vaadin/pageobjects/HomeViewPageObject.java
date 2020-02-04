@@ -5,6 +5,7 @@ import com.vaadin.flow.component.html.testbench.AnchorElement;
 import com.vaadin.flow.component.html.testbench.H2Element;
 import com.vaadin.flow.component.html.testbench.ImageElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
+import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.orderedlayout.testbench.VerticalLayoutElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
@@ -106,5 +107,9 @@ public class HomeViewPageObject extends YalsPageObject {
 
   public AnchorElement getCommitLink() {
     return getFooter().$(AnchorElement.class).id(HomeView.IDs.COMMIT_LINK);
+  }
+
+  public NotificationElement getErrorNotification() {
+    return $(NotificationElement.class).first();
   }
 }

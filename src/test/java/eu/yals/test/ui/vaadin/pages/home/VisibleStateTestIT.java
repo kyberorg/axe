@@ -20,7 +20,7 @@ public class VisibleStateTestIT extends HomePageTest {
   @Test
   public void errorBlockIsHidden() {
     openHomePage();
-    // FIXME impl
+    assertThatErrorNotificationIsNotVisible();
   }
 
   @Test

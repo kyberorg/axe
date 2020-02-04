@@ -1,5 +1,6 @@
 package eu.yals.test.utils.elements;
 
+import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import org.junit.Assert;
@@ -23,5 +24,14 @@ public class VaadinElement extends YalsElement {
 
     TextFieldElement element = (TextFieldElement) testBenchElement;
     Assert.assertTrue("Input is not empty", StringUtils.isBlank(element.getValue()));
+  }
+
+  public void errorTextHas(String phrase) {
+    Assert.assertNotNull("No such element found", testBenchElement);
+    Assert.assertTrue(
+        "Element is not NotificationElement", testBenchElement instanceof NotificationElement);
+
+    NotificationElement notification = (NotificationElement) testBenchElement;
+    Assert.assertTrue(StringUtils.containsIgnoreCase(notification.getText(), phrase));
   }
 }

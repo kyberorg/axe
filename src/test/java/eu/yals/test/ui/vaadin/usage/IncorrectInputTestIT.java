@@ -1,8 +1,11 @@
 package eu.yals.test.ui.vaadin.usage;
 
+import com.vaadin.flow.component.button.testbench.ButtonElement;
 import eu.yals.test.ui.vaadin.HomePageTest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
+import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import static com.helger.commons.mock.CommonsAssert.fail;
 
@@ -17,7 +20,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO notification should have text CANNOT_EMPTY_TEXT
+    $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
   }
 
   @Test
@@ -27,7 +30,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO notification should have text CANNOT_EMPTY_TEXT
+    $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
   }
 
   @Test
@@ -37,7 +40,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO notification should have text CANNOT_EMPTY_TEXT
+    $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
   }
 
   @Test
@@ -47,8 +50,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO FrontPage.ErrorRow.ERROR_TEXT.shouldHave(and("short and notURL text",
-    // text(MALFORMED_URL_TEXT)));
+    $$(homeView.getErrorNotification()).errorTextHas(MALFORMED_URL_TEXT);
   }
 
   @Test
@@ -58,7 +60,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
+    $$(homeView.getErrorNotification()).errorTextHas(MALFORMED_URL_TEXT);
   }
 
   @Test
@@ -68,7 +70,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
+    $$(homeView.getErrorNotification()).errorTextHas(MALFORMED_URL_TEXT);
   }
 
   @Test
@@ -78,7 +80,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
+    $$(homeView.getErrorNotification()).errorTextHas(MALFORMED_URL_TEXT);
   }
 
   @Test
@@ -87,7 +89,7 @@ public class IncorrectInputTestIT extends HomePageTest {
     homeView.pasteValueInFormAndSubmitIt("file:///etc/passwd");
     formIsClearedResultAndQRCodeAreNotVisible();
     errorBoxShouldAppear();
-    // TODO FrontPage.ErrorRow.ERROR_TEXT.shouldHave(text("protocol not supported"));
+    $$(homeView.getErrorNotification()).errorTextHas("protocol not supported");
   }
 
   private void formIsClearedResultAndQRCodeAreNotVisible() {
@@ -107,8 +109,8 @@ public class IncorrectInputTestIT extends HomePageTest {
   }
 
   private void errorBoxShouldAppear() {
-    // TODO error Notification should be visible
-    // TODO error text should not be empty
-    // TODO error close buttom should be visible
+    Assert.assertTrue(homeView.getErrorNotification().isOpen());
+    Assert.assertTrue(StringUtils.isNotBlank(homeView.getErrorNotification().getText()));
+    Assert.assertTrue(homeView.getErrorNotification().$(ButtonElement.class).exists());
   }
 }
