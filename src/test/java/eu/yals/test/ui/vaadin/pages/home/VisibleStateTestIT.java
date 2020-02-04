@@ -5,6 +5,7 @@ import eu.yals.test.ui.vaadin.VaadinTest;
 import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.NoSuchElementException;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -31,13 +32,13 @@ public class VisibleStateTestIT extends VaadinTest {
     $$(homeView.getMainArea()).shouldBeDisplayed();
   }
 
-  @Test
+  @Test(expected = NoSuchElementException.class)
   public void resultBlockIsHidden() {
     openUrl();
     $$(homeView.getResultArea()).shouldNotBeDisplayed();
   }
 
-  @Test
+  @Test(expected = NoSuchElementException.class)
   public void qrCodeBlockIsHidden() {
     openUrl();
     $$(homeView.getQRCodeArea()).shouldNotBeDisplayed();
@@ -60,8 +61,8 @@ public class VisibleStateTestIT extends VaadinTest {
   @Test
   public void inputAndButtonAreNotDisabled() {
     openUrl();
-    $$(homeView.getInput()).shouldNotBeDisabled();
-    $$(homeView.getSubmitButton()).shouldNotBeDisabled();
+    $$(homeView.getInput()).shouldBeEnabled();
+    $$(homeView.getSubmitButton()).shouldBeEnabled();
   }
 
   @Test

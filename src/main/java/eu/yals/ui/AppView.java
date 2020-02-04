@@ -9,6 +9,7 @@ import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
 import com.github.appreciated.app.layout.entity.Section;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
@@ -24,41 +25,46 @@ import eu.yals.utils.AppUtils;
 @UIScope
 @Push
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
-@PWA(name = "Yet another link shortener", shortName = "yals",
-        offlinePath = "offline-page.html",
-        offlineResources = {"images/logo.png"},
-        description = "Yet another link shortener for friends")
+@PWA(
+    name = "Yet another link shortener",
+    shortName = "yals",
+    offlinePath = "offline-page.html",
+    offlineResources = {"images/logo.png"},
+    description = "Yet another link shortener for friends")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
-public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid> implements PageConfigurator {
+@PageTitle("Link shortener for friends")
+public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
+    implements PageConfigurator {
 
-    public AppView(GitService gitService) {
+  public AppView(GitService gitService) {
 
-        AppLayoutBuilder<LeftLayouts.LeftHybrid> builder = AppLayoutBuilder
-                .get(LeftLayouts.LeftHybrid.class)
-                .withTitle("YALS");
+    AppLayoutBuilder<LeftLayouts.LeftHybrid> builder =
+        AppLayoutBuilder.get(LeftLayouts.LeftHybrid.class).withTitle("YALS");
 
-        LeftAppMenuBuilder menuBuilder = LeftAppMenuBuilder.get();
+    LeftAppMenuBuilder menuBuilder = LeftAppMenuBuilder.get();
 
-        //title
-        if (AppUtils.isMobile(VaadinSession.getCurrent())) {
-            menuBuilder.addToSection(Section.HEADER,
-                    new LeftHeaderItem("Yet another link shortener",
-                            String.format("Version %s", gitService.getGitInfoSource().getLatestTag()),
-                            "/images/logo.png"));
-        }
-
-        //items
-        menuBuilder.add(new LeftNavigationItem(HomeView.class));
-        menuBuilder.add(new LeftNavigationItem(SampleView.class));
-
-        builder.withAppMenu(menuBuilder.build());
-
-        LeftLayouts.LeftHybrid layout = builder.build();
-        init(layout);
+    // title
+    if (AppUtils.isMobile(VaadinSession.getCurrent())) {
+      menuBuilder.addToSection(
+          Section.HEADER,
+          new LeftHeaderItem(
+              "Yet another link shortener",
+              String.format("Version %s", gitService.getGitInfoSource().getLatestTag()),
+              "/images/logo.png"));
     }
 
-    @Override
-    public void configurePage(InitialPageSettings settings) {
-        settings.addFavIcon("icon", "/images/logo.png", "512x512");
-    }
+    // items
+    menuBuilder.add(new LeftNavigationItem(HomeView.class));
+    menuBuilder.add(new LeftNavigationItem(SampleView.class));
+
+    builder.withAppMenu(menuBuilder.build());
+
+    LeftLayouts.LeftHybrid layout = builder.build();
+    init(layout);
+  }
+
+  @Override
+  public void configurePage(InitialPageSettings settings) {
+    settings.addFavIcon("icon", "/images/logo.png", "512x512");
+  }
 }
