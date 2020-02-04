@@ -34,7 +34,7 @@ public class MultiStepTestIT extends VaadinTest {
     homeView.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
 
     $$(homeView.getResultArea()).shouldBeDisplayed();
-    $$(homeView.getInput()).shouldBeEmpty();
+    $$(homeView.getInput()).inputShouldBeEmpty();
 
     homeView.pasteValueInFormAndSubmitIt("g&%g");
     $$(homeView.getResultArea()).shouldNotBeDisplayed();
