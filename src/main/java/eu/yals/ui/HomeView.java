@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -36,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 @Route(value = Endpoint.UI.HOME_PAGE, layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
+@PageTitle("Link shortener for friends")
 public class HomeView extends VerticalLayout {
     private static final String TAG = "[Front Page]";
 

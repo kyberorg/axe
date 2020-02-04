@@ -1,8 +1,7 @@
 package eu.yals.test.ui.vaadin.pages.home;
 
 import com.vaadin.testbench.TestBenchElement;
-import eu.yals.test.ui.vaadin.VaadinTest;
-import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
+import eu.yals.test.ui.vaadin.HomePageTest;
 import org.junit.Test;
 
 /**
@@ -10,17 +9,11 @@ import org.junit.Test;
  *
  * @since 2.0
  */
-public class VersionInfoFooterTestIT extends VaadinTest {
-    private HomeViewPageObject homeView;
-
-    public void openUrl() {
-        open("/");
-        homeView = HomeViewPageObject.getPageObject(getDriver());
-    }
+public class VersionInfoFooterTestIT extends HomePageTest {
 
     @Test
     public void footerHasAllRequiredElements() {
-        openUrl();
+        openHomePage();
         if(isFooterNotVisible()) {
             //footer is not visible, when there is no git info aka local run
             return;

@@ -9,7 +9,6 @@ import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
 import com.github.appreciated.app.layout.entity.Section;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
@@ -32,7 +31,6 @@ import eu.yals.utils.AppUtils;
     offlineResources = {"images/logo.png"},
     description = "Yet another link shortener for friends")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
-@PageTitle("Link shortener for friends")
 public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
     implements PageConfigurator {
 

@@ -11,6 +11,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
@@ -20,6 +21,7 @@ import eu.yals.exception.YalsException;
 @Route(value = Endpoint.TNT.SAMPLE, layout = AppView.class)
 @Caption("Example")
 @Icon(VaadinIcon.AT)
+@PageTitle("Link shortener for friends")
 public class SampleView extends VerticalLayout {
     private final Board board;
     private final Row firstRow;

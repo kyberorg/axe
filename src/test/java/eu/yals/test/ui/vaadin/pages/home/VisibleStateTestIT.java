@@ -12,6 +12,11 @@ import java.util.List;
 
 import static org.junit.Assert.fail;
 
+/**
+ * Checks state of front page (elements and so on...)
+ *
+ * @since 1.0
+ */
 public class VisibleStateTestIT extends VaadinTest {
   private HomeViewPageObject homeView;
 

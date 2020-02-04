@@ -21,6 +21,11 @@ import org.openqa.selenium.Cookie;
 
 import java.lang.reflect.Field;
 
+/**
+ * Service class for all Vaadin aka UI Tests
+ *
+ * @since 2.7
+ */
 @Slf4j
 public abstract class VaadinTest extends ParallelTest {
   private static final int SERVER_PORT =
@@ -68,7 +73,7 @@ public abstract class VaadinTest extends ParallelTest {
     super.setup();
     Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
 
-    //getDriver().get(BASE_URL);
+    // getDriver().get(BASE_URL);
     // init selenide as well
     WebDriverRunner.setWebDriver(getDriver());
     Configuration.baseUrl = BASE_URL;
@@ -77,7 +82,7 @@ public abstract class VaadinTest extends ParallelTest {
   protected void open(String relativeOrAbsoluteUrl) {
     final String PROTOCOL_MARKER = "://";
     boolean isUrlAbsolute = relativeOrAbsoluteUrl.contains(PROTOCOL_MARKER);
-    if(isUrlAbsolute) {
+    if (isUrlAbsolute) {
       getDriver().get(relativeOrAbsoluteUrl);
     } else {
       getDriver().get(BASE_URL + relativeOrAbsoluteUrl);
