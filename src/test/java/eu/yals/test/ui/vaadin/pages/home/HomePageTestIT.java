@@ -1,8 +1,7 @@
 package eu.yals.test.ui.vaadin.pages.home;
 
 import com.vaadin.testbench.TestBenchElement;
-import eu.yals.test.ui.vaadin.VaadinTest;
-import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
+import eu.yals.test.ui.vaadin.HomePageTest;
 import eu.yals.test.ui.vaadin.pageobjects.NotFoundViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.external.VR;
 import eu.yals.test.utils.elements.VaadinElement;
@@ -14,32 +13,23 @@ import org.junit.Test;
  *
  * @since 1.0
  */
-public class HomePageTestIT extends VaadinTest {
-
-  protected HomeViewPageObject getHomePage() {
-    return HomeViewPageObject.getPageObject(getDriver());
-  }
-
-  private HomeViewPageObject openHomePage() {
-    open("/");
-    return getHomePage();
-  }
+public class HomePageTestIT extends HomePageTest {
 
   @Test
   public void urlWithJustSlashWillOpenFrontPage() {
-    HomeViewPageObject homePage = openHomePage();
+    openHomePage();
 
-    $$(homePage.getInput()).shouldExist();
-    $$(homePage.getSubmitButton()).shouldExist();
+    $$(homeView.getInput()).shouldExist();
+    $$(homeView.getSubmitButton()).shouldExist();
   }
 
   @Test
   public void saveLinkAndClickOnResult() {
-    HomeViewPageObject homePage = openHomePage();
+    openHomePage();
 
-    homePage.pasteValueInFormAndSubmitIt("https://vr.fi");
+    homeView.pasteValueInFormAndSubmitIt("https://vr.fi");
 
-    TestBenchElement shortLink = homePage.getShortLink();
+    TestBenchElement shortLink = homeView.getShortLink();
 
     $$(shortLink).shouldBeDisplayed();
     shortLink.click();
@@ -49,11 +39,11 @@ public class HomePageTestIT extends VaadinTest {
 
   @Test
   public void saveLinkAndCopyValueAndOpenIt() {
-    HomeViewPageObject homePage = openHomePage();
+    openHomePage();
 
-    homePage.pasteValueInFormAndSubmitIt("https://vr.fi");
-    $$(homePage.getShortLink()).shouldBeDisplayed();
-    String shortUrl = homePage.getShortLink().getText();
+    homeView.pasteValueInFormAndSubmitIt("https://vr.fi");
+    $$(homeView.getShortLink()).shouldBeDisplayed();
+    String shortUrl = homeView.getShortLink().getText();
 
     open(shortUrl);
     verifyThatVROpened();

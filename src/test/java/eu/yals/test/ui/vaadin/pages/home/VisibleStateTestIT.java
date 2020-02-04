@@ -1,8 +1,7 @@
 package eu.yals.test.ui.vaadin.pages.home;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
-import eu.yals.test.ui.vaadin.VaadinTest;
-import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
+import eu.yals.test.ui.vaadin.HomePageTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,88 +16,81 @@ import static org.junit.Assert.fail;
  *
  * @since 1.0
  */
-public class VisibleStateTestIT extends VaadinTest {
-  private HomeViewPageObject homeView;
-
-  public void openUrl() {
-    open("/");
-    homeView = HomeViewPageObject.getPageObject(getDriver());
-  }
-
+public class VisibleStateTestIT extends HomePageTest {
   @Test
   public void errorBlockIsHidden() {
-    openUrl();
+    openHomePage();
     // FIXME impl
   }
 
   @Test
   public void mainBlockIsVisible() {
-    openUrl();
+    openHomePage();
     $$(homeView.getMainArea()).shouldBeDisplayed();
   }
 
   @Test(expected = NoSuchElementException.class)
   public void resultBlockIsHidden() {
-    openUrl();
+    openHomePage();
     $$(homeView.getResultArea()).shouldNotBeDisplayed();
   }
 
   @Test(expected = NoSuchElementException.class)
   public void qrCodeBlockIsHidden() {
-    openUrl();
+    openHomePage();
     $$(homeView.getQRCodeArea()).shouldNotBeDisplayed();
   }
 
   @Test
   public void mainAreaHasFieldAndButton() {
-    openUrl();
+    openHomePage();
     $$(homeView.getInput()).shouldExist();
     $$(homeView.getSubmitButton()).shouldExist();
   }
 
   @Test
   public void formHasOnlyOneButton() {
-    openUrl();
+    openHomePage();
     List<ButtonElement> buttons = homeView.getMainArea().$(ButtonElement.class).all();
     Assert.assertEquals("Only 1 button expected", 1, buttons.size());
   }
 
   @Test
   public void inputAndButtonAreNotDisabled() {
-    openUrl();
+    openHomePage();
     $$(homeView.getInput()).shouldBeEnabled();
     $$(homeView.getSubmitButton()).shouldBeEnabled();
   }
 
   @Test
   public void inputShouldHavePlaceholder() {
-    openUrl();
+    openHomePage();
     $$(homeView.getInput()).shouldHaveAttr("placeholder");
   }
 
   @Test
   public void shouldHaveCorrectTitle() {
-    openUrl();
+    openHomePage();
     String title = getDriver().getTitle();
     Assert.assertEquals("Link shortener for friends", title);
   }
 
   @Test
   public void mainDivShouldHaveH2() {
-    openUrl();
+    openHomePage();
     $$(homeView.getTitle()).shouldExist();
   }
 
   @Test
   public void inputFieldHasLabel() {
-    openUrl();
+    openHomePage();
     String label = homeView.getInput().getLabel();
     Assert.assertTrue(StringUtils.isNotBlank(label));
   }
 
   @Test
   public void buttonIsPrimaryAndHasText() {
-    openUrl();
+    openHomePage();
     ButtonElement button = homeView.getSubmitButton();
     $$(button).shouldHaveAttr("theme", "primary");
     $$(button).shouldHaveText("Shorten it!");
@@ -106,7 +98,7 @@ public class VisibleStateTestIT extends VaadinTest {
 
   @Test
   public void publicAccessBannerIsPresentAndHasNeededText() {
-    openUrl();
+    openHomePage();
     $$(homeView.getPublicAccessBanner()).shouldExist();
     $$(homeView.getPublicAccessBanner()).shouldBeDisplayed();
     $$(homeView.getPublicAccessBanner()).shouldHaveText("public");
@@ -114,14 +106,14 @@ public class VisibleStateTestIT extends VaadinTest {
 
   @Test
   public void overallLinksDivExistsAndDisplayed() {
-    openUrl();
+    openHomePage();
     $$(homeView.getOverallArea()).shouldExist();
     $$(homeView.getOverallArea()).shouldBeDisplayed();
   }
 
   @Test
   public void overallLinksTextExistsAndDisplayed() {
-    openUrl();
+    openHomePage();
     $$(homeView.getOverallLinksText()).shouldExist();
     $$(homeView.getOverallLinksText()).shouldBeDisplayed();
     $$(homeView.getOverallLinksText()).shouldHaveText("Yals already saved");
@@ -129,7 +121,7 @@ public class VisibleStateTestIT extends VaadinTest {
 
   @Test
   public void overallLinksNumberExistsAndNumber() {
-    openUrl();
+    openHomePage();
     $$(homeView.getOverallLinksNumber()).shouldExist();
     $$(homeView.getOverallLinksNumber()).shouldBeDisplayed();
     String numberText = homeView.getOverallLinksNumber().getText();

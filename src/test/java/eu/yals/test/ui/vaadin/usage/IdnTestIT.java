@@ -1,7 +1,6 @@
 package eu.yals.test.ui.vaadin.usage;
 
-import eu.yals.test.ui.vaadin.VaadinTest;
-import eu.yals.test.ui.vaadin.pageobjects.HomeViewPageObject;
+import eu.yals.test.ui.vaadin.HomePageTest;
 import eu.yals.test.ui.vaadin.pageobjects.external.*;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
@@ -12,16 +11,11 @@ import org.junit.Test;
  *
  * @since 2.5
  */
-public class IdnTestIT extends VaadinTest {
-  private HomeViewPageObject homeView;
-
-  public void openUrl() {
-    open("/");
-    homeView = HomeViewPageObject.getPageObject(getDriver());
-  }
+public class IdnTestIT extends HomePageTest {
 
   @Test
   public void russianUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("http://кто.рф");
 
     // verify that KtoRF opened
@@ -31,6 +25,7 @@ public class IdnTestIT extends VaadinTest {
 
   @Test
   public void swedishUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("https://räksmörgås.josefsson.org");
 
     // verify that swedish site opened
@@ -41,6 +36,7 @@ public class IdnTestIT extends VaadinTest {
 
   @Test
   public void finnishUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("https://sää.fi");
     YalsElement logo = $$(ForecaFi.LOGO);
     logo.shouldExist();
@@ -49,6 +45,7 @@ public class IdnTestIT extends VaadinTest {
 
   @Test
   public void arabicUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("http://موقع.وزارة-الاتصالات.مصر/");
 
     // verify that opens page of IT ministry of Egypt
@@ -57,6 +54,7 @@ public class IdnTestIT extends VaadinTest {
 
   @Test
   public void taiwaneseUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("http://中文.tw/");
 
     YalsElement navTable = $$(ZhongwenTw.NAV_TABLE);
@@ -65,24 +63,28 @@ public class IdnTestIT extends VaadinTest {
 
   @Test
   public void polishUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("http://żółć.pl");
     Assert.assertEquals(ZolcPl.TITLE_TEXT, getPageTitle());
   }
 
   @Test
   public void germanUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("http://www.travemünde.de/");
     Assert.assertEquals(TravemundeDe.TITLE_TEXT, getPageTitle());
   }
 
   @Test
   public void estonianUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("https://sõnaveeb.ee");
     Assert.assertEquals(SonaveebEe.TITLE_TEXT, getPageTitle());
   }
 
   @Test
   public void multiLanguageUrl() {
+    openHomePage();
     storeAndOpenSavedUrl("http://€.linux.it");
 
     //verify that opens Euro Linux Page
@@ -92,7 +94,6 @@ public class IdnTestIT extends VaadinTest {
   }
 
   private void storeAndOpenSavedUrl(String urlToStore) {
-    openUrl();
     homeView.pasteValueInFormAndSubmitIt(urlToStore);
     String shortLink = homeView.getSavedUrl();
     open(shortLink);
