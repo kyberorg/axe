@@ -1,10 +1,7 @@
 package eu.yals.test.ui.vaadin.pageobjects;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
-import com.vaadin.flow.component.html.testbench.AnchorElement;
-import com.vaadin.flow.component.html.testbench.H2Element;
-import com.vaadin.flow.component.html.testbench.ImageElement;
-import com.vaadin.flow.component.html.testbench.SpanElement;
+import com.vaadin.flow.component.html.testbench.*;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import eu.yals.ui.HomeView;
@@ -39,8 +36,8 @@ public class HomeViewPageObject extends YalsPageObject {
     return linksCount;
   }
 
-  public TestBenchElement getMainArea() {
-    return $(TestBenchElement.class).id(HomeView.IDs.MAIN_AREA);
+  public DivElement getMainArea() {
+    return $(DivElement.class).id(HomeView.IDs.MAIN_AREA);
   }
 
   public H2Element getTitle() {

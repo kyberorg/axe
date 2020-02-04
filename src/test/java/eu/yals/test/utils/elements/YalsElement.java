@@ -45,6 +45,11 @@ public class YalsElement {
     Assert.assertFalse("Element is displayed", webElement.isDisplayed());
   }
 
+  public void shouldNotBeDisabled() {
+    shouldExist();
+    Assert.assertFalse("Element is disabled", webElement.isEnabled());
+  }
+
   public void textHas(String phrase) {
     shouldExist();
     Assert.assertTrue(
