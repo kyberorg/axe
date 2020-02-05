@@ -279,6 +279,7 @@ public class HomeView extends VerticalLayout {
 
   private void onSaveLink(ClickEvent<Button> buttonClickEvent) {
     cleanErrors();
+    cleanResults();
 
     boolean isFormValid = true;
     String longUrl = input.getValue();
