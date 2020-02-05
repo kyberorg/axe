@@ -37,7 +37,7 @@ public class MultiStepTestIT extends HomePageTest {
     $$(homeView.getShortLink()).shouldBeEmpty();
   }
 
-  // @Test TODO uncomment when functionality is ready
+  @Test
   public void copyLinkButtonShouldCopyShortLink() {
     openHomePage();
     homeView.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");

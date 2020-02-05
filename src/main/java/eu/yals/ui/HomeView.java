@@ -3,6 +3,7 @@ package eu.yals.ui;
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
@@ -311,7 +312,10 @@ public class HomeView extends VerticalLayout {
 
   private void copyLinkToClipboard(
       ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
-    // TODO https://vaadin.com/directory/component/v-clipboard/samples
+    String shortUrl = shortLink.getHref();
+
+    UI.getCurrent().getPage().executeJs("var xyz = $0; console.log(xyz)", shortUrl);
+
   }
 
   private void sendLink(String link) {
@@ -348,11 +352,11 @@ public class HomeView extends VerticalLayout {
     JsonNode json = response.getBody();
     log.error("{} Failed to store link. Reply: {}", TAG, json);
     String message;
-    try{
+    try {
       message = json.getObject().getJSONObject("error").getString("errorMessage");
-    }catch (JSONException e) {
+    } catch (JSONException e) {
       log.error("Malformed Error Json", e);
-       message = "Hups. Something went wrong at server-side";
+      message = "Hups. Something went wrong at server-side";
     }
 
     showError(message);
