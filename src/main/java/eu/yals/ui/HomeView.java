@@ -30,6 +30,7 @@ import eu.yals.utils.AppUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
+import kong.unirest.json.JSONException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -346,7 +347,14 @@ public class HomeView extends VerticalLayout {
   private void onFailStoreLink(HttpResponse<JsonNode> response) {
     JsonNode json = response.getBody();
     log.error("{} Failed to store link. Reply: {}", TAG, json);
-    String message = json.getObject().getString("message");
+    String message;
+    try{
+      message = json.getObject().getJSONObject("error").getString("errorMessage");
+    }catch (JSONException e) {
+      log.error("Malformed Error Json", e);
+       message = "Hups. Something went wrong at server-side";
+    }
+
     showError(message);
   }
 
