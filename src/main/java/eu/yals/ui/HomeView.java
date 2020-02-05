@@ -281,6 +281,13 @@ public class HomeView extends VerticalLayout {
     return notification;
   }
 
+  private Notification getLinkCopiedNotification() {
+    Notification notification =
+        new Notification("Short link copied", 3000, Notification.Position.MIDDLE);
+    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    return notification;
+  }
+
   private void onSaveLink(ClickEvent<Button> buttonClickEvent) {
     cleanErrors();
     cleanResults();
@@ -312,10 +319,13 @@ public class HomeView extends VerticalLayout {
 
   private void copyLinkToClipboard(
       ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
-    String shortUrl = shortLink.getHref();
-
-    UI.getCurrent().getPage().executeJs("var xyz = $0; console.log(xyz)", shortUrl);
-
+    UI.getCurrent()
+        .getPage()
+        .executeJs(
+            "var link = document.querySelector('#shortLink'); "
+                + "link.focus(); link.select();"
+                + "document.execCommand('copy')");
+    getLinkCopiedNotification().open();
   }
 
   private void sendLink(String link) {
