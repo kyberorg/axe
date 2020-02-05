@@ -270,6 +270,9 @@ public class HomeView extends VerticalLayout {
     Label label = new Label(text);
     Button closeButton = new Button("OK", event -> notification.close());
 
+    label.getStyle().set("margin-right", "0.5rem");
+    closeButton.getStyle().set("margin-right", "0.5rem");
+
     notification.add(label, closeButton);
     return notification;
   }
@@ -420,9 +423,7 @@ public class HomeView extends VerticalLayout {
   }
 
   private void showError(String errorMessage) {
-    String errorMsg = "<b>Hups!</b> Validation failed: <br>" +
-            errorMessage;
-    errorNotification = getErrorNotification(errorMsg);
+    errorNotification = getErrorNotification(errorMessage);
     errorNotification.open();
   }
 
