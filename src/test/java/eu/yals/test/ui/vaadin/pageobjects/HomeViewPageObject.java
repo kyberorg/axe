@@ -110,6 +110,6 @@ public class HomeViewPageObject extends YalsPageObject {
   }
 
   public NotificationElement getErrorNotification() {
-    return $(NotificationElement.class).first();
+    return $(NotificationElement.class).onPage().waitForFirst();
   }
 }

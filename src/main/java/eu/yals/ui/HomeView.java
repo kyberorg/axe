@@ -267,13 +267,15 @@ public class HomeView extends VerticalLayout {
     notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
     notification.setPosition(Notification.Position.MIDDLE);
 
+    HorizontalLayout layout = new HorizontalLayout();
     Label label = new Label(text);
     Button closeButton = new Button("OK", event -> notification.close());
 
     label.getStyle().set("margin-right", "0.5rem");
     closeButton.getStyle().set("margin-right", "0.5rem");
 
-    notification.add(label, closeButton);
+    layout.add(label, closeButton);
+    notification.add(layout);
     return notification;
   }
 
