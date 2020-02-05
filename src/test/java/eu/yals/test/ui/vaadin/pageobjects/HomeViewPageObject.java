@@ -5,11 +5,11 @@ import com.vaadin.flow.component.html.testbench.AnchorElement;
 import com.vaadin.flow.component.html.testbench.H2Element;
 import com.vaadin.flow.component.html.testbench.ImageElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
-import com.vaadin.flow.component.icon.testbench.IconElement;
 import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.orderedlayout.testbench.VerticalLayoutElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
+import eu.yals.test.ui.vaadin.elements.IronIconElement;
 import eu.yals.ui.HomeView;
 import org.openqa.selenium.WebDriver;
 
@@ -86,8 +86,8 @@ public class HomeViewPageObject extends YalsPageObject {
     return getResultArea().$(AnchorElement.class).id(HomeView.IDs.SHORT_LINK);
   }
 
-  public IconElement getCopyLinkButton() {
-    return getResultArea().$(IconElement.class).id(HomeView.IDs.COPY_LINK_BUTTON);
+  public IronIconElement getCopyLinkButton() {
+    return getResultArea().$(IronIconElement.class).id(HomeView.IDs.COPY_LINK_BUTTON);
   }
 
   public TestBenchElement getQRCodeArea() {
