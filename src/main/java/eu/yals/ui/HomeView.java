@@ -27,7 +27,6 @@ import eu.yals.services.GitService;
 import eu.yals.services.overall.OverallService;
 import eu.yals.ui.css.HomeViewCss;
 import eu.yals.utils.AppUtils;
-import eu.yals.utils.UrlExtraValidator;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -264,8 +263,9 @@ public class HomeView extends VerticalLayout {
   }
 
   private Notification getErrorNotification(String text) {
-    Notification notification = new Notification("", 3000, Notification.Position.MIDDLE);
+    Notification notification = new Notification();
     notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+    notification.setPosition(Notification.Position.MIDDLE);
 
     Label label = new Label(text);
     Button closeButton = new Button("OK", event -> notification.close());
@@ -286,11 +286,14 @@ public class HomeView extends VerticalLayout {
       String errorMessage = "Long URL cannot be empty";
       showError(errorMessage);
       isFormValid = false;
-    }
-    boolean isUrlValid = UrlExtraValidator.isUrlValid(longUrl).equals(UrlExtraValidator.VALID);
-    if (!isUrlValid) {
-      showError("Got malformed URL or not URL at all");
-      isFormValid = false;
+    } else {
+      try {
+        longUrl = AppUtils.makeFullUri(longUrl).toString();
+      } catch (RuntimeException e) {
+        log.error("URL validation failed", e);
+        showError("Got malformed URL or not URL at all");
+        isFormValid = false;
+      }
     }
 
     if (isFormValid) {
@@ -417,7 +420,9 @@ public class HomeView extends VerticalLayout {
   }
 
   private void showError(String errorMessage) {
-    errorNotification = getErrorNotification(errorMessage);
+    String errorMsg = "<b>Hups!</b> Validation failed: <br>" +
+            errorMessage;
+    errorNotification = getErrorNotification(errorMsg);
     errorNotification.open();
   }
 
