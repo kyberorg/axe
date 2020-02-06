@@ -215,14 +215,19 @@ public class HomeView extends VerticalLayout {
     com.vaadin.flow.component.icon.Icon copyLinkImage;
     copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.PASTE);
     copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
-    // copyLinkImage.addClickListener(this::copyLinkToClipboard);
-    ClipboardHelper clipboardHelper = new ClipboardHelper("ddd", copyLinkImage);
+    copyLinkImage.addClickListener(this::copyLinkToClipboard);
+
+    Button button = new Button("copy");
+    ClipboardHelper clipboardHelper = new ClipboardHelper("some stuff", button);
+    clipboardHelper.setContent(shortLink.getText());
+    clipboardHelper.wrap(copyLinkImage);
+    clipboardHelper.wrap(button);
 
     homeViewCss.applyResultAreaStyle(resultArea);
     resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-    resultArea.add(emptySpan, shortLink, copyLinkImage, clipboardHelper);
+    resultArea.add(emptySpan, shortLink, copyLinkImage, button, clipboardHelper);
     return resultArea;
   }
 
