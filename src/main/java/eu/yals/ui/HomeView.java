@@ -3,7 +3,6 @@ package eu.yals.ui;
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
@@ -34,6 +33,7 @@ import kong.unirest.Unirest;
 import kong.unirest.json.JSONException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.vaadin.olli.ClipboardHelper;
 
 @Slf4j
 @SpringComponent
@@ -215,13 +215,14 @@ public class HomeView extends VerticalLayout {
     com.vaadin.flow.component.icon.Icon copyLinkImage;
     copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.PASTE);
     copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
-    copyLinkImage.addClickListener(this::copyLinkToClipboard);
+    // copyLinkImage.addClickListener(this::copyLinkToClipboard);
+    ClipboardHelper clipboardHelper = new ClipboardHelper("ddd", copyLinkImage);
 
     homeViewCss.applyResultAreaStyle(resultArea);
     resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-    resultArea.add(emptySpan, shortLink, copyLinkImage);
+    resultArea.add(emptySpan, shortLink, copyLinkImage, clipboardHelper);
     return resultArea;
   }
 
@@ -319,12 +320,6 @@ public class HomeView extends VerticalLayout {
 
   private void copyLinkToClipboard(
       ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
-    UI.getCurrent()
-        .getPage()
-        .executeJs(
-            "var link = document.querySelector('#shortLink'); "
-                + "link.focus(); link.select();"
-                + "document.execCommand('copy')");
     getLinkCopiedNotification().open();
   }
 

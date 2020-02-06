@@ -196,6 +196,12 @@
             <version>[3.0,4.0)</version>
             <artifactId>bugsnag-spring</artifactId>
         </dependency>
+        <!-- Clipboard Operations -->
+        <dependency>
+            <groupId>org.vaadin.olli</groupId>
+            <artifactId>clipboardhelper</artifactId>
+            <version>1.1.2</version>
+        </dependency>
 
         <!-- Spring Boot Tests -->
         <dependency>
