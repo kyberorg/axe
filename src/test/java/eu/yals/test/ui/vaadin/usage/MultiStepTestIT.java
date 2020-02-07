@@ -45,6 +45,7 @@ public class MultiStepTestIT extends HomePageTest {
     $$(homeView.getResultArea()).shouldBeDisplayed();
     $$(homeView.getCopyLinkButton()).shouldBeDisplayed();
 
+    homeView.getCopyLinkButton().contextClick();
     homeView.getCopyLinkButton().click();
     homeView.getInput().click();
     homeView.getInput().sendKeys(Keys.chord(Keys.CONTROL, "v"));
