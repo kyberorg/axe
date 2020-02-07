@@ -217,7 +217,8 @@ public class HomeView extends VerticalLayout {
     copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
     copyLinkImage.addClickListener(this::copyLinkToClipboard);
 
-    ClipboardHelper clipboardHelper = new ClipboardHelper(shortLink.getText(), copyLinkImage);
+   Button theButton = new Button("The Button");
+    ClipboardHelper clipboardHelper = new ClipboardHelper(shortLink.getText(), theButton);
 
     homeViewCss.applyResultAreaStyle(resultArea);
     resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
