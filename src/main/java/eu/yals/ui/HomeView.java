@@ -60,6 +60,7 @@ public class HomeView extends VerticalLayout {
 
   private TextField input;
   Anchor shortLink;
+  ClipboardHelper clipboardHelper;
   Image qrCode;
 
   private String latestCommit;
@@ -217,8 +218,8 @@ public class HomeView extends VerticalLayout {
     copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
     copyLinkImage.addClickListener(this::copyLinkToClipboard);
 
-    Button button = new Button("click this button to copy some stuff to the clipboard");
-    ClipboardHelper clipboardHelper = new ClipboardHelper("some stuff 1111", button);
+    clipboardHelper = new ClipboardHelper();
+    clipboardHelper.wrap(copyLinkImage);
 
     homeViewCss.applyResultAreaStyle(resultArea);
     resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -347,6 +348,7 @@ public class HomeView extends VerticalLayout {
         shortLink.setText(appUtils.getServerUrl() + "/" + ident);
         shortLink.setHref(ident);
         resultRow.setVisible(true);
+        clipboardHelper.setContent(shortLink.getText());
         updateCounter();
         generateQRCode(ident);
       } else {
