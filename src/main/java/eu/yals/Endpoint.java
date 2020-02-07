@@ -33,6 +33,11 @@ public class Endpoint {
          * Page that will shown when application hits fatal error and became unaccessible
          */
         public static final String ERROR_PAGE_503 = "errors/503";
+
+        /**
+         * Page for debugging staff (avoid adding it in PROD mode)
+         */
+        public static final String DEBUG_PAGE = "debug";
     }
 
     /**

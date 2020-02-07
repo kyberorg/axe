@@ -223,7 +223,7 @@ public class HomeView extends VerticalLayout {
     resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-    resultArea.add(emptySpan, shortLink, copyLinkImage, clipboardHelper);
+    resultArea.add(emptySpan, shortLink, clipboardHelper);
     return resultArea;
   }
 
