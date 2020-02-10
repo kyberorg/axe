@@ -17,10 +17,14 @@ public class DebugViewPageObject extends YalsPageObject {
 
   // elements
   public TestBenchElement getButton() {
-    return $("clipboard-helper").first();
+    return getCl().$("vaadin-button").first();
   }
 
   public TextFieldElement getInput() {
     return $(TextFieldElement.class).first();
+  }
+
+  private TestBenchElement getCl() {
+    return $("clipboard-helper").first();
   }
 }
