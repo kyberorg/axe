@@ -11,6 +11,7 @@ public class TestApp {
         public static final String SERVER_PORT = "port";
         public static final String TEST_RUN_MODE = "test.runMode";
         public static final String BUILD_NAME = "test.buildName";
+        public static final String TEST_BROWSERS = "test.browsers";
     }
 
     public static class Selenide {
@@ -22,5 +23,14 @@ public class TestApp {
     public enum RunMode {
         CONTAINER,
         LOCAL
+    }
+
+    public enum Browser {
+        CHROME,
+        FIREFOX,
+        SAFARI,
+        IE,
+        EDGE,
+        UNKNOWN
     }
 }

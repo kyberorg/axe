@@ -88,7 +88,7 @@ pipeline {
                                      ]]) {
 
                         testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=qa.1e12.eu " +
-                                '-Dcom.vaadin.testbench.Parameters.gridBrowsers=chrome ' +
+                                '-Dtest.browsers=chrome ' +
                                 "-Dtest.buildName=${buildName} " +
                                 '-Dtest=!eu.yals.test.ui.pages.**',
                                 actions: 'clean test',

@@ -8,10 +8,14 @@ import eu.yals.test.utils.Selenide;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +24,7 @@ import static org.junit.Assert.*;
  *
  * @since 2.0
  */
+@Slf4j
 public class TestUtils {
 
   public static void assertResultIsJson(HttpResponse<String> result) {
@@ -93,6 +98,35 @@ public class TestUtils {
   public static String normalizeUrl(String endpoint) {
     assertNotNull(endpoint);
     return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
+  }
+
+  public static List<TestApp.Browser> getTestBrowsers() {
+    List<TestApp.Browser> browsers = new ArrayList<>(1);
+
+    String testBrowsersProp = System.getProperty(TestApp.Properties.TEST_BROWSERS, "");
+    if (StringUtils.isBlank(testBrowsersProp)) {
+      return defaultBrowsers();
+    }
+
+    String[] testBrowsers = testBrowsersProp.trim().split(",");
+    if (testBrowsers.length <= 0) {
+      return defaultBrowsers();
+    }
+    for (String testBrowser : testBrowsers) {
+      TestApp.Browser browser;
+      try {
+        browser = TestApp.Browser.valueOf(testBrowser.trim());
+        browsers.add(browser);
+      } catch (IllegalArgumentException | NullPointerException e) {
+        log.error(String.format("Browser '%s' is not supported. Skipping...", testBrowser), e);
+      }
+    }
+    if (browsers.isEmpty()) browsers = defaultBrowsers();
+    return browsers;
+  }
+
+  private static List<TestApp.Browser> defaultBrowsers() {
+    return Collections.singletonList(TestApp.Browser.CHROME);
   }
 
   /**
