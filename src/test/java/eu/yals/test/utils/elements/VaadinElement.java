@@ -32,6 +32,8 @@ public class VaadinElement extends YalsElement {
         "Element is not NotificationElement", testBenchElement instanceof NotificationElement);
 
     NotificationElement notification = (NotificationElement) testBenchElement;
-    Assert.assertTrue(StringUtils.containsIgnoreCase(notification.getText(), phrase));
+    Assert.assertTrue(
+        String.format("Phrase: %s does not contain %s", phrase, notification.getText()),
+        StringUtils.containsIgnoreCase(notification.getText(), phrase));
   }
 }

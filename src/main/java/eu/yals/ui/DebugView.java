@@ -4,8 +4,8 @@ import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -25,10 +25,11 @@ public class DebugView extends Div {
     setId(DebugView.class.getSimpleName());
 
     Button button = new Button("click this button to copy some stuff to the clipboard");
-    button.addClickListener(
-        event -> Notification.show("Copied some stuff to clipboard"));
+    Span span = new Span("");
+    button.addClickListener(event -> span.setText("Button clicked"));
     ClipboardHelper clipboardHelper = new ClipboardHelper("some stuff", button);
     TextField input = new TextField("Insert some stuff here");
-    add(clipboardHelper, input);
+
+    add(clipboardHelper, input, span);
   }
 }
