@@ -31,7 +31,7 @@ public class DebugView extends Div {
     button.addClickListener(event -> span.setText("Button clicked"));
     ClipboardHelper clipboardHelper = new ClipboardHelper("some stuff", button);
     TextField input = new TextField("Insert some stuff here");
-    input.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+    input.setValueChangeMode(ValueChangeMode.EAGER);
     input.addValueChangeListener(event -> Notification.show(event.getValue()));
 
     add(clipboardHelper, input, span);
