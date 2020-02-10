@@ -33,7 +33,7 @@ public class VaadinElement extends YalsElement {
 
     NotificationElement notification = (NotificationElement) testBenchElement;
     Assert.assertTrue(
-        String.format("Phrase: %s does not contain %s", phrase, notification.getText()),
+        String.format("Error text: %s does not contain phrase: %s", notification.getText(), phrase),
         StringUtils.containsIgnoreCase(notification.getText(), phrase));
   }
 }
