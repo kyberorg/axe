@@ -87,7 +87,7 @@ public class MultiStepTestIT extends HomePageTest {
     DebugViewPageObject debugViewPageObject = DebugViewPageObject.getPageObject(getDriver());
     debugViewPageObject.getButton().click();
     debugViewPageObject.getInput().click();
-    debugViewPageObject.getInput().sendKeys(Keys.chord(Keys.COMMAND, "v"));
+    //debugViewPageObject.getInput().sendKeys(Keys.chord(Keys.COMMAND, "v"));
     debugViewPageObject.getInput().sendKeys(Keys.chord(Keys.LEFT_CONTROL, "v"));
     debugViewPageObject.getInput().sendKeys(Keys.CONTROL + "v");
     String excepted = "some stuff";
