@@ -2,6 +2,7 @@ package eu.yals.test.ui.vaadin.usage;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import eu.yals.test.ui.vaadin.HomePageTest;
+import eu.yals.test.ui.vaadin.pageobjects.DebugViewPageObject;
 import eu.yals.test.ui.vaadin.pageobjects.external.Wikipedia;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
@@ -78,5 +79,18 @@ public class MultiStepTestIT extends HomePageTest {
     YalsElement articleTitle = $$(Wikipedia.getArticleTitle());
     articleTitle.shouldExist();
     articleTitle.shouldHaveText(Wikipedia.ARTICLE_TITLE);
+  }
+
+  @Test
+  public void debugIssue() {
+    open("/debug");
+    DebugViewPageObject debugViewPageObject = DebugViewPageObject.getPageObject(getDriver());
+    debugViewPageObject.getButton().click();
+    debugViewPageObject.getInput().click();
+    debugViewPageObject.getInput().sendKeys(Keys.chord(Keys.LEFT_CONTROL, "v"));
+    String excepted = "some stuff";
+    String actual = debugViewPageObject.getInput().getValue();
+
+    Assert.assertEquals(excepted, actual);
   }
 }
