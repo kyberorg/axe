@@ -87,7 +87,7 @@ pipeline {
                                       usernameVariable: 'USR', passwordVariable: 'PASS'
                                      ]]) {
 
-                        testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='${USR}':'${PASS}'@ci.yadev.eu " +
+                        testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='95.216.149.252" +
                                 '-Dcom.vaadin.testbench.Parameters.gridBrowsers=chrome ' +
                                 "-Dtest.buildName=${buildName} " +
                                 '-Dtest=!eu.yals.test.ui.pages.**',
