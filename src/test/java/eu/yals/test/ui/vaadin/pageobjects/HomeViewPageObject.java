@@ -111,13 +111,15 @@ public class HomeViewPageObject extends YalsPageObject {
   }
 
   public NotificationElement getErrorNotification() {
-    //TODO waitForFirst did not work correctly
-    NotificationElement notificationElement = $(NotificationElement.class).onPage().first();
+    sleep(2000); // waiting notification to appear
+    return $(NotificationElement.class).onPage().first();
+  }
+
+  private void sleep(long millis) {
     try {
-      wait(2000);
+      Thread.sleep(millis);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    return notificationElement;
   }
 }
