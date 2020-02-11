@@ -32,7 +32,7 @@ public class DebugView extends Div {
     ClipboardHelper clipboardHelper = new ClipboardHelper("some stuff", button);
     TextField input = new TextField("Insert some stuff here");
     input.setValueChangeMode(ValueChangeMode.EAGER);
-    input.addValueChangeListener(event -> Notification.show(event.getValue()));
+    input.addValueChangeListener(event -> Notification.show(event.getValue()).setPosition(Notification.Position.MIDDLE));
 
     add(clipboardHelper, input, span);
   }
