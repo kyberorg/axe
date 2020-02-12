@@ -105,7 +105,7 @@ public class TestUtils {
     for (String testBrowser : testBrowsers) {
       TestApp.Browser browser;
       try {
-        browser = TestApp.Browser.valueOf(testBrowser.trim());
+        browser = TestApp.Browser.valueOf(testBrowser.trim().toUpperCase());
         browsers.add(browser);
       } catch (IllegalArgumentException | NullPointerException e) {
         log.error(String.format("Browser '%s' is not supported. Skipping...", testBrowser), e);
