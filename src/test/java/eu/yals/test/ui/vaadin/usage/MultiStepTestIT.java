@@ -9,6 +9,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
 
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+
 /**
  * Contains multi step tests for Front page
  *
@@ -81,14 +86,15 @@ public class MultiStepTestIT extends HomePageTest {
     articleTitle.shouldHaveText(Wikipedia.ARTICLE_TITLE);
   }
 
-  //@Test not working yet (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
-  public void debugIssue() {
+  @Test //not working yet (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
+  public void debugIssue() throws IOException, UnsupportedFlavorException {
     open("/debug");
     DebugViewPageObject debugViewPageObject = DebugViewPageObject.getPageObject(getDriver());
     debugViewPageObject.getButton().click();
     debugViewPageObject.getInput().click();
-    debugViewPageObject.getInput().sendKeys(Keys.chord(Keys.CONTROL, "v"));
-    debugViewPageObject.getButton().click();
+    String clipboardContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor); // extracting the text that was copied to the clipboard
+    debugViewPageObject.getInput().sendKeys(clipboardContent);
+
     String excepted = "some stuff";
     String actual = debugViewPageObject.getInput().getValue();
 
