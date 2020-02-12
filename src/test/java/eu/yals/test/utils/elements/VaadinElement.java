@@ -3,10 +3,12 @@ package eu.yals.test.utils.elements;
 import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
+@Slf4j
 public class VaadinElement extends YalsElement {
   private TestBenchElement testBenchElement;
 
@@ -34,7 +36,9 @@ public class VaadinElement extends YalsElement {
 
     NotificationElement notification = (NotificationElement) testBenchElement;
     Assert.assertTrue(
-        String.format("Error text: %s does not contain phrase: %s", getNotificationText(notification), phrase),
+        String.format(
+            "Error text: %s does not contain phrase: %s",
+            getNotificationText(notification), phrase),
         StringUtils.containsIgnoreCase(getNotificationText(notification), phrase));
   }
 
@@ -45,11 +49,14 @@ public class VaadinElement extends YalsElement {
       return notificationText;
     }
 
+    log.info(
+        "Seems like notification.getText() method gave button's text. Getting text using JS methods instead");
+
     TestBenchElement notificationCard = notification.getPropertyElement("_card");
     TestBenchElement label =
-            notificationCard
-                    .findElement(By.tagName("vaadin-horizontal-layout"))
-                    .findElement(By.tagName("label"));
+        notificationCard
+            .findElement(By.tagName("vaadin-horizontal-layout"))
+            .findElement(By.tagName("label"));
     return label.getText();
   }
 }
