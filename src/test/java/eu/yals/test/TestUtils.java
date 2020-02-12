@@ -121,6 +121,7 @@ public class TestUtils {
         log.error(String.format("Browser '%s' is not supported. Skipping...", testBrowser), e);
       }
     }
+    if (browsers.isEmpty()) browsers = defaultBrowsers();
     return browsers;
   }
 

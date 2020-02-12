@@ -108,10 +108,6 @@ public abstract class VaadinTest extends ParallelTest {
   public List<DesiredCapabilities> getBrowserConfiguration() {
     List<TestApp.Browser> testBrowsers = TestUtils.getTestBrowsers();
     List<DesiredCapabilities> browsers = new ArrayList<>();
-    if (testBrowsers.isEmpty()) {
-      // default
-      testBrowsers.add(TestApp.Browser.CHROME);
-    }
 
     if (testBrowsers.contains(TestApp.Browser.CHROME)) {
       ChromeOptions options = new ChromeOptions();
