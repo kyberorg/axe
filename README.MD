@@ -185,6 +185,11 @@ To adjust logging we use ENV variables or `-D` vars:
 * Use `LOG_LEVEL_SPRING` or `-Dlog.level.spring` for setting Spring (package: `org.springframework`) log level
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
+
+### About: Tests
+* Browsers are defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge. 
+Can add several browsers like `chrome,firefox`
+
 ### Trunk build status
 
 [![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Ftrunk)](https://ci.yadev.eu/job/YalsGH/job/trunk/)

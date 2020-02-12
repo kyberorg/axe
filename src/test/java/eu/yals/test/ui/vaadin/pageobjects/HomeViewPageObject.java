@@ -11,8 +11,10 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import eu.yals.test.ui.vaadin.elements.ClipboardHelperElement;
 import eu.yals.ui.HomeView;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 
+@Slf4j
 public class HomeViewPageObject extends YalsPageObject {
 
   public static HomeViewPageObject getPageObject(WebDriver driver) {
@@ -111,16 +113,16 @@ public class HomeViewPageObject extends YalsPageObject {
   }
 
   public NotificationElement getErrorNotification() {
-    sleep(2000); // waiting notification to appear
+    sleep(2); // waiting notification to appear
     return $(NotificationElement.class).onPage().first();
   }
 
   @SuppressWarnings("SameParameterValue")
-  private void sleep(long millis) {
+  private void sleep(long seconds) {
     try {
-      Thread.sleep(millis);
+      Thread.sleep(seconds * 1000);
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      log.error(e.getMessage(), e);
     }
   }
 }
