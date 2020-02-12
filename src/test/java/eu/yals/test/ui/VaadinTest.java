@@ -5,6 +5,7 @@ import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.annotations.BrowserConfiguration;
 import com.vaadin.testbench.parallel.BrowserUtil;
 import com.vaadin.testbench.parallel.ParallelTest;
+import com.vaadin.testbench.parallel.SauceLabsIntegration;
 import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
 import eu.yals.test.TestUtils;
@@ -20,10 +21,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.ProtocolHandshake;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Service class for all Vaadin aka UI Tests
@@ -32,8 +36,17 @@ import java.util.List;
  */
 @Slf4j
 public abstract class VaadinTest extends ParallelTest {
+  static {
+    Logger sauceLabsLog = Logger.getLogger(SauceLabsIntegration.class.getName());
+    Logger selenideRemoteLog = Logger.getLogger(ProtocolHandshake.class.getName());
+
+    sauceLabsLog.setLevel(Level.SEVERE);
+    selenideRemoteLog.setLevel(Level.WARNING);
+  }
+
   private static final int SERVER_PORT =
-      Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, TestApp.Defaults.SERVER_PORT));
+      Integer.parseInt(
+          System.getProperty(TestApp.Properties.SERVER_PORT, TestApp.Defaults.SERVER_PORT));
   private static final String LOCAL_URL =
       String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
   private static final String REPORT_DIRECTORY =
