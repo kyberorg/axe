@@ -9,6 +9,7 @@ import com.vaadin.testbench.parallel.BrowserUtil;
 import com.vaadin.testbench.parallel.ParallelTest;
 import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
+import eu.yals.test.TestUtils;
 import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.elements.VaadinElement;
 import eu.yals.test.utils.elements.YalsElement;
@@ -24,7 +25,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,21 +86,6 @@ public abstract class VaadinTest extends ParallelTest {
     Configuration.baseUrl = BASE_URL;
   }
 
-  @BrowserConfiguration
-  public List<DesiredCapabilities> getBrowserConfiguration() {
-    ChromeOptions options = new ChromeOptions();
-    options.addArguments("enable-automation");
-    options.addArguments("--headless");
-    options.addArguments("--window-size=1920,1080");
-    options.addArguments("--no-sandbox");
-    options.addArguments("--disable-extensions");
-    options.addArguments("--dns-prefetch-disable");
-    options.addArguments("--disable-gpu");
-    DesiredCapabilities chrome = BrowserUtil.chrome();
-    chrome.setCapability(ChromeOptions.CAPABILITY, options);
-    return Collections.singletonList(chrome);
-  }
-
   protected void open(String relativeOrAbsoluteUrl) {
     final String PROTOCOL_MARKER = "://";
     boolean isUrlAbsolute = relativeOrAbsoluteUrl.contains(PROTOCOL_MARKER);
@@ -116,6 +102,46 @@ public abstract class VaadinTest extends ParallelTest {
 
   protected VaadinElement $$(TestBenchElement element) {
     return VaadinElement.wrap(element);
+  }
+
+  @BrowserConfiguration
+  public List<DesiredCapabilities> getBrowserConfiguration() {
+    List<TestApp.Browser> testBrowsers = TestUtils.getTestBrowsers();
+    List<DesiredCapabilities> browsers = new ArrayList<>();
+    if (testBrowsers.isEmpty()) {
+      // default
+      testBrowsers.add(TestApp.Browser.CHROME);
+    }
+
+    if (testBrowsers.contains(TestApp.Browser.CHROME)) {
+      ChromeOptions options = new ChromeOptions();
+      options.addArguments("enable-automation");
+      options.addArguments("--headless");
+      options.addArguments("--window-size=1920,1080");
+      options.addArguments("--no-sandbox");
+      options.addArguments("--disable-extensions");
+      options.addArguments("--dns-prefetch-disable");
+      options.addArguments("--disable-gpu");
+      DesiredCapabilities chrome = BrowserUtil.chrome();
+      chrome.setCapability(ChromeOptions.CAPABILITY, options);
+
+      browsers.add(chrome);
+    }
+
+    if (testBrowsers.contains(TestApp.Browser.FIREFOX)) {
+      browsers.add(BrowserUtil.firefox());
+    }
+    if (testBrowsers.contains(TestApp.Browser.SAFARI)) {
+      browsers.add(BrowserUtil.safari());
+    }
+    if (testBrowsers.contains(TestApp.Browser.IE)) {
+      browsers.add(BrowserUtil.ie11());
+    }
+    if (testBrowsers.contains(TestApp.Browser.EDGE)) {
+      browsers.add(BrowserUtil.edge());
+    }
+
+    return browsers;
   }
 
   @SuppressWarnings("rawtypes")

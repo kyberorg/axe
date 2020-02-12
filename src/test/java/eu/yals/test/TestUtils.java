@@ -11,7 +11,9 @@ import kong.unirest.HttpResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -93,6 +95,36 @@ public class TestUtils {
   public static String normalizeUrl(String endpoint) {
     assertNotNull(endpoint);
     return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
+  }
+
+  public static List<TestApp.Browser> getTestBrowsers() {
+    List<TestApp.Browser> browsers = new ArrayList<>(1);
+
+    String browsersList = System.getProperty(TestApp.Properties.TEST_BROWSERS, "");
+    if (StringUtils.isNotBlank(browsersList)) {
+      // parse 'em
+      String[] browserArray = browsersList.split(",");
+      if (browserArray.length > 0) {
+        for (String b : browserArray) {
+          b = b.trim();
+          TestApp.Browser browser;
+          try {
+            browser = TestApp.Browser.valueOf(b);
+          } catch (IllegalArgumentException | NullPointerException e) {
+            browser = TestApp.Browser.UNKNOWN;
+          }
+          if (browser != TestApp.Browser.UNKNOWN) {
+            browsers.add(browser);
+          }
+        }
+      }
+    }
+
+    if (browsers.isEmpty()) {
+      //default
+      browsers.add(TestApp.Browser.CHROME);
+    }
+    return browsers;
   }
 
   /**
