@@ -349,10 +349,6 @@ public class MattermostApiTest extends UnirestTest {
     return mmJson.getText();
   }
 
-  private void assertMMError(String mmText) {
-    assertTrue("Text must contain warning emoji", mmText.contains(App.Emoji.WARNING));
-  }
-
   private void assertUsage(String mmText) {
     assertTrue("Text must contain info emoji", mmText.contains(App.Emoji.INFO));
     assertTrue("Text must contain word 'Usage'", mmText.contains("Usage"));

@@ -5,6 +5,11 @@ import com.vaadin.testbench.TestBenchElement;
 import eu.yals.ui.DebugView;
 import org.openqa.selenium.WebDriver;
 
+/**
+ * Page Object for {@link DebugView}. Contains elements from DebugView
+ *
+ * @since 2.7
+ */
 public class DebugViewPageObject extends YalsPageObject {
 
   public static DebugViewPageObject getPageObject(WebDriver driver) {

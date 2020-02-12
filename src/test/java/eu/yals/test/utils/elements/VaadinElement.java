@@ -8,9 +8,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
+/**
+ * Test methods for Vaadin elements
+ *
+ * @since 2.7
+ */
 @Slf4j
 public class VaadinElement extends YalsElement {
-  private TestBenchElement testBenchElement;
+  private final TestBenchElement testBenchElement;
 
   public static VaadinElement wrap(TestBenchElement element) {
     return new VaadinElement(element);

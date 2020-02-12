@@ -4,7 +4,6 @@ import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
-import eu.yals.test.utils.Selenide;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
@@ -62,10 +61,6 @@ public class TestUtils {
     assertTrue(message, StringUtils.isBlank(string));
   }
 
-  public static String whichBrowser() {
-    return System.getProperty(TestApp.Selenide.BROWSER, Selenide.Browser.HTMLUNIT);
-  }
-
   public static String getTestUrl() {
     final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
     final String localUrl;
@@ -93,11 +88,6 @@ public class TestUtils {
     SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd-HHmm");
     Date date = new Date(System.currentTimeMillis());
     return formatter.format(date);
-  }
-
-  public static String normalizeUrl(String endpoint) {
-    assertNotNull(endpoint);
-    return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
   }
 
   public static List<TestApp.Browser> getTestBrowsers() {

@@ -9,6 +9,7 @@ public class Wikipedia {
   public static final String ARTICLE_TITLE =
       "Депортации из Эстонской Советской Социалистической Республики";
 
+  @SuppressWarnings("SameReturnValue")
   public static String getArticleTitle() {
     return "#firstHeading";
   }

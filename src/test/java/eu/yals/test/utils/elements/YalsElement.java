@@ -4,8 +4,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
+/**
+ * Test methods for Selenide Elements
+ *
+ * @since 2.7
+ */
 public class YalsElement {
-  private WebElement webElement;
+  private final WebElement webElement;
 
   public static YalsElement wrap(WebElement element) {
     return new YalsElement(element);

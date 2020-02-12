@@ -16,8 +16,7 @@ import org.junit.Test;
 public class IdnTestIT extends HomePageTest {
 
   // Run the test max 3 times (because of external sites)
-  @Rule
-  public RetryRule rule = new RetryRule(3);
+  @Rule public RetryRule rule = new RetryRule(3);
 
   @Test
   public void russianUrl() {
@@ -93,7 +92,7 @@ public class IdnTestIT extends HomePageTest {
     openHomePage();
     storeAndOpenSavedUrl("http://€.linux.it");
 
-    //verify that opens Euro Linux Page
+    // verify that opens Euro Linux Page
     YalsElement h1 = $$(EuroLinuxIt.H1);
     h1.shouldExist();
     h1.shouldHaveText(EuroLinuxIt.H1_TEXT);

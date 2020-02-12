@@ -8,7 +8,6 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
 import eu.yals.test.TestUtils;
-import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.elements.VaadinElement;
 import eu.yals.test.utils.elements.YalsElement;
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +33,16 @@ import java.util.List;
 @Slf4j
 public abstract class VaadinTest extends ParallelTest {
   private static final int SERVER_PORT =
-      Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
+      Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, TestApp.Defaults.SERVER_PORT));
   private static final String LOCAL_URL =
       String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
   private static final String REPORT_DIRECTORY =
-      System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
+      System.getProperty(TestApp.Properties.REPORT_DIR, TestApp.Defaults.REPORT_DIR);
   protected static final String BASE_URL =
       System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
   private static final String BUILD_NAME =
-      System.getProperty(TestApp.Properties.BUILD_NAME, Selenide.Defaults.BUILD_NAME);
+      System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
 
   private static String testName;
 
@@ -77,7 +76,6 @@ public abstract class VaadinTest extends ParallelTest {
 
     super.setup();
     Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
-
   }
 
   protected void open(String relativeOrAbsoluteUrl) {

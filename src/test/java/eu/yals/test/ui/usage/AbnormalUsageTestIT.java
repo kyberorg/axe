@@ -12,17 +12,17 @@ import org.junit.Test;
  */
 public class AbnormalUsageTestIT extends VaadinTest {
 
-    @Test
-    public void extraArgumentsShouldBeIgnored() {
-        final String EXTRA_ARGUMENT = "mineMetsa";
-        final String LINK_TO_SAVE = "https://vr.fi";
+  @Test
+  public void extraArgumentsShouldBeIgnored() {
+    final String EXTRA_ARGUMENT = "mineMetsa";
+    final String LINK_TO_SAVE = "https://vr.fi";
 
-        open("/?" + EXTRA_ARGUMENT);
-        HomeViewPageObject homeView = HomeViewPageObject.getPageObject(getDriver());
-        homeView.pasteValueInFormAndSubmitIt(LINK_TO_SAVE);
+    open("/?" + EXTRA_ARGUMENT);
+    HomeViewPageObject homeView = HomeViewPageObject.getPageObject(getDriver());
+    homeView.pasteValueInFormAndSubmitIt(LINK_TO_SAVE);
 
-        AnchorElement resultLink = homeView.getShortLink();
-        $$(resultLink).shouldNotBeEmpty();
-        $$(resultLink).shouldNotHaveText(EXTRA_ARGUMENT);
-    }
+    AnchorElement resultLink = homeView.getShortLink();
+    $$(resultLink).shouldNotBeEmpty();
+    $$(resultLink).shouldNotHaveText(EXTRA_ARGUMENT);
+  }
 }

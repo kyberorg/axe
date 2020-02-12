@@ -5,6 +5,11 @@ import org.openqa.selenium.NoSuchElementException;
 
 import static org.junit.Assert.fail;
 
+/**
+ * Base for all tests testing HomePage aka /
+ *
+ * @since 2.7
+ */
 public abstract class HomePageTest extends VaadinTest {
   protected HomeViewPageObject homeView;
 
