@@ -2,10 +2,10 @@ package eu.yals.test.ui.vaadin.usage;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import eu.yals.test.ui.vaadin.HomePageTest;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
-import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import static com.helger.commons.mock.CommonsAssert.fail;
 

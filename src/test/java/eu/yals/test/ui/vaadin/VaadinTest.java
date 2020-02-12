@@ -1,7 +1,5 @@
 package eu.yals.test.ui.vaadin;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.annotations.BrowserConfiguration;
@@ -80,10 +78,6 @@ public abstract class VaadinTest extends ParallelTest {
     super.setup();
     Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
 
-    // getDriver().get(BASE_URL);
-    // init selenide as well
-    WebDriverRunner.setWebDriver(getDriver());
-    Configuration.baseUrl = BASE_URL;
   }
 
   protected void open(String relativeOrAbsoluteUrl) {

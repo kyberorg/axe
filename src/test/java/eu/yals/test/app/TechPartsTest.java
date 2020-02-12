@@ -8,9 +8,9 @@ import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @since 2.5.1
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 @Slf4j
 public class TechPartsTest extends UnirestTest {
     public static final String TAG = "[" + TechPartsTest.class.getSimpleName() + "]";

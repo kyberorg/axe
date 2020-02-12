@@ -4,9 +4,9 @@ import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 @Slf4j
 public class VaadinElement extends YalsElement {
