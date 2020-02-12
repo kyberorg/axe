@@ -35,11 +35,10 @@ public class VaadinElement extends YalsElement {
         "Element is not NotificationElement", testBenchElement instanceof NotificationElement);
 
     NotificationElement notification = (NotificationElement) testBenchElement;
+    String notificationText = getNotificationText(notification);
     Assert.assertTrue(
-        String.format(
-            "Error text: %s does not contain phrase: %s",
-            getNotificationText(notification), phrase),
-        StringUtils.containsIgnoreCase(getNotificationText(notification), phrase));
+        String.format("Error text: %s does not contain phrase: %s", notificationText, phrase),
+        StringUtils.containsIgnoreCase(notificationText, phrase));
   }
 
   private String getNotificationText(NotificationElement notification) {
