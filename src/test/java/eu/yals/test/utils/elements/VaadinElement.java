@@ -4,6 +4,7 @@ import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 public class VaadinElement extends YalsElement {
@@ -33,7 +34,22 @@ public class VaadinElement extends YalsElement {
 
     NotificationElement notification = (NotificationElement) testBenchElement;
     Assert.assertTrue(
-        String.format("Error text: %s does not contain phrase: %s", notification.getText(), phrase),
-        StringUtils.containsIgnoreCase(notification.getText(), phrase));
+        String.format("Error text: %s does not contain phrase: %s", getNotificationText(notification), phrase),
+        StringUtils.containsIgnoreCase(getNotificationText(notification), phrase));
+  }
+
+  private String getNotificationText(NotificationElement notification) {
+    final String BUTTON_TEXT = "OK";
+    String notificationText = notification.getText();
+    if (!notificationText.equalsIgnoreCase(BUTTON_TEXT)) {
+      return notificationText;
+    }
+
+    TestBenchElement notificationCard = notification.getPropertyElement("_card");
+    TestBenchElement label =
+            notificationCard
+                    .findElement(By.tagName("vaadin-horizontal-layout"))
+                    .findElement(By.tagName("label"));
+    return label.getText();
   }
 }
