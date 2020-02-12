@@ -11,6 +11,7 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import eu.yals.test.ui.vaadin.elements.ClipboardHelperElement;
 import eu.yals.ui.HomeView;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class HomeViewPageObject extends YalsPageObject {
@@ -115,6 +116,24 @@ public class HomeViewPageObject extends YalsPageObject {
     return $(NotificationElement.class).onPage().first();
   }
 
+  public String getErrorNotificationText() {
+    final String BUTTON_TEXT = "OK";
+    NotificationElement notification = $(NotificationElement.class).onPage().first();
+    String notificationText = notification.getText();
+    if (!notificationText.equalsIgnoreCase(BUTTON_TEXT)) {
+      return notificationText;
+    }
+
+    TestBenchElement notificationCard = notification.getPropertyElement("_card");
+    TestBenchElement label =
+        notificationCard
+            .findElement(By.tagName("vaadin-horizontal-layout"))
+            .findElement(By.tagName("label"));
+    return label.getText();
+
+  }
+
+  @SuppressWarnings("SameParameterValue")
   private void sleep(long millis) {
     try {
       Thread.sleep(millis);
