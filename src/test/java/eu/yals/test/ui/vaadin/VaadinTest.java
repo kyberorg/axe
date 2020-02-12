@@ -116,7 +116,7 @@ public abstract class VaadinTest extends ParallelTest {
     if (testBrowsers.contains(TestApp.Browser.CHROME)) {
       ChromeOptions options = new ChromeOptions();
       options.addArguments("enable-automation");
-      options.addArguments("--headless");
+      //options.addArguments("--headless");
       options.addArguments("--window-size=1920,1080");
       options.addArguments("--no-sandbox");
       options.addArguments("--disable-extensions");
