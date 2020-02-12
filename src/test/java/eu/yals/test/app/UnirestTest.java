@@ -6,7 +6,6 @@ import kong.unirest.BodyPart;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.BeforeClass;
 
 import java.lang.reflect.Field;
 
@@ -21,9 +20,6 @@ import java.lang.reflect.Field;
 public abstract class UnirestTest {
   protected static final String TEST_URL = TestUtils.getTestUrl();
   public static String TAG = "[Unirest]";
-
-  @BeforeClass
-  public static void setUp() {}
 
   public void logRequestAndResponse(HttpRequest request, HttpResponse response, String tag) {
     TAG = tag;
