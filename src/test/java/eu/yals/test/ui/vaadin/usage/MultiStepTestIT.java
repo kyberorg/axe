@@ -86,7 +86,7 @@ public class MultiStepTestIT extends HomePageTest {
     articleTitle.shouldHaveText(Wikipedia.ARTICLE_TITLE);
   }
 
-  @Test //not working yet (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
+  //@Test //not working yet (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
   public void debugIssue() throws IOException, UnsupportedFlavorException {
     open("/debug");
     DebugViewPageObject debugViewPageObject = DebugViewPageObject.getPageObject(getDriver());
