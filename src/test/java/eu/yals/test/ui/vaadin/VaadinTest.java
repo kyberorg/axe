@@ -4,6 +4,8 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.TestBenchElement;
+import com.vaadin.testbench.annotations.BrowserConfiguration;
+import com.vaadin.testbench.parallel.BrowserUtil;
 import com.vaadin.testbench.parallel.ParallelTest;
 import com.vaadin.testbench.parallel.setup.SetupDriver;
 import eu.yals.test.TestApp;
@@ -18,8 +20,12 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Service class for all Vaadin aka UI Tests
@@ -77,6 +83,21 @@ public abstract class VaadinTest extends ParallelTest {
     // init selenide as well
     WebDriverRunner.setWebDriver(getDriver());
     Configuration.baseUrl = BASE_URL;
+  }
+
+  @BrowserConfiguration
+  public List<DesiredCapabilities> getBrowserConfiguration() {
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("enable-automation");
+    options.addArguments("--headless");
+    options.addArguments("--window-size=1920,1080");
+    options.addArguments("--no-sandbox");
+    options.addArguments("--disable-extensions");
+    options.addArguments("--dns-prefetch-disable");
+    options.addArguments("--disable-gpu");
+    DesiredCapabilities chrome = BrowserUtil.chrome();
+    chrome.setCapability(ChromeOptions.CAPABILITY, options);
+    return Collections.singletonList(chrome);
   }
 
   protected void open(String relativeOrAbsoluteUrl) {
