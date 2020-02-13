@@ -1,7 +1,7 @@
-package eu.yals.test.ui.vaadin.usage;
+package eu.yals.test.ui.usage;
 
 import eu.yals.test.TestUtils;
-import eu.yals.test.ui.vaadin.HomePageTest;
+import eu.yals.test.ui.HomePageTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

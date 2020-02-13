@@ -1,7 +1,7 @@
-package eu.yals.test.ui.vaadin.pages.home;
+package eu.yals.test.ui.home;
 
 import com.vaadin.testbench.TestBenchElement;
-import eu.yals.test.ui.vaadin.HomePageTest;
+import eu.yals.test.ui.HomePageTest;
 import org.junit.Test;
 
 /**

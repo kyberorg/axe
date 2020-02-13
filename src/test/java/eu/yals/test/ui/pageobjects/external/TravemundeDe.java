@@ -6,9 +6,5 @@ package eu.yals.test.ui.pageobjects.external;
  * @since 2.5
  */
 public class TravemundeDe {
-    private static final String TITLE_TEXT = "Ostseeheilbad Travemünde";
-
-    public static String getTitleText() {
-        return TITLE_TEXT;
-    }
+    public static final String TITLE_TEXT = "Travemünde.de –Offizielles Stadtportal für die Hansestadt Lübeck";
 }

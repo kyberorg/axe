@@ -4,7 +4,6 @@ import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.ErrorJson;
-import eu.yals.test.utils.Selenide;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
@@ -62,10 +61,6 @@ public class TestUtils {
     assertTrue(message, StringUtils.isBlank(string));
   }
 
-  public static String whichBrowser() {
-    return System.getProperty(TestApp.Selenide.BROWSER, Selenide.Browser.HTMLUNIT);
-  }
-
   public static String getTestUrl() {
     final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
     final String localUrl;
@@ -95,11 +90,6 @@ public class TestUtils {
     return formatter.format(date);
   }
 
-  public static String normalizeUrl(String endpoint) {
-    assertNotNull(endpoint);
-    return endpoint.startsWith("http") ? endpoint : TestUtils.getTestUrl() + endpoint;
-  }
-
   public static List<TestApp.Browser> getTestBrowsers() {
     List<TestApp.Browser> browsers = new ArrayList<>(1);
 
@@ -115,7 +105,7 @@ public class TestUtils {
     for (String testBrowser : testBrowsers) {
       TestApp.Browser browser;
       try {
-        browser = TestApp.Browser.valueOf(testBrowser.trim());
+        browser = TestApp.Browser.valueOf(testBrowser.trim().toUpperCase());
         browsers.add(browser);
       } catch (IllegalArgumentException | NullPointerException e) {
         log.error(String.format("Browser '%s' is not supported. Skipping...", testBrowser), e);

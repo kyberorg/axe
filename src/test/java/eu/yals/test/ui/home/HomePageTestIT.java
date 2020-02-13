@@ -1,9 +1,9 @@
-package eu.yals.test.ui.vaadin.pages.home;
+package eu.yals.test.ui.home;
 
 import com.vaadin.testbench.TestBenchElement;
-import eu.yals.test.ui.vaadin.HomePageTest;
-import eu.yals.test.ui.vaadin.pageobjects.NotFoundViewPageObject;
-import eu.yals.test.ui.vaadin.pageobjects.external.VR;
+import eu.yals.test.ui.HomePageTest;
+import eu.yals.test.ui.pageobjects.NotFoundViewPageObject;
+import eu.yals.test.ui.pageobjects.external.VR;
 import eu.yals.test.utils.elements.VaadinElement;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Test;

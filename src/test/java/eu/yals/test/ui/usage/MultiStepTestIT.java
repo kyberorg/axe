@@ -1,9 +1,9 @@
-package eu.yals.test.ui.vaadin.usage;
+package eu.yals.test.ui.usage;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
-import eu.yals.test.ui.vaadin.HomePageTest;
-import eu.yals.test.ui.vaadin.pageobjects.DebugViewPageObject;
-import eu.yals.test.ui.vaadin.pageobjects.external.Wikipedia;
+import eu.yals.test.ui.HomePageTest;
+import eu.yals.test.ui.pageobjects.DebugViewPageObject;
+import eu.yals.test.ui.pageobjects.external.Wikipedia;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,7 +43,8 @@ public class MultiStepTestIT extends HomePageTest {
     $$(homeView.getShortLink()).shouldBeEmpty();
   }
 
-  //@Test not working yet (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
+  // @Test not working yet
+  // (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
   public void copyLinkButtonShouldCopyShortLink() {
     openHomePage();
     homeView.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
@@ -86,13 +87,20 @@ public class MultiStepTestIT extends HomePageTest {
     articleTitle.shouldHaveText(Wikipedia.ARTICLE_TITLE);
   }
 
-  //@Test //not working yet (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
+  // @Test //not working yet
+  // (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
   public void debugIssue() throws IOException, UnsupportedFlavorException {
     open("/debug");
     DebugViewPageObject debugViewPageObject = DebugViewPageObject.getPageObject(getDriver());
     debugViewPageObject.getButton().click();
     debugViewPageObject.getInput().click();
-    String clipboardContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor); // extracting the text that was copied to the clipboard
+    String clipboardContent =
+        (String)
+            Toolkit.getDefaultToolkit()
+                .getSystemClipboard()
+                .getData(
+                    DataFlavor
+                        .stringFlavor); // extracting the text that was copied to the clipboard
     debugViewPageObject.getInput().sendKeys(clipboardContent);
 
     String excepted = "some stuff";

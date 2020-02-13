@@ -34,6 +34,8 @@
         <java.version>1.8</java.version>
         <!-- Vaadin version -->
         <vaadin.version>14.0.8</vaadin.version>
+        <!-- Selenium Version -->
+        <selenium.version>3.141.59</selenium.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -209,26 +211,24 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Easy test framework for UI Testing -->
-        <dependency>
-            <groupId>com.codeborne</groupId>
-            <artifactId>selenide</artifactId>
-            <version>5.3.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Test Containers -->
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>selenium</artifactId>
-            <version>1.12.1</version>
-            <scope>test</scope>
-        </dependency>
-
+        <!-- Vaadin Test Framework -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Selenium: to avoid "This version of TestBench depends on Selenium version 3.141.59 but version 3.14.0 was found" -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

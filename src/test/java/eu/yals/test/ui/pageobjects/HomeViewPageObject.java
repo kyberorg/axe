@@ -1,4 +1,4 @@
-package eu.yals.test.ui.vaadin.pageobjects;
+package eu.yals.test.ui.pageobjects;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.html.testbench.AnchorElement;
@@ -9,11 +9,15 @@ import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.orderedlayout.testbench.VerticalLayoutElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
-import eu.yals.test.ui.vaadin.elements.ClipboardHelperElement;
+import eu.yals.test.ui.elements.ClipboardHelperElement;
 import eu.yals.ui.HomeView;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
-
+/**
+ * Page Object for {@link HomeView}. Contains elements from HomeView
+ *
+ * @since 2.7
+ */
 @Slf4j
 public class HomeViewPageObject extends YalsPageObject {
 
@@ -50,10 +54,6 @@ public class HomeViewPageObject extends YalsPageObject {
 
   public H2Element getTitle() {
     return getMainArea().$(H2Element.class).id(HomeView.IDs.TITLE);
-  }
-
-  public SpanElement getSubtitle() {
-    return getMainArea().$(SpanElement.class).id(HomeView.IDs.SUBTITLE);
   }
 
   public TextFieldElement getInput() {

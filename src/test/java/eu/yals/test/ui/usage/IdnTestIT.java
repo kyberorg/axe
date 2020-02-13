@@ -1,8 +1,8 @@
-package eu.yals.test.ui.vaadin.usage;
+package eu.yals.test.ui.usage;
 
 import com.vaadin.testbench.RetryRule;
-import eu.yals.test.ui.vaadin.HomePageTest;
-import eu.yals.test.ui.vaadin.pageobjects.external.*;
+import eu.yals.test.ui.HomePageTest;
+import eu.yals.test.ui.pageobjects.external.*;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -16,8 +16,7 @@ import org.junit.Test;
 public class IdnTestIT extends HomePageTest {
 
   // Run the test max 3 times (because of external sites)
-  @Rule
-  public RetryRule rule = new RetryRule(3);
+  @Rule public RetryRule rule = new RetryRule(3);
 
   @Test
   public void russianUrl() {
@@ -93,7 +92,7 @@ public class IdnTestIT extends HomePageTest {
     openHomePage();
     storeAndOpenSavedUrl("http://€.linux.it");
 
-    //verify that opens Euro Linux Page
+    // verify that opens Euro Linux Page
     YalsElement h1 = $$(EuroLinuxIt.H1);
     h1.shouldExist();
     h1.shouldHaveText(EuroLinuxIt.H1_TEXT);
