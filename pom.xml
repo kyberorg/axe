@@ -34,6 +34,8 @@
         <java.version>1.8</java.version>
         <!-- Vaadin version -->
         <vaadin.version>14.0.8</vaadin.version>
+        <!-- Selenium Version -->
+        <selenium.version>3.141.59</selenium.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -213,6 +215,19 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Selenium: to avoid "This version of TestBench depends on Selenium version 3.141.59 but version 3.14.0 was found" -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${selenium.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
