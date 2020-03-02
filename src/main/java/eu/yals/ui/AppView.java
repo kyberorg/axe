@@ -53,7 +53,6 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
 
     // items
     menuBuilder.add(new LeftNavigationItem(HomeView.class));
-    menuBuilder.add(new LeftNavigationItem(SampleView.class));
 
     // dev-only items
     if (appUtils.isDevelopmentModeActivated()) {
