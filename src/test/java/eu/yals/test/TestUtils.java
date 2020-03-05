@@ -10,6 +10,7 @@ import kong.unirest.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +56,22 @@ public class TestUtils {
     String contentType = headers.getFirst(Header.CONTENT_TYPE);
     String actualMimeType = extractMime(contentType);
     assertEquals(mimeType, actualMimeType);
+  }
+
+  public static void assertContentNotEmpty(HttpResponse<String> response) {
+    assertNotNull(response);
+    Headers headers = response.getHeaders();
+    assertNotNull(headers);
+    String contentLengthStr = headers.getFirst(Header.CONTENT_LENGTH);
+
+    assertNotNull(contentLengthStr);
+    int contentLength = 0;
+    try {
+      contentLength = Integer.parseInt(contentLengthStr);
+    } catch (NumberFormatException e) {
+      fail(String.format("%s header value is not a number", Header.CONTENT_LENGTH));
+    }
+    assertTrue("Content is empty", contentLength > 0);
   }
 
   public static void assertEmpty(String message, String string) {
