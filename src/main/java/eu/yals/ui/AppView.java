@@ -53,7 +53,6 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
 
     // items
     menuBuilder.add(new LeftNavigationItem(HomeView.class));
-    menuBuilder.add(new LeftNavigationItem(SampleView.class));
 
     // dev-only items
     if (appUtils.isDevelopmentModeActivated()) {
@@ -68,6 +67,6 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
 
   @Override
   public void configurePage(InitialPageSettings settings) {
-    settings.addFavIcon("icon", "/images/logo.png", "512x512");
+    settings.addFavIcon("icon", "/favicon.ico", "16x16");
   }
 }

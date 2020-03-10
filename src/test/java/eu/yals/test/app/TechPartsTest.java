@@ -205,7 +205,7 @@ public class TechPartsTest extends UnirestTest {
 
         String body = result.getBody();
         Assert.assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
-        //in Spring boot 2 favicon has image/x-icon mimetype
-        TestUtils.assertContentType(MimeType.IMAGE_X_ICON, result);
+        //in Spring boot 2.2 favicon transferred without Content-Type Header, so we have to check Content-Length instead
+        TestUtils.assertContentNotEmpty(result);
     }
 }

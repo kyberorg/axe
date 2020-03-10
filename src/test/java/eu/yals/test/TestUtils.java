@@ -57,6 +57,22 @@ public class TestUtils {
     assertEquals(mimeType, actualMimeType);
   }
 
+  public static void assertContentNotEmpty(HttpResponse<String> response) {
+    assertNotNull(response);
+    Headers headers = response.getHeaders();
+    assertNotNull(headers);
+    String contentLengthStr = headers.getFirst(Header.CONTENT_LENGTH);
+
+    assertNotNull(contentLengthStr);
+    int contentLength = 0;
+    try {
+      contentLength = Integer.parseInt(contentLengthStr);
+    } catch (NumberFormatException e) {
+      fail(String.format("%s header value is not a number", Header.CONTENT_LENGTH));
+    }
+    assertTrue("Content is empty", contentLength > 0);
+  }
+
   public static void assertEmpty(String message, String string) {
     assertTrue(message, StringUtils.isBlank(string));
   }
