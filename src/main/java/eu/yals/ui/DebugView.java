@@ -34,10 +34,10 @@ public class DebugView extends Div {
     String gitHostStr = gitRepoState.hasValues() ? gitRepoState.getBuildHost() : UNDEFINED;
 
     VerticalLayout gitInfo = new VerticalLayout();
-    H2 h2 = new H2("Git info");
+    H2 h2 = new H2("Vaadin and Git info");
     Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr);
     Span gitBranch = new Span("Git branch: " + gitBranchStr);
-    Span gitHost = new Span("Build at " + gitHostStr);
+    Span gitHost = new Span("Built at " + gitHostStr);
 
     gitInfo.add(h2, vaadinVersion, gitBranch, gitHost);
 
