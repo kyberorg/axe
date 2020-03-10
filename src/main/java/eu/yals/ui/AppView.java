@@ -18,6 +18,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import eu.yals.services.GitService;
+import eu.yals.ui.dev.InfoView;
 import eu.yals.utils.AppUtils;
 
 @SpringComponent
@@ -57,6 +58,7 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
     // dev-only items
     if (appUtils.isDevelopmentModeActivated()) {
       menuBuilder.add(new LeftNavigationItem(DebugView.class));
+      menuBuilder.add(new LeftNavigationItem(InfoView.class));
     }
 
     builder.withAppMenu(menuBuilder.build());
