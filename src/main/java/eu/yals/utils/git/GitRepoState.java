@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -57,8 +58,9 @@ public class GitRepoState {
     }
 
     private void init() {
+        InputStream is = this.getClass().getResourceAsStream(GIT_PROPERTIES_FILE);
         try {
-            this.gitProperties.load(this.getClass().getResourceAsStream(GIT_PROPERTIES_FILE));
+            this.gitProperties.load(is);
             log.trace("{}: parsed info from file: {}", GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);
             this.publishFromProperties();
         } catch (IOException ioe) {
