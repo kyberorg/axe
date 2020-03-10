@@ -6,11 +6,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.Properties;
 
 /**
- * Object with properties from pom.xml at build time.
+ * Object with properties from pom.xml created at build time.
  *
  * java.version
  * vaadin.version
