@@ -1,5 +1,6 @@
 package eu.yals.utils.git;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -35,14 +36,17 @@ import java.util.Properties;
  * @since 2.0
  */
 @Slf4j
+@Data
 @Component
-class GitRepoState {
+public class GitRepoState {
     private static final String GIT_PROPERTIES_FILE = "git.properties";
 
     private final Properties gitProperties = new Properties();
 
     String commitIdAbbrev;          // =${git.commit.id.abbrev}
     String buildVersion;             // =${git.build.version}
+    String branch;                  //=${git.branch}
+    String buildHost;               //=${git.build.host}
 
     public GitRepoState() {
         init();
@@ -70,6 +74,8 @@ class GitRepoState {
     private void publishFromProperties() {
         this.commitIdAbbrev = String.valueOf(gitProperties.get("git.commit.id.abbrev"));
         this.buildVersion = String.valueOf(gitProperties.get("git.build.version"));
+        this.branch = String.valueOf(gitProperties.get("git.branch"));
+        this.buildHost = String.valueOf(gitProperties.get("git.build.host"));
     }
 
 }
