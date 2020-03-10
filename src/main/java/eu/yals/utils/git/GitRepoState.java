@@ -52,13 +52,13 @@ public class GitRepoState {
         init();
     }
 
-    boolean hasValues() {
+    public boolean hasValues() {
         return !gitProperties.isEmpty();
     }
 
     private void init() {
         try {
-            this.gitProperties.load(this.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
+            this.gitProperties.load(this.getClass().getResourceAsStream(GIT_PROPERTIES_FILE));
             log.trace("{}: parsed info from file: {}", GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);
             this.publishFromProperties();
         } catch (IOException ioe) {
