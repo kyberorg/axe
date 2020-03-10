@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -58,7 +59,14 @@ public class GitRepoState {
     }
 
     private void init() {
-        InputStream is = this.getClass().getResourceAsStream(GIT_PROPERTIES_FILE);
+        if(this.getClass().getClassLoader() == null) {
+            log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    GIT_PROPERTIES_FILE);
+            this.gitProperties.clear();
+            return;
+        }
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE);
         try {
             this.gitProperties.load(is);
             log.trace("{}: parsed info from file: {}", GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);

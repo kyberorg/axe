@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -36,12 +37,22 @@ public class MavenInfo {
     }
 
     private void init() {
-        InputStream is = this.getClass().getResourceAsStream(MAVEN_PROPERTIES_FILE);
+        if(this.getClass().getClassLoader() == null) {
+            log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    MAVEN_PROPERTIES_FILE);
+            this.mvnProperties.clear();
+            return;
+        }
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(MAVEN_PROPERTIES_FILE);
         try {
             mvnProperties.load(is);
             this.publishFromProperties();
         } catch (IOException e) {
             log.error("Failed to init " + MavenInfo.class.getSimpleName(), e);
+            this.mvnProperties.clear();
+        } catch (NullPointerException npe) {
+            log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    MAVEN_PROPERTIES_FILE);
             this.mvnProperties.clear();
         }
     }
