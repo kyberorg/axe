@@ -26,25 +26,4 @@ file_env 'YALS_DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
 
-checkingDb=true
-
-# For DB checker
-file_env 'DB_HOST'
-file_env 'DB_PORT' '3306'
-
-if [ "x$DB_HOST" == "x" ]; then
-  checkingDb=false
-fi
-
-# DB checker
-if [ "$checkingDb" = true ]; then
-  echo "Connecting to $DB_HOST:$DB_PORT"
-
-  while ! nc -z $DB_HOST $DB_PORT; do
-    echo "Waiting for DB..."
-    sleep 1
-  done
-  echo "Connected! Here we go: "
-fi
-
 exec java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app/yals.jar
