@@ -25,7 +25,7 @@ public class MavenInfo {
 
     private final Properties mvnProperties = new Properties();
 
-    String vaadinVersion; //vaadin.version
+    private String vaadinVersion; //vaadin.version
 
     public MavenInfo() {
         init();
@@ -43,15 +43,17 @@ public class MavenInfo {
             return;
         }
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(MAVEN_PROPERTIES_FILE);
+        if (is == null) {
+            log.warn("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    MAVEN_PROPERTIES_FILE);
+            this.mvnProperties.clear();
+            return;
+        }
         try {
             mvnProperties.load(is);
             this.publishFromProperties();
         } catch (IOException e) {
             log.error("Failed to init " + MavenInfo.class.getSimpleName(), e);
-            this.mvnProperties.clear();
-        } catch (NullPointerException npe) {
-            log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
-                    MAVEN_PROPERTIES_FILE);
             this.mvnProperties.clear();
         }
     }
