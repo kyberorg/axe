@@ -299,6 +299,20 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-frontend</goal>
+                            <goal>build-frontend</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Git info -->
+            <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
                 <version>4.0.0</version>
@@ -309,16 +323,20 @@
                     </generateGitPropertiesFilename>
                 </configuration>
             </plugin>
+            <!-- Properties for this pom.xml -->
             <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.version}</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
                 <executions>
                     <execution>
+                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>prepare-frontend</goal>
-                            <goal>build-frontend</goal>
+                            <goal>write-project-properties</goal>
                         </goals>
+                        <configuration>
+                            <outputFile>${project.build.outputDirectory}/maven.properties</outputFile>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -52,13 +54,21 @@ public class GitRepoState {
         init();
     }
 
-    boolean hasValues() {
+    public boolean hasValues() {
         return !gitProperties.isEmpty();
     }
 
     private void init() {
+        if(this.getClass().getClassLoader() == null) {
+            log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    GIT_PROPERTIES_FILE);
+            this.gitProperties.clear();
+            return;
+        }
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE);
         try {
-            this.gitProperties.load(this.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
+            this.gitProperties.load(is);
             log.trace("{}: parsed info from file: {}", GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);
             this.publishFromProperties();
         } catch (IOException ioe) {

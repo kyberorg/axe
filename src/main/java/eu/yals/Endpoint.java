@@ -38,6 +38,11 @@ public class Endpoint {
          * Page for debugging staff (avoid adding it in PROD mode)
          */
         public static final String DEBUG_PAGE = "debug";
+
+        /**
+         * Page for displaying software info (avoid adding it in PROD mode)
+         */
+        public static final String INFO_PAGE = "infoPage";
     }
 
     /**
