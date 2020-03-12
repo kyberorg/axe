@@ -1,6 +1,7 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Yet another link shortener",
+    "short_name": "yals",
+    "start_url": "/",
     "icons": [
         {
             "src": "/icons/android-chrome-192x192.png",
