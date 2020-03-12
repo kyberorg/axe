@@ -1,4 +1,5 @@
 [![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Fmaster)](https://ci.yadev.eu/job/YalsGH/job/master/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6a6b92ffc1841e49cef33eadf8aa201)](https://www.codacy.com/gh/yadevee/yals?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yadevee/yals&amp;utm_campaign=Badge_Grade)
 
 # Yet another link shortener
 
