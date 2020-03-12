@@ -69,6 +69,15 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
 
   @Override
   public void configurePage(InitialPageSettings settings) {
-    settings.addFavIcon("icon", "/favicon.ico", "16x16");
+    settings.addFavIcon("icon", "/icons/favicon-32x32.png", "32x32");
+    settings.addLink("shortcut icon","/icons/favicon-16x16.png");
+    settings.addLink("apple-touch-icon", "/icons/apple-touch-icon.png");
+    settings.addLink("manifest", "/site.webmanifest");
+    settings.addLink("mask-icon", "/icons/safari-pinned-tab.svg");
+
+    settings.addMetaTag("apple-mobile-web-app-title", "Yals");
+    settings.addMetaTag("application-name", "Yals");
+    settings.addMetaTag("msapplication-TileColor", "#ffc40d");
+    settings.addMetaTag("theme-color", "#ffffff");
   }
 }
