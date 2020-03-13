@@ -108,7 +108,7 @@ public class Endpoint {
         /**
          * Application offline page
          */
-        public static final String APP_OFFLINE_PAGE = "/app-offline.html";
+        public static final String APP_OFFLINE_PAGE = "app-offline.html";
     }
 
     /**
@@ -132,6 +132,12 @@ public class Endpoint {
          */
         public static final String ERROR_PAGE = "/error";
 
+        /**
+         * Serves offline page with status 503
+         *
+         * {@link eu.yals.controllers.AppOfflineController}
+         */
+        public static final String APP_OFFLINE = "/app-offline";
     }
 
     /**

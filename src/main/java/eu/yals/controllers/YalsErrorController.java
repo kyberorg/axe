@@ -164,6 +164,6 @@ public class YalsErrorController implements ErrorController {
     private void redirectToAppDownAnalogPage() {
         String host = request.getRequestURI().replace(getErrorPath(), "");
         response.setStatus(301);
-        response.setHeader(Header.LOCATION, host + Endpoint.Static.APP_OFFLINE_PAGE);
+        response.setHeader(Header.LOCATION, host + Endpoint.TNT.APP_OFFLINE);
     }
 }
