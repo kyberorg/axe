@@ -7,9 +7,13 @@ import kong.unirest.Unirest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.stereotype.Component;
 
-@Component
+/**
+ * Monitors if start page is accessible to users
+ *
+ * @since 2.7
+ */
+//@Component //FIXME fix check (at start-time start page is not accessible)
 public class YalsHealthIndicator implements HealthIndicator {
 
     private AppUtils appUtils;
