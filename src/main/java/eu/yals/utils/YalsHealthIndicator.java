@@ -7,16 +7,20 @@ import kong.unirest.Unirest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 /**
  * Monitors if start page is accessible to users
  *
  * @since 2.7
  */
-//@Component //FIXME fix check (at start-time start page is not accessible)
+@Component
 public class YalsHealthIndicator implements HealthIndicator {
 
     private AppUtils appUtils;
+    private boolean appStarted = false;
 
     public YalsHealthIndicator(AppUtils appUtils) {
         this.appUtils = appUtils;
@@ -24,16 +28,25 @@ public class YalsHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        StartPageStatus startPageStatus = isMainPageAccessible();
-        switch (startPageStatus) {
-            case OK:
-                return Health.up().build();
-            case DOWN:
-                return Health.down().outOfService().build();
-            case UNKNOWN:
-            default:
-                return Health.unknown().build();
+        if(appStarted) {
+            StartPageStatus startPageStatus = isMainPageAccessible();
+            switch (startPageStatus) {
+                case OK:
+                    return Health.up().build();
+                case DOWN:
+                    return Health.down().outOfService().build();
+                case UNKNOWN:
+                default:
+                    return Health.unknown().build();
+            }
+        } else {
+            return Health.up().build();
         }
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void detectApplicationStartup() {
+        appStarted = true;
     }
 
     private StartPageStatus isMainPageAccessible() {
