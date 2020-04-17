@@ -12,7 +12,6 @@ import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
@@ -56,14 +55,12 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         } else {
             subtitle = "";
         }
-        if (AppUtils.isMobile(VaadinSession.getCurrent())) {
-            menuBuilder.addToSection(
-                    Section.HEADER,
-                    new LeftHeaderItem(
-                            "Yet another link shortener",
-                            subtitle,
-                            "/images/logo.png"));
-        }
+        menuBuilder.addToSection(
+                Section.HEADER,
+                new LeftHeaderItem(
+                        "Yet another link shortener",
+                        subtitle,
+                        "/images/logo.png"));
 
         // items
         menuBuilder.add(new LeftNavigationItem(HomeView.class));
