@@ -18,13 +18,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
-import eu.yals.constants.App;
 import eu.yals.json.StoreRequestJson;
-import eu.yals.services.GitService;
 import eu.yals.services.overall.OverallService;
 import eu.yals.utils.AppUtils;
 import kong.unirest.HttpResponse;
@@ -52,10 +49,8 @@ public class HomeView extends VerticalLayout {
   private final Row overallRow = new Row();
   private final Row resultRow = new Row();
   private final Row qrCodeRow = new Row();
-  private HorizontalLayout footer = null;
 
   private final OverallService overallService;
-  private final GitService gitService;
   private final AppUtils appUtils;
 
   private TextField input;
@@ -63,17 +58,13 @@ public class HomeView extends VerticalLayout {
   ClipboardHelper clipboardHelper;
   Image qrCode;
 
-  private String latestCommit;
-  private String latestTag;
-
   private Span linkCounter;
 
   Notification errorNotification;
 
   public HomeView(
-      OverallService overallService, GitService gitService, AppUtils appUtils) {
+          OverallService overallService, AppUtils appUtils) {
     this.overallService = overallService;
-    this.gitService = gitService;
     this.appUtils = appUtils;
 
     init();
@@ -96,13 +87,6 @@ public class HomeView extends VerticalLayout {
     board.addRow(qrCodeRow);
 
     add(board);
-    if (AppUtils.isNotMobile(VaadinSession.getCurrent())) {
-      prepareGitInfoForFooter();
-      if (displayFooter()) {
-        footer = footer();
-        add(footer);
-      }
-    }
   }
 
   private void applyStyle() {
@@ -132,27 +116,6 @@ public class HomeView extends VerticalLayout {
     overallRow.setVisible(true);
     resultRow.setVisible(false);
     qrCodeRow.setVisible(false);
-  }
-
-  private void prepareGitInfoForFooter() {
-    latestCommit = gitService.getGitInfoSource().getLatestCommitHash().trim();
-    latestTag = gitService.getGitInfoSource().getLatestTag().trim();
-  }
-
-  private boolean displayFooter() {
-    boolean commitPresent =
-        (!latestCommit.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestCommit));
-    boolean tagPresent = (!latestTag.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestTag));
-
-    boolean displayCommitInfo = commitPresent && tagPresent;
-    log.trace(
-        "{} will I display footer: {}. Commit present: {}. Tag present: {} ",
-        TAG,
-        displayCommitInfo,
-        commitPresent,
-        tagPresent);
-
-    return displayCommitInfo;
   }
 
   private Div emptyDiv() {
@@ -243,30 +206,6 @@ public class HomeView extends VerticalLayout {
     qrCodeArea.add(qrCode);
     qrCodeArea.addClassNames("qr-area", "border");
     return qrCodeArea;
-  }
-
-  private HorizontalLayout footer() {
-    HorizontalLayout footer = new HorizontalLayout();
-    footer.setId(IDs.FOOTER);
-
-    Span versionStart = new Span(String.format("Version %s (based on commit ", this.latestTag));
-    Anchor commit =
-        new Anchor(
-            String.format("%s/%s", App.Git.REPOSITORY, this.latestCommit),
-            latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
-    commit.setId(IDs.COMMIT_LINK);
-    Span versionEnd = new Span(")");
-
-    Span version = new Span(versionStart, commit, versionEnd);
-    version.setId(IDs.VERSION);
-    version.addClassName("version");
-
-    footer.addClassName("footer");
-    footer.setWidthFull();
-
-    footer.add(version);
-
-    return footer;
   }
 
   private Notification getErrorNotification(String text) {
@@ -430,7 +369,6 @@ public class HomeView extends VerticalLayout {
       if (StringUtils.isNotBlank(qrCode)) {
         this.qrCode.setSrc(qrCode);
         qrCodeRow.setVisible(true);
-        if (footer != null) footer.setVisible(false);
       } else {
         showError("Internal error. Got malformed reply from QR generator");
       }
