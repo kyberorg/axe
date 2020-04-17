@@ -26,7 +26,6 @@ import eu.yals.constants.App;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.services.GitService;
 import eu.yals.services.overall.OverallService;
-import eu.yals.ui.css.HomeViewCss;
 import eu.yals.utils.AppUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -55,7 +54,6 @@ public class HomeView extends VerticalLayout {
   private final Row qrCodeRow = new Row();
   private HorizontalLayout footer = null;
 
-  private final HomeViewCss homeViewCss;
   private final OverallService overallService;
   private final GitService gitService;
   private final AppUtils appUtils;
@@ -73,8 +71,7 @@ public class HomeView extends VerticalLayout {
   Notification errorNotification;
 
   public HomeView(
-      HomeViewCss css, OverallService overallService, GitService gitService, AppUtils appUtils) {
-    this.homeViewCss = css;
+      OverallService overallService, GitService gitService, AppUtils appUtils) {
     this.overallService = overallService;
     this.gitService = gitService;
     this.appUtils = appUtils;
@@ -110,18 +107,19 @@ public class HomeView extends VerticalLayout {
 
   private void applyStyle() {
     firstRow.addClassName("mini-row");
+    firstRow.addClassName("row");
 
     mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(mainRow);
+    mainRow.addClassNames("row", "main-area", "border");
 
     overallRow.setComponentSpan(overallRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(overallRow);
+    overallRow.addClassNames("row", "overall-area", "border");
 
     resultRow.setComponentSpan(resultRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(resultRow);
+    resultRow.addClassNames("row", "result-area", "border");
 
     qrCodeRow.setComponentSpan(qrCodeRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(qrCodeRow);
+    qrCodeRow.addClassNames("row", "qr-area", "border");
 
     board.setSizeFull();
   }
@@ -167,8 +165,8 @@ public class HomeView extends VerticalLayout {
     H2 title = new H2("Yet another link shortener");
     title.setId(IDs.TITLE);
     Span subtitle = new Span("... for friends");
-    subtitle.setId(IDs.SUBTITLE);
-    homeViewCss.makeSubtitleItalic(subtitle);
+
+    subtitle.addClassName("italic");
 
     input = new TextField("Your very long URL here:");
     input.setId(IDs.INPUT);
@@ -187,7 +185,6 @@ public class HomeView extends VerticalLayout {
     VerticalLayout mainArea =
         new VerticalLayout(title, subtitle, input, publicAccessBanner, submitButton);
     mainArea.setId(IDs.MAIN_AREA);
-    homeViewCss.applyMainAreaStyle(mainArea);
     return mainArea;
   }
 
@@ -203,7 +200,6 @@ public class HomeView extends VerticalLayout {
 
     HorizontalLayout overallArea = new HorizontalLayout(overallText);
     overallArea.setId(IDs.OVERALL_AREA);
-    homeViewCss.applyOverallAreaStyle(overallArea);
     return overallArea;
   }
 
@@ -215,7 +211,7 @@ public class HomeView extends VerticalLayout {
 
     shortLink = new Anchor("", "");
     shortLink.setId(IDs.SHORT_LINK);
-    homeViewCss.makeLinkStrong(shortLink);
+    shortLink.addClassName("strong-link");
 
     com.vaadin.flow.component.icon.Icon copyLinkImage;
     copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.COPY);
@@ -225,7 +221,6 @@ public class HomeView extends VerticalLayout {
     clipboardHelper.wrap(copyLinkImage);
     clipboardHelper.setId(IDs.COPY_LINK_BUTTON);
 
-    homeViewCss.applyResultAreaStyle(resultArea);
     resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
@@ -241,8 +236,6 @@ public class HomeView extends VerticalLayout {
     qrCode.setId(IDs.QR_CODE);
     qrCode.setSrc("");
     qrCode.setAlt("qrCode");
-
-    homeViewCss.applyQrCodeAreaStyle(qrCodeArea);
 
     qrCodeArea.add(qrCode);
     return qrCodeArea;
@@ -262,9 +255,9 @@ public class HomeView extends VerticalLayout {
 
     Span version = new Span(versionStart, commit, versionEnd);
     version.setId(IDs.VERSION);
-    homeViewCss.paintVersion(version);
+    version.addClassName("version");
 
-    homeViewCss.applyFooterStyle(footer);
+    footer.addClassName("footer");
     footer.setWidthFull();
 
     footer.add(version);
