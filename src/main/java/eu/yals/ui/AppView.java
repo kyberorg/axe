@@ -32,13 +32,13 @@ import eu.yals.utils.AppUtils;
     offlineResources = {"images/logo.png"},
     description = "Yet another link shortener for friends")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
-public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
+public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftResponsiveHybrid>
     implements PageConfigurator {
 
   public AppView(GitService gitService, AppUtils appUtils) {
 
-    AppLayoutBuilder<LeftLayouts.LeftHybrid> builder =
-        AppLayoutBuilder.get(LeftLayouts.LeftHybrid.class).withTitle("YALS");
+    AppLayoutBuilder<LeftLayouts.LeftResponsiveHybrid> builder =
+        AppLayoutBuilder.get(LeftLayouts.LeftResponsiveHybrid.class).withTitle("YALS");
 
     LeftAppMenuBuilder menuBuilder = LeftAppMenuBuilder.get();
 
@@ -63,7 +63,7 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
 
     builder.withAppMenu(menuBuilder.build());
 
-    LeftLayouts.LeftHybrid layout = builder.build();
+    LeftLayouts.LeftResponsiveHybrid layout = builder.build();
     init(layout);
   }
 
