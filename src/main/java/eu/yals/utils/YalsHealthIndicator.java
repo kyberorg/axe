@@ -19,34 +19,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class YalsHealthIndicator implements HealthIndicator {
 
-    private AppUtils appUtils;
+    private final AppUtils appUtils;
     private boolean appStarted = false;
 
     public YalsHealthIndicator(AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 
-    @Override
-    public Health health() {
-        if(appStarted) {
-            StartPageStatus startPageStatus = isMainPageAccessible();
-            switch (startPageStatus) {
-                case OK:
-                    return Health.up().build();
-                case DOWN:
-                    return Health.down().outOfService().build();
-                case UNKNOWN:
-                default:
-                    return Health.unknown().build();
-            }
-        } else {
-            return Health.up().build();
-        }
-    }
-
     @EventListener(ApplicationReadyEvent.class)
     public void detectApplicationStartup() {
         appStarted = true;
+    }
+
+    @Override
+    public Health health() {
+        if(!appStarted) {
+            return Health.up().build();
+        }
+
+        StartPageStatus startPageStatus = isMainPageAccessible();
+        switch (startPageStatus) {
+            case OK:
+                return Health.up().build();
+            case DOWN:
+                return Health.down().outOfService().build();
+            case UNKNOWN:
+            default:
+                return Health.unknown().build();
+        }
     }
 
     private StartPageStatus isMainPageAccessible() {
@@ -60,7 +60,7 @@ public class YalsHealthIndicator implements HealthIndicator {
         return (response.getStatus() == 200 && hasBody) ? StartPageStatus.OK : StartPageStatus.DOWN;
     }
 
-    public enum StartPageStatus {
+    enum StartPageStatus {
         OK,
         DOWN,
         UNKNOWN
