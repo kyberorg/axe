@@ -105,6 +105,10 @@ public class Endpoint {
          * Application icon
          */
         public static final String FAVICON_ICO = "/favicon.ico";
+        /**
+         * Application offline page
+         */
+        public static final String APP_OFFLINE_PAGE = "app-offline.html";
     }
 
     /**
@@ -129,9 +133,11 @@ public class Endpoint {
         public static final String ERROR_PAGE = "/error";
 
         /**
-         * Temporary location with old UI
+         * Serves offline page with status 503
+         *
+         * {@link eu.yals.controllers.AppOfflineController}
          */
-        public static final String SAMPLE = "sample";
+        public static final String APP_OFFLINE = "/app-offline";
     }
 
     /**
