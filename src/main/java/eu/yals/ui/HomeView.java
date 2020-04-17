@@ -39,7 +39,7 @@ import org.vaadin.olli.ClipboardHelper;
 @Slf4j
 @SpringComponent
 @UIScope
-@StyleSheet("home.css")
+@StyleSheet("home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
@@ -117,7 +117,6 @@ public class HomeView extends VerticalLayout {
 
     resultRow.setComponentSpan(resultRow.getComponentAt(1), 2);
     homeViewCss.applyRowStyle(resultRow);
-    resultRow.addClassName("result");
 
     qrCodeRow.setComponentSpan(qrCodeRow.getComponentAt(1), 2);
     homeViewCss.applyRowStyle(qrCodeRow);

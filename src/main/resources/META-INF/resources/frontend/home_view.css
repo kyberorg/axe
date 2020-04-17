@@ -1,11 +1,19 @@
+body {
+    width: 99%;
+}
+
+#shortLink {
+    font-size: large;
+}
+
 @media all and (min-width: 407px) {
-    .result {
+    #shortLink {
         font-size: x-large;
     }
 }
 
 @media all and (min-width: 531px) {
-    .result {
+    #shortLink {
         font-size: xx-large;
     }
 }
