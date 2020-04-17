@@ -109,6 +109,8 @@ public class HomeView extends VerticalLayout {
   }
 
   private void applyStyle() {
+    firstRow.addClassName("mini-row");
+
     mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
     homeViewCss.applyRowStyle(mainRow);
 

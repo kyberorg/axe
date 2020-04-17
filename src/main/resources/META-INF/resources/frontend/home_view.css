@@ -2,6 +2,24 @@ body {
     width: 99%;
 }
 
+@media all and (max-width: 768px) {
+    .mini-row {
+        padding: 1px;
+    }
+}
+
+@media all and (min-width: 768px) {
+    .mini-row {
+        padding: 5px;
+    }
+}
+
+@media (min-width: 992px) {
+    .mini-row {
+        padding: 15px;
+    }
+}
+
 #shortLink {
     font-size: large;
 }
