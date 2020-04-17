@@ -1,0 +1,11 @@
+@media all and (min-width: 407px) {
+    .result {
+        font-size: x-large;
+    }
+}
+
+@media all and (min-width: 531px) {
+    .result {
+        font-size: xx-large;
+    }
+}
