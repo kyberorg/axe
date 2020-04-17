@@ -106,20 +106,20 @@ public class HomeView extends VerticalLayout {
   }
 
   private void applyStyle() {
-    firstRow.addClassName("mini-row");
-    firstRow.addClassName("row");
+    //firstRow.addClassName("mini-row");
+    //firstRow.addClassName("row");
 
     mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
-    mainRow.addClassNames("row", "main-area", "border");
+    mainRow.addClassName("row");
 
     overallRow.setComponentSpan(overallRow.getComponentAt(1), 2);
-    overallRow.addClassNames("row", "overall-area", "border");
+    overallRow.addClassName("row");
 
     resultRow.setComponentSpan(resultRow.getComponentAt(1), 2);
-    resultRow.addClassNames("row", "result-area", "border");
+    resultRow.addClassName("row");
 
     qrCodeRow.setComponentSpan(qrCodeRow.getComponentAt(1), 2);
-    qrCodeRow.addClassNames("row", "qr-area", "border");
+    qrCodeRow.addClassName("row");
 
     board.setSizeFull();
   }
@@ -185,6 +185,7 @@ public class HomeView extends VerticalLayout {
     VerticalLayout mainArea =
         new VerticalLayout(title, subtitle, input, publicAccessBanner, submitButton);
     mainArea.setId(IDs.MAIN_AREA);
+    mainArea.addClassNames("main-area", "border");
     return mainArea;
   }
 
@@ -200,6 +201,7 @@ public class HomeView extends VerticalLayout {
 
     HorizontalLayout overallArea = new HorizontalLayout(overallText);
     overallArea.setId(IDs.OVERALL_AREA);
+    overallArea.addClassNames("overall-area", "border");
     return overallArea;
   }
 
@@ -225,6 +227,7 @@ public class HomeView extends VerticalLayout {
     resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
     resultArea.add(emptySpan, shortLink, clipboardHelper);
+    resultArea.addClassNames("result-area", "border");
     return resultArea;
   }
 
@@ -238,6 +241,7 @@ public class HomeView extends VerticalLayout {
     qrCode.setAlt("qrCode");
 
     qrCodeArea.add(qrCode);
+    qrCodeArea.addClassNames("qr-area", "border");
     return qrCodeArea;
   }
 
