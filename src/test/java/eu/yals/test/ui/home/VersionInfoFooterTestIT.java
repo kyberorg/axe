@@ -27,7 +27,7 @@ public class VersionInfoFooterTestIT extends HomePageTest {
     }
 
     private boolean isFooterNotVisible() {
-        TestBenchElement footer = homeView.getFooter();
+        TestBenchElement footer = homeView.getMenuSubtitle();
         return ! footer.isDisplayed();
     }
 }

@@ -71,27 +71,6 @@ body {
     color: #337ab7;
     background-color: transparent;
 }
-.footer {
-    position: absolute;
-    bottom: 0;
-    height: 60px;
-    background-color: #f5f5f5;
-}
-
-.under-footer {
-    display: none;
-}
-
-@media all and (max-height: 800px) {
-    .footer {
-        display: none;
-    }
-
-    .under-footer {
-        display: block;
-        line-height: 1px;
-    }
-}
 
 .italic {
     font-style: italic;

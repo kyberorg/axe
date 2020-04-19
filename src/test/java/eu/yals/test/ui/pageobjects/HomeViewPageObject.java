@@ -100,16 +100,16 @@ public class HomeViewPageObject extends YalsPageObject {
     return getQRCodeArea().$(ImageElement.class).id(HomeView.IDs.QR_CODE);
   }
 
-  public TestBenchElement getFooter() {
-    return $(TestBenchElement.class).id(HomeView.IDs.FOOTER);
+  public TestBenchElement getMenuSubtitle() {
+    return $(TestBenchElement.class).id(HomeView.IDs.MENU_SUBTITLE);
   }
 
   public SpanElement getVersion() {
-    return getFooter().$(SpanElement.class).id(HomeView.IDs.VERSION);
+    return getMenuSubtitle().$(SpanElement.class).id(HomeView.IDs.VERSION);
   }
 
   public AnchorElement getCommitLink() {
-    return getFooter().$(AnchorElement.class).id(HomeView.IDs.COMMIT_LINK);
+    return getMenuSubtitle().$(AnchorElement.class).id(HomeView.IDs.COMMIT_LINK);
   }
 
   public NotificationElement getErrorNotification() {
