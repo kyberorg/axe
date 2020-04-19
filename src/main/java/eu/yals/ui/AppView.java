@@ -49,7 +49,7 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         // title and subtitle
         String subtitle;
         if(displayFullCommitInfo()) {
-            subtitle = String.format("Version %s (based on %s)",gitService.getLatestTag(), gitService.getLatestCommit());
+            subtitle = String.format("Version %s (based on <b>%s</b>)",gitService.getLatestTag(), gitService.getLatestCommit());
         } else if(gitService.tagPresent()) {
             subtitle = String.format("Version %s", gitService.getLatestTag());
         } else {
