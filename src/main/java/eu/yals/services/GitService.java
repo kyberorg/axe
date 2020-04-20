@@ -21,8 +21,8 @@ public class GitService {
     private final MavenGitInfo mavenGitInfo;
     private final NoGitInfo noGitInfo;
 
-    @Getter private String latestCommit;
-    @Getter private String latestTag;
+    @Getter private final String latestCommit;
+    @Getter private final String latestTag;
 
     public GitService(MavenGitInfo mavenGitInfo, NoGitInfo noGitInfo) {
         this.mavenGitInfo = mavenGitInfo;

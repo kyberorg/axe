@@ -429,9 +429,5 @@ public class HomeView extends VerticalLayout {
 
     public static final String QR_CODE_AREA = "qrCodeArea";
     public static final String QR_CODE = "qrCode";
-
-    public static final String MENU_SUBTITLE = "menu-header-subtitle";
-    public static final String VERSION = "version";
-    public static final String COMMIT_LINK = "commitLink";
   }
 }
