@@ -125,8 +125,9 @@ public class HomeView extends VerticalLayout {
   private VerticalLayout mainArea() {
     H2 title = new H2("Yet another link shortener");
     title.setId(IDs.TITLE);
-    Span subtitle = new Span("... for friends");
 
+    Span subtitle = new Span("... for friends");
+    subtitle.setId(IDs.SUBTITLE);
     subtitle.addClassName("italic");
 
     input = new TextField("Your very long URL here:");
