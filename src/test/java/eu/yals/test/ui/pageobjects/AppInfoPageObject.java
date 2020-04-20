@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 
 /**
  * Page Object for {@link AppInfoView}.
+ *
+ * @since 2.7
  */
 public class AppInfoPageObject extends YalsPageObject {
 

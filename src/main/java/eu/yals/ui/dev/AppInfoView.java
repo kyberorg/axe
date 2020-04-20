@@ -35,9 +35,6 @@ public class AppInfoView extends VerticalLayout {
     private final MavenInfo mavenInfo;
     private final AppUtils appUtils;
 
-    private String latestCommit;
-    private String latestTag;
-
     public AppInfoView(GitService gitService, GitRepoState gitRepoState, MavenInfo mavenInfo, AppUtils appUtils) {
         this.gitService = gitService;
         this.gitRepoState = gitRepoState;
@@ -59,20 +56,17 @@ public class AppInfoView extends VerticalLayout {
         }
     }
 
-    private void prepareGitInfoForPublicArea() {
-        latestCommit = gitService.getLatestCommit().trim();
-        latestTag = gitService.getLatestTag().trim();
-    }
-
     private HorizontalLayout publicInfoArea() {
-        prepareGitInfoForPublicArea();
         HorizontalLayout publicArea = new HorizontalLayout();
         publicArea.setId(IDs.PUBLIC_INFO_AREA);
 
-        Span versionStart = new Span(String.format("Version %s (based on commit ", this.latestTag));
+        String latestTag = gitService.getLatestTag();
+        String latestCommit = gitService.getLatestCommit();
+
+        Span versionStart = new Span(String.format("Version %s (based on commit ", latestTag));
         Anchor commit =
                 new Anchor(
-                        String.format("%s/%s", App.Git.REPOSITORY, this.latestCommit),
+                        String.format("%s/%s", App.Git.REPOSITORY, latestCommit),
                         latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
         commit.setId(IDs.COMMIT_LINK);
         Span versionEnd = new Span(")");
