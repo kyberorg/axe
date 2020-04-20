@@ -16,6 +16,7 @@ import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.services.GitService;
 import eu.yals.ui.AppView;
+import eu.yals.utils.AppUtils;
 import eu.yals.utils.git.GitRepoState;
 import eu.yals.utils.maven.MavenInfo;
 
@@ -31,23 +32,30 @@ public class AppInfoView extends VerticalLayout {
     private final GitService gitService;
     private final GitRepoState gitRepoState;
     private final MavenInfo mavenInfo;
+    private final AppUtils appUtils;
 
     private String latestCommit;
     private String latestTag;
 
-    public AppInfoView(GitService gitService, GitRepoState gitRepoState, MavenInfo mavenInfo) {
+    public AppInfoView(GitService gitService, GitRepoState gitRepoState, MavenInfo mavenInfo, AppUtils appUtils) {
         this.gitService = gitService;
         this.gitRepoState = gitRepoState;
         this.mavenInfo = mavenInfo;
+        this.appUtils = appUtils;
 
         init();
     }
 
     private void init() {
         setId(IDs.VIEW_ID);
+
         HorizontalLayout publicInfoArea = publicInfoArea();
-        VerticalLayout devInfoArea = devInfoArea();
-        add(publicInfoArea, devInfoArea);
+        add(publicInfoArea);
+
+        if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
+            VerticalLayout devInfoArea = devInfoArea();
+            add(devInfoArea);
+        }
     }
 
     private void prepareGitInfoForPublicArea() {

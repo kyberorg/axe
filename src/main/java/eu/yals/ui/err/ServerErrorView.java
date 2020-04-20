@@ -9,12 +9,10 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
-import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
-import eu.yals.constants.Header;
 import eu.yals.controllers.YalsErrorController;
 import eu.yals.exception.GeneralServerException;
 import eu.yals.exception.error.YalsError;
@@ -94,7 +92,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         timeStampPanel = techInfo.add("When happened?", when);
         triggerPanelsBasedOnTextInside(userMessagePanel, timeStampPanel);
 
-        if (appUtils.isDevelopmentModeActivated() || hasDevHeader()) {
+        if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
             techMessagePanel = techInfo.add("Tech message", messageSpan);
             tracePanel = techInfo.add("Trace", traceSpan);
             triggerPanelsBasedOnTextInside(techMessagePanel, tracePanel);
@@ -110,7 +108,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         }
         triggerPanelsBasedOnTextInside(userMessagePanel, timeStampPanel);
 
-        if (appUtils.isDevelopmentModeActivated() || hasDevHeader()) {
+        if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
             if (StringUtils.isNotBlank(yalsError.getTechMessage())) {
                 String techMessage = formatTechMessage(yalsError.getTechMessage());
 
@@ -143,15 +141,6 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
             } else {
                 panel.setEnabled(false);
             }
-        }
-    }
-
-    private boolean hasDevHeader() {
-        String xDeveloper = VaadinRequest.getCurrent().getHeader(Header.X_DEVELOPER);
-        if (StringUtils.isBlank(xDeveloper)) {
-            return false;
-        } else {
-            return Boolean.parseBoolean(xDeveloper);
         }
     }
 
