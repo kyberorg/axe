@@ -16,7 +16,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import eu.yals.services.GitService;
 import eu.yals.ui.dev.AppInfoView;
 import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         implements PageConfigurator {
     private static final String TAG = "[App View]";
-    private final GitService gitService;
 
-    public AppView(GitService gitService, AppUtils appUtils) {
-        this.gitService = gitService;
+    public AppView(AppUtils appUtils) {
 
         AppLayoutBuilder<LeftLayouts.LeftHybrid> builder =
                 AppLayoutBuilder.get(LeftLayouts.LeftHybrid.class).withTitle("YALS");
@@ -47,19 +44,11 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         LeftAppMenuBuilder menuBuilder = LeftAppMenuBuilder.get();
 
         // title and subtitle
-        String subtitle;
-        if(displayFullCommitInfo()) {
-            subtitle = String.format("Version %s (based on %s)",gitService.getLatestTag(), gitService.getLatestCommit());
-        } else if(gitService.tagPresent()) {
-            subtitle = String.format("Version %s", gitService.getLatestTag());
-        } else {
-            subtitle = "";
-        }
         menuBuilder.addToSection(
                 Section.HEADER,
                 new LeftHeaderItem(
                         "Yet another link shortener",
-                        subtitle,
+                        "",
                         "/images/logo.png"));
 
         // items
@@ -89,19 +78,5 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         settings.addMetaTag("application-name", "Yals");
         settings.addMetaTag("msapplication-TileColor", "#ffc40d");
         settings.addMetaTag("theme-color", "#ffffff");
-    }
-
-    private boolean displayFullCommitInfo() {
-        boolean commitPresent = gitService.commitPresent();
-        boolean tagPresent = gitService.tagPresent();
-        boolean displayCommitInfo = commitPresent && tagPresent;
-        log.trace(
-                "{} will I display commit info: {}. Commit present: {}. Tag present: {} ",
-                TAG,
-                displayCommitInfo,
-                commitPresent,
-                tagPresent);
-
-        return displayCommitInfo;
     }
 }
