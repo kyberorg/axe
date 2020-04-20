@@ -45,7 +45,7 @@ public class AppInfoView extends VerticalLayout {
     }
 
     private void init() {
-        setId(ID.VIEW_ID);
+        setId(Id.VIEW_ID);
 
         HorizontalLayout publicInfoArea = publicInfoArea();
         add(publicInfoArea);
@@ -58,7 +58,7 @@ public class AppInfoView extends VerticalLayout {
 
     private HorizontalLayout publicInfoArea() {
         HorizontalLayout publicArea = new HorizontalLayout();
-        publicArea.setId(ID.PUBLIC_INFO_AREA);
+        publicArea.setId(Id.PUBLIC_INFO_AREA);
 
         String latestTag = gitService.getLatestTag();
         String latestCommit = gitService.getLatestCommit();
@@ -68,11 +68,11 @@ public class AppInfoView extends VerticalLayout {
                 new Anchor(
                         String.format("%s/%s", App.Git.REPOSITORY, latestCommit),
                         latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
-        commit.setId(ID.COMMIT_LINK);
+        commit.setId(Id.COMMIT_LINK);
         Span versionEnd = new Span(")");
 
         Span version = new Span(versionStart, commit, versionEnd);
-        version.setId(ID.VERSION);
+        version.setId(Id.VERSION);
 
         publicArea.setWidthFull();
 
@@ -83,7 +83,7 @@ public class AppInfoView extends VerticalLayout {
 
     private VerticalLayout devInfoArea() {
         VerticalLayout devInfoArea = new VerticalLayout();
-        devInfoArea.setId(ID.DEV_INFO_AREA);
+        devInfoArea.setId(Id.DEV_INFO_AREA);
 
         String vaadinVersionStr = mavenInfo.hasValues() ? mavenInfo.getVaadinVersion() : UNDEFINED;
         String vaadinFlowVersion = Version.getFullVersion();
@@ -104,7 +104,7 @@ public class AppInfoView extends VerticalLayout {
         return devInfoArea;
     }
 
-    public static class ID {
+    public static class Id {
         public static final String VIEW_ID = "appInfoView";
         public static final String PUBLIC_INFO_AREA = "publicInfoArea";
         public static final String VERSION = "version";

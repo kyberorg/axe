@@ -17,18 +17,18 @@ public class AppInfoPageObject extends YalsPageObject {
         return new AppInfoPageObject(driver);
     }
     public AppInfoPageObject(WebDriver driver) {
-        super(driver, AppInfoView.ID.VIEW_ID);
+        super(driver, AppInfoView.Id.VIEW_ID);
     }
 
     public TestBenchElement getPublicInfoArea() {
-        return $(TestBenchElement.class).id(AppInfoView.ID.PUBLIC_INFO_AREA);
+        return $(TestBenchElement.class).id(AppInfoView.Id.PUBLIC_INFO_AREA);
     }
 
     public SpanElement getVersion() {
-        return getPublicInfoArea().$(SpanElement.class).id(AppInfoView.ID.VERSION);
+        return getPublicInfoArea().$(SpanElement.class).id(AppInfoView.Id.VERSION);
     }
 
     public AnchorElement getCommitLink() {
-        return getPublicInfoArea().$(AnchorElement.class).id(AppInfoView.ID.COMMIT_LINK);
+        return getPublicInfoArea().$(AnchorElement.class).id(AppInfoView.Id.COMMIT_LINK);
     }
 }
