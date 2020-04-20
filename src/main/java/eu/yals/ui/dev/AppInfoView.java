@@ -22,7 +22,7 @@ import eu.yals.utils.maven.MavenInfo;
 
 @SpringComponent
 @UIScope
-@Route(value = Endpoint.UI.INFO_PAGE, layout = AppView.class)
+@Route(value = Endpoint.UI.APP_INFO_PAGE, layout = AppView.class)
 @Caption("App Info")
 @Icon(VaadinIcon.INFO)
 @PageTitle("Link shortener for friends: App Info")

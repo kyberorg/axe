@@ -3,21 +3,19 @@ package eu.yals.test.ui.appinfo;
 import eu.yals.services.GitService;
 import eu.yals.test.ui.AppInfoPageTest;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Checking elements of footer with information about version
+ * Checking elements of public info area with information about version
  *
- * @since 2.0
+ * @since 2.7
  */
 @Component
 public class PublicInfoTestIT extends AppInfoPageTest {
 
-    private final GitService gitService;
-
-    public PublicInfoTestIT(GitService gitService) {
-        this.gitService = gitService;
-    }
+    @Autowired
+    private GitService gitService;
 
     @Test
     public void publicAreaHasAllRequiredElements() {
