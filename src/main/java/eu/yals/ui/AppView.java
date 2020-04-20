@@ -34,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         implements PageConfigurator {
-    private static final String TAG = "[App View]";
 
     public AppView(AppUtils appUtils) {
 
