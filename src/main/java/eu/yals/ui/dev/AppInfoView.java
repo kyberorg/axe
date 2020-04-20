@@ -3,13 +3,14 @@ package eu.yals.ui.dev;
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.Version;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
@@ -91,15 +92,19 @@ public class AppInfoView extends VerticalLayout {
         devInfoArea.setId(IDs.DEV_INFO_AREA);
 
         String vaadinVersionStr = mavenInfo.hasValues() ? mavenInfo.getVaadinVersion() : UNDEFINED;
+        String vaadinFlowVersion = Version.getFullVersion();
+
         String gitBranchStr = gitRepoState.hasValues() ? gitRepoState.getBranch() : UNDEFINED;
         String gitHostStr = gitRepoState.hasValues() ? gitRepoState.getBuildHost() : UNDEFINED;
 
-        H2 h2 = new H2("Dev Info");
-        Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr);
+        H3 h3 = new H3("Dev Info");
+        Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr +
+                " (Flow: " + vaadinFlowVersion + ")");
+
         Span gitBranch = new Span("Git branch: " + gitBranchStr);
         Span gitHost = new Span("Built at " + gitHostStr);
 
-        devInfoArea.add(h2, vaadinVersion, gitBranch, gitHost);
+        devInfoArea.add(h3, vaadinVersion, gitBranch, gitHost);
 
         add(devInfoArea);
         return devInfoArea;
