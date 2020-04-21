@@ -201,7 +201,7 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        Assert.assertEquals(200, result.getStatus());
+        assertEquals(200, result.getStatus());
 
         String body = result.getBody();
         Assert.assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
