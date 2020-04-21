@@ -7,6 +7,7 @@ import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -17,15 +18,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
-import eu.yals.constants.App;
 import eu.yals.json.StoreRequestJson;
-import eu.yals.services.GitService;
 import eu.yals.services.overall.OverallService;
-import eu.yals.ui.css.HomeViewCss;
 import eu.yals.utils.AppUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -38,6 +35,7 @@ import org.vaadin.olli.ClipboardHelper;
 @Slf4j
 @SpringComponent
 @UIScope
+@StyleSheet("home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
@@ -51,11 +49,8 @@ public class HomeView extends VerticalLayout {
   private final Row overallRow = new Row();
   private final Row resultRow = new Row();
   private final Row qrCodeRow = new Row();
-  private HorizontalLayout footer = null;
 
-  private final HomeViewCss homeViewCss;
   private final OverallService overallService;
-  private final GitService gitService;
   private final AppUtils appUtils;
 
   private TextField input;
@@ -63,18 +58,13 @@ public class HomeView extends VerticalLayout {
   ClipboardHelper clipboardHelper;
   Image qrCode;
 
-  private String latestCommit;
-  private String latestTag;
-
   private Span linkCounter;
 
   Notification errorNotification;
 
   public HomeView(
-      HomeViewCss css, OverallService overallService, GitService gitService, AppUtils appUtils) {
-    this.homeViewCss = css;
+          OverallService overallService, AppUtils appUtils) {
     this.overallService = overallService;
-    this.gitService = gitService;
     this.appUtils = appUtils;
 
     init();
@@ -97,27 +87,21 @@ public class HomeView extends VerticalLayout {
     board.addRow(qrCodeRow);
 
     add(board);
-    if (AppUtils.isNotMobile(VaadinSession.getCurrent())) {
-      prepareGitInfoForFooter();
-      if (displayFooter()) {
-        footer = footer();
-        add(footer);
-      }
-    }
   }
 
   private void applyStyle() {
+
     mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(mainRow);
+    mainRow.addClassName("row");
 
     overallRow.setComponentSpan(overallRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(overallRow);
+    overallRow.addClassName("row");
 
     resultRow.setComponentSpan(resultRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(resultRow);
+    resultRow.addClassName("row");
 
     qrCodeRow.setComponentSpan(qrCodeRow.getComponentAt(1), 2);
-    homeViewCss.applyRowStyle(qrCodeRow);
+    qrCodeRow.addClassName("row");
 
     board.setSizeFull();
   }
@@ -132,27 +116,6 @@ public class HomeView extends VerticalLayout {
     qrCodeRow.setVisible(false);
   }
 
-  private void prepareGitInfoForFooter() {
-    latestCommit = gitService.getGitInfoSource().getLatestCommitHash().trim();
-    latestTag = gitService.getGitInfoSource().getLatestTag().trim();
-  }
-
-  private boolean displayFooter() {
-    boolean commitPresent =
-        (!latestCommit.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestCommit));
-    boolean tagPresent = (!latestTag.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestTag));
-
-    boolean displayCommitInfo = commitPresent && tagPresent;
-    log.trace(
-        "{} will I display footer: {}. Commit present: {}. Tag present: {} ",
-        TAG,
-        displayCommitInfo,
-        commitPresent,
-        tagPresent);
-
-    return displayCommitInfo;
-  }
-
   private Div emptyDiv() {
     Div div = new Div();
     div.setText("");
@@ -162,9 +125,10 @@ public class HomeView extends VerticalLayout {
   private VerticalLayout mainArea() {
     H2 title = new H2("Yet another link shortener");
     title.setId(IDs.TITLE);
+
     Span subtitle = new Span("... for friends");
     subtitle.setId(IDs.SUBTITLE);
-    homeViewCss.makeSubtitleItalic(subtitle);
+    subtitle.addClassName("italic");
 
     input = new TextField("Your very long URL here:");
     input.setId(IDs.INPUT);
@@ -183,7 +147,7 @@ public class HomeView extends VerticalLayout {
     VerticalLayout mainArea =
         new VerticalLayout(title, subtitle, input, publicAccessBanner, submitButton);
     mainArea.setId(IDs.MAIN_AREA);
-    homeViewCss.applyMainAreaStyle(mainArea);
+    mainArea.addClassNames("main-area", "border");
     return mainArea;
   }
 
@@ -199,7 +163,7 @@ public class HomeView extends VerticalLayout {
 
     HorizontalLayout overallArea = new HorizontalLayout(overallText);
     overallArea.setId(IDs.OVERALL_AREA);
-    homeViewCss.applyOverallAreaStyle(overallArea);
+    overallArea.addClassNames("overall-area", "border");
     return overallArea;
   }
 
@@ -211,7 +175,7 @@ public class HomeView extends VerticalLayout {
 
     shortLink = new Anchor("", "");
     shortLink.setId(IDs.SHORT_LINK);
-    homeViewCss.makeLinkStrong(shortLink);
+    shortLink.addClassName("strong-link");
 
     com.vaadin.flow.component.icon.Icon copyLinkImage;
     copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.COPY);
@@ -221,11 +185,11 @@ public class HomeView extends VerticalLayout {
     clipboardHelper.wrap(copyLinkImage);
     clipboardHelper.setId(IDs.COPY_LINK_BUTTON);
 
-    homeViewCss.applyResultAreaStyle(resultArea);
     resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
     resultArea.add(emptySpan, shortLink, clipboardHelper);
+    resultArea.addClassNames("result-area", "border");
     return resultArea;
   }
 
@@ -238,34 +202,9 @@ public class HomeView extends VerticalLayout {
     qrCode.setSrc("");
     qrCode.setAlt("qrCode");
 
-    homeViewCss.applyQrCodeAreaStyle(qrCodeArea);
-
     qrCodeArea.add(qrCode);
+    qrCodeArea.addClassNames("qr-area", "border");
     return qrCodeArea;
-  }
-
-  private HorizontalLayout footer() {
-    HorizontalLayout footer = new HorizontalLayout();
-    footer.setId(IDs.FOOTER);
-
-    Span versionStart = new Span(String.format("Version %s (based on commit ", this.latestTag));
-    Anchor commit =
-        new Anchor(
-            String.format("%s/%s", App.Git.REPOSITORY, this.latestCommit),
-            latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
-    commit.setId(IDs.COMMIT_LINK);
-    Span versionEnd = new Span(")");
-
-    Span version = new Span(versionStart, commit, versionEnd);
-    version.setId(IDs.VERSION);
-    homeViewCss.paintVersion(version);
-
-    homeViewCss.applyFooterStyle(footer);
-    footer.setWidthFull();
-
-    footer.add(version);
-
-    return footer;
   }
 
   private Notification getErrorNotification(String text) {
@@ -429,7 +368,6 @@ public class HomeView extends VerticalLayout {
       if (StringUtils.isNotBlank(qrCode)) {
         this.qrCode.setSrc(qrCode);
         qrCodeRow.setVisible(true);
-        if (footer != null) footer.setVisible(false);
       } else {
         showError("Internal error. Got malformed reply from QR generator");
       }
@@ -490,9 +428,5 @@ public class HomeView extends VerticalLayout {
 
     public static final String QR_CODE_AREA = "qrCodeArea";
     public static final String QR_CODE = "qrCode";
-
-    public static final String FOOTER = "footer";
-    public static final String VERSION = "version";
-    public static final String COMMIT_LINK = "commitLink";
   }
 }

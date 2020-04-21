@@ -1,9 +1,12 @@
 package eu.yals.services;
 
+import eu.yals.constants.App;
 import eu.yals.utils.git.GitInfo;
 import eu.yals.utils.git.MavenGitInfo;
 import eu.yals.utils.git.NoGitInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,12 +21,18 @@ public class GitService {
     private final MavenGitInfo mavenGitInfo;
     private final NoGitInfo noGitInfo;
 
+    @Getter private final String latestCommit;
+    @Getter private final String latestTag;
+
     public GitService(MavenGitInfo mavenGitInfo, NoGitInfo noGitInfo) {
         this.mavenGitInfo = mavenGitInfo;
         this.noGitInfo = noGitInfo;
+
+        latestCommit = this.getGitInfoSource().getLatestCommitHash().trim();
+        latestTag =  this.getGitInfoSource().getLatestTag().trim();
     }
 
-    public GitInfo getGitInfoSource() {
+    private GitInfo getGitInfoSource() {
         if (mavenGitInfo.isApplicable()) {
             log.trace("{} Will return {}", TAG, MavenGitInfo.class.getSimpleName());
             return mavenGitInfo;
@@ -31,5 +40,13 @@ public class GitService {
             log.trace("{} Will return {}", TAG, NoGitInfo.class.getSimpleName());
             return noGitInfo;
         }
+    }
+
+    public boolean commitPresent() {
+        return (!latestCommit.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestCommit));
+    }
+
+    public boolean tagPresent() {
+        return (!latestTag.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestTag));
     }
 }

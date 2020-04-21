@@ -42,7 +42,7 @@ public class Endpoint {
         /**
          * Page for displaying software info (avoid adding it in PROD mode)
          */
-        public static final String INFO_PAGE = "infoPage";
+        public static final String APP_INFO_PAGE = "appInfo";
     }
 
     /**

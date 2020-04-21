@@ -272,6 +272,15 @@ public class AppUtils {
         return !isProductionModeActivated();
     }
 
+    public boolean hasDevHeader() {
+        String xDeveloper = VaadinRequest.getCurrent().getHeader(Header.X_DEVELOPER);
+        if (StringUtils.isBlank(xDeveloper)) {
+            return false;
+        } else {
+            return Boolean.parseBoolean(xDeveloper);
+        }
+    }
+
     public void pasteHtmlToComponent(String stringWithHtml, com.vaadin.flow.component.Component component) {
 
         component.getElement().setProperty(HTML_MODE, stringWithHtml);
