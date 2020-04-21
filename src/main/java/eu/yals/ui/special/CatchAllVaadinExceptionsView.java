@@ -1,6 +1,5 @@
 package eu.yals.ui.special;
 
-import com.bugsnag.Bugsnag;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
@@ -26,10 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 @UIScope
 public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasErrorParameter<Exception> {
 
-    private YalsErrorKeeper yalsErrorKeeper;
-    private ErrorUtils errorUtils;
+    private final YalsErrorKeeper yalsErrorKeeper;
+    private final ErrorUtils errorUtils;
 
-    public CatchAllVaadinExceptionsView(YalsErrorKeeper errorKeeper, ErrorUtils errorUtils, Bugsnag bugsnag) {
+    public CatchAllVaadinExceptionsView(YalsErrorKeeper errorKeeper, ErrorUtils errorUtils) {
         this.yalsErrorKeeper = errorKeeper;
         this.errorUtils = errorUtils;
     }

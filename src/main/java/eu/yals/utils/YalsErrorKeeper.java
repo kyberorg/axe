@@ -21,7 +21,7 @@ import static eu.yals.constants.App.NO_STATUS;
 public class YalsErrorKeeper {
     private static final String TAG = "[YALS ERROR KEEPER]";
 
-    private Map<String, YalsError> repo = new ConcurrentHashMap<>();
+    private final Map<String, YalsError> repo = new ConcurrentHashMap<>();
 
     public String send(YalsError yalsError) {
         String errorId;

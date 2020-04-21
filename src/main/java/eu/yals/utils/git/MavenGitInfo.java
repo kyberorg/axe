@@ -26,12 +26,12 @@ public class MavenGitInfo implements GitInfo {
 
     @Override
     public String getLatestCommitHash() {
-        return StringUtils.isNotBlank(gitRepoState.commitIdAbbrev) ? gitRepoState.commitIdAbbrev : App.NO_VALUE;
+        return StringUtils.isNotBlank(gitRepoState.getCommitIdAbbrev()) ? gitRepoState.getCommitIdAbbrev() : App.NO_VALUE;
     }
 
     @Override
     public String getLatestTag() {
         //we use here version from maven, because it is more stable then git tag
-        return StringUtils.isNotBlank(gitRepoState.buildVersion) ? gitRepoState.buildVersion : App.NO_VALUE;
+        return StringUtils.isNotBlank(gitRepoState.getBuildVersion()) ? gitRepoState.getBuildVersion() : App.NO_VALUE;
     }
 }

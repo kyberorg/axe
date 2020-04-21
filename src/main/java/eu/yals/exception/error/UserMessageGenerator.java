@@ -1,11 +1,18 @@
 package eu.yals.exception.error;
 
+import eu.yals.exception.YalsException;
+
 import java.util.HashMap;
 
 import static eu.yals.constants.App.NO_STATUS;
 
+/**
+ * Creates {@link YalsException#messageToUser} based on http status
+ *
+ * @since 2.7
+ */
 public class UserMessageGenerator {
-    private static HashMap<Integer, String> mapping = new HashMap<>();
+    private static final HashMap<Integer, String> mapping = new HashMap<>();
     private static final String DEFAULT_MESSAGE = "General server error";
 
     static {

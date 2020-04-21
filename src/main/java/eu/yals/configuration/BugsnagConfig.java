@@ -14,6 +14,11 @@ import org.springframework.core.env.Environment;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
+/**
+ * Configures Bugsnag integration
+ *
+ * @since 2.7
+ */
 @Slf4j
 @Configuration
 @Import(BugsnagSpringConfiguration.class)
@@ -22,16 +27,16 @@ public class BugsnagConfig {
     private static final String NO_TOKEN = "noToken";
 
     private final Environment env;
-    private MavenGitInfo mavenGitInfo;
+    private final MavenGitInfo mavenGitInfo;
+
+    private String proxyHost;
+    private String proxyPort;
+    private Bugsnag bugsnag;
 
     public BugsnagConfig(Environment env, MavenGitInfo gitInfo) {
         this.env = env;
         this.mavenGitInfo = gitInfo;
     }
-
-    private String proxyHost;
-    private String proxyPort;
-    private Bugsnag bugsnag;
 
     @Bean
     public Bugsnag bugsnag() {
