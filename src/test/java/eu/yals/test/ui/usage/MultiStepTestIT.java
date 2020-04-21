@@ -23,7 +23,7 @@ public class MultiStepTestIT extends HomePageTest {
   @Test
   public void closeButtonReallyClosesErrorNotification() {
     openHomePage();
-    homeView.pasteValueInFormAndSubmitIt(" ");
+    homeView.pasteValueInFormAndSubmitIt("veryLongStringWhichIsNotURL%&");
     Assert.assertTrue(homeView.getErrorNotification().isOpen());
     ButtonElement closeButton = homeView.getErrorNotification().$(ButtonElement.class).first();
     closeButton.click();

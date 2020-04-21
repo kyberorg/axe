@@ -29,8 +29,7 @@ public class IncorrectInputTestIT extends HomePageTest {
     homeView.pasteValueInFormAndSubmitIt(" ");
 
     formIsClearedResultAndQRCodeAreNotVisible();
-    errorBoxShouldAppear();
-    $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
+    submitButtonShouldBeDisabled();
   }
 
   @Test
@@ -39,8 +38,7 @@ public class IncorrectInputTestIT extends HomePageTest {
     homeView.pasteValueInFormAndSubmitIt("  ");
 
     formIsClearedResultAndQRCodeAreNotVisible();
-    errorBoxShouldAppear();
-    $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
+    submitButtonShouldBeDisabled();
   }
 
   @Test
@@ -112,5 +110,9 @@ public class IncorrectInputTestIT extends HomePageTest {
     Assert.assertTrue(homeView.getErrorNotification().isOpen());
     Assert.assertTrue(StringUtils.isNotBlank(homeView.getErrorNotification().getText()));
     Assert.assertTrue(homeView.getErrorNotification().$(ButtonElement.class).exists());
+  }
+
+  private void  submitButtonShouldBeDisabled() {
+    Assert.assertFalse(homeView.getSubmitButton().isEnabled());
   }
 }
