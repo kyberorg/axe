@@ -10,6 +10,7 @@ import org.openqa.selenium.NoSuchElementException;
 import static com.helger.commons.mock.CommonsAssert.fail;
 
 public class IncorrectInputTestIT extends HomePageTest {
+  private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
   private static final String MALFORMED_URL_TEXT = "malformed URL or not URL";
 
   @Test
@@ -17,7 +18,8 @@ public class IncorrectInputTestIT extends HomePageTest {
     openHomePage();
     homeView.pasteValueInForm("");
 
-    submitButtonShouldBeDisabled();
+    errorBoxShouldAppear();
+    $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
     formIsClearedResultAndQRCodeAreNotVisible();
   }
 

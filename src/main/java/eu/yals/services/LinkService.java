@@ -30,12 +30,10 @@ public class LinkService {
         Optional<Link> result;
         try {
             result = repo.findSingleByIdent(ident);
+        } catch (DataAccessResourceFailureException e) {
+            return new GetResult.DatabaseDown().withException(e);
         } catch (Exception e) {
-            if (e instanceof DataAccessResourceFailureException) {
-                return new GetResult.DatabaseDown().withException(e);
-            } else {
-                return new GetResult.Fail().withException(e);
-            }
+            return new GetResult.Fail().withException(e);
         }
 
         return result.<GetResult>map(link -> new GetResult.Success(link.getLink()))

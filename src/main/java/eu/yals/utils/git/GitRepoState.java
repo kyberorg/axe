@@ -44,10 +44,10 @@ public class GitRepoState {
 
     private final Properties gitProperties = new Properties();
 
-    String commitIdAbbrev;          // =${git.commit.id.abbrev}
-    String buildVersion;             // =${git.build.version}
-    String branch;                  //=${git.branch}
-    String buildHost;               //=${git.build.host}
+    private String commitIdAbbrev;          // =${git.commit.id.abbrev}
+    private String buildVersion;             // =${git.build.version}
+    private String branch;                  //=${git.branch}
+    private String buildHost;               //=${git.build.host}
 
     public GitRepoState() {
         init();

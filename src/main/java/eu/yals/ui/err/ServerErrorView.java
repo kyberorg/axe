@@ -180,6 +180,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
             default:
                 fillUIWithValuesFromError(yalsError);
                 event.rerouteToError(GeneralServerException.class, Integer.toString(yalsError.getHttpStatus()));
+                break;
         }
     }
 

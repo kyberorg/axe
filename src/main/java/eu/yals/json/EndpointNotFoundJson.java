@@ -50,8 +50,7 @@ public class EndpointNotFoundJson extends Json {
         }
 
         public static Endpoint create(HttpMethod method, String path) {
-            Endpoint endpoint = new Endpoint(method, path);
-            return endpoint;
+            return new Endpoint(method, path);
         }
     }
 }

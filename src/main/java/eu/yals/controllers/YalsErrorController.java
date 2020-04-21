@@ -28,13 +28,13 @@ public class YalsErrorController implements ErrorController {
     private final YalsErrorKeeper errorKeeper;
     private final ErrorUtils errorUtils;
 
-    HttpServletRequest request;
-    HttpServletResponse response;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
 
-    Throwable rawException;
-    Throwable cause;
-    int status;
-    String path;
+    private Throwable rawException;
+    private Throwable cause;
+    private int status;
+    private String path;
 
     public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils) {
         this.errorKeeper = yalsErrorKeeper;

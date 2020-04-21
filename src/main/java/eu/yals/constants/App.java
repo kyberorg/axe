@@ -6,9 +6,6 @@ package eu.yals.constants;
  * @since 2.3
  */
 public class App {
-    private App() {
-        throw new UnsupportedOperationException("Utility class");
-    }
 
     public static final String EQUAL = "=";
     public static final String AND = "&";
@@ -17,6 +14,10 @@ public class App {
     public static final int NO_STATUS = -1;
     public static final String NEW_LINE = System.getProperty("line.separator");
     public static final String WEB_NEW_LINE = "<BR>";
+
+    private App() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     public static class Emoji {
         public static final String WARNING = ":warning:";

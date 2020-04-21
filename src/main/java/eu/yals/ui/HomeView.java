@@ -56,13 +56,13 @@ public class HomeView extends VerticalLayout {
 
   private TextField input;
   private Button submitButton;
-  Anchor shortLink;
-  ClipboardHelper clipboardHelper;
-  Image qrCode;
+  private Anchor shortLink;
+  private ClipboardHelper clipboardHelper;
+  private Image qrCode;
 
   private Span linkCounter;
 
-  Notification errorNotification;
+  private Notification errorNotification;
 
   public HomeView(
           OverallService overallService, AppUtils appUtils) {

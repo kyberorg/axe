@@ -185,7 +185,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     if (result.getStatus() != 201) {
       log.error("Store API fail");
-      throw new RuntimeException("Could not get short link from Store API");
+      throw new IllegalStateException("Could not get short link from Store API");
     }
 
     JsonNode body = result.getBody();
