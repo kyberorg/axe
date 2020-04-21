@@ -237,6 +237,8 @@ public class HomeView extends VerticalLayout {
   }
 
   private void onSaveLink(ClickEvent<Button> buttonClickEvent) {
+    log.trace("Submit button clicked. By client? {}", buttonClickEvent.isFromClient());
+
     cleanErrors();
     cleanResults();
 
@@ -267,7 +269,9 @@ public class HomeView extends VerticalLayout {
 
   private void copyLinkToClipboard(
       ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
+    log.trace("Copy link button clicked. From client? {}", buttonClickEvent.isFromClient());
     getLinkCopiedNotification().open();
+    //All other actions are performed by component wrapper
   }
 
   private void sendLink(String link) {
