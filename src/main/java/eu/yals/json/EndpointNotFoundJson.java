@@ -43,10 +43,13 @@ public class EndpointNotFoundJson extends Json {
 
         public Endpoint(HttpMethod method, String path) {
             this.method = method.name();
+            String newPath;
             if (StringUtils.isNotBlank(path) && !path.startsWith("/")) {
-                path = "/" + path;
+                newPath = "/" + path;
+            } else {
+                newPath = path;
             }
-            this.path = path;
+            this.path = newPath;
         }
 
         public static Endpoint create(HttpMethod method, String path) {
