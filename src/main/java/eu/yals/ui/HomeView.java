@@ -111,7 +111,7 @@ public class HomeView extends VerticalLayout {
     long linksStored = overallService.numberOfStoredLinks();
     linkCounter.setText(Long.toString(linksStored));
 
-    input.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+    input.setValueChangeMode(ValueChangeMode.TIMEOUT);
     input.addValueChangeListener(event -> updateButtonState());
 
     mainRow.setVisible(true);
