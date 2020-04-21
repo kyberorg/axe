@@ -33,6 +33,16 @@ public class Endpoint {
          * Page that will shown when application hits fatal error and became unaccessible
          */
         public static final String ERROR_PAGE_503 = "errors/503";
+
+        /**
+         * Page for debugging staff (avoid adding it in PROD mode)
+         */
+        public static final String DEBUG_PAGE = "debug";
+
+        /**
+         * Page for displaying software info (avoid adding it in PROD mode)
+         */
+        public static final String APP_INFO_PAGE = "appInfo";
     }
 
     /**
@@ -95,6 +105,10 @@ public class Endpoint {
          * Application icon
          */
         public static final String FAVICON_ICO = "/favicon.ico";
+        /**
+         * Application offline page
+         */
+        public static final String APP_OFFLINE_PAGE = "app-offline.html";
     }
 
     /**
@@ -119,9 +133,11 @@ public class Endpoint {
         public static final String ERROR_PAGE = "/error";
 
         /**
-         * Temporary location with old UI
+         * Serves offline page with status 503
+         *
+         * {@link eu.yals.controllers.AppOfflineController}
          */
-        public static final String SAMPLE = "sample";
+        public static final String APP_OFFLINE = "/app-offline";
     }
 
     /**

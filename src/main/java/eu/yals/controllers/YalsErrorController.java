@@ -28,13 +28,13 @@ public class YalsErrorController implements ErrorController {
     private final YalsErrorKeeper errorKeeper;
     private final ErrorUtils errorUtils;
 
-    HttpServletRequest request;
-    HttpServletResponse response;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
 
-    Object rawException;
-    Throwable cause;
-    int status;
-    String path;
+    private Throwable rawException;
+    private Throwable cause;
+    private int status;
+    private String path;
 
     public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils) {
         this.errorKeeper = yalsErrorKeeper;
@@ -46,7 +46,10 @@ public class YalsErrorController implements ErrorController {
         this.request = req;
         this.response = resp;
 
-        rawException = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        rawException = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        if (rawException != null) {
+            cause = rawException.getCause();
+        }
         path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
         status = getCorrectStatus();
 
@@ -58,7 +61,7 @@ public class YalsErrorController implements ErrorController {
             logRequest(true);
         }
 
-        ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException((Throwable) rawException)
+        ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException(rawException)
                 .addStatus(status)
                 .addPath(path)
                 .build();
@@ -149,9 +152,18 @@ public class YalsErrorController implements ErrorController {
     }
 
     private void redirectToVaadinErrorPage(String errorId) {
+        if (rawException instanceof Error || cause instanceof Error) {
+            redirectToAppDownAnalogPage();
+            return;
+        }
         String host = request.getRequestURI().replace(getErrorPath(), "");
         response.setStatus(301);
         response.setHeader(Header.LOCATION, host + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
     }
 
+    private void redirectToAppDownAnalogPage() {
+        String host = request.getRequestURI().replace(getErrorPath(), "");
+        response.setStatus(301);
+        response.setHeader(Header.LOCATION, host + Endpoint.TNT.APP_OFFLINE);
+    }
 }

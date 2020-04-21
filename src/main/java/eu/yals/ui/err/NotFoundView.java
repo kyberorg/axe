@@ -40,6 +40,8 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     }
 
     private void init() {
+        this.setId(IDs.VIEW_ID);
+
         title.setText("404 - No Such Page Exception");
         subTitle.setText("We don't have such page at our site. Really.");
 
@@ -105,4 +107,7 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
         }
     }
 
+    public static class IDs {
+        public static final String VIEW_ID = "notFoundView";
+    }
 }

@@ -8,18 +8,18 @@ import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import org.testcontainers.shaded.org.apache.commons.lang.StringUtils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Testing Tech Parts and other non-standard locations
  *
  * @since 2.5.1
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 @Slf4j
 public class TechPartsTest extends UnirestTest {
     public static final String TAG = "[" + TechPartsTest.class.getSimpleName() + "]";
@@ -169,10 +169,10 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        Assert.assertEquals(200, result.getStatus());
+        assertEquals(200, result.getStatus());
 
         String body = result.getBody();
-        Assert.assertTrue("robots.txt is empty", StringUtils.isNotBlank(body));
+        assertTrue("robots.txt is empty", StringUtils.isNotBlank(body));
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
@@ -185,10 +185,10 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        Assert.assertEquals(200, result.getStatus());
+        assertEquals(200, result.getStatus());
 
         String body = result.getBody();
-        Assert.assertTrue("humans.txt is empty", StringUtils.isNotBlank(body));
+        assertTrue("humans.txt is empty", StringUtils.isNotBlank(body));
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
@@ -201,11 +201,11 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        Assert.assertEquals(200, result.getStatus());
+        assertEquals(200, result.getStatus());
 
         String body = result.getBody();
-        Assert.assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
-        //in Spring boot 2 favicon has image/x-icon mimetype
-        TestUtils.assertContentType(MimeType.IMAGE_X_ICON, result);
+        assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
+        //in Spring boot 2.2 favicon transferred without Content-Type Header, so we have to check Content-Length instead
+        TestUtils.assertContentNotEmpty(result);
     }
 }

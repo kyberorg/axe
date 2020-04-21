@@ -8,6 +8,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.core.IdentGenerator;
+import eu.yals.exception.NeedForRedirectException;
 import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
 import eu.yals.ui.err.AppDownView;
@@ -30,8 +31,7 @@ public class SlashView extends VerticalLayout implements HasUrlParameter<String>
     }
 
     @Override
-    public void setParameter(BeforeEvent event, String parameter) {
-        String ident = parameter;
+    public void setParameter(BeforeEvent event, String ident) {
         log.info("{} Got {\"Ident\": {}}", TAG, ident);
         if (StringUtils.isBlank(ident) || !ident.matches(IdentGenerator.VALID_IDENT_PATTERN)) {
             log.info("{} Got malformed request. Replying with 404. {\"Ident\": {}}", TAG, ident);
@@ -44,7 +44,7 @@ public class SlashView extends VerticalLayout implements HasUrlParameter<String>
         if (searchResult instanceof GetResult.Success) {
             String link = ((GetResult.Success) searchResult).getLink();
             log.info("{} Got long URL. Redirecting to {}", TAG, link);
-            event.rerouteToError(ArithmeticException.class, link);
+            event.rerouteToError(NeedForRedirectException.class, link);
         } else if (searchResult instanceof GetResult.NotFound) {
             log.info("{} No corresponding longURL found. Replying with 404", TAG);
             event.rerouteToError(NotFoundException.class);

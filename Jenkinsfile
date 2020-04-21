@@ -1,4 +1,4 @@
-@Library('common-lib@master') _
+@Library('common-lib@1.3') _
 pipeline {
     agent any;
     stages {
@@ -87,20 +87,16 @@ pipeline {
                                       usernameVariable: 'USR', passwordVariable: 'PASS'
                                      ]]) {
 
-                        testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname='${USR}':'${PASS}'@ci.yadev.eu " +
-                                '-Dcom.vaadin.testbench.Parameters.gridBrowsers=chrome ' +
+                        testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=grid.yatech.eu " +
+                                '-Dtest.browsers=chrome ' +
                                 "-Dtest.buildName=${buildName} " +
                                 '-Dtest=!eu.yals.test.ui.pages.**',
                                 actions: 'clean test',
                                 artifacts: "target/*.png", failStep: false);
                     }
-
-                    echo("Please find tests at https://tests.yadev.eu/dashboard/?q=" + buildName);
                 }
             }
         }
-
-
     }
     post {
         always {

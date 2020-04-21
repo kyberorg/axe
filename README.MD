@@ -1,4 +1,5 @@
 [![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Fmaster)](https://ci.yadev.eu/job/YalsGH/job/master/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6a6b92ffc1841e49cef33eadf8aa201)](https://www.codacy.com/gh/yadevee/yals)
 
 # Yet another link shortener
 
@@ -185,7 +186,14 @@ To adjust logging we use ENV variables or `-D` vars:
 * Use `LOG_LEVEL_SPRING` or `-Dlog.level.spring` for setting Spring (package: `org.springframework`) log level
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
-### Trunk build status
 
+### About: Tests
+* Test URL is defined bu `-Dtest.url` property. Should be with protocol
+* Browsers are defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge. 
+Can add several browsers like `chrome,firefox`
+* Report dir can be changed using `-Dtest.reportdir` property
+* Local server port can be changed using `-Dport` property
+
+### Trunk build status
 [![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Ftrunk)](https://ci.yadev.eu/job/YalsGH/job/trunk/)
 [![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)

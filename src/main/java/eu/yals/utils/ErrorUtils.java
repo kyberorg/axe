@@ -18,6 +18,9 @@ import java.util.Optional;
 
 import static eu.yals.constants.App.NO_STATUS;
 
+/**
+ * Methods for handling application errors
+ */
 @Component
 public class ErrorUtils {
 
@@ -145,9 +148,9 @@ public class ErrorUtils {
 
     @Data
     public static class Args {
-        Throwable exception;
-        int status = NO_STATUS;
-        String path;
+        private Throwable exception;
+        private int status = NO_STATUS;
+        private String path;
     }
 
     public static class ArgsBuilder {

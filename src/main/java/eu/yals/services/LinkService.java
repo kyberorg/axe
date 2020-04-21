@@ -12,7 +12,7 @@ import org.springframework.transaction.CannotCreateTransactionException;
 import java.util.Optional;
 
 /**
- * Service, which interacts with database
+ * Service, which interacts with database to store/retrieve links.
  *
  * @since 2.0
  */
@@ -30,12 +30,10 @@ public class LinkService {
         Optional<Link> result;
         try {
             result = repo.findSingleByIdent(ident);
+        } catch (DataAccessResourceFailureException e) {
+            return new GetResult.DatabaseDown().withException(e);
         } catch (Exception e) {
-            if (e instanceof DataAccessResourceFailureException) {
-                return new GetResult.DatabaseDown().withException(e);
-            } else {
-                return new GetResult.Fail().withException(e);
-            }
+            return new GetResult.Fail().withException(e);
         }
 
         return result.<GetResult>map(link -> new GetResult.Success(link.getLink()))
