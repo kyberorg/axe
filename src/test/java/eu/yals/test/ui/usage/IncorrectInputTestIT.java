@@ -10,35 +10,33 @@ import org.openqa.selenium.NoSuchElementException;
 import static com.helger.commons.mock.CommonsAssert.fail;
 
 public class IncorrectInputTestIT extends HomePageTest {
-  private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
   private static final String MALFORMED_URL_TEXT = "malformed URL or not URL";
 
   @Test
   public void emptyInput() {
     openHomePage();
-    homeView.pasteValueInFormAndSubmitIt("");
+    homeView.pasteValueInForm("");
 
+    submitButtonShouldBeDisabled();
     formIsClearedResultAndQRCodeAreNotVisible();
-    errorBoxShouldAppear();
-    $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
   }
 
   @Test
   public void singleSpace() {
     openHomePage();
-    homeView.pasteValueInFormAndSubmitIt(" ");
+    homeView.pasteValueInForm(" ");
 
-    formIsClearedResultAndQRCodeAreNotVisible();
     submitButtonShouldBeDisabled();
+    formIsClearedResultAndQRCodeAreNotVisible();
   }
 
   @Test
   public void twoSpaces() {
     openHomePage();
-    homeView.pasteValueInFormAndSubmitIt("  ");
+    homeView.pasteValueInForm("  ");
 
-    formIsClearedResultAndQRCodeAreNotVisible();
     submitButtonShouldBeDisabled();
+    formIsClearedResultAndQRCodeAreNotVisible();
   }
 
   @Test

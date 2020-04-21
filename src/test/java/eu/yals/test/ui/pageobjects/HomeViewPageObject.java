@@ -29,8 +29,12 @@ public class HomeViewPageObject extends YalsPageObject {
     super(driver, HomeView.IDs.VIEW_ID);
   }
 
-  public void pasteValueInFormAndSubmitIt(String link) {
+  public void pasteValueInForm(String link) {
     getInput().setValue(link);
+  }
+
+  public void pasteValueInFormAndSubmitIt(String link) {
+    pasteValueInForm(link);
     getSubmitButton().click();
   }
 
