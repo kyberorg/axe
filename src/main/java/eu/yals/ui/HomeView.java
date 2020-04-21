@@ -16,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -54,6 +55,7 @@ public class HomeView extends VerticalLayout {
   private final AppUtils appUtils;
 
   private TextField input;
+  Button submitButton;
   Anchor shortLink;
   ClipboardHelper clipboardHelper;
   Image qrCode;
@@ -90,7 +92,6 @@ public class HomeView extends VerticalLayout {
   }
 
   private void applyStyle() {
-
     mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
     mainRow.addClassName("row");
 
@@ -109,6 +110,10 @@ public class HomeView extends VerticalLayout {
   private void applyLoadState() {
     long linksStored = overallService.numberOfStoredLinks();
     linkCounter.setText(Long.toString(linksStored));
+
+    input.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+    input.addValueChangeListener(event -> updateButtonState());
+    updateButtonState();
 
     mainRow.setVisible(true);
     overallRow.setVisible(true);
@@ -139,7 +144,7 @@ public class HomeView extends VerticalLayout {
         new Span("Note: all links considered as public and can be used by anyone");
     publicAccessBanner.setId(IDs.BANNER);
 
-    Button submitButton = new Button("Shorten it!");
+    submitButton = new Button("Shorten it!");
     submitButton.setId(IDs.SUBMIT_BUTTON);
     submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     submitButton.addClickListener(this::onSaveLink);
@@ -391,6 +396,7 @@ public class HomeView extends VerticalLayout {
 
   private void cleanForm() {
     input.setValue("");
+    updateButtonState();
   }
 
   private void cleanErrors() {
@@ -406,6 +412,11 @@ public class HomeView extends VerticalLayout {
 
     qrCode.setSrc("");
     qrCodeRow.setVisible(false);
+  }
+
+  private void updateButtonState() {
+    boolean inputHasValue = StringUtils.isNotBlank(input.getValue());
+    submitButton.setEnabled(inputHasValue);
   }
 
   public static class IDs {
