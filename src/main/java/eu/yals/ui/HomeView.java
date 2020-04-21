@@ -55,7 +55,7 @@ public class HomeView extends VerticalLayout {
   private final AppUtils appUtils;
 
   private TextField input;
-  Button submitButton;
+  private Button submitButton;
   Anchor shortLink;
   ClipboardHelper clipboardHelper;
   Image qrCode;
@@ -113,7 +113,6 @@ public class HomeView extends VerticalLayout {
 
     input.setValueChangeMode(ValueChangeMode.ON_CHANGE);
     input.addValueChangeListener(event -> updateButtonState());
-    updateButtonState();
 
     mainRow.setVisible(true);
     overallRow.setVisible(true);
