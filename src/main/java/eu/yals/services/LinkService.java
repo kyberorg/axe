@@ -12,7 +12,7 @@ import org.springframework.transaction.CannotCreateTransactionException;
 import java.util.Optional;
 
 /**
- * Service, which interacts with database
+ * Service, which interacts with database to store/retrieve links.
  *
  * @since 2.0
  */

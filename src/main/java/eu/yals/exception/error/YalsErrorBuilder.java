@@ -2,9 +2,15 @@ package eu.yals.exception.error;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Builder for {@link YalsError}
+ *
+ * @since 2.7
+ */
+@SuppressWarnings("UnusedReturnValue") //normal for Builder
 public class YalsErrorBuilder {
     private String messageToUser;
-    private String techMessage;
+    private final String techMessage;
     private int httpStatus = 500;
     private Throwable rawException = null;
 

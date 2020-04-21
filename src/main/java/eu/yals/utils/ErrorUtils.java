@@ -18,6 +18,9 @@ import java.util.Optional;
 
 import static eu.yals.constants.App.NO_STATUS;
 
+/**
+ * Methods for handling application errors
+ */
 @Component
 public class ErrorUtils {
 

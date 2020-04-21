@@ -1,9 +1,15 @@
 package eu.yals.exception.error;
 
+import eu.yals.ui.err.ServerErrorView;
 import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * Useful data about happened error in application. Used for error reporting in {@link ServerErrorView}
+ *
+ * @since 2.7
+ */
 @Data
 public class YalsError {
     private String id;

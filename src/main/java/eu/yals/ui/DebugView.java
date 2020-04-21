@@ -19,9 +19,6 @@ import eu.yals.Endpoint;
 public class DebugView extends Div {
 
   public DebugView() {
-
     setId(DebugView.class.getSimpleName());
-
-
   }
 }

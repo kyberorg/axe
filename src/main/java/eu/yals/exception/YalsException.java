@@ -4,7 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
-
+/**
+ * {@link RuntimeException} with message as technical message and custom message as message for user
+ *
+ * @since 2.7
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class YalsException extends RuntimeException {

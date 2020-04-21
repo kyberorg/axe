@@ -1,4 +1,4 @@
-@Library('common-lib@master') _
+@Library('common-lib@1.3') _
 pipeline {
     agent any;
     stages {
@@ -94,8 +94,6 @@ pipeline {
                                 actions: 'clean test',
                                 artifacts: "target/*.png", failStep: false);
                     }
-
-                    echo("Please find tests at https://tests.yadev.eu/dashboard/?q=" + buildName);
                 }
             }
         }
