@@ -16,7 +16,7 @@ public class IncorrectInputTestIT extends HomePageTest {
   @Test
   public void emptyInput() {
     openHomePage();
-    homeView.pasteValueInForm("");
+    homeView.pasteValueInFormAndSubmitIt("");
 
     errorBoxShouldAppear();
     $$(homeView.getErrorNotification()).errorTextHas(CANNOT_EMPTY_TEXT);
