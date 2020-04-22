@@ -29,7 +29,7 @@ public class ErrorJson extends Json {
     private static final String NO_MESSAGE = "No error message found";
 
     /**
-     * Static constructor, build object with error message
+     * Static constructor, build object with error message.
      *
      * @param errorMsg non-empty string contains error message
      * @return error json object
@@ -41,7 +41,7 @@ public class ErrorJson extends Json {
     }
 
     /**
-     * Static constructor, build object from provided set of errors
+     * Static constructor, build object from provided set of errors.
      *
      * @param errorSet error objects
      * @return error json object
@@ -78,7 +78,7 @@ public class ErrorJson extends Json {
         private String errorMessage;
 
         /**
-         * Creates blank {@link Error} object
+         * Creates blank {@link Error} object.
          *
          * @return no params {@link Error}
          */
@@ -87,7 +87,8 @@ public class ErrorJson extends Json {
         }
 
         /**
-         * Create {@link Error} object from given {@link ConstraintViolation} object. Extracts it to field and message.
+         * Create {@link Error} object from given {@link ConstraintViolation} object.
+         * Extracts it to field and message.
          *
          * @param violation not empty object, which contains field and error message
          * @return error object with given params

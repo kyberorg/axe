@@ -29,7 +29,8 @@ public class EndpointNotFoundJson extends Json {
      * @param path   string with path to endpoint
      * @return json with endpoint built from given params
      */
-    public static EndpointNotFoundJson createWithEndpoint(final @NotNull HttpMethod method, final @NotNull String path) {
+    public static EndpointNotFoundJson createWithEndpoint(final @NotNull HttpMethod method,
+                                                          final @NotNull String path) {
         EndpointNotFoundJson self = new EndpointNotFoundJson();
         self.endpoint = Endpoint.create(method, path);
         return self;
@@ -45,7 +46,7 @@ public class EndpointNotFoundJson extends Json {
     }
 
     /**
-     * method and path combination (for example: GET /path)
+     * method and path combination (for example: GET /path).
      */
     public static class Endpoint {
         @Getter
@@ -57,16 +58,16 @@ public class EndpointNotFoundJson extends Json {
         /**
          * Constructs {@link Endpoint} object from method and path.
          *
-         * @param method http method like GET/POST...
-         * @param path   string with endpoint path
+         * @param httpMethod   http method like GET/POST...
+         * @param endpointPath string with endpoint path
          */
-        public Endpoint(final HttpMethod method, final String path) {
-            this.method = method.name();
+        public Endpoint(final HttpMethod httpMethod, final String endpointPath) {
+            this.method = httpMethod.name();
             String newPath;
-            if (StringUtils.isNotBlank(path) && !path.startsWith("/")) {
-                newPath = "/" + path;
+            if (StringUtils.isNotBlank(endpointPath) && !endpointPath.startsWith("/")) {
+                newPath = "/" + endpointPath;
             } else {
-                newPath = path;
+                newPath = endpointPath;
             }
             this.path = newPath;
         }
@@ -78,7 +79,7 @@ public class EndpointNotFoundJson extends Json {
          * @param path   string with endpoint path
          * @return created {@link Endpoint} obejct
          */
-        public static Endpoint create(HttpMethod method, String path) {
+        public static Endpoint create(final HttpMethod method, final String path) {
             return new Endpoint(method, path);
         }
     }

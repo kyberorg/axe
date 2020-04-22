@@ -22,7 +22,7 @@ public class StoreResponseJson extends Json {
     }
 
     /**
-     * Creates {@link StoreResponseJson} with given ident
+     * Creates {@link StoreResponseJson} with given ident.
      *
      * @param identStr string with ident.
      * @return json containing ident.

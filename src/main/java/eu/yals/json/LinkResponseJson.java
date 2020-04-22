@@ -24,11 +24,11 @@ public class LinkResponseJson extends Json {
     /**
      * Creates {@link LinkResponseJson} with given link param.
      *
-     * @param link string with short link
+     * @param shortLink string with short link
      * @return {@link LinkResponseJson} containing link param.
      */
-    public LinkResponseJson withLink(String link) {
-        this.link = link;
+    public LinkResponseJson withLink(final String shortLink) {
+        this.link = shortLink;
         return this;
     }
 }

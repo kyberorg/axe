@@ -13,7 +13,7 @@ import org.apache.commons.validator.GenericValidator;
  *
  * @since 2.3
  */
-public class MattermostResponseJson extends Json {
+public final class MattermostResponseJson extends Json {
 
     @Getter
     @JsonProperty("icon_url")
@@ -39,7 +39,7 @@ public class MattermostResponseJson extends Json {
     }
 
     /**
-     * Create response JSON with provided text
+     * Create response JSON with provided text.
      *
      * @param text string with message text
      * @return JSON which sent to requester mattermost
@@ -77,12 +77,12 @@ public class MattermostResponseJson extends Json {
     /**
      * Puts location.
      *
-     * @param gotoLocation string contains gotoLocation.
+     * @param goToLocation string contains gotoLocation.
      * @return json which senda in response
      */
-    public MattermostResponseJson addGotoLocation(final String gotoLocation) {
-        if (GenericValidator.isUrl(gotoLocation)) {
-            this.gotoLocation = gotoLocation;
+    public MattermostResponseJson addGotoLocation(final String goToLocation) {
+        if (GenericValidator.isUrl(goToLocation)) {
+            this.gotoLocation = goToLocation;
         } else {
             throw new IllegalArgumentException("Goto location should be valid URL");
         }
@@ -92,11 +92,11 @@ public class MattermostResponseJson extends Json {
     /**
      * Modifies Mattermost response type.
      *
-     * @param responseType valid {@link Mattermost.ResponseType}
-     * @return same jon
+     * @param respType valid {@link Mattermost.ResponseType}
+     * @return same json
      */
-    public MattermostResponseJson setResponseTypeTo(final Mattermost.ResponseType responseType) {
-        this.responseType = responseType.toString();
+    public MattermostResponseJson setResponseTypeTo(final Mattermost.ResponseType respType) {
+        this.responseType = respType.toString();
         return this;
     }
 
