@@ -2,7 +2,6 @@ package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.yals.constants.App;
-import eu.yals.controllers.rest.MattermostRestController;
 import eu.yals.json.internal.Json;
 import eu.yals.mm.Mattermost;
 import eu.yals.utils.UrlExtraValidator;
@@ -10,7 +9,7 @@ import lombok.Getter;
 import org.apache.commons.validator.GenericValidator;
 
 /**
- * {@link MattermostRestController} outgoing JSON
+ * {@link eu.yals.controllers.rest.MattermostRestController} outgoing JSON.
  *
  * @since 2.3
  */
@@ -39,7 +38,13 @@ public class MattermostResponseJson extends Json {
     private MattermostResponseJson() {
     }
 
-    public static MattermostResponseJson createWithText(String text) {
+    /**
+     * Create response JSON with provided text
+     *
+     * @param text string with message text
+     * @return JSON which sent to requester mattermost
+     */
+    public static MattermostResponseJson createWithText(final String text) {
         MattermostResponseJson mmJson = new MattermostResponseJson();
 
         boolean containsUrl = UrlExtraValidator.isStringContainsUrl(text);
@@ -53,17 +58,29 @@ public class MattermostResponseJson extends Json {
         }
     }
 
+    /**
+     * Replaces default Icon in message with given one.
+     *
+     * @param urlWithIcon valid full URL with icon
+     * @return same JSON but with replaced icon
+     */
     @SuppressWarnings("UnusedReturnValue") //by design
-    public MattermostResponseJson replaceIconWith(String iconUrl) {
-        if (GenericValidator.isUrl(iconUrl)) {
-            this.iconUrl = iconUrl;
+    public MattermostResponseJson replaceIconWith(final String urlWithIcon) {
+        if (GenericValidator.isUrl(urlWithIcon)) {
+            this.iconUrl = urlWithIcon;
         } else {
             throw new IllegalArgumentException("Replacing Icon URL should be valid URL");
         }
         return this;
     }
 
-    public MattermostResponseJson addGotoLocation(String gotoLocation) {
+    /**
+     * Puts location.
+     *
+     * @param gotoLocation string contains gotoLocation.
+     * @return json which senda in response
+     */
+    public MattermostResponseJson addGotoLocation(final String gotoLocation) {
         if (GenericValidator.isUrl(gotoLocation)) {
             this.gotoLocation = gotoLocation;
         } else {
@@ -72,7 +89,13 @@ public class MattermostResponseJson extends Json {
         return this;
     }
 
-    public MattermostResponseJson setResponseTypeTo(Mattermost.ResponseType responseType) {
+    /**
+     * Modifies Mattermost response type.
+     *
+     * @param responseType valid {@link Mattermost.ResponseType}
+     * @return same jon
+     */
+    public MattermostResponseJson setResponseTypeTo(final Mattermost.ResponseType responseType) {
         this.responseType = responseType.toString();
         return this;
     }

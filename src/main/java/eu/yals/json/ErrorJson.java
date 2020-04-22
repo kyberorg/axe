@@ -1,8 +1,8 @@
 package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.gson.annotations.Since;
 import eu.yals.json.internal.Json;
+import lombok.Getter;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.constraints.NotNull;
@@ -12,30 +12,42 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * This struct of JSON send in case of message
+ * This struct of JSON send in case of message.
  *
  * @since 1.0
  */
-@Since(1.0)
 public class ErrorJson extends Json {
 
-    @Since(1.0)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Getter
     private Error error;
 
-    @Since(1.0)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<Error> errors = new ArrayList<>(2);
+    @Getter
+    private final List<Error> errors = new ArrayList<>(2);
 
     private static final String NO_MESSAGE = "No error message found";
 
-    public static ErrorJson createWithMessage(@NotNull String errorMsg) {
+    /**
+     * Static constructor, build object with error message
+     *
+     * @param errorMsg non-empty string contains error message
+     * @return error json object
+     */
+    public static ErrorJson createWithMessage(@NotNull final String errorMsg) {
         ErrorJson errorJson = new ErrorJson();
         errorJson.error = Error.create().message(errorMsg);
         return errorJson;
     }
 
-    public static ErrorJson createFromSetOfErrors(@NotNull Set<ConstraintViolation> errorSet) {
+    /**
+     * Static constructor, build object from provided set of errors
+     *
+     * @param errorSet error objects
+     * @return error json object
+     */
+    @SuppressWarnings("rawtypes")
+    public static ErrorJson createFromSetOfErrors(@NotNull final Set<ConstraintViolation> errorSet) {
         if (errorSet.isEmpty()) {
             return createWithMessage(NO_MESSAGE);
         }
@@ -55,28 +67,33 @@ public class ErrorJson extends Json {
         return errorJson;
     }
 
-
-    public Error getError() {
-        return error;
-    }
-
-    public List<Error> getErrors() {
-        return errors;
-    }
-
-    @Since(1.0)
+    /**
+     * JSON field and error message combination.
+     */
     public static class Error {
-        @Since(1.0)
-        String field;
+        @Getter
+        private String field;
 
-        @Since(1.0)
-        String errorMessage;
+        @Getter
+        private String errorMessage;
 
+        /**
+         * Creates blank {@link Error} object
+         *
+         * @return no params {@link Error}
+         */
         static Error create() {
             return new Error();
         }
 
-        static Error create(@NotNull ConstraintViolation violation) {
+        /**
+         * Create {@link Error} object from given {@link ConstraintViolation} object. Extracts it to field and message.
+         *
+         * @param violation not empty object, which contains field and error message
+         * @return error object with given params
+         */
+        @SuppressWarnings("rawtypes")
+        static Error create(@NotNull final ConstraintViolation violation) {
             Error error = new Error();
             if (Objects.nonNull(violation.getPropertyPath())) {
                 error.field = violation.getPropertyPath().toString();
@@ -85,18 +102,10 @@ public class ErrorJson extends Json {
             return error;
         }
 
-        Error message(String errorText) {
+        Error message(final String errorText) {
             this.field = "";
             this.errorMessage = errorText;
             return this;
-        }
-
-        public String getErrorMessage() {
-            return errorMessage;
-        }
-
-        public String getField() {
-            return field;
         }
     }
 }

@@ -17,6 +17,8 @@ public class UrlExtraValidator {
 
     public static final String VALID = "VALID";
     public static final String URL_NOT_VALID = "URL is malformed, not URL at all or just protocol not supported yet";
+    public static final int URL_MIN_SIZE = 5;
+    public static final int URL_MAX_SIZE = 15613;
 
     public static String isUrlValid(String url) {
         UrlValidator validator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
