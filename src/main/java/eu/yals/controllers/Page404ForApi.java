@@ -24,7 +24,7 @@ public class Page404ForApi {
     private final String TAG = "[" + Page404ForApi.class.getSimpleName() + "]";
 
     /**
-     * Endpoint, which serves Page 404 for APi calls
+     * Endpoint, which serves Page 404 for APi calls.
      *
      * @param req  HTTP request
      * @param resp HTTP response

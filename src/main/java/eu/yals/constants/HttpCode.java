@@ -56,4 +56,8 @@ public final class HttpCode {
      * 503 - application is down.
      */
     public static final int STATUS_503 = 503;
+
+    private HttpCode() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 }

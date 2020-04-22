@@ -78,7 +78,7 @@ public class TelegramBotAutoConfig {
     }
 
     /**
-     * Destroys all telegram sessions before application stops
+     * Destroys all telegram sessions before application stops.
      */
     @PreDestroy
     public void stop() {

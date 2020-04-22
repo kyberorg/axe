@@ -59,7 +59,7 @@ public class GetRestController {
      *
      * @param ident    short part of URL
      * @param response HTTP response
-     * @ json which given in response
+     * @return json which given in response
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.LINK_API + "/{ident}")
     public Json getLink(final @PathVariable("ident") String ident, final HttpServletResponse response) {
@@ -68,7 +68,8 @@ public class GetRestController {
         if (StringUtils.isBlank(ident)) {
             log.info("{} Got empty ident", TAG);
             response.setStatus(STATUS_400);
-            return ErrorJson.createWithMessage("Request should be like this: " + Endpoint.Api.LINK_API + "/{ident}" + " and ident should not be empty");
+            return ErrorJson.createWithMessage("Request should be like this: " + Endpoint.Api.LINK_API + "/{ident}"
+                    + " and ident should not be empty");
         }
 
         boolean isIdentValid = ident.matches(IdentGenerator.VALID_IDENT_PATTERN);

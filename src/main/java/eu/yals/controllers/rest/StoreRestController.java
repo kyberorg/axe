@@ -49,7 +49,7 @@ public class StoreRestController {
     }
 
     /**
-     * API Endpoint to store link into DB
+     * API Endpoint to store link into DB.
      *
      * @param body     string with body of HTTP request
      * @param response response
@@ -105,8 +105,8 @@ public class StoreRestController {
                 log.info("{} User Ident '{}' already exists", TAG, usersIdent);
                 log.debug("{} Conflicting ident: {}", TAG, usersIdent);
                 response.setStatus(STATUS_409); //conflict
-                return ErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent +
-                        " Try another one");
+                return ErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
+                        + " Try another one");
             } else {
                 ident = usersIdent;
             }

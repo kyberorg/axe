@@ -45,7 +45,7 @@ public class QRCodeRestController {
     }
 
     /**
-     * Endpoint for getting QR codes based on ident
+     * Endpoint for getting QR codes based on ident.
      *
      * @param ident part of URL, which identifies  short link
      * @param resp  HTTP response
@@ -117,8 +117,8 @@ public class QRCodeRestController {
         if (identFromDatabase instanceof GetResult.NotFound) {
             log.debug("{} 0 idents found by request: {}", TAG, ident);
             response.setStatus(STATUS_404);
-            return ErrorJson.createWithMessage("No links found by this request. " +
-                    "Ident should be stored before requesting QR code");
+            return ErrorJson.createWithMessage("No links found by this request. "
+                    + "Ident should be stored before requesting QR code");
         } else if (identFromDatabase instanceof GetResult.Fail) {
             log.debug("{} Failed to query DB for ident. Error: {}",
                     TAG, ((GetResult.Fail) identFromDatabase).getErrorMessage());
@@ -143,7 +143,7 @@ public class QRCodeRestController {
         }
     }
 
-    private Optional<String> getQRCode(final String ident,final int size) {
+    private Optional<String> getQRCode(final String ident, final int size) {
         try {
             return Optional.of(qrCodeService.getQRCodeFromIdent(ident, size));
         } catch (WriterException | IOException e) {

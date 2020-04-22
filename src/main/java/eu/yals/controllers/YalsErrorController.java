@@ -55,7 +55,7 @@ public class YalsErrorController implements ErrorController {
     }
 
     /**
-     * Error handling endpoint
+     * Error handling endpoint.
      *
      * @param req  HTTP request
      * @param resp HTTP response
@@ -178,8 +178,8 @@ public class YalsErrorController implements ErrorController {
         }
         String host = request.getRequestURI().replace(getErrorPath(), "");
         response.setStatus(STATUS_301);
-        response.setHeader(Header.LOCATION, host + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" +
-                App.Params.ERROR_ID + "=" + errorId);
+        response.setHeader(Header.LOCATION, host + "/" + Endpoint.UI.ERROR_PAGE_500 + "?"
+                + App.Params.ERROR_ID + "=" + errorId);
     }
 
     private void redirectToAppDownAnalogPage() {
