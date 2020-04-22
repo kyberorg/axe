@@ -149,7 +149,7 @@ public final class Endpoint {
          */
         public static final String SLASH_BASE = "/";
         /**
-         * Path for getting link
+         * Path for getting link.
          */
         public static final String LINK_API = Api.LINK_API + "/";
         /**
