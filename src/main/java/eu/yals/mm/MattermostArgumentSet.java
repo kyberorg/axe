@@ -6,11 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * Combination of types present in MM Text ({@link Mattermost#text} )
+ * Combination of types present in MM Text ({@link Mattermost#text} ).
  *
  * @since 2.3.1
  */
-public class MattermostArgumentSet {
+public final class MattermostArgumentSet {
     static final MattermostArgumentSet EMPTY_SET = MattermostArgumentSet.emptySet();
     static final MattermostArgumentSet BROKEN_SET = MattermostArgumentSet.brokenSet();
 
@@ -25,13 +25,13 @@ public class MattermostArgumentSet {
     }
 
     /**
-     * Only for {@link #EMPTY_SET}
+     * Only for {@link #EMPTY_SET}.
      */
     private MattermostArgumentSet() {
     }
 
     /**
-     * Get stored URL
+     * Get stored URL.
      *
      * @return non-null string with URL to shortened.
      */
@@ -40,7 +40,7 @@ public class MattermostArgumentSet {
     }
 
     /**
-     * Provides stored description
+     * Provides stored description.
      *
      * @return stored description or Empty String
      */
@@ -61,7 +61,7 @@ public class MattermostArgumentSet {
         return brokenSet;
     }
 
-    static Builder builderWithUrl(String url) {
+    static Builder builderWithUrl(final String url) {
         return new Builder(url);
     }
 
@@ -72,7 +72,7 @@ public class MattermostArgumentSet {
         Builder() {
         }
 
-        Builder(String url) {
+        Builder(final String url) {
             this.urlString = url;
         }
 
@@ -80,7 +80,7 @@ public class MattermostArgumentSet {
             return EMPTY_SET;
         }
 
-        Builder andDescription(String description) {
+        Builder andDescription(final String description) {
             this.descriptionString = description;
             return this;
         }
