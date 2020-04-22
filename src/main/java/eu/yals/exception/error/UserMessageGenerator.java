@@ -10,7 +10,7 @@ import static eu.yals.constants.HttpCode.*;
  *
  * @since 2.7
  */
-public class UserMessageGenerator {
+public final class UserMessageGenerator {
     private static final HashMap<Integer, String> MAPPING = new HashMap<>();
     private static final String DEFAULT_MESSAGE = "General server error";
 

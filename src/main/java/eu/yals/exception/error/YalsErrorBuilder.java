@@ -26,18 +26,18 @@ public final class YalsErrorBuilder {
         return new YalsErrorBuilder(techMessage);
     }
 
-    private YalsErrorBuilder(final String techMessage) {
-        this.techMessage = techMessage;
+    private YalsErrorBuilder(final String technicalMessage) {
+        this.techMessage = technicalMessage;
     }
 
     /**
      * Adds user-friendly message.
      *
-     * @param messageToUser non-empty string with message to user.
+     * @param userFriendlyMessage non-empty string with message to user.
      * @return {@link YalsErrorBuilder} object to continue building {@link YalsError}
      */
-    public YalsErrorBuilder withMessageToUser(final String messageToUser) {
-        this.messageToUser = messageToUser;
+    public YalsErrorBuilder withMessageToUser(final String userFriendlyMessage) {
+        this.messageToUser = userFriendlyMessage;
         return this;
     }
 

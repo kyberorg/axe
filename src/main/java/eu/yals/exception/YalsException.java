@@ -31,7 +31,7 @@ public class YalsException extends RuntimeException {
     }
 
     /**
-     * Checks if {@link YalsException} object has not-empty {@link #messageToUser}
+     * Checks if {@link YalsException} object has not-empty {@link #messageToUser}.
      *
      * @return true - when {@link #messageToUser} contains non-empty string, false - elsewhere
      */
