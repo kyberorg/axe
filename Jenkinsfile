@@ -8,18 +8,26 @@ pipeline {
                     if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'trunk') {
                         vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting')
                     } else {
+                        def userInput;
                         def prodMode = false;
                         def review = false;
                         try {
                             timeout(time: 20, unit: 'SECONDS') {
-                                prodMode = input(message: 'Production Mode', ok: 'Build',
-                                        parameters: [booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'True')]);
-                                review = input(message: 'Review', ok: 'True',
-                                        parameters: [booleanParam(defaultValue: false, description: 'Do code review: code-style report', name: 'True')]);
+                                userInput = input(message: 'Production Mode', ok: 'Build',
+                                        parameters: [
+                                           booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'prodMode'),
+                                           booleanParam(defaultValue: false, description: 'Do code review: code-style report', name: 'review')
+                                        ]);
                             }
                         } catch (err) {
                             //do nothing as default is 'false'
                         }
+
+                        if(userInput != null) {
+                            prodMode = userInput['prodMode'];
+                            review = userInput['review'];
+                        }
+
                         if (prodMode) {
                             if(review) {
                                 vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: true)
@@ -34,7 +42,15 @@ pipeline {
                             }
                         }
                         if(review) {
-                            publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/site', reportFiles: 'checkstyle.html', reportName: 'HTML Report', reportTitles: ''])
+                            publishHTML([
+                               allowMissing: true,
+                               alwaysLinkToLastBuild: false,
+                               keepAll: true,
+                               reportDir: 'target/site',
+                               reportFiles: 'checkstyle.html',
+                               reportName: 'HTML Report',
+                               reportTitles: ''
+                            ])
                         }
                     }
                 }
