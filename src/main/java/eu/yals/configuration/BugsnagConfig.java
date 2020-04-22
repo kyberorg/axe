@@ -33,6 +33,12 @@ public class BugsnagConfig {
     private String proxyPort;
     private Bugsnag bugsnag;
 
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param environment {@link Environment} for accessing to env vars
+     * @param gitInfo     for getting application version from pom
+     */
     public BugsnagConfig(final Environment environment, final MavenGitInfo gitInfo) {
         this.env = environment;
         this.mavenGitInfo = gitInfo;

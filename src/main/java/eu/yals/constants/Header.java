@@ -1,7 +1,7 @@
 package eu.yals.constants;
 
 /**
- * Header names
+ * Header names.
  *
  * @since 2.0
  */

@@ -1,11 +1,11 @@
 package eu.yals.constants;
 
 /**
- * Application constants
+ * Application constants.
  *
  * @since 2.3
  */
-public class App {
+public final class App {
 
     public static final String EQUAL = "=";
     public static final String AND = "&";

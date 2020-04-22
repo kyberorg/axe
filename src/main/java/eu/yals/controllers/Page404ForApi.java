@@ -15,13 +15,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 
+import static eu.yals.constants.HttpCode.STATUS_404;
+import static eu.yals.constants.HttpCode.STATUS_406;
+
 @Slf4j
 @Controller
 public class Page404ForApi {
-    private final String TAG = "[Page 404 For API]";
+    private final String TAG = "[" + Page404ForApi.class.getSimpleName() + "]";
 
+    /**
+     * Endpoint, which serves Page 404 for APi calls
+     *
+     * @param req  HTTP request
+     * @param resp HTTP response
+     * @throws IOException when unable to write response
+     */
     @RequestMapping(Endpoint.Api.PAGE_404)
-    public void handle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void handle(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
 
         boolean hasParams = req.getQueryString() != null;
         boolean hasYalsMethodParam = false;
@@ -46,20 +56,20 @@ public class Page404ForApi {
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         if (hasAcceptHeader && !AppUtils.clientWantsJson(req)) {
             resp.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON);
-            resp.setStatus(406);
+            resp.setStatus(STATUS_406);
             return;
         }
 
-        resp.setStatus(404);
+        resp.setStatus(STATUS_404);
         resp.setContentType(MimeType.APPLICATION_JSON);
         resp.getWriter().write(payload.toString());
     }
 
-    private void logRequest(HttpServletRequest req) {
+    private void logRequest(final HttpServletRequest req) {
         log.info(String.format("%s Request: %s", TAG, req));
     }
 
-    private void logRequest(HttpMethod method, String path) {
+    private void logRequest(final HttpMethod method, final String path) {
         log.info(String.format("%s %s %s", TAG, method.name(), path));
     }
 }
