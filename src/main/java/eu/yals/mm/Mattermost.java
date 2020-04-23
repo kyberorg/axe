@@ -146,8 +146,8 @@ public final class Mattermost {
 
         private final String value;
 
-        Marker(final String valueStr) {
-            this.value = valueStr;
+        Marker(final String value) {
+            this.value = value;
         }
 
         @Override
@@ -162,8 +162,8 @@ public final class Mattermost {
 
         private final String value;
 
-        ResponseType(final String val) {
-            this.value = val;
+        ResponseType(final String value) {
+            this.value = value;
         }
 
         @Override

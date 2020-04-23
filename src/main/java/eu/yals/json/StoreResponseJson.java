@@ -24,11 +24,11 @@ public class StoreResponseJson extends Json {
     /**
      * Creates {@link StoreResponseJson} with given ident.
      *
-     * @param identStr string with ident.
+     * @param ident string with ident.
      * @return json containing ident.
      */
-    public StoreResponseJson withIdent(final String identStr) {
-        this.ident = identStr;
+    public StoreResponseJson withIdent(final String ident) {
+        this.ident = ident;
         return this;
     }
 }

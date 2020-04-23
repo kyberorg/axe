@@ -61,13 +61,13 @@ public final class MattermostResponseJson extends Json {
     /**
      * Replaces default Icon in message with given one.
      *
-     * @param urlWithIcon valid full URL with icon
+     * @param iconUrl valid full URL with icon
      * @return same JSON but with replaced icon
      */
     @SuppressWarnings("UnusedReturnValue") //by design
-    public MattermostResponseJson replaceIconWith(final String urlWithIcon) {
-        if (GenericValidator.isUrl(urlWithIcon)) {
-            this.iconUrl = urlWithIcon;
+    public MattermostResponseJson replaceIconWith(final String iconUrl) {
+        if (GenericValidator.isUrl(iconUrl)) {
+            this.iconUrl = iconUrl;
         } else {
             throw new IllegalArgumentException("Replacing Icon URL should be valid URL");
         }
@@ -77,12 +77,12 @@ public final class MattermostResponseJson extends Json {
     /**
      * Puts location.
      *
-     * @param goToLocation string contains gotoLocation.
+     * @param gotoLocation string contains gotoLocation.
      * @return json which senda in response
      */
-    public MattermostResponseJson addGotoLocation(final String goToLocation) {
-        if (GenericValidator.isUrl(goToLocation)) {
-            this.gotoLocation = goToLocation;
+    public MattermostResponseJson addGotoLocation(final String gotoLocation) {
+        if (GenericValidator.isUrl(gotoLocation)) {
+            this.gotoLocation = gotoLocation;
         } else {
             throw new IllegalArgumentException("Goto location should be valid URL");
         }
@@ -92,11 +92,11 @@ public final class MattermostResponseJson extends Json {
     /**
      * Modifies Mattermost response type.
      *
-     * @param respType valid {@link Mattermost.ResponseType}
+     * @param responseType valid {@link Mattermost.ResponseType}
      * @return same json
      */
-    public MattermostResponseJson setResponseTypeTo(final Mattermost.ResponseType respType) {
-        this.responseType = respType.toString();
+    public MattermostResponseJson setResponseTypeTo(final Mattermost.ResponseType responseType) {
+        this.responseType = responseType.toString();
         return this;
     }
 
