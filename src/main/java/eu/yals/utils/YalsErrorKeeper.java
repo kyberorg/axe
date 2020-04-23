@@ -31,7 +31,7 @@ public class YalsErrorKeeper {
      * @param yalsError error object to store
      * @return string with error id
      */
-    public String send(YalsError yalsError) {
+    public String send(final YalsError yalsError) {
         String errorId;
         do {
             errorId = UUID.randomUUID().toString();

@@ -85,7 +85,7 @@ public class ErrorUtils {
     }
 
     /**
-     * Converts exception to {@link YalsError}
+     * Converts exception to {@link YalsError}.
      *
      * @param args {@link Args} object
      * @return converted {@link YalsError} object
@@ -197,22 +197,45 @@ public class ErrorUtils {
         private int status = NO_STATUS;
         private String path;
 
-        public static ArgsBuilder withException(Throwable th) {
+        /**
+         * Builder static constructor creates object with provided exception.
+         *
+         * @param th exception
+         * @return {@link ArgsBuilder} object
+         */
+        public static ArgsBuilder withException(final Throwable th) {
             ArgsBuilder builder = new ArgsBuilder();
             builder.th = th;
             return builder;
         }
 
-        public ArgsBuilder addStatus(int status) {
+        /**
+         * Add status.
+         *
+         * @param status http status. See {@link eu.yals.constants.HttpCode} for more.
+         * @return {@link ArgsBuilder} object
+         */
+        public ArgsBuilder addStatus(final int status) {
             this.status = status;
             return this;
         }
 
-        public ArgsBuilder addPath(String path) {
+        /**
+         * Add endpoint path, which caused an error.
+         *
+         * @param path string with valid endpoint path, which caused an error
+         * @return {@link ArgsBuilder} object
+         */
+        public ArgsBuilder addPath(final String path) {
             this.path = path;
             return this;
         }
 
+        /**
+         * Builds {@link Args} object from fields in Builder.
+         *
+         * @return built {@link Args}
+         */
         public Args build() {
             Args args = new Args();
             args.exception = th;
