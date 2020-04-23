@@ -162,8 +162,8 @@ public final class Mattermost {
 
         private final String value;
 
-        ResponseType(String value) {
-            this.value = value;
+        ResponseType(final String val) {
+            this.value = val;
         }
 
         @Override
