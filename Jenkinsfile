@@ -16,7 +16,7 @@ pipeline {
                                 userInput = input(message: 'Production Mode', ok: 'Build',
                                         parameters: [
                                            booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'prodMode'),
-                                           booleanParam(defaultValue: true, description: 'Do code review: code-style report', name: 'review')
+                                           booleanParam(defaultValue: false, description: 'Do code review: code-style report', name: 'review')
                                         ]);
                             }
                         } catch (err) {
