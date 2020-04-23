@@ -2,6 +2,7 @@ package eu.yals.telegram;
 
 
 import eu.yals.utils.UrlExtraValidator;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -11,25 +12,27 @@ import java.util.Objects;
  *
  * @since 2.4
  */
-public class TelegramArguments {
+public final class TelegramArguments {
     static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
     static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
 
     private static TelegramArguments SELF = null;
 
+    @Getter
     private String url;
     private String description = null;
 
     /**
-     * Only for {@link #EMPTY_ARGS} and {@link #BROKEN_ARGS}
+     * Only for {@link #EMPTY_ARGS} and {@link #BROKEN_ARGS}.
      */
     private TelegramArguments() {
     }
 
-    public String getUrl() {
-        return url;
-    }
-
+    /**
+     * Gets description.
+     *
+     * @return description if present, empty string is not
+     */
     public String getDescription() {
         return Objects.isNull(description) ? "" : description;
     }
@@ -47,7 +50,7 @@ public class TelegramArguments {
         return brokenArgs;
     }
 
-    static Builder builderWithUrl(String url) {
+    static Builder builderWithUrl(final String url) {
         return new Builder(url);
     }
 
@@ -62,7 +65,7 @@ public class TelegramArguments {
         Builder() {
         }
 
-        Builder(String url) {
+        Builder(final String url) {
             this.urlString = url;
         }
 
@@ -70,7 +73,7 @@ public class TelegramArguments {
             return EMPTY_ARGS;
         }
 
-        Builder andDescription(String description) {
+        Builder andDescription(final String description) {
             this.descriptionString = description;
             return this;
         }
@@ -91,9 +94,9 @@ public class TelegramArguments {
 
     @Override
     public String toString() {
-        return TelegramArguments.class.getSimpleName() + "{" +
-                "url=" + url + ", " +
-                "description=" + description +
-                "}";
+        return TelegramArguments.class.getSimpleName() + "{"
+                + "url=" + url + ", "
+                + "description=" + description
+                + "}";
     }
 }

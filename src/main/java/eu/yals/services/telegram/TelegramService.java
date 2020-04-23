@@ -95,8 +95,9 @@ public class TelegramService {
 
         String linkDescription = telegramObject.getArguments().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
-            String userGreet = (StringUtils.isNotBlank(telegramObject.getUsername()) && (!telegramObject.getUsername().equals(NO_VALUE))) ?
-                    "Okay " + AT + telegramObject.getUsername() + ", " : "Okay, ";
+            String userGreet = (StringUtils.isNotBlank(telegramObject.getUsername())
+                    && (!telegramObject.getUsername().equals(NO_VALUE)))
+                    ? "Okay " + AT + telegramObject.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
             return greeting + fullYalsLink;
         } else {
@@ -114,15 +115,15 @@ public class TelegramService {
             return NO_INIT;
         }
 
-        String message = " This bot makes short links from long ones" +
-                App.NEW_LINE + App.NEW_LINE +
-                "https://mySuperLongLink.com" +
-                App.NEW_LINE + App.NEW_LINE +
-                "or" +
-                App.NEW_LINE + App.NEW_LINE +
-                "https://mySuperLongLink.com description" +
-                App.NEW_LINE + App.NEW_LINE +
-                "/usage - Show this message";
+        String message = " This bot makes short links from long ones"
+                + App.NEW_LINE + App.NEW_LINE
+                + "https://mySuperLongLink.com"
+                + App.NEW_LINE + App.NEW_LINE
+                + "or"
+                + App.NEW_LINE + App.NEW_LINE
+                + "https://mySuperLongLink.com description"
+                + App.NEW_LINE + App.NEW_LINE
+                + "/usage - Show this message";
 
         return EmojiParser.parseToUnicode(Emoji.INFO + message);
     }
