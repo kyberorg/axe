@@ -19,7 +19,9 @@ import java.util.Optional;
 import static eu.yals.constants.App.NO_STATUS;
 
 /**
- * Methods for handling application errors
+ * Methods for handling application errors.
+ *
+ * @since 2.7
  */
 @Component
 public class ErrorUtils {
@@ -27,12 +29,24 @@ public class ErrorUtils {
     private final YalsErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
 
-    public ErrorUtils(YalsErrorKeeper errorKeeper, Bugsnag bugsnag) {
+    /**
+     * Creates {@link ErrorUtils}.
+     *
+     * @param errorKeeper error holder
+     * @param bugsnag     Bugsnag bean
+     */
+    public ErrorUtils(final YalsErrorKeeper errorKeeper, final Bugsnag bugsnag) {
         this.errorKeeper = errorKeeper;
         this.bugsnag = bugsnag;
     }
 
-    public YalsError getYalsErrorFromEvent(BeforeEvent event) {
+    /**
+     * Extracts {@link YalsError} from {@link BeforeEvent}.
+     *
+     * @param event {@link BeforeEvent} with {@link YalsError}
+     * @return extracted {@link YalsError}
+     */
+    public YalsError getYalsErrorFromEvent(final BeforeEvent event) {
         QueryParameters queryParameters = event.getLocation().getQueryParameters();
         if (queryParameters.getParameters().isEmpty()) return null;
         boolean errorIdKeyIsPresent = queryParameters.getParameters().containsKey(App.Params.ERROR_ID);
@@ -47,7 +61,15 @@ public class ErrorUtils {
         return yalsErrorOptional.orElse(null);
     }
 
-    public int parseStatusFromErrorParameter(ErrorParameter<? extends Exception> parameter, int defaultStatus) {
+    /**
+     * Gets status from {@link ErrorParameter} object.
+     *
+     * @param parameter     error parameter
+     * @param defaultStatus status to result, if no status found in parameter
+     * @return status found from {@link ErrorParameter} or defaultStatus
+     */
+    public int parseStatusFromErrorParameter(final ErrorParameter<? extends Exception> parameter,
+                                             final int defaultStatus) {
         int status;
         if (parameter != null && parameter.hasCustomMessage()) {
             String statusString = parameter.getCustomMessage();
@@ -62,7 +84,13 @@ public class ErrorUtils {
         return status;
     }
 
-    public YalsError convertExceptionToYalsError(ErrorUtils.Args args) {
+    /**
+     * Converts exception to {@link YalsError}
+     *
+     * @param args {@link Args} object
+     * @return converted {@link YalsError} object
+     */
+    public YalsError convertExceptionToYalsError(final ErrorUtils.Args args) {
         Throwable exceptionFromArgs = args.getException();
         boolean hasStatus = args.getStatus() != NO_STATUS;
         YalsErrorBuilder yalsErrorBuilder;
@@ -111,7 +139,12 @@ public class ErrorUtils {
         return yalsErrorBuilder.build();
     }
 
-    public void reportToBugsnag(YalsError yalsError) {
+    /**
+     * Reports issue to Bugsnag service.
+     *
+     * @param yalsError {@link YalsError} objects
+     */
+    public void reportToBugsnag(final YalsError yalsError) {
         YalsException yalsException = new YalsException("Yals Error: " + yalsError.getId());
         final String tabName = "Yals Error";
         bugsnag.addCallback(report -> {
@@ -125,7 +158,13 @@ public class ErrorUtils {
         bugsnag.notify(yalsException);
     }
 
-    public static Throwable findRootCause(Throwable throwable) {
+    /**
+     * Extracts deepest exception, which is root of problem.
+     *
+     * @param throwable exception containing chain of exceptions
+     * @return deepest exception from the chain
+     */
+    public static Throwable findRootCause(final Throwable throwable) {
         if (throwable == null) return null;
         Throwable rootCause = throwable;
         while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
@@ -134,7 +173,7 @@ public class ErrorUtils {
         return rootCause;
     }
 
-    private void enrichTechMessageWithStatusAndPath(StringBuilder techMessage, Args args) {
+    private void enrichTechMessageWithStatusAndPath(final StringBuilder techMessage, final Args args) {
         boolean hasStatus = args.getStatus() != NO_STATUS;
         boolean hasPath = StringUtils.isNotBlank(args.getPath());
         if (hasStatus) {

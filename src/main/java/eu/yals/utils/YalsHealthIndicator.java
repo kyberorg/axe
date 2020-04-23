@@ -11,8 +11,10 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import static eu.yals.constants.HttpCode.STATUS_200;
+
 /**
- * Monitors if start page is accessible to users
+ * Monitors if start page is accessible to users.
  *
  * @since 2.7
  */
@@ -22,10 +24,18 @@ public class YalsHealthIndicator implements HealthIndicator {
     private final AppUtils appUtils;
     private boolean appStarted = false;
 
-    public YalsHealthIndicator(AppUtils appUtils) {
+    /**
+     * Creates {@link YalsHealthIndicator}.
+     *
+     * @param appUtils application utils
+     */
+    public YalsHealthIndicator(final AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 
+    /**
+     * Detects if application started or not.
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void detectApplicationStartup() {
         appStarted = true;
@@ -33,7 +43,7 @@ public class YalsHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        if(!appStarted) {
+        if (!appStarted) {
             return Health.up().build();
         }
 
@@ -57,7 +67,7 @@ public class YalsHealthIndicator implements HealthIndicator {
         GetRequest request = Unirest.get(selfUrl + Endpoint.UI.HOME_PAGE);
         HttpResponse<String> response = request.asString();
         boolean hasBody = StringUtils.isNotBlank(response.getBody());
-        return (response.getStatus() == 200 && hasBody) ? StartPageStatus.OK : StartPageStatus.DOWN;
+        return (response.getStatus() == STATUS_200 && hasBody) ? StartPageStatus.OK : StartPageStatus.DOWN;
     }
 
     enum StartPageStatus {
