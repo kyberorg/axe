@@ -182,34 +182,34 @@ public class AppUtils {
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
      * @throws RuntimeException if URL malformed or not URL
      */
-    public static String covertUnicodeToAscii(String url) {
-        if (url != null) {
-            url = url.trim();
+    public static String covertUnicodeToAscii(final String url) {
+        if (url == null) return null;
 
-            // Handle international domains by detecting non-ascii and converting them to punycode
-            if (isAscii(url)) return url;
+        String trimUrl = url.trim();
 
-            URI uri;
-            try {
-                uri = makeFullUri(url);
+        // Handle international domains by detecting non-ascii and converting them to punycode
+        if (isAscii(trimUrl)) return trimUrl;
 
-                String scheme = uri.getScheme() != null ? uri.getScheme() + "://" : null;
-                // includes domain and port
-                String authority = uri.getRawAuthority() != null ? uri.getRawAuthority() : "";
-                String path = uri.getRawPath() != null ? uri.getRawPath() : "";
-                String queryString = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
+        URI uri;
+        try {
+            uri = makeFullUri(trimUrl);
 
-                // Must convert domain to punycode separately from the path
-                url = scheme + IDN.toASCII(authority) + path + queryString;
-                // Convert path from unicode to ascii encoding
-                url = new URI(url).toASCIIString();
-            } catch (URISyntaxException e) {
-                String message = String.format("String '%s': malformed URL or not URL at all", url);
-                log.warn(message);
-                throw new RuntimeException(message, e);
-            }
+            String scheme = uri.getScheme() != null ? uri.getScheme() + "://" : null;
+            // includes domain and port
+            String authority = uri.getRawAuthority() != null ? uri.getRawAuthority() : "";
+            String path = uri.getRawPath() != null ? uri.getRawPath() : "";
+            String queryString = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
+
+            // Must convert domain to punycode separately from the path
+            trimUrl = scheme + IDN.toASCII(authority) + path + queryString;
+            // Convert path from unicode to ascii encoding
+            trimUrl = new URI(trimUrl).toASCIIString();
+        } catch (URISyntaxException e) {
+            String message = String.format("String '%s': malformed URL or not URL at all", url);
+            log.warn(message);
+            throw new RuntimeException(message, e);
         }
-        return url;
+        return trimUrl;
     }
 
     /**
