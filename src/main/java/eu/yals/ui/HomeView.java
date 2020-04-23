@@ -222,7 +222,7 @@ public class HomeView extends VerticalLayout {
         return qrCodeArea;
     }
 
-    private Notification getErrorNotification(String text) {
+    private Notification getErrorNotification(final String text) {
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         notification.setPosition(Notification.Position.MIDDLE);

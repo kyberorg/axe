@@ -29,6 +29,7 @@ import eu.yals.utils.maven.MavenInfo;
 @PageTitle("Link shortener for friends: App Info")
 public class AppInfoView extends VerticalLayout {
     private static final String UNDEFINED = "UNDEFINED";
+    private static final int COMMIT_HASH_LENGTH = 7;
 
     private final GitService gitService;
     private final GitRepoState gitRepoState;
@@ -36,7 +37,7 @@ public class AppInfoView extends VerticalLayout {
     private final AppUtils appUtils;
 
     /**
-     * Creates {@link AppInfoView} object
+     * Creates {@link AppInfoView} object.
      *
      * @param gitService   information from git
      * @param gitRepoState information from build time
@@ -73,11 +74,10 @@ public class AppInfoView extends VerticalLayout {
         String latestCommit = gitService.getLatestCommit();
 
         Span versionStart = new Span(String.format("Version %s (based on commit ", latestTag));
-        int commitHashLength = 7;
         Anchor commit =
                 new Anchor(
                         String.format("%s/%s", App.Git.REPOSITORY, latestCommit),
-                        latestCommit.substring(0, Integer.min(latestCommit.length(), commitHashLength)));
+                        latestCommit.substring(0, Integer.min(latestCommit.length(), COMMIT_HASH_LENGTH)));
         commit.setId(IDs.COMMIT_LINK);
         Span versionEnd = new Span(")");
 
