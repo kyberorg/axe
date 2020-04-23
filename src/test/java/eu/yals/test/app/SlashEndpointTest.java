@@ -14,11 +14,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static eu.yals.Endpoint.ForTests.SLASH_BASE;
+import static eu.yals.constants.HttpCode.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests for /{ident}
+ * Tests for /{ident}.
  *
  * @since 1.0
  */
@@ -42,7 +43,7 @@ public class SlashEndpointTest extends UnirestTest {
 
     Unirest.config().reset().followRedirects(true);
 
-    Assert.assertEquals(302, result.getStatus());
+    Assert.assertEquals(STATUS_302, result.getStatus());
     Assert.assertTrue(result.getHeaders().containsKey(Header.LOCATION));
     String location = result.getHeaders().getFirst(Header.LOCATION);
     Assert.assertTrue("Got empty " + Header.LOCATION + " header", StringUtils.isNotBlank(location));
@@ -57,10 +58,10 @@ public class SlashEndpointTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    Assert.assertEquals(404, result.getStatus());
+    Assert.assertEquals(STATUS_404, result.getStatus());
   }
 
-  private String store(String urlToStore) {
+  private String store(final String urlToStore) {
     String requestBody = StoreRequestJson.create().withLink(urlToStore).toString();
 
     HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestBody);
@@ -68,7 +69,7 @@ public class SlashEndpointTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    Assert.assertEquals(201, result.getStatus());
+    Assert.assertEquals(STATUS_201, result.getStatus());
 
     String responseBody = result.getBody();
     assertNotNull(responseBody);

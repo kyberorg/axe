@@ -86,6 +86,7 @@ public final class TelegramObject {
             default:
                 //no reason for manipulating with user message
                 this.arguments = TelegramArguments.builder().buildEmpty();
+                break;
         }
     }
 

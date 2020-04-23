@@ -14,7 +14,7 @@ public class YalsPageObject extends TestBenchTestCase {
 
   private final SearchContext context;
 
-  public YalsPageObject(WebDriver driver, SearchContext context) {
+  public YalsPageObject(final WebDriver driver, final SearchContext context) {
     setDriver(driver);
     this.context = context;
   }

@@ -14,10 +14,11 @@ import org.junit.Test;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import static eu.yals.constants.HttpCode.*;
 import static org.junit.Assert.*;
 
 /**
- * Testing {@link GetRestController}
+ * Testing {@link GetRestController}.
  *
  * @since 1.0
  */
@@ -33,7 +34,7 @@ public class GetApiTest extends UnirestTest {
     logRequestAndResponse(request, result, TAG);
 
     assertNotNull(result);
-    assertEquals(400, result.getStatus());
+    assertEquals(STATUS_400, result.getStatus());
 
     TestUtils.assertResultIsErrorJson(result);
   }
@@ -47,7 +48,7 @@ public class GetApiTest extends UnirestTest {
     logRequestAndResponse(request, result, TAG);
 
     assertNotNull(result);
-    assertEquals(400, result.getStatus());
+    assertEquals(STATUS_400, result.getStatus());
     TestUtils.assertResultIsErrorJson(result);
   }
 
@@ -64,7 +65,7 @@ public class GetApiTest extends UnirestTest {
     logRequestAndResponse(request, result, TAG);
 
     assertNotNull(result);
-    assertEquals(400, result.getStatus());
+    assertEquals(STATUS_400, result.getStatus());
     TestUtils.assertResultIsErrorJson(result);
   }
 
@@ -76,7 +77,7 @@ public class GetApiTest extends UnirestTest {
     logRequestAndResponse(request, result, TAG);
 
     assertNotNull(result);
-    assertEquals(404, result.getStatus());
+    assertEquals(STATUS_404, result.getStatus());
     TestUtils.assertResultIsErrorJson(result);
   }
 
@@ -91,7 +92,7 @@ public class GetApiTest extends UnirestTest {
     logRequestAndResponse(request, result, TAG);
 
     assertNotNull(result);
-    assertEquals(200, result.getStatus());
+    assertEquals(STATUS_200, result.getStatus());
 
     TestUtils.assertResultIsJson(result);
   }
@@ -105,7 +106,7 @@ public class GetApiTest extends UnirestTest {
     logRequestAndResponse(request, result, TAG);
 
     assertNotNull(result);
-    assertEquals(201, result.getStatus());
+    assertEquals(STATUS_201, result.getStatus());
 
     String responseBody = result.getBody();
     assertNotNull(responseBody);

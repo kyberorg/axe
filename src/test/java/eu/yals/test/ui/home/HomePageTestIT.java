@@ -9,7 +9,7 @@ import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Test;
 
 /**
- * Testing /(Slash) URL
+ * Testing /(Slash) URL.
  *
  * @since 1.0
  */

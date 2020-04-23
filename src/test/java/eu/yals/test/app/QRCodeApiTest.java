@@ -17,10 +17,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
 
+import static eu.yals.constants.HttpCode.*;
 import static org.junit.Assert.*;
 
 /**
- * Testing locations related to QR codes
+ * Testing locations related to QR codes.
  *
  * @since 2.6
  */
@@ -38,7 +39,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(200, result.getStatus());
+    assertEquals(STATUS_200, result.getStatus());
 
     JsonNode body = result.getBody();
     assertNotNull(body);
@@ -57,7 +58,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(200, result.getStatus());
+    assertEquals(STATUS_200, result.getStatus());
 
     JsonNode body = result.getBody();
     assertNotNull(body);
@@ -76,7 +77,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(404, result.getStatus());
+    assertEquals(STATUS_404, result.getStatus());
   }
 
   @Test
@@ -87,7 +88,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(404, result.getStatus());
+    assertEquals(STATUS_404, result.getStatus());
   }
 
   @Test
@@ -97,7 +98,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(404, result.getStatus());
+    assertEquals(STATUS_404, result.getStatus());
   }
 
   @Test
@@ -112,7 +113,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(200, result.getStatus());
+    assertEquals(STATUS_200, result.getStatus());
 
     JsonNode body = result.getBody();
     String qrCode = body.getObject().getString("qrCode");
@@ -132,7 +133,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(400, result.getStatus());
+    assertEquals(STATUS_400, result.getStatus());
   }
 
   @Test
@@ -146,7 +147,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(400, result.getStatus());
+    assertEquals(STATUS_400, result.getStatus());
   }
 
   @Test
@@ -160,7 +161,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(400, result.getStatus());
+    assertEquals(STATUS_400, result.getStatus());
   }
 
   @Test
@@ -170,7 +171,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    assertEquals(404, result.getStatus());
+    assertEquals(STATUS_404, result.getStatus());
   }
 
   private String getValidIdent() {
@@ -183,7 +184,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     logRequestAndResponse(request, result, TAG);
 
-    if (result.getStatus() != 201) {
+    if (result.getStatus() != STATUS_201) {
       log.error("Store API fail");
       throw new IllegalStateException("Could not get short link from Store API");
     }
@@ -192,7 +193,7 @@ public class QRCodeApiTest extends UnirestTest {
     return body.getObject().getString("ident");
   }
 
-  private void assertValidQRCode(String qrCode) {
+  private void assertValidQRCode(final String qrCode) {
     assertTrue("QR find, but cannot be empty", StringUtils.isNotBlank(qrCode));
 
     String[] qrCodeParts = qrCode.split(";");

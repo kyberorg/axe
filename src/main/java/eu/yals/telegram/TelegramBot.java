@@ -80,6 +80,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         break;
                     default:
                         message = telegramService.usage();
+                        break;
                 }
             }
 
