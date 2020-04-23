@@ -12,7 +12,7 @@ public interface GetResult {
     class Success implements GetResult {
         private String link;
 
-        public Success(String link) {
+        public Success(final String link) {
             this.link = link;
         }
 
@@ -43,7 +43,7 @@ public interface GetResult {
             this.errorMessage = "Unknown Database Error";
         }
 
-        public Fail withException(Throwable e) {
+        public Fail withException(final Throwable e) {
             this.exception = e;
             return this;
         }
@@ -59,7 +59,7 @@ public interface GetResult {
             this.errorMessage = "Database is DOWN";
         }
 
-        public DatabaseDown withException(Throwable e) {
+        public DatabaseDown withException(final Throwable e) {
             this.exception = e;
             return this;
         }
