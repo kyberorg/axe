@@ -16,6 +16,9 @@ import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import static eu.yals.constants.HttpCode.STATUS_302;
+import static eu.yals.constants.HttpCode.STATUS_500;
+
 @Slf4j
 @SpringComponent
 @UIScope
@@ -23,19 +26,23 @@ import org.apache.commons.lang3.StringUtils;
 public class RedirectToLinkView extends VerticalLayout implements HasErrorParameter<NeedForRedirectException> {
     private static final String TAG = "[" + RedirectToLinkView.class.getSimpleName() + "]";
 
+    /**
+     * Creates {@link RedirectToLinkView}.
+     */
     public RedirectToLinkView() {
         add(new Text("Not intended for direct use. Needs parameter"));
     }
 
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NeedForRedirectException> parameter) {
+    public int setErrorParameter(final BeforeEnterEvent event,
+                                 final ErrorParameter<NeedForRedirectException> parameter) {
         String target = parameter.getCustomMessage();
         if (StringUtils.isNotBlank(target)) {
             VaadinResponse.getCurrent().setHeader(Header.LOCATION, AppUtils.covertUnicodeToAscii(target));
-            return 302;
+            return STATUS_302;
         } else {
             log.error("{} Target is empty", TAG);
-            return 500;
+            return STATUS_500;
         }
 
     }

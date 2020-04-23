@@ -23,6 +23,11 @@ public final class HttpCode {
     public static final int STATUS_301 = 301;
 
     /**
+     * 302 - temp redirect.
+     */
+    public static final int STATUS_302 = 302;
+
+    /**
      * 400 - bad request.
      */
     public static final int STATUS_400 = 400;

@@ -54,4 +54,10 @@ public final class App {
     public static class Params {
         public static final String ERROR_ID = "errorId";
     }
+
+    public static class QR {
+        public static final int DEFAULT_QR_BLOCK_SIZE = 371;
+        public static final int DEFAULT_QR_CODE_SIZE = 350;
+        public static final float QR_BLOCK_RATIO = 0.943f; // 350/371
+    }
 }

@@ -22,6 +22,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static eu.yals.constants.HttpCode.STATUS_302;
+import static eu.yals.constants.HttpCode.STATUS_404;
+
 @Slf4j
 @SpringComponent
 @UIScope
@@ -33,6 +36,9 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     private final Span subTitle = new Span();
     private final Image image = new Image();
 
+    /**
+     * Creates {@link NotFoundView}.
+     */
     public NotFoundView() {
         init();
         add(title, subTitle, image);
@@ -50,52 +56,53 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
     }
 
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NotFoundException> parameter) {
+    public int setErrorParameter(final BeforeEnterEvent event,
+                                 final ErrorParameter<NotFoundException> parameter) {
         String path = event.getLocation().getPath();
         boolean identNotFound = path.equals(Endpoint.TNT.SLASH_IDENT);
         if (identNotFound) {
             if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
                 VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
-                return 302;
+                return STATUS_302;
             } else {
                 subTitle.setText("We don't have long link that match your short link. " +
                         "Make sure you copypasted it fully and without extra characters");
-                return 404;
+                return STATUS_404;
             }
         }
         if (StringUtils.isBlank(path)) {
             event.rerouteTo("/");
-            return 302;
+            return STATUS_302;
         } else {
             boolean isIdentValid = path.matches(IdentGenerator.VALID_IDENT_PATTERN);
             if (isIdentValid) {
                 List<String> param = new ArrayList<>();
                 param.add(path);
                 event.rerouteTo(Endpoint.TNT.SLASH_IDENT, param);
-                return 302;
+                return STATUS_302;
             } else {
                 if (AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
                     VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.Api.PAGE_404);
-                    return 302;
+                    return STATUS_302;
                 }
                 //not a ident
                 if (isApiRequest(path)) {
                     //api call
                     VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
-                    return 302;
+                    return STATUS_302;
                 } else {
                     VaadinResponse.getCurrent().setHeader(Header.LOCATION, Endpoint.UI.PAGE_404);
-                    return 404;
+                    return STATUS_404;
                 }
             }
         }
     }
 
-    private boolean isApiRequest(String path) {
+    private boolean isApiRequest(final String path) {
         return path.startsWith("api");
     }
 
-    private String api404Endpoint(BeforeEnterEvent event) {
+    private String api404Endpoint(final BeforeEnterEvent event) {
         String method = VaadinRequest.getCurrent().getMethod();
         String path = event.getLocation().getPath();
 
