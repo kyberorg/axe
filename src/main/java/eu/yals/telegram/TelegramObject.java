@@ -29,7 +29,13 @@ public final class TelegramObject {
         this.parseUserMessage();
     }
 
-    static TelegramObject createFromUpdate(final Update update) {
+    /**
+     * Creates {@link TelegramObject} for telegram {@link Update}.
+     *
+     * @param update telegram update object
+     * @return created {@link TelegramObject}
+     */
+    public static TelegramObject createFromUpdate(final Update update) {
         if (Objects.isNull(update)) {
             throw new IllegalStateException("Update is missing");
         }

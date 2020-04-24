@@ -13,8 +13,8 @@ import java.util.Objects;
  * @since 2.4
  */
 public final class TelegramArguments {
-    static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
-    static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
+    public static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
+    public static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
 
     private static TelegramArguments SELF = null;
 
@@ -50,34 +50,72 @@ public final class TelegramArguments {
         return brokenArgs;
     }
 
-    static Builder builderWithUrl(final String url) {
+    /**
+     * Build {@link TelegramArguments} from given URL.
+     *
+     * @param url string with URL
+     * @return {@link Builder}
+     */
+    public static Builder builderWithUrl(final String url) {
         return new Builder(url);
     }
 
-    static Builder builder() {
+    /**
+     * Empty builder.
+     *
+     * @return {@link Builder}
+     */
+    public static Builder builder() {
         return new Builder();
     }
 
-    static class Builder {
+    /**
+     * Builder for {@link TelegramArguments}.
+     */
+    public static class Builder {
         private String urlString;
         private String descriptionString;
 
-        Builder() {
+        /**
+         * Empty builder.
+         */
+        public Builder() {
         }
 
+        /**
+         * Builder with URL.
+         *
+         * @param url string with URL
+         */
         Builder(final String url) {
             this.urlString = url;
         }
 
-        TelegramArguments buildEmpty() {
+        /**
+         * Builder without args.
+         *
+         * @return {@link #EMPTY_ARGS}
+         */
+        public TelegramArguments buildEmpty() {
             return EMPTY_ARGS;
         }
 
-        Builder andDescription(final String description) {
+        /**
+         * Adds description.
+         *
+         * @param description string with description
+         * @return {@link Builder}
+         */
+        public Builder andDescription(final String description) {
             this.descriptionString = description;
             return this;
         }
 
+        /**
+         * Triggers build.
+         *
+         * @return {@link TelegramArguments}
+         */
         public TelegramArguments build() {
             if (UrlExtraValidator.isUrl(urlString)) {
                 TelegramArguments newArguments = new TelegramArguments();

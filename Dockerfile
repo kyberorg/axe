@@ -1,7 +1,7 @@
 FROM openjdk:8-jre-slim
 VOLUME /tmp
 
-ADD ./target/yals.jar /app/
+COPY ./target/yals.jar /app/
 COPY ./docker-entrypoint.sh /
 RUN sh -c 'chmod +x /docker-entrypoint.sh'
 RUN sh -c 'apt-get update && apt-get install -y netcat curl jq && rm -rf /var/lib/apt/lists/*'

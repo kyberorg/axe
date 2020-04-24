@@ -18,6 +18,7 @@ import eu.yals.exception.error.YalsError;
 import eu.yals.ui.AppView;
 import eu.yals.utils.AppUtils;
 import eu.yals.utils.ErrorUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.CannotCreateTransactionException;
 
@@ -28,6 +29,7 @@ import java.util.Optional;
 import static eu.yals.constants.HttpCode.*;
 import static eu.yals.utils.AppUtils.HTML_MODE;
 
+@Slf4j
 @SpringComponent
 @UIScope
 @PageTitle("Yals: Error 500")
@@ -82,6 +84,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     }
 
     private void onImageClick(final ClickEvent<Image> imageClickEvent) {
+        log.trace("Image click event. Is from client? {}", imageClickEvent.isFromClient());
         image.setVisible(false);
         techInfo.setVisible(true);
     }

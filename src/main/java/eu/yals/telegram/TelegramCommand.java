@@ -16,6 +16,12 @@ public enum TelegramCommand {
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
+    private final String commandString;
+
+    TelegramCommand(final String cmd) {
+        this.commandString = cmd;
+    }
+
     /**
      * Get telegram command.
      *
@@ -23,12 +29,6 @@ public enum TelegramCommand {
      */
     public String getCommandText() {
         return commandString;
-    }
-
-    private final String commandString;
-
-    TelegramCommand(final String cmd) {
-        this.commandString = cmd;
     }
 
     /**
@@ -84,7 +84,7 @@ public enum TelegramCommand {
                 break;
             default:
                 isYals = false;
-
+                break;
         }
         return isYals;
     }

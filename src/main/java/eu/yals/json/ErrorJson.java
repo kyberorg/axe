@@ -94,7 +94,7 @@ public class ErrorJson extends Json {
          * @return error object with given params
          */
         @SuppressWarnings("rawtypes")
-        static Error create(@NotNull final ConstraintViolation violation) {
+        private static Error create(@NotNull final ConstraintViolation violation) {
             Error error = new Error();
             if (Objects.nonNull(violation.getPropertyPath())) {
                 error.field = violation.getPropertyPath().toString();
@@ -103,7 +103,7 @@ public class ErrorJson extends Json {
             return error;
         }
 
-        Error message(final String errorText) {
+        private Error message(final String errorText) {
             this.field = "";
             this.errorMessage = errorText;
             return this;

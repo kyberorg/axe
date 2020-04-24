@@ -76,7 +76,12 @@ public final class MattermostArgumentSet {
             this.urlString = url;
         }
 
-        MattermostArgumentSet buildEmpty() {
+        /**
+         * Builds empty set.
+         *
+         * @return {@link #EMPTY_SET}
+         */
+        public MattermostArgumentSet buildEmpty() {
             return EMPTY_SET;
         }
 
