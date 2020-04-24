@@ -20,6 +20,11 @@ public final class MattermostArgumentSet {
     private String description = null;
 
 
+    /**
+     * Static constructor for {@link MattermostArgumentSet} builder.
+     *
+     * @return empty {@link Builder}
+     */
     public static MattermostArgumentSet.Builder builder() {
         return new Builder();
     }
@@ -61,10 +66,19 @@ public final class MattermostArgumentSet {
         return brokenSet;
     }
 
+    /**
+     * Creates builder and initialize it with url.
+     *
+     * @param url string with url
+     * @return {@link Builder}
+     */
     public static Builder builderWithUrl(final String url) {
         return new Builder(url);
     }
 
+    /**
+     * Builder class.
+     */
     public static class Builder {
         private String urlString;
         private String descriptionString;
@@ -85,11 +99,22 @@ public final class MattermostArgumentSet {
             return EMPTY_SET;
         }
 
+        /**
+         * Adds description.
+         *
+         * @param description string with description
+         * @return {@link Builder}
+         */
         public Builder andDescription(final String description) {
             this.descriptionString = description;
             return this;
         }
 
+        /**
+         * Triggers build.
+         *
+         * @return built {@link MattermostArgumentSet}
+         */
         public MattermostArgumentSet build() {
             if (UrlExtraValidator.isUrl(urlString)) {
                 MattermostArgumentSet newArgumentSet = new MattermostArgumentSet();
