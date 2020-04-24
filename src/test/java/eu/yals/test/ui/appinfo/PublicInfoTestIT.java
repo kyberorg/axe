@@ -21,7 +21,7 @@ public class PublicInfoTestIT extends AppInfoPageTest {
         $$(appInfoView.getVersion()).shouldHaveText("commit");
 
         $$(appInfoView.getCommitLink()).shouldBeDisplayed();
-        $$(appInfoView.getCommitLink()).shouldNotBeEmpty();
+        $$(appInfoView.getCommitLink()).textShouldNotBeEmpty();
         $$(appInfoView.getCommitLink()).shouldHaveAttr("href");
     }
 

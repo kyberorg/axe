@@ -22,7 +22,7 @@ public class AbnormalUsageTestIT extends VaadinTest {
     homeView.pasteValueInFormAndSubmitIt(LINK_TO_SAVE);
 
     AnchorElement resultLink = homeView.getShortLink();
-    $$(resultLink).shouldNotBeEmpty();
+    $$(resultLink).textShouldNotBeEmpty();
     $$(resultLink).shouldNotHaveText(EXTRA_ARGUMENT);
   }
 }

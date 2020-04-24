@@ -40,7 +40,7 @@ public class MultiStepTestIT extends HomePageTest {
 
         homeView.pasteValueInFormAndSubmitIt("g&%g");
         $$(homeView.getResultArea()).shouldNotBeDisplayed();
-        $$(homeView.getShortLink()).shouldBeEmpty();
+        $$(homeView.getShortLink()).textShouldBeEmpty();
     }
 
     /**

@@ -63,21 +63,21 @@ public abstract class VaadinTest extends ParallelTest {
     public final TestRule watchman =
             new TestWatcher() {
                 @Override
-                protected void starting(Description description) {
+                protected void starting(final Description description) {
                     super.starting(description);
                     testName = setTestNameFromTestDescription(description);
                     log.info(String.format("Starting build '%s'. Test: '%s", BUILD_NAME, testName));
                 }
 
                 @Override
-                protected void succeeded(Description description) {
+                protected void succeeded(final Description description) {
                     super.succeeded(description);
                     Cookie cookie = new Cookie("zaleniumTestPassed", "true");
                     getDriver().manage().addCookie(cookie);
                 }
 
                 @Override
-                protected void failed(Throwable e, Description description) {
+                protected void failed(final Throwable e, final Description description) {
                     Cookie cookie = new Cookie("zaleniumTestPassed", "false");
                     getDriver().manage().addCookie(cookie);
                 }
@@ -96,7 +96,7 @@ public abstract class VaadinTest extends ParallelTest {
         Parameters.setScreenshotErrorDirectory(REPORT_DIRECTORY);
     }
 
-    protected void open(String relativeOrAbsoluteUrl) {
+    protected void open(final String relativeOrAbsoluteUrl) {
         final String PROTOCOL_MARKER = "://";
         boolean isUrlAbsolute = relativeOrAbsoluteUrl.contains(PROTOCOL_MARKER);
         if (isUrlAbsolute) {
@@ -106,14 +106,19 @@ public abstract class VaadinTest extends ParallelTest {
         }
     }
 
-    protected YalsElement $$(String cssSelector) {
+    protected YalsElement $$(final String cssSelector) {
         return YalsElement.wrap(findElement(By.cssSelector(cssSelector)));
     }
 
-    protected VaadinElement $$(TestBenchElement element) {
+    protected VaadinElement $$(final TestBenchElement element) {
         return VaadinElement.wrap(element);
     }
 
+    /**
+     * Browsers configuration aka browser launch params.
+     *
+     * @return list with configured browsers
+     */
     @BrowserConfiguration
     public List<DesiredCapabilities> getBrowserConfiguration() {
         List<TestApp.Browser> testBrowsers = TestUtils.getTestBrowsers();
@@ -176,7 +181,7 @@ public abstract class VaadinTest extends ParallelTest {
         sd.getDesiredCapabilities().setCapability("build", BUILD_NAME);
     }
 
-    private String setTestNameFromTestDescription(Description description) {
+    private String setTestNameFromTestDescription(final Description description) {
         String rawMethodName = description.getMethodName();
         String[] methodAndBrowserInfo = rawMethodName.split("\\[");
         if (methodAndBrowserInfo.length > 0) {

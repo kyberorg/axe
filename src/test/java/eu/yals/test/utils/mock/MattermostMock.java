@@ -10,15 +10,20 @@ import java.util.ArrayList;
  *
  * @since 2.3
  */
-public class MattermostMock {
+public final class MattermostMock {
 
     private final ArrayList<String> collector;
     private final StringBuilder sb = new StringBuilder();
 
     private MattermostMock() {
-        collector = new ArrayList<>(8);
+        collector = new ArrayList<>();
     }
 
+    /**
+     * Creates {@link MattermostMock}.
+     *
+     * @return empty object
+     */
     public static MattermostMock create() {
         return new MattermostMock();
     }
@@ -29,47 +34,95 @@ public class MattermostMock {
      * @param channelId string with channel id
      * @return {@link MattermostMock}
      */
-    public MattermostMock withChannelId(String channelId) {
+    public MattermostMock withChannelId(final String channelId) {
         collector.add(createParam(Marker.CHANNEL_ID, channelId));
         return this;
     }
 
-    public MattermostMock withChannelName(String channelName) {
+    /**
+     * Adds chanel name to mock.
+     *
+     * @param channelName string with MM channel name
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withChannelName(final String channelName) {
         collector.add(createParam(Marker.CHANNEL_NAME, channelName));
         return this;
     }
 
-    public MattermostMock withCommand(String command) {
+    /**
+     * Adds Mattermost command.
+     *
+     * @param command string with command
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withCommand(final String command) {
         collector.add(createParam(Marker.COMMAND, command));
         return this;
     }
 
-    public MattermostMock withTeamDomain(String teamDomain) {
+    /**
+     * Adds team name (aka domain).
+     *
+     * @param teamDomain string team domain
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withTeamDomain(final String teamDomain) {
         collector.add(createParam(Marker.TEAM_DOMAIN, teamDomain));
         return this;
     }
 
-    public MattermostMock withTeamId(String teamId) {
+    /**
+     * ID of team.
+     *
+     * @param teamId string with mm team id
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withTeamId(final String teamId) {
         collector.add(createParam(Marker.TEAM_ID, teamId));
         return this;
     }
 
-    public MattermostMock withText(String text) {
+    /**
+     * Adds message.
+     *
+     * @param text string with message
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withText(final String text) {
         collector.add(createParam(Marker.TEXT, text));
         return this;
     }
 
-    public MattermostMock withToken(String token) {
+    /**
+     * Adds mattermost token.
+     *
+     * @param token string with token
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withToken(final String token) {
         collector.add(createParam(Marker.TOKEN, token));
         return this;
     }
 
-    public MattermostMock withUserId(String userId) {
+    /**
+     * Adds sender's ID.
+     *
+     * @param userId string with sender's id
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withUserId(final String userId) {
         collector.add(createParam(Marker.USER_ID, userId));
         return this;
     }
 
-    public MattermostMock withUsername(String username) {
+    /**
+     * Adds sender username.
+     *
+     * @param username string with username of sender
+     * @return {@link MattermostMock}
+     */
+    public MattermostMock withUsername(final String username) {
         collector.add(createParam(Marker.USER_NAME, username));
         return this;
     }
