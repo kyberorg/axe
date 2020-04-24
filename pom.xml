@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>1.8</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.1.25</vaadin.version>
+        <vaadin.version>14.2.0.beta1</vaadin.version>
         <!-- Selenium Version -->
         <selenium.version>3.141.59</selenium.version>
 
