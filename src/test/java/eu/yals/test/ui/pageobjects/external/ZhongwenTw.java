@@ -5,6 +5,7 @@ package eu.yals.test.ui.pageobjects.external;
  *
  * @since 2.5
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class ZhongwenTw {
     public static final String NAV_TABLE = ".mbr-table";
 }

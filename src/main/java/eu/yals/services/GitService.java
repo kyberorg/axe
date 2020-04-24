@@ -62,7 +62,7 @@ public class GitService {
     /**
      * Verifies if latest application tag present or not.
      *
-     * @return true if peresent, false - if not.
+     * @return true if present, false - if not.
      */
     public boolean tagPresent() {
         return (!latestTag.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestTag));

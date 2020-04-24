@@ -13,6 +13,7 @@ import org.junit.Test;
  *
  * @since 2.5
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class IdnTestIT extends HomePageTest {
 
     // Run the test max 3 times (because of external sites)

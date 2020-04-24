@@ -5,6 +5,7 @@ package eu.yals.test.ui.pageobjects.external;
  *
  * @since 2.5
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class TravemundeDe {
     public static final String TITLE_TEXT = "Travemünde.de –Offizielles Stadtportal für die Hansestadt Lübeck";
 }

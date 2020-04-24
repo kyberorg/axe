@@ -32,6 +32,7 @@ import static eu.yals.constants.HttpCode.*;
  *
  * @since 1.0
  */
+@SuppressWarnings("rawtypes")
 @Slf4j
 @RestController
 public class StoreRestController {

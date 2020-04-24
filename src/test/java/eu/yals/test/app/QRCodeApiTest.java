@@ -193,11 +193,13 @@ public class QRCodeApiTest extends UnirestTest {
         return body.getObject().getString("ident");
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private void assertValidQRCode(final String qrCode) {
         assertTrue("QR find, but cannot be empty", StringUtils.isNotBlank(qrCode));
 
         String[] qrCodeParts = qrCode.split(";");
-        if (qrCodeParts.length > 1) {
+        if (qrCodeParts.length > 1) //noinspection SpellCheckingInspection
+        {
             // base64,iVBORw0KGgoAAAAN...
             String[] valueParts = qrCodeParts[1].split(",");
             if (valueParts.length > 1) {

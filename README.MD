@@ -166,7 +166,7 @@ Secrets:
 
 * Git clone ``` git clone repoUrl ```
 
-* Import into IDE as **Maven** project
+* Import into an IDE as **Maven** project
 
 * Select all autodetected Spring facets
 
@@ -203,7 +203,7 @@ To adjust logging we use ENV variables or `-D` vars:
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
 ### About: Tests
-* Test URL is defined bu `-Dtest.url` property. Should be with protocol
+* Test URL is defined bu `-Dtest.url` property. Should be with protocol.
   
 * Browsers are defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge. 
 

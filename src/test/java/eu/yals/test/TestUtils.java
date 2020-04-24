@@ -130,7 +130,7 @@ public class TestUtils {
     }
 
     /**
-     * Determines if tests are runnning locally (docker container or localhost).
+     * Determines if tests are running locally (docker container or localhost).
      *
      * @return true if locally, false if not
      */

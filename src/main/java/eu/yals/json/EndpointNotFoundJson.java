@@ -77,7 +77,7 @@ public class EndpointNotFoundJson extends Json {
          *
          * @param method http method like GET/POST...
          * @param path   string with endpoint path
-         * @return created {@link Endpoint} obejct
+         * @return created {@link Endpoint} object
          */
         public static Endpoint create(final HttpMethod method, final String path) {
             return new Endpoint(method, path);

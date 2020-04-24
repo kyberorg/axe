@@ -78,7 +78,7 @@ public final class MattermostResponseJson extends Json {
      * Puts location.
      *
      * @param gotoLocation string contains gotoLocation.
-     * @return json which senda in response
+     * @return json which sends in response
      */
     public MattermostResponseJson addGotoLocation(final String gotoLocation) {
         if (GenericValidator.isUrl(gotoLocation)) {
