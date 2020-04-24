@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 /**
- * Provides git information (maven way)
+ * Provides git information (maven way).
  *
  * @since 2.0
  */
@@ -15,7 +15,12 @@ import java.util.Objects;
 public class MavenGitInfo implements GitInfo {
     private final GitRepoState gitRepoState;
 
-    public MavenGitInfo(GitRepoState gitRepoState) {
+    /**
+     * Creates {@link MavenGitInfo} object.
+     *
+     * @param gitRepoState build time info
+     */
+    public MavenGitInfo(final GitRepoState gitRepoState) {
         this.gitRepoState = gitRepoState;
     }
 
@@ -26,7 +31,8 @@ public class MavenGitInfo implements GitInfo {
 
     @Override
     public String getLatestCommitHash() {
-        return StringUtils.isNotBlank(gitRepoState.getCommitIdAbbrev()) ? gitRepoState.getCommitIdAbbrev() : App.NO_VALUE;
+        return StringUtils.isNotBlank(gitRepoState.getCommitIdAbbrev())
+                ? gitRepoState.getCommitIdAbbrev() : App.NO_VALUE;
     }
 
     @Override

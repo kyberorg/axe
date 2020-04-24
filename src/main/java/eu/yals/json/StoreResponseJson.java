@@ -1,27 +1,34 @@
 package eu.yals.json;
 
-import com.google.gson.annotations.Since;
 import eu.yals.json.internal.Json;
+import lombok.Getter;
 
 /**
- * Store Endpoint outgoing JSON
+ * Store Endpoint outgoing JSON.
  *
  * @since 1.0
  */
 public class StoreResponseJson extends Json {
-    @Since(1.0)
+    @Getter
     private String ident;
 
+    /**
+     * Creates empty {@link StoreResponseJson}.
+     *
+     * @return {@link StoreResponseJson} with no params
+     */
     public static StoreResponseJson create() {
         return new StoreResponseJson();
     }
 
-    public StoreResponseJson withIdent(String ident) {
+    /**
+     * Creates {@link StoreResponseJson} with given ident.
+     *
+     * @param ident string with ident.
+     * @return json containing ident.
+     */
+    public StoreResponseJson withIdent(final String ident) {
         this.ident = ident;
         return this;
-    }
-
-    public String getIdent() {
-        return this.ident;
     }
 }

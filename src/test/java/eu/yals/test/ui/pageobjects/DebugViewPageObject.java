@@ -12,24 +12,24 @@ import org.openqa.selenium.WebDriver;
  */
 public class DebugViewPageObject extends YalsPageObject {
 
-  public static DebugViewPageObject getPageObject(WebDriver driver) {
-    return new DebugViewPageObject(driver);
-  }
+    public static DebugViewPageObject getPageObject(WebDriver driver) {
+        return new DebugViewPageObject(driver);
+    }
 
-  public DebugViewPageObject(WebDriver driver) {
-    super(driver, DebugView.class.getSimpleName());
-  }
+    public DebugViewPageObject(WebDriver driver) {
+        super(driver, DebugView.class.getSimpleName());
+    }
 
-  // elements
-  public TestBenchElement getButton() {
-    return getCl().$("vaadin-button").first();
-  }
+    // elements
+    public TestBenchElement getButton() {
+        return getCl().$("vaadin-button").first();
+    }
 
-  public TextFieldElement getInput() {
-    return $(TextFieldElement.class).first();
-  }
+    public TextFieldElement getInput() {
+        return $(TextFieldElement.class).first();
+    }
 
-  private TestBenchElement getCl() {
-    return $("clipboard-helper").first();
-  }
+    private TestBenchElement getCl() {
+        return $("clipboard-helper").first();
+    }
 }

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 /**
- * Service which generates QR codes
+ * Service which generates QR codes.
  *
  * @since 2.6
  */
@@ -24,28 +24,33 @@ public class QRCodeService {
     public static final int DEFAULT_SIZE = 350;
     private final AppUtils appUtils;
 
-    public QRCodeService(AppUtils appUtils) {
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param appUtils application utils
+     */
+    public QRCodeService(final AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 
     /**
-     * Produces PNG with QR code, where encoded short link
+     * Produces PNG with QR code, where encoded short link.
      *
      * @param ident string with ident, which will added to server url
      * @return base64 encoded png with data:image/png stamp with default size {@link #DEFAULT_SIZE}
      */
-    public String getQRCodeFromIdent(String ident) throws IOException, WriterException {
+    public String getQRCodeFromIdent(final String ident) throws IOException, WriterException {
         return getQRCodeFromIdent(ident, DEFAULT_SIZE);
     }
 
     /**
-     * Produces PNG with QR code, where encoded short link, with given size
+     * Produces PNG with QR code, where encoded short link, with given size.
      *
      * @param ident string with ident, which will added to server url
      * @param size  positive integer with QR code size.
      * @return ready base64 encoded png with data:image/png stamp
      */
-    public String getQRCodeFromIdent(String ident, int size) throws WriterException, IOException {
+    public String getQRCodeFromIdent(final String ident, final int size) throws WriterException, IOException {
         String serverUrl = appUtils.getServerUrl();
         String fullLink = serverUrl + "/" + ident;
 
@@ -54,7 +59,7 @@ public class QRCodeService {
         return doPng(base64encodedQRCode);
     }
 
-    private byte[] doQRCode(String text, int size) throws WriterException, IOException {
+    private byte[] doQRCode(final String text, final int size) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, size, size);
 
@@ -64,13 +69,13 @@ public class QRCodeService {
         return pngData;
     }
 
-    private String encodeQRCode(byte[] qrCode) {
+    private String encodeQRCode(final byte[] qrCode) {
         final String base64Marker = "base64";
         Base64.Encoder encoder = Base64.getEncoder();
         return base64Marker + "," + encoder.encodeToString(qrCode);
     }
 
-    private String doPng(String base64encodedQRCode) {
+    private String doPng(final String base64encodedQRCode) {
         final String pngMarker = "data:image/png";
         return pngMarker + ";" + base64encodedQRCode;
     }

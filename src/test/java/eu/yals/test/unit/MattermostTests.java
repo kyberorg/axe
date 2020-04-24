@@ -16,21 +16,24 @@ import static org.junit.Assert.*;
  * @since 2.3
  */
 public class MattermostTests {
+    private static final int CHANNEL_ID_LENGTH = 6;
+    private static final int TEAM_ID_LENGTH = 6;
+    private static final int USER_ID_LENGTH = 6;
+    private static final int TOKEN_LENGTH = 15;
 
     @Test
     public void shouldBeValidObjectFromValidRequest() {
         String host = "yals.eu";
         String text = "https%3A%2F%2F" + host;
 
-        String channelId = RandomStringUtils.randomAlphanumeric(6);
+        String channelId = RandomStringUtils.randomAlphanumeric(CHANNEL_ID_LENGTH);
         String channelName = "channelName";
         String command = "yals";
         String teamDomain = "myTeam";
-        String teamId = RandomStringUtils.randomAlphanumeric(6);
-        String token = RandomStringUtils.randomAlphanumeric(15);
-        String userId = RandomStringUtils.randomAlphanumeric(6);
+        String teamId = RandomStringUtils.randomAlphanumeric(TEAM_ID_LENGTH);
+        String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
+        String userId = RandomStringUtils.randomAlphanumeric(USER_ID_LENGTH);
         String uzer = "uzer";
-
 
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(channelId).withChannelName(channelName)
@@ -64,6 +67,9 @@ public class MattermostTests {
         Mattermost.createFromResponseBody(null);
     }
 
+    /**
+     * When empty body - exception expected.
+     */
     @Test(expected = IllegalStateException.class)
     public void shouldBeExceptionWhenRequestHasEmptyBody() {
         Mattermost.createFromResponseBody(" ");
@@ -71,15 +77,14 @@ public class MattermostTests {
 
     @Test(expected = NoSuchElementException.class)
     public void shouldBeExceptionWhenRequestHasNoText() {
-        String channelId = RandomStringUtils.randomAlphanumeric(6);
+        String channelId = RandomStringUtils.randomAlphanumeric(CHANNEL_ID_LENGTH);
         String channelName = "channelName";
         String command = "yals";
         String teamDomain = "myTeam";
-        String teamId = RandomStringUtils.randomAlphanumeric(6);
-        String token = RandomStringUtils.randomAlphanumeric(15);
-        String userId = RandomStringUtils.randomAlphanumeric(6);
+        String teamId = RandomStringUtils.randomAlphanumeric(TEAM_ID_LENGTH);
+        String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
+        String userId = RandomStringUtils.randomAlphanumeric(USER_ID_LENGTH);
         String uzer = "uzer";
-
 
         MattermostMock matterMock = MattermostMock.create()
                 .withChannelId(channelId).withChannelName(channelName)
@@ -96,8 +101,8 @@ public class MattermostTests {
         String host = "yals.eu";
         String text = "https%3A%2F%2F" + host;
 
-        String token = RandomStringUtils.randomAlphanumeric(15);
-        String userId = RandomStringUtils.randomAlphanumeric(6);
+        String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
+        String userId = RandomStringUtils.randomAlphanumeric(USER_ID_LENGTH);
         String uzer = "uzer";
 
 
@@ -122,8 +127,8 @@ public class MattermostTests {
     @Test(expected = IllegalArgumentException.class)
     public void shouldBeExceptionWhenTextIsNotUrl() {
         String text = "notAnUrl";
-        String token = RandomStringUtils.randomAlphanumeric(15);
-        String userId = RandomStringUtils.randomAlphanumeric(6);
+        String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
+        String userId = RandomStringUtils.randomAlphanumeric(USER_ID_LENGTH);
         String uzer = "uzer";
 
 
@@ -138,8 +143,8 @@ public class MattermostTests {
     @Test
     public void urlInTextShouldBeDecodedIfValidUrl() {
         String text = "https%3A%2F%2Fyals.eu";
-        String token = RandomStringUtils.randomAlphanumeric(15);
-        String userId = RandomStringUtils.randomAlphanumeric(6);
+        String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
+        String userId = RandomStringUtils.randomAlphanumeric(USER_ID_LENGTH);
         String uzer = "uzer";
 
 

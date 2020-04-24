@@ -1,7 +1,7 @@
 package eu.yals.constants;
 
 /**
- * MIME-types
+ * MIME-types.
  *
  * @since 2.0
  */

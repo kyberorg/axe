@@ -35,7 +35,12 @@ import lombok.extern.slf4j.Slf4j;
 public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         implements PageConfigurator {
 
-    public AppView(AppUtils appUtils) {
+    /**
+     * Creates menu.
+     *
+     * @param appUtils application utils for determine dev mode
+     */
+    public AppView(final AppUtils appUtils) {
 
         AppLayoutBuilder<LeftLayouts.LeftHybrid> builder =
                 AppLayoutBuilder.get(LeftLayouts.LeftHybrid.class).withTitle("YALS");
@@ -66,7 +71,7 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
     }
 
     @Override
-    public void configurePage(InitialPageSettings settings) {
+    public void configurePage(final InitialPageSettings settings) {
         settings.addFavIcon("icon", "/icons/favicon-32x32.png", "32x32");
         settings.addLink("shortcut icon", "/icons/favicon-16x16.png");
         settings.addLink("apple-touch-icon", "/icons/apple-touch-icon.png");

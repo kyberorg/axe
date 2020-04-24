@@ -1,58 +1,85 @@
 package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.gson.annotations.Since;
 import eu.yals.json.internal.Json;
 import kong.unirest.HttpMethod;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * This struct of JSON send when API endpoint is not found
+ * This struct of JSON send when API endpoint is not found.
  *
  * @since 2.7
  */
-@Since(2.7)
 public class EndpointNotFoundJson extends Json {
 
-    @Since(2.7)
+    @Getter
     private final String error = "Endpoint not found";
 
-    @Since(2.7)
+    @Getter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Endpoint endpoint;
 
-    public static EndpointNotFoundJson createWithEndpoint(@NotNull HttpMethod method, @NotNull String path) {
+    /**
+     * Creates {@link EndpointNotFoundJson} from endpoint method and path.
+     *
+     * @param method {@link HttpMethod} method aka GET/POST...
+     * @param path   string with path to endpoint
+     * @return json with endpoint built from given params
+     */
+    public static EndpointNotFoundJson createWithEndpoint(final @NotNull HttpMethod method,
+                                                          final @NotNull String path) {
         EndpointNotFoundJson self = new EndpointNotFoundJson();
         self.endpoint = Endpoint.create(method, path);
         return self;
     }
 
+    /**
+     * Creates {@link EndpointNotFoundJson} without params.
+     *
+     * @return {@link EndpointNotFoundJson} object with defaults.
+     */
     public static EndpointNotFoundJson create() {
         return new EndpointNotFoundJson();
     }
 
-    @Since(2.7)
+    /**
+     * method and path combination (for example: GET /path).
+     */
     public static class Endpoint {
-        @Since(2.7)
-        String method;
+        @Getter
+        private final String method;
 
-        @Since(2.7)
-        String path;
+        @Getter
+        private final String path;
 
-        public Endpoint(HttpMethod method, String path) {
-            this.method = method.name();
+        /**
+         * Constructs {@link Endpoint} object from method and path.
+         *
+         * @param httpMethod   http method like GET/POST...
+         * @param endpointPath string with endpoint path
+         */
+        public Endpoint(final HttpMethod httpMethod, final String endpointPath) {
+            this.method = httpMethod.name();
             String newPath;
-            if (StringUtils.isNotBlank(path) && !path.startsWith("/")) {
-                newPath = "/" + path;
+            if (StringUtils.isNotBlank(endpointPath) && !endpointPath.startsWith("/")) {
+                newPath = "/" + endpointPath;
             } else {
-                newPath = path;
+                newPath = endpointPath;
             }
             this.path = newPath;
         }
 
-        public static Endpoint create(HttpMethod method, String path) {
+        /**
+         * Static method which is analog to {@link #Endpoint(HttpMethod, String)}.
+         *
+         * @param method http method like GET/POST...
+         * @param path   string with endpoint path
+         * @return created {@link Endpoint} object
+         */
+        public static Endpoint create(final HttpMethod method, final String path) {
             return new Endpoint(method, path);
         }
     }

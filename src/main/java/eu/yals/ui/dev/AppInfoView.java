@@ -29,13 +29,23 @@ import eu.yals.utils.maven.MavenInfo;
 @PageTitle("Link shortener for friends: App Info")
 public class AppInfoView extends VerticalLayout {
     private static final String UNDEFINED = "UNDEFINED";
+    private static final int COMMIT_HASH_LENGTH = 7;
 
     private final GitService gitService;
     private final GitRepoState gitRepoState;
     private final MavenInfo mavenInfo;
     private final AppUtils appUtils;
 
-    public AppInfoView(GitService gitService, GitRepoState gitRepoState, MavenInfo mavenInfo, AppUtils appUtils) {
+    /**
+     * Creates {@link AppInfoView} object.
+     *
+     * @param gitService   information from git
+     * @param gitRepoState information from build time
+     * @param mavenInfo    info from maven
+     * @param appUtils     application utils
+     */
+    public AppInfoView(final GitService gitService, final GitRepoState gitRepoState,
+                       final MavenInfo mavenInfo, final AppUtils appUtils) {
         this.gitService = gitService;
         this.gitRepoState = gitRepoState;
         this.mavenInfo = mavenInfo;
@@ -67,7 +77,7 @@ public class AppInfoView extends VerticalLayout {
         Anchor commit =
                 new Anchor(
                         String.format("%s/%s", App.Git.REPOSITORY, latestCommit),
-                        latestCommit.substring(0, Integer.min(latestCommit.length(), 7)));
+                        latestCommit.substring(0, Integer.min(latestCommit.length(), COMMIT_HASH_LENGTH)));
         commit.setId(IDs.COMMIT_LINK);
         Span versionEnd = new Span(")");
 
@@ -92,8 +102,8 @@ public class AppInfoView extends VerticalLayout {
         String gitHostStr = gitRepoState.hasValues() ? gitRepoState.getBuildHost() : UNDEFINED;
 
         H3 h3 = new H3("Dev Info");
-        Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr +
-                " (Flow: " + vaadinFlowVersion + ")");
+        Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr
+                + " (Flow: " + vaadinFlowVersion + ")");
 
         Span gitBranch = new Span("Git branch: " + gitBranchStr);
         Span gitHost = new Span("Built at " + gitHostStr);

@@ -6,13 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * Combination of types present in MM Text ({@link Mattermost#text} )
+ * Combination of types present in MM Text ({@link Mattermost#text} ).
  *
  * @since 2.3.1
  */
-public class MattermostArgumentSet {
-    static final MattermostArgumentSet EMPTY_SET = MattermostArgumentSet.emptySet();
-    static final MattermostArgumentSet BROKEN_SET = MattermostArgumentSet.brokenSet();
+public final class MattermostArgumentSet {
+    public static final MattermostArgumentSet EMPTY_SET = MattermostArgumentSet.emptySet();
+    public static final MattermostArgumentSet BROKEN_SET = MattermostArgumentSet.brokenSet();
 
     private static MattermostArgumentSet SELF = null;
 
@@ -20,18 +20,23 @@ public class MattermostArgumentSet {
     private String description = null;
 
 
-    static MattermostArgumentSet.Builder builder() {
+    /**
+     * Static constructor for {@link MattermostArgumentSet} builder.
+     *
+     * @return empty {@link Builder}
+     */
+    public static MattermostArgumentSet.Builder builder() {
         return new Builder();
     }
 
     /**
-     * Only for {@link #EMPTY_SET}
+     * Only for {@link #EMPTY_SET}.
      */
     private MattermostArgumentSet() {
     }
 
     /**
-     * Get stored URL
+     * Get stored URL.
      *
      * @return non-null string with URL to shortened.
      */
@@ -40,7 +45,7 @@ public class MattermostArgumentSet {
     }
 
     /**
-     * Provides stored description
+     * Provides stored description.
      *
      * @return stored description or Empty String
      */
@@ -61,30 +66,55 @@ public class MattermostArgumentSet {
         return brokenSet;
     }
 
-    static Builder builderWithUrl(String url) {
+    /**
+     * Creates builder and initialize it with url.
+     *
+     * @param url string with url
+     * @return {@link Builder}
+     */
+    public static Builder builderWithUrl(final String url) {
         return new Builder(url);
     }
 
-    static class Builder {
+    /**
+     * Builder class.
+     */
+    public static class Builder {
         private String urlString;
         private String descriptionString;
 
         Builder() {
         }
 
-        Builder(String url) {
+        Builder(final String url) {
             this.urlString = url;
         }
 
-        MattermostArgumentSet buildEmpty() {
+        /**
+         * Builds empty set.
+         *
+         * @return {@link #EMPTY_SET}
+         */
+        public MattermostArgumentSet buildEmpty() {
             return EMPTY_SET;
         }
 
-        Builder andDescription(String description) {
+        /**
+         * Adds description.
+         *
+         * @param description string with description
+         * @return {@link Builder}
+         */
+        public Builder andDescription(final String description) {
             this.descriptionString = description;
             return this;
         }
 
+        /**
+         * Triggers build.
+         *
+         * @return built {@link MattermostArgumentSet}
+         */
         public MattermostArgumentSet build() {
             if (UrlExtraValidator.isUrl(urlString)) {
                 MattermostArgumentSet newArgumentSet = new MattermostArgumentSet();

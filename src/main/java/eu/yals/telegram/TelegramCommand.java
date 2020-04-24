@@ -3,7 +3,7 @@ package eu.yals.telegram;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * List of supported by {@link TelegramBot} commands
+ * List of supported by {@link TelegramBot} commands.
  *
  * @since 2.4
  */
@@ -16,17 +16,28 @@ public enum TelegramCommand {
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
+    private final String commandString;
+
+    TelegramCommand(final String cmd) {
+        this.commandString = cmd;
+    }
+
+    /**
+     * Get telegram command.
+     *
+     * @return string with command string
+     */
     public String getCommandText() {
         return commandString;
     }
 
-    private final String commandString;
-
-    TelegramCommand(String cmd) {
-        this.commandString = cmd;
-    }
-
-    public static TelegramCommand createFromString(String cmd) {
+    /**
+     * Constructs {@link TelegramCommand} with string.
+     *
+     * @param cmd string with command
+     * @return created object
+     */
+    public static TelegramCommand createFromString(final String cmd) {
         if (StringUtils.isBlank(cmd)) {
             return UNKNOWN;
         }
@@ -35,7 +46,9 @@ public enum TelegramCommand {
             return NOT_A_COMMAND;
         }
 
-        boolean isYalsCommand = cmd.equals(YALS.commandString) || cmd.equals(YALST.commandString) || cmd.equals(YALSL.commandString);
+        boolean isYalsCommand = cmd.equals(YALS.commandString)
+                || cmd.equals(YALST.commandString)
+                || cmd.equals(YALSL.commandString);
 
         if (cmd.equals(START.commandString)) {
             return START;
@@ -56,6 +69,11 @@ public enum TelegramCommand {
         }
     }
 
+    /**
+     * Validates command.
+     *
+     * @return true - if match found, false if not
+     */
     public boolean isYalsCommand() {
         boolean isYals;
         switch (this) {
@@ -66,7 +84,7 @@ public enum TelegramCommand {
                 break;
             default:
                 isYals = false;
-
+                break;
         }
         return isYals;
     }

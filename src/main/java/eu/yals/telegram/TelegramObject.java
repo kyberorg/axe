@@ -1,5 +1,6 @@
 package eu.yals.telegram;
 
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,11 +11,12 @@ import static eu.yals.constants.App.NEW_LINE;
 import static eu.yals.constants.App.NO_VALUE;
 
 /**
- * Contains message, username and other useful info from {@link org.telegram.telegrambots.meta.api.objects.Update}
+ * Contains message, username and other useful info from {@link org.telegram.telegrambots.meta.api.objects.Update}.
  *
  * @since 2.4
  */
-public class TelegramObject {
+@Data
+public final class TelegramObject {
 
     private TelegramArguments arguments = TelegramArguments.EMPTY_ARGS;
     private TelegramCommand command = TelegramCommand.UNKNOWN;
@@ -22,12 +24,18 @@ public class TelegramObject {
 
     private String userMessage;
 
-    private TelegramObject(Update update) {
+    private TelegramObject(final Update update) {
         this.parseUpdate(update);
         this.parseUserMessage();
     }
 
-    static TelegramObject createFromUpdate(Update update) {
+    /**
+     * Creates {@link TelegramObject} for telegram {@link Update}.
+     *
+     * @param update telegram update object
+     * @return created {@link TelegramObject}
+     */
+    public static TelegramObject createFromUpdate(final Update update) {
         if (Objects.isNull(update)) {
             throw new IllegalStateException("Update is missing");
         }
@@ -35,19 +43,7 @@ public class TelegramObject {
         return new TelegramObject(update);
     }
 
-    public TelegramArguments getArguments() {
-        return arguments;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    TelegramCommand getCommand() {
-        return command;
-    }
-
-    private void parseUpdate(Update update) {
+    private void parseUpdate(final Update update) {
         if (Objects.isNull(update)) {
             userMessage = NO_VALUE;
             return;
@@ -94,11 +90,13 @@ public class TelegramObject {
             case USAGE:
             case START:
             default:
-                this.arguments = TelegramArguments.builder().buildEmpty(); //no reason for manipulating with user message
+                //no reason for manipulating with user message
+                this.arguments = TelegramArguments.builder().buildEmpty();
+                break;
         }
     }
 
-    private TelegramArguments createArgumentsFromMessageWithoutCommand(String userMessageWithoutCommand) {
+    private TelegramArguments createArgumentsFromMessageWithoutCommand(final String userMessageWithoutCommand) {
         TelegramArguments arguments;
         String[] args = userMessageWithoutCommand.split(" ");
         String url = "";
@@ -124,11 +122,11 @@ public class TelegramObject {
 
     @Override
     public String toString() {
-        return TelegramObject.class.getSimpleName() + " {" + NEW_LINE +
-                TelegramArguments.class.getSimpleName() + "=" + arguments + NEW_LINE +
-                TelegramCommand.class.getSimpleName() + "=" + command + NEW_LINE +
-                "username=" + username + NEW_LINE +
-                "userMessage=" + userMessage + NEW_LINE +
-                "}";
+        return TelegramObject.class.getSimpleName() + " {" + NEW_LINE
+                + TelegramArguments.class.getSimpleName() + "=" + arguments + NEW_LINE
+                + TelegramCommand.class.getSimpleName() + "=" + command + NEW_LINE
+                + "username=" + username + NEW_LINE
+                + "userMessage=" + userMessage + NEW_LINE
+                + "}";
     }
 }

@@ -6,5 +6,5 @@ package eu.yals.test.ui.pageobjects.external;
  * @since 2.2
  */
 public class VR {
-  public static final String LOGO = "a.mainLogo img";
+    public static final String LOGO = "a.mainLogo img";
 }

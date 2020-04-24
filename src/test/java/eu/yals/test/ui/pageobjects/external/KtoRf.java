@@ -6,5 +6,5 @@ package eu.yals.test.ui.pageobjects.external;
  * @since 2.5
  */
 public class KtoRf {
-  public static final String DIV_EGGS = "div.eggs";
+    public static final String DIV_EGGS = "div.eggs";
 }

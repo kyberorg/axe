@@ -18,7 +18,10 @@ import eu.yals.Endpoint;
 @PageTitle("Link shortener for friends: Debug Page")
 public class DebugView extends Div {
 
-  public DebugView() {
-    setId(DebugView.class.getSimpleName());
-  }
+    /**
+     * Creates {@link DebugView}.
+     */
+    public DebugView() {
+        setId(DebugView.class.getSimpleName());
+    }
 }
