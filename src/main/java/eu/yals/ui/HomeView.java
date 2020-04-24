@@ -46,7 +46,7 @@ import static eu.yals.constants.HttpCode.STATUS_201;
 @Icon(VaadinIcon.HOME)
 @PageTitle("Link shortener for friends")
 public class HomeView extends VerticalLayout {
-    private static final String TAG = "[Front Page]";
+    private static final String TAG = "[" + HomeView.class.getSimpleName() + "]";
 
     private final Board board = new Board();
     private final Row firstRow = new Row();

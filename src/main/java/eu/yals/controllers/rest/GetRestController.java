@@ -27,7 +27,7 @@ import static eu.yals.constants.HttpCode.*;
 @Slf4j
 @RestController
 public class GetRestController {
-    private static final String TAG = "[API Get]";
+    private static final String TAG = "[" + GetRestController.class.getSimpleName() + "]";
 
     private final LinkService linkService;
 

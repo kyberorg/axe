@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 @Data
 @Slf4j
 public final class Mattermost {
-    private static final String TAG = "[MM]";
+    private static final String TAG = "[" + Mattermost.class.getSimpleName() + "]";
 
     private String channelId = App.NO_VALUE;
     private String channelName = App.NO_VALUE;

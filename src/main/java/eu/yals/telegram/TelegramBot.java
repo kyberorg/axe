@@ -24,7 +24,7 @@ import static eu.yals.constants.App.NEW_LINE;
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
-    private static final String TAG = "[Telegram Bot]";
+    private static final String TAG = "[" + TelegramBot.class.getSimpleName() + "]";
 
     private static final Message NO_MESSAGE = new Message();
 
