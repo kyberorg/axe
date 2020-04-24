@@ -44,21 +44,29 @@ public class GitRepoState {
 
     private final Properties gitProperties = new Properties();
 
-    String commitIdAbbrev;          // =${git.commit.id.abbrev}
-    String buildVersion;             // =${git.build.version}
-    String branch;                  //=${git.branch}
-    String buildHost;               //=${git.build.host}
+    private String commitIdAbbrev;          // =${git.commit.id.abbrev}
+    private String buildVersion;             // =${git.build.version}
+    private String branch;                  //=${git.branch}
+    private String buildHost;               //=${git.build.host}
 
+    /**
+     * Creates {@link GitRepoState} object.
+     */
     public GitRepoState() {
         init();
     }
 
+    /**
+     * Controls if object populated values or not.
+     *
+     * @return true if values are correctly populated, false if not
+     */
     public boolean hasValues() {
         return !gitProperties.isEmpty();
     }
 
     private void init() {
-        if(this.getClass().getClassLoader() == null) {
+        if (this.getClass().getClassLoader() == null) {
             log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
                     GIT_PROPERTIES_FILE);
             this.gitProperties.clear();

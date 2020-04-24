@@ -1,27 +1,34 @@
 package eu.yals.json;
 
-import com.google.gson.annotations.Since;
 import eu.yals.json.internal.Json;
+import lombok.Getter;
 
 /**
- * Store Endpoint outgoing JSON
+ * Store Endpoint outgoing JSON.
  *
  * @since 1.0
  */
 public class LinkResponseJson extends Json {
-    @Since(1.0)
+    @Getter
     private String link;
 
+    /**
+     * Creates blank {@link LinkResponseJson} without params.
+     *
+     * @return empty {@link LinkResponseJson} object.
+     */
     public static LinkResponseJson create() {
         return new LinkResponseJson();
     }
 
-    public LinkResponseJson withLink(String link) {
-        this.link = link;
+    /**
+     * Creates {@link LinkResponseJson} with given link param.
+     *
+     * @param shortLink string with short link
+     * @return {@link LinkResponseJson} containing link param.
+     */
+    public LinkResponseJson withLink(final String shortLink) {
+        this.link = shortLink;
         return this;
-    }
-
-    public String getLink() {
-        return this.link;
     }
 }

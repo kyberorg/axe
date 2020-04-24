@@ -9,10 +9,11 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.junit.Test;
 
+import static eu.yals.constants.HttpCode.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Testing Tech Parts and other non-standard locations
@@ -35,7 +36,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(404, result.getStatus());
+        assertEquals(STATUS_404, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -48,7 +49,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(404, result.getStatus());
+        assertEquals(STATUS_404, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.TEXT_HTML, result);
@@ -62,7 +63,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(404, result.getStatus());
+        assertEquals(STATUS_404, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -75,7 +76,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(404, result.getStatus());
+        assertEquals(STATUS_404, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -90,7 +91,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(406, result.getStatus());
+        assertEquals(STATUS_406, result.getStatus());
     }
 
     @Test
@@ -102,7 +103,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(500, result.getStatus());
+        assertEquals(STATUS_500, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -115,7 +116,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(500, result.getStatus());
+        assertEquals(STATUS_500, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.TEXT_HTML, result);
@@ -129,7 +130,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(500, result.getStatus());
+        assertEquals(STATUS_500, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -142,7 +143,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(500, result.getStatus());
+        assertEquals(STATUS_500, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -156,7 +157,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(406, result.getStatus());
+        assertEquals(STATUS_406, result.getStatus());
     }
 
     @Test
@@ -169,10 +170,10 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        Assert.assertEquals(200, result.getStatus());
+        assertEquals(STATUS_200, result.getStatus());
 
         String body = result.getBody();
-        Assert.assertTrue("robots.txt is empty", StringUtils.isNotBlank(body));
+        assertTrue("robots.txt is empty", StringUtils.isNotBlank(body));
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
@@ -185,10 +186,10 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        Assert.assertEquals(200, result.getStatus());
+        assertEquals(STATUS_200, result.getStatus());
 
         String body = result.getBody();
-        Assert.assertTrue("humans.txt is empty", StringUtils.isNotBlank(body));
+        assertTrue("humans.txt is empty", StringUtils.isNotBlank(body));
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
@@ -201,10 +202,10 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        Assert.assertEquals(200, result.getStatus());
+        assertEquals(STATUS_200, result.getStatus());
 
         String body = result.getBody();
-        Assert.assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
+        assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
         //in Spring boot 2.2 favicon transferred without Content-Type Header, so we have to check Content-Length instead
         TestUtils.assertContentNotEmpty(result);
     }

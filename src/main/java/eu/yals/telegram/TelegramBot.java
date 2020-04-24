@@ -17,14 +17,14 @@ import java.util.Objects;
 import static eu.yals.constants.App.NEW_LINE;
 
 /**
- * Telegram Bot
+ * Telegram Bot.
  *
  * @since 2.4
  */
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
-    private static final String TAG = "[Telegram Bot]";
+    private static final String TAG = "[" + TelegramBot.class.getSimpleName() + "]";
 
     private static final Message NO_MESSAGE = new Message();
 
@@ -34,13 +34,19 @@ public class TelegramBot extends TelegramLongPollingBot {
     private Update update;
     private TelegramObject telegramObject;
 
-    public TelegramBot(TelegramService telegramService, AppUtils appUtils) {
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param telegramService service for acting with DB
+     * @param appUtils        application utils
+     */
+    public TelegramBot(final TelegramService telegramService, final AppUtils appUtils) {
         this.telegramService = telegramService;
         this.appUtils = appUtils;
     }
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(final Update update) {
         log.trace(TAG + " New Update " + update);
         this.update = update;
 
@@ -50,7 +56,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 throw new IllegalStateException("Internal server error: ");
             }
 
-            log.debug("{} Update (Author: {}, Message: {})", TAG, getMessage().getFrom().getUserName(), getMessage().getText());
+            log.debug("{} Update (Author: {}, Message: {})", TAG,
+                    getMessage().getFrom().getUserName(), getMessage().getText());
 
             telegramObject = TelegramObject.createFromUpdate(update);
 
@@ -73,19 +80,20 @@ public class TelegramBot extends TelegramLongPollingBot {
                         break;
                     default:
                         message = telegramService.usage();
+                        break;
                 }
             }
 
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            log.error(TAG + " Got exception while handling incoming update." +
-                    " " + e.getClass().getName() + ": " + e.getMessage());
+            log.error(TAG + " Got exception while handling incoming update."
+                    + " " + e.getClass().getName() + ": " + e.getMessage());
             message = telegramService.usage();
         } catch (IllegalStateException e) {
             message = "Internal error: not all components are available. Bot currently not available";
             log.error(TAG + " " + message + " " + e.getClass().getName() + ": " + e.getMessage());
         } catch (Exception e) {
-            log.error(TAG + " Got unexpected exception while processing telegram update" +
-                    " " + e.getClass().getName() + ": " + e.getMessage());
+            log.error(TAG + " Got unexpected exception while processing telegram update"
+                    + " " + e.getClass().getName() + ": " + e.getMessage());
             message = telegramService.serverError();
         }
 
@@ -97,8 +105,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(createSendMessage(message));
         } catch (TelegramApiException e) {
-            log.error(TAG + " Failed to send telegram message. Message: " + message +
-                    " " + e.getClass().getName() + ": " + e.getMessage());
+            log.error(TAG + " Failed to send telegram message. Message: " + message
+                    + " " + e.getClass().getName() + ": " + e.getMessage());
         }
     }
 
@@ -115,9 +123,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     private String doYals() {
         String message;
         if (telegramObject.getArguments() == TelegramArguments.EMPTY_ARGS) {
-            throw new NoSuchElementException("Got " + telegramObject.getCommand() + " command without arguments. Nothing to shorten");
+            throw new NoSuchElementException("Got " + telegramObject.getCommand()
+                    + " command without arguments. Nothing to shorten");
         } else if (telegramObject.getArguments() == TelegramArguments.BROKEN_ARGS) {
-            throw new IllegalArgumentException("UserMessage must contain URL as first or second (when first is command) param");
+            throw new IllegalArgumentException(
+                    "UserMessage must contain URL as first or second (when first is command) param");
         }
 
         String url = telegramObject.getArguments().getUrl();
@@ -131,7 +141,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return message;
     }
 
-    private SendMessage createSendMessage(String message) {
+    private SendMessage createSendMessage(final String message) {
         Message telegramMessage = getMessage();
         SendMessage sendMessage = new SendMessage().setChatId(telegramMessage.getChatId());
         sendMessage.setText(message);

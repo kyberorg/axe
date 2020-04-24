@@ -14,25 +14,41 @@ import org.springframework.core.env.Environment;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
+/**
+ * Configures Bugsnag integration.
+ *
+ * @since 2.7
+ */
 @Slf4j
 @Configuration
 @Import(BugsnagSpringConfiguration.class)
 public class BugsnagConfig {
-    private static final String TAG = "[BugsnagConfig]";
+    private static final String TAG = "[" + BugsnagConfig.class.getSimpleName() + "]";
     private static final String NO_TOKEN = "noToken";
 
     private final Environment env;
-    private MavenGitInfo mavenGitInfo;
-
-    public BugsnagConfig(Environment env, MavenGitInfo gitInfo) {
-        this.env = env;
-        this.mavenGitInfo = gitInfo;
-    }
+    private final MavenGitInfo mavenGitInfo;
 
     private String proxyHost;
     private String proxyPort;
     private Bugsnag bugsnag;
 
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param environment {@link Environment} for accessing to env vars
+     * @param gitInfo     for getting application version from pom
+     */
+    public BugsnagConfig(final Environment environment, final MavenGitInfo gitInfo) {
+        this.env = environment;
+        this.mavenGitInfo = gitInfo;
+    }
+
+    /**
+     * Configures connection to Bugsnag services.
+     *
+     * @return configured bean, which handles connections/sessions/API calls.
+     */
     @Bean
     public Bugsnag bugsnag() {
         String bugsnagToken = env.getProperty(App.Env.BUGSNAG_TOKEN, NO_TOKEN);

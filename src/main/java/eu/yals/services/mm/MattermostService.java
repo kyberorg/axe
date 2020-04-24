@@ -1,6 +1,5 @@
 package eu.yals.services.mm;
 
-import eu.yals.controllers.rest.MattermostRestController;
 import eu.yals.core.IdentGenerator;
 import eu.yals.models.Link;
 import eu.yals.models.dao.LinkRepo;
@@ -8,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * Service which handlers requests from {@link MattermostRestController}
+ * Service which handlers requests from {@link eu.yals.controllers.rest.MattermostRestController}.
  *
  * @since 2.3
  */
@@ -18,11 +17,22 @@ public class MattermostService {
 
     private final LinkRepo repo;
 
-    public MattermostService(LinkRepo repo) {
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param repo links table Repo object to manipulate with DB
+     */
+    public MattermostService(final LinkRepo repo) {
         this.repo = repo;
     }
 
-    public Link storeLink(String longUrl) {
+    /**
+     * Stores link to DB.
+     *
+     * @param longUrl string with long link
+     * @return stored {@link Link} object with ID from DB.
+     */
+    public Link storeLink(final String longUrl) {
         Link link = Link.create(IdentGenerator.generateNewIdent(), longUrl);
         Link savedLink;
         try {

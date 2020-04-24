@@ -1,5 +1,5 @@
 [![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Fmaster)](https://ci.yadev.eu/job/YalsGH/job/master/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6a6b92ffc1841e49cef33eadf8aa201)](https://www.codacy.com/gh/yadevee/yals?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yadevee/yals&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6a6b92ffc1841e49cef33eadf8aa201)](https://www.codacy.com/gh/yadevee/yals)
 
 # Yet another link shortener
 
@@ -11,6 +11,7 @@ Just a simple link shortener like many others. Made for friends.
 QR Code
 
 * Added QR code with short link (#134)
+
 * Added REST API Endpoint, which generates QR code from ident and optional size: 
 `/api/qrCode/{ident}/{size}`
 
@@ -18,32 +19,44 @@ QR Code
 Updates and better error handling
 
 * Software updates (#120) 
+
 * Replying to API calls only by JSON and respect Accept Header (#130)
 
 ### Version 2.5 (24/09/19)
 Bug Fixes
 
 * Links without http:// prefix are supported (#50)
+
 * Links from Russian Wikipedia are supported (#92)
+
 * Application moved to Spring Boot 2 (#101)
+
 * IDN aka URLs with non-latin symbols are supported (#102)
+
 * Application can correctly handle Database disconnects at runtime (#104)
+
 * Removed double slash in git commit link (#105)
+
 * Footer no more flaky (#106)
+
 * Telegram auto config working stable (#108)
+
 * Link counter shows without space after 1000 links saved (#122) 
 
 ### Version 2.4 (12/04/18)
 Telegram Bot
 
 * Telegram Bot (#80)
+
 * Better logs (#84)
 
 ### Version 2.3.1 (05/02/18)
 Mattermost multiple params support and fixes
 
 * Mattermost Bug: query with all spaces leaded to ":warning: Server Error" (#68)
+
 * Multiple param support (#69)
+
 * :warning: replaced with  :information_source: in Usage message (#70)
 
 ### Version 2.3 (31/01/18)
@@ -95,7 +108,7 @@ Second stable version
 Can be found from [here](https://github.com/yadevee/yals-play/blob/trunk/README.md#yet-another-link-shortener)
 
 ## For Ops
-### How to Deploy app ?
+### How to Deploy app
 
 * Our docker image: `yadev/yals`
 
@@ -143,17 +156,17 @@ Secrets:
 * yals_telegram_token: `telegram bot token`
 
 ## For Developers
-### Common info ###
+### Common info
 
 * We use [slack](https://app.slack.com/client/TRVM22544/CRW52SCLQ)
 
 * We use [BugSnag](https://app.bugsnag.com/yadev/yals/errors)
 
-### How to start coding ?
+### How to start coding
 
 * Git clone ``` git clone repoUrl ```
 
-* Import into IDE as **Maven** project
+* Import into an IDE as **Maven** project
 
 * Select all autodetected Spring facets
 
@@ -166,13 +179,13 @@ Profile can activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `loc
 
 MySQL can be started from `docker/localMySQL` directory by running:
 
-```
+```shell script
 docker-compose up -d
 ``` 
 
 MySQL can be stopped from `docker/localMySQL` directory by running:
 
-```
+```shell script
 docker-compose down
 ```
 
@@ -182,16 +195,22 @@ Use `@yals_local_bot` and its token (currently can be requested from [kyberorg](
 To adjust logging we use ENV variables or `-D` vars: 
 
 * Use `LOG_LEVEL_CORE` or `-Dlog.level.core` for setting overall log level
+
 * Use `LOG_LEVEL_APP` or `-Dlog.level.app` for setting application (package: `ee.yals`) log level
+
 * Use `LOG_LEVEL_SPRING` or `-Dlog.level.spring` for setting Spring (package: `org.springframework`) log level
+
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
-
 ### About: Tests
-* Test URL is defined bu `-Dtest.url` property. Should be with protocol
+* Test URL is defined bu `-Dtest.url` property. Should be with protocol.
+  
 * Browsers are defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge. 
+
 Can add several browsers like `chrome,firefox`
+
 * Report dir can be changed using `-Dtest.reportdir` property
+
 * Local server port can be changed using `-Dport` property
 
 ### Trunk build status

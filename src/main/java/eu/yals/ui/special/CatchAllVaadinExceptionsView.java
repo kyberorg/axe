@@ -1,6 +1,5 @@
 package eu.yals.ui.special;
 
-import com.bugsnag.Bugsnag;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
@@ -19,28 +18,38 @@ import eu.yals.utils.YalsErrorKeeper;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static eu.yals.constants.HttpCode.STATUS_302;
+import static eu.yals.constants.HttpCode.STATUS_500;
+
 /**
- * Catches all unhandled exceptions from Vaadin Servlet
+ * Catches all unhandled exceptions from Vaadin Servlet.
  */
 @SpringComponent
 @UIScope
 public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasErrorParameter<Exception> {
 
-    private YalsErrorKeeper yalsErrorKeeper;
-    private ErrorUtils errorUtils;
+    private final YalsErrorKeeper yalsErrorKeeper;
+    private final ErrorUtils errorUtils;
 
-    public CatchAllVaadinExceptionsView(YalsErrorKeeper errorKeeper, ErrorUtils errorUtils, Bugsnag bugsnag) {
+    /**
+     * Creates {@link CatchAllVaadinExceptionsView}.
+     *
+     * @param errorKeeper holder for errors
+     * @param errorUtils  utils for handling with errors
+     */
+    public CatchAllVaadinExceptionsView(final YalsErrorKeeper errorKeeper, final ErrorUtils errorUtils) {
         this.yalsErrorKeeper = errorKeeper;
         this.errorUtils = errorUtils;
     }
 
     @Override
-    public int setErrorParameter(BeforeEnterEvent beforeEnterEvent, ErrorParameter<Exception> errorParameter) {
+    public int setErrorParameter(final BeforeEnterEvent beforeEnterEvent,
+                                 final ErrorParameter<Exception> errorParameter) {
         Throwable cause = errorParameter.getCaughtException();
         String path = "/" + beforeEnterEvent.getLocation().getPathWithQueryParameters();
 
         ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException(cause)
-                .addStatus(500)
+                .addStatus(STATUS_500)
                 .addPath(path)
                 .build();
         YalsError yalsError = errorUtils.convertExceptionToYalsError(args);
@@ -51,11 +60,12 @@ public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasE
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
                 getMyHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
 
-        return 302;
+        return STATUS_302;
     }
 
     private String getMyHost() {
-        HttpServletRequest httpServletRequest = ((VaadinServletRequest) VaadinRequest.getCurrent()).getHttpServletRequest();
+        HttpServletRequest httpServletRequest =
+                ((VaadinServletRequest) VaadinRequest.getCurrent()).getHttpServletRequest();
         String fullUrl = httpServletRequest.getRequestURL().toString();
         String path = VaadinRequest.getCurrent().getPathInfo();
 

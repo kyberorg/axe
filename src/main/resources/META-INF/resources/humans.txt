@@ -15,6 +15,6 @@
 /* SITE */
     Language: English
     Standards: HTML5, CSS3
-    Components: Spring framework, Vaadin, Java, Vaadin TestBench, Zalenium
+    Components: Spring framework, Vaadin, Java, Vaadin TestBench, Selenium
     Software: IDEA
     Hosted on: Hetzner

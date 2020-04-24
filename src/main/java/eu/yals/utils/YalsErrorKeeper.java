@@ -14,16 +14,24 @@ import java.util.concurrent.ConcurrentHashMap;
 import static eu.yals.constants.App.NO_STATUS;
 
 /**
- * Post for keeping error object
+ * Post for keeping error objects.
+ *
+ * @since 2.7
  */
 @Slf4j
 @Component
 public class YalsErrorKeeper {
-    private static final String TAG = "[YALS ERROR KEEPER]";
+    private static final String TAG = "[" + YalsErrorKeeper.class.getSimpleName() + "]";
 
-    private Map<String, YalsError> repo = new ConcurrentHashMap<>();
+    private final Map<String, YalsError> repo = new ConcurrentHashMap<>();
 
-    public String send(YalsError yalsError) {
+    /**
+     * Stores an error.
+     *
+     * @param yalsError error object to store
+     * @return string with error id
+     */
+    public String send(final YalsError yalsError) {
         String errorId;
         do {
             errorId = UUID.randomUUID().toString();
@@ -38,11 +46,17 @@ public class YalsErrorKeeper {
         return errorId;
     }
 
-    public Optional<YalsError> get(String errorId) {
+    /**
+     * Getting stored error object by its id.
+     *
+     * @param errorId id of searched error
+     * @return {@link Optional} of found error
+     */
+    public Optional<YalsError> get(final String errorId) {
         return Optional.ofNullable(repo.get(errorId));
     }
 
-    private void logYalsError(YalsError yalsError) {
+    private void logYalsError(final YalsError yalsError) {
         StringBuilder logMessage = new StringBuilder("=== Error ===").append(App.NEW_LINE);
         logMessage.append("Error ID: ").append(yalsError.getId()).append(App.NEW_LINE);
         logMessage.append("TimeStamp: ").append(yalsError.getTimeStamp()).append(App.NEW_LINE);
@@ -55,7 +69,8 @@ public class YalsErrorKeeper {
             logMessage.append("Status: ").append(yalsError.getHttpStatus()).append(App.NEW_LINE);
         }
         if (yalsError.getRawException() != null) {
-            logMessage.append("Trace: ").append(AppUtils.stackTraceToString(yalsError.getRawException())).append(App.NEW_LINE);
+            logMessage.append("Trace: ")
+                    .append(AppUtils.stackTraceToString(yalsError.getRawException())).append(App.NEW_LINE);
         }
         logMessage.append("=============");
         logMessage.trimToSize();

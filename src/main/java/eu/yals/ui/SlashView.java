@@ -22,16 +22,22 @@ import org.springframework.stereotype.Controller;
 @UIScope
 @Route(Endpoint.TNT.SLASH_IDENT)
 public class SlashView extends VerticalLayout implements HasUrlParameter<String> {
-    private static final String TAG = "[Vaadin Web]";
+    private static final String TAG = "[" + SlashView.class.getSimpleName() + "]";
 
     private final LinkService linkService;
 
-    public SlashView(LinkService linkService) {
+    /**
+     * Creates {@link SlashView}.
+     *
+     * @param linkService service to work with DB
+     */
+    public SlashView(final LinkService linkService) {
         this.linkService = linkService;
     }
 
+
     @Override
-    public void setParameter(BeforeEvent event, String ident) {
+    public void setParameter(final BeforeEvent event, final String ident) {
         log.info("{} Got {\"Ident\": {}}", TAG, ident);
         if (StringUtils.isBlank(ident) || !ident.matches(IdentGenerator.VALID_IDENT_PATTERN)) {
             log.info("{} Got malformed request. Replying with 404. {\"Ident\": {}}", TAG, ident);

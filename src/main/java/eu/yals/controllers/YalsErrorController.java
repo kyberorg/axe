@@ -20,37 +20,60 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static eu.yals.constants.HttpCode.*;
+
+/**
+ * Handles application errors.
+ *
+ * @since 2.7
+ */
 @Slf4j
 @Controller
 public class YalsErrorController implements ErrorController {
-    private final String TAG = "[Error Controller]";
+    private final String TAG = "[" + YalsErrorController.class.getSimpleName() + "]";
 
     private final YalsErrorKeeper errorKeeper;
     private final ErrorUtils errorUtils;
 
-    HttpServletRequest request;
-    HttpServletResponse response;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
 
-    Object rawException;
-    Throwable cause;
-    int status;
-    String path;
+    private Throwable rawException;
+    private Throwable cause;
+    private int status;
+    private String path;
 
-    public YalsErrorController(YalsErrorKeeper yalsErrorKeeper, ErrorUtils errorUtils) {
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param yalsErrorKeeper for keeping errors in runtime
+     * @param errUtils        utils for manipulating with errors
+     */
+    public YalsErrorController(final YalsErrorKeeper yalsErrorKeeper, final ErrorUtils errUtils) {
         this.errorKeeper = yalsErrorKeeper;
-        this.errorUtils = errorUtils;
+        this.errorUtils = errUtils;
     }
 
+    /**
+     * Error handling endpoint.
+     *
+     * @param req  HTTP request
+     * @param resp HTTP response
+     * @throws IOException when failed to write response
+     */
     @RequestMapping(Endpoint.TNT.ERROR_PAGE)
-    public void handleError(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void handleError(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
         this.request = req;
         this.response = resp;
 
-        rawException = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        rawException = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        if (rawException != null) {
+            cause = rawException.getCause();
+        }
         path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
         status = getCorrectStatus();
 
-        if (status < 400) {
+        if (status < STATUS_400) {
             //there is no error
             logRequest(false);
             return;
@@ -58,7 +81,7 @@ public class YalsErrorController implements ErrorController {
             logRequest(true);
         }
 
-        ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException((Throwable) rawException)
+        ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException(rawException)
                 .addStatus(status)
                 .addPath(path)
                 .build();
@@ -82,7 +105,7 @@ public class YalsErrorController implements ErrorController {
                 return;
             } else {
                 response.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON);
-                response.setStatus(406);
+                response.setStatus(STATUS_406);
             }
             return;
         }
@@ -94,7 +117,7 @@ public class YalsErrorController implements ErrorController {
                 responseWithJson(errorJson);
             } else {
                 resp.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON + "," + MimeType.TEXT_HTML);
-                resp.setStatus(406);
+                resp.setStatus(STATUS_406);
             }
         } else {
             //html
@@ -109,23 +132,23 @@ public class YalsErrorController implements ErrorController {
 
     private int getCorrectStatus() {
         if (request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE) == null) {
-            status = 500;
+            status = STATUS_500;
         } else {
             try {
                 status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
             } catch (Exception e) {
-                status = 500;
+                status = STATUS_500;
             }
 
             //DB is DOWN
             if (cause instanceof CannotCreateTransactionException) {
-                status = 503;
+                status = STATUS_503;
             }
         }
         return status;
     }
 
-    private void logRequest(boolean realError) {
+    private void logRequest(final boolean realError) {
         boolean isException = (rawException != null);
         if (realError) {
             if (isException) {
@@ -138,20 +161,30 @@ public class YalsErrorController implements ErrorController {
         }
     }
 
-    private String storeYalsError(YalsError yalsError) {
+    private String storeYalsError(final YalsError yalsError) {
         return errorKeeper.send(yalsError);
     }
 
-    private void responseWithJson(YalsErrorJson json) throws IOException {
+    private void responseWithJson(final YalsErrorJson json) throws IOException {
         response.setStatus(status);
         response.setContentType(MimeType.APPLICATION_JSON);
         response.getWriter().write(json.toString());
     }
 
-    private void redirectToVaadinErrorPage(String errorId) {
+    private void redirectToVaadinErrorPage(final String errorId) {
+        if (rawException instanceof Error || cause instanceof Error) {
+            redirectToAppDownAnalogPage();
+            return;
+        }
         String host = request.getRequestURI().replace(getErrorPath(), "");
-        response.setStatus(301);
-        response.setHeader(Header.LOCATION, host + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
+        response.setStatus(STATUS_301);
+        response.setHeader(Header.LOCATION, host + "/" + Endpoint.UI.ERROR_PAGE_500 + "?"
+                + App.Params.ERROR_ID + "=" + errorId);
     }
 
+    private void redirectToAppDownAnalogPage() {
+        String host = request.getRequestURI().replace(getErrorPath(), "");
+        response.setStatus(STATUS_301);
+        response.setHeader(Header.LOCATION, host + Endpoint.TNT.APP_OFFLINE);
+    }
 }
