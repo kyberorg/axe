@@ -2,6 +2,7 @@ package eu.yals.telegram;
 
 
 import eu.yals.utils.UrlExtraValidator;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -11,25 +12,27 @@ import java.util.Objects;
  *
  * @since 2.4
  */
-public class TelegramArguments {
-    static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
-    static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
+public final class TelegramArguments {
+    public static final TelegramArguments EMPTY_ARGS = TelegramArguments.emptyArgs();
+    public static final TelegramArguments BROKEN_ARGS = TelegramArguments.brokenArgs();
 
     private static TelegramArguments SELF = null;
 
+    @Getter
     private String url;
     private String description = null;
 
     /**
-     * Only for {@link #EMPTY_ARGS} and {@link #BROKEN_ARGS}
+     * Only for {@link #EMPTY_ARGS} and {@link #BROKEN_ARGS}.
      */
     private TelegramArguments() {
     }
 
-    public String getUrl() {
-        return url;
-    }
-
+    /**
+     * Gets description.
+     *
+     * @return description if present, empty string is not
+     */
     public String getDescription() {
         return Objects.isNull(description) ? "" : description;
     }
@@ -47,34 +50,72 @@ public class TelegramArguments {
         return brokenArgs;
     }
 
-    static Builder builderWithUrl(String url) {
+    /**
+     * Build {@link TelegramArguments} from given URL.
+     *
+     * @param url string with URL
+     * @return {@link Builder}
+     */
+    public static Builder builderWithUrl(final String url) {
         return new Builder(url);
     }
 
-    static Builder builder() {
+    /**
+     * Empty builder.
+     *
+     * @return {@link Builder}
+     */
+    public static Builder builder() {
         return new Builder();
     }
 
-    static class Builder {
+    /**
+     * Builder for {@link TelegramArguments}.
+     */
+    public static class Builder {
         private String urlString;
         private String descriptionString;
 
-        Builder() {
+        /**
+         * Empty builder.
+         */
+        public Builder() {
         }
 
-        Builder(String url) {
+        /**
+         * Builder with URL.
+         *
+         * @param url string with URL
+         */
+        Builder(final String url) {
             this.urlString = url;
         }
 
-        TelegramArguments buildEmpty() {
+        /**
+         * Builder without args.
+         *
+         * @return {@link #EMPTY_ARGS}
+         */
+        public TelegramArguments buildEmpty() {
             return EMPTY_ARGS;
         }
 
-        Builder andDescription(String description) {
+        /**
+         * Adds description.
+         *
+         * @param description string with description
+         * @return {@link Builder}
+         */
+        public Builder andDescription(final String description) {
             this.descriptionString = description;
             return this;
         }
 
+        /**
+         * Triggers build.
+         *
+         * @return {@link TelegramArguments}
+         */
         public TelegramArguments build() {
             if (UrlExtraValidator.isUrl(urlString)) {
                 TelegramArguments newArguments = new TelegramArguments();
@@ -91,9 +132,9 @@ public class TelegramArguments {
 
     @Override
     public String toString() {
-        return TelegramArguments.class.getSimpleName() + "{" +
-                "url=" + url + ", " +
-                "description=" + description +
-                "}";
+        return TelegramArguments.class.getSimpleName() + "{"
+                + "url=" + url + ", "
+                + "description=" + description
+                + "}";
     }
 }

@@ -13,12 +13,12 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
-import eu.yals.controllers.YalsErrorController;
 import eu.yals.exception.GeneralServerException;
 import eu.yals.exception.error.YalsError;
 import eu.yals.ui.AppView;
 import eu.yals.utils.AppUtils;
 import eu.yals.utils.ErrorUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.CannotCreateTransactionException;
 
@@ -26,13 +26,16 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
+import static eu.yals.constants.HttpCode.*;
 import static eu.yals.utils.AppUtils.HTML_MODE;
 
+@Slf4j
 @SpringComponent
 @UIScope
 @PageTitle("Yals: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
-public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>, HasUrlParameter<String> {
+public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>,
+        HasUrlParameter<String> {
 
     private final ErrorUtils errorUtils;
     private final AppUtils appUtils;
@@ -48,13 +51,18 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     private AccordionPanel techMessagePanel;
     private AccordionPanel tracePanel;
 
-
     private final Span when = new Span();
     private final Span what = new Span();
     private final Span messageSpan = new Span();
     private final Span traceSpan = new Span();
 
-    public ServerErrorView(ErrorUtils errorUtils, AppUtils appUtils) {
+    /**
+     * Creates {@link ServerErrorView}.
+     *
+     * @param errorUtils error utils for actions with errors
+     * @param appUtils   application utils
+     */
+    public ServerErrorView(final ErrorUtils errorUtils, final AppUtils appUtils) {
         this.errorUtils = errorUtils;
         this.appUtils = appUtils;
 
@@ -75,7 +83,8 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         initTechInfo();
     }
 
-    private void onImageClick(ClickEvent<Image> imageClickEvent) {
+    private void onImageClick(final ClickEvent<Image> imageClickEvent) {
+        log.trace("Image click event. Is from client? {}", imageClickEvent.isFromClient());
         image.setVisible(false);
         techInfo.setVisible(true);
     }
@@ -99,7 +108,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         }
     }
 
-    private void fillUIWithValuesFromError(YalsError yalsError) {
+    private void fillUIWithValuesFromError(final YalsError yalsError) {
         if (StringUtils.isNotBlank(yalsError.getTimeStamp())) {
             when.setText(yalsError.getTimeStamp());
         }
@@ -125,17 +134,17 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     }
 
     /**
-     * Disables given accordion panels if they are empty, enables otherwise
+     * Disables given accordion panels if they are empty, enables otherwise.
      *
      * @param panels initialised accordion panels
      */
-    private void triggerPanelsBasedOnTextInside(AccordionPanel... panels) {
+    private void triggerPanelsBasedOnTextInside(final AccordionPanel... panels) {
         for (AccordionPanel panel : panels) {
             Optional<Component> elementWithText = panel.getContent().findFirst();
             if (elementWithText.isPresent()) {
                 Span spanWithText = (Span) elementWithText.get();
-                boolean ifSpanHasText = StringUtils.isNotBlank(spanWithText.getText()) ||
-                        StringUtils.isNotBlank(spanWithText.getElement().getProperty(HTML_MODE));
+                boolean ifSpanHasText = StringUtils.isNotBlank(spanWithText.getText())
+                        || StringUtils.isNotBlank(spanWithText.getElement().getProperty(HTML_MODE));
 
                 panel.setEnabled(ifSpanHasText);
             } else {
@@ -144,37 +153,37 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         }
     }
 
-    private String formatTechMessage(String techMessage) {
+    private String formatTechMessage(final String techMessage) {
         return techMessage
                 .replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
                 .replaceAll(";", App.WEB_NEW_LINE)
                 .replaceAll("nested exception is", "&emsp;->");
     }
 
-    private String formatTrace(String traceMessage) {
+    private String formatTrace(final String traceMessage) {
         return traceMessage.replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
                 .replaceAll("at ", "&emsp;&emsp;at ");
     }
 
     /**
-     * EntryPoint from {@link YalsErrorController}
+     * EntryPoint from {@link eu.yals.controllers.YalsErrorController}.
      *
      * @param event     Vaadin Event with location, payload
      * @param parameter string goes after errors/500. We ignore it, because we use queryParams instead
      */
     @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+    public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
         YalsError yalsError = errorUtils.getYalsErrorFromEvent(event);
         if (Objects.isNull(yalsError)) {
-            event.rerouteToError(GeneralServerException.class, Integer.toString(500));
+            event.rerouteToError(GeneralServerException.class, Integer.toString(STATUS_500));
             return;
         }
 
         switch (yalsError.getHttpStatus()) {
-            case 404:
+            case STATUS_404:
                 event.rerouteToError(NotFoundException.class);
                 return;
-            case 503:
+            case STATUS_503:
                 event.rerouteToError(CannotCreateTransactionException.class);
                 return;
             default:
@@ -185,15 +194,15 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     }
 
     /**
-     * This method sets HTTP Code, based on payload, if no payload - status is 500
+     * This method sets HTTP Code, based on payload, if no payload - status is 500.
      *
      * @param event     same event as {@link #setParameter(BeforeEvent, String)}
      * @param parameter payload with status as String
      * @return http status
      */
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<GeneralServerException> parameter) {
-        return errorUtils.parseStatusFromErrorParameter(parameter, 500);
+    public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<GeneralServerException> parameter) {
+        return errorUtils.parseStatusFromErrorParameter(parameter, STATUS_500);
     }
 
 

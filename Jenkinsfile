@@ -1,4 +1,4 @@
-@Library('common-lib@1.3') _
+@Library('common-lib@1.4') _
 pipeline {
     agent any;
     stages {
@@ -8,19 +8,49 @@ pipeline {
                     if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'trunk') {
                         vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting')
                     } else {
+                        def userInput;
                         def prodMode = false;
+                        def review = false;
                         try {
                             timeout(time: 20, unit: 'SECONDS') {
-                                prodMode = input(message: 'Production Mode', ok: 'Build',
-                                        parameters: [booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'True')]);
+                                userInput = input(message: 'Production Mode', ok: 'Build',
+                                        parameters: [
+                                           booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'prodMode'),
+                                           booleanParam(defaultValue: false, description: 'Do code review: code-style report', name: 'review')
+                                        ]);
                             }
                         } catch (err) {
                             //do nothing as default is 'false'
                         }
+
+                        if(userInput != null) {
+                            prodMode = userInput['prodMode'];
+                            review = userInput['review'];
+                        }
+
                         if (prodMode) {
-                            vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting')
+                            if(review) {
+                                vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: true)
+                            } else {
+                                vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting')
+                            }
                         } else {
-                            vaadin(extraProfiles: 'noTesting', verbose: true)
+                            if(review) {
+                                vaadin(extraProfiles: 'noTesting', verbose: true, runSiteTarget: true)
+                            } else {
+                                vaadin(extraProfiles: 'noTesting', verbose: true)
+                            }
+                        }
+                        if(review) {
+                            publishHTML([
+                               allowMissing: true,
+                               alwaysLinkToLastBuild: false,
+                               keepAll: true,
+                               reportDir: 'target/site',
+                               reportFiles: 'checkstyle.html',
+                               reportName: 'HTML Report',
+                               reportTitles: ''
+                            ])
                         }
                     }
                 }

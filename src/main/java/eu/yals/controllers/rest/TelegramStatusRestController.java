@@ -13,25 +13,36 @@ import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 /**
- * Reports telegram bot status
+ * Reports telegram bot status.
  *
  * @since 2.5
  */
 @Slf4j
 @RestController
 public class TelegramStatusRestController {
-    private static final String TAG = "[API Telegram Status]";
+    private static final String TAG = "[" + TelegramStatusRestController.class.getSimpleName() + "]";
     private static final String ONLINE = "Online";
     private static final String OFFLINE = "Offline";
 
     private final TelegramBot bot;
     private final AppUtils appUtils;
 
-    public TelegramStatusRestController(TelegramBot bot, AppUtils appUtils) {
-        this.bot = bot;
-        this.appUtils = appUtils;
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param telegramBot      telegram bot
+     * @param applicationUtils application utils to find out if telegram API is enabled
+     */
+    public TelegramStatusRestController(final TelegramBot telegramBot, final AppUtils applicationUtils) {
+        this.bot = telegramBot;
+        this.appUtils = applicationUtils;
     }
 
+    /**
+     * API Endpoint for getting telegram bot status.
+     *
+     * @return json with bot status
+     */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.TELEGRAM_STATUS_API)
     public Json getBotStatus() {
         log.info("{} got request", TAG);

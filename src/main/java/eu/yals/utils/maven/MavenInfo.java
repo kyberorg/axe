@@ -10,7 +10,7 @@ import java.util.Properties;
 
 /**
  * Object with properties from pom.xml created at build time.
- *
+ * <p>
  * java.version
  * vaadin.version
  * selenium.version
@@ -27,16 +27,24 @@ public class MavenInfo {
 
     private String vaadinVersion; //vaadin.version
 
+    /**
+     * Creates {@link MavenInfo} object.
+     */
     public MavenInfo() {
         init();
     }
 
+    /**
+     * Defines if object populated values or not.
+     *
+     * @return true object correctly populated, false if not.
+     */
     public boolean hasValues() {
         return !mvnProperties.isEmpty();
     }
 
     private void init() {
-        if(this.getClass().getClassLoader() == null) {
+        if (this.getClass().getClassLoader() == null) {
             log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
                     MAVEN_PROPERTIES_FILE);
             this.mvnProperties.clear();

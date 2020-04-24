@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Controller
 public class AppOfflineController {
+    /**
+     * Endpoint, which shows application offline page aka page 503.
+     *
+     * @return string with path to static resource, contains page 503
+     */
     @RequestMapping(Endpoint.TNT.APP_OFFLINE)
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public String serveAppOfflinePage() {

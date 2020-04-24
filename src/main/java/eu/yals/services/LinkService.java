@@ -22,11 +22,22 @@ public class LinkService {
 
     private final LinkRepo repo;
 
-    public LinkService(LinkRepo repo) {
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param repo object for communicating with DB
+     */
+    public LinkService(final LinkRepo repo) {
         this.repo = repo;
     }
 
-    public GetResult getLink(String ident) {
+    /**
+     * Provides stored link by its ident.
+     *
+     * @param ident string with ident to search against
+     * @return search result
+     */
+    public GetResult getLink(final String ident) {
         Optional<Link> result;
         try {
             result = repo.findSingleByIdent(ident);
@@ -40,7 +51,14 @@ public class LinkService {
                 .orElseGet(GetResult.NotFound::new);
     }
 
-    public StoreResult storeNew(String ident, String link) {
+    /**
+     * Stores new link into DB.
+     *
+     * @param ident string with part that identifies  short link
+     * @param link  string with long URL
+     * @return store result
+     */
+    public StoreResult storeNew(final String ident, final String link) {
         Link linkObject = Link.create(ident, link);
         try {
             repo.save(linkObject);
