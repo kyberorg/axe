@@ -384,7 +384,7 @@ public class HomeView extends VerticalLayout {
 
     private void onSuccessGenerateQRCode(final HttpResponse<JsonNode> response) {
         if (response.getStatus() == STATUS_200) {
-            String qrCode = response.getBody().getObject().getString("qrCode");
+            String qrCode = response.getBody().getObject().getString("qr_code");
             if (StringUtils.isNotBlank(qrCode)) {
                 this.qrCode.setSrc(qrCode);
                 qrCodeRow.setVisible(true);
