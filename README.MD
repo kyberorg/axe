@@ -108,7 +108,7 @@ Second stable version
 Can be found from [here](https://github.com/yadevee/yals-play/blob/trunk/README.md#yet-another-link-shortener)
 
 ## For Ops
-### How to Deploy app ?
+### How to Deploy app
 
 * Our docker image: `yadev/yals`
 
