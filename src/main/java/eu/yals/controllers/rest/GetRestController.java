@@ -4,7 +4,7 @@ import eu.yals.Endpoint;
 import eu.yals.core.IdentGenerator;
 import eu.yals.json.ErrorJson;
 import eu.yals.json.LinkResponseJson;
-import eu.yals.json.internal.Json;
+import eu.yals.json.YalsJson;
 import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
 import eu.yals.utils.AppUtils;
@@ -50,7 +50,7 @@ public class GetRestController {
             Endpoint.Api.LINK_API,
             Endpoint.Api.LINK_API + "/"
     })
-    public Json getLink(final HttpServletResponse response) {
+    public YalsJson getLink(final HttpServletResponse response) {
         return getLink("", response);
     }
 
@@ -62,7 +62,7 @@ public class GetRestController {
      * @return json which given in response
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.LINK_API + "/{ident}")
-    public Json getLink(final @PathVariable("ident") String ident, final HttpServletResponse response) {
+    public YalsJson getLink(final @PathVariable("ident") String ident, final HttpServletResponse response) {
         log.info("{} got request: {\"Ident\": {}}", TAG, ident);
 
         if (StringUtils.isBlank(ident)) {

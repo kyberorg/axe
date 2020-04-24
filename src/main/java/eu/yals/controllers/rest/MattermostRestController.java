@@ -3,7 +3,7 @@ package eu.yals.controllers.rest;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.json.MattermostResponseJson;
-import eu.yals.json.internal.Json;
+import eu.yals.json.YalsJson;
 import eu.yals.mm.Mattermost;
 import eu.yals.models.Link;
 import eu.yals.services.mm.MattermostService;
@@ -52,7 +52,7 @@ public class MattermostRestController {
      * @return json given in response
      */
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.Api.MM_API)
-    public Json mm(final @RequestBody String body, final HttpServletRequest req) {
+    public YalsJson mm(final @RequestBody String body, final HttpServletRequest req) {
         this.request = req;
         try {
             log.info("{} Got request from Mattermost. Body: {}", TAG, body);

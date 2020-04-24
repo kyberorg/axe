@@ -1,25 +1,18 @@
 package eu.yals.json;
 
-import eu.yals.json.internal.Json;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
+import lombok.Data;
 
 /**
  * Store Endpoint outgoing JSON.
  *
  * @since 1.0
  */
-public class LinkResponseJson extends Json {
-    @Getter
+@Data(staticConstructor = "create")
+public class LinkResponseJson implements YalsJson {
+    @JsonProperty("link")
     private String link;
-
-    /**
-     * Creates blank {@link LinkResponseJson} without params.
-     *
-     * @return empty {@link LinkResponseJson} object.
-     */
-    public static LinkResponseJson create() {
-        return new LinkResponseJson();
-    }
 
     /**
      * Creates {@link LinkResponseJson} with given link param.
@@ -30,5 +23,10 @@ public class LinkResponseJson extends Json {
     public LinkResponseJson withLink(final String shortLink) {
         this.link = shortLink;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

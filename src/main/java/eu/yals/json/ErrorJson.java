@@ -1,7 +1,8 @@
 package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import eu.yals.json.internal.Json;
+import com.google.gson.Gson;
+import lombok.Data;
 import lombok.Getter;
 
 import javax.validation.ConstraintViolation;
@@ -15,15 +16,16 @@ import java.util.Set;
  * This struct of JSON send in case of message.
  *
  * @since 1.0
+ * @deprecated since 2.7 use {@link YalsErrorJson} instead
  */
-public class ErrorJson extends Json {
+@Deprecated
+@Data
+public class ErrorJson implements YalsJson {
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Getter
     private Error error;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Getter
     private final List<Error> errors = new ArrayList<>(2);
 
     private static final String NO_MESSAGE = "No error message found";
@@ -108,5 +110,10 @@ public class ErrorJson extends Json {
             this.errorMessage = errorText;
             return this;
         }
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

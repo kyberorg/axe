@@ -5,7 +5,7 @@ import eu.yals.Endpoint;
 import eu.yals.json.EmptyJson;
 import eu.yals.json.ErrorJson;
 import eu.yals.json.QRCodeResponseJson;
-import eu.yals.json.internal.Json;
+import eu.yals.json.YalsJson;
 import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
 import eu.yals.services.QRCodeService;
@@ -53,16 +53,16 @@ public class QRCodeRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.QR_CODE_API + "/{ident}")
     @ResponseBody
-    public Json getQRCode(final @PathVariable("ident") String ident, final HttpServletResponse resp) {
+    public YalsJson getQRCode(final @PathVariable("ident") String ident, final HttpServletResponse resp) {
         this.response = resp;
 
-        Json testResult = testIdentExist(ident);
+        YalsJson testResult = testIdentExist(ident);
         if (testResult instanceof ErrorJson) {
             return testResult;
         }
 
         Optional<String> qrCode = getQRCode(ident, QRCodeService.DEFAULT_SIZE);
-        Json result;
+        YalsJson result;
         if (qrCode.isPresent()) {
             resp.setStatus(STATUS_200);
             result = QRCodeResponseJson.withQRCode(qrCode.get());
@@ -84,23 +84,23 @@ public class QRCodeRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.QR_CODE_API + "/{ident}/{size}")
     @ResponseBody
-    public Json getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
-                                        final @PathVariable("size") int size,
-                                        final HttpServletResponse resp) {
+    public YalsJson getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
+                                            final @PathVariable("size") int size,
+                                            final HttpServletResponse resp) {
         this.response = resp;
 
-        Json sizeTestResult = testSize(size);
+        YalsJson sizeTestResult = testSize(size);
         if (sizeTestResult instanceof ErrorJson) {
             return sizeTestResult;
         }
 
-        Json identTestResult = testIdentExist(ident);
+        YalsJson identTestResult = testIdentExist(ident);
         if (identTestResult instanceof ErrorJson) {
             return identTestResult;
         }
 
         Optional<String> qrCode = getQRCode(ident, size);
-        Json result;
+        YalsJson result;
         if (qrCode.isPresent()) {
             resp.setStatus(STATUS_200);
             result = QRCodeResponseJson.withQRCode(qrCode.get());
@@ -111,7 +111,7 @@ public class QRCodeRestController {
         return result;
     }
 
-    private Json testIdentExist(final String ident) {
+    private YalsJson testIdentExist(final String ident) {
         GetResult identFromDatabase = linkService.getLink(ident);
 
         if (identFromDatabase instanceof GetResult.NotFound) {
@@ -133,7 +133,7 @@ public class QRCodeRestController {
         }
     }
 
-    private Json testSize(final int sizeToTest) {
+    private YalsJson testSize(final int sizeToTest) {
         if (sizeToTest <= 0) {
             log.error("{} invalid size {}. Replying 400", TAG, sizeToTest);
             response.setStatus(STATUS_400);

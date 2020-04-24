@@ -5,7 +5,7 @@ import eu.yals.core.IdentGenerator;
 import eu.yals.json.ErrorJson;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
-import eu.yals.json.internal.Json;
+import eu.yals.json.YalsJson;
 import eu.yals.result.GetResult;
 import eu.yals.result.StoreResult;
 import eu.yals.services.LinkService;
@@ -58,7 +58,7 @@ public class StoreRestController {
      */
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.Api.STORE_API)
-    public Json store(final @RequestBody String body, final HttpServletResponse response) {
+    public YalsJson store(final @RequestBody String body, final HttpServletResponse response) {
         log.info("{} got request: {}", TAG, body);
 
         StoreRequestJson storeInput;
