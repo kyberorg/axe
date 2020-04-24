@@ -26,57 +26,57 @@ import static org.junit.Assert.assertNotNull;
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Slf4j
 public class SlashEndpointTest extends UnirestTest {
-  public static final String TAG = "[" + SlashEndpointTest.class.getSimpleName() + "]";
+    public static final String TAG = "[" + SlashEndpointTest.class.getSimpleName() + "]";
 
-  @Test
-  public void storeURLAndCheckIfRedirectToSameURL() {
-    String url = "https://ci.yadev.eu";
-    String ident = store(url);
-    assertNotNull(ident);
+    @Test
+    public void storeURLAndCheckIfRedirectToSameURL() {
+        String url = "https://ci.yadev.eu";
+        String ident = store(url);
+        assertNotNull(ident);
 
-    Unirest.config().reset().followRedirects(false);
+        Unirest.config().reset().followRedirects(false);
 
-    HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
-    HttpResponse<String> result = request.asString();
+        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
+        HttpResponse<String> result = request.asString();
 
-    logRequestAndResponse(request, result, TAG);
+        logRequestAndResponse(request, result, TAG);
 
-    Unirest.config().reset().followRedirects(true);
+        Unirest.config().reset().followRedirects(true);
 
-    Assert.assertEquals(STATUS_302, result.getStatus());
-    Assert.assertTrue(result.getHeaders().containsKey(Header.LOCATION));
-    String location = result.getHeaders().getFirst(Header.LOCATION);
-    Assert.assertTrue("Got empty " + Header.LOCATION + " header", StringUtils.isNotBlank(location));
-  }
+        Assert.assertEquals(STATUS_302, result.getStatus());
+        Assert.assertTrue(result.getHeaders().containsKey(Header.LOCATION));
+        String location = result.getHeaders().getFirst(Header.LOCATION);
+        Assert.assertTrue("Got empty " + Header.LOCATION + " header", StringUtils.isNotBlank(location));
+    }
 
-  @Test
-  public void requestWithIdentThatNotStoredGivesStatus404() {
-    String ident = "habaHaba";
+    @Test
+    public void requestWithIdentThatNotStoredGivesStatus404() {
+        String ident = "habaHaba";
 
-    HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
-    HttpResponse<String> result = request.asString();
+        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
+        HttpResponse<String> result = request.asString();
 
-    logRequestAndResponse(request, result, TAG);
+        logRequestAndResponse(request, result, TAG);
 
-    Assert.assertEquals(STATUS_404, result.getStatus());
-  }
+        Assert.assertEquals(STATUS_404, result.getStatus());
+    }
 
-  private String store(final String urlToStore) {
-    String requestBody = StoreRequestJson.create().withLink(urlToStore).toString();
+    private String store(final String urlToStore) {
+        String requestBody = StoreRequestJson.create().withLink(urlToStore).toString();
 
-    HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestBody);
-    HttpResponse<String> result = request.asString();
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestBody);
+        HttpResponse<String> result = request.asString();
 
-    logRequestAndResponse(request, result, TAG);
+        logRequestAndResponse(request, result, TAG);
 
-    Assert.assertEquals(STATUS_201, result.getStatus());
+        Assert.assertEquals(STATUS_201, result.getStatus());
 
-    String responseBody = result.getBody();
-    assertNotNull(responseBody);
-    assertFalse(responseBody.trim().isEmpty());
+        String responseBody = result.getBody();
+        assertNotNull(responseBody);
+        assertFalse(responseBody.trim().isEmpty());
 
-    StoreResponseJson replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
-    assertNotNull(replyJson);
-    return replyJson.getIdent();
-  }
+        StoreResponseJson replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
+        assertNotNull(replyJson);
+        return replyJson.getIdent();
+    }
 }

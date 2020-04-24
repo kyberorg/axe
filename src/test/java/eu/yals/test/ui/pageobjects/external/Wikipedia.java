@@ -6,11 +6,11 @@ package eu.yals.test.ui.pageobjects.external;
  * @since 2.5
  */
 public class Wikipedia {
-  public static final String ARTICLE_TITLE =
-      "Депортации из Эстонской Советской Социалистической Республики";
+    public static final String ARTICLE_TITLE =
+            "Депортации из Эстонской Советской Социалистической Республики";
 
-  @SuppressWarnings("SameReturnValue")
-  public static String getArticleTitle() {
-    return "#firstHeading";
-  }
+    @SuppressWarnings("SameReturnValue")
+    public static String getArticleTitle() {
+        return "#firstHeading";
+    }
 }

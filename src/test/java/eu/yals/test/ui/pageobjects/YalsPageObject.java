@@ -12,19 +12,19 @@ import org.openqa.selenium.WebDriver;
  */
 public class YalsPageObject extends TestBenchTestCase {
 
-  private final SearchContext context;
+    private final SearchContext context;
 
-  public YalsPageObject(final WebDriver driver, final SearchContext context) {
-    setDriver(driver);
-    this.context = context;
-  }
+    public YalsPageObject(final WebDriver driver, final SearchContext context) {
+        setDriver(driver);
+        this.context = context;
+    }
 
-  public YalsPageObject(WebDriver driver, String contextId) {
-    this(driver, driver.findElement(By.id(contextId)));
-  }
+    public YalsPageObject(WebDriver driver, String contextId) {
+        this(driver, driver.findElement(By.id(contextId)));
+    }
 
-  @Override
-  public SearchContext getContext() {
-    return context;
-  }
+    @Override
+    public SearchContext getContext() {
+        return context;
+    }
 }

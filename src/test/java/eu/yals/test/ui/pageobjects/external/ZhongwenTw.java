@@ -6,5 +6,5 @@ package eu.yals.test.ui.pageobjects.external;
  * @since 2.5
  */
 public class ZhongwenTw {
-  public static final String NAV_TABLE = ".mbr-table";
+    public static final String NAV_TABLE = ".mbr-table";
 }

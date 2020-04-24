@@ -134,7 +134,7 @@ public final class Endpoint {
 
         /**
          * Serves offline page with status 503.
-         *
+         * <p>
          * {@link eu.yals.controllers.AppOfflineController}
          */
         public static final String APP_OFFLINE = "/app-offline";

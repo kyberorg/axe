@@ -10,5 +10,5 @@ import com.vaadin.testbench.elementsbase.Element;
  */
 @Element("clipboard-helper")
 public class ClipboardHelperElement extends TestBenchElement {
-  // Empty class for further implementation
+    // Empty class for further implementation
 }
