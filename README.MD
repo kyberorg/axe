@@ -156,13 +156,13 @@ Secrets:
 * yals_telegram_token: `telegram bot token`
 
 ## For Developers
-### Common info ###
+### Common info
 
 * We use [slack](https://app.slack.com/client/TRVM22544/CRW52SCLQ)
 
 * We use [BugSnag](https://app.bugsnag.com/yadev/yals/errors)
 
-### How to start coding?
+### How to start coding
 
 * Git clone ``` git clone repoUrl ```
 
@@ -179,13 +179,13 @@ Profile can activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `loc
 
 MySQL can be started from `docker/localMySQL` directory by running:
 
-```
+```shell script
 docker-compose up -d
 ``` 
 
 MySQL can be stopped from `docker/localMySQL` directory by running:
 
-```
+```shell script
 docker-compose down
 ```
 
@@ -202,11 +202,11 @@ To adjust logging we use ENV variables or `-D` vars:
 
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
-
 ### About: Tests
 * Test URL is defined bu `-Dtest.url` property. Should be with protocol
   
 * Browsers are defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge. 
+
 Can add several browsers like `chrome,firefox`
 
 * Report dir can be changed using `-Dtest.reportdir` property
