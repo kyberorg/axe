@@ -65,6 +65,12 @@ public class YalsErrorJson implements YalsJson {
         return json.build();
     }
 
+    /**
+     * Creates {@link YalsErrorJson} from set of errors.
+     *
+     * @param errors errors from validator
+     * @return {@link YalsErrorJson} filled with errors
+     */
     @SuppressWarnings("rawtypes")
     public static YalsErrorJson createFromSetOfErrors(final Set<ConstraintViolation> errors) {
         if (errors.isEmpty()) {
@@ -87,8 +93,30 @@ public class YalsErrorJson implements YalsJson {
         }
     }
 
+    /**
+     * Creates {@link YalsErrorJson} with message to user only.
+     *
+     * @param message string with user-friendly message
+     * @return {@link YalsErrorJson}
+     */
     public static YalsErrorJson createWithMessage(String message) {
         return YalsErrorJson.builder().message(message).build();
+    }
+
+    /**
+     * Adds status without invoking builder.
+     *
+     * @param status int with http status: see {@link eu.yals.constants.HttpCode}
+     * @return same {@link YalsErrorJson}, but with status
+     */
+    public YalsErrorJson andStatus(int status) {
+        setStatus(status);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 
     @SuppressWarnings("rawtypes")
@@ -98,15 +126,5 @@ public class YalsErrorJson implements YalsJson {
         }
         return String.format("Field: %s, Error: %s", constraintViolation.getPropertyPath(),
                 constraintViolation.getMessage());
-    }
-
-    public YalsErrorJson andStatus(int status) {
-        setStatus(status);
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
     }
 }

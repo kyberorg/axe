@@ -84,7 +84,6 @@ public class StoreRestController {
             } catch (RuntimeException e) {
                 //to be handled by validators
             }
-
         }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();

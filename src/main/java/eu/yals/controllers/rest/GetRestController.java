@@ -2,8 +2,8 @@ package eu.yals.controllers.rest;
 
 import eu.yals.Endpoint;
 import eu.yals.core.IdentGenerator;
-import eu.yals.json.ErrorJson;
 import eu.yals.json.LinkResponseJson;
+import eu.yals.json.YalsErrorJson;
 import eu.yals.json.YalsJson;
 import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
@@ -68,22 +68,23 @@ public class GetRestController {
         if (StringUtils.isBlank(ident)) {
             log.info("{} Got empty ident", TAG);
             response.setStatus(STATUS_400);
-            return ErrorJson.createWithMessage("Request should be like this: " + Endpoint.Api.LINK_API + "/{ident}"
-                    + " and ident should not be empty");
+            return YalsErrorJson.createWithMessage("Request should be like this: " + Endpoint.Api.LINK_API + "/{ident}"
+                    + " and ident should not be empty").andStatus(STATUS_400);
         }
 
         boolean isIdentValid = ident.matches(IdentGenerator.VALID_IDENT_PATTERN);
         if (!isIdentValid) {
             log.error("{} Request has not valid ident: {}", TAG, ident);
             response.setStatus(STATUS_400);
-            return ErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string");
+            return YalsErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string").andStatus(STATUS_400);
         }
 
         GetResult result = linkService.getLink(ident);
         if (result instanceof GetResult.NotFound) {
             log.info("{} Miss {\"Ident\": {}}", TAG, ident);
             response.setStatus(STATUS_404);
-            return ErrorJson.createWithMessage(((GetResult.NotFound) result).getErrorMessage());
+            return YalsErrorJson.createWithMessage(((GetResult.NotFound) result).getErrorMessage())
+                    .andStatus(STATUS_404);
         } else if (result instanceof GetResult.Success) {
             response.setStatus(STATUS_200);
             String link = ((GetResult.Success) result).getLink();
@@ -98,12 +99,13 @@ public class GetRestController {
         } else if (result instanceof GetResult.DatabaseDown) {
             response.setStatus(STATUS_503);
             log.error("{} Database is DOWN", TAG, ((GetResult.DatabaseDown) result).getException());
-            return ErrorJson.createWithMessage("The server is currently unable to handle the request");
+            return YalsErrorJson.createWithMessage("The server is currently unable to handle the request")
+                    .andStatus(STATUS_503);
         } else {
             log.error("{} unknown failure", TAG);
             log.debug("{} got unknown result object: {}", TAG, result);
             response.setStatus(STATUS_500);
-            return ErrorJson.createWithMessage("Unexpected Server error");
+            return YalsErrorJson.createWithMessage("Unexpected Server error");
         }
     }
 }

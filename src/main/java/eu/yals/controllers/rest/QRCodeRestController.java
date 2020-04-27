@@ -3,8 +3,8 @@ package eu.yals.controllers.rest;
 import com.google.zxing.WriterException;
 import eu.yals.Endpoint;
 import eu.yals.json.EmptyJson;
-import eu.yals.json.ErrorJson;
 import eu.yals.json.QRCodeResponseJson;
+import eu.yals.json.YalsErrorJson;
 import eu.yals.json.YalsJson;
 import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
@@ -57,7 +57,7 @@ public class QRCodeRestController {
         this.response = resp;
 
         YalsJson testResult = testIdentExist(ident);
-        if (testResult instanceof ErrorJson) {
+        if (testResult instanceof YalsErrorJson) {
             return testResult;
         }
 
@@ -68,10 +68,9 @@ public class QRCodeRestController {
             result = QRCodeResponseJson.withQRCode(qrCode.get());
         } else {
             resp.setStatus(STATUS_500);
-            result = ErrorJson.createWithMessage("Failed to generate QR code. Internal error");
+            result = YalsErrorJson.createWithMessage("Failed to generate QR code. Internal error");
         }
         return result;
-
     }
 
     /**
@@ -90,12 +89,12 @@ public class QRCodeRestController {
         this.response = resp;
 
         YalsJson sizeTestResult = testSize(size);
-        if (sizeTestResult instanceof ErrorJson) {
+        if (sizeTestResult instanceof YalsErrorJson) {
             return sizeTestResult;
         }
 
         YalsJson identTestResult = testIdentExist(ident);
-        if (identTestResult instanceof ErrorJson) {
+        if (identTestResult instanceof YalsErrorJson) {
             return identTestResult;
         }
 
@@ -106,7 +105,7 @@ public class QRCodeRestController {
             result = QRCodeResponseJson.withQRCode(qrCode.get());
         } else {
             resp.setStatus(STATUS_500);
-            result = ErrorJson.createWithMessage("Failed to generate QR code. Internal error");
+            result = YalsErrorJson.createWithMessage("Failed to generate QR code. Internal error");
         }
         return result;
     }
@@ -117,17 +116,18 @@ public class QRCodeRestController {
         if (identFromDatabase instanceof GetResult.NotFound) {
             log.debug("{} 0 idents found by request: {}", TAG, ident);
             response.setStatus(STATUS_404);
-            return ErrorJson.createWithMessage("No links found by this request. "
-                    + "Ident should be stored before requesting QR code");
+            return YalsErrorJson.createWithMessage("No links found by this request. "
+                    + "Ident should be stored before requesting QR code").andStatus(STATUS_404);
         } else if (identFromDatabase instanceof GetResult.Fail) {
             log.debug("{} Failed to query DB for ident. Error: {}",
                     TAG, ((GetResult.Fail) identFromDatabase).getErrorMessage());
             response.setStatus(STATUS_500);
-            return ErrorJson.createWithMessage("Server Error: Something wrong at our side");
+            return YalsErrorJson.createWithMessage("Server Error: Something wrong at our side");
         } else if (identFromDatabase instanceof GetResult.DatabaseDown) {
             log.debug("DB is DOWN");
             response.setStatus(STATUS_503);
-            return ErrorJson.createWithMessage("Server is unreachable. Please repeat request later");
+            return YalsErrorJson.createWithMessage("Server is unreachable. Please repeat request later")
+                    .andStatus(STATUS_503);
         } else {
             return EmptyJson.create();
         }
@@ -137,7 +137,7 @@ public class QRCodeRestController {
         if (sizeToTest <= 0) {
             log.error("{} invalid size {}. Replying 400", TAG, sizeToTest);
             response.setStatus(STATUS_400);
-            return ErrorJson.createWithMessage("Size must be positive number");
+            return YalsErrorJson.createWithMessage("Size must be positive number").andStatus(STATUS_400);
         } else {
             return EmptyJson.create();
         }
