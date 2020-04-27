@@ -2,9 +2,9 @@ package eu.yals.controllers.rest;
 
 import eu.yals.Endpoint;
 import eu.yals.core.IdentGenerator;
-import eu.yals.json.ErrorJson;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.json.StoreResponseJson;
+import eu.yals.json.YalsErrorJson;
 import eu.yals.json.YalsJson;
 import eu.yals.result.GetResult;
 import eu.yals.result.StoreResult;
@@ -67,19 +67,19 @@ public class StoreRestController {
         } catch (Exception e) {
             response.setStatus(STATUS_421);
             log.info("{} unparseable JSON", TAG);
-            return ErrorJson.createWithMessage("Unable to parse json");
+            return YalsErrorJson.builder()
+                    .status(STATUS_421)
+                    .message("Unable to parse json")
+                    .techMessage("Malformed JSON received. Got body: " + body)
+                    .build();
         }
 
         String linkToStore = storeInput.getLink();
         if (StringUtils.isNotBlank(linkToStore)) {
             //normalize URL if needed
-            try {
-                String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
-                log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
-                storeInput.withLink(fullUrl);
-            } catch (RuntimeException e) {
-                //Malformed URL: will be handled by validators later on
-            }
+            String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
+            log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
+            storeInput.withLink(fullUrl);
         }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -88,14 +88,14 @@ public class StoreRestController {
             log.info("{} Value Violations found: {}", TAG, errors);
             Set<ConstraintViolation> errorSet = new HashSet<>(errors);
             response.setStatus(STATUS_421);
-            return ErrorJson.createFromSetOfErrors(errorSet);
+            return YalsErrorJson.createFromSetOfErrors(errorSet).andStatus(STATUS_421);
         }
 
         String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
         if (!messageFromExtraValidator.equals(UrlExtraValidator.VALID)) {
             log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
             response.setStatus(STATUS_421);
-            return ErrorJson.createWithMessage(messageFromExtraValidator);
+            return YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_421);
         }
 
         String usersIdent = ""; //TODO replace by data from JSON
@@ -106,8 +106,8 @@ public class StoreRestController {
                 log.info("{} User Ident '{}' already exists", TAG, usersIdent);
                 log.debug("{} Conflicting ident: {}", TAG, usersIdent);
                 response.setStatus(STATUS_409); //conflict
-                return ErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
-                        + " Try another one");
+                return YalsErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
+                        + " Try another one").andStatus(STATUS_409);
             } else {
                 ident = usersIdent;
             }
@@ -127,7 +127,11 @@ public class StoreRestController {
             String message = "Problem with URL decoding";
             log.error(message, e);
             response.setStatus(STATUS_500);
-            return ErrorJson.createWithMessage(message);
+
+            return YalsErrorJson.builder()
+                    .message(message).techMessage(e.getMessage()).throwable(e)
+                    .status(STATUS_500)
+                    .build();
         }
 
         StoreResult result = linkService.storeNew(ident, storeInput.getLink());
@@ -138,15 +142,16 @@ public class StoreRestController {
         } else if (result instanceof StoreResult.Fail) {
             log.error("{} Failed to save link: {}", TAG, storeInput.getLink());
             response.setStatus(STATUS_500);
-            return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         } else if (result instanceof StoreResult.DatabaseDown) {
             response.setStatus(STATUS_503);
             log.error("{} Database is DOWN", TAG, ((StoreResult.DatabaseDown) result).getException());
-            return ErrorJson.createWithMessage("The server is currently unable to handle the request");
+            return YalsErrorJson.createWithMessage("The server is currently unable to handle the request")
+                    .andStatus(STATUS_503);
         } else {
             log.error("{} Failed to save link: got unknown result object: {}", TAG, result);
             response.setStatus(STATUS_500);
-            return ErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         }
     }
 
