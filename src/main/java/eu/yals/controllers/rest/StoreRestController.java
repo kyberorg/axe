@@ -40,6 +40,7 @@ public class StoreRestController {
     private static final String TAG = "[" + StoreRestController.class.getSimpleName() + "]";
 
     private final LinkService linkService;
+    private HttpServletResponse response;
 
     /**
      * Constructor for Spring autowiring.
@@ -61,13 +62,12 @@ public class StoreRestController {
             value = Endpoint.Api.STORE_API)
     public YalsJson store(final @RequestBody String body, final HttpServletResponse response) {
         log.info("{} got request: {}", TAG, body);
+        this.response = response;
 
         Intent parseResult = parseJson(body);
 
         if (intentHasYalsErrorJson(parseResult)) {
-            YalsErrorJson errorJson = parseResult.read(YalsErrorJson.class);
-            response.setStatus(errorJson.getStatus());
-            return errorJson;
+            return yalsErrorJson(parseResult);
         }
 
         StoreRequestJson storeInput = parseResult.read(StoreRequestJson.class);
@@ -77,9 +77,7 @@ public class StoreRestController {
 
         Intent validateResult = validateInput(storeInput);
         if (intentHasYalsErrorJson(validateResult)) {
-            YalsErrorJson errorJson = validateResult.read(YalsErrorJson.class);
-            response.setStatus(errorJson.getStatus());
-            return errorJson;
+            return yalsErrorJson(validateResult);
         }
 
         String usersIdent = ""; //TODO replace by data from JSON
@@ -87,11 +85,7 @@ public class StoreRestController {
         String ident;
         if (usingUsersIdent) {
             if (isIdentAlreadyExists(usersIdent)) {
-                log.info("{} User Ident '{}' already exists", TAG, usersIdent);
-                log.debug("{} Conflicting ident: {}", TAG, usersIdent);
-                response.setStatus(STATUS_409); //conflict
-                return YalsErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
-                        + " Try another one").andStatus(STATUS_409);
+                return confict(usersIdent);
             } else {
                 ident = usersIdent;
             }
@@ -102,23 +96,13 @@ public class StoreRestController {
         }
 
         //decoding URL before saving to DB
-        try {
-            String currentLink = storeInput.getLink();
-            String decodedLink = AppUtils.decodeUrl(currentLink);
-            log.trace("{} Link {} became {} after decoding", TAG, currentLink, decodedLink);
-            storeInput.withLink(decodedLink);
-        } catch (RuntimeException e) {
-            String message = "Problem with URL decoding";
-            log.error(message, e);
-            response.setStatus(STATUS_500);
-
-            return YalsErrorJson.builder()
-                    .message(message).techMessage(e.getMessage()).throwable(e)
-                    .status(STATUS_500)
-                    .build();
+        Intent decodeUrlResult = decodeUrl(storeInput.getLink());
+        if (intentHasYalsErrorJson(decodeUrlResult)) {
+            return yalsErrorJson(decodeUrlResult);
         }
+        String decodedUrl = decodeUrlResult.read(String.class);
 
-        StoreResult result = linkService.storeNew(ident, storeInput.getLink());
+        StoreResult result = linkService.storeNew(ident, decodedUrl);
         if (result instanceof StoreResult.Success) {
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, storeInput.getLink());
             response.setStatus(STATUS_201);
@@ -136,6 +120,24 @@ public class StoreRestController {
             log.error("{} Failed to save link: got unknown result object: {}", TAG, result);
             response.setStatus(STATUS_500);
             return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+        }
+    }
+
+    private Intent decodeUrl(String currentLink) {
+        try {
+            String decodedLink = AppUtils.decodeUrl(currentLink);
+            log.trace("{} Link {} became {} after decoding", TAG, currentLink, decodedLink);
+            return Intent.get().write(decodedLink);
+        } catch (RuntimeException e) {
+            String message = "Problem with URL decoding";
+            log.error(message, e);
+            response.setStatus(STATUS_500);
+
+            YalsErrorJson errorJson = YalsErrorJson.builder()
+                    .message(message).techMessage(e.getMessage()).throwable(e)
+                    .status(STATUS_500)
+                    .build();
+            return Intent.get().write(errorJson);
         }
     }
 
@@ -198,8 +200,22 @@ public class StoreRestController {
         return (searchResult instanceof GetResult.Success);
     }
 
-    private boolean intentHasYalsErrorJson(Intent intent) {
+    private boolean intentHasYalsErrorJson(final Intent intent) {
         if (intent == null) return false;
         return intent.readValueType(Intent.DEFAULT_KEY) == YalsErrorJson.class;
+    }
+
+    private YalsErrorJson yalsErrorJson(final Intent intent) {
+        YalsErrorJson errorJson = intent.read(YalsErrorJson.class);
+        response.setStatus(errorJson.getStatus());
+        return errorJson;
+    }
+
+    private YalsErrorJson confict(final String usersIdent) {
+        log.info("{} User Ident '{}' already exists", TAG, usersIdent);
+        log.debug("{} Conflicting ident: {}", TAG, usersIdent);
+        response.setStatus(STATUS_409); //conflict
+        return YalsErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
+                + " Try another one").andStatus(STATUS_409);
     }
 }
