@@ -21,16 +21,22 @@ import static eu.yals.constants.HttpCode.STATUS_500;
 @Getter
 @Setter
 public class YalsErrorJson implements YalsJson {
+    @Builder.Default
     @JsonProperty("timestamp")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String timestamp = new Date().toString();
 
     @JsonProperty("message")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String message;
 
     @JsonProperty("tech_message")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String techMessage;
 
+    @Builder.Default
     @JsonProperty("status")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private int status = STATUS_500;
 
     @JsonProperty("error")
@@ -41,6 +47,7 @@ public class YalsErrorJson implements YalsJson {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String path;
 
+    @Builder.Default
     @JsonProperty("throwable")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Throwable throwable = null;
