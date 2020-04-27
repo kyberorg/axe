@@ -77,9 +77,14 @@ public class StoreRestController {
         String linkToStore = storeInput.getLink();
         if (StringUtils.isNotBlank(linkToStore)) {
             //normalize URL if needed
-            String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
-            log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
-            storeInput.withLink(fullUrl);
+            try {
+                String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
+                log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
+                storeInput.withLink(fullUrl);
+            } catch (RuntimeException e) {
+                //to be handled by validators
+            }
+
         }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
