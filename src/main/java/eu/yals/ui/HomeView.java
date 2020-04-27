@@ -321,7 +321,7 @@ public class HomeView extends VerticalLayout {
         log.error("{} Failed to store link. Reply: {}", TAG, json);
         String message;
         try {
-            message = json.getObject().getJSONObject("error").getString("errorMessage");
+            message = json.getObject().getString("message");
         } catch (JSONException e) {
             log.error("Malformed Error Json", e);
             message = "Hups. Something went wrong at server-side";
