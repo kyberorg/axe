@@ -10,6 +10,7 @@ import eu.yals.result.GetResult;
 import eu.yals.result.StoreResult;
 import eu.yals.services.LinkService;
 import eu.yals.utils.AppUtils;
+import eu.yals.utils.Intent;
 import eu.yals.utils.UrlExtraValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -61,45 +62,24 @@ public class StoreRestController {
     public YalsJson store(final @RequestBody String body, final HttpServletResponse response) {
         log.info("{} got request: {}", TAG, body);
 
-        StoreRequestJson storeInput;
-        try {
-            storeInput = AppUtils.GSON.fromJson(body, StoreRequestJson.class);
-        } catch (Exception e) {
-            response.setStatus(STATUS_421);
-            log.info("{} unparseable JSON", TAG);
-            return YalsErrorJson.builder()
-                    .status(STATUS_421)
-                    .message("Unable to parse json")
-                    .techMessage("Malformed JSON received. Got body: " + body)
-                    .build();
+        Intent parseResult = parseJson(body);
+
+        if (intentHasYalsErrorJson(parseResult)) {
+            YalsErrorJson errorJson = parseResult.read(YalsErrorJson.class);
+            response.setStatus(errorJson.getStatus());
+            return errorJson;
         }
 
+        StoreRequestJson storeInput = parseResult.read(StoreRequestJson.class);
         String linkToStore = storeInput.getLink();
-        if (StringUtils.isNotBlank(linkToStore)) {
-            //normalize URL if needed
-            try {
-                String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
-                log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
-                storeInput.withLink(fullUrl);
-            } catch (RuntimeException e) {
-                //to be handled by validators
-            }
-        }
 
-        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
-        if (!errors.isEmpty()) {
-            log.info("{} Value Violations found: {}", TAG, errors);
-            Set<ConstraintViolation> errorSet = new HashSet<>(errors);
-            response.setStatus(STATUS_421);
-            return YalsErrorJson.createFromSetOfErrors(errorSet).andStatus(STATUS_421);
-        }
+        storeInput.setLink(normalizeUrl(linkToStore));
 
-        String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
-        if (!messageFromExtraValidator.equals(UrlExtraValidator.VALID)) {
-            log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
-            response.setStatus(STATUS_421);
-            return YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_421);
+        Intent validateResult = validateInput(storeInput);
+        if (intentHasYalsErrorJson(validateResult)) {
+            YalsErrorJson errorJson = validateResult.read(YalsErrorJson.class);
+            response.setStatus(errorJson.getStatus());
+            return errorJson;
         }
 
         String usersIdent = ""; //TODO replace by data from JSON
@@ -159,6 +139,56 @@ public class StoreRestController {
         }
     }
 
+    private Intent parseJson(final String body) {
+        try {
+            StoreRequestJson storeInput = AppUtils.GSON.fromJson(body, StoreRequestJson.class);
+            return Intent.get().write(storeInput);
+        } catch (Exception e) {
+            log.info("{} unparseable JSON", TAG);
+            YalsErrorJson errorJson = YalsErrorJson.builder()
+                    .status(STATUS_421)
+                    .message("Unable to parse json")
+                    .techMessage("Malformed JSON received. Got body: " + body)
+                    .build();
+            return Intent.get().write(errorJson);
+        }
+    }
+
+    private String normalizeUrl(final String linkToStore) {
+        if (StringUtils.isNotBlank(linkToStore)) {
+            //normalize URL if needed
+            try {
+                String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
+                log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
+                return fullUrl;
+            } catch (RuntimeException e) {
+                //to be handled by validators
+                return linkToStore;
+            }
+        } else {
+            return linkToStore;
+        }
+    }
+
+    private Intent validateInput(StoreRequestJson storeInput) {
+        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
+        if (!errors.isEmpty()) {
+            log.info("{} Value Violations found: {}", TAG, errors);
+            Set<ConstraintViolation> errorSet = new HashSet<>(errors);
+            YalsErrorJson errorJson = YalsErrorJson.createFromSetOfErrors(errorSet).andStatus(STATUS_421);
+            return Intent.get().write(errorJson);
+        }
+
+        String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
+        if (!messageFromExtraValidator.equals(UrlExtraValidator.VALID)) {
+            log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
+            YalsErrorJson errorJson = YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_421);
+            return Intent.get().write(errorJson);
+        }
+        return Intent.get().write("Validation passed");
+    }
+
     private boolean isUsersIdentValid(final String usersIdent) {
         return usersIdent.matches(IdentGenerator.VALID_IDENT_PATTERN);
     }
@@ -166,5 +196,10 @@ public class StoreRestController {
     private boolean isIdentAlreadyExists(final String ident) {
         GetResult searchResult = linkService.getLink(ident);
         return (searchResult instanceof GetResult.Success);
+    }
+
+    private boolean intentHasYalsErrorJson(Intent intent) {
+        if (intent == null) return false;
+        return intent.readValueType(Intent.DEFAULT_KEY) == YalsErrorJson.class;
     }
 }
