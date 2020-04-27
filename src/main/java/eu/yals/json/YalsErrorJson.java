@@ -7,7 +7,6 @@ import eu.yals.constants.App;
 import eu.yals.exception.error.YalsError;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.ConstraintViolation;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 
 import static eu.yals.constants.HttpCode.STATUS_500;
 
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter
