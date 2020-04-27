@@ -55,12 +55,13 @@ public class YalsErrorJson implements YalsJson {
      * @return {@link YalsErrorJson} with filled fields from given {@link YalsError}.
      */
     public static YalsErrorJson createFromYalsError(final YalsError error) {
-        YalsErrorJson.YalsErrorJsonBuilder json = YalsErrorJson.builder().message(error.getMessageToUser())
-                .techMessage(error.getTechMessage());
-        json.throwable(error.getRawException());
-        json.timestamp = error.getTimeStamp();
-        json.status = error.getHttpStatus();
-        json.path = error.getPath();
+        YalsErrorJson.YalsErrorJsonBuilder json = YalsErrorJson.builder()
+                .timestamp(error.getTimeStamp())
+                .message(error.getMessageToUser())
+                .techMessage(error.getTechMessage())
+                .status(error.getHttpStatus())
+                .path(error.getPath())
+                .throwable(error.getRawException());
         return json.build();
     }
 
