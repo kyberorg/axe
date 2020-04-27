@@ -39,10 +39,6 @@ public class YalsErrorJson implements YalsJson {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private int status = STATUS_500;
 
-    @JsonProperty("error")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String error;
-
     @JsonProperty("path")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String path;
@@ -71,7 +67,7 @@ public class YalsErrorJson implements YalsJson {
     @SuppressWarnings("rawtypes")
     public static YalsErrorJson createFromSetOfErrors(final Set<ConstraintViolation> errors) {
         if (errors.isEmpty()) {
-            return YalsErrorJson.builder().error("Unknown error").build();
+            return YalsErrorJson.builder().message("Unknown error").build();
         }
         if (errors.size() == 1) {
             String error = errors.stream().findFirst()

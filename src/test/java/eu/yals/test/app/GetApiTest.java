@@ -39,7 +39,7 @@ public class GetApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(STATUS_400, result.getStatus());
 
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class GetApiTest extends UnirestTest {
 
         assertNotNull(result);
         assertEquals(STATUS_400, result.getStatus());
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class GetApiTest extends UnirestTest {
 
         assertNotNull(result);
         assertEquals(STATUS_400, result.getStatus());
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class GetApiTest extends UnirestTest {
 
         assertNotNull(result);
         assertEquals(STATUS_404, result.getStatus());
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test
