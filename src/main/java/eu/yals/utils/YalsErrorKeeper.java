@@ -69,8 +69,13 @@ public class YalsErrorKeeper {
             logMessage.append("Status: ").append(yalsError.getHttpStatus()).append(App.NEW_LINE);
         }
         if (yalsError.getRawException() != null) {
-            logMessage.append("Trace: ")
-                    .append(AppUtils.stackTraceToString(yalsError.getRawException())).append(App.NEW_LINE);
+            if(log.isDebugEnabled()) {
+                logMessage.append("Trace: ")
+                        .append(ErrorUtils.stackTraceToString(yalsError.getRawException())).append(App.NEW_LINE);
+            } else {
+                logMessage.append("Exception: ")
+                        .append(yalsError.getRawException().getMessage()).append(App.NEW_LINE);
+            }
         }
         logMessage.append("=============");
         logMessage.trimToSize();

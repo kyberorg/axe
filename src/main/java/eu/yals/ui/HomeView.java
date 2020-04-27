@@ -266,7 +266,8 @@ public class HomeView extends VerticalLayout {
             try {
                 longUrl = AppUtils.makeFullUri(longUrl).toString();
             } catch (RuntimeException e) {
-                log.error("URL validation failed", e);
+                log.error("URL validation failed");
+                log.debug("", e);
                 showError("Got malformed URL or not URL at all");
                 isFormValid = false;
             }

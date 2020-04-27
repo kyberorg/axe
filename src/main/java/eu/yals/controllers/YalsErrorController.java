@@ -152,7 +152,8 @@ public class YalsErrorController implements ErrorController {
         boolean isException = (rawException != null);
         if (realError) {
             if (isException) {
-                log.info("{} Status: {}. Path: {}. Exception: {}", TAG, status, path, rawException);
+                log.info("{} Status: {}. Path: {}. Exception message: {}", TAG, status, path, rawException.getMessage());
+                log.debug("{} Exception: {}", TAG, rawException);
             } else {
                 log.info("{} Status: {}. Path: {}", TAG, status, path);
             }

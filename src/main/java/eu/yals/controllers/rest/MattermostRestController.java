@@ -57,7 +57,12 @@ public class MattermostRestController {
         try {
             log.info("{} Got request from Mattermost. Body: {}", TAG, body);
             log.debug("{} Parsing MM request", TAG);
-            mattermost = Mattermost.createFromResponseBody(body);
+            try {
+                mattermost = Mattermost.createFromResponseBody(body);
+            } catch (NoSuchElementException | IllegalArgumentException e) {
+                log.error("{} Parsing failed: {}", TAG, e.getMessage());
+                log.debug("",e);
+            }
             String mmUrl = mattermost.getArgumentSet().getUrl();
             log.debug("{} Request Parsed. Saving link. mmUrl: {}", TAG, mmUrl);
 
