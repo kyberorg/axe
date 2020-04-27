@@ -57,12 +57,7 @@ public class MattermostRestController {
         try {
             log.info("{} Got request from Mattermost. Body: {}", TAG, body);
             log.debug("{} Parsing MM request", TAG);
-            try {
-                mattermost = Mattermost.createFromResponseBody(body);
-            } catch (NoSuchElementException | IllegalArgumentException e) {
-                log.error("{} Parsing failed: {}", TAG, e.getMessage());
-                log.debug("",e);
-            }
+            mattermost = Mattermost.createFromResponseBody(body);
             String mmUrl = mattermost.getArgumentSet().getUrl();
             log.debug("{} Request Parsed. Saving link. mmUrl: {}", TAG, mmUrl);
 
@@ -75,10 +70,12 @@ public class MattermostRestController {
                 return serverError();
             }
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            log.error("{} Got exception while handling request. Body: {} Exception: {}", TAG, body, e);
+            log.error("{} Got exception while handling request. Body: {} Exception: {}", TAG, body, e.getMessage());
+            log.debug("", e);
             return usage();
         } catch (Exception e) {
-            log.error("{} Unknown exception while handling request. Body: {} Exception: {}", TAG, body, e);
+            log.error("{} Unknown exception while handling request. Body: {} Exception: {}", TAG, body, e.getMessage());
+            log.debug("", e);
             return serverError();
         }
     }
