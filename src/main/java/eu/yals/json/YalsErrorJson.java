@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import eu.yals.constants.App;
 import eu.yals.exception.error.YalsError;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.ConstraintViolation;
 import java.util.Date;
@@ -20,6 +17,8 @@ import static eu.yals.constants.HttpCode.STATUS_500;
 
 @Builder
 @RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class YalsErrorJson implements YalsJson {
