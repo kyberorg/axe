@@ -13,20 +13,20 @@ import java.util.Objects;
  *
  * @since 2.7
  */
-public class Intent {
+public class Result {
     public static final String DEFAULT_KEY = "DEFAULT_KEY";
 
     private final Map<String, Object> objects = new HashMap<>();
 
-    public static Intent get() {
-        return new Intent();
+    public static Result get() {
+        return new Result();
     }
 
-    public Intent write(Object o) {
+    public Result write(Object o) {
         return write(DEFAULT_KEY, o);
     }
 
-    public Intent write(String key, Object o) {
+    public Result write(String key, Object o) {
         objects.put(key, o);
         return this;
     }
