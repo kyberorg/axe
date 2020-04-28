@@ -1,8 +1,9 @@
 package eu.yals.json;
 
-import eu.yals.json.internal.Json;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import eu.yals.utils.UrlExtraValidator;
-import lombok.Getter;
+import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotNull;
@@ -16,21 +17,13 @@ import static eu.yals.utils.UrlExtraValidator.URL_MIN_SIZE;
  *
  * @since 1.0
  */
-public class StoreRequestJson extends Json {
+@Data(staticConstructor = "create")
+public class StoreRequestJson implements YalsJson {
     @NotNull(message = "must be present")
     @Size(min = URL_MIN_SIZE, max = URL_MAX_SIZE)
     @URL(message = UrlExtraValidator.URL_NOT_VALID)
-    @Getter
+    @JsonProperty("link")
     private String link;
-
-    /**
-     * Creates blank {@link StoreRequestJson} with no params.
-     *
-     * @return json object with no params
-     */
-    public static StoreRequestJson create() {
-        return new StoreRequestJson();
-    }
 
     /**
      * Creates {@link StoreRequestJson} with provided link.
@@ -41,5 +34,10 @@ public class StoreRequestJson extends Json {
     public StoreRequestJson withLink(final String longLink) {
         this.link = longLink;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

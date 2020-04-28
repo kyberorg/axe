@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.IDN;
 import java.net.URI;
@@ -247,18 +245,6 @@ public class AppUtils {
      */
     public static boolean isNotMobile(final VaadinSession vaadinSession) {
         return !isMobile(vaadinSession);
-    }
-
-    /**
-     * Converts from stack trace to String with stack trace.
-     *
-     * @param e exception with stack trace
-     * @return stack trace as string
-     */
-    public static String stackTraceToString(final Throwable e) {
-        StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw));
-        return sw.toString();
     }
 
     /**

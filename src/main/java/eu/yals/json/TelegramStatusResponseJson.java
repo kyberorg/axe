@@ -1,8 +1,8 @@
 package eu.yals.json;
 
-import eu.yals.json.internal.Json;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -11,11 +11,12 @@ import lombok.RequiredArgsConstructor;
  * @since 2.5
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor(staticName = "createWithStatus")
-public class TelegramStatusResponseJson extends Json {
+public class TelegramStatusResponseJson implements YalsJson {
+    @JsonProperty("status")
     private final String status;
 
+    @JsonProperty("name")
     private String name;
 
     /**
@@ -27,5 +28,10 @@ public class TelegramStatusResponseJson extends Json {
     public TelegramStatusResponseJson withBotName(final String botName) {
         this.name = botName;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

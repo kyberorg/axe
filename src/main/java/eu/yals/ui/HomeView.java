@@ -266,7 +266,8 @@ public class HomeView extends VerticalLayout {
             try {
                 longUrl = AppUtils.makeFullUri(longUrl).toString();
             } catch (RuntimeException e) {
-                log.error("URL validation failed", e);
+                log.error("URL validation failed");
+                log.debug("", e);
                 showError("Got malformed URL or not URL at all");
                 isFormValid = false;
             }
@@ -321,7 +322,7 @@ public class HomeView extends VerticalLayout {
         log.error("{} Failed to store link. Reply: {}", TAG, json);
         String message;
         try {
-            message = json.getObject().getJSONObject("error").getString("errorMessage");
+            message = json.getObject().getString("message");
         } catch (JSONException e) {
             log.error("Malformed Error Json", e);
             message = "Hups. Something went wrong at server-side";
@@ -384,7 +385,7 @@ public class HomeView extends VerticalLayout {
 
     private void onSuccessGenerateQRCode(final HttpResponse<JsonNode> response) {
         if (response.getStatus() == STATUS_200) {
-            String qrCode = response.getBody().getObject().getString("qrCode");
+            String qrCode = response.getBody().getObject().getString("qr_code");
             if (StringUtils.isNotBlank(qrCode)) {
                 this.qrCode.setSrc(qrCode);
                 qrCodeRow.setVisible(true);

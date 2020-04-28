@@ -1,9 +1,9 @@
 package eu.yals.controllers.rest;
 
 import eu.yals.Endpoint;
-import eu.yals.json.ErrorJson;
 import eu.yals.json.TelegramStatusResponseJson;
-import eu.yals.json.internal.Json;
+import eu.yals.json.YalsErrorJson;
+import eu.yals.json.YalsJson;
 import eu.yals.telegram.TelegramBot;
 import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +44,12 @@ public class TelegramStatusRestController {
      * @return json with bot status
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.TELEGRAM_STATUS_API)
-    public Json getBotStatus() {
+    public YalsJson getBotStatus() {
         log.info("{} got request", TAG);
         if (bot == null) {
             //most likely you want want see it as application startup will fail
             log.error("Failed to autowire " + TelegramBot.class.getSimpleName());
-            return ErrorJson.createWithMessage("Internal error: bot is missing");
+            return YalsErrorJson.createWithMessage("Internal error: bot is missing");
         }
 
         if (appUtils.isTelegramDisabled()) {

@@ -1,8 +1,10 @@
 package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import eu.yals.json.internal.Json;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import kong.unirest.HttpMethod;
+import lombok.Data;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,12 +15,10 @@ import javax.validation.constraints.NotNull;
  *
  * @since 2.7
  */
-public class EndpointNotFoundJson extends Json {
+@Data(staticConstructor = "create")
+public class EndpointNotFoundJson implements YalsJson {
 
-    @Getter
-    private final String error = "Endpoint not found";
-
-    @Getter
+    @JsonProperty("endpoint")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Endpoint endpoint;
 
@@ -34,15 +34,6 @@ public class EndpointNotFoundJson extends Json {
         EndpointNotFoundJson self = new EndpointNotFoundJson();
         self.endpoint = Endpoint.create(method, path);
         return self;
-    }
-
-    /**
-     * Creates {@link EndpointNotFoundJson} without params.
-     *
-     * @return {@link EndpointNotFoundJson} object with defaults.
-     */
-    public static EndpointNotFoundJson create() {
-        return new EndpointNotFoundJson();
     }
 
     /**
@@ -82,5 +73,10 @@ public class EndpointNotFoundJson extends Json {
         public static Endpoint create(final HttpMethod method, final String path) {
             return new Endpoint(method, path);
         }
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
