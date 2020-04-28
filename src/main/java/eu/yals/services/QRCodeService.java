@@ -6,7 +6,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import eu.yals.utils.AppUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -18,7 +17,6 @@ import java.util.Base64;
  *
  * @since 2.6
  */
-@Slf4j
 @Service
 public class QRCodeService {
     public static final int DEFAULT_SIZE = 350;

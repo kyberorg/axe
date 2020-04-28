@@ -111,7 +111,7 @@ public class StoreRestController {
             return Result.get().write(decodedLink);
         } catch (RuntimeException e) {
             String message = "Problem with URL decoding";
-            log.error(message, e);
+            log.error("{} {}", TAG, message);
             response.setStatus(STATUS_500);
 
             YalsErrorJson errorJson = YalsErrorJson.builder()

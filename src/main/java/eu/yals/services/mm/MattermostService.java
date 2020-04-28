@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class MattermostService {
-
+    private static final String TAG = "[" + MattermostService.class.getSimpleName() + "]";
     private final LinkRepo repo;
 
     /**
@@ -38,7 +38,8 @@ public class MattermostService {
         try {
             savedLink = repo.save(link);
         } catch (Exception e) {
-            log.error("Got exception while saving new Link " + link.toString(), e);
+            log.error("{}Got exception while saving new Link {}", TAG, link.toString());
+            log.debug("", e);
             savedLink = null;
         }
         return savedLink;

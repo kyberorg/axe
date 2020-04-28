@@ -48,7 +48,7 @@ public class TelegramStatusRestController {
         log.info("{} got request", TAG);
         if (bot == null) {
             //most likely you want want see it as application startup will fail
-            log.error("Failed to autowire " + TelegramBot.class.getSimpleName());
+            log.error("{} Failed to autowire " + TelegramBot.class.getSimpleName(), TAG);
             return YalsErrorJson.createWithMessage("Internal error: bot is missing");
         }
 

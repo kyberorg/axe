@@ -14,7 +14,6 @@ import eu.yals.constants.Header;
 import eu.yals.core.IdentGenerator;
 import eu.yals.ui.AppView;
 import eu.yals.utils.AppUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -25,7 +24,7 @@ import java.util.List;
 import static eu.yals.constants.HttpCode.STATUS_302;
 import static eu.yals.constants.HttpCode.STATUS_404;
 
-@Slf4j
+
 @SpringComponent
 @UIScope
 @PageTitle("Yals: Error 404")

@@ -18,9 +18,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import eu.yals.ui.dev.AppInfoView;
 import eu.yals.utils.AppUtils;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @SpringComponent
 @UIScope
 @Push

@@ -23,6 +23,7 @@ import static eu.yals.constants.App.NO_VALUE;
 @Slf4j
 @Service
 public class TelegramService {
+    public static final String TAG = "[" + TelegramService.class.getSimpleName() + "]";
     public static final String NO_INIT = "Didn't correctly initialized. Did you run telegramService.init()?";
 
     private final LinkRepo linkRepo;
@@ -74,7 +75,8 @@ public class TelegramService {
         try {
             savedLink = linkRepo.save(link);
         } catch (Exception e) {
-            log.error("Got exception while saving new Link " + link.toString(), e);
+            log.error("{} Got exception while saving new Link {}", TAG, link.toString());
+            log.debug("", e);
             savedLink = null;
         }
         return savedLink;

@@ -36,6 +36,7 @@ import static eu.yals.utils.AppUtils.HTML_MODE;
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>,
         HasUrlParameter<String> {
+    public static final String TAG = "[" + ServerErrorView.class.getSimpleName() + "]";
 
     private final ErrorUtils errorUtils;
     private final AppUtils appUtils;
@@ -84,7 +85,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     }
 
     private void onImageClick(final ClickEvent<Image> imageClickEvent) {
-        log.trace("Image click event. Is from client? {}", imageClickEvent.isFromClient());
+        log.trace("{} Image click event. Is from client? {}", TAG, imageClickEvent.isFromClient());
         image.setVisible(false);
         techInfo.setVisible(true);
     }
