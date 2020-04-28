@@ -248,7 +248,7 @@ public class HomeView extends VerticalLayout {
     }
 
     private void onSaveLink(final ClickEvent<Button> buttonClickEvent) {
-        log.trace("Submit button clicked. By client? {}", buttonClickEvent.isFromClient());
+        log.trace("{} Submit button clicked. By client? {}",TAG,  buttonClickEvent.isFromClient());
 
         cleanErrors();
         cleanResults();
@@ -266,7 +266,7 @@ public class HomeView extends VerticalLayout {
             try {
                 longUrl = AppUtils.makeFullUri(longUrl).toString();
             } catch (RuntimeException e) {
-                log.error("URL validation failed");
+                log.error("{} URL validation failed", TAG);
                 log.debug("", e);
                 showError("Got malformed URL or not URL at all");
                 isFormValid = false;
@@ -276,12 +276,14 @@ public class HomeView extends VerticalLayout {
         if (isFormValid) {
             cleanResults();
             sendLink(longUrl);
+        } else {
+            log.debug("{} Form is not valid", TAG);
         }
     }
 
     private void copyLinkToClipboard(
             final ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
-        log.trace("Copy link button clicked. From client? {}", buttonClickEvent.isFromClient());
+        log.trace("{} Copy link button clicked. From client? {}", TAG, buttonClickEvent.isFromClient());
         getLinkCopiedNotification().open();
         //All other actions are performed by component wrapper
     }
@@ -324,7 +326,8 @@ public class HomeView extends VerticalLayout {
         try {
             message = json.getObject().getString("message");
         } catch (JSONException e) {
-            log.error("Malformed Error Json", e);
+            log.error("{} Malformed Error Json", TAG);
+            log.debug("", e);
             message = "Hups. Something went wrong at server-side";
         }
 

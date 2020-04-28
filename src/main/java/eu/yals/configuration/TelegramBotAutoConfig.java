@@ -72,7 +72,8 @@ public class TelegramBotAutoConfig {
             try {
                 sessions.add(api.registerBot(telegramBot));
             } catch (TelegramApiRequestException e) {
-                log.error("{} Failed to register bot", TAG, e);
+                log.error("{} Failed to register bot", TAG);
+                log.debug("", e);
             }
         }
     }

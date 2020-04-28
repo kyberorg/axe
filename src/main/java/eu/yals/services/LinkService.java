@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class LinkService {
-
+    private static final String TAG = "[" + LinkService.class.getSimpleName() + "]";
     private final LinkRepo repo;
 
     /**
@@ -66,7 +66,8 @@ public class LinkService {
         } catch (CannotCreateTransactionException e) {
             return new StoreResult.DatabaseDown().withException(e);
         } catch (Exception e) {
-            log.error("Exception on storing new " + Link.class.getSimpleName(), e);
+            log.error("{} Exception on storing new {}", TAG, Link.class.getSimpleName());
+            log.debug("", e);
             return new StoreResult.Fail("Failed to add new record");
         }
 
