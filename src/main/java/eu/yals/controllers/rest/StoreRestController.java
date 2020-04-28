@@ -66,7 +66,7 @@ public class StoreRestController {
 
         Result parseResult = parseJson(body);
 
-        if (intentHasYalsErrorJson(parseResult)) {
+        if (resultHasYalsErrorJson(parseResult)) {
             return yalsErrorJson(parseResult);
         }
 
@@ -76,7 +76,7 @@ public class StoreRestController {
         storeInput.setLink(normalizeUrl(linkToStore));
 
         Result validateResult = validateInput(storeInput);
-        if (intentHasYalsErrorJson(validateResult)) {
+        if (resultHasYalsErrorJson(validateResult)) {
             return yalsErrorJson(validateResult);
         }
 
@@ -85,7 +85,7 @@ public class StoreRestController {
         String ident;
         if (usingUsersIdent) {
             if (isIdentAlreadyExists(usersIdent)) {
-                return confict(usersIdent);
+                return conflict(usersIdent);
             } else {
                 ident = usersIdent;
             }
@@ -97,30 +97,11 @@ public class StoreRestController {
 
         //decoding URL before saving to DB
         Result decodeUrlResult = decodeUrl(storeInput.getLink());
-        if (intentHasYalsErrorJson(decodeUrlResult)) {
+        if (resultHasYalsErrorJson(decodeUrlResult)) {
             return yalsErrorJson(decodeUrlResult);
         }
         String decodedUrl = decodeUrlResult.read(String.class);
-
-        StoreResult result = linkService.storeNew(ident, decodedUrl);
-        if (result instanceof StoreResult.Success) {
-            log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, storeInput.getLink());
-            response.setStatus(STATUS_201);
-            return StoreResponseJson.create().withIdent(ident);
-        } else if (result instanceof StoreResult.Fail) {
-            log.error("{} Failed to save link: {}", TAG, storeInput.getLink());
-            response.setStatus(STATUS_500);
-            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
-        } else if (result instanceof StoreResult.DatabaseDown) {
-            response.setStatus(STATUS_503);
-            log.error("{} Database is DOWN", TAG, ((StoreResult.DatabaseDown) result).getException());
-            return YalsErrorJson.createWithMessage("The server is currently unable to handle the request")
-                    .andStatus(STATUS_503);
-        } else {
-            log.error("{} Failed to save link: got unknown result object: {}", TAG, result);
-            response.setStatus(STATUS_500);
-            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
-        }
+        return storeLink(ident, decodedUrl);
     }
 
     private Result decodeUrl(String currentLink) {
@@ -191,6 +172,28 @@ public class StoreRestController {
         return Result.get().write("Validation passed");
     }
 
+    private YalsJson storeLink(String ident, String decodedUrl) {
+        StoreResult result = linkService.storeNew(ident, decodedUrl);
+        if (result instanceof StoreResult.Success) {
+            log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedUrl);
+            response.setStatus(STATUS_201);
+            return StoreResponseJson.create().withIdent(ident);
+        } else if (result instanceof StoreResult.Fail) {
+            log.error("{} Failed to save link: {}", TAG, decodedUrl);
+            response.setStatus(STATUS_500);
+            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+        } else if (result instanceof StoreResult.DatabaseDown) {
+            response.setStatus(STATUS_503);
+            log.error("{} Database is DOWN", TAG, ((StoreResult.DatabaseDown) result).getException());
+            return YalsErrorJson.createWithMessage("The server is currently unable to handle the request")
+                    .andStatus(STATUS_503);
+        } else {
+            log.error("{} Failed to save link: got unknown result object: {}", TAG, result);
+            response.setStatus(STATUS_500);
+            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+        }
+    }
+
     private boolean isUsersIdentValid(final String usersIdent) {
         return usersIdent.matches(IdentGenerator.VALID_IDENT_PATTERN);
     }
@@ -200,7 +203,7 @@ public class StoreRestController {
         return (searchResult instanceof GetResult.Success);
     }
 
-    private boolean intentHasYalsErrorJson(final Result result) {
+    private boolean resultHasYalsErrorJson(final Result result) {
         if (result == null) return false;
         return result.readValueType(Result.DEFAULT_KEY) == YalsErrorJson.class;
     }
@@ -211,7 +214,7 @@ public class StoreRestController {
         return errorJson;
     }
 
-    private YalsErrorJson confict(final String usersIdent) {
+    private YalsErrorJson conflict(final String usersIdent) {
         log.info("{} User Ident '{}' already exists", TAG, usersIdent);
         log.debug("{} Conflicting ident: {}", TAG, usersIdent);
         response.setStatus(STATUS_409); //conflict
