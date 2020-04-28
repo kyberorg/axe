@@ -1,19 +1,12 @@
 package eu.yals.json;
 
-import eu.yals.json.internal.Json;
+import lombok.Data;
 
 /**
  * JSON without fields. Can be used for testing.
  *
  * @since 1.0
  */
-public class EmptyJson extends Json {
-    /**
-     * Creates empty json without fields.
-     *
-     * @return empty json.
-     */
-    public static EmptyJson create() {
-        return new EmptyJson();
-    }
+@Data(staticConstructor = "create")
+public class EmptyJson implements YalsJson {
 }

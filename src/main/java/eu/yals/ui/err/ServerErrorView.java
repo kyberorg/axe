@@ -124,7 +124,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
                 appUtils.pasteHtmlToComponent(techMessage, messageSpan);
             }
             if (yalsError.getRawException() != null) {
-                String traceMessage = AppUtils.stackTraceToString(yalsError.getRawException());
+                String traceMessage = ErrorUtils.stackTraceToString(yalsError.getRawException());
                 String trace = formatTrace(traceMessage);
 
                 appUtils.pasteHtmlToComponent(trace, traceSpan);

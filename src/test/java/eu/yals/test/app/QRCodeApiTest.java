@@ -45,7 +45,7 @@ public class QRCodeApiTest extends UnirestTest {
         assertNotNull(body);
         assertNotNull(body.getObject());
 
-        String qrCode = body.getObject().getString("qrCode");
+        String qrCode = body.getObject().getString("qr_code");
         assertValidQRCode(qrCode);
     }
 
@@ -64,7 +64,7 @@ public class QRCodeApiTest extends UnirestTest {
         assertNotNull(body);
         assertNotNull(body.getObject());
 
-        String qrCode = body.getObject().getString("qrCode");
+        String qrCode = body.getObject().getString("qr_code");
         assertValidQRCode(qrCode);
         assertQRCodeHasExactSize(QRCodeService.DEFAULT_SIZE, qrCode);
     }
@@ -116,7 +116,7 @@ public class QRCodeApiTest extends UnirestTest {
         assertEquals(STATUS_200, result.getStatus());
 
         JsonNode body = result.getBody();
-        String qrCode = body.getObject().getString("qrCode");
+        String qrCode = body.getObject().getString("qr_code");
 
         assertValidQRCode(qrCode);
         assertQRCodeHasExactSize(size, qrCode);
