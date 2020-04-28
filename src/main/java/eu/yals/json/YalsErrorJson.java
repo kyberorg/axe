@@ -99,7 +99,7 @@ public class YalsErrorJson implements YalsJson {
      * @param message string with user-friendly message
      * @return {@link YalsErrorJson}
      */
-    public static YalsErrorJson createWithMessage(String message) {
+    public static YalsErrorJson createWithMessage(final String message) {
         return YalsErrorJson.builder().message(message).build();
     }
 
@@ -109,7 +109,7 @@ public class YalsErrorJson implements YalsJson {
      * @param status int with http status: see {@link eu.yals.constants.HttpCode}
      * @return same {@link YalsErrorJson}, but with status
      */
-    public YalsErrorJson andStatus(int status) {
+    public YalsErrorJson andStatus(final int status) {
         setStatus(status);
         return this;
     }
@@ -120,7 +120,7 @@ public class YalsErrorJson implements YalsJson {
     }
 
     @SuppressWarnings("rawtypes")
-    private static String convertConstraintViolationToErrorString(ConstraintViolation constraintViolation) {
+    private static String convertConstraintViolationToErrorString(final ConstraintViolation constraintViolation) {
         if (constraintViolation == null) {
             return null;
         }

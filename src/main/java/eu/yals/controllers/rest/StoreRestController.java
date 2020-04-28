@@ -104,7 +104,7 @@ public class StoreRestController {
         return storeLink(ident, decodedUrl);
     }
 
-    private Result decodeUrl(String currentLink) {
+    private Result decodeUrl(final String currentLink) {
         try {
             String decodedLink = AppUtils.decodeUrl(currentLink);
             log.trace("{} Link {} became {} after decoding", TAG, currentLink, decodedLink);
@@ -153,7 +153,7 @@ public class StoreRestController {
         }
     }
 
-    private Result validateInput(StoreRequestJson storeInput) {
+    private Result validateInput(final StoreRequestJson storeInput) {
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<StoreRequestJson>> errors = validator.validate(storeInput);
         if (!errors.isEmpty()) {
@@ -172,7 +172,7 @@ public class StoreRestController {
         return Result.get().write("Validation passed");
     }
 
-    private YalsJson storeLink(String ident, String decodedUrl) {
+    private YalsJson storeLink(final String ident, final String decodedUrl) {
         StoreResult result = linkService.storeNew(ident, decodedUrl);
         if (result instanceof StoreResult.Success) {
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedUrl);

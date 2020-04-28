@@ -5,4 +5,5 @@ package eu.yals.json;
  *
  * @since 2.0
  */
-public interface YalsJson {}
+public interface YalsJson {
+}

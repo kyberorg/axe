@@ -69,7 +69,7 @@ public class YalsErrorKeeper {
             logMessage.append("Status: ").append(yalsError.getHttpStatus()).append(App.NEW_LINE);
         }
         if (yalsError.getRawException() != null) {
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 logMessage.append("Trace: ")
                         .append(ErrorUtils.stackTraceToString(yalsError.getRawException())).append(App.NEW_LINE);
             } else {
