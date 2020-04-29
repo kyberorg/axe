@@ -40,7 +40,6 @@ public class StoreRestController {
     private static final String TAG = "[" + StoreRestController.class.getSimpleName() + "]";
 
     private final LinkService linkService;
-    private HttpServletResponse response;
 
     /**
      * Constructor for Spring autowiring.
@@ -62,12 +61,11 @@ public class StoreRestController {
             value = Endpoint.Api.STORE_API)
     public YalsJson store(final @RequestBody String body, final HttpServletResponse response) {
         log.info("{} got request: {}", TAG, body);
-        this.response = response;
 
         Result parseResult = parseJson(body);
 
         if (resultHasYalsErrorJson(parseResult)) {
-            return yalsErrorJson(parseResult);
+            return yalsErrorJson(parseResult, response);
         }
 
         StoreRequestJson storeInput = parseResult.read(StoreRequestJson.class);
@@ -77,7 +75,7 @@ public class StoreRestController {
 
         Result validateResult = validateInput(storeInput);
         if (resultHasYalsErrorJson(validateResult)) {
-            return yalsErrorJson(validateResult);
+            return yalsErrorJson(validateResult, response);
         }
 
         String usersIdent = ""; //TODO replace by data from JSON
@@ -85,6 +83,7 @@ public class StoreRestController {
         String ident;
         if (usingUsersIdent) {
             if (isIdentAlreadyExists(usersIdent)) {
+                response.setStatus(STATUS_409); //conflict
                 return conflict(usersIdent);
             } else {
                 ident = usersIdent;
@@ -96,15 +95,15 @@ public class StoreRestController {
         }
 
         //decoding URL before saving to DB
-        Result decodeUrlResult = decodeUrl(storeInput.getLink());
+        Result decodeUrlResult = decodeUrl(storeInput.getLink(), response);
         if (resultHasYalsErrorJson(decodeUrlResult)) {
-            return yalsErrorJson(decodeUrlResult);
+            return yalsErrorJson(decodeUrlResult, response);
         }
         String decodedUrl = decodeUrlResult.read(String.class);
-        return storeLink(ident, decodedUrl);
+        return storeLink(ident, decodedUrl, response);
     }
 
-    private Result decodeUrl(final String currentLink) {
+    private Result decodeUrl(final String currentLink, final HttpServletResponse response) {
         try {
             String decodedLink = AppUtils.decodeUrl(currentLink);
             log.trace("{} Link {} became {} after decoding", TAG, currentLink, decodedLink);
@@ -172,7 +171,7 @@ public class StoreRestController {
         return Result.get().write("Validation passed");
     }
 
-    private YalsJson storeLink(final String ident, final String decodedUrl) {
+    private YalsJson storeLink(final String ident, final String decodedUrl, final HttpServletResponse response) {
         StoreResult result = linkService.storeNew(ident, decodedUrl);
         if (result instanceof StoreResult.Success) {
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedUrl);
@@ -208,7 +207,7 @@ public class StoreRestController {
         return result.readValueType(Result.DEFAULT_KEY) == YalsErrorJson.class;
     }
 
-    private YalsErrorJson yalsErrorJson(final Result result) {
+    private YalsErrorJson yalsErrorJson(final Result result, final HttpServletResponse response) {
         YalsErrorJson errorJson = result.read(YalsErrorJson.class);
         response.setStatus(errorJson.getStatus());
         return errorJson;
@@ -217,7 +216,6 @@ public class StoreRestController {
     private YalsErrorJson conflict(final String usersIdent) {
         log.info("{} User Ident '{}' already exists", TAG, usersIdent);
         log.debug("{} Conflicting ident: {}", TAG, usersIdent);
-        response.setStatus(STATUS_409); //conflict
         return YalsErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
                 + " Try another one").andStatus(STATUS_409);
     }
