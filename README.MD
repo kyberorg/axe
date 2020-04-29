@@ -143,8 +143,6 @@ Optional EnvVars:
 
 * TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 
-* LAZY_INIT: `true/false` (most likely don't needed as regulated by Spring profile)
-
 Ports: 
 
 * host port: `select yourself`
