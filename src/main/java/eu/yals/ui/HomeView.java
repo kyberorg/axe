@@ -316,7 +316,14 @@ public class HomeView extends VerticalLayout {
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
+                //TODO report to bugsnag
             }
+        } else {
+            log.error("{} Got false positive. Status: {}, Body: {}",
+                    TAG, response.getStatus(), response.getBody().toPrettyString());
+
+            showError("Something wrong was happened at server-side. Issue already reported");
+            //TODO report to bugsnag
         }
     }
 
@@ -330,6 +337,7 @@ public class HomeView extends VerticalLayout {
             log.error("{} Malformed Error Json", TAG);
             log.debug("", e);
             message = "Hups. Something went wrong at server-side";
+            //TODO report to bugsnag
         }
 
         showError(message);
@@ -395,17 +403,22 @@ public class HomeView extends VerticalLayout {
                 qrCodeRow.setVisible(true);
             } else {
                 showError("Internal error. Got malformed reply from QR generator");
+                //TODO report to bugsnag
             }
+        } else {
+            showError("Internal error. Something is wrong at server-side");
+            //TODO report to bugsnag
         }
     }
 
     private void onFailGenerateQRCode(final HttpResponse<JsonNode> response) {
         showError("Internal error. Got malformed reply from QR generator");
+        //TODO report to bugsnag
         this.qrCode.setSrc("");
         qrCodeRow.setVisible(false);
 
         if (response.getBody() != null) {
-            log.debug("{} QR Code Reply JSON: {}", TAG, response.getBody());
+            log.error("{} QR Code Reply JSON: {}", TAG, response.getBody());
         }
     }
 
