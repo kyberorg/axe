@@ -248,7 +248,7 @@ public class HomeView extends VerticalLayout {
     }
 
     private void onSaveLink(final ClickEvent<Button> buttonClickEvent) {
-        log.trace("{} Submit button clicked. By client? {}",TAG,  buttonClickEvent.isFromClient());
+        log.trace("{} Submit button clicked. By client? {}", TAG, buttonClickEvent.isFromClient());
 
         cleanErrors();
         cleanResults();
@@ -306,6 +306,7 @@ public class HomeView extends VerticalLayout {
         if (response.getStatus() == STATUS_201) {
             JsonNode json = response.getBody();
             String ident = json.getObject().getString("ident");
+            log.debug("{} Got reply with ident: {}", TAG, ident);
             if (StringUtils.isNotBlank(ident)) {
                 shortLink.setText(appUtils.getServerUrl() + "/" + ident);
                 shortLink.setHref(ident);
@@ -415,7 +416,6 @@ public class HomeView extends VerticalLayout {
 
     private void cleanForm() {
         input.setValue("");
-        updateButtonState();
     }
 
     private void cleanErrors() {
