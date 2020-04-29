@@ -23,9 +23,11 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
+import eu.yals.exception.error.YalsErrorBuilder;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.services.overall.OverallService;
 import eu.yals.utils.AppUtils;
+import eu.yals.utils.ErrorUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -57,6 +59,7 @@ public class HomeView extends VerticalLayout {
 
     private final OverallService overallService;
     private final AppUtils appUtils;
+    private final ErrorUtils errorUtils;
 
     private TextField input;
     private Button submitButton;
@@ -73,11 +76,13 @@ public class HomeView extends VerticalLayout {
      *
      * @param overallService overall service for getting number of links
      * @param appUtils       application utils for getting server location and API location
+     * @param errorUtils     error utils to report to bugsnag
      */
     public HomeView(
-            final OverallService overallService, final AppUtils appUtils) {
+            final OverallService overallService, final AppUtils appUtils, final ErrorUtils errorUtils) {
         this.overallService = overallService;
         this.appUtils = appUtils;
+        this.errorUtils = errorUtils;
 
         init();
         applyStyle();
@@ -318,14 +323,23 @@ public class HomeView extends VerticalLayout {
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
-                //TODO report to bugsnag
+                errorUtils.reportToBugsnag(YalsErrorBuilder
+                        .withTechMessage(String.format("onSuccessStoreLink: Malformed JSON: %s",
+                                response.getBody().toPrettyString()
+                        ))
+                        .withStatus(response.getStatus())
+                        .build());
             }
         } else {
             log.error("{} Got false positive. Status: {}, Body: {}",
                     TAG, response.getStatus(), response.getBody().toPrettyString());
 
             showError("Something wrong was happened at server-side. Issue already reported");
-            //TODO report to bugsnag
+            errorUtils.reportToBugsnag(YalsErrorBuilder
+                    .withTechMessage(String.format("onSuccessStoreLink: Got false positive. Body: %s",
+                            response.getBody().toPrettyString()
+                    ))
+                    .withStatus(response.getStatus()).build());
         }
     }
 
@@ -339,7 +353,12 @@ public class HomeView extends VerticalLayout {
             log.error("{} Malformed Error Json", TAG);
             log.debug("", e);
             message = "Hups. Something went wrong at server-side";
-            //TODO report to bugsnag
+            errorUtils.reportToBugsnag(YalsErrorBuilder
+                    .withTechMessage(String.format("onFailStoreLink: Malformed JSON. Body: %s",
+                            response.getBody().toPrettyString()
+                    ))
+                    .withStatus(response.getStatus()).addRawException(e)
+                    .build());
         }
 
         showError(message);
@@ -407,17 +426,32 @@ public class HomeView extends VerticalLayout {
                 qrCodeRow.setVisible(true);
             } else {
                 showError("Internal error. Got malformed reply from QR generator");
-                //TODO report to bugsnag
+                errorUtils.reportToBugsnag(YalsErrorBuilder
+                        .withTechMessage(String.format("onSuccessGenerateQRCode: Malformed JSON. Body: %s",
+                                response.getBody().toPrettyString()
+                        ))
+                        .withStatus(response.getStatus())
+                        .build());
             }
         } else {
             showError("Internal error. Something is wrong at server-side");
-            //TODO report to bugsnag
+            errorUtils.reportToBugsnag(YalsErrorBuilder
+                    .withTechMessage(String.format("onSuccessGenerateQRCode: False positive. Body: %s",
+                            response.getBody().toPrettyString()
+                    ))
+                    .withStatus(response.getStatus())
+                    .build());
         }
     }
 
     private void onFailGenerateQRCode(final HttpResponse<JsonNode> response) {
         showError("Internal error. Got malformed reply from QR generator");
-        //TODO report to bugsnag
+        errorUtils.reportToBugsnag(YalsErrorBuilder
+                .withTechMessage(String.format("onFailGenerateQRCode: Malformed JSON. Body: %s",
+                        response.getBody().toPrettyString()
+                ))
+                .withStatus(response.getStatus())
+                .build());
         this.qrCode.setSrc("");
         qrCodeRow.setVisible(false);
 
