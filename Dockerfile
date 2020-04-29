@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM openjdk:11-jre-slim
 VOLUME /tmp
 
 COPY ./target/yals.jar /app/
