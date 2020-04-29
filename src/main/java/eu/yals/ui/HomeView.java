@@ -293,6 +293,8 @@ public class HomeView extends VerticalLayout {
         StoreRequestJson json = StoreRequestJson.create().withLink(link);
         HttpResponse<JsonNode> response =
                 Unirest.post(appUtils.getAPIHostPort() + apiRoute).body(json).asJson();
+        log.debug("{} Got reply from Store API. Status: {}, Body: {}",
+                TAG, response.getStatus(), response.getBody().toPrettyString());
         if (response.isSuccess()) {
             onSuccessStoreLink(response);
         } else {
@@ -388,6 +390,8 @@ public class HomeView extends VerticalLayout {
         }
 
         HttpResponse<JsonNode> response = Unirest.get(qrCodeGeneratorRoute).asJson();
+        log.debug("{} Got reply from QR Code API. Status: {}, Body: {}",
+                TAG, response.getStatus(), response.getBody().toPrettyString());
         if (response.isSuccess()) {
             onSuccessGenerateQRCode(response);
         } else {
