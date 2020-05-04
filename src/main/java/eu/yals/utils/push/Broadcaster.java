@@ -1,4 +1,4 @@
-package eu.yals.utils;
+package eu.yals.utils.push;
 
 import com.vaadin.flow.shared.Registration;
 

@@ -29,12 +29,12 @@ import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.exception.error.YalsErrorBuilder;
 import eu.yals.json.StoreRequestJson;
-import eu.yals.push.Push;
-import eu.yals.push.PushCommand;
 import eu.yals.services.overall.OverallService;
 import eu.yals.utils.AppUtils;
-import eu.yals.utils.Broadcaster;
 import eu.yals.utils.ErrorUtils;
+import eu.yals.utils.push.Broadcaster;
+import eu.yals.utils.push.Push;
+import eu.yals.utils.push.PushCommand;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -45,7 +45,7 @@ import org.vaadin.olli.ClipboardHelper;
 
 import static eu.yals.constants.HttpCode.STATUS_200;
 import static eu.yals.constants.HttpCode.STATUS_201;
-import static eu.yals.push.PushCommand.UPDATE_COUNTER;
+import static eu.yals.utils.push.PushCommand.UPDATE_COUNTER;
 
 @Slf4j
 @SpringComponent
