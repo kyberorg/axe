@@ -2,7 +2,10 @@ package eu.yals.ui;
 
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
@@ -19,6 +22,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
@@ -27,6 +31,7 @@ import eu.yals.exception.error.YalsErrorBuilder;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.services.overall.OverallService;
 import eu.yals.utils.AppUtils;
+import eu.yals.utils.Broadcaster;
 import eu.yals.utils.ErrorUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -60,6 +65,7 @@ public class HomeView extends VerticalLayout {
     private final OverallService overallService;
     private final AppUtils appUtils;
     private final ErrorUtils errorUtils;
+    private Registration broadcasterRegistration;
 
     private TextField input;
     private Button submitButton;
@@ -252,6 +258,29 @@ public class HomeView extends VerticalLayout {
         return notification;
     }
 
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        UI ui = attachEvent.getUI();
+        broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
+            if (message.startsWith(TAG)) {
+                if (message.contains(PushCommands.UPDATE_COUNTER.name())) {
+                    updateCounter();
+                } else {
+                    log.warn("{} got unknown push command {}", TAG, message);
+                }
+            }
+        }));
+        //page init
+        Broadcaster.broadcast("");
+    }
+
+    @Override
+    protected void onDetach(DetachEvent detachEvent) {
+        // Cleanup
+        broadcasterRegistration.remove();
+        broadcasterRegistration = null;
+    }
+
     private void onSaveLink(final ClickEvent<Button> buttonClickEvent) {
         log.trace("{} Submit button clicked. By client? {}", TAG, buttonClickEvent.isFromClient());
 
@@ -319,7 +348,7 @@ public class HomeView extends VerticalLayout {
                 shortLink.setHref(ident);
                 resultRow.setVisible(true);
                 clipboardHelper.setContent(shortLink.getText());
-                updateCounter();
+                Broadcaster.broadcast(String.format("%s-%s", TAG, PushCommands.UPDATE_COUNTER.name()));
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
@@ -365,8 +394,7 @@ public class HomeView extends VerticalLayout {
     }
 
     private void updateCounter() {
-        int currentNumber = Integer.parseInt(linkCounter.getText());
-        linkCounter.setText(String.valueOf(currentNumber + 1));
+        linkCounter.setText(Long.toString(overallService.numberOfStoredLinks()));
     }
 
     private int calculateQRCodeSize() {
@@ -509,5 +537,9 @@ public class HomeView extends VerticalLayout {
 
         public static final String QR_CODE_AREA = "qrCodeArea";
         public static final String QR_CODE = "qrCode";
+    }
+
+    private enum PushCommands {
+        UPDATE_COUNTER
     }
 }
