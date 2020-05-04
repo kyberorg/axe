@@ -59,7 +59,7 @@ public class Push {
     }
 
     public boolean valid() {
-        return (pushCommand == null || destination == null);
+        return (pushCommand != null && destination != null);
     }
 
     private static Push createNotValidObject() {
