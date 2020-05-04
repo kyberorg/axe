@@ -4,18 +4,20 @@ import com.vaadin.flow.component.Component;
 import lombok.Getter;
 
 public class Push {
-    private static final String MARKER = "PUSH";
-    private static final String NULL = "null";
+  private static final String MARKER = "PUSH";
+  private static final String NULL = "null";
 
-    @Getter
-    private final PushCommand pushCommand;
+  private static final String UI_PACKAGE = "eu.yals.ui";
 
-    @Getter
-    private final Class<? extends Component> destination;
+  @Getter
+  private final PushCommand pushCommand;
 
-    private Push(PushCommand pushCommand, Class<? extends Component> component) {
-        this.pushCommand = pushCommand;
-        this.destination = component;
+  @Getter
+  private final Class<? extends Component> destination;
+
+  private Push(PushCommand pushCommand, Class<? extends Component> component) {
+    this.pushCommand = pushCommand;
+    this.destination = component;
     }
 
     public static PushBuilder command(PushCommand pushCommand) {
@@ -34,7 +36,7 @@ public class Push {
 
                 try {
                     //noinspection unchecked
-                    clazz = (Class<? extends Component>) Class.forName(destinationString);
+                  clazz = (Class<? extends Component>) Class.forName(UI_PACKAGE + "." + destinationString);
                 } catch (ClassNotFoundException | ClassCastException e) {
                     clazz = null;
                 }
