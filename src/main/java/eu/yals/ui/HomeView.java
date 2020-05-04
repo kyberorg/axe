@@ -29,6 +29,8 @@ import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.exception.error.YalsErrorBuilder;
 import eu.yals.json.StoreRequestJson;
+import eu.yals.push.Push;
+import eu.yals.push.PushCommand;
 import eu.yals.services.overall.OverallService;
 import eu.yals.utils.AppUtils;
 import eu.yals.utils.Broadcaster;
@@ -43,6 +45,7 @@ import org.vaadin.olli.ClipboardHelper;
 
 import static eu.yals.constants.HttpCode.STATUS_200;
 import static eu.yals.constants.HttpCode.STATUS_201;
+import static eu.yals.push.PushCommand.UPDATE_COUNTER;
 
 @Slf4j
 @SpringComponent
@@ -262,16 +265,20 @@ public class HomeView extends VerticalLayout {
     protected void onAttach(AttachEvent attachEvent) {
         UI ui = attachEvent.getUI();
         broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
-            if (message.startsWith(TAG)) {
-                if (message.contains(PushCommands.UPDATE_COUNTER.name())) {
-                    updateCounter();
-                } else {
-                    log.warn("{} got unknown push command {}", TAG, message);
+            Push push = Push.fromMessage(message);
+            if (push.valid()) {
+                if (push.getDestination() == HomeView.class) {
+                    PushCommand command = push.getPushCommand();
+                    if (command == UPDATE_COUNTER) {
+                        updateCounter();
+                    } else {
+                        log.warn("{} got unknown push command: '{}'", TAG, push.getPushCommand());
+                    }
                 }
+            } else {
+                log.debug("{} not valid push command: '{}'", TAG, message);
             }
         }));
-        //page init
-        Broadcaster.broadcast("");
     }
 
     @Override
@@ -348,7 +355,7 @@ public class HomeView extends VerticalLayout {
                 shortLink.setHref(ident);
                 resultRow.setVisible(true);
                 clipboardHelper.setContent(shortLink.getText());
-                Broadcaster.broadcast(String.format("%s-%s", TAG, PushCommands.UPDATE_COUNTER.name()));
+                Broadcaster.broadcast(Push.command(UPDATE_COUNTER).dest(HomeView.class).toString());
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
@@ -539,7 +546,4 @@ public class HomeView extends VerticalLayout {
         public static final String QR_CODE = "qrCode";
     }
 
-    private enum PushCommands {
-        UPDATE_COUNTER
-    }
 }
