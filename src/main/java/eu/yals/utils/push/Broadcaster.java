@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  *
  * @since 2.7
  */
-public class Broadcaster {
+public final class Broadcaster {
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
 
     private static final LinkedList<Consumer<String>> LISTENERS = new LinkedList<>();

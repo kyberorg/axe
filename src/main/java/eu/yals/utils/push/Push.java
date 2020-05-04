@@ -11,6 +11,7 @@ import lombok.Getter;
 public final class Push {
     private static final String MARKER = "PUSH";
     private static final String NULL = "null";
+    private static final int PARTS_IN_VALID_ARRAY = 3;
 
     private static final String UI_PACKAGE = "eu.yals.ui";
 
@@ -26,7 +27,7 @@ public final class Push {
      * @param pushCommand valid non null {@link PushCommand}
      * @return {@link PushBuilder} to continue building {@link Push} object
      */
-    public static PushBuilder command(PushCommand pushCommand) {
+    public static PushBuilder command(final PushCommand pushCommand) {
         return new PushBuilder(pushCommand);
     }
 
@@ -39,7 +40,6 @@ public final class Push {
     public static Push fromMessage(final String message) {
         if (message.startsWith(MARKER)) {
             String[] parts = message.split("-");
-            int PARTS_IN_VALID_ARRAY = 3;
             if (parts.length == PARTS_IN_VALID_ARRAY) {
                 String commandString = parts[2];
                 String destinationString = parts[1];
@@ -95,7 +95,7 @@ public final class Push {
     /**
      * Interim object to hide {@link Push} object until it fully constructed.
      */
-    public static class PushBuilder {
+    public static final class PushBuilder {
         private final PushCommand pushCommand;
 
         private PushBuilder(final PushCommand pushCommand) {
