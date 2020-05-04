@@ -75,7 +75,8 @@ public class MultiStepTestIT extends HomePageTest {
         long numberAfterLinkSaved = homeView.getNumberOfSavedLinks();
 
         //+1 logic is no longer valid, because someone else (i.e. other tests) can also store link within same time
-        Assert.assertTrue(numberAfterLinkSaved > initialNumber);
+        Assert.assertTrue("Number Before: " + initialNumber + " Number after: " + numberAfterLinkSaved,
+                numberAfterLinkSaved > initialNumber);
     }
 
     @Test
