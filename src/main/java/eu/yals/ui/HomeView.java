@@ -262,7 +262,7 @@ public class HomeView extends VerticalLayout {
     }
 
     @Override
-    protected void onAttach(AttachEvent attachEvent) {
+    protected void onAttach(final AttachEvent attachEvent) {
         UI ui = attachEvent.getUI();
         broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
             Push push = Push.fromMessage(message);
@@ -282,7 +282,7 @@ public class HomeView extends VerticalLayout {
     }
 
     @Override
-    protected void onDetach(DetachEvent detachEvent) {
+    protected void onDetach(final DetachEvent detachEvent) {
         // Cleanup
         broadcasterRegistration.remove();
         broadcasterRegistration = null;

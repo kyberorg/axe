@@ -7,25 +7,45 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+/**
+ * Push streamer.
+ *
+ * @since 2.7
+ */
 public class Broadcaster {
-    private static final Executor executor = Executors.newSingleThreadExecutor();
+    private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
 
-    private static final LinkedList<Consumer<String>> listeners = new LinkedList<>();
+    private static final LinkedList<Consumer<String>> LISTENERS = new LinkedList<>();
 
+    /**
+     * Register as listener.
+     *
+     * @param listener message receiver
+     * @return {@link Registration} object
+     */
     public static synchronized Registration register(
-            Consumer<String> listener) {
-        listeners.add(listener);
+            final Consumer<String> listener) {
+        LISTENERS.add(listener);
 
         return () -> {
             synchronized (Broadcaster.class) {
-                listeners.remove(listener);
+                LISTENERS.remove(listener);
             }
         };
     }
 
-    public static synchronized void broadcast(String message) {
-        for (Consumer<String> listener : listeners) {
-            executor.execute(() -> listener.accept(message));
+    /**
+     * Stream message.
+     *
+     * @param message string with message to stream
+     */
+    public static synchronized void broadcast(final String message) {
+        for (Consumer<String> listener : LISTENERS) {
+            EXECUTOR.execute(() -> listener.accept(message));
         }
+    }
+
+    private Broadcaster() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }

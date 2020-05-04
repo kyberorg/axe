@@ -5,6 +5,8 @@ import lombok.Getter;
 
 /**
  * Object for keeping field to construct push message from.
+ *
+ * @since 2.7
  */
 public final class Push {
     private static final String MARKER = "PUSH";
@@ -37,7 +39,8 @@ public final class Push {
     public static Push fromMessage(final String message) {
         if (message.startsWith(MARKER)) {
             String[] parts = message.split("-");
-            if (parts.length == 3) {
+            int PARTS_IN_VALID_ARRAY = 3;
+            if (parts.length == PARTS_IN_VALID_ARRAY) {
                 String commandString = parts[2];
                 String destinationString = parts[1];
 
@@ -95,18 +98,18 @@ public final class Push {
     public static class PushBuilder {
         private final PushCommand pushCommand;
 
-        private PushBuilder(PushCommand pushCommand) {
+        private PushBuilder(final PushCommand pushCommand) {
             this.pushCommand = pushCommand;
         }
 
         /**
          * Adds push notification destination UI.
          *
-         * @param component class in UI package for which this push message for.
+         * @param view class in UI package for which this push message for.
          * @return fully constructed {@link Push} object
          */
-        public Push dest(Class<? extends Component> component) {
-            return new Push(pushCommand, component);
+        public Push dest(final Class<? extends Component> view) {
+            return new Push(pushCommand, view);
         }
     }
 }
