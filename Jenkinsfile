@@ -10,8 +10,8 @@ pipeline {
         stage('Vaadin') {
             steps {
                 script {
-                    def prodMode = "${params.prodMode}"
-                    def review = "${params.review}"
+                    def prodMode = "${env.prodMode}"
+                    def review = "${env.review}"
 
                     print "DEBUG: Production Mode= ${prodMode}, Review = ${review}"
 
