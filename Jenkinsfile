@@ -11,9 +11,27 @@ pipeline {
             steps {
                 script {
                     def prodMode = "${env.prodMode}"
+                    def pm = "${params.prodMode}"
                     def review = "${env.review}"
+                    def r = "${params.review}"
 
                     print "DEBUG: Production Mode= ${prodMode}, Review = ${review}"
+
+                    if(prodMode) {
+                        print "PROD MODE"
+                    }
+
+                    if(pm) {
+                        print "PM"
+                    }
+
+                    if(review) {
+                        print "Review"
+                    }
+
+                    if(r) {
+                        print "R"
+                    }
 
                     if (prodMode) {
                         vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: review)
