@@ -74,7 +74,9 @@ public class MultiStepTestIT extends HomePageTest {
         homeView.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
         long numberAfterLinkSaved = homeView.getNumberOfSavedLinks();
 
-        Assert.assertEquals(initialNumber + 1, numberAfterLinkSaved);
+        //+1 logic is no longer valid, because someone else (i.e. other tests) can also store link within same time
+        Assert.assertTrue("Number Before: " + initialNumber + " Number after: " + numberAfterLinkSaved,
+                numberAfterLinkSaved > initialNumber);
     }
 
     @Test
