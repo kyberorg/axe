@@ -13,6 +13,8 @@ pipeline {
                     def prodMode = "${params.prodMode}"
                     def review = "${params.review}"
 
+                    print "DEBUG: Production Mode= ${prodMode}, Review = ${review}"
+
                     if (prodMode) {
                         vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: review)
                     } else {
