@@ -9,7 +9,7 @@ pipeline {
                         vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting')
                     } else {
                         def userInput;
-                        def prodMode = false;
+                        def prodMode = true;
                         def review = false;
                         try {
                             timeout(time: 20, unit: 'SECONDS') {
@@ -20,7 +20,7 @@ pipeline {
                                         ]);
                             }
                         } catch (err) {
-                            //do nothing as default is 'false'
+                            //do nothing as this stage
                         }
 
                         if(userInput != null) {
