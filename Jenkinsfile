@@ -2,7 +2,7 @@
 pipeline {
     agent any;
     parameters {
-        booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'prodMode'),
+        booleanParam(defaultValue: false, description: 'Build for Production Mode', name: 'prodMode')
         booleanParam(defaultValue: false, description: 'Do code review: code-style report', name: 'review')
      }
 
