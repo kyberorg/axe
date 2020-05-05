@@ -9,8 +9,7 @@ import lombok.Getter;
  * @since 2.7
  */
 public final class Push {
-    private static final String MARKER = "PUSH";
-    private static final String NULL = "null";
+    private static final String PUSH_MESSAGE_MARKER = "PUSH";
     private static final int PARTS_IN_VALID_ARRAY = 3;
 
     private static final String UI_PACKAGE = "eu.yals.ui";
@@ -38,7 +37,7 @@ public final class Push {
      * @return if parsing succeeds - valid {@link Push} object, if fails - {@link Push} with empty fields
      */
     public static Push fromMessage(final String message) {
-        if (message.startsWith(MARKER)) {
+        if (message.startsWith(PUSH_MESSAGE_MARKER)) {
             String[] parts = message.split("-");
             if (parts.length == PARTS_IN_VALID_ARRAY) {
                 String commandString = parts[2];
@@ -74,9 +73,9 @@ public final class Push {
      */
     @Override
     public String toString() {
-        String target = (destination != null) ? destination.getSimpleName() : NULL;
-        String command = (pushCommand != null) ? pushCommand.toString() : NULL;
-        return String.format("%s-%s-%s", MARKER, target, command);
+        String target = (destination != null) ? destination.getSimpleName() : null;
+        String command = (pushCommand != null) ? pushCommand.toString() : null;
+        return String.format("%s-%s-%s", PUSH_MESSAGE_MARKER, target, command);
     }
 
     /**
