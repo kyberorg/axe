@@ -3,7 +3,7 @@ package eu.yals.test;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
-import eu.yals.json.ErrorJson;
+import eu.yals.json.YalsErrorJson;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
@@ -40,13 +40,13 @@ public class TestUtils {
     }
 
     /**
-     * Result is {@link ErrorJson}.
+     * Result is {@link YalsErrorJson}.
      *
      * @param result string with http response
      */
-    public static void assertResultIsErrorJson(final HttpResponse<String> result) {
+    public static void assertResultIsYalsErrorJson(final HttpResponse<String> result) {
         assertTrue(
-                "Response is not valid " + ErrorJson.class.getSimpleName(),
+                "Response is not valid " + YalsErrorJson.class.getSimpleName(),
                 TestUtils.isValidErrorJson(result));
     }
 
@@ -207,12 +207,12 @@ public class TestUtils {
     private static boolean isValidErrorJson(HttpResponse<String> result) {
         String body = result.getBody();
         try {
-            ErrorJson errorJson = AppUtils.GSON.fromJson(body, ErrorJson.class);
+            YalsErrorJson errorJson = AppUtils.GSON.fromJson(body, YalsErrorJson.class);
             assertNotNull(errorJson);
-            boolean hasNotEmptyErrorField = errorJson.getError() != null;
-            boolean hasNotEmptyErrorsField = errorJson.getErrors() != null;
+            boolean hasNotEmptyMessageField = errorJson.getMessage() != null;
+            boolean hasNotEmptyTimestampField = errorJson.getTimestamp() != null;
 
-            return hasNotEmptyErrorField || (hasNotEmptyErrorsField && errorJson.getErrors().size() > 0);
+            return hasNotEmptyMessageField || hasNotEmptyTimestampField;
         } catch (Exception e) {
             return false;
         }

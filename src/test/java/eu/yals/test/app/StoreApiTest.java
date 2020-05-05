@@ -54,7 +54,7 @@ public class StoreApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class StoreApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class StoreApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class StoreApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(421, result.getStatus());
 
-        TestUtils.assertResultIsErrorJson(result);
+        TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     @Test

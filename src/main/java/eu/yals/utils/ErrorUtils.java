@@ -13,6 +13,8 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,18 @@ public class ErrorUtils {
     public ErrorUtils(final YalsErrorKeeper errorKeeper, final Bugsnag bugsnag) {
         this.errorKeeper = errorKeeper;
         this.bugsnag = bugsnag;
+    }
+
+    /**
+     * Converts from stack trace to String with stack trace.
+     *
+     * @param e exception with stack trace
+     * @return stack trace as string
+     */
+    public static String stackTraceToString(final Throwable e) {
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
     }
 
     /**

@@ -2,7 +2,10 @@ package eu.yals.ui;
 
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
@@ -19,13 +22,19 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
+import eu.yals.exception.error.YalsErrorBuilder;
 import eu.yals.json.StoreRequestJson;
 import eu.yals.services.overall.OverallService;
 import eu.yals.utils.AppUtils;
+import eu.yals.utils.ErrorUtils;
+import eu.yals.utils.push.Broadcaster;
+import eu.yals.utils.push.Push;
+import eu.yals.utils.push.PushCommand;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -36,6 +45,7 @@ import org.vaadin.olli.ClipboardHelper;
 
 import static eu.yals.constants.HttpCode.STATUS_200;
 import static eu.yals.constants.HttpCode.STATUS_201;
+import static eu.yals.utils.push.PushCommand.UPDATE_COUNTER;
 
 @Slf4j
 @SpringComponent
@@ -57,6 +67,8 @@ public class HomeView extends VerticalLayout {
 
     private final OverallService overallService;
     private final AppUtils appUtils;
+    private final ErrorUtils errorUtils;
+    private Registration broadcasterRegistration;
 
     private TextField input;
     private Button submitButton;
@@ -73,11 +85,13 @@ public class HomeView extends VerticalLayout {
      *
      * @param overallService overall service for getting number of links
      * @param appUtils       application utils for getting server location and API location
+     * @param errorUtils     error utils to report to bugsnag
      */
     public HomeView(
-            final OverallService overallService, final AppUtils appUtils) {
+            final OverallService overallService, final AppUtils appUtils, final ErrorUtils errorUtils) {
         this.overallService = overallService;
         this.appUtils = appUtils;
+        this.errorUtils = errorUtils;
 
         init();
         applyStyle();
@@ -247,8 +261,35 @@ public class HomeView extends VerticalLayout {
         return notification;
     }
 
+    @Override
+    protected void onAttach(final AttachEvent attachEvent) {
+        UI ui = attachEvent.getUI();
+        broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
+            Push push = Push.fromMessage(message);
+            if (push.valid()) {
+                if (push.getDestination() == HomeView.class) {
+                    PushCommand command = push.getPushCommand();
+                    if (command == UPDATE_COUNTER) {
+                        updateCounter();
+                    } else {
+                        log.warn("{} got unknown push command: '{}'", TAG, push.getPushCommand());
+                    }
+                }
+            } else {
+                log.debug("{} not valid push command: '{}'", TAG, message);
+            }
+        }));
+    }
+
+    @Override
+    protected void onDetach(final DetachEvent detachEvent) {
+        // Cleanup
+        broadcasterRegistration.remove();
+        broadcasterRegistration = null;
+    }
+
     private void onSaveLink(final ClickEvent<Button> buttonClickEvent) {
-        log.trace("Submit button clicked. By client? {}", buttonClickEvent.isFromClient());
+        log.trace("{} Submit button clicked. By client? {}", TAG, buttonClickEvent.isFromClient());
 
         cleanErrors();
         cleanResults();
@@ -266,7 +307,8 @@ public class HomeView extends VerticalLayout {
             try {
                 longUrl = AppUtils.makeFullUri(longUrl).toString();
             } catch (RuntimeException e) {
-                log.error("URL validation failed", e);
+                log.error("{} URL validation failed", TAG);
+                log.debug("", e);
                 showError("Got malformed URL or not URL at all");
                 isFormValid = false;
             }
@@ -275,12 +317,14 @@ public class HomeView extends VerticalLayout {
         if (isFormValid) {
             cleanResults();
             sendLink(longUrl);
+        } else {
+            log.debug("{} Form is not valid", TAG);
         }
     }
 
     private void copyLinkToClipboard(
             final ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
-        log.trace("Copy link button clicked. From client? {}", buttonClickEvent.isFromClient());
+        log.trace("{} Copy link button clicked. From client? {}", TAG, buttonClickEvent.isFromClient());
         getLinkCopiedNotification().open();
         //All other actions are performed by component wrapper
     }
@@ -290,6 +334,8 @@ public class HomeView extends VerticalLayout {
         StoreRequestJson json = StoreRequestJson.create().withLink(link);
         HttpResponse<JsonNode> response =
                 Unirest.post(appUtils.getAPIHostPort() + apiRoute).body(json).asJson();
+        log.debug("{} Got reply from Store API. Status: {}, Body: {}",
+                TAG, response.getStatus(), response.getBody().toPrettyString());
         if (response.isSuccess()) {
             onSuccessStoreLink(response);
         } else {
@@ -303,16 +349,33 @@ public class HomeView extends VerticalLayout {
         if (response.getStatus() == STATUS_201) {
             JsonNode json = response.getBody();
             String ident = json.getObject().getString("ident");
+            log.debug("{} Got reply with ident: {}", TAG, ident);
             if (StringUtils.isNotBlank(ident)) {
                 shortLink.setText(appUtils.getServerUrl() + "/" + ident);
                 shortLink.setHref(ident);
                 resultRow.setVisible(true);
                 clipboardHelper.setContent(shortLink.getText());
-                updateCounter();
+                Broadcaster.broadcast(Push.command(UPDATE_COUNTER).dest(HomeView.class).toString());
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
+                errorUtils.reportToBugsnag(YalsErrorBuilder
+                        .withTechMessage(String.format("onSuccessStoreLink: Malformed JSON: %s",
+                                response.getBody().toPrettyString()
+                        ))
+                        .withStatus(response.getStatus())
+                        .build());
             }
+        } else {
+            log.error("{} Got false positive. Status: {}, Body: {}",
+                    TAG, response.getStatus(), response.getBody().toPrettyString());
+
+            showError("Something wrong was happened at server-side. Issue already reported");
+            errorUtils.reportToBugsnag(YalsErrorBuilder
+                    .withTechMessage(String.format("onSuccessStoreLink: Got false positive. Body: %s",
+                            response.getBody().toPrettyString()
+                    ))
+                    .withStatus(response.getStatus()).build());
         }
     }
 
@@ -321,18 +384,24 @@ public class HomeView extends VerticalLayout {
         log.error("{} Failed to store link. Reply: {}", TAG, json);
         String message;
         try {
-            message = json.getObject().getJSONObject("error").getString("errorMessage");
+            message = json.getObject().getString("message");
         } catch (JSONException e) {
-            log.error("Malformed Error Json", e);
+            log.error("{} Malformed Error Json", TAG);
+            log.debug("", e);
             message = "Hups. Something went wrong at server-side";
+            errorUtils.reportToBugsnag(YalsErrorBuilder
+                    .withTechMessage(String.format("onFailStoreLink: Malformed JSON. Body: %s",
+                            response.getBody().toPrettyString()
+                    ))
+                    .withStatus(response.getStatus()).addRawException(e)
+                    .build());
         }
 
         showError(message);
     }
 
     private void updateCounter() {
-        int currentNumber = Integer.parseInt(linkCounter.getText());
-        linkCounter.setText(String.valueOf(currentNumber + 1));
+        linkCounter.setText(Long.toString(overallService.numberOfStoredLinks()));
     }
 
     private int calculateQRCodeSize() {
@@ -375,6 +444,8 @@ public class HomeView extends VerticalLayout {
         }
 
         HttpResponse<JsonNode> response = Unirest.get(qrCodeGeneratorRoute).asJson();
+        log.debug("{} Got reply from QR Code API. Status: {}, Body: {}",
+                TAG, response.getStatus(), response.getBody().toPrettyString());
         if (response.isSuccess()) {
             onSuccessGenerateQRCode(response);
         } else {
@@ -384,23 +455,43 @@ public class HomeView extends VerticalLayout {
 
     private void onSuccessGenerateQRCode(final HttpResponse<JsonNode> response) {
         if (response.getStatus() == STATUS_200) {
-            String qrCode = response.getBody().getObject().getString("qrCode");
+            String qrCode = response.getBody().getObject().getString("qr_code");
             if (StringUtils.isNotBlank(qrCode)) {
                 this.qrCode.setSrc(qrCode);
                 qrCodeRow.setVisible(true);
             } else {
                 showError("Internal error. Got malformed reply from QR generator");
+                errorUtils.reportToBugsnag(YalsErrorBuilder
+                        .withTechMessage(String.format("onSuccessGenerateQRCode: Malformed JSON. Body: %s",
+                                response.getBody().toPrettyString()
+                        ))
+                        .withStatus(response.getStatus())
+                        .build());
             }
+        } else {
+            showError("Internal error. Something is wrong at server-side");
+            errorUtils.reportToBugsnag(YalsErrorBuilder
+                    .withTechMessage(String.format("onSuccessGenerateQRCode: False positive. Body: %s",
+                            response.getBody().toPrettyString()
+                    ))
+                    .withStatus(response.getStatus())
+                    .build());
         }
     }
 
     private void onFailGenerateQRCode(final HttpResponse<JsonNode> response) {
         showError("Internal error. Got malformed reply from QR generator");
+        errorUtils.reportToBugsnag(YalsErrorBuilder
+                .withTechMessage(String.format("onFailGenerateQRCode: Malformed JSON. Body: %s",
+                        response.getBody().toPrettyString()
+                ))
+                .withStatus(response.getStatus())
+                .build());
         this.qrCode.setSrc("");
         qrCodeRow.setVisible(false);
 
         if (response.getBody() != null) {
-            log.debug("{} QR Code Reply JSON: {}", TAG, response.getBody());
+            log.error("{} QR Code Reply JSON: {}", TAG, response.getBody());
         }
     }
 
@@ -411,7 +502,6 @@ public class HomeView extends VerticalLayout {
 
     private void cleanForm() {
         input.setValue("");
-        updateButtonState();
     }
 
     private void cleanErrors() {
@@ -455,4 +545,5 @@ public class HomeView extends VerticalLayout {
         public static final String QR_CODE_AREA = "qrCodeArea";
         public static final String QR_CODE = "qrCode";
     }
+
 }

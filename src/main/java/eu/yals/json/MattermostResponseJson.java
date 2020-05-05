@@ -1,11 +1,11 @@
 package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import eu.yals.constants.App;
-import eu.yals.json.internal.Json;
 import eu.yals.mm.Mattermost;
 import eu.yals.utils.UrlExtraValidator;
-import lombok.Getter;
+import lombok.Data;
 import org.apache.commons.validator.GenericValidator;
 
 /**
@@ -13,25 +13,21 @@ import org.apache.commons.validator.GenericValidator;
  *
  * @since 2.3
  */
-public final class MattermostResponseJson extends Json {
+@Data
+public final class MattermostResponseJson implements YalsJson {
 
-    @Getter
     @JsonProperty("icon_url")
     private String iconUrl = App.Mattermost.BOT_ICON;
 
-    @Getter
     @JsonProperty("text")
     private String text;
 
-    @Getter
     @JsonProperty("response_type")
     private String responseType = Mattermost.ResponseType.IN_CHANNEL.toString();
 
-    @Getter
     @JsonProperty("goto_location")
     private String gotoLocation;
 
-    @Getter
     @JsonProperty("username")
     private final String username = App.Mattermost.BOT_NAME;
 
@@ -100,4 +96,8 @@ public final class MattermostResponseJson extends Json {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
 }

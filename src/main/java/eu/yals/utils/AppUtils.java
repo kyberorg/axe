@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.IDN;
 import java.net.URI;
@@ -33,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @Component
 public class AppUtils {
-
+    private static final String TAG = "[" + AppUtils.class.getSimpleName() + "]";
     private final Environment env;
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
@@ -85,7 +83,8 @@ public class AppUtils {
         try {
             requestUrl = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
         } catch (Exception e) {
-            log.error("Failed to determine request URL which caused an error", e);
+            log.error("{} Failed to determine request URL which caused an error", TAG);
+            log.debug("", e);
             return false;
         }
         return requestUrl.startsWith("/api");
@@ -170,7 +169,7 @@ public class AppUtils {
             return uri;
         } catch (URISyntaxException e) {
             String message = String.format("String '%s': malformed URL or not URL at all", url);
-            log.warn(message);
+            log.warn("{} {}", TAG, message);
             throw new RuntimeException(message, e);
         }
     }
@@ -206,7 +205,7 @@ public class AppUtils {
             trimUrl = new URI(trimUrl).toASCIIString();
         } catch (URISyntaxException e) {
             String message = String.format("String '%s': malformed URL or not URL at all", url);
-            log.warn(message);
+            log.warn("{} {}", TAG, message);
             throw new RuntimeException(message, e);
         }
         return trimUrl;
@@ -222,7 +221,8 @@ public class AppUtils {
         try {
             return URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
-            log.error("Failed to decode URL", e);
+            log.error("{} Failed to decode URL", TAG);
+            log.debug("", e);
             throw new RuntimeException(e.getCause());
         }
     }
@@ -247,18 +247,6 @@ public class AppUtils {
      */
     public static boolean isNotMobile(final VaadinSession vaadinSession) {
         return !isMobile(vaadinSession);
-    }
-
-    /**
-     * Converts from stack trace to String with stack trace.
-     *
-     * @param e exception with stack trace
-     * @return stack trace as string
-     */
-    public static String stackTraceToString(final Throwable e) {
-        StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw));
-        return sw.toString();
     }
 
     /**

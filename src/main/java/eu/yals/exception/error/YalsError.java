@@ -20,6 +20,7 @@ public class YalsError {
     private String techMessage;
     private int httpStatus = STATUS_500;
     private Throwable rawException;
+    private String path;
 
     @Override
     public String toString() {

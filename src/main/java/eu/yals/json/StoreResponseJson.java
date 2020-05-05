@@ -1,25 +1,18 @@
 package eu.yals.json;
 
-import eu.yals.json.internal.Json;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
+import lombok.Data;
 
 /**
  * Store Endpoint outgoing JSON.
  *
  * @since 1.0
  */
-public class StoreResponseJson extends Json {
-    @Getter
+@Data(staticConstructor = "create")
+public class StoreResponseJson implements YalsJson {
+    @JsonProperty("ident")
     private String ident;
-
-    /**
-     * Creates empty {@link StoreResponseJson}.
-     *
-     * @return {@link StoreResponseJson} with no params
-     */
-    public static StoreResponseJson create() {
-        return new StoreResponseJson();
-    }
 
     /**
      * Creates {@link StoreResponseJson} with given ident.
@@ -30,5 +23,10 @@ public class StoreResponseJson extends Json {
     public StoreResponseJson withIdent(final String ident) {
         this.ident = ident;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
