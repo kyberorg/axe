@@ -264,6 +264,9 @@ public class HomeView extends VerticalLayout {
     @Override
     protected void onAttach(final AttachEvent attachEvent) {
         UI ui = attachEvent.getUI();
+
+        log.warn("{} COMPAT MODE {} ", TAG, ui.getSession().getConfiguration().isCompatibilityMode());
+
         broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
             Push push = Push.fromMessage(message);
             if (push.valid()) {
