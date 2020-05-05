@@ -11,9 +11,9 @@ pipeline {
             steps {
                 script {
                     def prodMode = "${env.prodMode}"
-                    def pm = ${params.prodMode}
+                    def pm = params.prodMode
                     def review = "${env.review}"
-                    def r = ${params.review}
+                    def r = params.review
 
                     print "DEBUG: Production Mode= ${prodMode}, Review = ${review}"
 
