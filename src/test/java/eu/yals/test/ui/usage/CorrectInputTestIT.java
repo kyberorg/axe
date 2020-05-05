@@ -17,7 +17,7 @@ public class CorrectInputTestIT extends HomePageTest {
     @Test
     public void httpLink() {
         openHomePage();
-        String link = "http://virtadev.net";
+        String link = "http://http.yadev.eu";
         homeView.pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
     }
