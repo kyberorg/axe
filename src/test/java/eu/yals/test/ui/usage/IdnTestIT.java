@@ -1,11 +1,9 @@
 package eu.yals.test.ui.usage;
 
-import com.vaadin.testbench.RetryRule;
 import eu.yals.test.ui.HomePageTest;
 import eu.yals.test.ui.pageobjects.external.*;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -17,8 +15,8 @@ import org.junit.Test;
 public class IdnTestIT extends HomePageTest {
 
     // Run the test max 3 times (because of external sites)
-    @Rule
-    public RetryRule rule = new RetryRule(3);
+    //@Rule
+    //public RetryRule rule = new RetryRule(3);
 
     @Test
     public void russianUrl() {
