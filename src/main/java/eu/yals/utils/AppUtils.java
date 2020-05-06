@@ -279,21 +279,12 @@ public class AppUtils {
     }
 
     /**
-     * Defines if Vaadin works in Production Mode or not.
+     * Defines if application works in Development Mode. Dev Mode enables developer features (i.e. Debug Page)
      *
-     * @return true if Vaadin Production Mode is activated, false - if not.
-     */
-    public boolean isProductionModeActivated() {
-        return Boolean.parseBoolean(env.getProperty(App.Properties.VAADIN_PROD_MODE, "false"));
-    }
-
-    /**
-     * Defines if Vaadin works in Development Mode. Opposite of {@link #isProductionModeActivated()}.
-     *
-     * @return true if Vaadin Production Mode is not activated, else false
+     * @return true if Dev Mode is activated, else false
      */
     public boolean isDevelopmentModeActivated() {
-        return !isProductionModeActivated();
+        return Boolean.parseBoolean(env.getProperty(App.Properties.DEV_MODE, "false"));
     }
 
     /**

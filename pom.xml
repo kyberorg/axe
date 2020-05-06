@@ -284,19 +284,6 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-frontend</goal>
-                            <goal>build-frontend</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <!-- Git info -->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -331,6 +318,9 @@
     <profiles>
         <profile>
             <id>production-mode</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <vaadin.productionMode>true</vaadin.productionMode>
             </properties>
@@ -353,8 +343,6 @@
                                 <goals>
                                     <goal>prepare-frontend</goal>
                                     <goal>build-frontend</goal>
-                                    <goal>copy-production-files</goal>
-                                    <goal>package-for-production</goal>
                                 </goals>
                                 <phase>compile</phase>
                             </execution>
