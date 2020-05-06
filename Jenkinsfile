@@ -2,7 +2,6 @@
 pipeline {
     agent any;
     parameters {
-        booleanParam(name: 'PROD_MODE', defaultValue: true, description: 'Build for Production Mode')
         booleanParam(name: 'REVIEW', defaultValue: false, description: 'Do code review: code-style report')
      }
 
@@ -10,16 +9,11 @@ pipeline {
         stage('Vaadin') {
             steps {
                 script {
-                    def prodMode = params.PROD_MODE
                     def review = params.REVIEW
 
-                    print "Parameters: Production Mode = ${prodMode}, Review = ${review}"
+                    print "Parameters: Review = ${review}"
 
-                    if (prodMode) {
-                        vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: review)
-                    } else {
-                        vaadin(extraProfiles: 'noTesting', verbose: true, runSiteTarget: review)
-                    }
+                    vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: review)
 
                     if(review) {
                         publishHTML([

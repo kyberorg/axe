@@ -318,6 +318,9 @@
     <profiles>
         <profile>
             <id>production-mode</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <vaadin.productionMode>true</vaadin.productionMode>
             </properties>
