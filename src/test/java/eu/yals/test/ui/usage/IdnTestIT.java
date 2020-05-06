@@ -53,6 +53,9 @@ public class IdnTestIT extends HomePageTest {
         openHomePage();
         storeAndOpenSavedUrl("http://موقع.وزارة-الاتصالات.مصر/");
 
+        //needed because site site loads way too long
+        waitUntilSiteLoads(40);
+
         // verify that opens page of IT ministry of Egypt
         Assert.assertEquals(EgyptianMinistryOfIT.TITLE_TEXT, getPageTitle());
     }
