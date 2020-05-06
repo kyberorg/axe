@@ -138,6 +138,17 @@ public class YalsElement {
     }
 
     /**
+     * Checks if element id same as given id.
+     *
+     * @param text string with id to check
+     */
+    public void shouldHaveId(final String id) {
+        shouldExist();
+        String message = String.format("Element ID. Excepted %s, Actual: %s", id, webElement.getAttribute("id"));
+        Assert.assertEquals(message, webElement.getAttribute("id"), id);
+    }
+
+    /**
      * Check if element is image.
      *
      * @return true - if element is image, false if not
