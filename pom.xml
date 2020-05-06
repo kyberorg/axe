@@ -284,7 +284,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
                 <version>${vaadin.version}</version>
@@ -296,7 +296,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <!-- Git info -->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -353,8 +353,6 @@
                                 <goals>
                                     <goal>prepare-frontend</goal>
                                     <goal>build-frontend</goal>
-                                    <goal>copy-production-files</goal>
-                                    <goal>package-for-production</goal>
                                 </goals>
                                 <phase>compile</phase>
                             </execution>
