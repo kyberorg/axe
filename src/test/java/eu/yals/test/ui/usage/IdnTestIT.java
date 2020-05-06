@@ -57,7 +57,9 @@ public class IdnTestIT extends HomePageTest {
         waitUntilSiteLoads(40);
 
         // verify that opens page of IT ministry of Egypt
-        Assert.assertEquals(EgyptianMinistryOfIT.TITLE_TEXT, getPageTitle());
+        YalsElement body = $$("body");
+        body.shouldExist();
+        body.shouldHaveId(EgyptianMinistryOfIT.BODY_ID);
     }
 
     @Test
