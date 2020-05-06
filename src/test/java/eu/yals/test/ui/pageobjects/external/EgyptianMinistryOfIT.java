@@ -6,5 +6,5 @@ package eu.yals.test.ui.pageobjects.external;
  * @since 2.5
  */
 public class EgyptianMinistryOfIT {
-    public static final String TITLE_TEXT = "Egyptian Ministry of Communications and Information Technology";
+    public static final String BODY_ID = "MasterBodyTag";
 }

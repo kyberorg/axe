@@ -22,6 +22,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.ProtocolHandshake;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -110,6 +111,10 @@ public abstract class VaadinTest extends ParallelTest {
 
     protected VaadinElement $$(final TestBenchElement element) {
         return VaadinElement.wrap(element);
+    }
+
+    protected void waitUntilSiteLoads(int timeoutInSeconds) {
+        waitUntil(ExpectedConditions.presenceOfElementLocated(By.tagName("body")), timeoutInSeconds);
     }
 
     /**
