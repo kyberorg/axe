@@ -143,6 +143,8 @@ Optional EnvVars:
 
 * TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 
+* DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
+
 Ports: 
 
 * host port: `select yourself`
