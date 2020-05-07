@@ -3,10 +3,14 @@ package eu.yals.ui;
 import com.github.appreciated.app.layout.component.applayout.LeftLayouts;
 import com.github.appreciated.app.layout.component.builder.AppLayoutBuilder;
 import com.github.appreciated.app.layout.component.menu.left.builder.LeftAppMenuBuilder;
+import com.github.appreciated.app.layout.component.menu.left.items.LeftBadgeIconItem;
+import com.github.appreciated.app.layout.component.menu.left.items.LeftClickableItem;
 import com.github.appreciated.app.layout.component.menu.left.items.LeftHeaderItem;
 import com.github.appreciated.app.layout.component.menu.left.items.LeftNavigationItem;
 import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
 import com.github.appreciated.app.layout.entity.Section;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.server.InitialPageSettings;
@@ -61,6 +65,12 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
         if (appUtils.isDevelopmentModeActivated()) {
             menuBuilder.add(new LeftNavigationItem(DebugView.class));
         }
+
+        menuBuilder.addToSection(
+                Section.FOOTER,
+                new LeftClickableItem("Old UI", VaadinIcon.COG.create(), onClick -> Notification.show("Test")),
+                new LeftBadgeIconItem("Badge Icon", VaadinIcon.ABACUS.create())
+        );
 
         builder.withAppMenu(menuBuilder.build());
 
