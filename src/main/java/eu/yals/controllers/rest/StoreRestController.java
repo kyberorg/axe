@@ -170,13 +170,15 @@ public class StoreRestController {
                 break;
             case UrlExtraValidator.LOCAL_URL_NOT_ALLOWED:
                 log.info("{} {} is not allowed", TAG, storeInput.getLink());
-                YalsErrorJson errorJson = YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_403);
+                YalsErrorJson errorJson = YalsErrorJson.createWithMessage(messageFromExtraValidator)
+                        .andStatus(STATUS_403);
                 result = Result.get().write(errorJson);
                 break;
-                case UrlExtraValidator.URL_NOT_VALID:
+            case UrlExtraValidator.URL_NOT_VALID:
             default:
                 log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
-                YalsErrorJson errorJson1 = YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_421);
+                YalsErrorJson errorJson1 = YalsErrorJson.createWithMessage(messageFromExtraValidator)
+                        .andStatus(STATUS_421);
                 result = Result.get().write(errorJson1);
                 break;
         }
