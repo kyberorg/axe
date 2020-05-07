@@ -38,15 +38,14 @@ public final class App {
         public static final String PROXY_HOST = "http.proxyHost";
         public static final String PROXY_PORT = "http.proxyPort";
         public static final String APPLICATION_STAGE = "application.stage";
-        public static final String VAADIN_PROD_MODE = "vaadin.productionMode";
         public static final String DEV_MODE = "app.devMode";
+        public static final String OLD_UI = "app.old.ui";
     }
 
     public static class Env {
         public static final String TELEGRAM_TOKEN = "TELEGRAM_TOKEN";
         public static final String SERVER_URL = "SERVER_URL";
         public static final String BUGSNAG_TOKEN = "BUGSNAG_TOKEN";
-        public static final String DEV_MODE = "DEV_MODE";
     }
 
     public static class Git {

@@ -141,6 +141,8 @@ Optional EnvVars:
 
 * SERVER_URL: `https://yals.tld` (most likely don't needed as regulated by Spring profile)
 
+* OLD_UI: `https://old.yals.eu` (most likely remains as is)
+
 * TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 
 * DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
