@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
+import static eu.yals.utils.UrlExtraValidator.VALID;
+
 /**
  * Combinations or params present at message in {@link TelegramObject}. Similar to Unix command line args.
  *
@@ -117,7 +119,7 @@ public final class TelegramArguments {
          * @return {@link TelegramArguments}
          */
         public TelegramArguments build() {
-            if (UrlExtraValidator.isUrl(urlString)) {
+            if (UrlExtraValidator.isUrlValid(urlString).equals(VALID)) {
                 TelegramArguments newArguments = new TelegramArguments();
                 newArguments.url = urlString;
                 if (StringUtils.isNotBlank(descriptionString)) {

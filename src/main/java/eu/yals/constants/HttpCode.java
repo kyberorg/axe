@@ -33,6 +33,11 @@ public final class HttpCode {
     public static final int STATUS_400 = 400;
 
     /**
+     * 403 - forbidden.
+     */
+    public static final int STATUS_403 = 403;
+
+    /**
      * 404 - not found.
      */
     public static final int STATUS_404 = 404;

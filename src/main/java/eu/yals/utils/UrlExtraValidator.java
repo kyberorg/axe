@@ -12,6 +12,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 public final class UrlExtraValidator {
     public static final String VALID = "VALID";
     public static final String URL_NOT_VALID = "URL is malformed, not URL at all or just protocol not supported yet";
+    public static final String LOCAL_URL_NOT_ALLOWED = "Single layer URLs (without domain) temporary not allowed";
     public static final int URL_MIN_SIZE = 5;
     public static final int URL_MAX_SIZE = 15613;
 
@@ -29,18 +30,12 @@ public final class UrlExtraValidator {
      */
     public static String isUrlValid(final String url) {
         UrlValidator validator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
-        return validator.isValid(url) ? VALID : URL_NOT_VALID;
-    }
-
-    /**
-     * Defines if given string is URL or not.
-     *
-     * @param url string to control
-     * @return true is string is valid URL, false if not
-     */
-    public static boolean isUrl(final String url) {
-        UrlValidator validator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
-        return validator.isValid(url);
+        if (validator.isValid(url)) {
+            UrlValidator noLocalValidator = new UrlValidator();
+            return noLocalValidator.isValid(url) ? VALID : LOCAL_URL_NOT_ALLOWED;
+        } else {
+            return URL_NOT_VALID;
+        }
     }
 
     /**

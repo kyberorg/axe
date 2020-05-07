@@ -163,12 +163,24 @@ public class StoreRestController {
         }
 
         String messageFromExtraValidator = UrlExtraValidator.isUrlValid(storeInput.getLink());
-        if (!messageFromExtraValidator.equals(UrlExtraValidator.VALID)) {
-            log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
-            YalsErrorJson errorJson = YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_421);
-            return Result.get().write(errorJson);
+        Result result;
+        switch (messageFromExtraValidator) {
+            case UrlExtraValidator.VALID:
+                result = Result.get().write("Validation passed");
+                break;
+            case UrlExtraValidator.LOCAL_URL_NOT_ALLOWED:
+                log.info("{} {} is not allowed", TAG, storeInput.getLink());
+                YalsErrorJson errorJson = YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_403);
+                result = Result.get().write(errorJson);
+                break;
+                case UrlExtraValidator.URL_NOT_VALID:
+            default:
+                log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
+                YalsErrorJson errorJson1 = YalsErrorJson.createWithMessage(messageFromExtraValidator).andStatus(STATUS_421);
+                result = Result.get().write(errorJson1);
+                break;
         }
-        return Result.get().write("Validation passed");
+        return result;
     }
 
     private YalsJson storeLink(final String ident, final String decodedUrl, final HttpServletResponse response) {

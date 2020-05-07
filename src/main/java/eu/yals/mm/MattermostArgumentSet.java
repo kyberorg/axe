@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
+import static eu.yals.utils.UrlExtraValidator.VALID;
+
 /**
  * Combination of types present in MM Text ({@link Mattermost#text} ).
  *
@@ -116,7 +118,7 @@ public final class MattermostArgumentSet {
          * @return built {@link MattermostArgumentSet}
          */
         public MattermostArgumentSet build() {
-            if (UrlExtraValidator.isUrl(urlString)) {
+            if (UrlExtraValidator.isUrlValid(urlString).equals(VALID)) {
                 MattermostArgumentSet newArgumentSet = new MattermostArgumentSet();
                 newArgumentSet.url = urlString;
                 if (StringUtils.isNotBlank(descriptionString)) {

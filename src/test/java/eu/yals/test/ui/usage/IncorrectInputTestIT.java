@@ -12,6 +12,7 @@ import static com.helger.commons.mock.CommonsAssert.fail;
 public class IncorrectInputTestIT extends HomePageTest {
     private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
     private static final String MALFORMED_URL_TEXT = "malformed URL or not URL";
+    private static final String NOT_ALLOWED_TEXT = "temporary not allowed";
 
     @Test
     public void emptyInput() {
@@ -88,6 +89,24 @@ public class IncorrectInputTestIT extends HomePageTest {
         formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         $$(homeView.getErrorNotification()).errorTextHas("protocol not supported");
+    }
+
+    @Test
+    public void urlSingleLayerDomainLinksAreNotAllowed() {
+        openHomePage();
+        homeView.pasteValueInFormAndSubmitIt("localhost");
+        formIsClearedResultAndQRCodeAreNotVisible();
+        errorBoxShouldAppear();
+        $$(homeView.getErrorNotification()).errorTextHas(NOT_ALLOWED_TEXT);
+    }
+
+    @Test
+    public void urlSingleDomainLinksAreNotAllowed() {
+        openHomePage();
+        homeView.pasteValueInFormAndSubmitIt("localhost/ff.ff");
+        formIsClearedResultAndQRCodeAreNotVisible();
+        errorBoxShouldAppear();
+        $$(homeView.getErrorNotification()).errorTextHas(NOT_ALLOWED_TEXT);
     }
 
     private void formIsClearedResultAndQRCodeAreNotVisible() {

@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static eu.yals.utils.UrlExtraValidator.VALID;
+
 /**
  * Registering bot at start time.
  *
@@ -92,7 +94,7 @@ public class TelegramBotAutoConfig {
 
     private boolean isServerUrlAvailable() {
         String serverHostname = appUtils.getServerUrl();
-        boolean isServerUrlPresentAndValid = UrlExtraValidator.isUrl(serverHostname);
+        boolean isServerUrlPresentAndValid = UrlExtraValidator.isUrlValid(serverHostname).equals(VALID);
         if (isServerUrlPresentAndValid) {
             return true;
         } else {
