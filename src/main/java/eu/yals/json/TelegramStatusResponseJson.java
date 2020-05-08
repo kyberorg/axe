@@ -1,28 +1,37 @@
 package eu.yals.json;
 
-import com.google.gson.annotations.Since;
-import eu.yals.json.internal.Json;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Telegram Status outgoing JSON
+ * Telegram Status outgoing JSON.
  *
  * @since 2.5
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor(staticName = "createWithStatus")
-public class TelegramStatusResponseJson extends Json {
-    @Since(2.5)
+public class TelegramStatusResponseJson implements YalsJson {
+    @JsonProperty("status")
     private final String status;
 
-    @Since(2.5)
+    @JsonProperty("name")
     private String name;
 
-    public TelegramStatusResponseJson withBotName(String botName) {
+    /**
+     * Adds bot's name.
+     *
+     * @param botName non-empty string with valid name for bot
+     * @return json with stored bot name
+     */
+    public TelegramStatusResponseJson withBotName(final String botName) {
         this.name = botName;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

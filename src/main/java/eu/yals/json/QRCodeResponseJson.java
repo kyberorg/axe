@@ -1,18 +1,21 @@
 package eu.yals.json;
 
-import com.google.gson.annotations.Since;
-import eu.yals.json.internal.Json;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * QR Code Endpoint outgoing JSON
+ * QR Code Endpoint outgoing JSON.
  *
  * @since 2.6
  */
-@EqualsAndHashCode(callSuper = true)
 @Data(staticConstructor = "withQRCode")
-public class QRCodeResponseJson extends Json {
-    @Since(2.6)
+public class QRCodeResponseJson implements YalsJson {
+    @JsonProperty("qr_code")
     private final String qrCode;
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
 }

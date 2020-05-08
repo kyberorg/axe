@@ -1,6 +1,7 @@
 package eu.yals.mm;
 
 import eu.yals.constants.App;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -10,13 +11,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 
 /**
- * Mattermost related code
+ * Mattermost related code.
  *
  * @since 2.3
  */
+@Data
 @Slf4j
-public class Mattermost {
-    private static final String TAG = "[MM]";
+public final class Mattermost {
+    private static final String TAG = "[" + Mattermost.class.getSimpleName() + "]";
 
     private String channelId = App.NO_VALUE;
     private String channelName = App.NO_VALUE;
@@ -32,12 +34,18 @@ public class Mattermost {
 
     private String param;
 
-    private Mattermost(String body) {
+    private Mattermost(final String body) {
         this.parseBody(body);
         this.parseText();
     }
 
-    public static Mattermost createFromResponseBody(String body) {
+    /**
+     * Creates {@link Mattermost} object from given response body.
+     *
+     * @param body string with valid body to reply with
+     * @return valid {@link Mattermost} object
+     */
+    public static Mattermost createFromResponseBody(final String body) {
         if (StringUtils.isBlank(body)) {
             throw new IllegalStateException("Body is missing");
         }
@@ -52,47 +60,7 @@ public class Mattermost {
         return mm;
     }
 
-    public String getChannelId() {
-        return channelId;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    public String getTeamDomain() {
-        return teamDomain;
-    }
-
-    public String getTeamId() {
-        return teamId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public MattermostArgumentSet getArgumentSet() {
-        return argumentSet;
-    }
-
-    private void parseBody(String body) {
+    private void parseBody(final String body) {
         log.debug("{} Parsing body", TAG);
         String[] bodyParams = body.split("&");
         if (bodyParams.length == 0) {
@@ -125,7 +93,7 @@ public class Mattermost {
         }
     }
 
-    private String decodeText(String encodedString) {
+    private String decodeText(final String encodedString) {
         try {
             return URLDecoder.decode(encodedString, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
@@ -157,11 +125,11 @@ public class Mattermost {
         }
     }
 
-    private boolean isParamStartWith(Marker marker) {
+    private boolean isParamStartWith(final Marker marker) {
         return param.startsWith(marker.value + App.EQUAL);
     }
 
-    private String removeMarker(Marker marker) {
+    private String removeMarker(final Marker marker) {
         return this.param.replace(marker.value + App.EQUAL, "");
     }
 
@@ -178,7 +146,7 @@ public class Mattermost {
 
         private final String value;
 
-        Marker(String value) {
+        Marker(final String value) {
             this.value = value;
         }
 
@@ -194,7 +162,7 @@ public class Mattermost {
 
         private final String value;
 
-        ResponseType(String value) {
+        ResponseType(final String value) {
             this.value = value;
         }
 

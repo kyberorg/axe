@@ -47,3 +47,10 @@ server.pid
 .cache
 .mvn
 docker/localMySQL/yalsdb
+/node_modules/
+
+package-lock.json
+package.json
+webpack.config.js
+webpack.generated.js
+

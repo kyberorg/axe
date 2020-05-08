@@ -1,0 +1,59 @@
+body {
+    width: 99%;
+}
+
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.main-area {
+    background: #f0f0f0;
+}
+
+.overall-area {
+    background: #f0f0f0;
+    padding-left: 1em;
+}
+
+.result-area {
+    background: #dff0d8;
+    font-size: large;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.qr-area {
+    text-align: center;
+}
+
+#shortLink {
+    font-size: large;
+}
+
+@media all and (min-width: 407px) {
+    #shortLink {
+        font-size: x-large;
+    }
+}
+
+@media all and (min-width: 531px) {
+    #shortLink {
+        font-size: xx-large;
+    }
+}
+
+.border {
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+}
+
+.strong-link {
+    font-weight: 700;
+    color: #337ab7;
+    background-color: transparent;
+}
+
+.italic {
+    font-style: italic;
+}

@@ -1,15 +1,47 @@
 package eu.yals.services.mm;
 
-import eu.yals.controllers.rest.MattermostRestController;
+import eu.yals.core.IdentGenerator;
 import eu.yals.models.Link;
+import eu.yals.models.dao.LinkRepo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
- * Service which handlers requests from {@link MattermostRestController}
+ * Service which handlers requests from {@link eu.yals.controllers.rest.MattermostRestController}.
  *
  * @since 2.3
  */
-public interface MattermostService {
+@Service
+@Slf4j
+public class MattermostService {
+    private static final String TAG = "[" + MattermostService.class.getSimpleName() + "]";
+    private final LinkRepo repo;
 
-    Link storeLink(String longUrl);
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param repo links table Repo object to manipulate with DB
+     */
+    public MattermostService(final LinkRepo repo) {
+        this.repo = repo;
+    }
 
+    /**
+     * Stores link to DB.
+     *
+     * @param longUrl string with long link
+     * @return stored {@link Link} object with ID from DB.
+     */
+    public Link storeLink(final String longUrl) {
+        Link link = Link.create(IdentGenerator.generateNewIdent(), longUrl);
+        Link savedLink;
+        try {
+            savedLink = repo.save(link);
+        } catch (Exception e) {
+            log.error("{}Got exception while saving new Link {}", TAG, link.toString());
+            log.debug("", e);
+            savedLink = null;
+        }
+        return savedLink;
+    }
 }

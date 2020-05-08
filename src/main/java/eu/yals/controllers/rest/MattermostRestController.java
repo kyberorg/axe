@@ -3,7 +3,7 @@ package eu.yals.controllers.rest;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.json.MattermostResponseJson;
-import eu.yals.json.internal.Json;
+import eu.yals.json.YalsJson;
 import eu.yals.mm.Mattermost;
 import eu.yals.models.Link;
 import eu.yals.services.mm.MattermostService;
@@ -20,14 +20,14 @@ import java.util.Objects;
 
 
 /**
- * MatterMost chat endpoint
+ * MatterMost chat endpoint.
  *
  * @since 2.3
  */
 @Slf4j
 @RestController
 public class MattermostRestController {
-    private static final String TAG = "[MM]";
+    private static final String TAG = "[" + MattermostRestController.class.getSimpleName() + "]";
 
     private final MattermostService mmService;
 
@@ -35,13 +35,25 @@ public class MattermostRestController {
 
     private HttpServletRequest request;
 
-    public MattermostRestController(MattermostService mmService) {
-        this.mmService = mmService;
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param mattermostService service for performing actions
+     */
+    public MattermostRestController(final MattermostService mattermostService) {
+        this.mmService = mattermostService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = Endpoint.MM_API)
-    public Json mm(@RequestBody String body, HttpServletRequest request) {
-        this.request = request;
+    /**
+     * Mattermost API endpoint.
+     *
+     * @param body body of HTTP request
+     * @param req  raw HTTP request
+     * @return json given in response
+     */
+    @RequestMapping(method = RequestMethod.POST, value = Endpoint.Api.MM_API)
+    public YalsJson mm(final @RequestBody String body, final HttpServletRequest req) {
+        this.request = req;
         try {
             log.info("{} Got request from Mattermost. Body: {}", TAG, body);
             log.debug("{} Parsing MM request", TAG);
@@ -58,22 +70,25 @@ public class MattermostRestController {
                 return serverError();
             }
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            log.error("{} Got exception while handling request. Body: {} Exception: {}", TAG, body, e);
+            log.error("{} Got exception while handling request. Body: {} Exception: {}", TAG, body, e.getMessage());
+            log.debug("", e);
             return usage();
         } catch (Exception e) {
-            log.error("{} Unknown exception while handling request. Body: {} Exception: {}", TAG, body, e);
+            log.error("{} Unknown exception while handling request. Body: {} Exception: {}", TAG, body, e.getMessage());
+            log.debug("", e);
             return serverError();
         }
     }
 
-    private MattermostResponseJson success(Link savedLink) {
+    private MattermostResponseJson success(final Link savedLink) {
         String serverHostname = getServerHostname(request);
         String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
 
         String linkDescription = mattermost.getArgumentSet().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
-            String userGreet = StringUtils.isNotBlank(mattermost.getUsername()) && (!mattermost.getUsername().equals(App.NO_VALUE)) ?
-                    "Okay " + App.AT + mattermost.getUsername() + ", " : "Okay, ";
+            String userGreet = StringUtils.isNotBlank(mattermost.getUsername())
+                    && (!mattermost.getUsername().equals(App.NO_VALUE))
+                    ? "Okay " + App.AT + mattermost.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
 
             return MattermostResponseJson.createWithText(greeting + fullYalsLink);
@@ -83,11 +98,11 @@ public class MattermostRestController {
     }
 
     private MattermostResponseJson usage() {
-        String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand())) ?
-                mattermost.getCommand() : "/yals";
+        String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand()))
+                ? mattermost.getCommand() : "/yals";
 
-        return MattermostResponseJson.createWithText(App.Emoji.INFO + "  Usage: " + command +
-                " http://mysuperlonglink.tld [Optional Link Description]");
+        return MattermostResponseJson.createWithText(App.Emoji.INFO + "  Usage: " + command
+                + " http://mysuperlonglink.tld [Optional Link Description]");
     }
 
     private MattermostResponseJson serverError() {
@@ -95,8 +110,8 @@ public class MattermostRestController {
                 .addGotoLocation(App.Mattermost.SUPPORT_URL);
     }
 
-    private String getServerHostname(HttpServletRequest request) {
-        String requestUrl = request.getRequestURL().toString();
-        return requestUrl.replace(Endpoint.MM_API, "");
+    private String getServerHostname(final HttpServletRequest req) {
+        String requestUrl = req.getRequestURL().toString();
+        return requestUrl.replace(Endpoint.Api.MM_API, "");
     }
 }

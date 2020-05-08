@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static eu.yals.utils.UrlExtraValidator.VALID;
+
 /**
- * Registering bot at start time
+ * Registering bot at start time.
  *
  * @since 2.4
  */
@@ -27,7 +29,7 @@ import java.util.Objects;
 @ConditionalOnBean(TelegramBot.class)
 @Configuration
 public class TelegramBotAutoConfig {
-    private static final String TAG = "[TelegramAutoConfig]";
+    private static final String TAG = "[" + TelegramBotAutoConfig.class.getSimpleName() + "]";
 
     private final List<BotSession> sessions = new ArrayList<>();
 
@@ -38,11 +40,20 @@ public class TelegramBotAutoConfig {
         ApiContextInitializer.init();
     }
 
-    public TelegramBotAutoConfig(TelegramBot telegramBot, AppUtils appUtils) {
-        this.telegramBot = telegramBot;
-        this.appUtils = appUtils;
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param bot   Telegram bot, which handles connections
+     * @param utils app utils for getting server url and defining if telegram integration is enabled
+     */
+    public TelegramBotAutoConfig(final TelegramBot bot, final AppUtils utils) {
+        this.telegramBot = bot;
+        this.appUtils = utils;
     }
 
+    /**
+     * Starts interaction with Telegram after {@link TelegramBot} component is ready.
+     */
     @PostConstruct
     public void start() {
         if (appUtils.isTelegramDisabled()) {
@@ -63,11 +74,15 @@ public class TelegramBotAutoConfig {
             try {
                 sessions.add(api.registerBot(telegramBot));
             } catch (TelegramApiRequestException e) {
-                log.error("{} Failed to register bot", TAG, e);
+                log.error("{} Failed to register bot", TAG);
+                log.debug("", e);
             }
         }
     }
 
+    /**
+     * Destroys all telegram sessions before application stops.
+     */
     @PreDestroy
     public void stop() {
         sessions.forEach(session -> {
@@ -79,7 +94,7 @@ public class TelegramBotAutoConfig {
 
     private boolean isServerUrlAvailable() {
         String serverHostname = appUtils.getServerUrl();
-        boolean isServerUrlPresentAndValid = UrlExtraValidator.isUrl(serverHostname);
+        boolean isServerUrlPresentAndValid = UrlExtraValidator.isUrlValid(serverHostname).equals(VALID);
         if (isServerUrlPresentAndValid) {
             return true;
         } else {

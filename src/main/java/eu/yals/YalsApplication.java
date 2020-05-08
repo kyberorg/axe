@@ -4,13 +4,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Main (Start point)
+ * Application Start point.
  */
 @SpringBootApplication
 public class YalsApplication {
 
-    public static void main(String[] args) {
+    /**
+     * Main class.
+     *
+     * @param args standard signature
+     */
+    public static void main(final String[] args) {
         SpringApplication.run(YalsApplication.class, args);
     }
-
 }
