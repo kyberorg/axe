@@ -74,13 +74,6 @@ public class IdnTestIT extends HomePageTest {
     }
 
     @Test
-    public void polishUrl() {
-        openHomePage();
-        storeAndOpenSavedUrl("http://żółć.pl");
-        Assert.assertEquals(ZolcPl.TITLE_TEXT, getPageTitle());
-    }
-
-    @Test
     public void germanUrl() {
         openHomePage();
         storeAndOpenSavedUrl("http://www.travemünde.de/");
