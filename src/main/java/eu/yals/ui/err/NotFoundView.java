@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,12 +106,8 @@ public class NotFoundView extends VerticalLayout implements HasErrorParameter<No
         String method = VaadinRequest.getCurrent().getMethod();
         String path = event.getLocation().getPath();
 
-        try {
-            return String.format("%s?method=%s&path=%s", Endpoint.Api.PAGE_404, method,
-                    URLEncoder.encode(path, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            return Endpoint.Api.PAGE_404;
-        }
+        return String.format("%s?method=%s&path=%s", Endpoint.Api.PAGE_404, method,
+                URLEncoder.encode(path, StandardCharsets.UTF_8));
     }
 
     public static class IDs {
