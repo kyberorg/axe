@@ -142,7 +142,9 @@ public class StoreRestController {
             try {
                 String fullUrl = AppUtils.makeFullUri(linkToStore).toString();
                 log.trace("{} Link {} became {} after adding schema", TAG, linkToStore, fullUrl);
-                return fullUrl;
+                String convertedUrl = AppUtils.covertUnicodeToAscii(fullUrl);
+                log.trace("{} Link {} converted to {}", TAG, fullUrl, convertedUrl);
+                return convertedUrl;
             } catch (RuntimeException e) {
                 //to be handled by validators
                 return linkToStore;
