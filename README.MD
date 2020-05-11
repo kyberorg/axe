@@ -7,6 +7,11 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.7 (11/05/2020)
+Vaadin UI
+
+* User interface re-written in Vaadin 14 framework. (#55)
+
 ### Version 2.6 (30/09/19)
 QR Code
 
