@@ -1,11 +1,39 @@
 package eu.yals.services.overall;
 
+import eu.yals.models.dao.LinkRepo;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
 /**
- * Service which queries in storage about totals
+ * Service which queries from DB about totals.
  *
  * @since 2.1
  */
-public interface OverallService {
+@Service
+public class OverallService {
 
-    long numberOfStoredLinks();
+    private final LinkRepo repo;
+
+    /**
+     * Constructor for Spring autowiring.
+     *
+     * @param repo link table repo for operating with DB
+     */
+    public OverallService(final LinkRepo repo) {
+        this.repo = repo;
+    }
+
+    /**
+     * Retrieves number of stored links.
+     *
+     * @return long number with qty of stored links in DB
+     */
+    public long numberOfStoredLinks() {
+        if (Objects.nonNull(repo)) {
+            return repo.count();
+        } else {
+            return 0;
+        }
+    }
 }

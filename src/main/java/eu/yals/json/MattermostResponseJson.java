@@ -1,45 +1,46 @@
 package eu.yals.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import eu.yals.constants.App;
-import eu.yals.controllers.rest.MattermostRestController;
-import eu.yals.json.internal.Json;
 import eu.yals.mm.Mattermost;
 import eu.yals.utils.UrlExtraValidator;
-import lombok.Getter;
+import lombok.Data;
 import org.apache.commons.validator.GenericValidator;
 
 /**
- * {@link MattermostRestController} outgoing JSON
+ * {@link eu.yals.controllers.rest.MattermostRestController} outgoing JSON.
  *
  * @since 2.3
  */
-public class MattermostResponseJson extends Json {
+@Data
+public final class MattermostResponseJson implements YalsJson {
 
-    @Getter
     @JsonProperty("icon_url")
     private String iconUrl = App.Mattermost.BOT_ICON;
 
-    @Getter
     @JsonProperty("text")
     private String text;
 
-    @Getter
     @JsonProperty("response_type")
     private String responseType = Mattermost.ResponseType.IN_CHANNEL.toString();
 
-    @Getter
     @JsonProperty("goto_location")
     private String gotoLocation;
 
-    @Getter
     @JsonProperty("username")
     private final String username = App.Mattermost.BOT_NAME;
 
     private MattermostResponseJson() {
     }
 
-    public static MattermostResponseJson createWithText(String text) {
+    /**
+     * Create response JSON with provided text.
+     *
+     * @param text string with message text
+     * @return JSON which sent to requester mattermost
+     */
+    public static MattermostResponseJson createWithText(final String text) {
         MattermostResponseJson mmJson = new MattermostResponseJson();
 
         boolean containsUrl = UrlExtraValidator.isStringContainsUrl(text);
@@ -53,8 +54,14 @@ public class MattermostResponseJson extends Json {
         }
     }
 
+    /**
+     * Replaces default Icon in message with given one.
+     *
+     * @param iconUrl valid full URL with icon
+     * @return same JSON but with replaced icon
+     */
     @SuppressWarnings("UnusedReturnValue") //by design
-    public MattermostResponseJson replaceIconWith(String iconUrl) {
+    public MattermostResponseJson replaceIconWith(final String iconUrl) {
         if (GenericValidator.isUrl(iconUrl)) {
             this.iconUrl = iconUrl;
         } else {
@@ -63,7 +70,13 @@ public class MattermostResponseJson extends Json {
         return this;
     }
 
-    public MattermostResponseJson addGotoLocation(String gotoLocation) {
+    /**
+     * Puts location.
+     *
+     * @param gotoLocation string contains gotoLocation.
+     * @return json which sends in response
+     */
+    public MattermostResponseJson addGotoLocation(final String gotoLocation) {
         if (GenericValidator.isUrl(gotoLocation)) {
             this.gotoLocation = gotoLocation;
         } else {
@@ -72,9 +85,19 @@ public class MattermostResponseJson extends Json {
         return this;
     }
 
-    public MattermostResponseJson setResponseTypeTo(Mattermost.ResponseType responseType) {
+    /**
+     * Modifies Mattermost response type.
+     *
+     * @param responseType valid {@link Mattermost.ResponseType}
+     * @return same json
+     */
+    public MattermostResponseJson setResponseTypeTo(final Mattermost.ResponseType responseType) {
         this.responseType = responseType.toString();
         return this;
     }
 
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
 }

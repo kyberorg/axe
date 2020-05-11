@@ -13,9 +13,9 @@ public interface StoreResult {
     }
 
     class Fail implements StoreResult {
-        private String errorMessage;
+        private final String errorMessage;
 
-        public Fail(String errorMessage) {
+        public Fail(final String errorMessage) {
             this.errorMessage = errorMessage;
         }
 
@@ -34,7 +34,7 @@ public interface StoreResult {
             this.errorMessage = "Database is DOWN";
         }
 
-        public DatabaseDown withException(Throwable e) {
+        public DatabaseDown withException(final Throwable e) {
             this.exception = e;
             return this;
         }

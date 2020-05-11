@@ -1,9 +1,11 @@
 package eu.yals.utils.git;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -35,34 +37,57 @@ import java.util.Properties;
  * @since 2.0
  */
 @Slf4j
+@Data
 @Component
-class GitRepoState {
+public class GitRepoState {
+    private static final String TAG = "[" + GitRepoState.class.getSimpleName() + "]";
     private static final String GIT_PROPERTIES_FILE = "git.properties";
 
     private final Properties gitProperties = new Properties();
 
-    String commitIdAbbrev;          // =${git.commit.id.abbrev}
-    String buildVersion;             // =${git.build.version}
+    private String commitIdAbbrev;          // =${git.commit.id.abbrev}
+    private String buildVersion;             // =${git.build.version}
+    private String branch;                  //=${git.branch}
+    private String buildHost;               //=${git.build.host}
 
+    /**
+     * Creates {@link GitRepoState} object.
+     */
     public GitRepoState() {
         init();
     }
 
-    boolean hasValues() {
+    /**
+     * Controls if object populated values or not.
+     *
+     * @return true if values are correctly populated, false if not
+     */
+    public boolean hasValues() {
         return !gitProperties.isEmpty();
     }
 
     private void init() {
+        if (this.getClass().getClassLoader() == null) {
+            log.error("{} '{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    TAG, GIT_PROPERTIES_FILE);
+            this.gitProperties.clear();
+            return;
+        }
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE);
+        if (is == null) {
+            log.error("{} '{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
+                    TAG, GIT_PROPERTIES_FILE);
+            this.gitProperties.clear();
+            return;
+        }
         try {
-            this.gitProperties.load(this.getClass().getClassLoader().getResourceAsStream(GIT_PROPERTIES_FILE));
-            log.trace("{}: parsed info from file: {}", GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);
+            this.gitProperties.load(is);
+            log.trace("{} {}: parsed info from file: {}", TAG, GitRepoState.class.getSimpleName(), GIT_PROPERTIES_FILE);
             this.publishFromProperties();
         } catch (IOException ioe) {
-            log.error("Failed to init " + GitRepoState.class.getSimpleName(), ioe);
-            this.gitProperties.clear();
-        } catch (NullPointerException npe) {
-            log.error("'{}': no such file. Did you run 'mvn package' ? (Note: ignore, if profile is 'local')",
-                    GIT_PROPERTIES_FILE);
+            log.error("{} Failed to init {}", TAG, GitRepoState.class.getSimpleName());
+            log.debug("", ioe);
             this.gitProperties.clear();
         }
     }
@@ -70,6 +95,8 @@ class GitRepoState {
     private void publishFromProperties() {
         this.commitIdAbbrev = String.valueOf(gitProperties.get("git.commit.id.abbrev"));
         this.buildVersion = String.valueOf(gitProperties.get("git.build.version"));
+        this.branch = String.valueOf(gitProperties.get("git.branch"));
+        this.buildHost = String.valueOf(gitProperties.get("git.build.host"));
     }
 
 }

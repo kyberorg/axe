@@ -1,14 +1,11 @@
 package eu.yals.test.ui.pageobjects.external;
 
-import com.codeborne.selenide.SelenideElement;
-
-import static com.codeborne.selenide.Selenide.$;
-
 /**
  * Page object for page http://中文.tw/
  *
  * @since 2.5
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class ZhongwenTw {
-    public static final SelenideElement NAV_TABLE = $(".mbr-table");
+    public static final String NAV_TABLE = ".mbr-table";
 }

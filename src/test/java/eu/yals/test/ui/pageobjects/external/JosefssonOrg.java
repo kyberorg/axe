@@ -1,15 +1,12 @@
 package eu.yals.test.ui.pageobjects.external;
 
-import com.codeborne.selenide.SelenideElement;
-
-import static com.codeborne.selenide.Selenide.$;
-
 /**
  * Page object for page https://räksmörgås.josefsson.org/
  *
  * @since 2.5
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class JosefssonOrg {
-    public static final SelenideElement H1 = $("h1");
+    public static final String H1 = "h1";
     public static final String H1_TEXT = "Räksmörgås.josefßon.org";
 }
