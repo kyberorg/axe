@@ -1,9 +1,11 @@
 package eu.yals.test.ui.usage;
 
+import com.vaadin.testbench.RetryRule;
 import eu.yals.test.ui.HomePageTest;
 import eu.yals.test.ui.pageobjects.external.*;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -15,8 +17,8 @@ import org.junit.Test;
 public class IdnTestIT extends HomePageTest {
 
     // Run the test max 3 times (because of external sites)
-    //@Rule
-    //public RetryRule rule = new RetryRule(3);
+    @Rule
+    public RetryRule rule = new RetryRule(3);
 
     @Test
     public void russianUrl() {
@@ -51,15 +53,14 @@ public class IdnTestIT extends HomePageTest {
     @Test
     public void arabicUrl() {
         openHomePage();
-        storeAndOpenSavedUrl("http://موقع.وزارة-الاتصالات.مصر/");
+        storeAndOpenSavedUrl("https://www.101domain.com/عرب.htm");
 
         //needed because site site loads way too long
         waitUntilSiteLoads(40);
 
-        // verify that opens page of IT ministry of Egypt
-        YalsElement body = $$("body");
-        body.shouldExist();
-        body.shouldHaveId(EgyptianMinistryOfIT.BODY_ID);
+        // verify that opens page of Registation of arabic names
+        YalsElement uniqueClassElement = $$(ArabUrlRegistrar.MAIN_CLASS);
+        uniqueClassElement.shouldExist();
     }
 
     @Test
