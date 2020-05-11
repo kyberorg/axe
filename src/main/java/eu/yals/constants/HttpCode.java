@@ -43,6 +43,11 @@ public final class HttpCode {
     public static final int STATUS_404 = 404;
 
     /**
+     * 405 - Method not allowed.
+     */
+    public static final int STATUS_405 = 405;
+
+    /**
      * 406 - Not acceptable.
      */
     public static final int STATUS_406 = 406;

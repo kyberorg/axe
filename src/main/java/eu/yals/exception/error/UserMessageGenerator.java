@@ -18,6 +18,7 @@ public final class UserMessageGenerator {
         MAPPING.put(NO_STATUS, DEFAULT_MESSAGE);
         MAPPING.put(STATUS_400, "Got malformed request");
         MAPPING.put(STATUS_404, "Requested resource was not found at server");
+        MAPPING.put(STATUS_405, "API called with wrong method");
         MAPPING.put(STATUS_500, DEFAULT_MESSAGE);
         MAPPING.put(STATUS_503, "Application is down");
     }

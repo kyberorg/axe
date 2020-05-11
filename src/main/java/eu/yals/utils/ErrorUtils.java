@@ -113,7 +113,13 @@ public class ErrorUtils {
 
         if (exception == null) {
             //tech message
-            StringBuilder techMessage = new StringBuilder("Not exceptional situation.");
+            StringBuilder techMessage = new StringBuilder();
+            if (hasStatus) {
+                techMessage.append(UserMessageGenerator.getMessageByStatus(args.getStatus()));
+            } else {
+                techMessage.append("Not exceptional situation. Something went wrong.");
+            }
+            
             this.enrichTechMessageWithStatusAndPath(techMessage, args);
             yalsErrorBuilder = YalsErrorBuilder.withTechMessage(techMessage.toString());
 
