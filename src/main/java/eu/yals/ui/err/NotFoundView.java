@@ -16,7 +16,6 @@ import eu.yals.ui.AppView;
 import eu.yals.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
