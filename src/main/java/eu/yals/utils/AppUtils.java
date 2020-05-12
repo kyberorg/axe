@@ -161,8 +161,7 @@ public class AppUtils {
      */
     public static URI makeFullUri(final String url) {
         try {
-            //TODO here is bug
-            URI uri = new URI(url);
+            URI uri = new URI(replaceSpacesInUrl(url));
 
             if (uri.getScheme() == null) {
                 uri = new URI("http://" + url);
@@ -328,6 +327,10 @@ public class AppUtils {
         } else {
             return acceptHeader.equals(MimeType.APPLICATION_JSON);
         }
+    }
+
+    private static String replaceSpacesInUrl(String originUrl) {
+        return originUrl.replaceAll(" ", "+");
     }
 
 }
