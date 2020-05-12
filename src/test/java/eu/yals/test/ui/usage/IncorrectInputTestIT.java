@@ -2,6 +2,7 @@ package eu.yals.test.ui.usage;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import eu.yals.test.ui.HomePageTest;
+import eu.yals.utils.UrlExtraValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -69,7 +70,7 @@ public class IncorrectInputTestIT extends HomePageTest {
 
         formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
-        $$(homeView.getErrorNotification()).errorTextHas(MALFORMED_URL_TEXT);
+        $$(homeView.getErrorNotification()).errorTextHas(UrlExtraValidator.URL_NOT_VALID);
     }
 
     @Test
