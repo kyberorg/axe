@@ -329,7 +329,7 @@ public class AppUtils {
         }
     }
 
-    private static String replaceSpacesInUrl(String originUrl) {
+    private static String replaceSpacesInUrl(final String originUrl) {
         return originUrl.replaceAll(" ", "+");
     }
 
