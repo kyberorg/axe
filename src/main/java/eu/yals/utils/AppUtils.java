@@ -161,6 +161,7 @@ public class AppUtils {
      */
     public static URI makeFullUri(final String url) {
         try {
+            //TODO here is bug
             URI uri = new URI(url);
 
             if (uri.getScheme() == null) {
