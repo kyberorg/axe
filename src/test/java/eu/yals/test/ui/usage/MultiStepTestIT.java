@@ -3,6 +3,7 @@ package eu.yals.test.ui.usage;
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import eu.yals.test.ui.HomePageTest;
 import eu.yals.test.ui.pageobjects.DebugViewPageObject;
+import eu.yals.test.ui.pageobjects.external.Eki;
 import eu.yals.test.ui.pageobjects.external.Wikipedia;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
@@ -90,6 +91,17 @@ public class MultiStepTestIT extends HomePageTest {
         YalsElement articleTitle = $$(Wikipedia.getArticleTitle());
         articleTitle.shouldExist();
         articleTitle.shouldHaveText(Wikipedia.ARTICLE_TITLE);
+    }
+
+    @Test
+    public void linkWithEstonianLettersMustBeSavedAndReused() {
+        openHomePage();
+        homeView.pasteValueInFormAndSubmitIt("http://eki.ee/dict/ekss/index.cgi?Q=l%C3%A4bi%20tulema");
+
+        open(homeView.getSavedUrl());
+        YalsElement titleSpan = $$(Eki.getTitle());
+        titleSpan.shouldExist();
+        titleSpan.shouldHaveText(Eki.TITLE_TEXT);
     }
 
     // @Test //not working yet

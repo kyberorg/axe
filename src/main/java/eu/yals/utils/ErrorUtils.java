@@ -119,7 +119,7 @@ public class ErrorUtils {
             } else {
                 techMessage.append("Not exceptional situation. Something went wrong.");
             }
-            
+
             this.enrichTechMessageWithStatusAndPath(techMessage, args);
             yalsErrorBuilder = YalsErrorBuilder.withTechMessage(techMessage.toString());
 

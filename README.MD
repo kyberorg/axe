@@ -7,6 +7,15 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.7.1 (13/05/2020)
+Bug fixes
+
+* Bug fixed. EKSS Links can be used (#139) 
+
+* Adding missing image for 404 page (#184)
+
+* Fixing IDN URL tests (#186)
+
 ### Version 2.7 (11/05/2020)
 Vaadin UI
 

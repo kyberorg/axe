@@ -53,15 +53,14 @@ public class IdnTestIT extends HomePageTest {
     @Test
     public void arabicUrl() {
         openHomePage();
-        storeAndOpenSavedUrl("http://موقع.وزارة-الاتصالات.مصر/");
+        storeAndOpenSavedUrl("https://www.101domain.com/عرب.htm");
 
         //needed because site site loads way too long
         waitUntilSiteLoads(40);
 
-        // verify that opens page of IT ministry of Egypt
-        YalsElement body = $$("body");
-        body.shouldExist();
-        body.shouldHaveId(EgyptianMinistryOfIT.BODY_ID);
+        // verify that opens page of Registation of arabic names
+        YalsElement uniqueClassElement = $$(ArabUrlRegistrar.MAIN_CLASS);
+        uniqueClassElement.shouldExist();
     }
 
     @Test
