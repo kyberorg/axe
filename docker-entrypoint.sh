@@ -26,4 +26,4 @@ file_env 'YALS_DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
 
-exec java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app/yals.jar
+exec java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom --add-opens java.base/java.lang=ALL-UNNAMED -jar /app/yals.jar
