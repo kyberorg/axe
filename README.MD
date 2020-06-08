@@ -7,6 +7,17 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.7.2 (08/06/2020)
+Ops fixes
+
+* Fixed illegal access warning during a startup in Java 11 + added some useful Java 11 params (#196)
+
+* Fixed app restarts caused by DB connection aborted (#197)
+
+* Startup banner replaced and now contains app name and version (#198)
+
+* Fixing home-view.css loading error (#201)
+
 ### Version 2.7.1 (13/05/2020)
 Bug fixes
 
