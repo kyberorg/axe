@@ -10,7 +10,7 @@ import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dependency.StyleSheet;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -50,7 +50,7 @@ import static eu.yals.utils.push.PushCommand.UPDATE_COUNTER;
 @Slf4j
 @SpringComponent
 @UIScope
-@StyleSheet("home_view.css")
+@CssImport("./css/home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = AppView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
