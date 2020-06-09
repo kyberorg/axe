@@ -14,7 +14,6 @@ import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.shared.ui.Transport;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
@@ -24,7 +23,7 @@ import eu.yals.utils.AppUtils;
 
 @SpringComponent
 @UIScope
-@Push(transport = Transport.WEBSOCKET)
+@Push
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 @PWA(
         name = "Yet another link shortener",
