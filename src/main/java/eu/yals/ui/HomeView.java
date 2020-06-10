@@ -265,6 +265,7 @@ public class HomeView extends VerticalLayout {
     protected void onAttach(final AttachEvent attachEvent) {
         UI ui = attachEvent.getUI();
         broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
+            log.debug("{} Push received {}", TAG, message);
             Push push = Push.fromMessage(message);
             if (push.valid()) {
                 PushCommand command = push.getPushCommand();
