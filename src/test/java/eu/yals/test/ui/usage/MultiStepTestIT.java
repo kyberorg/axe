@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Contains multi step tests for Front page
@@ -68,9 +69,12 @@ public class MultiStepTestIT extends HomePageTest {
     }
 
     @Test
-    public void linksCounterIncreasedValueAfterSave() {
+    public void linksCounterIncreasedValueAfterSave() throws InterruptedException {
         openHomePage();
         long initialNumber = homeView.getNumberOfSavedLinks();
+
+        //sometime it takes time to update counter. Waiting second to prevent flaky test.
+        TimeUnit.SECONDS.sleep(1);
 
         homeView.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
         long numberAfterLinkSaved = homeView.getNumberOfSavedLinks();

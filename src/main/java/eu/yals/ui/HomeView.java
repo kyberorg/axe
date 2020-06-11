@@ -265,15 +265,15 @@ public class HomeView extends VerticalLayout {
     protected void onAttach(final AttachEvent attachEvent) {
         UI ui = attachEvent.getUI();
         broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
+            log.debug("{} Push received. {} ID: {}, Message: {}",
+                    TAG, HomeView.class.getSimpleName(), ui.getUIId(), message);
             Push push = Push.fromMessage(message);
             if (push.valid()) {
-                if (push.getDestination() == HomeView.class) {
-                    PushCommand command = push.getPushCommand();
-                    if (command == UPDATE_COUNTER) {
-                        updateCounter();
-                    } else {
-                        log.warn("{} got unknown push command: '{}'", TAG, push.getPushCommand());
-                    }
+                PushCommand command = push.getPushCommand();
+                if (command == UPDATE_COUNTER) {
+                    updateCounter();
+                } else {
+                    log.warn("{} got unknown push command: '{}'", TAG, push.getPushCommand());
                 }
             } else {
                 log.debug("{} not valid push command: '{}'", TAG, message);
@@ -284,6 +284,7 @@ public class HomeView extends VerticalLayout {
     @Override
     protected void onDetach(final DetachEvent detachEvent) {
         // Cleanup
+        log.debug("{} {} {} detached", TAG, HomeView.class.getSimpleName(), detachEvent.getUI().getUIId());
         broadcasterRegistration.remove();
         broadcasterRegistration = null;
     }
@@ -355,7 +356,7 @@ public class HomeView extends VerticalLayout {
                 shortLink.setHref(ident);
                 resultRow.setVisible(true);
                 clipboardHelper.setContent(shortLink.getText());
-                Broadcaster.broadcast(Push.command(UPDATE_COUNTER).dest(HomeView.class).toString());
+                Broadcaster.broadcast(Push.command(UPDATE_COUNTER).toString());
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
