@@ -265,8 +265,8 @@ public class HomeView extends VerticalLayout {
     protected void onAttach(final AttachEvent attachEvent) {
         UI ui = attachEvent.getUI();
         broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
-            log.debug("{} Push received. Message: {} UI ID: {}, Object: {}",
-                    TAG, message, ui.getUIId(), this.toString());
+            log.debug("{} Push received. {} ID: {}, Message: {}",
+                    TAG, HomeView.class.getSimpleName(), ui.getUIId(), message);
             Push push = Push.fromMessage(message);
             if (push.valid()) {
                 PushCommand command = push.getPushCommand();
@@ -284,6 +284,7 @@ public class HomeView extends VerticalLayout {
     @Override
     protected void onDetach(final DetachEvent detachEvent) {
         // Cleanup
+        log.debug("{} {} {} detached", TAG, HomeView.class.getSimpleName(), detachEvent.getUI().getUIId());
         broadcasterRegistration.remove();
         broadcasterRegistration = null;
     }
