@@ -52,9 +52,9 @@ public final class Push {
     }
 
     /**
-     * Creates string which can be used as push message. This string contains command and string with UI class name.
+     * Creates string which can be used as push message. This string contains command.
      *
-     * @return string with push message like PUSH-HomeView-COMMAND
+     * @return string with push message like PUSH-COMMAND
      */
     @Override
     public String toString() {
