@@ -25,17 +25,6 @@ public class IdnTestIT extends HomePageTest {
     }
 
     @Test
-    public void swedishUrl() {
-        openHomePage();
-        storeAndOpenSavedUrl("https://räksmörgås.josefsson.org");
-
-        // verify that swedish site opened
-        YalsElement h1 = $$(JosefssonOrg.H1);
-        h1.shouldExist();
-        h1.textHas(JosefssonOrg.H1_TEXT);
-    }
-
-    @Test
     public void finnishUrl() {
         openHomePage();
         storeAndOpenSavedUrl("https://sää.fi");
