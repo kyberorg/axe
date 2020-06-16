@@ -7,6 +7,11 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.7.3 (16/06/2020)
+Super long links bug fixed
+
+* Fixed a bug when super long URL with a lot params cannot be saved due to limitations (#207)
+
 ### Version 2.7.2 (08/06/2020)
 Ops fixes
 
