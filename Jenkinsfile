@@ -59,7 +59,7 @@ pipeline {
                             hookUrl = '';
                             break;
                         case "trunk":
-                            hookUrl = 'https://docker.yatech.eu/api/webhooks/71721a7e-0d85-4735-8670-4f0afd18c0f7?tag=trunk';
+                            hookUrl = 'https://docker.yatech.eu/api/webhooks/2c45304e-8344-4b01-8a5a-c2828bc1abfc?tag=trunk';
                             break;
                         default:
                             hookUrl = "https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1?tag=" + env.BRANCH_NAME;

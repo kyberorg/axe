@@ -19,4 +19,9 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="2" author="kyberorg">
+        <modifyDataType columnName="link"
+                        newDataType="varchar(15613)"
+                        tableName="links"/>
+    </changeSet>
 </databaseChangeLog>
