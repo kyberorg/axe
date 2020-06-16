@@ -1,11 +1,9 @@
 package eu.yals.test.ui.usage;
 
-import com.vaadin.testbench.RetryRule;
 import eu.yals.test.ui.HomePageTest;
 import eu.yals.test.ui.pageobjects.external.*;
 import eu.yals.test.utils.elements.YalsElement;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -16,10 +14,6 @@ import org.junit.Test;
 @SuppressWarnings("SpellCheckingInspection")
 public class IdnTestIT extends HomePageTest {
 
-    // Run the test max 3 times (because of external sites)
-    @Rule
-    public RetryRule rule = new RetryRule(3);
-
     @Test
     public void russianUrl() {
         openHomePage();
@@ -28,17 +22,6 @@ public class IdnTestIT extends HomePageTest {
         // verify that KtoRF opened
         YalsElement eggs = $$(KtoRf.DIV_EGGS);
         eggs.shouldExist();
-    }
-
-    @Test
-    public void swedishUrl() {
-        openHomePage();
-        storeAndOpenSavedUrl("https://räksmörgås.josefsson.org");
-
-        // verify that swedish site opened
-        YalsElement h1 = $$(JosefssonOrg.H1);
-        h1.shouldExist();
-        h1.textHas(JosefssonOrg.H1_TEXT);
     }
 
     @Test
