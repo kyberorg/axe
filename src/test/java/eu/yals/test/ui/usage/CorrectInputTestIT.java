@@ -63,6 +63,14 @@ public class CorrectInputTestIT extends HomePageTest {
         checkExpectedBehavior();
     }
 
+    @Test
+    public void veryLongLinkFromFacebook() {
+        openHomePage();
+        String link = "https://www.facebook.com/kallaskaja/?__cft__%5B0%5D=AZWCTMuD7IisNVDDgkRkbaKveUKUuFfnAXKNfKVON_JhRowIA8EJkAjmqU25goOf5OQFuUPLND19WYbO-njrGBA_xxRNkBUDwGqivdDx_bixKxXI7fq8rR9V_neqU3MkuB5OmNKJEPjsrMeTwMDLn2heVAIDHV176G6qhrzf1kZdlHZ0F2NdPRz3AceR4W64MtmgblwzwVCgribQ4sijefQl&__tn__=kC%2CP-R";
+        homeView.pasteValueInFormAndSubmitIt(link);
+        checkExpectedBehavior();
+    }
+
     private void checkExpectedBehavior() {
         $$(homeView.getResultArea()).shouldBeDisplayed();
         $$(homeView.getShortLink()).shouldBeDisplayed();
