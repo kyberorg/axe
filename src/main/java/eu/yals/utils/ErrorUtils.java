@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static eu.yals.constants.App.NO_STATUS;
@@ -144,7 +145,8 @@ public class ErrorUtils {
 
         } else {
             //general exception
-            StringBuilder techMessage = new StringBuilder(exception.getMessage());
+            String exceptionMessage = Objects.isNull(exception.getMessage()) ? "" : exception.getMessage();
+            StringBuilder techMessage = new StringBuilder(exceptionMessage);
             this.enrichTechMessageWithStatusAndPath(techMessage, args);
 
             yalsErrorBuilder = YalsErrorBuilder.withTechMessage(techMessage.toString());
