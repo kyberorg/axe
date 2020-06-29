@@ -39,7 +39,7 @@ if [ -z ${JMX_PORT} ]; then
   -Dcom.sun.management.jmxremote.local.only=false"
 fi
 
-exec echo "${JMX_PORT} :: ${JAVA_OPTS}" && java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
+exec java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
   --add-opens java.base/java.lang=ALL-UNNAMED \
   -XX:+UseContainerSupport -XX:+AlwaysActAsServerClassMachine \
   -jar /app/yals.jar
