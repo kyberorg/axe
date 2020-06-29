@@ -8,7 +8,7 @@ RUN sh -c 'apt-get update && apt-get install -y netcat curl jq && apt -y autorem
 
 ENTRYPOINT ./docker-entrypoint.sh
 
-EXPOSE 8080 8000
+#EXPOSE 8080 8000
 
 HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 \
    CMD curl --silent --request GET http://127.0.0.1:8080/actuator/health \
