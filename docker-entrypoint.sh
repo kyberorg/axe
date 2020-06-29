@@ -26,7 +26,19 @@ file_env 'YALS_DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
 
+JAVA_OPTS=${JAVA_OPTS}
+
+if [ -z "${JMX_PORT}" ]; then
+  JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.rmi.port=${JMX_PORT}
+  -Dcom.sun.management.jmxremote.port=${JMX_PORT}
+  -Dcom.sun.management.jmxremote=true
+  -Dcom.sun.management.jmxremote.ssl=false
+  -Dcom.sun.management.jmxremote.authenticate=false
+  -Djava.rmi.server.hostname=localhost
+  -Dcom.sun.management.jmxremote.local.only=false"
+fi
+
 exec java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
---add-opens java.base/java.lang=ALL-UNNAMED \
--XX:+UseContainerSupport -XX:+AlwaysActAsServerClassMachine \
--jar /app/yals.jar
+  --add-opens java.base/java.lang=ALL-UNNAMED \
+  -XX:+UseContainerSupport -XX:+AlwaysActAsServerClassMachine \
+  -jar /app/yals.jar

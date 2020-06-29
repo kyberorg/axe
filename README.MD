@@ -177,6 +177,8 @@ Optional EnvVars:
 
 * DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
 
+* JMX_PORT: `port for monitoring JVM` (also should be exposed in a docker)
+
 Ports: 
 
 * host port: `select yourself`
