@@ -28,8 +28,7 @@ file_env 'BUGSNAG_TOKEN'
 
 JAVA_OPTS=${JAVA_OPTS}
 
-if [ -z ${JMX_PORT} ]; then
-  echo "JMX options added"
+if [ -n "${JMX_PORT}" ]; then
   JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.rmi.port=${JMX_PORT}
   -Dcom.sun.management.jmxremote.port=${JMX_PORT}
   -Dcom.sun.management.jmxremote=true
@@ -38,6 +37,8 @@ if [ -z ${JMX_PORT} ]; then
   -Djava.rmi.server.hostname=localhost
   -Dcom.sun.management.jmxremote.local.only=false"
 fi
+
+echo "Executing: java ${JAVA_OPTS} -jar /app/yals.jar"
 
 exec java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
   --add-opens java.base/java.lang=ALL-UNNAMED \
