@@ -4,7 +4,7 @@ VOLUME /tmp
 COPY ./target/yals.jar /app/
 COPY ./docker-entrypoint.sh /
 RUN sh -c 'chmod +x /docker-entrypoint.sh'
-RUN sh -c 'apt-get update && apt-get install -y netcat curl jq && apt -y autoremove && rm -rf /var/lib/apt/lists/*'
+RUN sh -c 'apt-get update && apt-get install -y netcat curl jq iproute2 && apt -y autoremove && rm -rf /var/lib/apt/lists/*'
 
 ENTRYPOINT ./docker-entrypoint.sh
 
