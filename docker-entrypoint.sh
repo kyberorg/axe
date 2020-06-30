@@ -29,9 +29,9 @@ file_env 'BUGSNAG_TOKEN'
 JAVA_OPTS=${JAVA_OPTS}
 
 if [ -n "${JMX_PORT}" ]; then
-  IP_ADDR=`ip route get 8.8.8.8 | awk '{print $7; exit}'`
+  HOSTNAME=`hostname -i`
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
-  export JAVA_OPTS="$JAVA_OPTS -Djava.rmi.server.hostname=${IP_ADDR}"
+  export JAVA_OPTS="$JAVA_OPTS -Djava.rmi.server.hostname=${HOSTNAME}"
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.rmi.port=${JMX_PORT}"
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=${JMX_PORT}"
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
