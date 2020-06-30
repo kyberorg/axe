@@ -29,14 +29,16 @@ file_env 'BUGSNAG_TOKEN'
 JAVA_OPTS=${JAVA_OPTS}
 
 if [ -n "${JMX_PORT}" ]; then
-  JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.rmi.port=${JMX_PORT}
-  -Dcom.sun.management.jmxremote.port=${JMX_PORT}
-  -Dcom.sun.management.jmxremote=true
-  -Dcom.sun.management.jmxremote.ssl=false
-  -Dcom.sun.management.jmxremote.authenticate=false
-  -Djava.rmi.server.hostname=localhost
-  -Dcom.sun.management.jmxremote.local.only=false"
+  IP_ADDR=`ip route get 8.8.8.8 | awk '{print $7; exit}'`
+  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
+  export JAVA_OPTS="$JAVA_OPTS -Djava.rmi.server.hostname=${IP_ADDR}"
+  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.rmi.port=${JMX_PORT}"
+  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=${JMX_PORT}"
+  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
+  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
+  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.local.only=false"
 fi
+
 
 echo "Executing: java ${JAVA_OPTS} -jar /app/yals.jar"
 
