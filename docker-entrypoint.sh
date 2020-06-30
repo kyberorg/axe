@@ -30,8 +30,8 @@ JAVA_OPTS=${JAVA_OPTS}
 
 if [ -n "${JMX_PORT}" ]; then
   INTERNAL_HOST_IP=$(ip route show default | awk '/default/ {print $3}')
-  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
-  export JAVA_OPTS="$JAVA_OPTS -Djava.rmi.server.hostname=95.216.218.156"
+#  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
+#  export JAVA_OPTS="$JAVA_OPTS -Djava.rmi.server.hostname=${INTERNAL_HOST_IP}"
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.rmi.port=${JMX_PORT}"
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=${JMX_PORT}"
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
