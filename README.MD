@@ -177,6 +177,8 @@ Optional EnvVars:
 
 * DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
 
+* JAVA_DEBUG_PORT: `port for remote debugging` (this is internal port, need to expose it to connect from outside word)
+
 Ports: 
 
 * host port: `select yourself`
@@ -188,6 +190,10 @@ Secrets:
 * yals_db_password: `database password`
 
 * yals_telegram_token: `telegram bot token`
+
+Volumes:
+
+* yals_dumps: should be mounted as `/opt/dumps` (volume to store heap dumps, when app crashed)
 
 ## For Developers
 ### Common info
