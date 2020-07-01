@@ -28,16 +28,8 @@ file_env 'BUGSNAG_TOKEN'
 
 JAVA_OPTS=${JAVA_OPTS}
 
-if [ -n "${JMX_PORT}" ]; then
-  INTERNAL_HOST_IP=$(ip route show default | awk '/default/ {print $3}')
-  HOSTNAME=`hostname`
-  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
-  export JAVA_OPTS="$JAVA_OPTS -Djava.rmi.server.hostname=${HOSTNAME}"
-  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.rmi.port=${JMX_PORT}"
-  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=${JMX_PORT}"
-  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
-  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
-  export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.local.only=false"
+if [ -n "${JAVA_DEBUG_PORT}" ]; then
+  export JAVA_OPTS="$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:${JAVA_DEBUG_PORT}"
 fi
 
 export JAVA_OPTS="$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom"
