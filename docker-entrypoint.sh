@@ -40,10 +40,12 @@ if [ -n "${JMX_PORT}" ]; then
   export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.local.only=false"
 fi
 
+export JAVA_OPTS="$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom"
+export JAVA_OPTS="$JAVA_OPTS --add-opens java.base/java.lang=ALL-UNNAMED"
+export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
+export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
+export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
 echo "Executing: java ${JAVA_OPTS} -jar /app/yals.jar"
 
-exec java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
-  --add-opens java.base/java.lang=ALL-UNNAMED \
-  -XX:+UseContainerSupport -XX:+AlwaysActAsServerClassMachine \
-  -jar /app/yals.jar
+exec java ${JAVA_OPTS} -jar /app/yals.jar
