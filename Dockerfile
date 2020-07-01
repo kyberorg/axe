@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk
+FROM openjdk:11-jre-slim
 VOLUME /tmp
 
 COPY ./target/yals.jar /app/
@@ -8,7 +8,7 @@ RUN sh -c 'apt-get update && apt-get upgrade -y && apt-get install -y netcat cur
 
 ENTRYPOINT ./docker-entrypoint.sh
 
-#EXPOSE 8080 8000
+EXPOSE 8080
 
 HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 \
    CMD curl --silent --request GET http://127.0.0.1:8080/actuator/health \
