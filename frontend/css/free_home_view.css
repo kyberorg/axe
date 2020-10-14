@@ -1,15 +1,62 @@
-.test-div {
-    flex-basis: 25%;
-}
-
-.test-center {
-    flex-basis: 50%;
-}
-
 .color-div {
     background-color: green;
 }
 
 .color-center {
     background-color: blue;
+}
+
+/* Extra small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) {
+    .test-div {
+        flex-basis: 1%;
+    }
+
+    .test-center {
+        flex-basis: 98%;
+    }
+}
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .test-div {
+        flex-basis: 10%;
+    }
+
+    .test-center {
+        flex-basis: 80%;
+    }
+}
+
+/*Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .test-div {
+        flex-basis: 15%;
+    }
+
+    .test-center {
+        flex-basis: 70%;
+    }
+}
+
+/*Large devices (desktops/laptops, 992px and up)*/
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .test-div {
+        flex-basis: 25%;
+    }
+
+    .test-center {
+        flex-basis: 50%;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+    .test-div {
+        flex-basis: 25%;
+    }
+
+    .test-center {
+        flex-basis: 50%;
+    }
 }
