@@ -3,8 +3,6 @@ package eu.yals.ui;
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.board.Board;
-import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -64,13 +62,6 @@ public class HomeView extends HorizontalLayout {
     private final Component resultArea = resultArea();
     private final Component qrCodeArea = qrCodeArea();
 
-    private final Board board = new Board();
-    private final Row firstRow = new Row();
-    private final Row mainRow = new Row();
-    private final Row overallRow = new Row();
-    private final Row resultRow = new Row();
-    private final Row qrCodeRow = new Row();
-
     private final OverallService overallService;
     private final AppUtils appUtils;
     private final ErrorUtils errorUtils;
@@ -109,39 +100,12 @@ public class HomeView extends HorizontalLayout {
 
         add(leftDiv, centralLayout, rightDiv);
         centralLayout.add(mainArea, overallArea, resultArea, qrCodeArea);
-
-/*        mainRow.add(emptyDiv(), mainArea(), emptyDiv());
-        overallRow.add(emptyDiv(), overallArea(), emptyDiv());
-        resultRow.add(emptyDiv(), resultArea(), emptyDiv());
-        qrCodeRow.add(emptyDiv(), qrCodeArea(), emptyDiv());
-
-        board.addRow(firstRow);
-        board.addRow(mainRow);
-        board.addRow(overallRow);
-        board.addRow(resultRow);
-        board.addRow(qrCodeRow);
-
-        add(board);*/
     }
 
     private void applyStyle() {
         leftDiv.addClassName("responsive-div");
         centralLayout.addClassName("responsive-center");
         rightDiv.addClassName("responsive-div");
-
-/*        mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
-        mainRow.addClassName("row");
-
-        overallRow.setComponentSpan(overallRow.getComponentAt(1), 2);
-        overallRow.addClassName("row");
-
-        resultRow.setComponentSpan(resultRow.getComponentAt(1), 2);
-        resultRow.addClassName("row");
-
-        qrCodeRow.setComponentSpan(qrCodeRow.getComponentAt(1), 2);
-        qrCodeRow.addClassName("row");
-
-        board.setSizeFull();*/
     }
 
     private void applyLoadState() {
@@ -156,17 +120,6 @@ public class HomeView extends HorizontalLayout {
         overallArea.setVisible(true);
         resultArea.setVisible(false);
         qrCodeArea.setVisible(false);
-
-       /* mainRow.setVisible(true);
-        overallRow.setVisible(true);
-        resultRow.setVisible(false);
-        qrCodeRow.setVisible(false);*/
-    }
-
-    private Div emptyDiv() {
-        Div div = new Div();
-        div.setText("");
-        return div;
     }
 
     private VerticalLayout mainArea() {
@@ -210,7 +163,7 @@ public class HomeView extends HorizontalLayout {
 
         HorizontalLayout overallArea = new HorizontalLayout(overallText);
         overallArea.setId(IDs.OVERALL_AREA);
-        overallArea.addClassNames("overall-area", "border");
+        overallArea.addClassNames("overall-area", "border", "joint-area");
         overallArea.setWidthFull();
         return overallArea;
     }
@@ -252,7 +205,7 @@ public class HomeView extends HorizontalLayout {
         qrCode.setAlt("qrCode");
 
         qrCodeArea.add(qrCode);
-        qrCodeArea.addClassNames("qr-area", "border");
+        qrCodeArea.addClassNames("qr-area", "border", "joint-area");
         qrCodeArea.setWidthFull();
         return qrCodeArea;
     }
