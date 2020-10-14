@@ -80,6 +80,7 @@ body {
 .overall-area {
     background: #f0f0f0;
     padding-left: 1em;
+    margin-top: 0;
 }
 
 .result-area {
@@ -91,6 +92,7 @@ body {
 
 .qr-area {
     text-align: center;
+    margin-top: 0;
 }
 
 #shortLink {
