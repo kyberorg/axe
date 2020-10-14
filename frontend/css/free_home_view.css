@@ -1,0 +1,15 @@
+.test-div {
+    flex-basis: 25%;
+}
+
+.test-center {
+    flex-basis: 50%;
+}
+
+.color-div {
+    background-color: green;
+}
+
+.color-center {
+    background-color: blue;
+}
