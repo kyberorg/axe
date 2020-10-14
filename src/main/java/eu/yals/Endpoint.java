@@ -43,8 +43,6 @@ public final class Endpoint {
          * Page for displaying software info (avoid adding it in PROD mode).
          */
         public static final String APP_INFO_PAGE = "appInfo";
-        //TODO remove after test
-        public static final String FREE_HOME = "free";
     }
 
     /**
