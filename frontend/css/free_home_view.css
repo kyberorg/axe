@@ -42,6 +42,17 @@
 /*Large devices (desktops/laptops, 992px and up)*/
 @media (min-width: 992px) and (max-width: 1199.98px) {
     .test-div {
+        flex-basis: 15%;
+    }
+
+    .test-center {
+        flex-basis: 70%;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) and (max-width: 1440.98px) {
+    .test-div {
         flex-basis: 20%;
     }
 
@@ -50,8 +61,8 @@
     }
 }
 
-/* Extra large devices (large desktops, 1200px and up)*/
-@media (min-width: 1200px) {
+/* Super large devices (large desktops, TVs, 1441px and up)*/
+@media (min-width: 1441px) {
     .test-div {
         flex-basis: 25%;
     }
