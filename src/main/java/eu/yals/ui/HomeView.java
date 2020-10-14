@@ -55,8 +55,12 @@ import static eu.yals.utils.push.PushCommand.UPDATE_COUNTER;
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
 @PageTitle("Link shortener for friends")
-public class HomeView extends VerticalLayout {
+public class HomeView extends HorizontalLayout {
     private static final String TAG = "[" + HomeView.class.getSimpleName() + "]";
+
+    private final Div leftDiv = new Div();
+    private final VerticalLayout centralLayout = new VerticalLayout();
+    private final Div rightDiv = new Div();
 
     private final Board board = new Board();
     private final Row firstRow = new Row();
@@ -101,7 +105,10 @@ public class HomeView extends VerticalLayout {
     private void init() {
         this.setId(IDs.VIEW_ID);
 
-        mainRow.add(emptyDiv(), mainArea(), emptyDiv());
+        add(leftDiv, centralLayout, rightDiv);
+        centralLayout.add(mainArea(), overallArea(), resultArea(), qrCodeArea());
+
+/*        mainRow.add(emptyDiv(), mainArea(), emptyDiv());
         overallRow.add(emptyDiv(), overallArea(), emptyDiv());
         resultRow.add(emptyDiv(), resultArea(), emptyDiv());
         qrCodeRow.add(emptyDiv(), qrCodeArea(), emptyDiv());
@@ -112,11 +119,15 @@ public class HomeView extends VerticalLayout {
         board.addRow(resultRow);
         board.addRow(qrCodeRow);
 
-        add(board);
+        add(board);*/
     }
 
     private void applyStyle() {
-        mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
+        leftDiv.addClassName("responsive-div");
+        centralLayout.addClassName("responsive-center");
+        rightDiv.addClassName("responsive-div");
+
+/*        mainRow.setComponentSpan(mainRow.getComponentAt(1), 2);
         mainRow.addClassName("row");
 
         overallRow.setComponentSpan(overallRow.getComponentAt(1), 2);
@@ -128,7 +139,7 @@ public class HomeView extends VerticalLayout {
         qrCodeRow.setComponentSpan(qrCodeRow.getComponentAt(1), 2);
         qrCodeRow.addClassName("row");
 
-        board.setSizeFull();
+        board.setSizeFull();*/
     }
 
     private void applyLoadState() {
