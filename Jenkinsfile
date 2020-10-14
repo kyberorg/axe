@@ -1,4 +1,4 @@
-@Library('common-lib@1.4') _
+@Library('common-lib@1.7') _
 pipeline {
     agent any;
     parameters {
@@ -53,22 +53,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    String hookUrl;
-                    switch (env.BRANCH_NAME) {
-                        case "master":
-                            hookUrl = '';
-                            break;
-                        case "trunk":
-                            hookUrl = 'https://docker.yatech.eu/api/webhooks/2c45304e-8344-4b01-8a5a-c2828bc1abfc?tag=trunk';
-                            break;
-                        default:
-                            hookUrl = "https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1?tag=" + env.BRANCH_NAME;
-                            break;
-                    }
-                    //no hook - no deploy
-                    if(hookUrl.equals('')) { return; }
-                    deployToSwarm(hookUrl: hookUrl);
-                    sleep(30); //pause for application to be started
+                  deployToKube(
+                          namespace: 'dev-yals',
+                          workloadName: 'yals-app',
+                          imageRepo: env.DOCKER_REPO,
+                          imageTag: env.BRANCH_NAME,
+                          containerName: 'app'
+                  )
                 }
             }
         }
