@@ -1,8 +1,12 @@
 @Library('common-lib@1.7') _
 pipeline {
     agent any;
+    environment {
+      DOCKER_REPO = 'yadev/yals'
+    }
     parameters {
         booleanParam(name: 'REVIEW', defaultValue: false, description: 'Do code review: code-style report')
+        string(name: 'DOCKER_TAG', defaultValue: "")
      }
 
     stages {
@@ -32,17 +36,19 @@ pipeline {
         stage('Docker') {
             steps {
                 script {
-                    def repo = 'yadev/yals';
+                    def dockerTag = params.DOCKER_TAG;
                     def tags = [];
                     String tag;
-                    if (env.BRANCH_NAME.equals("master")) {
+                    if (! dockerTag.trim().equals("")) {
+                        tag = dockerTag;
+                    } else if (env.BRANCH_NAME.equals("master")) {
                         tag = "latest";
                     } else {
                         tag = env.BRANCH_NAME;
                     }
                     tags << tag;
 
-                    dockerBuild(repo: repo, tags: tags);
+                    dockerBuild(repo: env.DOCKER_REPO, tags: tags);
                     dockerLogin(creds: 'hub-docker');
                     dockerPush();
                     dockerLogout();
@@ -63,7 +69,7 @@ pipeline {
                 }
             }
         }
-        stage('App and UI Tests') {
+        /*stage('App and UI Tests') {
             steps {
                 script {
                     String url;
@@ -95,7 +101,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
     post {
         always {
