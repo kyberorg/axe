@@ -2,10 +2,7 @@ package eu.yals.ui;
 
 import com.github.appreciated.app.layout.annotations.Caption;
 import com.github.appreciated.app.layout.annotations.Icon;
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.DetachEvent;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.board.Board;
 import com.vaadin.flow.component.board.Row;
 import com.vaadin.flow.component.button.Button;
@@ -62,6 +59,11 @@ public class HomeView extends HorizontalLayout {
     private final VerticalLayout centralLayout = new VerticalLayout();
     private final Div rightDiv = new Div();
 
+    private final Component mainArea = mainArea();
+    private final Component overallArea = overallArea();
+    private final Component resultArea = resultArea();
+    private final Component qrCodeArea = qrCodeArea();
+
     private final Board board = new Board();
     private final Row firstRow = new Row();
     private final Row mainRow = new Row();
@@ -106,7 +108,7 @@ public class HomeView extends HorizontalLayout {
         this.setId(IDs.VIEW_ID);
 
         add(leftDiv, centralLayout, rightDiv);
-        centralLayout.add(mainArea(), overallArea(), resultArea(), qrCodeArea());
+        centralLayout.add(mainArea, overallArea, resultArea, qrCodeArea);
 
 /*        mainRow.add(emptyDiv(), mainArea(), emptyDiv());
         overallRow.add(emptyDiv(), overallArea(), emptyDiv());
@@ -150,10 +152,15 @@ public class HomeView extends HorizontalLayout {
         input.setValueChangeMode(ValueChangeMode.TIMEOUT);
         input.addValueChangeListener(event -> updateButtonState());
 
-        mainRow.setVisible(true);
+        mainArea.setVisible(true);
+        overallArea.setVisible(true);
+        resultArea.setVisible(false);
+        qrCodeArea.setVisible(false);
+
+       /* mainRow.setVisible(true);
         overallRow.setVisible(true);
         resultRow.setVisible(false);
-        qrCodeRow.setVisible(false);
+        qrCodeRow.setVisible(false);*/
     }
 
     private Div emptyDiv() {
@@ -204,6 +211,7 @@ public class HomeView extends HorizontalLayout {
         HorizontalLayout overallArea = new HorizontalLayout(overallText);
         overallArea.setId(IDs.OVERALL_AREA);
         overallArea.addClassNames("overall-area", "border");
+        overallArea.setWidthFull();
         return overallArea;
     }
 
@@ -230,6 +238,7 @@ public class HomeView extends HorizontalLayout {
 
         resultArea.add(emptySpan, shortLink, clipboardHelper);
         resultArea.addClassNames("result-area", "border");
+        resultArea.setWidthFull();
         return resultArea;
     }
 
@@ -244,6 +253,7 @@ public class HomeView extends HorizontalLayout {
 
         qrCodeArea.add(qrCode);
         qrCodeArea.addClassNames("qr-area", "border");
+        qrCodeArea.setWidthFull();
         return qrCodeArea;
     }
 
@@ -365,7 +375,7 @@ public class HomeView extends HorizontalLayout {
             if (StringUtils.isNotBlank(ident)) {
                 shortLink.setText(appUtils.getServerUrl() + "/" + ident);
                 shortLink.setHref(ident);
-                resultRow.setVisible(true);
+                resultArea.setVisible(true);
                 clipboardHelper.setContent(shortLink.getText());
                 Broadcaster.broadcast(Push.command(UPDATE_COUNTER).toString());
                 generateQRCode(ident);
@@ -470,7 +480,7 @@ public class HomeView extends HorizontalLayout {
             String qrCode = response.getBody().getObject().getString("qr_code");
             if (StringUtils.isNotBlank(qrCode)) {
                 this.qrCode.setSrc(qrCode);
-                qrCodeRow.setVisible(true);
+                qrCodeArea.setVisible(true);
             } else {
                 showError("Internal error. Got malformed reply from QR generator");
                 errorUtils.reportToBugsnag(YalsErrorBuilder
@@ -500,7 +510,7 @@ public class HomeView extends HorizontalLayout {
                 .withStatus(response.getStatus())
                 .build());
         this.qrCode.setSrc("");
-        qrCodeRow.setVisible(false);
+        qrCodeArea.setVisible(false);
 
         if (response.getBody() != null) {
             log.error("{} QR Code Reply JSON: {}", TAG, response.getBody());
@@ -525,10 +535,10 @@ public class HomeView extends HorizontalLayout {
     private void cleanResults() {
         shortLink.setHref("");
         shortLink.setText("");
-        resultRow.setVisible(false);
+        resultArea.setVisible(false);
 
         qrCode.setSrc("");
-        qrCodeRow.setVisible(false);
+        qrCodeArea.setVisible(false);
     }
 
     private void updateButtonState() {
