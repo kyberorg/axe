@@ -120,7 +120,7 @@ pipeline {
           withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
                             usernameVariable: 'USR', passwordVariable: 'PASS'
                            ]]) {
-
+            sleep(1, MINUTES)
             testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=grid.yatech.eu " +
                     '-Dtest.browsers=chrome ' +
                     "-Dtest.buildName=${buildName} " +
