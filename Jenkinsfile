@@ -1,7 +1,17 @@
 @Library('common-lib@1.7') _
 
 //global vars
-def dockerTag = 'dev'
+def buildProfile = 'dev';
+
+def dockerTag = 'dev';
+def dockerTags = [];
+
+def deployNamespace = 'dev-yals';
+def deployWorkloadName = 'yals-app';
+def deployContainerName = 'app';
+
+def testEnabled = true;
+def testUrl = "https://dev.yals.eu";
 
 pipeline {
   agent any;
@@ -12,6 +22,7 @@ pipeline {
     booleanParam(name: 'REVIEW', defaultValue: false, description: 'Do code review: code-style report')
     string(name: 'DOCKER_TAG', defaultValue: "", description: 'Custom Docker image Tag')
     booleanParam(name: 'PRODUCTION_BUILD', defaultValue: false, description: 'Deploy to Production')
+    booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Do NOT run Tests')
   }
 
   stages {
@@ -43,7 +54,7 @@ pipeline {
         }
       }
     }
-    stage('Docker (Dev Build)') {
+    stage('Setting Build Params (Dev Build)') {
       when {
         not {
           anyOf {
@@ -57,21 +68,93 @@ pipeline {
       }
       steps {
         script {
+          buildProfile = 'dev';
+        }
+        script {
           def customDockerTag = params.DOCKER_TAG;
-          def tags = [];
           if (!customDockerTag.trim().equals("")) {
             dockerTag = customDockerTag;
           } else {
-            dockerTag = 'dev'
+            dockerTag = 'dev';
           }
-          tags << dockerTag;
-          dockerBuild(repo: env.DOCKER_REPO, tags: tags);
+          dockerTags << dockerTag;
+        }
+        script {
+          deployNamespace = 'dev-yals';
+          deployWorkloadName = 'yals-app';
+        }
+        script {
+          testEnabled = !params.SKIP_TESTS;
+          testUrl = "https://dev.yals.eu";
         }
       }
     }
-    stage('Docker: Push to Repo') {
+
+    stage('Setting Build Params (QA/Demo Build)') {
+      when {
+        branch 'trunk'
+      }
       steps {
         script {
+          buildProfile = 'qa';
+        }
+        script {
+          def customDockerTag = params.DOCKER_TAG;
+          if (!customDockerTag.trim().equals("")) {
+            dockerTag = customDockerTag;
+          } else {
+            dockerTag = 'dev';
+          }
+          dockerTags << dockerTag;
+        }
+        script {
+          deployNamespace = 'qa-yals';
+          deployWorkloadName = 'yals-app';
+        }
+        script {
+          testEnabled = !params.SKIP_TESTS;
+          testUrl = "https://qa.yals.eu";
+        }
+      }
+    }
+
+    stage('Setting Build Params (PROD Build)') {
+      when {
+        anyOf {
+          buildingTag()
+          expression {
+            return params.PRODUCTION_BUILD
+          }
+        }
+      }
+      steps {
+        script {
+          buildProfile = 'PROD';
+        }
+        script {
+          def customDockerTag = params.DOCKER_TAG;
+          if (!customDockerTag.trim().equals("")) {
+            dockerTag = customDockerTag;
+          } else {
+            dockerTag = 'dev';
+          }
+          dockerTags << dockerTag;
+        }
+        script {
+          deployNamespace = 'prod-yals';
+          deployWorkloadName = 'yals-app';
+        }
+        script {
+          testEnabled = false;
+          testUrl = "https://yals.eu";
+        }
+      }
+    }
+
+    stage('Docker') {
+      steps {
+        script {
+          dockerBuild(repo: env.DOCKER_REPO, tags: dockerTags);
           dockerLogin(creds: 'hub-docker');
           dockerPush();
           dockerLogout();
@@ -80,61 +163,44 @@ pipeline {
       }
     }
 
-    stage('Deploy to Dev') {
-      when {
-        not {
-          anyOf {
-            branch 'trunk'
-            buildingTag()
-            expression {
-              return params.PRODUCTION_BUILD
-            }
-          }
-        }
-      }
+    stage('Deploy to ' + buildProfile) {
       steps {
         script {
           deployToKube(
-                  namespace: 'dev-yals',
-                  workloadName: 'yals-app',
+                  namespace: deployNamespace,
+                  workloadName: deployWorkloadName,
                   imageRepo: env.DOCKER_REPO,
                   imageTag: dockerTag,
-                  containerName: 'app'
+                  containerName: deployContainerName
           )
         }
       }
     }
+
     stage("Wait For Deploy prior Testing") {
+      when {
+        expression {
+          return testEnabled
+        }
+      }
       steps {
         echo 'Waiting 1 minute for deployment to complete prior starting smoke testing'
         sleep(time: 1, unit: 'MINUTES')
       }
     }
     stage('App and UI Tests') {
+      when {
+        expression {
+          return testEnabled
+        }
+      }
       steps {
         script {
-          String url;
-          switch (env.BRANCH_NAME) {
-            case "master":
-              url = 'https://yals.eu';
-              break;
-            case "trunk":
-              url = 'https://qa.yals.eu';
-              break;
-            default:
-              url = 'https://dev.yals.eu';
-              break;
-          }
-          //no tests
-          if (url.equals('https://yals.eu')) {
-            return;
-          }
-
           def buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
           withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
                             usernameVariable: 'USR', passwordVariable: 'PASS'
                            ]]) {
-            testApp(url: url, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=grid.yatech.eu " +
+            testApp(url: testUrl, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=grid.yatech.eu " +
                     '-Dtest.browsers=chrome ' +
                     "-Dtest.buildName=${buildName} " +
                     '-Dtest=!eu.yals.test.ui.pages.**',
@@ -147,6 +213,7 @@ pipeline {
   }
   post {
     always {
+      chuckNorris();
       cleanWs();
     }
   }
