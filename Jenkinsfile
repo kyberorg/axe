@@ -65,8 +65,13 @@ pipeline {
             dockerTag = 'dev'
           }
           tags << dockerTag;
-
           dockerBuild(repo: env.DOCKER_REPO, tags: tags);
+        }
+      }
+    }
+    stage('Docker: Push to Repo') {
+      steps {
+        script {
           dockerLogin(creds: 'hub-docker');
           dockerPush();
           dockerLogout();
@@ -74,6 +79,7 @@ pipeline {
         }
       }
     }
+
     stage('Deploy to Dev') {
       when {
         not {
@@ -98,7 +104,7 @@ pipeline {
         }
       }
     }
-    stage ("Wait For Deploy prior Testing") {
+    stage("Wait For Deploy prior Testing") {
       echo 'Waiting 1 minute for deployment to complete prior starting smoke testing'
       sleep(time: 1, unit: 'MINUTES')
     }
@@ -118,7 +124,9 @@ pipeline {
               break;
           }
           //no tests
-          if(url.equals('https://yals.eu')) { return; }
+          if (url.equals('https://yals.eu')) {
+            return;
+          }
 
           def buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
           withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
