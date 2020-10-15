@@ -19,8 +19,8 @@ pipeline {
     DOCKER_REPO = 'yadev/yals'
   }
   parameters {
-    booleanParam(name: 'REVIEW', defaultValue: false, description: 'Do code review: code-style report')
     string(name: 'DOCKER_TAG', defaultValue: "", description: 'Custom Docker image Tag')
+    booleanParam(name: 'REVIEW', defaultValue: false, description: 'Do code review: code-style report')
     booleanParam(name: 'PRODUCTION_BUILD', defaultValue: false, description: 'Deploy to Production')
     booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Do NOT run Tests')
   }
