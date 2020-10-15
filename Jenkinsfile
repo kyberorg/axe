@@ -54,9 +54,29 @@ pipeline {
         }
       }
     }
-    stage('Setting Build Params') {
+    stage('Root') {
       parallel {
-        stages {
+        stage('Dev') {
+          when {
+            branch 'yals-218'
+          }
+          steps {
+            echo 'Dev'
+          }
+        }
+        stage('PROD') {
+          when {
+            branch 'trunk'
+          }
+          steps {
+            echo 'PROD'
+          }
+        }
+      }
+    }
+
+    /*stage('Setting Build Params') {
+      parallel {
           stage('Dev') {
             when {
               not {
@@ -157,9 +177,9 @@ pipeline {
               }
             }
           }
-        }
+
       }
-    }
+    }*/
 
     stage('Docker') {
       steps {
