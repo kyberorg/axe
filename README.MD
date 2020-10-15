@@ -253,6 +253,26 @@ Can add several browsers like `chrome,firefox`
 
 * Local server port can be changed using `-Dport` property
 
+## About: Git Branches, Tags and Releases
+| Branch    | Docker Tag     | Deploy Destination  |
+|-----------|----------------|---------------------|
+| trunk     | latest         | qa/demo             |
+| (tag)     | (tag name)     | PROD                |
+| any other | dev/custom tag | dev                 | 
+
+### Trunk
+Considered as default branch.
+Should always be stable. 
+
 ### Trunk build status
 [![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Ftrunk)](https://ci.yadev.eu/job/YalsGH/job/trunk/)
 [![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)
+
+### Tags
+Reserved for releases only. Will be deployed to Production Server.
+
+### Other branches aka features
+* Always start from trunk branch.
+* Uses `dev` docker tag, unless custom (or branch named) tag provided.
+* Deploy destination = dev server
+ 

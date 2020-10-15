@@ -1,48 +1,72 @@
-@Library('common-lib@1.4') _
+@Library('common-lib@1.7') _
+
+//global vars
+def dockerTag = 'dev'
+
 pipeline {
   agent any;
+  environment {
+    DOCKER_REPO = 'yadev/yals'
+  }
   parameters {
     booleanParam(name: 'REVIEW', defaultValue: false, description: 'Do code review: code-style report')
+    string(name: 'DOCKER_TAG', defaultValue: "", description: 'Custom Docker image Tag')
+    booleanParam(name: 'PRODUCTION_BUILD', defaultValue: false, description: 'Deploy to Production')
   }
 
   stages {
     stage('Vaadin') {
       steps {
         script {
-          def review = params.REVIEW
-
-          print "Parameters: Review = ${review}"
-
-          vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: review)
-
-          if(review) {
-            publishHTML([
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: 'target/site',
-                    reportFiles: 'checkstyle.html',
-                    reportName: 'HTML Report',
-                    reportTitles: ''
-            ])
-          }
+          vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: params.REVIEW)
         }
       }
     }
-    stage('Docker') {
+    stage('Auto Code Review') {
+      when {
+        expression {
+          return params.REVIEW
+        }
+      }
       steps {
         script {
-          def repo = 'yadev/yals';
-          def tags = [];
-          String tag;
-          if (env.BRANCH_NAME.equals("master")) {
-            tag = "latest";
-          } else {
-            tag = env.BRANCH_NAME;
-          }
-          tags << tag;
+          publishHTML([
+                  allowMissing         : true,
+                  alwaysLinkToLastBuild: false,
+                  keepAll              : true,
+                  reportDir            : 'target/site',
+                  reportFiles          : 'checkstyle.html',
+                  reportName           : 'HTML Report',
+                  reportTitles         : ''
+          ])
 
-          dockerBuild(repo: repo, tags: tags);
+        }
+      }
+    }
+    stage('Docker (Dev Build)') {
+      when {
+        not {
+          anyOf {
+            branch 'trunk'
+            buildingTag()
+            expression {
+              return params.PRODUCTION_BUILD
+            }
+          }
+        }
+      }
+      steps {
+        script {
+          def customDockerTag = params.DOCKER_TAG;
+          def tags = [];
+          if (!customDockerTag.trim().equals("")) {
+            dockerTag = customDockerTag;
+          } else {
+            dockerTag = 'dev'
+          }
+          tags << dockerTag;
+
+          dockerBuild(repo: env.DOCKER_REPO, tags: tags);
           dockerLogin(creds: 'hub-docker');
           dockerPush();
           dockerLogout();
@@ -50,25 +74,27 @@ pipeline {
         }
       }
     }
-    stage('Deploy') {
+    stage('Deploy to Dev') {
+      when {
+        not {
+          anyOf {
+            branch 'trunk'
+            buildingTag()
+            expression {
+              return params.PRODUCTION_BUILD
+            }
+          }
+        }
+      }
       steps {
         script {
-          String hookUrl;
-          switch (env.BRANCH_NAME) {
-            case "master":
-              hookUrl = '';
-              break;
-            case "trunk":
-              hookUrl = 'https://docker.yatech.eu/api/webhooks/2c45304e-8344-4b01-8a5a-c2828bc1abfc?tag=trunk';
-              break;
-            default:
-              hookUrl = "https://docker.yatech.eu/api/webhooks/c722e1bf-fa5a-46de-a161-1c6afdc370c1?tag=" + env.BRANCH_NAME;
-              break;
-          }
-          //no hook - no deploy
-          if(hookUrl.equals('')) { return; }
-          deployToSwarm(hookUrl: hookUrl);
-          sleep(30); //pause for application to be started
+          deployToKube(
+                  namespace: 'dev-yals',
+                  workloadName: 'yals-app',
+                  imageRepo: env.DOCKER_REPO,
+                  imageTag: dockerTag,
+                  containerName: 'app'
+          )
         }
       }
     }
