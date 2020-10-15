@@ -33,6 +33,7 @@ pipeline {
         }
       }
     }
+
     stage('Auto Code Review') {
       when {
         expression {
@@ -54,27 +55,6 @@ pipeline {
         }
       }
     }
-
-/*    stage('Root') {
-      parallel {
-        stage('Dev') {
-          when {
-            branch 'yals-218'
-          }
-          steps {
-            echo 'Dev'
-          }
-        }
-        stage('PROD') {
-          when {
-            branch 'trunk'
-          }
-          steps {
-            echo 'PROD'
-          }
-        }
-      }
-    }*/
 
     stage('Setting Build Params') {
       parallel {
@@ -212,9 +192,13 @@ pipeline {
           return testEnabled
         }
       }
+      options {
+        timeout(time: 2, unit: 'MINUTES') {
+          input 'Should we continue?'
+        }
+      }
       steps {
-        echo 'Waiting 1 minute for deployment to complete prior starting smoke testing'
-        sleep(time: 1, unit: 'MINUTES')
+        echo 'Waiting for deployment to complete prior starting smoke testing'
       }
     }
     stage('App and UI Tests') {
