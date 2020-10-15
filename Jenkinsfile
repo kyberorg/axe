@@ -186,22 +186,30 @@ pipeline {
       }
     }
 
-/*    stage("Wait For Deploy prior Testing") {
+    stage("Wait For Deploy prior Testing") {
       when {
         expression {
           return testEnabled
         }
       }
-      options {
-        timeout(time: 2, unit: 'MINUTES')
-      }
-      input {
-        message 'Should we continue?'
-      }
       steps {
         echo 'Waiting for deployment to complete prior starting smoke testing'
+        try {
+          timeout (time: 10, unit: 'MINUTES') {
+            input message: 'Shall we proceed?', ok: 'Yes'
+          }
+        }
+        catch (error) {
+          def user = error.getCauses()[0].getUser()
+          if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
+            echo "Timeout reached, continue to next stage"
+          }
+          else {
+            throw new Exception("[ERROR] stage failed!")
+          }
+        }
       }
-    }*/
+    }
     stage('App and UI Tests') {
       when {
         expression {
