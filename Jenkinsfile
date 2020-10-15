@@ -192,11 +192,11 @@ pipeline {
           return testEnabled
         }
       }
-      options {
+/*      options {
         timeout(time: 2, unit: 'MINUTES') {
           input 'Should we continue?'
         }
-      }
+      }*/
       steps {
         echo 'Waiting for deployment to complete prior starting smoke testing'
       }
