@@ -2,11 +2,73 @@ body {
     width: 99%;
 }
 
-.row {
-    margin-right: -15px;
-    margin-left: -15px;
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .responsive-div {
+        flex-basis: 0;
+    }
+
+    .responsive-center {
+        flex-basis: 100%;
+    }
 }
 
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .responsive-div {
+        flex-basis: 5%;
+    }
+
+    .responsive-center {
+        flex-basis: 90%;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .responsive-div {
+        flex-basis: 10%;
+    }
+
+    .responsive-center {
+        flex-basis: 80%;
+    }
+}
+
+/* Large devices (desktops/laptops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .responsive-div {
+        flex-basis: 15%;
+    }
+
+    .responsive-center {
+        flex-basis: 70%;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) and (max-width: 1440.98px) {
+    .responsive-div {
+        flex-basis: 20%;
+    }
+
+    .responsive-center {
+        flex-basis: 60%;
+    }
+}
+
+/* Super large devices (large desktops, TVs, 1441px and up) */
+@media (min-width: 1441px) {
+    .responsive-div {
+        flex-basis: 25%;
+    }
+
+    .responsive-center {
+        flex-basis: 50%;
+    }
+}
+
+/* Areas */
 .main-area {
     background: #f0f0f0;
 }
@@ -27,6 +89,12 @@ body {
     text-align: center;
 }
 
+/* Use it for area that needed to "together" with upper area */
+.joint-area {
+    margin-top: 0;
+}
+
+/* Font size for Short Link in Result Area */
 #shortLink {
     font-size: large;
 }
@@ -43,6 +111,7 @@ body {
     }
 }
 
+/* Styling */
 .border {
     border: 1px solid #e3e3e3;
     border-radius: 4px;
