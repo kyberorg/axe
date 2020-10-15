@@ -54,7 +54,8 @@ pipeline {
         }
       }
     }
-    stage('Root') {
+
+/*    stage('Root') {
       parallel {
         stage('Dev') {
           when {
@@ -73,113 +74,110 @@ pipeline {
           }
         }
       }
-    }
+    }*/
 
-    /*stage('Setting Build Params') {
+    stage('Setting Build Params') {
       parallel {
-          stage('Dev') {
-            when {
-              not {
-                anyOf {
-                  branch 'trunk'
-                  buildingTag()
-                  expression {
-                    return params.PRODUCTION_BUILD
-                  }
-                }
-              }
-            }
-            steps {
-              parallel {
-                script {
-                  buildProfile = 'dev';
-                }
-                script {
-                  def customDockerTag = params.DOCKER_TAG;
-                  if (!customDockerTag.trim().equals("")) {
-                    dockerTag = customDockerTag;
-                  } else {
-                    dockerTag = 'dev';
-                  }
-                  dockerTags << dockerTag;
-                }
-                script {
-                  deployNamespace = 'dev-yals';
-                  deployWorkloadName = 'yals-app';
-                }
-                script {
-                  testEnabled = !params.SKIP_TESTS;
-                  testUrl = "https://dev.yals.eu";
-                }
-              }
-            }
-          }
-          stage('QA/Demo Build') {
-            when {
-              branch 'trunk'
-            }
-            steps {
-              parallel {
-                script {
-                  buildProfile = 'qa';
-                }
-                script {
-                  def customDockerTag = params.DOCKER_TAG;
-                  if (!customDockerTag.trim().equals("")) {
-                    dockerTag = customDockerTag;
-                  } else {
-                    dockerTag = 'dev';
-                  }
-                  dockerTags << dockerTag;
-                }
-                script {
-                  deployNamespace = 'qa-yals';
-                  deployWorkloadName = 'yals-app';
-                }
-                script {
-                  testEnabled = !params.SKIP_TESTS;
-                  testUrl = "https://qa.yals.eu";
-                }
-              }
-            }
-          }
-          stage('PROD Build') {
-            when {
+        stage('Dev') {
+          when {
+            not {
               anyOf {
+                branch 'trunk'
                 buildingTag()
                 expression {
                   return params.PRODUCTION_BUILD
                 }
               }
             }
-            steps {
-              parallel {
-                script {
-                  buildProfile = 'PROD';
-                }
-                script {
-                  def customDockerTag = params.DOCKER_TAG;
-                  if (!customDockerTag.trim().equals("")) {
-                    dockerTag = customDockerTag;
-                  } else {
-                    dockerTag = 'dev';
-                  }
-                  dockerTags << dockerTag;
-                }
-                script {
-                  deployNamespace = 'prod-yals';
-                  deployWorkloadName = 'yals-app';
-                }
-                script {
-                  testEnabled = false;
-                  testUrl = "https://yals.eu";
-                }
+          }
+          steps {
+            script {
+              buildProfile = 'dev';
+            }
+            script {
+              def customDockerTag = params.DOCKER_TAG;
+              if (!customDockerTag.trim().equals("")) {
+                dockerTag = customDockerTag;
+              } else {
+                dockerTag = 'dev';
+              }
+              dockerTags << dockerTag;
+            }
+            script {
+              deployNamespace = 'dev-yals';
+              deployWorkloadName = 'yals-app';
+            }
+            script {
+              testEnabled = !params.SKIP_TESTS;
+              testUrl = "https://dev.yals.eu";
+            }
+
+          }
+        }
+        stage('QA/Demo Build') {
+          when {
+            branch 'trunk'
+          }
+          steps {
+            script {
+              buildProfile = 'qa';
+            }
+            script {
+              def customDockerTag = params.DOCKER_TAG;
+              if (!customDockerTag.trim().equals("")) {
+                dockerTag = customDockerTag;
+              } else {
+                dockerTag = 'dev';
+              }
+              dockerTags << dockerTag;
+            }
+            script {
+              deployNamespace = 'qa-yals';
+              deployWorkloadName = 'yals-app';
+            }
+            script {
+              testEnabled = !params.SKIP_TESTS;
+              testUrl = "https://qa.yals.eu";
+            }
+
+          }
+        }
+        stage('PROD Build') {
+          when {
+            anyOf {
+              buildingTag()
+              expression {
+                return params.PRODUCTION_BUILD
               }
             }
           }
+          steps {
+            script {
+              buildProfile = 'PROD';
+            }
+            script {
+              def customDockerTag = params.DOCKER_TAG;
+              if (!customDockerTag.trim().equals("")) {
+                dockerTag = customDockerTag;
+              } else {
+                dockerTag = 'dev';
+              }
+              dockerTags << dockerTag;
+            }
+            script {
+              deployNamespace = 'prod-yals';
+              deployWorkloadName = 'yals-app';
+            }
+            script {
+              testEnabled = false;
+              testUrl = "https://yals.eu";
+            }
+
+          }
+        }
 
       }
-    }*/
+    }
 
     stage('Docker') {
       steps {
