@@ -163,9 +163,10 @@ pipeline {
       }
     }
 
-    stage('Deploy to ' + buildProfile) {
+    stage('Deploy') {
       steps {
         script {
+          print 'Deploying to ' + buildProfile;
           deployToKube(
                   namespace: deployNamespace,
                   workloadName: deployWorkloadName,
