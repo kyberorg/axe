@@ -105,8 +105,10 @@ pipeline {
       }
     }
     stage("Wait For Deploy prior Testing") {
-      echo 'Waiting 1 minute for deployment to complete prior starting smoke testing'
-      sleep(time: 1, unit: 'MINUTES')
+      steps {
+        echo 'Waiting 1 minute for deployment to complete prior starting smoke testing'
+        sleep(time: 1, unit: 'MINUTES')
+      }
     }
     stage('App and UI Tests') {
       steps {
