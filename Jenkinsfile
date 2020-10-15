@@ -186,7 +186,7 @@ pipeline {
       }
     }
 
-    stage("Wait For Deploy prior Testing") {
+/*    stage("Wait For Deploy prior Testing") {
       when {
         expression {
           return testEnabled
@@ -201,7 +201,7 @@ pipeline {
       steps {
         echo 'Waiting for deployment to complete prior starting smoke testing'
       }
-    }
+    }*/
     stage('App and UI Tests') {
       when {
         expression {
