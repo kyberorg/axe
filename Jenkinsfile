@@ -196,7 +196,7 @@ pipeline {
         timeout(time: 2, unit: 'MINUTES')
       }
       input {
-        message: 'Should we continue?'
+        message 'Should we continue?'
       }
       steps {
         echo 'Waiting for deployment to complete prior starting smoke testing'
