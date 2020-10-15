@@ -194,18 +194,19 @@ pipeline {
       }
       steps {
         echo 'Waiting for deployment to complete prior starting smoke testing'
-        try {
-          timeout (time: 10, unit: 'MINUTES') {
-            input message: 'Shall we proceed?', ok: 'Yes'
+        script {
+          try {
+            timeout(time: 10, unit: 'MINUTES') {
+              input message: 'Shall we proceed?', ok: 'Yes'
+            }
           }
-        }
-        catch (error) {
-          def user = error.getCauses()[0].getUser()
-          if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
-            echo "Timeout reached, continue to next stage"
-          }
-          else {
-            throw new Exception("[ERROR] stage failed!")
+          catch (error) {
+            def user = error.getCauses()[0].getUser()
+            if ('SYSTEM' == user.toString()) { // SYSTEM means timeout.
+              echo "Timeout reached, continue to next stage"
+            } else {
+              throw new Exception("[ERROR] stage failed!")
+            }
           }
         }
       }
