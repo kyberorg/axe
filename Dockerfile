@@ -1,6 +1,6 @@
 FROM openjdk:11-jdk
 VOLUME /tmp
-
+ADD https://scp.yatech.eu/get/jLmBW/elastic-apm-agent-1.18.1.jar /app/apm-agent.jar
 COPY ./target/yals.jar /app/
 COPY ./docker-entrypoint.sh /
 RUN sh -c 'chmod +x /docker-entrypoint.sh'

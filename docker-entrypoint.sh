@@ -38,6 +38,12 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
 export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
+#Issue #223 Elastic APM Support
+export JAVA_OPTS="$JAVA_OPTS -javaagent:/app/apm-agent.jar"
+export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yals-test" # TODO Adjust AppName
+export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.server_urls=https://es:8200" # TODO url
+export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.secret_token=TOKEN_HERE " # TODO token
+export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.application_packages=eu.yals"
 echo "Executing: java ${JAVA_OPTS} -jar /app/yals.jar"
 
 exec java ${JAVA_OPTS} -jar /app/yals.jar
