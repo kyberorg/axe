@@ -129,7 +129,7 @@ pipeline {
       }
     }
 
-    stage('PROD Build') {
+    stage('Tag/PROD Build') {
       when {
         buildingTag()
       }
@@ -181,21 +181,18 @@ pipeline {
         script {
           print 'Deploying to ' + deployTarget;
           script {
-            switch (deployTarget) {
-              case 'PROD':
-                deployNamespace = 'prod-yals';
-                deployWorkloadName = 'yals-app';
-                break;
-              case 'Demo':
-                deployNamespace = 'qa-yals';
-                deployWorkloadName = 'yals-app';
-                break;
-              case 'Dev':
-              default:
-                deployNamespace = 'dev-yals';
-                deployWorkloadName = 'yals-app';
+            if(deployTarget.equalsIgnoreCase("PROD")) {
+              deployNamespace = 'prod-yals';
+              deployWorkloadName = 'yals-app';
+            } else if(deployTarget.equalsIgnoreCase("Demo")) {
+              deployNamespace = 'qa-yals';
+              deployWorkloadName = 'yals-app';
+            } else {
+              deployNamespace = 'dev-yals';
+              deployWorkloadName = 'yals-app';
             }
           }
+          echo "Namespace" + deployNamespace
           deployToKube(
                   namespace: deployNamespace,
                   workloadName: deployWorkloadName,
