@@ -180,7 +180,6 @@ pipeline {
                   imageTag: dockerTag,
                   containerName: deployContainerName
           )
-          print 'Tests enabled? ' + testEnabled
         }
       }
     }
