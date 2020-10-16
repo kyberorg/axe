@@ -6,6 +6,7 @@ def buildProfile = 'dev';
 def dockerTag = 'dev';
 def dockerTags = [];
 
+def deployTarget = 'Dev';
 def deployNamespace = 'dev-yals';
 def deployWorkloadName = 'yals-app';
 def deployContainerName = 'app';
@@ -135,17 +136,18 @@ pipeline {
           buildProfile = 'PROD';
         }
         script {
-          env.DEPLOY_TARGET = input message: 'Select deploy target', ok: 'Deploy!',
+          deployTarget = input message: 'Select deploy target', ok: 'Deploy!',
                   parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev', description: 'What is the server we deploy to?')]
         }
         script {
-          echo "${env.DEPLOY_TARGET}"
-
           def customDockerTag = params.DOCKER_TAG;
           if (!customDockerTag.trim().equals("")) {
             dockerTag = customDockerTag;
           } else {
             dockerTag = env.BRANCH_NAME;
+          }
+          if(deployTarget.equalsIgnoreCase("PROD")) {
+              dockerTags << "latest";
           }
           dockerTags << dockerTag;
         }
@@ -175,7 +177,23 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          print 'Deploying to ' + buildProfile;
+          print 'Deploying to ' + deployTarget;
+          script {
+            switch (deployTarget) {
+              case 'PROD':
+                deployNamespace = 'prod-yals';
+                deployWorkloadName = 'yals-app';
+                break;
+              case 'Demo':
+                deployNamespace = 'qa-yals';
+                deployWorkloadName = 'yals-app';
+                break;
+              case 'Dev':
+              default:
+                deployNamespace = 'dev-yals';
+                deployWorkloadName = 'yals-app';
+            }
+          }
           deployToKube(
                   namespace: deployNamespace,
                   workloadName: deployWorkloadName,
