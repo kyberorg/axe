@@ -81,7 +81,7 @@ pipeline {
       }
     }
 
-    stage('QA/Demo Build') {
+    stage('Demo Build') {
       when {
         allOf {
           not {
@@ -119,7 +119,7 @@ pipeline {
       }
     }
 
-    stage('Tag/PROD Build') {
+    stage('Tag Build') {
       when {
         buildingTag()
       }
