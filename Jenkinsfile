@@ -1,8 +1,6 @@
 @Library('common-lib@1.7') _
 
 //global vars
-def buildProfile = 'dev';
-
 def dockerTag = 'dev';
 def dockerTags = [];
 
@@ -71,7 +69,6 @@ pipeline {
       }
       steps {
         script {
-          buildProfile = 'dev';
           deployTarget = 'Dev';
         }
         script {
@@ -97,17 +94,21 @@ pipeline {
 
     stage('QA/Demo Build') {
       when {
-        anyOf {
-          branch 'trunk'
-          expression {
-            return params.DEMO_BUILD
+        allOf {
+          not {
+            buildingTag()
+          }
+          anyOf {
+            branch 'trunk'
+            expression {
+              return params.DEMO_BUILD
+            }
           }
         }
       }
       steps {
         script {
-          buildProfile = 'qa';
-          deployTarget = 'Demo'
+          deployTarget = 'Demo';
         }
         script {
           def customDockerTag = params.DOCKER_TAG;
@@ -135,11 +136,10 @@ pipeline {
       }
       steps {
         script {
-          buildProfile = 'PROD';
-        }
-        script {
           deployTarget = input message: 'Select deploy target', ok: 'Deploy!',
                   parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev', description: 'What is the server we deploy to?')]
+          testEnabled = input message: 'Do you want to test', ok: 'Go next!',
+                  parameters: [booleanParam(name: 'TEST_ENABLED',defaultValue: false, description: 'Enable if you want to test after deploy')]
         }
         script {
           def customDockerTag = params.DOCKER_TAG;
@@ -148,18 +148,10 @@ pipeline {
           } else {
             dockerTag = env.BRANCH_NAME;
           }
-          if(deployTarget.equalsIgnoreCase("PROD")) {
-              dockerTags << "latest";
+          if (deployTarget.equalsIgnoreCase("PROD")) {
+            dockerTags << "latest";
           }
           dockerTags << dockerTag;
-        }
-        script {
-          deployNamespace = 'prod-yals';
-          deployWorkloadName = 'yals-app';
-        }
-        script {
-          testEnabled = false;
-          testUrl = "https://yals.eu";
         }
       }
     }
@@ -181,18 +173,21 @@ pipeline {
         script {
           print 'Deploying to ' + deployTarget;
           script {
-            if(deployTarget.equalsIgnoreCase("PROD")) {
+            if (deployTarget.equalsIgnoreCase("PROD")) {
               deployNamespace = 'prod-yals';
               deployWorkloadName = 'yals-app';
-            } else if(deployTarget.equalsIgnoreCase("Demo")) {
+              testUrl = "https://yals.eu";
+            } else if (deployTarget.equalsIgnoreCase("Demo")) {
               deployNamespace = 'qa-yals';
               deployWorkloadName = 'yals-app';
+              testUrl = "https://demo.yals.eu";
             } else {
               deployNamespace = 'dev-yals';
               deployWorkloadName = 'yals-app';
+              testUrl = "https://dev.yals.eu";
             }
           }
-          echo "Namespace" + deployNamespace
+          echo "Namespace:" + deployNamespace
           deployToKube(
                   namespace: deployNamespace,
                   workloadName: deployWorkloadName,
@@ -214,7 +209,7 @@ pipeline {
         echo 'Waiting for deployment to complete prior starting smoke testing'
         script {
           try {
-            timeout(time: 10, unit: 'MINUTES') {
+            timeout(time: 2, unit: 'MINUTES') {
               input message: 'Shall we proceed?', ok: 'Yes'
             }
           }
