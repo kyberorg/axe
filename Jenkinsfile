@@ -152,10 +152,8 @@ pipeline {
               testEnabled = false;
               testUrl = "https://yals.eu";
             }
-
           }
         }
-
       }
     }
 
@@ -182,6 +180,7 @@ pipeline {
                   imageTag: dockerTag,
                   containerName: deployContainerName
           )
+          print 'Tests enabled? ' + testEnabled
         }
       }
     }
