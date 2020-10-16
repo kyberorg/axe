@@ -21,7 +21,7 @@ pipeline {
   parameters {
     string(name: 'DOCKER_TAG', defaultValue: "", description: 'Custom Docker image Tag')
     booleanParam(name: 'REVIEW', defaultValue: false, description: 'Do code review: code-style report')
-    booleanParam(name: 'PRODUCTION_BUILD', defaultValue: false, description: 'Deploy to Production')
+    booleanParam(name: 'DEMO_BUILD', defaultValue: false, description: 'Deploy to Demo')
     booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Do NOT run Tests')
   }
 
@@ -56,103 +56,106 @@ pipeline {
       }
     }
 
-    stage('Setting Build Params') {
-      parallel {
-        stage('Dev') {
-          when {
-            not {
-              anyOf {
-                branch 'trunk'
-                buildingTag()
-                expression {
-                  return params.PRODUCTION_BUILD
-                }
-              }
-            }
-          }
-          steps {
-            script {
-              buildProfile = 'dev';
-            }
-            script {
-              def customDockerTag = params.DOCKER_TAG;
-              if (!customDockerTag.trim().equals("")) {
-                dockerTag = customDockerTag;
-              } else {
-                dockerTag = 'dev';
-              }
-              dockerTags << dockerTag;
-            }
-            script {
-              deployNamespace = 'dev-yals';
-              deployWorkloadName = 'yals-app';
-            }
-            script {
-              testEnabled = !params.SKIP_TESTS;
-              testUrl = "https://dev.yals.eu";
-            }
-
-          }
-        }
-        stage('QA/Demo Build') {
-          when {
+    stage('Dev Build') {
+      when {
+        not {
+          anyOf {
             branch 'trunk'
-          }
-          steps {
-            script {
-              buildProfile = 'qa';
+            buildingTag()
+            expression {
+              return params.DEMO_BUILD
             }
-            script {
-              def customDockerTag = params.DOCKER_TAG;
-              if (!customDockerTag.trim().equals("")) {
-                dockerTag = customDockerTag;
-              } else {
-                dockerTag = 'dev';
-              }
-              dockerTags << dockerTag;
-            }
-            script {
-              deployNamespace = 'qa-yals';
-              deployWorkloadName = 'yals-app';
-            }
-            script {
-              testEnabled = !params.SKIP_TESTS;
-              testUrl = "https://qa.yals.eu";
-            }
-
           }
         }
-        stage('PROD Build') {
-          when {
-            anyOf {
-              buildingTag()
-              expression {
-                return params.PRODUCTION_BUILD
-              }
-            }
+      }
+      steps {
+        script {
+          buildProfile = 'dev';
+        }
+        script {
+          def customDockerTag = params.DOCKER_TAG;
+          if (!customDockerTag.trim().equals("")) {
+            dockerTag = customDockerTag;
+          } else {
+            dockerTag = 'dev';
           }
-          steps {
-            script {
-              buildProfile = 'PROD';
-            }
-            script {
-              def customDockerTag = params.DOCKER_TAG;
-              if (!customDockerTag.trim().equals("")) {
-                dockerTag = customDockerTag;
-              } else {
-                dockerTag = 'dev';
-              }
-              dockerTags << dockerTag;
-            }
-            script {
-              deployNamespace = 'prod-yals';
-              deployWorkloadName = 'yals-app';
-            }
-            script {
-              testEnabled = false;
-              testUrl = "https://yals.eu";
-            }
+          dockerTags << dockerTag;
+        }
+        script {
+          deployNamespace = 'dev-yals';
+          deployWorkloadName = 'yals-app';
+        }
+        script {
+          testEnabled = !params.SKIP_TESTS;
+          testUrl = "https://dev.yals.eu";
+        }
+
+      }
+    }
+
+    stage('QA/Demo Build') {
+      when {
+        anyOf {
+          branch 'trunk'
+          expression {
+            return params.DEMO_BUILD
           }
+        }
+      }
+      steps {
+        script {
+          buildProfile = 'qa';
+        }
+        script {
+          def customDockerTag = params.DOCKER_TAG;
+          if (!customDockerTag.trim().equals("")) {
+            dockerTag = customDockerTag;
+          } else {
+            dockerTag = 'trunk';
+          }
+          dockerTags << dockerTag;
+        }
+        script {
+          deployNamespace = 'qa-yals';
+          deployWorkloadName = 'yals-app';
+        }
+        script {
+          testEnabled = !params.SKIP_TESTS;
+          testUrl = "https://qa.yals.eu";
+        }
+      }
+    }
+
+    stage('PROD Build') {
+      when {
+        buildingTag()
+      }
+      steps {
+        script {
+          buildProfile = 'PROD';
+        }
+        script {
+          env.DEPLOY_TARGET = input message: 'Select deploy target', ok: 'Deploy!',
+                  parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev', description: 'What is the server we deploy to?')]
+        }
+        script {
+          echo "${env.DEPLOY_TARGET}"
+
+          def customDockerTag = params.DOCKER_TAG;
+          if (!customDockerTag.trim().equals("")) {
+            dockerTag = customDockerTag;
+          } else {
+            dockerTag = env.BRANCH_NAME;
+          }
+          dockerTags << dockerTag;
+        }
+        script {
+          deployNamespace = 'prod-yals';
+          deployWorkloadName = 'yals-app';
+        }
+        script {
+          testEnabled = false;
+          testUrl = "https://yals.eu";
         }
       }
     }
