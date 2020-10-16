@@ -269,7 +269,7 @@ Should always be stable.
 [![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)
 
 ### Tags
-Reserved for releases only. Will be deployed to Production Server.
+Build manually. Deploy Destination selected by user. By design, we use tags for Releases.
 
 ### Other branches aka features
 * Always start from trunk branch.
