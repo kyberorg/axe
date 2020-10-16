@@ -56,21 +56,6 @@ pipeline {
       }
     }
 
-    stage('Test Step') {
-      when {
-        branch 'trunk'
-      }
-      steps {
-        echo 'Trunk'
-      }
-      when {
-        branch 'yals-218'
-      }
-      steps {
-        echo 'It Works'
-      }
-    }
-
     stage('Setting Build Params') {
       parallel {
         stage('Dev') {
