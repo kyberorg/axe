@@ -29,28 +29,17 @@ pipeline {
       steps {
         script {
           vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: params.REVIEW)
-        }
-      }
-    }
-
-    stage('Auto Code Review') {
-      when {
-        expression {
-          return params.REVIEW
-        }
-      }
-      steps {
-        script {
-          publishHTML([
-                  allowMissing         : true,
-                  alwaysLinkToLastBuild: false,
-                  keepAll              : true,
-                  reportDir            : 'target/site',
-                  reportFiles          : 'checkstyle.html',
-                  reportName           : 'HTML Report',
-                  reportTitles         : ''
-          ])
-
+          if (params.REVIEW) {
+            publishHTML([
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll              : true,
+                    reportDir            : 'target/site',
+                    reportFiles          : 'checkstyle.html',
+                    reportName           : 'HTML Report',
+                    reportTitles         : 'Code Style Review'
+            ])
+          }
         }
       }
     }
@@ -139,7 +128,7 @@ pipeline {
           deployTarget = input message: 'Select deploy target', ok: 'Deploy!',
                   parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev', description: 'What is the server we deploy to?')]
           testEnabled = input message: 'Do you want to test', ok: 'Go next!',
-                  parameters: [booleanParam(name: 'TEST_ENABLED',defaultValue: false, description: 'Enable if you want to test after deploy')]
+                  parameters: [booleanParam(name: 'TEST_ENABLED', defaultValue: false, description: 'Enable if you want to test after deploy')]
         }
         script {
           def customDockerTag = params.DOCKER_TAG;
