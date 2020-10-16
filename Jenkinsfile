@@ -72,6 +72,7 @@ pipeline {
       steps {
         script {
           buildProfile = 'dev';
+          deployTarget = 'Dev';
         }
         script {
           def customDockerTag = params.DOCKER_TAG;
@@ -106,6 +107,7 @@ pipeline {
       steps {
         script {
           buildProfile = 'qa';
+          deployTarget = 'Demo'
         }
         script {
           def customDockerTag = params.DOCKER_TAG;
