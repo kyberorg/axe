@@ -38,4 +38,10 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
 export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
+# Issue 223 (APM Support) #
+if [ -n "${APM_ENV}" ]; then
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
+fi
+# End Issue 223 (APM Support) #
+
 exec java ${JAVA_OPTS} -jar /app/yals.jar
