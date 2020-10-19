@@ -169,6 +169,7 @@ public abstract class SelenideTest {
 
     private static void addTestNameToDriver() {
         DesiredCapabilities extraCapabilities = new DesiredCapabilities();
+        log.info("Test Name: " + testName);
         extraCapabilities.setCapability("name", "MySuperName");
         extraCapabilities.setCapability("build", BUILD_NAME);
         Configuration.browserCapabilities = extraCapabilities;
