@@ -222,10 +222,10 @@ pipeline {
       steps {
         script {
           def buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
-          withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
+          withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'grid-creds',
                             usernameVariable: 'USR', passwordVariable: 'PASS'
                            ]]) {
-            testApp(url: testUrl, dParams: "-Dgrid.hostname=grid.yatech.eu " +
+            testApp(url: testUrl, dParams: "-Dgrid.hostname=${USR}:${PASS}@grid.yatech.eu " +
                     '-Dselenide.browser=chrome ' +
                     "-Dtest.buildName=${buildName} " +
                     '-Dtest=!eu.yals.test.ui.pages.**',
