@@ -1,5 +1,6 @@
 FROM openjdk:11-jdk
 VOLUME /tmp
+
 COPY ./target/yals.jar /app/
 COPY ./docker-entrypoint.sh /
 RUN sh -c 'chmod +x /docker-entrypoint.sh'
