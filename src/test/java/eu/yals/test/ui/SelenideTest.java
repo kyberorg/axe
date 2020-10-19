@@ -9,6 +9,7 @@ import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.YalsTestDescription;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.platform.commons.util.StringUtils;
@@ -89,8 +90,7 @@ public abstract class SelenideTest {
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
 
-            //to distinguish test in Grid
-            addTestNameToDriver();
+
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
             //expose ports if testing local URL
@@ -106,6 +106,14 @@ public abstract class SelenideTest {
         }
         //debug information
         debugInfo();
+    }
+
+    @Before
+    public void setup() {
+        if(shouldRunTestsAtGrid()) {
+            //to distinguish test in Grid
+            addTestNameToDriver();
+        }
     }
 
     @AfterClass
@@ -167,10 +175,10 @@ public abstract class SelenideTest {
         }
     }
 
-    private static void addTestNameToDriver() {
+    private void addTestNameToDriver() {
         DesiredCapabilities extraCapabilities = new DesiredCapabilities();
         System.out.println("Test Name: " + testName);
-        extraCapabilities.setCapability("name", "MySuperName");
+        extraCapabilities.setCapability("name", testName);
         extraCapabilities.setCapability("build", BUILD_NAME);
         Configuration.browserCapabilities = extraCapabilities;
     }
