@@ -225,8 +225,8 @@ pipeline {
           withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
                             usernameVariable: 'USR', passwordVariable: 'PASS'
                            ]]) {
-            testApp(url: testUrl, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=grid.yatech.eu " +
-                    '-Dtest.browsers=chrome ' +
+            testApp(url: testUrl, dParams: "-Dgrid.hostname=grid.yatech.eu " +
+                    '-Dselenide.browser=chrome ' +
                     "-Dtest.buildName=${buildName} " +
                     '-Dtest=!eu.yals.test.ui.pages.**',
                     actions: 'clean test',

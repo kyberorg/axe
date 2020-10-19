@@ -117,16 +117,27 @@ public class TestUtils {
     public static String getTestUrl() {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         final String localUrl;
-        String runMode =
-                System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name());
 
-        if (runMode.equals(TestApp.RunMode.CONTAINER.name())) {
-            localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
-        } else {
-            localUrl = String.format("http://localhost:%d", serverPort);
+        if(StringUtils.isNotBlank(System.getProperty(TestApp.Properties.TEST_URL, ""))) {
+            return System.getProperty(TestApp.Properties.TEST_URL);
         }
 
-        return System.getProperty(TestApp.Properties.TEST_URL, localUrl);
+        TestApp.RunMode runMode = TestApp.RunMode.valueOf(
+                System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
+
+        switch (runMode) {
+            case CONTAINER:
+                localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
+                break;
+            case GRID:
+                localUrl = System.getProperty(TestApp.Properties.TEST_URL);
+                break;
+            case LOCAL:
+            default:
+                localUrl = String.format("http://localhost:%d", serverPort);
+        }
+
+        return localUrl;
     }
 
     /**

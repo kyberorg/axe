@@ -13,6 +13,7 @@ public class TestApp {
         public static final String BUILD_NAME = "test.buildName";
         public static final String TEST_BROWSERS = "test.browsers";
         public static final String REPORT_DIR = "test.reportdir";
+        public static final String GRID_HOSTNAME = "grid.hostname";
     }
 
     public static class Defaults {
@@ -21,8 +22,16 @@ public class TestApp {
         public static final String BUILD_NAME = "build-" + TestUtils.timeStamp();
     }
 
+    public static class Selenide {
+        public static final String BROWSER = "selenide.browser";
+        public static final String REMOTE = "selenide.remote";
+        public static final String TIMEOUT = "selenide.timeout";
+        public static final String REPORT_DIR = "yals.selenide.report_dir";
+    }
+
     public enum RunMode {
         CONTAINER,
+        GRID,
         LOCAL
     }
 
