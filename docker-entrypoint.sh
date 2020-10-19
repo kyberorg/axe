@@ -41,6 +41,9 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/o
 # Issue 223 (APM Support) #
 if [ -n "${APM_ENV}" ]; then
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
+  if [ -n "${APM_TOKEN}" ]; then
+    export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.secret_token=${APM_TOKEN}"
+  fi
 fi
 # End Issue 223 (APM Support) #
 
