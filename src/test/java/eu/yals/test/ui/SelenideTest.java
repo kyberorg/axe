@@ -28,7 +28,7 @@ import java.util.Optional;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
-@Slf4j
+
 public abstract class SelenideTest {
     private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     private static final String SELENIDE_BROWSER = System.getProperty(TestApp.Selenide.BROWSER, Selenide.Defaults.BROWSER);
@@ -59,7 +59,7 @@ public abstract class SelenideTest {
         protected void starting(final Description description) {
             super.starting(description);
             testName = setTestNameFromTestDescription(description);
-            log.info(String.format("Starting build '%s'. Test: '%s", BUILD_NAME, testName));
+            System.out.printf("Starting build '%s'. Test: '%s%n", BUILD_NAME, testName);
         }
 
         @Override
@@ -111,7 +111,7 @@ public abstract class SelenideTest {
     @AfterClass
     public static void tearDown() {
         //actions after all tests
-        log.info("Testing is Done");
+        System.out.println("Testing is Done");
     }
 
     private static void debugInfo() {
