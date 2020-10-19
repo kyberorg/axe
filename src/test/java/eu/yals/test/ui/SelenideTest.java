@@ -165,13 +165,15 @@ public abstract class SelenideTest {
     }
 
     private String setTestNameFromTestDescription(final Description description) {
+        //removing package part (as all classes are within eu.yals.test.ui)
+        String testClassName = description.getClassName().replace("eu.yals.test.ui.","");
         String rawMethodName = description.getMethodName();
         String[] methodAndBrowserInfo = rawMethodName.split("\\[");
         if (methodAndBrowserInfo.length > 0) {
             String method = methodAndBrowserInfo[0];
-            return String.format("%s.%s", description.getTestClass().getName(), method);
+            return String.format("%s.%s", testClassName, method);
         } else {
-            return String.format("%s.%s", description.getTestClass().getName(), rawMethodName);
+            return String.format("%s.%s", testClassName, rawMethodName);
         }
     }
 
