@@ -221,6 +221,13 @@
             <artifactId>selenide</artifactId>
             <version>5.15.0</version>
             <scope>test</scope>
+            <!-- temporary disable jsoup because it conflicts with Vaadin -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jsoup</groupId>
+                    <artifactId>jsoup</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Test Containers -->
         <dependency>
