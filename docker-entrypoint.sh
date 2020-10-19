@@ -25,6 +25,7 @@ file_env() {
 file_env 'YALS_DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
+file_env 'APM_TOKEN'
 
 JAVA_OPTS=${JAVA_OPTS}
 
@@ -38,6 +39,13 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
 export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
-echo "Executing: java ${JAVA_OPTS} -jar /app/yals.jar"
+# Issue 223 (APM Support) #
+if [ -n "${APM_ENV}" ]; then
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
+  if [ -n "${APM_TOKEN}" ]; then
+    export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.secret_token=${APM_TOKEN}"
+  fi
+fi
+# End Issue 223 (APM Support) #
 
 exec java ${JAVA_OPTS} -jar /app/yals.jar

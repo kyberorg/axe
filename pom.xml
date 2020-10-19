@@ -204,6 +204,12 @@
             <artifactId>clipboardhelper</artifactId>
             <version>1.1.2</version>
         </dependency>
+        <!-- Elastic APM Java Monitoring -->
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-attach</artifactId>
+            <version>1.18.1</version>
+        </dependency>
 
         <!-- Spring Boot Tests -->
         <dependency>
