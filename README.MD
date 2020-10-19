@@ -163,6 +163,10 @@ EnvVars:
 
 * BUGSNAG_TOKEN or BUGSNAG_TOKEN_FILE: `token for BugSnag`
 
+* APM_TOKEN or APM_TOKEN_FILE: `token for Elastic APM`
+
+* APM_ENV: `environment in APM`
+
 Optional EnvVars: 
 
 * LOG_LEVEL_APP: `see Logging part`
