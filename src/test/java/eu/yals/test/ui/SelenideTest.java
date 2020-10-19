@@ -94,10 +94,13 @@ public abstract class SelenideTest {
     }
 
     private static void debugInfo() {
+        TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.CONTAINER.name()));
+        String testRunner = runMode == TestApp.RunMode.GRID ? getGridFullUrl() : "TestContainers";
         String debugInfo = "" + App.NEW_LINE +
                 "=== Debug Info ===" +
                 App.NEW_LINE +
                 String.format("Will test BASE_URL: %s", BASE_URL) + App.NEW_LINE +
+                String.format("Will test at : %s", testRunner) + App.NEW_LINE +
                 String.format("Application will start at %d", SERVER_PORT) + App.NEW_LINE +
                 String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY) +
                 App.NEW_LINE +
@@ -117,7 +120,7 @@ public abstract class SelenideTest {
         final String HTTP_PREFIX = "http://";
         final String GRID_POSTFIX = "/wd/hub";
 
-        String selenideRemote = System.getProperty(TestApp.Properties.GRID_HOSTNAME, "");
+        String selenideRemote = System.getProperty(TestApp.Selenide.REMOTE, "");
         if (StringUtils.isNotBlank(selenideRemote)) {
             return selenideRemote;
         }
