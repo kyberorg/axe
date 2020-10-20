@@ -58,6 +58,8 @@ public abstract class SelenideTest {
             super.starting(description);
             testName = setTestNameFromTestDescription(description);
             System.out.printf("Starting build '%s'. Test: '%s%n", BUILD_NAME, testName);
+            Cookie cookie = new Cookie("zaleniumTestName", testName);
+            getWebDriver().manage().addCookie(cookie);
         }
 
         @Override
