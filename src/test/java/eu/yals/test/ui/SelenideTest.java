@@ -68,6 +68,7 @@ public abstract class SelenideTest {
         @Override
         protected void succeeded(Description description) {
             super.succeeded(description);
+            System.out.printf("Succeeded build '%s'. Test: '%s%n", BUILD_NAME, testName);
             Cookie cookie = new Cookie("zaleniumTestPassed", "true");
             getWebDriver().manage().addCookie(cookie);
             chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.empty());
@@ -76,6 +77,7 @@ public abstract class SelenideTest {
         @Override
         protected void failed(Throwable e, Description description) {
             super.failed(e, description);
+            System.out.printf("Failed build '%s'. Test: '%s%n", BUILD_NAME, testName);
             Cookie cookie = new Cookie("zaleniumTestPassed", "false");
             getWebDriver().manage().addCookie(cookie);
             chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.of(e));
@@ -84,6 +86,7 @@ public abstract class SelenideTest {
         @Override
         protected void finished(Description description) {
             super.finished(description);
+            System.out.printf("Finished build '%s'. Test: '%s%n", BUILD_NAME, testName);
             Cookie videoCookie = new Cookie("zaleniumVideo", "false");
             getWebDriver().manage().addCookie(videoCookie);
         }
@@ -120,15 +123,17 @@ public abstract class SelenideTest {
     @Before
     public void setup() {
         if (shouldRunTestsAtGrid()) {
+            System.out.printf("@Before build '%s'. Test: '%s%n", BUILD_NAME, testName);
             //to distinguish test in Grid
-            //addTestNameToDriver();
+            addTestNameToDriver();
         }
     }
 
     @After
     public void afterTest() {
         if (shouldRunTestsAtGrid()) {
-            //resetTestNameAfterTestCompleted();
+            System.out.printf("@After build '%s'. Test: '%s%n", BUILD_NAME, testName);
+            resetTestNameAfterTestCompleted();
         }
     }
 
