@@ -101,6 +101,7 @@ public abstract class SelenideTest {
 
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
+            addBuildNameToDriver();
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
             //expose ports if testing local URL
@@ -118,18 +119,15 @@ public abstract class SelenideTest {
         debugInfo();
     }
 
-    @Before
+/*    @Before
     public void setup() {
         if (shouldRunTestsAtGrid()) {
             System.out.printf("@Before build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            //to distinguish test in Grid
-            addTestNameToDriver();
         }
-    }
+    }*/
 
     protected void updateTestNameHook() {
         if (shouldRunTestsAtGrid()) {
-
             Cookie cookie = new Cookie("zaleniumTestName", testName);
             getWebDriver().manage().addCookie(cookie);
             Cookie videoCookie = new Cookie("zaleniumVideo", "true");
@@ -208,10 +206,8 @@ public abstract class SelenideTest {
         }
     }
 
-    private void addTestNameToDriver() {
+    private static void addBuildNameToDriver() {
         DesiredCapabilities extraCapabilities = new DesiredCapabilities();
-        System.out.println("Test Name: " + testName);
-        extraCapabilities.setCapability("name", testName);
         extraCapabilities.setCapability("build", BUILD_NAME);
         Configuration.browserCapabilities = extraCapabilities;
     }
