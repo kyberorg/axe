@@ -7,15 +7,13 @@ import eu.yals.constants.App;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.YalsTestDescription;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.*;
 import org.junit.platform.commons.util.StringUtils;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -111,9 +109,16 @@ public abstract class SelenideTest {
 
     @Before
     public void setup() {
-        if(shouldRunTestsAtGrid()) {
+        if (shouldRunTestsAtGrid()) {
             //to distinguish test in Grid
             addTestNameToDriver();
+        }
+    }
+
+    @After
+    public void afterTest() {
+        if(shouldRunTestsAtGrid()) {
+            resetTestNameAfterTestCompleted();
         }
     }
 
@@ -167,7 +172,7 @@ public abstract class SelenideTest {
 
     private String setTestNameFromTestDescription(final Description description) {
         //removing package part (as all classes are within eu.yals.test.ui)
-        String testClassName = description.getClassName().replace("eu.yals.test.ui.","");
+        String testClassName = description.getClassName().replace("eu.yals.test.ui.", "");
         String rawMethodName = description.getMethodName();
         String[] methodAndBrowserInfo = rawMethodName.split("\\[");
         if (methodAndBrowserInfo.length > 0) {
@@ -184,5 +189,13 @@ public abstract class SelenideTest {
         extraCapabilities.setCapability("name", testName);
         extraCapabilities.setCapability("build", BUILD_NAME);
         Configuration.browserCapabilities = extraCapabilities;
+    }
+
+    private void resetTestNameAfterTestCompleted() {
+        MutableCapabilities desiredCapabilities = Configuration.browserCapabilities;
+        if (desiredCapabilities.is("name")) {
+            desiredCapabilities.asMap().remove("name");
+        }
+        Configuration.browserCapabilities = desiredCapabilities;
     }
 }
