@@ -7,7 +7,6 @@ import eu.yals.constants.App;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.YalsTestDescription;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -86,6 +85,8 @@ public abstract class SelenideTest {
         Configuration.reportsFolder = REPORT_DIRECTORY;
         Configuration.timeout = SELENIDE_TIMEOUT;
         Configuration.browser = SELENIDE_BROWSER;
+        //critical for Vaadin input
+        Configuration.fastSetValue = true;
 
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
