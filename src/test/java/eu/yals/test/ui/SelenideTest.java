@@ -118,18 +118,22 @@ public abstract class SelenideTest {
         debugInfo();
     }
 
-    @Before
+/*    @Before
     public void setup() {
         if (shouldRunTestsAtGrid()) {
             System.out.printf("@Before build '%s'. Test: '%s%n", BUILD_NAME, testName);
+        }
+    }*/
+
+    protected void updateTestNameHook() {
+        if (shouldRunTestsAtGrid()) {
             //to distinguish test in Grid
             addTestNameToDriver();
+            Cookie cookie = new Cookie("zaleniumTestName", testName);
+            getWebDriver().manage().addCookie(cookie);
+            Cookie videoCookie = new Cookie("zaleniumVideo", "true");
+            getWebDriver().manage().addCookie(videoCookie);
         }
-    }
-
-    protected void updateTestName() {
-        Cookie cookie = new Cookie("zaleniumTestName", testName);
-        getWebDriver().manage().addCookie(cookie);
     }
 
     @After
@@ -137,6 +141,8 @@ public abstract class SelenideTest {
         if (shouldRunTestsAtGrid()) {
             System.out.printf("@After build '%s'. Test: '%s%n", BUILD_NAME, testName);
             resetTestNameAfterTestCompleted();
+            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
+            getWebDriver().manage().addCookie(videoCookie);
         }
     }
 
