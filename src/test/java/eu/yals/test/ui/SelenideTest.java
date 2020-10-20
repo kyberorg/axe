@@ -136,7 +136,7 @@ public abstract class SelenideTest {
     public void afterTest() {
         if (shouldRunTestsAtGrid()) {
             System.out.printf("@After build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            //resetTestNameAfterTestCompleted();
+            resetTestNameAfterTestCompleted();
         }
     }
 
