@@ -99,7 +99,7 @@ public abstract class SelenideTest {
         Configuration.fastSetValue = true;
 
         if (shouldRunTestsAtGrid()) {
-            //configuration moved to Before method
+            Configuration.remote = getGridFullUrl();
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
             //expose ports if testing local URL
@@ -120,17 +120,15 @@ public abstract class SelenideTest {
     @Before
     public void setup() {
         if (shouldRunTestsAtGrid()) {
-            Configuration.remote = getGridFullUrl();
             //to distinguish test in Grid
-            addTestNameToDriver();
+            //addTestNameToDriver();
         }
     }
 
     @After
     public void afterTest() {
         if (shouldRunTestsAtGrid()) {
-            Configuration.remote = null;
-            resetTestNameAfterTestCompleted();
+            //resetTestNameAfterTestCompleted();
         }
     }
 
