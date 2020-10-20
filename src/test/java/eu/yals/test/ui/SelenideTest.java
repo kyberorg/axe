@@ -58,17 +58,18 @@ public abstract class SelenideTest {
             super.starting(description);
             testName = setTestNameFromTestDescription(description);
             System.out.printf("Starting build '%s'. Test: '%s%n", BUILD_NAME, testName);
+
             Cookie cookie = new Cookie("zaleniumTestName", testName);
+            Cookie videoCookie = new Cookie("zaleniumVideo", "true");
             getWebDriver().manage().addCookie(cookie);
+            getWebDriver().manage().addCookie(videoCookie);
         }
 
         @Override
         protected void succeeded(Description description) {
             super.succeeded(description);
             Cookie cookie = new Cookie("zaleniumTestPassed", "true");
-            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
             getWebDriver().manage().addCookie(cookie);
-            getWebDriver().manage().addCookie(videoCookie);
             chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.empty());
         }
 
@@ -76,10 +77,15 @@ public abstract class SelenideTest {
         protected void failed(Throwable e, Description description) {
             super.failed(e, description);
             Cookie cookie = new Cookie("zaleniumTestPassed", "false");
-            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
             getWebDriver().manage().addCookie(cookie);
-            getWebDriver().manage().addCookie(videoCookie);
             chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.of(e));
+        }
+
+        @Override
+        protected void finished(Description description) {
+            super.finished(description);
+            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
+            getWebDriver().manage().addCookie(videoCookie);
         }
     };
 
