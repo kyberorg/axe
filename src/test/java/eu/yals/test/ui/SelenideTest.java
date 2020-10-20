@@ -66,7 +66,9 @@ public abstract class SelenideTest {
         protected void succeeded(Description description) {
             super.succeeded(description);
             Cookie cookie = new Cookie("zaleniumTestPassed", "true");
+            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
             getWebDriver().manage().addCookie(cookie);
+            getWebDriver().manage().addCookie(videoCookie);
             chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.empty());
         }
 
@@ -74,7 +76,9 @@ public abstract class SelenideTest {
         protected void failed(Throwable e, Description description) {
             super.failed(e, description);
             Cookie cookie = new Cookie("zaleniumTestPassed", "false");
+            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
             getWebDriver().manage().addCookie(cookie);
+            getWebDriver().manage().addCookie(videoCookie);
             chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.of(e));
         }
     };
@@ -118,7 +122,7 @@ public abstract class SelenideTest {
 
     @After
     public void afterTest() {
-        if(shouldRunTestsAtGrid()) {
+        if (shouldRunTestsAtGrid()) {
             Configuration.remote = null;
             resetTestNameAfterTestCompleted();
         }
