@@ -19,6 +19,7 @@ public class SampleTest extends SelenideTest {
     public void openPage() {
         System.out.println("Second Before aka OpenPage");
         open("/");
+        updateTestName();
     }
 
     @Test

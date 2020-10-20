@@ -59,8 +59,6 @@ public abstract class SelenideTest {
             testName = setTestNameFromTestDescription(description);
             System.out.printf("Starting build '%s'. Test: '%s%n", BUILD_NAME, testName);
 
-            Cookie cookie = new Cookie("zaleniumTestName", testName);
-            getWebDriver().manage().addCookie(cookie);
             /*Cookie videoCookie = new Cookie("zaleniumVideo", "true");
             getWebDriver().manage().addCookie(videoCookie);*/
         }
@@ -127,6 +125,11 @@ public abstract class SelenideTest {
             //to distinguish test in Grid
             addTestNameToDriver();
         }
+    }
+
+    protected void updateTestName() {
+        Cookie cookie = new Cookie("zaleniumTestName", testName);
+        getWebDriver().manage().addCookie(cookie);
     }
 
     @After
@@ -202,7 +205,6 @@ public abstract class SelenideTest {
         DesiredCapabilities extraCapabilities = new DesiredCapabilities();
         System.out.println("Test Name: " + testName);
         extraCapabilities.setCapability("name", testName);
-
         extraCapabilities.setCapability("build", BUILD_NAME);
         Configuration.browserCapabilities = extraCapabilities;
     }
