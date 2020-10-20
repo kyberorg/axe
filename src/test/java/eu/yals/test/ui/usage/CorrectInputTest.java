@@ -8,7 +8,6 @@ import org.junit.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static eu.yals.test.ui.pageobjects.uus.HomePageObject.ErrorModal.ERROR_MODAL;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.ErrorModal.ERROR_TEXT;
 import static eu.yals.test.ui.pageobjects.uus.HomePageObject.MainArea.LONG_URL_INPUT;
 import static eu.yals.test.ui.pageobjects.uus.HomePageObject.QrCodeArea.QR_CODE;
 import static eu.yals.test.ui.pageobjects.uus.HomePageObject.QrCodeArea.QR_CODE_AREA;
@@ -46,7 +45,6 @@ public class CorrectInputTest extends SelenideTest {
 
         LONG_URL_INPUT.shouldBe(empty);
 
-        ERROR_MODAL.shouldNotBe(visible);
-        ERROR_TEXT.shouldBe(empty);
+        ERROR_MODAL.shouldNot(exist);
     }
 }

@@ -118,17 +118,18 @@ public abstract class SelenideTest {
         debugInfo();
     }
 
-/*    @Before
+    @Before
     public void setup() {
         if (shouldRunTestsAtGrid()) {
             System.out.printf("@Before build '%s'. Test: '%s%n", BUILD_NAME, testName);
+            //to distinguish test in Grid
+            addTestNameToDriver();
         }
-    }*/
+    }
 
     protected void updateTestNameHook() {
         if (shouldRunTestsAtGrid()) {
-            //to distinguish test in Grid
-            addTestNameToDriver();
+
             Cookie cookie = new Cookie("zaleniumTestName", testName);
             getWebDriver().manage().addCookie(cookie);
             Cookie videoCookie = new Cookie("zaleniumVideo", "true");
