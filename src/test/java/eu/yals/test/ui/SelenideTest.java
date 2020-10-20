@@ -202,6 +202,10 @@ public abstract class SelenideTest {
         DesiredCapabilities extraCapabilities = new DesiredCapabilities();
         System.out.println("Test Name: " + testName);
         extraCapabilities.setCapability("name", testName);
+
+        Cookie cookie = new Cookie("zaleniumTestName", testName);
+        getWebDriver().manage().addCookie(cookie);
+
         extraCapabilities.setCapability("build", BUILD_NAME);
         Configuration.browserCapabilities = extraCapabilities;
     }
