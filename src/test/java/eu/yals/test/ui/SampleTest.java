@@ -1,7 +1,6 @@
 package eu.yals.test.ui;
 
 import com.codeborne.selenide.SelenideElement;
-import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.vaadin.elements.ButtonElement;
 import eu.yals.test.utils.vaadin.elements.TextFieldElement;
 import org.junit.Before;

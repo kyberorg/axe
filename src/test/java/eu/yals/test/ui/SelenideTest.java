@@ -59,10 +59,10 @@ public abstract class SelenideTest {
             testName = setTestNameFromTestDescription(description);
             System.out.printf("Starting build '%s'. Test: '%s%n", BUILD_NAME, testName);
 
-            Cookie cookie = new Cookie("zaleniumTestName", testName);
-            Cookie videoCookie = new Cookie("zaleniumVideo", "true");
-            getWebDriver().manage().addCookie(cookie);
-            getWebDriver().manage().addCookie(videoCookie);
+            /*Cookie cookie = new Cookie("zaleniumTestName", testName);
+            getWebDriver().manage().addCookie(cookie);*/
+            /*Cookie videoCookie = new Cookie("zaleniumVideo", "true");
+            getWebDriver().manage().addCookie(videoCookie);*/
         }
 
         @Override
@@ -87,8 +87,8 @@ public abstract class SelenideTest {
         protected void finished(Description description) {
             super.finished(description);
             System.out.printf("Finished build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
-            getWebDriver().manage().addCookie(videoCookie);
+            /*Cookie videoCookie = new Cookie("zaleniumVideo", "false");
+            getWebDriver().manage().addCookie(videoCookie);*/
         }
     };
 
@@ -133,7 +133,7 @@ public abstract class SelenideTest {
     public void afterTest() {
         if (shouldRunTestsAtGrid()) {
             System.out.printf("@After build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            resetTestNameAfterTestCompleted();
+            //resetTestNameAfterTestCompleted();
         }
     }
 
