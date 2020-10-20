@@ -1,7 +1,7 @@
-package eu.yals.test.ui;
+package eu.yals.test.ui.usage;
 
-import com.codeborne.selenide.Condition;
-import eu.yals.test.ui.pageobjects.NewHomePageObject;
+import eu.yals.test.ui.SelenideTest;
+import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +26,9 @@ public class AbnormalUsageTest extends SelenideTest {
 
         open("/?" + EXTRA_ARGUMENT);
 
-        NewHomePageObject.pasteValueInFormAndSubmitIt(LINK_TO_SAVE);
+        HomePageObject.pasteValueInFormAndSubmitIt(LINK_TO_SAVE);
 
-        NewHomePageObject.ResultArea.RESULT_LINK.shouldNotBe(empty);
-        NewHomePageObject.ResultArea.RESULT_LINK.shouldNotHave(text(EXTRA_ARGUMENT));
+        HomePageObject.ResultArea.RESULT_LINK.shouldNotBe(empty);
+        HomePageObject.ResultArea.RESULT_LINK.shouldNotHave(text(EXTRA_ARGUMENT));
     }
 }
