@@ -11,6 +11,11 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
 
+/**
+ * Simulates some not normal user activity
+ *
+ * @since 1.0
+ */
 @RunWith(SpringRunner.class)
 public class AbnormalUsageTest extends SelenideTest {
     @Before
