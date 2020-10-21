@@ -82,10 +82,10 @@ public class MultiStepTest extends SelenideTest {
     public void linksCounterIncreasedValueAfterSave() throws InterruptedException {
         long initialNumber = HomePageObject.getNumberOfSavedLinks();
 
+        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
         //sometime it takes time to update counter. Waiting second to prevent flaky test.
         TimeUnit.SECONDS.sleep(1);
 
-        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
         long numberAfterLinkSaved = HomePageObject.getNumberOfSavedLinks();
 
         //+1 logic is no longer valid, because someone else (i.e. other tests) can also store link within same time
