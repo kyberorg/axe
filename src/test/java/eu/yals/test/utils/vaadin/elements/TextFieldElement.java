@@ -23,6 +23,6 @@ public class TextFieldElement extends VaadinElement {
     }
 
     public SelenideElement getLabel() {
-        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container #vaadin-text-field-input-0");
+        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container label");
     }
 }
