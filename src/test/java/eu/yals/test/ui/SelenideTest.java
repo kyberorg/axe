@@ -23,6 +23,9 @@ import org.testcontainers.containers.BrowserWebDriverContainer;
 import java.io.File;
 import java.util.Optional;
 
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
@@ -119,13 +122,6 @@ public abstract class SelenideTest {
         debugInfo();
     }
 
-/*    @Before
-    public void setup() {
-        if (shouldRunTestsAtGrid()) {
-            System.out.printf("@Before build '%s'. Test: '%s%n", BUILD_NAME, testName);
-        }
-    }*/
-
     protected void updateTestNameHook() {
         if (shouldRunTestsAtGrid()) {
             Cookie cookie = new Cookie("zaleniumTestName", testName);
@@ -133,6 +129,19 @@ public abstract class SelenideTest {
             Cookie videoCookie = new Cookie("zaleniumVideo", "true");
             getWebDriver().manage().addCookie(videoCookie);
         }
+    }
+
+    protected void waitUntilSiteLoads(int durationInSeconds) {
+        $("body").waitUntil(visible, durationInSeconds * 1000);
+    }
+
+    /**
+     * Just more readable alias for Selenide's {@link com.codeborne.selenide.Selenide#title()}
+     *
+     * @return string with title of opened page
+     */
+    protected String getPageTitle() {
+        return title();
     }
 
     @After

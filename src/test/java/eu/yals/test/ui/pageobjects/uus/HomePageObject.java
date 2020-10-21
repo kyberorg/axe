@@ -6,6 +6,7 @@ import eu.yals.test.utils.vaadin.elements.TextFieldElement;
 import eu.yals.ui.HomeView;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 
 public class HomePageObject {
 
@@ -42,6 +43,12 @@ public class HomePageObject {
     public static void pasteValueInFormAndSubmitIt(String link) {
         pasteValueInForm(link);
         MainArea.SUBMIT_BUTTON.click();
+    }
+
+    public static void storeAndOpenSavedUrl(String urlToStore) {
+        pasteValueInFormAndSubmitIt(urlToStore);
+        String shortLink = HomePageObject.ResultArea.RESULT_LINK.getText();
+        open(shortLink);
     }
 
 
