@@ -132,6 +132,6 @@ public class IncorrectInputTest extends SelenideTest {
     }
 
     private void submitButtonShouldBeDisabled() {
-        SUBMIT_BUTTON.shouldBe(disabled);
+        SUBMIT_BUTTON.shouldHave(attribute("disabled"));
     }
 }
