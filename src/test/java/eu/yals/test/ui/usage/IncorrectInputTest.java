@@ -46,17 +46,13 @@ public class IncorrectInputTest extends SelenideTest {
     @Test
     public void singleSpace() {
         HomePageObject.pasteValueInForm(" ");
-
         submitButtonShouldBeDisabled();
-        formIsClearedResultAndQRCodeAreNotVisible();
     }
 
     @Test
     public void twoSpaces() {
         HomePageObject.pasteValueInForm("  ");
-
         submitButtonShouldBeDisabled();
-        formIsClearedResultAndQRCodeAreNotVisible();
     }
 
     @Test
