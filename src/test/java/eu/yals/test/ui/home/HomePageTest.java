@@ -2,9 +2,11 @@ package eu.yals.test.ui.home;
 
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
+import eu.yals.test.ui.pageobjects.external.SonaveebEe;
 import eu.yals.test.ui.pageobjects.external.VR;
 import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import eu.yals.test.ui.pageobjects.uus.NotFoundViewPageObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,8 +72,7 @@ public class HomePageTest extends SelenideTest {
     }
 
     private void verifyThatVROpened() {
-        SelenideElement logo = $(VR.LOGO);
-        logo.shouldHave(attribute("alt", "VR"));
+        Assert.assertEquals(VR.TITLE_TEXT, getPageTitle());
     }
 
     private void verifyThatPage404Opened() {

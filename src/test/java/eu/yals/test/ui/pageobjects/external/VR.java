@@ -5,6 +5,7 @@ package eu.yals.test.ui.pageobjects.external;
  *
  * @since 2.2
  */
+@SuppressWarnings("SpellCheckingInspection") //this is Finnish lang
 public class VR {
-    public static final String LOGO = "a.mainLogo img";
+    public static final String TITLE_TEXT = "Uudistunut vr.fi – tervetuloa yhteiselle matkalle - VR";
 }
