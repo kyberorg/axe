@@ -486,14 +486,14 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void cleanResults() {
-        log.info("{} Clean Result: Start", TAG );
         shortLink.setHref("");
         shortLink.setText("");
+        log.info("{} Clean Result. Href {} Text: {}", TAG, shortLink.getHref(), shortLink.getText() );
         resultArea.setVisible(false);
 
         qrCode.setSrc("");
+        log.info("{} QR Code Src: {}", TAG, qrCode.getSrc());
         qrCodeArea.setVisible(false);
-        log.info("{} Clean Result: Done", TAG );
     }
 
     private void updateButtonState() {
