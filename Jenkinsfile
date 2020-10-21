@@ -230,7 +230,7 @@ pipeline {
                     "-Dtest.buildName=${buildName} " +
                     '-Dtest=!eu.yals.test.ui.pages.**',
                     actions: 'clean test',
-                    artifacts: "target/**/*.png", failStep: false);
+                    artifacts: "target/reports/**/*.png", failStep: false);
           }
         }
       }

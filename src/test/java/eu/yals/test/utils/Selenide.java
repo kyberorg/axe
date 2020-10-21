@@ -11,7 +11,7 @@ public class Selenide {
     }
 
     public static class Defaults {
-        public static final String REPORT_DIR = "target";
+        public static final String REPORT_DIR = "target/reports";
         public static final String TIMEOUT = "4000";
         public static final String BROWSER = "chrome";
     }
