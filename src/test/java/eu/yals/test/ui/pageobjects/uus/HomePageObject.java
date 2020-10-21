@@ -5,6 +5,8 @@ import eu.yals.test.utils.vaadin.elements.ButtonElement;
 import eu.yals.test.utils.vaadin.elements.TextFieldElement;
 import eu.yals.ui.HomeView;
 
+import java.net.URL;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
@@ -16,6 +18,9 @@ public class HomePageObject {
     }
 
     public static class OverallArea {
+        public static final SelenideElement OVERALL_AREA = $("#" + HomeView.IDs.OVERALL_AREA);
+        public static final SelenideElement OVERALL_LINKS_TEXT = $("#" + HomeView.IDs.OVERALL_LINKS_TEXT);
+        public static final SelenideElement OVERALL_LINKS_NUMBER = $("#" + HomeView.IDs.OVERALL_LINKS_NUMBER);
 
     }
 
@@ -36,10 +41,19 @@ public class HomePageObject {
         public static final SelenideElement ERROR_BUTTON = ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout vaadin-button");
     }
 
+    public static long getNumberOfSavedLinks() {
+        long linksCount;
+        try {
+            linksCount = Long.parseLong(OverallArea.OVERALL_LINKS_NUMBER.getText());
+        } catch (NumberFormatException e) {
+            linksCount = 0;
+        }
+        return linksCount;
+    }
+
     public static void pasteValueInForm(String link) {
         MainArea.LONG_URL_INPUT.setValue(link);
     }
-
 
     public static void pasteValueInFormAndSubmitIt(String link) {
         pasteValueInForm(link);
@@ -52,5 +66,8 @@ public class HomePageObject {
         open(shortLink);
     }
 
+    public static String getSavedUrl() {
+        return ResultArea.RESULT_LINK.getText();
+    }
 
 }
