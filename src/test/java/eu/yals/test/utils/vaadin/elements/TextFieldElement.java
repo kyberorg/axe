@@ -21,4 +21,8 @@ public class TextFieldElement extends VaadinElement {
     public SelenideElement getInput() {
         return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container #vaadin-text-field-input-0 slot input");
     }
+
+    public SelenideElement getLabel() {
+        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container #vaadin-text-field-input-0");
+    }
 }
