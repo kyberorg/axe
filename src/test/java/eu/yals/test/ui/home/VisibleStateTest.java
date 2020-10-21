@@ -100,8 +100,9 @@ public class VisibleStateTest extends SelenideTest {
 
     @Test
     public void inputFieldHasLabel() {
-        String label = LONG_URL_INPUT_LABEL.getText();
-        Assert.assertTrue(StringUtils.isNotBlank(label));
+        LONG_URL_INPUT_LABEL.should(exist);
+        String labelText = LONG_URL_INPUT_LABEL.getText();
+        Assert.assertTrue(StringUtils.isNotBlank(labelText));
     }
 
     @Test
