@@ -1,10 +1,7 @@
 package eu.yals.test.ui.usage;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.vaadin.flow.component.button.testbench.ButtonElement;
 import eu.yals.test.ui.SelenideTest;
-import eu.yals.test.ui.pageobjects.DebugViewPageObject;
 import eu.yals.test.ui.pageobjects.external.Eki;
 import eu.yals.test.ui.pageobjects.external.Wikipedia;
 import eu.yals.test.ui.pageobjects.uus.HomePageObject;

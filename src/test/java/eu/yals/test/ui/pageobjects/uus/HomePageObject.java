@@ -5,8 +5,6 @@ import eu.yals.test.utils.vaadin.elements.ButtonElement;
 import eu.yals.test.utils.vaadin.elements.TextFieldElement;
 import eu.yals.ui.HomeView;
 
-import java.net.URL;
-
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
