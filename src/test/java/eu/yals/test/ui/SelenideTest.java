@@ -162,7 +162,7 @@ public abstract class SelenideTest {
 
     private static void debugInfo() {
         TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.CONTAINER.name()));
-        String testRunner = runMode == TestApp.RunMode.GRID ? getGridFullUrl() : "TestContainers";
+        String testRunner = runMode == TestApp.RunMode.GRID ? "Grid" : "TestContainers";
         String debugInfo = "" + App.NEW_LINE +
                 "=== Debug Info ===" +
                 App.NEW_LINE +
@@ -203,8 +203,7 @@ public abstract class SelenideTest {
     }
 
     private String setTestNameFromTestDescription(final Description description) {
-        //removing package part (as all classes are within eu.yals.test.ui)
-        String testClassName = description.getClassName().replace("eu.yals.test.ui.", "");
+        String testClassName = description.getTestClass().getSimpleName();
         String rawMethodName = description.getMethodName();
         String[] methodAndBrowserInfo = rawMethodName.split("\\[");
         if (methodAndBrowserInfo.length > 0) {
