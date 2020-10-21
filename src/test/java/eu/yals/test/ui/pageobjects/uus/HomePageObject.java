@@ -17,7 +17,7 @@ public class HomePageObject {
         public static final SelenideElement LONG_URL_INPUT_LABEL = TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getLabel();
         public static final SelenideElement LONG_URL_INPUT = TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getInput();
         public static final SelenideElement BANNER = $("#" + HomeView.IDs.BANNER);
-        public static final SelenideElement SUBMIT_BUTTON = ButtonElement.byCss("#" + HomeView.IDs.SUBMIT_BUTTON).getButton();
+        public static final SelenideElement SUBMIT_BUTTON = ButtonElement.byCss("#" + HomeView.IDs.SUBMIT_BUTTON).getSelf();
     }
 
     public static class OverallArea {

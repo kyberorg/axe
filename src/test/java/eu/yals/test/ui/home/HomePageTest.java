@@ -2,7 +2,6 @@ package eu.yals.test.ui.home;
 
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
-import eu.yals.test.ui.pageobjects.external.SonaveebEe;
 import eu.yals.test.ui.pageobjects.external.VR;
 import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import eu.yals.test.ui.pageobjects.uus.NotFoundViewPageObject;

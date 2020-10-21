@@ -57,13 +57,11 @@ public class VisibleStateTest extends SelenideTest {
 
     @Test
     public void resultAreaIsHidden() {
-        RESULT_AREA.should(exist);
         RESULT_AREA.shouldNotBe(visible);
     }
 
     @Test
     public void qrCodeAreaIsHidden() {
-        QR_CODE_AREA.should(exist);
         QR_CODE_AREA.shouldNotBe(visible);
     }
 
