@@ -4,8 +4,7 @@ import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -16,7 +15,7 @@ import static com.codeborne.selenide.Selenide.open;
  *
  * @since 1.0
  */
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class AbnormalUsageTest extends SelenideTest {
     @Before
     public void beforeTest() {

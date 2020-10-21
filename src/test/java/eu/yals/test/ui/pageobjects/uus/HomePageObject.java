@@ -32,7 +32,8 @@ public class HomePageObject {
 
     public static class ErrorModal {
         public static final SelenideElement ERROR_MODAL = $("#vaadin-notification-card");
-        public static final SelenideElement ERROR_TEXT = $("#vaadin-notification-card");
+        public static final SelenideElement ERROR_TEXT = ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout label");
+        public static final SelenideElement ERROR_BUTTON = ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout vaadin-button");
     }
 
     public static void pasteValueInForm(String link) {

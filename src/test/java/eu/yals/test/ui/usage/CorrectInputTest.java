@@ -4,8 +4,7 @@ import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @since 1.0
  */
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class CorrectInputTest extends SelenideTest {
     @Before
     public void beforeTest() {
