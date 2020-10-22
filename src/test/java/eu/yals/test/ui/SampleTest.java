@@ -5,21 +5,19 @@ import eu.yals.test.utils.vaadin.elements.ButtonElement;
 import eu.yals.test.utils.vaadin.elements.TextFieldElement;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class SampleTest extends SelenideTest {
 
     @Before
     public void openPage() {
-        System.out.println("Second Before aka OpenPage");
         open("/");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test

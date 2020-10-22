@@ -20,7 +20,7 @@ public class AbnormalUsageTest extends SelenideTest {
     @Before
     public void beforeTest() {
         open("/");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test

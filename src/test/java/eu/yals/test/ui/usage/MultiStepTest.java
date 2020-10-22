@@ -31,7 +31,7 @@ public class MultiStepTest extends SelenideTest {
     @Before
     public void beforeTest() {
         open("/");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test

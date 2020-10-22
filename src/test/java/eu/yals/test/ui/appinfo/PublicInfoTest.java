@@ -21,7 +21,7 @@ public class PublicInfoTest extends SelenideTest {
     @Before
     public void beforeTest() {
         open("/appInfo");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test

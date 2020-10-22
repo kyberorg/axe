@@ -26,7 +26,7 @@ public class CorrectInputTest extends SelenideTest {
     @Before
     public void beforeTest() {
         open("/");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test

@@ -5,6 +5,7 @@ import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.ui.pageobjects.external.VR;
 import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import eu.yals.test.ui.pageobjects.uus.NotFoundViewPageObject;
+import eu.yals.test.utils.SelenideUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class HomePageTest extends SelenideTest {
     @Before
     public void beforeTest() {
         open("/");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test
@@ -71,7 +72,7 @@ public class HomePageTest extends SelenideTest {
     }
 
     private void verifyThatVROpened() {
-        Assert.assertEquals(VR.TITLE_TEXT, getPageTitle());
+        Assert.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
     }
 
     private void verifyThatPage404Opened() {

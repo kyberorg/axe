@@ -4,13 +4,15 @@ import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.ui.pageobjects.external.*;
 import eu.yals.test.ui.pageobjects.uus.HomePageObject;
+import eu.yals.test.utils.SelenideUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 
 /**
  * Contains IDN URL multi step tests for Front page.
@@ -24,7 +26,7 @@ public class IdnTest extends SelenideTest {
     @Before
     public void beforeTest() {
         open("/");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test
@@ -48,7 +50,7 @@ public class IdnTest extends SelenideTest {
         HomePageObject.storeAndOpenSavedUrl("https://www.101domain.com/عرب.htm");
 
         //needed because site site loads way too long
-        waitUntilSiteLoads(40);
+        SelenideUtils.waitUntilSiteLoads(40);
 
         // verify that opens page of Registation of arabic names
         SelenideElement uniqueClassElement = $(ArabUrlRegistrar.MAIN_CLASS);
@@ -60,7 +62,7 @@ public class IdnTest extends SelenideTest {
         HomePageObject.storeAndOpenSavedUrl("http://中文.tw/");
 
         //needed because site site loads way too long
-        waitUntilSiteLoads(30);
+        SelenideUtils.waitUntilSiteLoads(30);
 
         SelenideElement navTable = $(ZhongwenTw.NAV_TABLE);
         navTable.should(exist);
@@ -69,13 +71,13 @@ public class IdnTest extends SelenideTest {
     @Test
     public void germanUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://www.travemünde.de/");
-        Assert.assertEquals(TravemundeDe.TITLE_TEXT, getPageTitle());
+        Assert.assertEquals(TravemundeDe.TITLE_TEXT, SelenideUtils.getPageTitle());
     }
 
     @Test
     public void estonianUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://sõnaveeb.ee");
-        Assert.assertEquals(SonaveebEe.TITLE_TEXT, getPageTitle());
+        Assert.assertEquals(SonaveebEe.TITLE_TEXT, SelenideUtils.getPageTitle());
     }
 
     /**

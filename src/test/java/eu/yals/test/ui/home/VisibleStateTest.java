@@ -2,6 +2,7 @@ package eu.yals.test.ui.home;
 
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
+import eu.yals.test.utils.SelenideUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,7 +30,7 @@ public class VisibleStateTest extends SelenideTest {
     @Before
     public void beforeTest() {
         open("/");
-        updateTestNameHook();
+        updateTestNameAndStartVideo();
     }
 
     @Test
@@ -84,7 +85,7 @@ public class VisibleStateTest extends SelenideTest {
 
     @Test
     public void shouldHaveCorrectTitle() {
-        Assert.assertEquals("Link shortener for friends", getPageTitle());
+        Assert.assertEquals("Link shortener for friends", SelenideUtils.getPageTitle());
     }
 
     @Test

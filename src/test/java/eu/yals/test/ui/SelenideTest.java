@@ -7,7 +7,10 @@ import eu.yals.constants.App;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.YalsTestDescription;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.platform.commons.util.StringUtils;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -23,24 +26,18 @@ import org.testcontainers.containers.BrowserWebDriverContainer;
 import java.io.File;
 import java.util.Optional;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
-
+/**
+ * Base for all UI Tests, which run with Selenide.
+ *
+ * @since 1.0
+ */
 public abstract class SelenideTest {
     private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
     private static final String SELENIDE_BROWSER = System.getProperty(TestApp.Selenide.BROWSER, Selenide.Defaults.BROWSER);
     private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Selenide.TIMEOUT, Selenide.Defaults.TIMEOUT));
-    private static final BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
-
-    @SuppressWarnings("rawtypes")
-    private static final BrowserWebDriverContainer chrome =
-            new BrowserWebDriverContainer()
-                    .withRecordingMode(TESTS_RECORDING_MODE, new File(REPORT_DIRECTORY))
-                    .withCapabilities(new ChromeOptions());
 
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
@@ -49,50 +46,78 @@ public abstract class SelenideTest {
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
 
+    private static final BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
+
+    @SuppressWarnings("rawtypes")
+    private static final BrowserWebDriverContainer chrome =
+            new BrowserWebDriverContainer()
+                    .withRecordingMode(TESTS_RECORDING_MODE, new File(REPORT_DIRECTORY))
+                    .withCapabilities(new ChromeOptions());
+
     private static String testName;
+    private static boolean isCommonInfoAlreadyShown;
 
     @Rule  // automatically takes screenshot of every failed test
     public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 
     @Rule  // catching test result and triggering BrowserWebDriverContainer#afterTest() for saving test recordings
     public final TestRule watchman = new TestWatcher() {
+        /**
+         * Very first stage of running test. We use it for getting test name and logging executing startup.
+         * @param description JUnit's test {@link Description} from Runner
+         */
         @Override
         protected void starting(final Description description) {
             super.starting(description);
             testName = setTestNameFromTestDescription(description);
             System.out.printf("Starting build '%s'. Test: '%s%n", BUILD_NAME, testName);
-
-            /*Cookie videoCookie = new Cookie("zaleniumVideo", "true");
-            getWebDriver().manage().addCookie(videoCookie);*/
         }
 
+        /**
+         * Marks test as succeeded. We report result to Zalenium or to TestContainers
+         * @param description JUnit's test {@link Description} from Runner
+         */
         @Override
         protected void succeeded(Description description) {
             super.succeeded(description);
-            System.out.printf("Succeeded build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            Cookie cookie = new Cookie("zaleniumTestPassed", "true");
-            getWebDriver().manage().addCookie(cookie);
-            chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.empty());
+            if (shouldRunTestsAtGrid()) {
+                Cookie cookie = new Cookie("zaleniumTestPassed", "true");
+                getWebDriver().manage().addCookie(cookie);
+            } else {
+                chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.empty());
+            }
         }
 
+        /**
+         * Marks test as failed. We report result to Zalenium or to TestContainers
+         * @param e exception that occurred at exec time.
+         * @param description JUnit's test {@link Description} from Runner
+         */
         @Override
         protected void failed(Throwable e, Description description) {
             super.failed(e, description);
-            System.out.printf("Failed build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            Cookie cookie = new Cookie("zaleniumTestPassed", "false");
-            getWebDriver().manage().addCookie(cookie);
-            chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.of(e));
+            if (shouldRunTestsAtGrid()) {
+                Cookie cookie = new Cookie("zaleniumTestPassed", "false");
+                getWebDriver().manage().addCookie(cookie);
+            } else {
+                chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.of(e));
+            }
         }
 
+        /**
+         * Very last step of test execution.
+         * @param description JUnit's test {@link Description} from Runner
+         */
         @Override
         protected void finished(Description description) {
             super.finished(description);
             System.out.printf("Finished build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            /*Cookie videoCookie = new Cookie("zaleniumVideo", "false");
-            getWebDriver().manage().addCookie(videoCookie);*/
         }
     };
 
+    /**
+     * Common Runner Setup and Info.
+     */
     @BeforeClass
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
@@ -105,6 +130,7 @@ public abstract class SelenideTest {
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
             addBuildNameToDriver();
+            //will run tests at Grid
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
             //expose ports if testing local URL
@@ -118,62 +144,57 @@ public abstract class SelenideTest {
             //application runs in docker container
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.CONTAINER.name());
         }
-        //debug information
-        debugInfo();
-    }
-
-    protected void updateTestNameHook() {
-        if (shouldRunTestsAtGrid()) {
-            Cookie cookie = new Cookie("zaleniumTestName", testName);
-            getWebDriver().manage().addCookie(cookie);
-            Cookie videoCookie = new Cookie("zaleniumVideo", "true");
-            getWebDriver().manage().addCookie(videoCookie);
-        }
-    }
-
-    protected void waitUntilSiteLoads(int durationInSeconds) {
-        $("body").waitUntil(visible, durationInSeconds * 1000);
+        //display common information
+        displayCommonInfo();
     }
 
     /**
-     * Just more readable alias for Selenide's {@link com.codeborne.selenide.Selenide#title()}
-     *
-     * @return string with title of opened page
+     * Hook, which updates TestName in Grid.
+     * It uses Driver and therefore needs to run after {@link com.codeborne.selenide.Selenide#open()} method.
      */
-    protected String getPageTitle() {
-        return title();
-    }
-
-    @After
-    public void afterTest() {
+    protected void updateTestNameAndStartVideo() {
         if (shouldRunTestsAtGrid()) {
-            System.out.printf("@After build '%s'. Test: '%s%n", BUILD_NAME, testName);
-            resetTestNameAfterTestCompleted();
-            Cookie videoCookie = new Cookie("zaleniumVideo", "false");
-            getWebDriver().manage().addCookie(videoCookie);
+            setTestName();
+            startVideo();
         }
     }
 
+    /**
+     * Actions performed after test completes.
+     */
+    @After
+    public void afterTest() {
+        if (shouldRunTestsAtGrid()) {
+            resetTestNameAfterTestCompleted();
+            stopVideo();
+        }
+    }
+
+    /**
+     * Actions after all tests.
+     */
     @AfterClass
     public static void tearDown() {
-        //actions after all tests
         System.out.println("Testing is Done");
     }
 
-    private static void debugInfo() {
-        TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.CONTAINER.name()));
-        String testRunner = runMode == TestApp.RunMode.GRID ? "Grid" : "TestContainers";
-        String debugInfo = "" + App.NEW_LINE +
-                "=== Debug Info ===" +
-                App.NEW_LINE +
-                String.format("Will test BASE_URL: %s", BASE_URL) + App.NEW_LINE +
-                String.format("Will test at : %s", testRunner) + App.NEW_LINE +
-                String.format("Application will start at %d", SERVER_PORT) + App.NEW_LINE +
-                String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY) +
-                App.NEW_LINE +
-                "==================" +
-                App.NEW_LINE;
-        System.out.println(debugInfo);
+    private static void displayCommonInfo() {
+        if (!isCommonInfoAlreadyShown) {
+            TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.CONTAINER.name()));
+            String testRunner = runMode == TestApp.RunMode.GRID ? "Grid" : "TestContainers";
+            String commonInfo = "" + App.NEW_LINE +
+                    "=== UI Tests Common Info ===" +
+                    App.NEW_LINE +
+                    String.format("BuildName: %s", BUILD_NAME) + App.NEW_LINE +
+                    String.format("Will test BASE_URL: %s", BASE_URL) + App.NEW_LINE +
+                    String.format("Will test at : %s", testRunner) + App.NEW_LINE +
+                    String.format("Application will start at %d", SERVER_PORT) + App.NEW_LINE +
+                    String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY) + App.NEW_LINE +
+                    "==================" +
+                    App.NEW_LINE;
+            System.out.println(commonInfo);
+            isCommonInfoAlreadyShown = true;
+        }
     }
 
     private static boolean shouldRunTestsAtGrid() {
@@ -202,6 +223,12 @@ public abstract class SelenideTest {
         }
     }
 
+    private static void addBuildNameToDriver() {
+        DesiredCapabilities extraCapabilities = new DesiredCapabilities();
+        extraCapabilities.setCapability("build", BUILD_NAME);
+        Configuration.browserCapabilities = extraCapabilities;
+    }
+
     private String setTestNameFromTestDescription(final Description description) {
         String testClassName = description.getTestClass().getSimpleName();
         String rawMethodName = description.getMethodName();
@@ -214,10 +241,9 @@ public abstract class SelenideTest {
         }
     }
 
-    private static void addBuildNameToDriver() {
-        DesiredCapabilities extraCapabilities = new DesiredCapabilities();
-        extraCapabilities.setCapability("build", BUILD_NAME);
-        Configuration.browserCapabilities = extraCapabilities;
+    private void setTestName() {
+        Cookie cookie = new Cookie("zaleniumTestName", testName);
+        getWebDriver().manage().addCookie(cookie);
     }
 
     private void resetTestNameAfterTestCompleted() {
@@ -226,5 +252,15 @@ public abstract class SelenideTest {
             desiredCapabilities.asMap().remove("name");
         }
         Configuration.browserCapabilities = desiredCapabilities;
+    }
+
+    private void startVideo() {
+        Cookie videoCookie = new Cookie("zaleniumVideo", "true");
+        getWebDriver().manage().addCookie(videoCookie);
+    }
+
+    private void stopVideo() {
+        Cookie videoCookie = new Cookie("zaleniumVideo", "false");
+        getWebDriver().manage().addCookie(videoCookie);
     }
 }
