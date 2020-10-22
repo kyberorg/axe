@@ -1,7 +1,7 @@
 package eu.yals.test.ui.usage;
 
 import eu.yals.test.ui.SelenideTest;
-import eu.yals.test.ui.pageobjects.uus.HomePageObject;
+import eu.yals.test.ui.pageobjects.HomePageObject;
 import eu.yals.utils.UrlExtraValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.ErrorModal.*;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.MainArea.LONG_URL_INPUT;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.MainArea.SUBMIT_BUTTON;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.QrCodeArea.QR_CODE_AREA;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.ResultArea.RESULT_AREA;
+import static eu.yals.test.ui.pageobjects.HomePageObject.ErrorModal.*;
+import static eu.yals.test.ui.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
+import static eu.yals.test.ui.pageobjects.HomePageObject.MainArea.SUBMIT_BUTTON;
+import static eu.yals.test.ui.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
+import static eu.yals.test.ui.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 
 @SpringBootTest
 public class IncorrectInputTest extends SelenideTest {

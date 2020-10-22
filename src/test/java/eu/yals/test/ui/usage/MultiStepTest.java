@@ -2,9 +2,9 @@ package eu.yals.test.ui.usage;
 
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
+import eu.yals.test.ui.pageobjects.HomePageObject;
 import eu.yals.test.ui.pageobjects.external.Eki;
 import eu.yals.test.ui.pageobjects.external.Wikipedia;
-import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.ErrorModal.ERROR_BUTTON;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.ErrorModal.ERROR_MODAL;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.MainArea.LONG_URL_INPUT;
-import static eu.yals.test.ui.pageobjects.uus.HomePageObject.ResultArea.*;
+import static eu.yals.test.ui.pageobjects.HomePageObject.ErrorModal.ERROR_BUTTON;
+import static eu.yals.test.ui.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
+import static eu.yals.test.ui.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
+import static eu.yals.test.ui.pageobjects.HomePageObject.ResultArea.*;
 
 /**
  * Contains multi step tests for Front page

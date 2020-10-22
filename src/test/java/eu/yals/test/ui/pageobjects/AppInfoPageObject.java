@@ -1,61 +1,20 @@
 package eu.yals.test.ui.pageobjects;
 
-import com.vaadin.flow.component.html.testbench.AnchorElement;
-import com.vaadin.flow.component.html.testbench.SpanElement;
-import com.vaadin.testbench.TestBenchElement;
+import com.codeborne.selenide.SelenideElement;
 import eu.yals.ui.dev.AppInfoView;
-import org.openqa.selenium.WebDriver;
+
+import static com.codeborne.selenide.Selenide.$;
 
 /**
  * Page Object for {@link AppInfoView}.
  *
  * @since 2.7
  */
-public class AppInfoPageObject extends YalsPageObject {
+public class AppInfoPageObject {
 
-    /**
-     * Provides page object.
-     *
-     * @param driver web driver
-     * @return created {@link AppInfoPageObject}
-     */
-    public static AppInfoPageObject getPageObject(final WebDriver driver) {
-        return new AppInfoPageObject(driver);
-    }
-
-    /**
-     * Creates {@link AppInfoPageObject}.
-     *
-     * @param driver web driver
-     */
-    public AppInfoPageObject(final WebDriver driver) {
-        super(driver, AppInfoView.IDs.VIEW_ID);
-    }
-
-    /**
-     * Public area.
-     *
-     * @return element
-     */
-    public TestBenchElement getPublicInfoArea() {
-        return $(TestBenchElement.class).id(AppInfoView.IDs.PUBLIC_INFO_AREA);
-    }
-
-    /**
-     * Version span.
-     *
-     * @return element
-     */
-    public SpanElement getVersion() {
-        return getPublicInfoArea().$(SpanElement.class).id(AppInfoView.IDs.VERSION);
-    }
-
-    /**
-     * Commit link.
-     *
-     * @return element
-     */
-    public AnchorElement getCommitLink() {
-        return getPublicInfoArea().$(AnchorElement.class).id(AppInfoView.IDs.COMMIT_LINK);
+    public static class PublicInfoArea {
+        public static final SelenideElement PUBLIC_INFO_AREA = $("#" + AppInfoView.IDs.PUBLIC_INFO_AREA);
+        public static final SelenideElement VERSION = $("#" + AppInfoView.IDs.VERSION);
+        public static final SelenideElement COMMIT_LINK = $("#" + AppInfoView.IDs.COMMIT_LINK);
     }
 }

@@ -236,12 +236,6 @@
             <version>1.15.0-rc2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Vaadin Test Framework -->
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>

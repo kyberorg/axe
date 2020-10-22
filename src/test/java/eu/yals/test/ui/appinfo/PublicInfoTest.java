@@ -7,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.uus.AppInfoPageObject.PublicInfoArea.COMMIT_LINK;
-import static eu.yals.test.ui.pageobjects.uus.AppInfoPageObject.PublicInfoArea.VERSION;
+import static eu.yals.test.ui.pageobjects.AppInfoPageObject.PublicInfoArea.COMMIT_LINK;
+import static eu.yals.test.ui.pageobjects.AppInfoPageObject.PublicInfoArea.VERSION;
 
 /**
  * Checking elements of public info area with information about version

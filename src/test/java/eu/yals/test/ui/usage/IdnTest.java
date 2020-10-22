@@ -2,8 +2,8 @@ package eu.yals.test.ui.usage;
 
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
+import eu.yals.test.ui.pageobjects.HomePageObject;
 import eu.yals.test.ui.pageobjects.external.*;
-import eu.yals.test.ui.pageobjects.uus.HomePageObject;
 import eu.yals.test.utils.SelenideUtils;
 import org.junit.Assert;
 import org.junit.Before;

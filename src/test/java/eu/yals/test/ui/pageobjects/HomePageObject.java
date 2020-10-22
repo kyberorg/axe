@@ -1,4 +1,4 @@
-package eu.yals.test.ui.pageobjects.uus;
+package eu.yals.test.ui.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.utils.vaadin.elements.ButtonElement;
