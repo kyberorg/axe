@@ -122,6 +122,7 @@ public class TestUtils {
             case LOCAL:
             default:
                 localUrl = String.format("http://localhost:%d", serverPort);
+                break;
         }
 
         return localUrl;
