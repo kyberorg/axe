@@ -27,7 +27,6 @@ public class HomePageObject {
         public static final SelenideElement OVERALL_AREA = $("#" + HomeView.IDs.OVERALL_AREA);
         public static final SelenideElement OVERALL_LINKS_TEXT = $("#" + HomeView.IDs.OVERALL_LINKS_TEXT);
         public static final SelenideElement OVERALL_LINKS_NUMBER = $("#" + HomeView.IDs.OVERALL_LINKS_NUMBER);
-
     }
 
     public static class ResultArea {
@@ -75,5 +74,4 @@ public class HomePageObject {
     public static String getSavedUrl() {
         return ResultArea.RESULT_LINK.getText();
     }
-
 }

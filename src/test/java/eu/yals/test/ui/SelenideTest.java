@@ -5,7 +5,6 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit.ScreenShooter;
 import eu.yals.constants.App;
 import eu.yals.test.TestApp;
-import eu.yals.test.utils.Selenide;
 import eu.yals.test.utils.YalsTestDescription;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,11 +34,11 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
  * @since 1.0
  */
 public abstract class SelenideTest {
-    private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Selenide.REPORT_DIR, Selenide.Defaults.REPORT_DIR);
-    private static final String SELENIDE_BROWSER = System.getProperty(TestApp.Selenide.BROWSER, Selenide.Defaults.BROWSER);
-    private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Selenide.TIMEOUT, Selenide.Defaults.TIMEOUT));
+    private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Properties.REPORT_DIR, TestApp.Defaults.Selenide.REPORT_DIR);
+    private static final String SELENIDE_BROWSER = System.getProperty(TestApp.Properties.Selenide.BROWSER, TestApp.Defaults.Selenide.BROWSER);
+    private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Properties.Selenide.TIMEOUT, TestApp.Defaults.Selenide.TIMEOUT));
 
-    private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, "8080"));
+    private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, TestApp.Defaults.SERVER_PORT));
     private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
     protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
 
@@ -200,7 +199,7 @@ public abstract class SelenideTest {
     }
 
     private static boolean shouldRunTestsAtGrid() {
-        String selenideRemote = System.getProperty(TestApp.Selenide.REMOTE, "");
+        String selenideRemote = System.getProperty(TestApp.Properties.Selenide.REMOTE, "");
         String gridHostname = System.getProperty(TestApp.Properties.GRID_HOSTNAME, "");
         return StringUtils.isNotBlank(selenideRemote) || StringUtils.isNotBlank(gridHostname);
     }
@@ -210,7 +209,7 @@ public abstract class SelenideTest {
         final String HTTP_PREFIX = "http://";
         final String GRID_POSTFIX = "/wd/hub";
 
-        String selenideRemote = System.getProperty(TestApp.Selenide.REMOTE, "");
+        String selenideRemote = System.getProperty(TestApp.Properties.Selenide.REMOTE, "");
         if (StringUtils.isNotBlank(selenideRemote)) {
             return selenideRemote;
         }

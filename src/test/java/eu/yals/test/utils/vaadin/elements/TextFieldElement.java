@@ -4,18 +4,13 @@ import com.codeborne.selenide.SelenideElement;
 
 import static eu.yals.test.utils.vaadin.VaadinUtils.$vaadin;
 
-public class TextFieldElement extends VaadinElement {
-    String tag = "vaadin-text-field";
+public class TextFieldElement {
+    private String cssSelector;
 
     public static TextFieldElement byCss(String cssSelector) {
         TextFieldElement element = new TextFieldElement();
         element.cssSelector = cssSelector;
         return element;
-    }
-
-    @Override
-    public String getTag() {
-        return tag;
     }
 
     public SelenideElement getInput() {

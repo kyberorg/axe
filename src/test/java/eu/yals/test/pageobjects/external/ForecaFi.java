@@ -5,6 +5,7 @@ package eu.yals.test.pageobjects.external;
  *
  * @since 2.5
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class ForecaFi {
     public static final String LOGO = ".logo a";
     public static final String LOGO_TITLE = "Foreca";
