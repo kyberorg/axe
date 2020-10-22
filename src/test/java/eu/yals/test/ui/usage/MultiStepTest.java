@@ -43,7 +43,8 @@ public class MultiStepTest extends SelenideTest {
         ERROR_MODAL.shouldNot(exist);
     }
 
-    @Test
+    //@Test
+    //TODO re-enable when #232 is fixed
     public void shortenItButtonClearsResultAndValueIfVisible() {
         HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
 
@@ -58,8 +59,6 @@ public class MultiStepTest extends SelenideTest {
     /**
      * Tests copy link button
      */
-    // @Test not working yet
-    // (https://vaadin.com/forum/thread/18090427/paste-from-clipboard-not-working)
     @Test
     public void copyLinkButtonShouldCopyShortLink() {
         HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
