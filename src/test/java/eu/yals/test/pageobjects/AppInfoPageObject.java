@@ -1,4 +1,4 @@
-package eu.yals.test.ui.pageobjects;
+package eu.yals.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.ui.dev.AppInfoView;

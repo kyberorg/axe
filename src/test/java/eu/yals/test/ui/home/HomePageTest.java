@@ -1,10 +1,10 @@
 package eu.yals.test.ui.home;
 
 import com.codeborne.selenide.SelenideElement;
+import eu.yals.test.pageobjects.HomePageObject;
+import eu.yals.test.pageobjects.NotFoundViewPageObject;
+import eu.yals.test.pageobjects.external.VR;
 import eu.yals.test.ui.SelenideTest;
-import eu.yals.test.ui.pageobjects.HomePageObject;
-import eu.yals.test.ui.pageobjects.NotFoundViewPageObject;
-import eu.yals.test.ui.pageobjects.external.VR;
 import eu.yals.test.utils.SelenideUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
-import static eu.yals.test.ui.pageobjects.HomePageObject.MainArea.SUBMIT_BUTTON;
+import static eu.yals.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
+import static eu.yals.test.pageobjects.HomePageObject.MainArea.SUBMIT_BUTTON;
 
 /**
  * Testing /(Slash) URL.

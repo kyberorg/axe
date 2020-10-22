@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.AppInfoPageObject.PublicInfoArea.*;
+import static eu.yals.test.pageobjects.AppInfoPageObject.PublicInfoArea.*;
 
 /**
  * Checking elements of public info area with information about version

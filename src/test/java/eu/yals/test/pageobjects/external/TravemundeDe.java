@@ -1,4 +1,4 @@
-package eu.yals.test.ui.pageobjects.external;
+package eu.yals.test.pageobjects.external;
 
 /**
  * Page object for page http://www.travemünde.de/

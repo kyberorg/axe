@@ -1,18 +1,18 @@
 package eu.yals.test.ui.usage;
 
+import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.ui.SelenideTest;
-import eu.yals.test.ui.pageobjects.HomePageObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
-import static eu.yals.test.ui.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
-import static eu.yals.test.ui.pageobjects.HomePageObject.QrCodeArea.QR_CODE;
-import static eu.yals.test.ui.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
-import static eu.yals.test.ui.pageobjects.HomePageObject.ResultArea.*;
+import static eu.yals.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
+import static eu.yals.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
+import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE;
+import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
+import static eu.yals.test.pageobjects.HomePageObject.ResultArea.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

@@ -1,7 +1,7 @@
 package eu.yals.test.ui.usage;
 
+import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.ui.SelenideTest;
-import eu.yals.test.ui.pageobjects.HomePageObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;

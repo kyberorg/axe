@@ -13,11 +13,11 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
-import static eu.yals.test.ui.pageobjects.HomePageObject.MainArea.*;
-import static eu.yals.test.ui.pageobjects.HomePageObject.OverallArea.*;
-import static eu.yals.test.ui.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
-import static eu.yals.test.ui.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
+import static eu.yals.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
+import static eu.yals.test.pageobjects.HomePageObject.MainArea.*;
+import static eu.yals.test.pageobjects.HomePageObject.OverallArea.*;
+import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
+import static eu.yals.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 import static org.junit.Assert.fail;
 
 /**
