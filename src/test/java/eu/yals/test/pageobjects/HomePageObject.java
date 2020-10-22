@@ -1,7 +1,6 @@
 package eu.yals.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import eu.yals.test.utils.vaadin.elements.ButtonElement;
 import eu.yals.test.utils.vaadin.elements.TextFieldElement;
 import eu.yals.ui.HomeView;
 
@@ -21,7 +20,7 @@ public class HomePageObject {
         public static final SelenideElement LONG_URL_INPUT_LABEL = TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getLabel();
         public static final SelenideElement LONG_URL_INPUT = TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getInput();
         public static final SelenideElement BANNER = $("#" + HomeView.IDs.BANNER);
-        public static final SelenideElement SUBMIT_BUTTON = ButtonElement.byCss("#" + HomeView.IDs.SUBMIT_BUTTON).getSelf();
+        public static final SelenideElement SUBMIT_BUTTON = $("#" + HomeView.IDs.SUBMIT_BUTTON);
     }
 
     public static class OverallArea {
