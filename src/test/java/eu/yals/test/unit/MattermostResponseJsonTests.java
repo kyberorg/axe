@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for {@link MattermostResponseJson )}
+ * Tests for {@link MattermostResponseJson)}
  *
  * @since 2.3
  */

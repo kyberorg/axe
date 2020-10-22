@@ -1,7 +1,6 @@
 package eu.yals.test.ui.pageobjects.uus;
 
 import com.codeborne.selenide.SelenideElement;
-import com.vaadin.flow.component.html.testbench.SelectElement;
 import eu.yals.test.utils.vaadin.elements.ButtonElement;
 import eu.yals.test.utils.vaadin.elements.TextFieldElement;
 import eu.yals.ui.HomeView;
@@ -9,6 +8,11 @@ import eu.yals.ui.HomeView;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
+/**
+ * Page Object for {@link HomeView}.
+ *
+ * @since 2.2
+ */
 public class HomePageObject {
 
     public static class MainArea {

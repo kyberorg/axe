@@ -1,8 +1,6 @@
 package eu.yals.test.ui.appinfo;
 
-import com.codeborne.selenide.Condition;
 import eu.yals.test.ui.SelenideTest;
-import eu.yals.test.ui.pageobjects.uus.AppInfoPageObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
