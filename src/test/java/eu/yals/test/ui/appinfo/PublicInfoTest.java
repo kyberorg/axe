@@ -7,8 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static eu.yals.test.ui.pageobjects.AppInfoPageObject.PublicInfoArea.COMMIT_LINK;
-import static eu.yals.test.ui.pageobjects.AppInfoPageObject.PublicInfoArea.VERSION;
+import static eu.yals.test.ui.pageobjects.AppInfoPageObject.PublicInfoArea.*;
 
 /**
  * Checking elements of public info area with information about version
@@ -25,8 +24,13 @@ public class PublicInfoTest extends SelenideTest {
     }
 
     @Test
-    public void publicAreaHasAllRequiredElements() {
+    public void publicAreaIsVisible() {
+        PUBLIC_INFO_AREA.should(exist);
+        PUBLIC_INFO_AREA.shouldBe(visible);
+    }
 
+    @Test
+    public void publicAreaHasAllRequiredElements() {
         VERSION.shouldBe(visible);
         VERSION.shouldHave(text("version"));
         VERSION.shouldHave(text("commit"));
