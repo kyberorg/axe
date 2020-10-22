@@ -190,6 +190,8 @@ public abstract class SelenideTest {
                     String.format("Will test at : %s", testRunner) + App.NEW_LINE +
                     String.format("Application will start at %d", SERVER_PORT) + App.NEW_LINE +
                     String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY) + App.NEW_LINE +
+                    String.format("Live Sessions: https://grid.yatech.eu/grid/admin/live?build=%s", BUILD_NAME) +
+                    App.NEW_LINE +
                     "==================" +
                     App.NEW_LINE;
             System.out.println(commonInfo);
