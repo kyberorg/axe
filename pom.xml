@@ -208,6 +208,14 @@
             <artifactId>apm-agent-attach</artifactId>
             <version>1.18.1</version>
         </dependency>
+        <!-- Hibernate URL Validator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.1.6.Final</version>
+        </dependency>
+
+
 
         <!-- Spring Boot Tests -->
         <dependency>
