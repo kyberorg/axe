@@ -115,9 +115,9 @@ public class IncorrectInputTest extends SelenideTest {
     }
 
     private void formIsClearedResultAndQRCodeAreNotVisible() {
-        LONG_URL_INPUT.shouldBe(empty);
         RESULT_AREA.shouldNotBe(visible);
         QR_CODE_AREA.shouldNotBe(visible);
+        LONG_URL_INPUT.shouldBe(empty);
     }
 
     private void submitButtonShouldBeDisabled() {
