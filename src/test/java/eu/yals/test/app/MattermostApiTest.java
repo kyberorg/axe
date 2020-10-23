@@ -15,6 +15,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static eu.yals.constants.HttpCode.STATUS_200;
 import static eu.yals.constants.HttpCode.STATUS_400;
@@ -225,10 +226,9 @@ public class MattermostApiTest extends UnirestTest {
     }
 
     @Test
-    public void whenTextHasMultiWordDescriptionShouldReturnShortLinkAndMultiWordDescription()
-            throws Exception {
+    public void whenTextHasMultiWordDescriptionShouldReturnShortLinkAndMultiWordDescription() {
         String description = "Multi Test Description";
-        String encodedDescription = URLEncoder.encode(description, "UTF-8");
+        String encodedDescription = URLEncoder.encode(description, StandardCharsets.UTF_8);
         MattermostMock matterPayload = getMock("https%3A%2F%2Fyals.eu+" + encodedDescription);
 
         HttpRequest request =

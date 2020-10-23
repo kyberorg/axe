@@ -222,15 +222,15 @@ pipeline {
       steps {
         script {
           def buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
-          withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'hub-creds',
+          withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'grid-creds',
                             usernameVariable: 'USR', passwordVariable: 'PASS'
                            ]]) {
-            testApp(url: testUrl, dParams: "-Dcom.vaadin.testbench.Parameters.hubHostname=grid.yatech.eu " +
-                    '-Dtest.browsers=chrome ' +
+            testApp(url: testUrl, dParams: "-Dgrid.hostname=${USR}:${PASS}@grid.yatech.eu " +
+                    '-Dselenide.browser=chrome ' +
                     "-Dtest.buildName=${buildName} " +
                     '-Dtest=!eu.yals.test.ui.pages.**',
                     actions: 'clean test',
-                    artifacts: "target/*.png", failStep: false);
+                    artifacts: "target/reports/**/*.png", failStep: false);
           }
         }
       }

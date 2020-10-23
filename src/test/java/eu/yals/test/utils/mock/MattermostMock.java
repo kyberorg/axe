@@ -40,7 +40,7 @@ public final class MattermostMock {
     }
 
     /**
-     * Adds chanel name to mock.
+     * Adds channel name to mock.
      *
      * @param channelName string with MM channel name
      * @return {@link MattermostMock}
@@ -134,7 +134,7 @@ public final class MattermostMock {
             sb.append(str).append(App.AND);
         }
 
-        return sb.toString().substring(0, sb.toString().length() - 1);
+        return sb.substring(0, sb.toString().length() - 1);
     }
 
     private String createParam(final Marker marker, final String value) {

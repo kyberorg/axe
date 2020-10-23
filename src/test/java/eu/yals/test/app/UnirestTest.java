@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Field;
 
 /**
- * Tests, where we run application same ways in {@link eu.yals.test.ui.vaadin.VaadinTest} and test.
+ * Tests, where we run application same ways in {@link eu.yals.test.ui.SelenideTest} and test.
  * by doing requests using {@link kong.unirest.Unirest}
  *
  * @since 2.5.1

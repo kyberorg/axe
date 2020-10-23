@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -100,16 +97,6 @@ public class TestUtils {
     }
 
     /**
-     * Asserts that string is empty.
-     *
-     * @param message test error message
-     * @param string  string to check
-     */
-    public static void assertEmpty(String message, String string) {
-        assertTrue(message, StringUtils.isBlank(string));
-    }
-
-    /**
      * Defines URL of server to run tests against.
      *
      * @return string with Server+Port
@@ -117,16 +104,28 @@ public class TestUtils {
     public static String getTestUrl() {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         final String localUrl;
-        String runMode =
-                System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name());
 
-        if (runMode.equals(TestApp.RunMode.CONTAINER.name())) {
-            localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
-        } else {
-            localUrl = String.format("http://localhost:%d", serverPort);
+        if(StringUtils.isNotBlank(System.getProperty(TestApp.Properties.TEST_URL, ""))) {
+            return System.getProperty(TestApp.Properties.TEST_URL);
         }
 
-        return System.getProperty(TestApp.Properties.TEST_URL, localUrl);
+        TestApp.RunMode runMode = TestApp.RunMode.valueOf(
+                System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
+
+        switch (runMode) {
+            case CONTAINER:
+                localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
+                break;
+            case GRID:
+                localUrl = System.getProperty(TestApp.Properties.TEST_URL);
+                break;
+            case LOCAL:
+            default:
+                localUrl = String.format("http://localhost:%d", serverPort);
+                break;
+        }
+
+        return localUrl;
     }
 
     /**
@@ -151,40 +150,6 @@ public class TestUtils {
         SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd-HHmm");
         Date date = new Date(System.currentTimeMillis());
         return formatter.format(date);
-    }
-
-    /**
-     * List of browser to run tests with.
-     *
-     * @return list of {@link TestApp.Browser}
-     */
-    public static List<TestApp.Browser> getTestBrowsers() {
-        List<TestApp.Browser> browsers = new ArrayList<>(1);
-
-        String testBrowsersProp = System.getProperty(TestApp.Properties.TEST_BROWSERS, "");
-        if (StringUtils.isBlank(testBrowsersProp)) {
-            return defaultBrowsers();
-        }
-
-        String[] testBrowsers = testBrowsersProp.trim().split(",");
-        if (testBrowsers.length <= 0) {
-            return defaultBrowsers();
-        }
-        for (String testBrowser : testBrowsers) {
-            TestApp.Browser browser;
-            try {
-                browser = TestApp.Browser.valueOf(testBrowser.trim().toUpperCase());
-                browsers.add(browser);
-            } catch (IllegalArgumentException | NullPointerException e) {
-                log.error(String.format("Browser '%s' is not supported. Skipping...", testBrowser), e);
-            }
-        }
-        if (browsers.isEmpty()) browsers = defaultBrowsers();
-        return browsers;
-    }
-
-    private static List<TestApp.Browser> defaultBrowsers() {
-        return Collections.singletonList(TestApp.Browser.CHROME);
     }
 
     /**

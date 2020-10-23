@@ -11,8 +11,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static eu.yals.constants.HttpCode.*;
 import static org.junit.Assert.*;
@@ -56,12 +56,12 @@ public class GetApiTest extends UnirestTest {
     }
 
     @Test
-    public void onRequestWithSpecialCharIdentStatusIs400() throws UnsupportedEncodingException {
+    public void onRequestWithSpecialCharIdentStatusIs400() {
         String specChars = "%#";
         String url =
                 TEST_URL
                         + Endpoint.ForTests.LINK_API
-                        + URLEncoder.encode(specChars, "UTF-8"); // because '%' should be encoded
+                        + URLEncoder.encode(specChars, StandardCharsets.UTF_8); // because '%' should be encoded
         HttpRequest request = Unirest.get(url);
         HttpResponse<String> result = request.asString();
 

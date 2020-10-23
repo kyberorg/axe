@@ -34,8 +34,6 @@
         <java.version>11</java.version>
         <!-- Vaadin version -->
         <vaadin.version>14.0.8</vaadin.version>
-        <!-- Selenium Version -->
-        <selenium.version>3.141.59</selenium.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -217,23 +215,25 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Vaadin Test Framework -->
+        <!-- Selenide Test Framework -->
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench</artifactId>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>5.15.0</version>
             <scope>test</scope>
+            <!-- temporary disable jsoup because it conflicts with Vaadin -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jsoup</groupId>
+                    <artifactId>jsoup</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <!-- Selenium: to avoid "This version of TestBench depends on Selenium version 3.141.59 but version 3.14.0 was found" -->
+        <!-- Test Containers -->
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-remote-driver</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <version>${selenium.version}</version>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>selenium</artifactId>
+            <version>1.15.0-rc2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
