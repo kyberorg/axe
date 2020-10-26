@@ -25,7 +25,7 @@ public final class Endpoint {
         public static final String PAGE_404 = "errors/404page";
 
         /**
-         * Page that will appear, when user hits location which is not exist nor served by application.
+         * Page that will appear, when user hits ident which is not exist.
          */
         public static final String IDENT_404 = "errors/404ident";
 
