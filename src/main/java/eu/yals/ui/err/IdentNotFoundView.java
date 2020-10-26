@@ -16,7 +16,7 @@ import static eu.yals.constants.HttpCode.STATUS_404;
 @SpringComponent
 @UIScope
 @PageTitle("Yals: Error 404")
-@Route(value = Endpoint.UI.PAGE_404, layout = AppView.class)
+@Route(value = Endpoint.UI.IDENT_404, layout = AppView.class)
 public class IdentNotFoundView extends VerticalLayout implements HasErrorParameter<IdentNotFoundException> {
 
     private final H1 title = new H1();
