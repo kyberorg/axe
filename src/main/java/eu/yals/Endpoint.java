@@ -121,11 +121,6 @@ public final class Endpoint {
      */
     public static class TNT {
         /**
-         * Workaround for "/{ident}" endpoint. Not intended to be accessed directly
-         */
-        public static final String SLASH_IDENT = "app";
-
-        /**
          * Endpoint for redirecting to long links. Not intended to be accessed directly
          */
         public static final String REDIRECTOR = "redirector";
