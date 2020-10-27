@@ -138,6 +138,11 @@ public final class Endpoint {
          * {@link eu.yals.controllers.AppOfflineController}
          */
         public static final String APP_OFFLINE = "/app-offline";
+
+        /**
+         * Server Error Loopback View. Intended to be used only within {@link eu.yals.ui.err.ServerErrorView}.
+         */
+        public static final String SERVER_ERROR_LOOP = "server-error-loop";
     }
 
     /**

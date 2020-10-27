@@ -14,6 +14,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.exception.GeneralServerException;
+import eu.yals.exception.NeedForLoopException;
 import eu.yals.exception.error.YalsError;
 import eu.yals.ui.AppView;
 import eu.yals.utils.AppUtils;
@@ -176,7 +177,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
         YalsError yalsError = errorUtils.getYalsErrorFromEvent(event);
         if (Objects.isNull(yalsError)) {
-            event.rerouteToError(GeneralServerException.class, Integer.toString(STATUS_500));
+            event.rerouteToError(NeedForLoopException.class, Integer.toString(STATUS_500));
             return;
         }
 
@@ -189,7 +190,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
                 return;
             default:
                 fillUIWithValuesFromError(yalsError);
-                event.rerouteToError(GeneralServerException.class, Integer.toString(yalsError.getHttpStatus()));
+                event.rerouteToError(NeedForLoopException.class, Integer.toString(yalsError.getHttpStatus()));
                 break;
         }
     }
@@ -205,6 +206,4 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<GeneralServerException> parameter) {
         return errorUtils.parseStatusFromErrorParameter(parameter, STATUS_500);
     }
-
-
 }
