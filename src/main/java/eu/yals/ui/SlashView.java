@@ -26,7 +26,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import static eu.yals.constants.HttpCode.STATUS_302;
-import static eu.yals.constants.HttpCode.STATUS_404;
 
 @Slf4j
 @Controller
@@ -63,15 +62,9 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
                 String link = ((GetResult.Success) searchResult).getLink();
                 log.info("{} Got long URL. Redirecting to {}", TAG, link);
                 event.rerouteToError(NeedForRedirectException.class, link);
-                return STATUS_302;
             } else if (searchResult instanceof GetResult.NotFound) {
                 log.info("{} No corresponding longURL found. Replying with 404. {\"Ident\": {}}", TAG, route);
-                if (isApiRequest(route) || AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
-                    VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
-                } else {
-                    event.rerouteToError(IdentNotFoundException.class);
-                }
-                return STATUS_302;
+                rerouteTo404(route, event, Target.IDENT_NOT_FOUND);
             } else if (searchResult instanceof GetResult.DatabaseDown) {
                 log.info("{} Database is DOWN. Replying with 503", TAG);
                 event.rerouteTo(AppDownView.class);
@@ -81,8 +74,7 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
             }
         } else {
             log.info("{} Page not found. Replying with 404. {\"Unknown Route\": {}}", TAG, route);
-            event.rerouteToError(PageNotFoundException.class);
-            return STATUS_404;
+            rerouteTo404(route, event, Target.PAGE_NOT_FOUND);
         }
 
         return STATUS_302;
@@ -102,5 +94,22 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
 
         return String.format("%s?method=%s&path=%s", Endpoint.Api.PAGE_404, method,
                 URLEncoder.encode(path, StandardCharsets.UTF_8));
+    }
+
+    private void rerouteTo404(String route, BeforeEnterEvent event, Target target) {
+        if (isApiRequest(route) || AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
+            VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
+        } else {
+            if(target == Target.IDENT_NOT_FOUND) {
+                event.rerouteToError(IdentNotFoundException.class);
+            } else {
+                event.rerouteToError(PageNotFoundException.class);
+            }
+        }
+    }
+
+    enum Target {
+        IDENT_NOT_FOUND,
+        PAGE_NOT_FOUND
     }
 }
