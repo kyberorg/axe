@@ -22,7 +22,12 @@ public final class Endpoint {
         /**
          * Page that will appear, when user hits location which is not exist nor served by application.
          */
-        public static final String PAGE_404 = "errors/404";
+        public static final String PAGE_404 = "errors/404page";
+
+        /**
+         * Page that will appear, when user hits ident which is not exist.
+         */
+        public static final String IDENT_404 = "errors/404ident";
 
         /**
          * Page that will shown when application hits server-side error.
@@ -116,11 +121,6 @@ public final class Endpoint {
      */
     public static class TNT {
         /**
-         * Workaround for "/{ident}" endpoint. Not intended to be accessed directly
-         */
-        public static final String SLASH_IDENT = "app";
-
-        /**
          * Endpoint for redirecting to long links. Not intended to be accessed directly
          */
         public static final String REDIRECTOR = "redirector";
@@ -138,6 +138,11 @@ public final class Endpoint {
          * {@link eu.yals.controllers.AppOfflineController}
          */
         public static final String APP_OFFLINE = "/app-offline";
+
+        /**
+         * Server Error Loopback View. Intended to be used only within {@link eu.yals.ui.err.ServerErrorView}.
+         */
+        public static final String SERVER_ERROR_LOOP = "server-error-loop";
     }
 
     /**

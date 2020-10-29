@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ee.yals</groupId>
+    <groupId>eu.yals</groupId>
     <artifactId>yals</artifactId>
-    <version>2.7.3</version>
+    <version>2.7.4-dev</version>
     <packaging>jar</packaging>
 
     <name>yals</name>
@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.0.8</vaadin.version>
+        <vaadin.version>14.4.1</vaadin.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,7 +43,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -120,35 +120,35 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
+            <version>3.11</version>
         </dependency>
 
         <!-- Calling own REST from controllers -->
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.6.01</version>
+            <version>3.11.02</version>
         </dependency>
 
         <!-- For extra validation of URL  -->
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
         </dependency>
 
         <!-- For retrieve info from Git -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.8.0</version>
         </dependency>
 
         <!-- Telegram Bot -->
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>4.6</version>
+            <version>4.9.1</version>
         </dependency>
 
         <!-- Emoji Parser -->
@@ -162,19 +162,19 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.16</version>
         </dependency>
 
-        <!-- QA Code generation -->
+        <!-- QR Code generation -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.1</version>
         </dependency>
 
         <!-- Vaadin -->
@@ -187,7 +187,7 @@
         <dependency>
             <groupId>com.github.appreciated</groupId>
             <artifactId>app-layout-addon</artifactId>
-            <version>4.0.0.rc5</version>
+            <version>4.0.0</version>
         </dependency>
 
         <!-- BugSnag: error reporting -->
@@ -208,6 +208,12 @@
             <artifactId>apm-agent-attach</artifactId>
             <version>1.18.1</version>
         </dependency>
+        <!-- Hibernate URL Validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.1.6.Final</version>
+        </dependency>
 
         <!-- Spring Boot Tests -->
         <dependency>
@@ -219,15 +225,8 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>5.15.0</version>
+            <version>5.15.1</version>
             <scope>test</scope>
-            <!-- temporary disable jsoup because it conflicts with Vaadin -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jsoup</groupId>
-                    <artifactId>jsoup</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- Test Containers -->
         <dependency>
@@ -294,7 +293,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.0.0</version>
+                <version>4.0.2</version>
                 <configuration>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
@@ -318,6 +317,13 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Part of Maven - specified version explicitly for compatibility
+           with the maven-project-info-reports-plugin 3.0.0-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>
             </plugin>
         </plugins>
     </build>
@@ -367,7 +373,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <version>3.2.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -405,7 +411,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.5</version>
+                        <version>0.8.6</version>
                         <configuration>
                             <excludes>
                                 <exclude>**com.steadystate*</exclude>

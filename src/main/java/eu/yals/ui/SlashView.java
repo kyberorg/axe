@@ -1,27 +1,36 @@
 package eu.yals.ui;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.ErrorParameter;
+import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.NotFoundException;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
+import eu.yals.constants.Header;
 import eu.yals.core.IdentGenerator;
+import eu.yals.exception.IdentNotFoundException;
 import eu.yals.exception.NeedForRedirectException;
+import eu.yals.exception.PageNotFoundException;
 import eu.yals.result.GetResult;
 import eu.yals.services.LinkService;
 import eu.yals.ui.err.AppDownView;
 import eu.yals.ui.err.ServerErrorView;
+import eu.yals.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+import static eu.yals.constants.HttpCode.STATUS_302;
 
 @Slf4j
 @Controller
 @UIScope
-@Route(Endpoint.TNT.SLASH_IDENT)
-public class SlashView extends VerticalLayout implements HasUrlParameter<String> {
+public class SlashView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
     private static final String TAG = "[" + SlashView.class.getSimpleName() + "]";
 
     private final LinkService linkService;
@@ -36,30 +45,71 @@ public class SlashView extends VerticalLayout implements HasUrlParameter<String>
     }
 
 
+    /**
+     * Handles every unmatched route within Application.
+     *
+     * @param event     Vaadin's event
+     * @param parameter optional params that can be send during redirect. We don't use it here.
+     * @return int with HTTP Code
+     */
     @Override
-    public void setParameter(final BeforeEvent event, final String ident) {
-        log.info("{} Got {\"Ident\": {}}", TAG, ident);
-        if (StringUtils.isBlank(ident) || !ident.matches(IdentGenerator.VALID_IDENT_PATTERN)) {
-            log.info("{} Got malformed request. Replying with 404. {\"Ident\": {}}", TAG, ident);
-            event.rerouteToError(NotFoundException.class);
-            return;
+    public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<NotFoundException> parameter) {
+        String route = event.getLocation().getPath();
+        if (isIdent(route)) {
+            assert linkService != null;
+            GetResult searchResult = linkService.getLink(route);
+            if (searchResult instanceof GetResult.Success) {
+                String link = ((GetResult.Success) searchResult).getLink();
+                log.info("{} Got long URL. Redirecting to {}", TAG, link);
+                event.rerouteToError(NeedForRedirectException.class, link);
+            } else if (searchResult instanceof GetResult.NotFound) {
+                log.info("{} No corresponding longURL found. Replying with 404. {\"Ident\": {}}", TAG, route);
+                rerouteTo404(route, event, Target.IDENT_NOT_FOUND);
+            } else if (searchResult instanceof GetResult.DatabaseDown) {
+                log.info("{} Database is DOWN. Replying with 503", TAG);
+                event.rerouteTo(AppDownView.class);
+            } else {
+                log.info("{} Got internal error. Replying with 500", TAG);
+                event.rerouteTo(ServerErrorView.class);
+            }
+        } else {
+            log.info("{} Page not found. Replying with 404. {\"Unknown Route\": {}}", TAG, route);
+            rerouteTo404(route, event, Target.PAGE_NOT_FOUND);
         }
 
-        assert linkService != null;
-        GetResult searchResult = linkService.getLink(ident);
-        if (searchResult instanceof GetResult.Success) {
-            String link = ((GetResult.Success) searchResult).getLink();
-            log.info("{} Got long URL. Redirecting to {}", TAG, link);
-            event.rerouteToError(NeedForRedirectException.class, link);
-        } else if (searchResult instanceof GetResult.NotFound) {
-            log.info("{} No corresponding longURL found. Replying with 404", TAG);
-            event.rerouteToError(NotFoundException.class);
-        } else if (searchResult instanceof GetResult.DatabaseDown) {
-            log.info("{} Database is DOWN. Replying with 503", TAG);
-            event.rerouteTo(AppDownView.class);
+        return STATUS_302;
+    }
+
+    private boolean isIdent(final String route) {
+        return route.matches(IdentGenerator.VALID_IDENT_PATTERN);
+    }
+
+    private boolean isApiRequest(final String path) {
+        return path.startsWith("api");
+    }
+
+    private String api404Endpoint(final BeforeEnterEvent event) {
+        String method = VaadinRequest.getCurrent().getMethod();
+        String path = event.getLocation().getPath();
+
+        return String.format("%s?method=%s&path=%s", Endpoint.Api.PAGE_404, method,
+                URLEncoder.encode(path, StandardCharsets.UTF_8));
+    }
+
+    private void rerouteTo404(final String route, final BeforeEnterEvent event, final Target target) {
+        if (isApiRequest(route) || AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
+            VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
         } else {
-            log.info("{} Got internal error. Replying with 500", TAG);
-            event.rerouteTo(ServerErrorView.class);
+            if (target == Target.IDENT_NOT_FOUND) {
+                event.rerouteToError(IdentNotFoundException.class);
+            } else {
+                event.rerouteToError(PageNotFoundException.class);
+            }
         }
+    }
+
+    enum Target {
+        IDENT_NOT_FOUND,
+        PAGE_NOT_FOUND
     }
 }
