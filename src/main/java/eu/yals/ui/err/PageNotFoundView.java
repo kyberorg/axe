@@ -51,7 +51,7 @@ public class PageNotFoundView extends VerticalLayout implements HasErrorParamete
      * @return http code for not found aka 404
      */
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<PageNotFoundException> parameter) {
+    public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<PageNotFoundException> parameter) {
         return STATUS_404;
     }
 

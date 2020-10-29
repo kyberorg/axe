@@ -9,6 +9,8 @@ import eu.yals.exception.GeneralServerException;
 import eu.yals.exception.NeedForLoopException;
 import eu.yals.ui.AppView;
 
+import static eu.yals.constants.HttpCode.STATUS_500;
+
 /**
  * This View sends everything back to {@link eu.yals.ui.err.ServerErrorView} and intended to be used only
  * within {@link eu.yals.ui.err.ServerErrorView}.
@@ -22,8 +24,8 @@ import eu.yals.ui.AppView;
 @Route(value = Endpoint.TNT.SERVER_ERROR_LOOP, layout = AppView.class)
 public class ServerErrorLoopView extends Div implements HasErrorParameter<NeedForLoopException> {
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NeedForLoopException> parameter) {
+    public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<NeedForLoopException> parameter) {
         event.rerouteToError(GeneralServerException.class, parameter.getCustomMessage());
-        return 500;
+        return STATUS_500;
     }
 }

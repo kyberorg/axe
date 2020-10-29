@@ -53,9 +53,9 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
      * @return int with HTTP Code
      */
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NotFoundException> parameter) {
+    public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<NotFoundException> parameter) {
         String route = event.getLocation().getPath();
-        if(isIdent(route)) {
+        if (isIdent(route)) {
             assert linkService != null;
             GetResult searchResult = linkService.getLink(route);
             if (searchResult instanceof GetResult.Success) {
@@ -80,7 +80,7 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
         return STATUS_302;
     }
 
-    private boolean isIdent(String route) {
+    private boolean isIdent(final String route) {
         return route.matches(IdentGenerator.VALID_IDENT_PATTERN);
     }
 
@@ -96,11 +96,11 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
                 URLEncoder.encode(path, StandardCharsets.UTF_8));
     }
 
-    private void rerouteTo404(String route, BeforeEnterEvent event, Target target) {
+    private void rerouteTo404(final String route, final BeforeEnterEvent event, final Target target) {
         if (isApiRequest(route) || AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
             VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
         } else {
-            if(target == Target.IDENT_NOT_FOUND) {
+            if (target == Target.IDENT_NOT_FOUND) {
                 event.rerouteToError(IdentNotFoundException.class);
             } else {
                 event.rerouteToError(PageNotFoundException.class);

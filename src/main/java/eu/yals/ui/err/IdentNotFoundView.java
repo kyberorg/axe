@@ -51,7 +51,7 @@ public class IdentNotFoundView extends VerticalLayout implements HasErrorParamet
      * @return HTTP Code for page not found aka 404
      */
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<IdentNotFoundException> parameter) {
+    public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<IdentNotFoundException> parameter) {
         return STATUS_404;
     }
 
