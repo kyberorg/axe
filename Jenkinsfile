@@ -103,8 +103,10 @@ pipeline {
           def customDockerTag = params.DOCKER_TAG;
           if (!customDockerTag.trim().equals("")) {
             dockerTag = customDockerTag;
-          } else {
+          } else if (env.BRANCH_NAME == 'trunk') {
             dockerTag = 'trunk';
+          } else {
+            dockerTag = 'demo';
           }
           dockerTags << dockerTag;
         }
@@ -221,7 +223,7 @@ pipeline {
       }
       steps {
         script {
-          def buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
+          GString buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
           withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'grid-creds',
                             usernameVariable: 'USR', passwordVariable: 'PASS'
                            ]]) {
