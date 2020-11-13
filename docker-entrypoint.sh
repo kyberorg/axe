@@ -41,7 +41,7 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/o
 
 # Issues 223 and 237 (APM Support) #
 APM_JAR="/apm-agent.jar"
-if [ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]; then
+if [[ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]]; then
   export JAVA_OPTS="$JAVA_OPTS -javaagent:${APM_JAR}"
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yals"
