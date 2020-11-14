@@ -39,13 +39,18 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
 export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
-# Issue 223 (APM Support) #
-if [ -n "${APM_ENV}" ]; then
+# Issues 223 and 237 (APM Support) #
+APM_JAR="/apm-agent.jar"
+if [[ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]]; then
+  export JAVA_OPTS="$JAVA_OPTS -javaagent:${APM_JAR}"
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yals"
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.application_packages=eu.yals"
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.server_urls=${APM_SERVER}"
   if [ -n "${APM_TOKEN}" ]; then
     export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.secret_token=${APM_TOKEN}"
   fi
 fi
-# End Issue 223 (APM Support) #
+# End Issues 223 and 237 (APM Support) #
 
 exec java ${JAVA_OPTS} -jar /app/yals.jar
