@@ -1,4 +1,4 @@
-@Library('common-lib@1.7') _
+@Library('common-lib@1.8') _
 
 //global vars
 def dockerTag = 'dev';

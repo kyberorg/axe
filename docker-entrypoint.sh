@@ -53,4 +53,8 @@ if [[ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]]; then
 fi
 # End Issues 223 and 237 (APM Support) #
 
+# Issue 236 (Vaadin Production Mode) #
+export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
+# End Issue 236 (Vaadin Production Mode) #
+
 exec java ${JAVA_OPTS} -jar /app/yals.jar
