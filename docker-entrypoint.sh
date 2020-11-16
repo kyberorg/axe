@@ -29,9 +29,11 @@ file_env 'APM_TOKEN'
 
 JAVA_OPTS=${JAVA_OPTS}
 
-if [ -n "${JAVA_DEBUG_PORT}" ]; then
+# Remote Debug Support
+if [[ ${JAVA_VERSION} == *"jdk"* && -n "${JAVA_DEBUG_PORT}" ]]; then
   export JAVA_OPTS="$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:${JAVA_DEBUG_PORT}"
 fi
+# End Remote Debug Support
 
 export JAVA_OPTS="$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom"
 export JAVA_OPTS="$JAVA_OPTS --add-opens java.base/java.lang=ALL-UNNAMED"

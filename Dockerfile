@@ -1,4 +1,7 @@
-FROM openjdk:11-jdk
+ARG JAVA_BASE=11-jre
+FROM openjdk:${JAVA_BASE}
+ENV JAVA_VERSION=${JAVA_BASE}
+
 VOLUME /tmp
 
 COPY ./target/yals.jar /app/
