@@ -3,7 +3,7 @@
 //global vars
 def dockerTag = 'dev';
 def dockerTags = [];
-def dockerBuildArgs = [];
+def dockerFile = 'Dockerfile';
 
 def deployTarget = 'Dev';
 def deployNamespace = 'dev-yals';
@@ -71,8 +71,7 @@ pipeline {
           dockerTags << dockerTag;
         }
         script {
-          def javaBase = '11-jdk';
-          dockerBuildArgs << javaBase;
+          dockerFile = 'Dockerfile.DEV'
         }
         script {
           deployNamespace = 'dev-yals';
@@ -115,8 +114,7 @@ pipeline {
           dockerTags << dockerTag;
         }
         script {
-          def javaBase = '11-jre';
-          dockerBuildArgs << javaBase;
+          dockerFile = 'Dockerfile.PROD'
         }
         script {
           deployNamespace = 'qa-yals';
@@ -153,8 +151,7 @@ pipeline {
           dockerTags << dockerTag;
         }
         script {
-          def javaBase = '11-jre';
-          dockerBuildArgs << javaBase;
+          dockerFile = 'Dockerfile.PROD'
         }
       }
     }
@@ -162,7 +159,7 @@ pipeline {
     stage('Docker') {
       steps {
         script {
-          dockerBuild(repo: env.DOCKER_REPO, tags: dockerTags, buildArgs: dockerBuildArgs);
+          dockerBuild(repo: env.DOCKER_REPO, tags: dockerTags, dockerFile: dockerFile);
           dockerLogin(creds: 'hub-docker');
           dockerPush();
           dockerLogout();
