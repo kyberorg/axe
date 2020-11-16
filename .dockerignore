@@ -1,0 +1,10 @@
+.idea
+.run
+docker
+node_modules
+.gitignore
+.travis.yml
+checkstyle.xml
+Jenkinsfile
+README.MD
+yals.iml

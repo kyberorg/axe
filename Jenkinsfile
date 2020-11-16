@@ -3,6 +3,7 @@
 //global vars
 def dockerTag = 'dev';
 def dockerTags = [];
+def dockerFile = 'Dockerfile';
 
 def deployTarget = 'Dev';
 def deployNamespace = 'dev-yals';
@@ -70,6 +71,9 @@ pipeline {
           dockerTags << dockerTag;
         }
         script {
+          dockerFile = 'Dockerfile.DEV'
+        }
+        script {
           deployNamespace = 'dev-yals';
           deployWorkloadName = 'yals-app';
         }
@@ -77,7 +81,6 @@ pipeline {
           testEnabled = !params.SKIP_TESTS;
           testUrl = "https://dev.yals.eu";
         }
-
       }
     }
 
@@ -109,6 +112,9 @@ pipeline {
             dockerTag = 'demo';
           }
           dockerTags << dockerTag;
+        }
+        script {
+          dockerFile = 'Dockerfile.PROD'
         }
         script {
           deployNamespace = 'qa-yals';
@@ -144,13 +150,16 @@ pipeline {
           }
           dockerTags << dockerTag;
         }
+        script {
+          dockerFile = 'Dockerfile.PROD'
+        }
       }
     }
 
     stage('Docker') {
       steps {
         script {
-          dockerBuild(repo: env.DOCKER_REPO, tags: dockerTags);
+          dockerBuild(repo: env.DOCKER_REPO, tags: dockerTags, dockerFile: dockerFile);
           dockerLogin(creds: 'hub-docker');
           dockerPush();
           dockerLogout();
