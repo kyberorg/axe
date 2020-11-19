@@ -233,16 +233,11 @@ pipeline {
       steps {
         script {
           GString buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
-          withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'grid-creds',
-                            usernameVariable: 'USR', passwordVariable: 'PASS'
-                           ]]) {
-            testApp(url: testUrl, dParams: "-Dgrid.hostname=${USR}:${PASS}@grid.yatech.eu " +
-                    '-Dselenide.browser=chrome ' +
-                    "-Dtest.buildName=${buildName} " +
-                    '-Dtest=!eu.yals.test.ui.pages.**',
-                    actions: 'clean test',
-                    artifacts: "target/reports/**/*.png", failStep: false);
-          }
+          testApp(url: testUrl, dParams: "-Dgrid.hostname=http://127.0.0.1:4444 " +
+                  '-Dselenide.browser=chrome ' +
+                  "-Dtest.buildName=${buildName} ",
+                  actions: 'clean test',
+                  artifacts: "target/reports/**/*.png", failStep: false);
         }
       }
     }
