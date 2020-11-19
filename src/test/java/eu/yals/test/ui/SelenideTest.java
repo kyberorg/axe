@@ -222,7 +222,7 @@ public abstract class SelenideTest {
         } else if(hostnameStringHasProtocol) {
             return gridHostname + GRID_POSTFIX;
         } else if(hostnameStringHasGridPostfix) {
-            return HTTP_PREFIX + gridHostname + GRID_POSTFIX;
+            return HTTP_PREFIX + gridHostname;
         } else {
             return HTTP_PREFIX + gridHostname + GRID_POSTFIX;
         }
