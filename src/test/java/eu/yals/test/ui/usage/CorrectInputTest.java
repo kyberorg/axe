@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class CorrectInputTest extends SelenideTest {
     @Before
     public void beforeTest() {
+        tuneDriverWithTestName();
         open("/");
         updateTestNameAndStartVideo();
     }

@@ -23,6 +23,7 @@ public class IncorrectInputTest extends SelenideTest {
 
     @Before
     public void beforeTest() {
+        tuneDriverWithTestName();
         open("/");
         updateTestNameAndStartVideo();
     }

@@ -123,12 +123,13 @@ public abstract class SelenideTest {
         Configuration.reportsFolder = REPORT_DIRECTORY;
         Configuration.timeout = SELENIDE_TIMEOUT;
         Configuration.browser = SELENIDE_BROWSER;
+        Configuration.startMaximized = true;
         //critical for Vaadin input
         Configuration.fastSetValue = true;
 
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
-            addBuildNameToDriver();
+            //addBuildNameToDriver();
             //will run tests at Grid
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
@@ -145,6 +146,16 @@ public abstract class SelenideTest {
         }
         //display common information
         displayCommonInfo();
+    }
+
+    protected void tuneDriverWithTestName() {
+        if(shouldRunTestsAtGrid()) {
+            MutableCapabilities capabilities = new MutableCapabilities();
+            capabilities.setCapability("enableVnc", true);
+            capabilities.setCapability("screenResolution","1920x1080x24");
+            capabilities.setCapability("name", testName);
+            Configuration.browserCapabilities.merge(capabilities);
+        }
     }
 
     /**
