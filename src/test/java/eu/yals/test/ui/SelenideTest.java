@@ -219,8 +219,12 @@ public abstract class SelenideTest {
         boolean hostnameStringHasGridPostfix = gridHostname.contains(GRID_POSTFIX);
         if (hostnameStringHasProtocol && hostnameStringHasGridPostfix) {
             return gridHostname;
+        } else if(hostnameStringHasProtocol) {
+            return gridHostname + GRID_POSTFIX;
+        } else if(hostnameStringHasGridPostfix) {
+            return HTTP_PREFIX + gridHostname + GRID_POSTFIX;
         } else {
-            return HTTPS_PREFIX + gridHostname + GRID_POSTFIX;
+            return HTTP_PREFIX + gridHostname + GRID_POSTFIX;
         }
     }
 
