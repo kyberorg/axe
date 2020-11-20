@@ -6,7 +6,6 @@ import com.codeborne.selenide.junit.ScreenShooter;
 import eu.yals.constants.App;
 import eu.yals.test.TestApp;
 import eu.yals.test.utils.YalsTestDescription;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -17,7 +16,6 @@ import org.junit.runner.Description;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.BrowserWebDriverContainer;
@@ -183,28 +181,6 @@ public abstract class SelenideTest {
     }
 
     /**
-     * Hook, which updates TestName in Grid.
-     * It uses Driver and therefore needs to run after {@link com.codeborne.selenide.Selenide#open()} method.
-     */
-    protected void updateTestNameAndStartVideo() {
-        if (shouldRunTestsAtGrid()) {
-            setTestName();
-            startVideo();
-        }
-    }
-
-    /**
-     * Actions performed after test completes.
-     */
-    @After
-    public void afterTest() {
-        if (shouldRunTestsAtGrid()) {
-            resetTestNameAfterTestCompleted();
-            stopVideo();
-        }
-    }
-
-    /**
      * Actions after all tests.
      */
     @AfterClass
@@ -263,12 +239,6 @@ public abstract class SelenideTest {
         }
     }
 
-    private static void addBuildNameToDriver() {
-        DesiredCapabilities extraCapabilities = new DesiredCapabilities();
-        extraCapabilities.setCapability("build", BUILD_NAME);
-        Configuration.browserCapabilities = extraCapabilities;
-    }
-
     private String setTestNameFromTestDescription(final Description description) {
         String testClassName = description.getTestClass().getSimpleName();
         String rawMethodName = description.getMethodName();
@@ -281,26 +251,4 @@ public abstract class SelenideTest {
         }
     }
 
-    private void setTestName() {
-        Cookie cookie = new Cookie("zaleniumTestName", testName);
-        getWebDriver().manage().addCookie(cookie);
-    }
-
-    private void resetTestNameAfterTestCompleted() {
-        MutableCapabilities desiredCapabilities = Configuration.browserCapabilities;
-        if (desiredCapabilities.is("name")) {
-            desiredCapabilities.asMap().remove("name");
-        }
-        Configuration.browserCapabilities = desiredCapabilities;
-    }
-
-    private void startVideo() {
-        Cookie videoCookie = new Cookie("zaleniumVideo", "true");
-        getWebDriver().manage().addCookie(videoCookie);
-    }
-
-    private void stopVideo() {
-        Cookie videoCookie = new Cookie("zaleniumVideo", "false");
-        getWebDriver().manage().addCookie(videoCookie);
-    }
 }
