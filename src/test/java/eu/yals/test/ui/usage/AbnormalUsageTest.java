@@ -21,7 +21,6 @@ public class AbnormalUsageTest extends SelenideTest {
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
     }
 
     @Test

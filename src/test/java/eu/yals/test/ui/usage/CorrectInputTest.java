@@ -27,7 +27,6 @@ public class CorrectInputTest extends SelenideTest {
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
     }
 
     @Test

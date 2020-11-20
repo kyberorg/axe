@@ -31,7 +31,6 @@ public class VisibleStateTest extends SelenideTest {
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
     }
 
     @Test

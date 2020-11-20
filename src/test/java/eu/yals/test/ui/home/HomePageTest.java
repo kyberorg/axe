@@ -29,7 +29,6 @@ public class HomePageTest extends SelenideTest {
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
     }
 
     @Test
