@@ -19,7 +19,7 @@ import static com.codeborne.selenide.Selenide.open;
 public class AbnormalUsageTest extends SelenideTest {
     @Before
     public void beforeTest() {
-        tuneDriverWithTestName();
+        tuneDriverWithCapabilities();
         open("/");
         updateTestNameAndStartVideo();
     }

@@ -29,7 +29,7 @@ import static org.junit.Assert.fail;
 public class VisibleStateTest extends SelenideTest {
     @Before
     public void beforeTest() {
-        tuneDriverWithTestName();
+        tuneDriverWithCapabilities();
         open("/");
         updateTestNameAndStartVideo();
     }

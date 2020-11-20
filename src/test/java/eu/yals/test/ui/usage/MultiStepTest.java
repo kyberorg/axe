@@ -30,7 +30,7 @@ import static eu.yals.test.pageobjects.HomePageObject.ResultArea.*;
 public class MultiStepTest extends SelenideTest {
     @Before
     public void beforeTest() {
-        tuneDriverWithTestName();
+        tuneDriverWithCapabilities();
         open("/");
         updateTestNameAndStartVideo();
     }

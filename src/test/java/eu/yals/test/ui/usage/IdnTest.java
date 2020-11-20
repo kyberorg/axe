@@ -25,7 +25,7 @@ public class IdnTest extends SelenideTest {
 
     @Before
     public void beforeTest() {
-        tuneDriverWithTestName();
+        tuneDriverWithCapabilities();
         open("/");
         updateTestNameAndStartVideo();
     }

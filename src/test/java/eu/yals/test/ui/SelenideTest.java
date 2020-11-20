@@ -148,12 +148,24 @@ public abstract class SelenideTest {
         displayCommonInfo();
     }
 
-    protected void tuneDriverWithTestName() {
+    /**
+     * Setting capabilities for driver.
+     * Needs to run before {@link com.codeborne.selenide.Selenide#open()} method.
+     */
+    protected void tuneDriverWithCapabilities() {
         if(shouldRunTestsAtGrid()) {
             MutableCapabilities capabilities = new MutableCapabilities();
             capabilities.setCapability("enableVnc", true);
             capabilities.setCapability("screenResolution","1920x1080x24");
-            capabilities.setCapability("name", testName);
+
+            capabilities.setCapability("name", BUILD_NAME);
+
+            capabilities.setCapability("enableVideo", true);
+            capabilities.setCapability("videoName", BUILD_NAME+".mp4");
+
+            capabilities.setCapability("enableLog", true);
+            capabilities.setCapability("logName", BUILD_NAME+".log");
+
             Configuration.browserCapabilities.merge(capabilities);
         }
     }

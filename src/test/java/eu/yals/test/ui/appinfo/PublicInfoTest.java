@@ -19,7 +19,7 @@ public class PublicInfoTest extends SelenideTest {
 
     @Before
     public void beforeTest() {
-        tuneDriverWithTestName();
+        tuneDriverWithCapabilities();
         open("/appInfo");
         updateTestNameAndStartVideo();
     }
