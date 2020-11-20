@@ -4,6 +4,7 @@ import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.YalsErrorJson;
+import eu.yals.test.utils.HostIdentifier;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
@@ -137,6 +138,13 @@ public class TestUtils {
         return testUrl.contains(localhost);
     }
 
+    /**
+     * Hostname of executing machine
+     * @return string with hostname
+     */
+    public static String hostName() {
+        return HostIdentifier.getHostName();
+    }
     /**
      * Provides current time for test naming.
      *
