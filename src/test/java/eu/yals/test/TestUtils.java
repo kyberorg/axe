@@ -113,9 +113,6 @@ public class TestUtils {
                 System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
 
         switch (runMode) {
-            case CONTAINER:
-                localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
-                break;
             case GRID:
                 localUrl = System.getProperty(TestApp.Properties.TEST_URL);
                 break;
@@ -129,16 +126,15 @@ public class TestUtils {
     }
 
     /**
-     * Determines if tests are running locally (docker container or localhost).
+     * Determines if tests are running locally (localhost).
      *
      * @return true if locally, false if not
      */
     public static boolean isLocalRun() {
         String testUrl = getTestUrl();
-        String dockerHost = "host.testcontainers.internal";
         String localhost = "localhost";
 
-        return (testUrl.contains(dockerHost) || testUrl.contains(localhost));
+        return testUrl.contains(localhost);
     }
 
     /**

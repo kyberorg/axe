@@ -1,11 +1,10 @@
 package eu.yals.test.ui;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit.ScreenShooter;
 import eu.yals.constants.App;
 import eu.yals.test.TestApp;
-import eu.yals.test.utils.YalsTestDescription;
+import eu.yals.test.TestUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -15,16 +14,8 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testcontainers.Testcontainers;
-import org.testcontainers.containers.BrowserWebDriverContainer;
-
-import java.io.File;
-import java.util.Optional;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
 
 /**
  * Base for all UI Tests, which run with Selenide.
@@ -37,19 +28,10 @@ public abstract class SelenideTest {
     private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Properties.Selenide.TIMEOUT, TestApp.Defaults.Selenide.TIMEOUT));
 
     private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, TestApp.Defaults.SERVER_PORT));
-    private final static String LOCAL_URL = String.format("http://host.testcontainers.internal:%d", SERVER_PORT);
-    protected final static String BASE_URL = System.getProperty(TestApp.Properties.TEST_URL, LOCAL_URL);
+    protected final static String BASE_URL = TestUtils.getTestUrl();
 
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
-
-    private static final BrowserWebDriverContainer.VncRecordingMode TESTS_RECORDING_MODE = RECORD_FAILING;
-
-    @SuppressWarnings("rawtypes")
-    private static final BrowserWebDriverContainer chrome =
-            new BrowserWebDriverContainer()
-                    .withRecordingMode(TESTS_RECORDING_MODE, new File(REPORT_DIRECTORY))
-                    .withCapabilities(new ChromeOptions());
 
     private static String testName;
     private static boolean isCommonInfoAlreadyShown;
@@ -87,8 +69,6 @@ public abstract class SelenideTest {
             if (shouldRunTestsAtGrid()) {
                 Cookie cookie = new Cookie("zaleniumTestPassed", "true");
                 getWebDriver().manage().addCookie(cookie);
-            } else {
-                chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.empty());
             }
         }
 
@@ -105,8 +85,6 @@ public abstract class SelenideTest {
             if (shouldRunTestsAtGrid()) {
                 Cookie cookie = new Cookie("zaleniumTestPassed", "false");
                 getWebDriver().manage().addCookie(cookie);
-            } else {
-                chrome.afterTest(YalsTestDescription.fromDescription(description), Optional.of(e));
             }
         }
 
@@ -139,20 +117,11 @@ public abstract class SelenideTest {
 
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
-            //addBuildNameToDriver();
             //will run tests at Grid
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
-            //expose ports if testing local URL
-            if (BASE_URL.equals(LOCAL_URL)) {
-                Testcontainers.exposeHostPorts(SERVER_PORT);
-            }
-            chrome.start();
-            RemoteWebDriver driver = chrome.getWebDriver();
-            WebDriverRunner.setWebDriver(driver);
-
             //application runs in docker container
-            System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.CONTAINER.name());
+            System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name());
         }
         //display common information
         displayCommonInfo();
@@ -190,7 +159,7 @@ public abstract class SelenideTest {
 
     private static void displayCommonInfo() {
         if (!isCommonInfoAlreadyShown) {
-            TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.CONTAINER.name()));
+            TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
             String testRunner = runMode == TestApp.RunMode.GRID ? "Grid" : "TestContainers";
             String commonInfo = "" + App.NEW_LINE +
                     "=== UI Tests Common Info ===" +

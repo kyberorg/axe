@@ -224,13 +224,6 @@
             <version>5.16.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- Test Containers -->
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>selenium</artifactId>
-            <version>1.15.0-rc2</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
