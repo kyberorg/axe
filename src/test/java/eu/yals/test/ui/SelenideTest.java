@@ -56,6 +56,10 @@ public abstract class SelenideTest {
     private static String testName;
     private static boolean isCommonInfoAlreadyShown;
 
+    private long testStartTime;
+    private float testDurationInMillis;
+    private boolean testSucceeded;
+
     @Rule  // automatically takes screenshot of every failed test
     public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 
@@ -69,7 +73,8 @@ public abstract class SelenideTest {
         protected void starting(final Description description) {
             super.starting(description);
             testName = setTestNameFromTestDescription(description);
-            System.out.printf("Starting build '%s'. Test: '%s%n", BUILD_NAME, testName);
+            testStartTime = System.currentTimeMillis();
+            System.out.printf("Starting.... build '%s'. Test: '%s%n", BUILD_NAME, testName);
         }
 
         /**
@@ -79,6 +84,8 @@ public abstract class SelenideTest {
         @Override
         protected void succeeded(Description description) {
             super.succeeded(description);
+            testDurationInMillis = System.currentTimeMillis() - testStartTime;
+            testSucceeded = true;
             if (shouldRunTestsAtGrid()) {
                 Cookie cookie = new Cookie("zaleniumTestPassed", "true");
                 getWebDriver().manage().addCookie(cookie);
@@ -95,6 +102,8 @@ public abstract class SelenideTest {
         @Override
         protected void failed(Throwable e, Description description) {
             super.failed(e, description);
+            testDurationInMillis = System.currentTimeMillis() - testStartTime;
+            testSucceeded = false;
             if (shouldRunTestsAtGrid()) {
                 Cookie cookie = new Cookie("zaleniumTestPassed", "false");
                 getWebDriver().manage().addCookie(cookie);
@@ -110,7 +119,10 @@ public abstract class SelenideTest {
         @Override
         protected void finished(Description description) {
             super.finished(description);
-            System.out.printf("Finished build '%s'. Test: '%s%n", BUILD_NAME, testName);
+            String testResult = testSucceeded ? "OK" : "FAIL";
+            String timeTook = testDurationInMillis/1000 +" s";
+
+            System.out.printf("Finished(%s) build '%s'. Test: '%s, Time elapsed: %s%n", testResult, BUILD_NAME, testName, timeTook);
         }
     };
 
