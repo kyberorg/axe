@@ -2,6 +2,7 @@ package eu.yals.test.ui.usage;
 
 import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.ui.SelenideTest;
+import eu.yals.test.utils.retry.RetryOneMoreTimeIfFails;
 import eu.yals.utils.UrlExtraValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 
 @SpringBootTest
+@RetryOneMoreTimeIfFails
 public class IncorrectInputTest extends SelenideTest {
     private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
     private static final String MALFORMED_URL_TEXT = "malformed URL or not URL";

@@ -13,8 +13,11 @@ public class RetryRule implements TestRule {
                 try {
                     base.evaluate();
                 } catch (Throwable t) {
-                    Retry retry = method.getAnnotation(Retry.class);
+                    RetryOneMoreTimeIfFails retry = method.getAnnotation(RetryOneMoreTimeIfFails.class);
                     if (retry != null) {
+                        base.evaluate();
+                    } else if(method.getTestClass().getAnnotation(RetryOneMoreTimeIfFails.class) != null) {
+                        System.out.println("Retrying one more time...");
                         base.evaluate();
                     } else {
                         throw t;

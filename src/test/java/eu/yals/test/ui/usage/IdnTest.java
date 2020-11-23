@@ -5,6 +5,7 @@ import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.pageobjects.external.*;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.utils.SelenideUtils;
+import eu.yals.test.utils.retry.RetryOneMoreTimeIfFails;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import static com.codeborne.selenide.Selenide.open;
  * @since 2.5
  */
 @SpringBootTest
+@RetryOneMoreTimeIfFails
 @SuppressWarnings("SpellCheckingInspection")
 public class IdnTest extends SelenideTest {
 

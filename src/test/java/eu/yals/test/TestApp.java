@@ -27,7 +27,7 @@ public class TestApp {
 
     public static class Defaults {
         public static final String SERVER_PORT = "8080";
-        public static final String BUILD_NAME = "build-" + TestUtils.hostName() + "-"+ TestUtils.timeStamp();
+        public static final String BUILD_NAME = TestUtils.hostName() + "-"+ TestUtils.timeStamp();
 
         public static class Selenide {
             public static final String REPORT_DIR = "target/reports";

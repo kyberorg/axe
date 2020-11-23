@@ -2,6 +2,7 @@ package eu.yals.test.ui.usage;
 
 import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.ui.SelenideTest;
+import eu.yals.test.utils.retry.RetryOneMoreTimeIfFails;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,7 @@ import static com.codeborne.selenide.Selenide.open;
  * @since 1.0
  */
 @SpringBootTest
+@RetryOneMoreTimeIfFails
 public class AbnormalUsageTest extends SelenideTest {
     @Before
     public void beforeTest() {

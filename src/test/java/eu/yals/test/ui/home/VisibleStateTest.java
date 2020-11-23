@@ -3,7 +3,7 @@ package eu.yals.test.ui.home;
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.utils.SelenideUtils;
-import eu.yals.test.utils.retry.Retry;
+import eu.yals.test.utils.retry.RetryOneMoreTimeIfFails;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,6 +27,7 @@ import static org.junit.Assert.fail;
  * @since 1.0
  */
 @SpringBootTest
+@RetryOneMoreTimeIfFails
 public class VisibleStateTest extends SelenideTest {
     @Before
     public void beforeTest() {
@@ -68,7 +69,6 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     @Test
-    @Retry
     public void formHasOnlyOneButton() {
         List<SelenideElement> buttons = MAIN_AREA.findAll("vaadin-button");
         Assert.assertEquals("Only 1 button expected", 1, buttons.size());
