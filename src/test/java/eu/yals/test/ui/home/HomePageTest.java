@@ -6,7 +6,6 @@ import eu.yals.test.pageobjects.NotFoundViewPageObject;
 import eu.yals.test.pageobjects.external.VR;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.utils.SelenideUtils;
-import eu.yals.test.utils.retry.RetryOneMoreTimeIfFails;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +24,6 @@ import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
  * @since 1.0
  */
 @SpringBootTest
-@RetryOneMoreTimeIfFails
 public class HomePageTest extends SelenideTest {
 
     @Before

@@ -235,7 +235,8 @@ pipeline {
           GString buildName = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}";
           testApp(url: testUrl, dParams: "-Dgrid.hostname=http://127.0.0.1:4444 " +
                   '-Dselenide.browser=chrome ' +
-                  "-Dtest.buildName=${buildName} ",
+                  "-Dtest.buildName=${buildName} " +
+                  "-Dsurefire.rerunFailingTestsCount=2",
                   actions: 'clean test',
                   artifacts: "target/reports/**/*.png", failStep: false);
         }

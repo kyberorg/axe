@@ -5,7 +5,6 @@ import com.codeborne.selenide.junit.ScreenShooter;
 import eu.yals.constants.App;
 import eu.yals.test.TestApp;
 import eu.yals.test.TestUtils;
-import eu.yals.test.utils.retry.RetryRule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -42,9 +41,6 @@ public abstract class SelenideTest {
 
     @Rule  // automatically takes screenshot of every failed test
     public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
-
-    @Rule //retries flaky tests. Sometimes helps.
-    public RetryRule rule = new RetryRule();
 
     @Rule  // catching test result and triggering BrowserWebDriverContainer#afterTest() for saving test recordings
     public final TestRule watchman = new TestWatcher() {
