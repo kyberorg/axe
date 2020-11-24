@@ -28,7 +28,6 @@ public abstract class SelenideTest {
     private static final String SELENIDE_BROWSER = System.getProperty(TestApp.Properties.Selenide.BROWSER, TestApp.Defaults.Selenide.BROWSER);
     private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Properties.Selenide.TIMEOUT, TestApp.Defaults.Selenide.TIMEOUT));
 
-    private final static int SERVER_PORT = Integer.parseInt(System.getProperty(TestApp.Properties.SERVER_PORT, TestApp.Defaults.SERVER_PORT));
     protected final static String BASE_URL = TestUtils.getTestUrl();
 
     private static final String BUILD_NAME =
@@ -164,20 +163,25 @@ public abstract class SelenideTest {
     private static void displayCommonInfo() {
         if (!isCommonInfoAlreadyShown) {
             TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
-            String testRunner = runMode == TestApp.RunMode.GRID ? "Grid" : "TestContainers";
-            String commonInfo = "" + App.NEW_LINE +
-                    "=== UI Tests Common Info ===" +
-                    App.NEW_LINE +
-                    String.format("BuildName: %s", BUILD_NAME) + App.NEW_LINE +
-                    String.format("Will test BASE_URL: %s", BASE_URL) + App.NEW_LINE +
-                    String.format("Will test at : %s", testRunner) + App.NEW_LINE +
-                    String.format("Application will start at %d", SERVER_PORT) + App.NEW_LINE +
-                    String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY) + App.NEW_LINE +
-                    String.format("Live Sessions: https://grid.yatech.eu/grid/admin/live?build=%s", BUILD_NAME) +
-                    App.NEW_LINE +
-                    "==================" +
-                    App.NEW_LINE;
-            System.out.println(commonInfo);
+            String testLocation = runMode == TestApp.RunMode.GRID ? "at Grid ("+Configuration.remote+")" : "locally";
+
+            StringBuilder commonInfoBuilder =  new StringBuilder(App.NEW_LINE);
+            commonInfoBuilder.append("=== UI Tests Common Info ===").append(App.NEW_LINE);
+            commonInfoBuilder.append(String.format("BuildName: %s", BUILD_NAME)).append(App.NEW_LINE);
+            commonInfoBuilder.append(String.format("Will test %s", testLocation)).append(App.NEW_LINE);
+            commonInfoBuilder.append(String.format("Test URL: %s", BASE_URL)).append(App.NEW_LINE);
+
+            if (runMode == TestApp.RunMode.GRID) {
+                commonInfoBuilder.append("Live Sessions: https://grid-ui.yadev.eu/#/").append(App.NEW_LINE);
+                commonInfoBuilder.append(String.format("TestVideo: https://grid-ui.yadev.eu/video/%s.mp4", BUILD_NAME))
+                        .append(App.NEW_LINE);
+            } else {
+                commonInfoBuilder.append(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY))
+                        .append(App.NEW_LINE);
+            }
+            commonInfoBuilder.append("==================").append(App.NEW_LINE);
+
+            System.out.println(commonInfoBuilder.toString());
             isCommonInfoAlreadyShown = true;
         }
     }
