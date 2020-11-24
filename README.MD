@@ -1,4 +1,4 @@
-[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Fmaster)](https://ci.yadev.eu/job/YalsGH/job/master/)
+[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=Yals%2Ftrunk)](https://ci.yadev.eu/job/Yals/job/trunk/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6a6b92ffc1841e49cef33eadf8aa201)](https://www.codacy.com/gh/yadevee/yals)
 
 # Yet another link shortener
@@ -269,10 +269,6 @@ Can add several browsers like `chrome,firefox`
 ### Trunk
 Considered as default branch.
 Should always be stable. 
-
-### Trunk build status
-[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=YalsGH%2Ftrunk)](https://ci.yadev.eu/job/YalsGH/job/trunk/)
-[![codecov](https://codecov.io/gh/yadevee/yals/branch/trunk/graph/badge.svg)](https://codecov.io/gh/yadevee/yals)
 
 ### Tags
 Build manually. Deploy Destination selected by user. By design, we use tags for Releases.
