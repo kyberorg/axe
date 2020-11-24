@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
  * Simulates some not normal user activity
@@ -19,8 +20,9 @@ import static com.codeborne.selenide.Selenide.open;
 public class AbnormalUsageTest extends SelenideTest {
     @Before
     public void beforeTest() {
+        tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
+        waitForVaadin();
     }
 
     @Test

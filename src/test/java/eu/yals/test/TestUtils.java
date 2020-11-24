@@ -4,6 +4,7 @@ import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
 import eu.yals.json.YalsErrorJson;
+import eu.yals.test.utils.HostIdentifier;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
@@ -113,9 +114,6 @@ public class TestUtils {
                 System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
 
         switch (runMode) {
-            case CONTAINER:
-                localUrl = String.format("http://host.testcontainers.internal:%d", serverPort);
-                break;
             case GRID:
                 localUrl = System.getProperty(TestApp.Properties.TEST_URL);
                 break;
@@ -129,16 +127,24 @@ public class TestUtils {
     }
 
     /**
-     * Determines if tests are running locally (docker container or localhost).
+     * Determines if tests are running locally (localhost).
      *
      * @return true if locally, false if not
      */
     public static boolean isLocalRun() {
         String testUrl = getTestUrl();
-        String dockerHost = "host.testcontainers.internal";
         String localhost = "localhost";
 
-        return (testUrl.contains(dockerHost) || testUrl.contains(localhost));
+        return testUrl.contains(localhost);
+    }
+
+    /**
+     * Hostname of executing machine.
+     *
+     * @return string with hostname
+     */
+    public static String hostName() {
+        return HostIdentifier.getHostName();
     }
 
     /**
@@ -153,7 +159,7 @@ public class TestUtils {
     }
 
     /**
-     * Following needed because in may contain something like 'application/json;encoding=UTF8'
+     * Following needed because in may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
      * @return string which contains content type without encoding

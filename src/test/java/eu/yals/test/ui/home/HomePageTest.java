@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static eu.yals.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static eu.yals.test.pageobjects.HomePageObject.MainArea.SUBMIT_BUTTON;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
  * Testing /(Slash) URL.
@@ -27,8 +28,9 @@ public class HomePageTest extends SelenideTest {
 
     @Before
     public void beforeTest() {
+        tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
+        waitForVaadin();
     }
 
     @Test

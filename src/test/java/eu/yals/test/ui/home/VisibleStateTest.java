@@ -18,6 +18,7 @@ import static eu.yals.test.pageobjects.HomePageObject.MainArea.*;
 import static eu.yals.test.pageobjects.HomePageObject.OverallArea.*;
 import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.Assert.fail;
 
 /**
@@ -29,8 +30,9 @@ import static org.junit.Assert.fail;
 public class VisibleStateTest extends SelenideTest {
     @Before
     public void beforeTest() {
+        tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
+        waitForVaadin();
     }
 
     @Test

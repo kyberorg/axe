@@ -14,6 +14,7 @@ import static eu.yals.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static eu.yals.test.pageobjects.HomePageObject.MainArea.SUBMIT_BUTTON;
 import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 @SpringBootTest
 public class IncorrectInputTest extends SelenideTest {
@@ -23,8 +24,9 @@ public class IncorrectInputTest extends SelenideTest {
 
     @Before
     public void beforeTest() {
+        tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
+        waitForVaadin();
     }
 
     @Test

@@ -20,6 +20,7 @@ import static eu.yals.test.pageobjects.HomePageObject.ErrorModal.ERROR_BUTTON;
 import static eu.yals.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
 import static eu.yals.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.*;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
  * Contains multi step tests for Front page
@@ -30,8 +31,9 @@ import static eu.yals.test.pageobjects.HomePageObject.ResultArea.*;
 public class MultiStepTest extends SelenideTest {
     @Before
     public void beforeTest() {
+        tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
+        waitForVaadin();
     }
 
     @Test

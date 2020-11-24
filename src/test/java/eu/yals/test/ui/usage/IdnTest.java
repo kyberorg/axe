@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
  * Contains IDN URL multi step tests for Front page.
@@ -25,8 +26,9 @@ public class IdnTest extends SelenideTest {
 
     @Before
     public void beforeTest() {
+        tuneDriverWithCapabilities();
         open("/");
-        updateTestNameAndStartVideo();
+        waitForVaadin();
     }
 
     @Test
