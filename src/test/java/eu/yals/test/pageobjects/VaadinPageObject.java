@@ -14,6 +14,9 @@ import static com.codeborne.selenide.Selenide.$;
 public class VaadinPageObject {
     public static final SelenideElement LOADING_BAR = $(".v-loading-indicator");
 
+    /**
+     * Ensures that site is loaded and Vaadin loading bar already disappear.
+     */
     public static void waitForVaadin() {
         $(LOADING_BAR).waitUntil(disappears, Configuration.timeout);
     }

@@ -8,9 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static eu.yals.test.pageobjects.AppInfoPageObject.PublicInfoArea.*;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
- * Checking elements of public info area with information about version
+ * Checking elements of public info area with information about version.
  *
  * @since 2.7
  */
@@ -21,6 +22,7 @@ public class PublicInfoTest extends SelenideTest {
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/appInfo");
+        waitForVaadin();
     }
 
     @Test

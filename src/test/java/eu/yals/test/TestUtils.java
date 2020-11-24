@@ -139,12 +139,14 @@ public class TestUtils {
     }
 
     /**
-     * Hostname of executing machine
+     * Hostname of executing machine.
+     *
      * @return string with hostname
      */
     public static String hostName() {
         return HostIdentifier.getHostName();
     }
+
     /**
      * Provides current time for test naming.
      *
@@ -157,7 +159,7 @@ public class TestUtils {
     }
 
     /**
-     * Following needed because in may contain something like 'application/json;encoding=UTF8'
+     * Following needed because in may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
      * @return string which contains content type without encoding
