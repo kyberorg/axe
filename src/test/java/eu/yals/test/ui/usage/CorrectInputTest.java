@@ -14,6 +14,7 @@ import static eu.yals.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE;
 import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.*;
+import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -29,6 +30,7 @@ public class CorrectInputTest extends SelenideTest {
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
+        waitForVaadin();
     }
 
     @Test
