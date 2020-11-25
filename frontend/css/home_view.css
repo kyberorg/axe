@@ -13,6 +13,10 @@ body {
         padding-right: 1px;
         padding-left: 1px;
     }
+
+    #mainArea {
+        padding: 0.4em;
+    }
 }
 
 /* Small devices (landscape phones, 576px and up) */
