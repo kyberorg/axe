@@ -30,18 +30,29 @@ pipeline {
       steps {
         script {
           vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: params.REVIEW)
-          if (params.REVIEW) {
-            publishHTML([
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: false,
-                    keepAll              : true,
-                    reportDir            : 'target/site',
-                    reportFiles          : 'checkstyle.html',
-                    reportName           : 'HTML Report',
-                    reportTitles         : 'Code Style Review'
-            ])
+        }
+      }
+    }
+
+    stage('Review') {
+      when {
+        anyOf {
+          changeRequest target: 'trunk'
+          expression {
+            return params.REVIEW
           }
         }
+      }
+      steps {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: false,
+                keepAll              : true,
+                reportDir            : 'target/site',
+                reportFiles          : 'checkstyle.html',
+                reportName           : 'HTML Report',
+                reportTitles         : 'Code Style Review'
+        ])
       }
     }
 
@@ -50,6 +61,7 @@ pipeline {
         not {
           anyOf {
             branch 'trunk'
+            changeRequest target: 'trunk'
             buildingTag()
             expression {
               return params.DEMO_BUILD
@@ -92,6 +104,7 @@ pipeline {
           }
           anyOf {
             branch 'trunk'
+            changeRequest target: 'trunk'
             expression {
               return params.DEMO_BUILD
             }
