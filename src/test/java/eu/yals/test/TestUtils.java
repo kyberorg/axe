@@ -8,7 +8,6 @@ import eu.yals.test.utils.HostIdentifier;
 import eu.yals.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -21,7 +20,6 @@ import static org.junit.Assert.*;
  *
  * @since 2.0
  */
-@Slf4j
 public class TestUtils {
 
     /**
