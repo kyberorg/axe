@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "application.stage",
+      "type": "java.lang.String",
+      "description": "Application env for Bugsnag."
+    },
+    {
+      "name": "server.url",
+      "type": "java.lang.String",
+      "description": "URL where site resides. Value added to short link."
+    },
+    {
+      "name": "app.devMode",
+      "type": "java.lang.String",
+      "description": "Defines if application works in Development Mode. Dev Mode enables developer features (i.e. Debug Page)."
+    },
+    {
+      "name": "app.old.ui",
+      "type": "java.lang.String",
+      "description": "Location of old yals UI aka old.yals.eu."
+    },
+    {
+      "name": "telegram.enabled",
+      "type": "java.lang.String",
+      "description": "Defines is telegram integration is enabled or not."
+    },
+    {
+      "name": "telegram.token",
+      "type": "java.lang.String",
+      "description": "String with token for telegram."
+    }
+  ] }

@@ -224,6 +224,14 @@
             <version>5.16.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- Spring Annotation Processor for generating .properties metadata -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
     </dependencies>
 
     <dependencyManagement>
