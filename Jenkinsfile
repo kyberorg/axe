@@ -26,24 +26,33 @@ pipeline {
   }
 
   stages {
-    stage('Vaadin') {
-      steps {
-        script {
-          vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: params.REVIEW)
-        }
-      }
-    }
-
-    stage('Review') {
+    stage('Build') {
       when {
-        anyOf {
-          changeRequest target: 'trunk'
-          expression {
-            return params.REVIEW
+        not {
+          anyOf {
+            changeRequest target: 'trunk'
+            expression {
+              return params.REVIEW;
+            }
           }
         }
       }
       steps {
+        vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: false)
+      }
+    }
+
+    stage('Build with review') {
+      when {
+        anyOf {
+          changeRequest target: 'trunk'
+          expression {
+            return params.REVIEW;
+          }
+        }
+      }
+      steps {
+        vaadin(prodModeProfile: 'production-mode', extraProfiles: 'noTesting', runSiteTarget: true)
         publishHTML([
                 allowMissing         : true,
                 alwaysLinkToLastBuild: false,
