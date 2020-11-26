@@ -52,7 +52,7 @@ public class BugsnagConfig {
     @Bean
     public Bugsnag bugsnag() {
         String bugsnagToken = env.getProperty(App.Env.BUGSNAG_TOKEN, NO_TOKEN);
-        log.info("{} Initialing Bugsnag with token {}", TAG, bugsnagToken);
+        log.debug("{} Initialing Bugsnag with token {}", TAG, bugsnagToken);
         bugsnag = new Bugsnag(bugsnagToken);
         if (hasProxy()) {
             setProxy();
