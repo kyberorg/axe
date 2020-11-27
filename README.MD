@@ -7,6 +7,23 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.7.4 (27/11/2020)
+Internal Tweaks
+
+* Memory usage decreased by switching to OpenJ9 (#216)
+* Got rid of Vaadin Paid Components (#217)
+* Dockerfile: JDK for Dev builds, JRE for others (#244)
+* Dependencies updates (#238)
+* Fixing application tests by moving to Selenide + Selenoid (#224) (#249)
+* Added Java Remote Debug for DEV/DEMO (#213)
+* Now deploying to K8S with Chuck Norris help (#218)
+* Added APM agent for JVM stats (#223) (#242)
+* Jenkinsfile updates  (#237) (#240) (#243)
+* Logging: Removed extensive logging on debug level (#220)
+* Fixed NPE at `ErrorUtils.java` (#212)
+* Fixed Jenkins badges at `README.MD` (#246)
+* Documented application.properties (#229)
+
 ### Version 2.7.3 (16/06/2020)
 Super long links bug fixed
 

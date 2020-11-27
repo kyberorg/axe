@@ -5,7 +5,7 @@
 
     <groupId>eu.yals</groupId>
     <artifactId>yals</artifactId>
-    <version>2.7.4-dev</version>
+    <version>2.7.4</version>
     <packaging>jar</packaging>
 
     <name>yals</name>
