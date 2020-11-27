@@ -1,5 +1,5 @@
-ARG JAVA_BASE=11-jdk
-FROM openjdk:${JAVA_BASE}
+ARG JAVA_BASE=11-jdk-openj9
+FROM adoptopenjdk:${JAVA_BASE}
 ENV JAVA_VERSION=${JAVA_BASE}
 
 VOLUME /tmp
