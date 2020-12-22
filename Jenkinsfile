@@ -214,6 +214,7 @@ pipeline {
                   deployLocation = '${HOOK}?tag='+ dockerTag;
             }
           }
+          echo deployLocation;
           deployToSwarm(hookUrl: deployLocation)
         }
       }
