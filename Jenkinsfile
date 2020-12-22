@@ -7,8 +7,6 @@ def dockerFile = 'Dockerfile';
 
 def deployTarget = 'Dev';
 def deployCreds = '';
-def deployWorkloadName = 'yals-app';
-def deployContainerName = 'app';
 
 def testEnabled = true;
 def testUrl = "https://dev.yals.eu";
@@ -95,10 +93,6 @@ pipeline {
           dockerFile = 'Dockerfile.DEV'
         }
         script {
-          deployCreds = 'dev-yals';
-          deployWorkloadName = 'yals-app';
-        }
-        script {
           testEnabled = !params.SKIP_TESTS;
           testUrl = "https://dev.yals.eu";
         }
@@ -137,10 +131,6 @@ pipeline {
         }
         script {
           dockerFile = 'Dockerfile.PROD'
-        }
-        script {
-          deployCreds = 'qa-yals';
-          deployWorkloadName = 'yals-app';
         }
         script {
           testEnabled = !params.SKIP_TESTS;
@@ -197,15 +187,12 @@ pipeline {
           script {
             if (deployTarget.equalsIgnoreCase("PROD")) {
               deployCreds = 'prod-yals-deploy-creds';
-              deployWorkloadName = 'yals-app';
               testUrl = "https://yals.eu";
             } else if (deployTarget.equalsIgnoreCase("Demo")) {
-              deployCreds = 'qa-yals-deploy-creds';
-              deployWorkloadName = 'yals-app';
+              deployCreds = 'demo-yals-deploy-creds';
               testUrl = "https://demo.yals.eu";
             } else {
               deployCreds = 'dev-yals-deploy-creds';
-              deployWorkloadName = 'yals-app';
               testUrl = "https://dev.yals.eu";
             }
           }
