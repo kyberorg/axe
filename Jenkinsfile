@@ -211,7 +211,7 @@ pipeline {
           }
           script {
             withCredentials([string(credentialsId: deployCreds, variable: 'HOOK')]) {
-                  deployLocation = '${HOOK}?tag='+ dockerTag;
+                  deployLocation = "$HOOK" + '?tag='+ dockerTag;
             }
           }
           echo deployLocation;
