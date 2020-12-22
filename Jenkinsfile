@@ -6,9 +6,7 @@ def dockerTags = [];
 def dockerFile = 'Dockerfile';
 
 def deployTarget = 'Dev';
-def deployNamespace = 'dev-yals';
-def deployWorkloadName = 'yals-app';
-def deployContainerName = 'app';
+def deployCreds = '';
 
 def testEnabled = true;
 def testUrl = "https://dev.yals.eu";
@@ -95,10 +93,6 @@ pipeline {
           dockerFile = 'Dockerfile.DEV'
         }
         script {
-          deployNamespace = 'dev-yals';
-          deployWorkloadName = 'yals-app';
-        }
-        script {
           testEnabled = !params.SKIP_TESTS;
           testUrl = "https://dev.yals.eu";
         }
@@ -137,10 +131,6 @@ pipeline {
         }
         script {
           dockerFile = 'Dockerfile.PROD'
-        }
-        script {
-          deployNamespace = 'qa-yals';
-          deployWorkloadName = 'yals-app';
         }
         script {
           testEnabled = !params.SKIP_TESTS;
@@ -196,27 +186,23 @@ pipeline {
           print 'Deploying to ' + deployTarget;
           script {
             if (deployTarget.equalsIgnoreCase("PROD")) {
-              deployNamespace = 'prod-yals';
-              deployWorkloadName = 'yals-app';
+              deployCreds = 'prod-yals-deploy-creds';
               testUrl = "https://yals.eu";
             } else if (deployTarget.equalsIgnoreCase("Demo")) {
-              deployNamespace = 'qa-yals';
-              deployWorkloadName = 'yals-app';
+              deployCreds = 'demo-yals-deploy-creds';
               testUrl = "https://demo.yals.eu";
             } else {
-              deployNamespace = 'dev-yals';
-              deployWorkloadName = 'yals-app';
+              deployCreds = 'dev-yals-deploy-creds';
               testUrl = "https://dev.yals.eu";
             }
           }
-          echo "Namespace:" + deployNamespace
-          deployToKube(
-                  namespace: deployNamespace,
-                  workloadName: deployWorkloadName,
-                  imageRepo: env.DOCKER_REPO,
-                  imageTag: dockerTag,
-                  containerName: deployContainerName
-          )
+          script {
+            withCredentials([string(credentialsId: deployCreds, variable: 'HOOK')]) {
+                  deployLocation = "$HOOK" + '?tag='+ dockerTag;
+            }
+          }
+          echo deployLocation;
+          deployToSwarm(hookUrl: deployLocation)
         }
       }
     }
