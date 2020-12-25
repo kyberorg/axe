@@ -41,6 +41,14 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
 export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
+## Issue 264 (OpenJ9 tuning). Based on https://yals.eu/dUxHlC
+export JAVA_OPTS="$JAVA_OPTS -Dcom.ibm.tools.attach.enable=no"
+export JAVA_OPTS="$JAVA_OPTS -Xquickstart"
+export JAVA_OPTS="$JAVA_OPTS -Xtune:virtualized"
+export JAVA_OPTS="$JAVA_OPTS -XX:+ClassRelationshipVerifier"
+export JAVA_OPTS="$JAVA_OPTS -XX:-TransparentHugePage"
+## End OpenJ9 tuning
+
 # Issues 223 and 237 (APM Support) #
 APM_JAR="/apm-agent.jar"
 if [[ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]]; then
