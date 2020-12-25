@@ -20,6 +20,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import eu.yals.ui.dev.AppInfoView;
 import eu.yals.utils.AppUtils;
+import org.springframework.core.env.Environment;
 
 @SpringComponent
 @UIScope
@@ -39,11 +40,14 @@ public class AppView extends AppLayoutRouterLayout<LeftLayouts.LeftHybrid>
      * Creates menu.
      *
      * @param appUtils application utils for determine dev mode
+     * @param env object for accessing application properties
      */
-    public AppView(final AppUtils appUtils) {
+    public AppView(final AppUtils appUtils, final Environment env) {
+
+        String siteTitle = env.getProperty("eu.yals.site-title", "Yals").toUpperCase();
 
         AppLayoutBuilder<LeftLayouts.LeftHybrid> builder =
-                AppLayoutBuilder.get(LeftLayouts.LeftHybrid.class).withTitle("YALS");
+                AppLayoutBuilder.get(LeftLayouts.LeftHybrid.class).withTitle(siteTitle);
 
         LeftAppMenuBuilder menuBuilder = LeftAppMenuBuilder.get();
 
