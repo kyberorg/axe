@@ -42,8 +42,7 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
 ## Issue 264 (OpenJ9 tuning). Based on https://yals.eu/dUxHlC
-export JAVA_OPTS="$JAVA_OPTS -Dcom.ibm.tools.attach.enable=no"
-export JAVA_OPTS="$JAVA_OPTS -Xgcpolicy:balanced"
+export JAVA_OPTS="$JAVA_OPTS -Xgcpolicy:gencon"
 export JAVA_OPTS="$JAVA_OPTS -Xquickstart"
 export JAVA_OPTS="$JAVA_OPTS -Xtune:virtualized"
 export JAVA_OPTS="$JAVA_OPTS -XX:+ClassRelationshipVerifier"
