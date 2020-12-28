@@ -3,6 +3,7 @@ package eu.yals.ui;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Push;
@@ -11,6 +12,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
@@ -36,6 +38,7 @@ import java.util.Map;
         offlineResources = {"images/logo.png"},
         description = "Yet another link shortener for friends")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
+@CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
 
     private final Tabs tabs = new Tabs();
@@ -71,6 +74,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         RouterLink link = new RouterLink(null, target);
         link.add(VaadinIcon.FLASK.create());
         link.add(label);
+        link.setHighlightCondition(HighlightConditions.sameLocation());
         Tab tab = new Tab(link);
         targets.put(target, tab);
         tabs.add(tab);
