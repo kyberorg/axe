@@ -9,7 +9,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.exception.PageNotFoundException;
-import eu.yals.ui.AppView;
+import eu.yals.ui.MainView;
 
 import static eu.yals.constants.HttpCode.STATUS_404;
 
@@ -17,7 +17,7 @@ import static eu.yals.constants.HttpCode.STATUS_404;
 @SpringComponent
 @UIScope
 @PageTitle("Yals: Error 404")
-@Route(value = Endpoint.UI.PAGE_404, layout = AppView.class)
+@Route(value = Endpoint.UI.PAGE_404, layout = MainView.class)
 public class PageNotFoundView extends VerticalLayout implements HasErrorParameter<PageNotFoundException> {
 
     private final H1 title = new H1();

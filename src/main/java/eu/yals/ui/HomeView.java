@@ -1,7 +1,5 @@
 package eu.yals.ui;
 
-import com.github.appreciated.app.layout.annotations.Caption;
-import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -47,8 +45,6 @@ import static eu.yals.utils.push.PushCommand.UPDATE_COUNTER;
 @UIScope
 @CssImport("./css/home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
-@Caption("Home")
-@Icon(VaadinIcon.HOME)
 @PageTitle("Link shortener for friends")
 public class HomeView extends HorizontalLayout {
     private static final String TAG = "[" + HomeView.class.getSimpleName() + "]";

@@ -1,11 +1,8 @@
 package eu.yals.ui.dev;
 
-import com.github.appreciated.app.layout.annotations.Caption;
-import com.github.appreciated.app.layout.annotations.Icon;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -24,8 +21,6 @@ import eu.yals.utils.maven.MavenInfo;
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
-@Caption("App Info")
-@Icon(VaadinIcon.INFO)
 @PageTitle("Link shortener for friends: App Info")
 public class AppInfoView extends VerticalLayout {
     private static final String UNDEFINED = "UNDEFINED";
