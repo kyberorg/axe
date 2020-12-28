@@ -46,7 +46,7 @@ import static eu.yals.utils.push.PushCommand.UPDATE_COUNTER;
 @SpringComponent
 @UIScope
 @CssImport("./css/home_view.css")
-@Route(value = Endpoint.UI.HOME_PAGE, layout = AppView.class)
+@Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
 @Caption("Home")
 @Icon(VaadinIcon.HOME)
 @PageTitle("Link shortener for friends")

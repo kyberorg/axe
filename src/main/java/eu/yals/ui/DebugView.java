@@ -12,7 +12,7 @@ import eu.yals.Endpoint;
 
 @SpringComponent
 @UIScope
-@Route(value = Endpoint.UI.DEBUG_PAGE, layout = AppView.class)
+@Route(value = Endpoint.UI.DEBUG_PAGE, layout = MainView.class)
 @Caption("Debug Page")
 @Icon(VaadinIcon.FLASK)
 @PageTitle("Link shortener for friends: Debug Page")

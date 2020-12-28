@@ -16,14 +16,14 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import eu.yals.Endpoint;
 import eu.yals.constants.App;
 import eu.yals.services.GitService;
-import eu.yals.ui.AppView;
+import eu.yals.ui.MainView;
 import eu.yals.utils.AppUtils;
 import eu.yals.utils.git.GitRepoState;
 import eu.yals.utils.maven.MavenInfo;
 
 @SpringComponent
 @UIScope
-@Route(value = Endpoint.UI.APP_INFO_PAGE, layout = AppView.class)
+@Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
 @Caption("App Info")
 @Icon(VaadinIcon.INFO)
 @PageTitle("Link shortener for friends: App Info")
