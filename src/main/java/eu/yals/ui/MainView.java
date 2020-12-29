@@ -75,7 +75,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void addLogo() {
-        Image logo = new Image("/images/logo.png","Icon");
+        Image logo = new Image("/images/logo.png", "Icon");
         logo.addClassName("logo-image");
         Tab logoTab = new Tab(logo);
         logoTab.setEnabled(false);
@@ -89,7 +89,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(subTitleTab);
     }
 
-    private void addMenuTab(String label, Class<? extends Component> target, VaadinIcon icon) {
+    private void addMenuTab(final String label, final Class<? extends Component> target, final VaadinIcon icon) {
         RouterLink link = new RouterLink(null, target);
         link.add(icon.create());
         link.add(label);
@@ -100,12 +100,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         tabs.setSelectedTab(targets.get(beforeEnterEvent.getNavigationTarget()));
     }
 
     @Override
-    public void configurePage(InitialPageSettings settings) {
+    public void configurePage(final InitialPageSettings settings) {
         settings.addFavIcon("icon", "/icons/favicon-32x32.png", "32x32");
         settings.addLink("shortcut icon", "/icons/favicon-16x16.png");
         settings.addLink("apple-touch-icon", "/icons/apple-touch-icon.png");
