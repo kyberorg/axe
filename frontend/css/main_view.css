@@ -1,3 +1,9 @@
+.site-title {
+    font-size: x-large;
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
 a[highlight] {
     font-weight: bold;
     text-decoration: underline;

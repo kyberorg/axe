@@ -56,7 +56,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         setPrimarySection(Section.NAVBAR);
 
         Span title = new Span("Site Title".toUpperCase());
-        title.setHeight("63px"); //TODO magic number - set by css
+        title.addClassName("site-title");
         addToNavbar(toggle, title);
 
         //items
