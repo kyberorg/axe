@@ -53,6 +53,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public MainView(final AppUtils appUtils) {
 
         DrawerToggle toggle = new DrawerToggle();
+        setPrimarySection(Section.NAVBAR);
 
         Span title = new Span("Site Title".toUpperCase());
         title.setHeight("63px"); //TODO magic number - set by css
@@ -77,11 +78,14 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         Image logo = new Image("/images/logo.png","Icon");
         logo.addClassName("logo-image");
         Tab logoTab = new Tab(logo);
+        logoTab.setEnabled(false);
         tabs.add(logoTab);
     }
 
     private void addSubTitle() {
         Tab subTitleTab = new Tab("Yet another link shortener");
+        subTitleTab.setEnabled(false);
+        subTitleTab.addClassName("subtitle-tab");
         tabs.add(subTitleTab);
     }
 
