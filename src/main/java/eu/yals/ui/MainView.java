@@ -62,12 +62,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         //items
         addLogo();
         addSubTitle();
-        addMenuTab("Main", HomeView.class);
-        addMenuTab("App", AppInfoView.class);
+        addMenuTab("Main", HomeView.class, VaadinIcon.HOME);
+        addMenuTab("App Info", AppInfoView.class, VaadinIcon.INFO);
 
         // dev-only items
         if (appUtils.isDevelopmentModeActivated()) {
-            addMenuTab("Debug", DebugView.class);
+            addMenuTab("Debug", DebugView.class, VaadinIcon.FLASK);
         }
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
@@ -89,9 +89,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(subTitleTab);
     }
 
-    private void addMenuTab(String label, Class<? extends Component> target) {
+    private void addMenuTab(String label, Class<? extends Component> target, VaadinIcon icon) {
         RouterLink link = new RouterLink(null, target);
-        link.add(VaadinIcon.FLASK.create());
+        link.add(icon.create());
         link.add(label);
         link.setHighlightCondition(HighlightConditions.sameLocation());
         Tab tab = new Tab(link);
