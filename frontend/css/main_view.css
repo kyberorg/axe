@@ -1,7 +1,7 @@
 .site-title {
-    font-size: x-large;
-    padding-bottom: 6px;
-    padding-top: 6px;
+    font-size: large;
+    padding-bottom: 15px;
+    padding-top: 15px;
 }
 
 a[highlight] {
