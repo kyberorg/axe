@@ -183,13 +183,6 @@
             <artifactId>vaadin</artifactId>
         </dependency>
 
-        <!-- App Layout for Vaadin -->
-        <dependency>
-            <groupId>com.github.appreciated</groupId>
-            <artifactId>app-layout-addon</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-
         <!-- BugSnag: error reporting -->
         <dependency>
             <groupId>com.bugsnag</groupId>

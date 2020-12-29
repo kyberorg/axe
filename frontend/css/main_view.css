@@ -1,0 +1,36 @@
+.site-title {
+    font-size: large;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+a[highlight] {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.logo-image {
+    border-radius: 100%;
+    width: 56px;
+    height: 56px;
+}
+
+vaadin-tab {
+    padding: 0 0.5rem;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+}
+
+vaadin-tab[selected] {
+    background: var(--lumo-primary-color-10pct);
+}
+
+vaadin-tab a iron-icon {
+    padding-right: 1rem;
+}
+
+.subtitle-tab {
+    color: rgba(24, 39, 57, 0.94);
+}

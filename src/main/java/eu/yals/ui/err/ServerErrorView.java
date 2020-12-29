@@ -16,7 +16,7 @@ import eu.yals.constants.App;
 import eu.yals.exception.GeneralServerException;
 import eu.yals.exception.NeedForLoopException;
 import eu.yals.exception.error.YalsError;
-import eu.yals.ui.AppView;
+import eu.yals.ui.MainView;
 import eu.yals.utils.AppUtils;
 import eu.yals.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ import static eu.yals.utils.AppUtils.HTML_MODE;
 @SpringComponent
 @UIScope
 @PageTitle("Yals: Error 500")
-@Route(value = Endpoint.UI.ERROR_PAGE_500, layout = AppView.class)
+@Route(value = Endpoint.UI.ERROR_PAGE_500, layout = MainView.class)
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>,
         HasUrlParameter<String> {
     public static final String TAG = "[" + ServerErrorView.class.getSimpleName() + "]";
