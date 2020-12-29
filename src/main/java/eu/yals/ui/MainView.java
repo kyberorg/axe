@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Push;
@@ -58,6 +59,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addToNavbar(toggle, title);
 
         //items
+        addLogo();
+        addSubTitle();
         addMenuTab("Main", HomeView.class);
         addMenuTab("App", AppInfoView.class);
 
@@ -68,6 +71,18 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(tabs);
+    }
+
+    private void addLogo() {
+        Image logo = new Image("/images/logo.png","Icon");
+        logo.addClassName("logo-image");
+        Tab logoTab = new Tab(logo);
+        tabs.add(logoTab);
+    }
+
+    private void addSubTitle() {
+        Tab subTitleTab = new Tab("Yet another link shortener");
+        tabs.add(subTitleTab);
     }
 
     private void addMenuTab(String label, Class<? extends Component> target) {

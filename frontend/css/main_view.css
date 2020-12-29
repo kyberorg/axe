@@ -3,3 +3,16 @@ a[highlight] {
     text-decoration: underline;
 }
 
+.logo-image {
+    border-radius: 100%;
+    width: 56px;
+    height: 56px;
+}
+
+vaadin-tab {
+    padding: 0 0.5rem;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+}
