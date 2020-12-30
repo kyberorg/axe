@@ -9,6 +9,7 @@ import com.vaadin.flow.server.WebBrowser;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
@@ -32,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class AppUtils {
     private static final String TAG = "[" + AppUtils.class.getSimpleName() + "]";
+    @Getter
     private final Environment env;
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();

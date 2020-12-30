@@ -6,13 +6,13 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import eu.yals.Endpoint;
-import eu.yals.ui.AppView;
+import eu.yals.ui.MainView;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 import static eu.yals.constants.HttpCode.STATUS_503;
 
 @PageTitle("Yals: Error 503")
-@Route(value = Endpoint.UI.ERROR_PAGE_503, layout = AppView.class)
+@Route(value = Endpoint.UI.ERROR_PAGE_503, layout = MainView.class)
 public class AppDownView extends VerticalLayout implements HasErrorParameter<CannotCreateTransactionException> {
 
     private final H1 title = new H1();

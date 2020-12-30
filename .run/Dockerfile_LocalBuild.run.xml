@@ -7,6 +7,18 @@
         <option name="command" value="" />
         <option name="containerName" value="" />
         <option name="entrypoint" value="" />
+        <option name="envVars">
+          <list>
+            <DockerEnvVarImpl>
+              <option name="name" value="JAVA_DEBUG_PORT" />
+              <option name="value" value="8888" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_PROFILES_ACTIVE" />
+              <option name="value" value="local, activator" />
+            </DockerEnvVarImpl>
+          </list>
+        </option>
         <option name="publishAllPorts" value="true" />
         <option name="commandLineOptions" value="" />
         <option name="sourceFilePath" value="Dockerfile" />
