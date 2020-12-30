@@ -7,6 +7,16 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.7.5 (30/12/2020)
+No more leaks
+
+* Application memory leak found and fixed (#264)
+* OpenJ9 Java VM tweaks (#264)  
+* Migration from AppView (App Layout add-on) to Vaadin App layout (#269)  
+* Site title per each profile (#268)
+* Small ops changes (#262)
+
+
 ### Version 2.7.4 (27/11/2020)
 Internal Tweaks
 
