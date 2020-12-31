@@ -1,27 +1,25 @@
 package eu.yals.test.ui;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.junit.ScreenShooter;
+import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import eu.yals.constants.App;
 import eu.yals.test.TestApp;
 import eu.yals.test.TestUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import eu.yals.test.utils.TestWatcherExtension;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.MutableCapabilities;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 /**
  * Base for all UI Tests, which run with Selenide.
  *
  * @since 1.0
  */
+@ExtendWith(ScreenShooterExtension.class) // automatically takes screenshot of every failed test
+@ExtendWith(TestWatcherExtension.class) // catching test results and logging results to System.out
 public abstract class SelenideTest {
     private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Properties.REPORT_DIR, TestApp.Defaults.Selenide.REPORT_DIR);
     private static final String SELENIDE_BROWSER = System.getProperty(TestApp.Properties.Selenide.BROWSER, TestApp.Defaults.Selenide.BROWSER);
@@ -32,79 +30,12 @@ public abstract class SelenideTest {
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
 
-    private static String testName;
     private static boolean isCommonInfoAlreadyShown;
-
-    private long testStartTime;
-    private float testDurationInMillis;
-    private boolean testSucceeded;
-
-    @Rule  // automatically takes screenshot of every failed test
-    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
-
-    @Rule  // catching test result and triggering BrowserWebDriverContainer#afterTest() for saving test recordings
-    public final TestRule watchman = new TestWatcher() {
-        /**
-         * Very first stage of running test. We use it for getting test name and logging executing startup.
-         * @param description JUnit's test {@link Description} from Runner
-         */
-        @Override
-        protected void starting(final Description description) {
-            super.starting(description);
-            testName = setTestNameFromTestDescription(description);
-            testStartTime = System.currentTimeMillis();
-            System.out.printf("Starting.... build '%s'. Test: '%s%n", BUILD_NAME, testName);
-        }
-
-        /**
-         * Marks test as succeeded. We report result to Zalenium or to TestContainers
-         * @param description JUnit's test {@link Description} from Runner
-         */
-        @Override
-        protected void succeeded(Description description) {
-            super.succeeded(description);
-            testDurationInMillis = System.currentTimeMillis() - testStartTime;
-            testSucceeded = true;
-            if (shouldRunTestsAtGrid()) {
-                Cookie cookie = new Cookie("zaleniumTestPassed", "true");
-                getWebDriver().manage().addCookie(cookie);
-            }
-        }
-
-        /**
-         * Marks test as failed. We report result to Zalenium or to TestContainers
-         * @param e exception that occurred at exec time.
-         * @param description JUnit's test {@link Description} from Runner
-         */
-        @Override
-        protected void failed(Throwable e, Description description) {
-            super.failed(e, description);
-            testDurationInMillis = System.currentTimeMillis() - testStartTime;
-            testSucceeded = false;
-            if (shouldRunTestsAtGrid()) {
-                Cookie cookie = new Cookie("zaleniumTestPassed", "false");
-                getWebDriver().manage().addCookie(cookie);
-            }
-        }
-
-        /**
-         * Very last step of test execution.
-         * @param description JUnit's test {@link Description} from Runner
-         */
-        @Override
-        protected void finished(Description description) {
-            super.finished(description);
-            String testResult = testSucceeded ? "OK" : "FAIL";
-            String timeTook = testDurationInMillis/1000 +" s";
-
-            System.out.printf("Finished(%s) build '%s'. Test: '%s, Time elapsed: %s%n", testResult, BUILD_NAME, testName, timeTook);
-        }
-    };
 
     /**
      * Common Runner Setup and Info.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         Configuration.baseUrl = BASE_URL;
         Configuration.reportsFolder = REPORT_DIRECTORY;
@@ -151,7 +82,7 @@ public abstract class SelenideTest {
     /**
      * Actions after all tests.
      */
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         System.out.println("Testing is Done");
     }
@@ -209,18 +140,6 @@ public abstract class SelenideTest {
             return HTTP_PREFIX + gridHostname;
         } else {
             return HTTP_PREFIX + gridHostname + GRID_POSTFIX;
-        }
-    }
-
-    private String setTestNameFromTestDescription(final Description description) {
-        String testClassName = description.getTestClass().getSimpleName();
-        String rawMethodName = description.getMethodName();
-        String[] methodAndBrowserInfo = rawMethodName.split("\\[");
-        if (methodAndBrowserInfo.length > 0) {
-            String method = methodAndBrowserInfo[0];
-            return String.format("%s.%s", testClassName, method);
-        } else {
-            return String.format("%s.%s", testClassName, rawMethodName);
         }
     }
 

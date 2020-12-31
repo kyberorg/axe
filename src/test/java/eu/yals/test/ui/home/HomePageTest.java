@@ -6,9 +6,9 @@ import eu.yals.test.pageobjects.NotFoundViewPageObject;
 import eu.yals.test.pageobjects.external.VR;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.utils.SelenideUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
@@ -26,7 +26,7 @@ import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 @SpringBootTest
 public class HomePageTest extends SelenideTest {
 
-    @Before
+    @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
@@ -74,7 +74,7 @@ public class HomePageTest extends SelenideTest {
     }
 
     private void verifyThatVROpened() {
-        Assert.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
+        Assertions.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
     }
 
     private void verifyThatPage404Opened() {

@@ -2,8 +2,8 @@ package eu.yals.test.ui.usage;
 
 import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.ui.SelenideTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
@@ -14,8 +14,9 @@ import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE;
 import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.*;
 import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * Tries to input valid values and checks returned result
@@ -24,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  */
 @SpringBootTest
 public class CorrectInputTest extends SelenideTest {
-    @Before
+    @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
@@ -93,7 +94,7 @@ public class CorrectInputTest extends SelenideTest {
 
         QR_CODE_AREA.shouldBe(visible);
         QR_CODE.shouldBe(visible);
-        assertTrue("QR code is not image", QR_CODE.isImage());
+        assertTrue(QR_CODE.isImage(), "QR code is not image");
 
         LONG_URL_INPUT.shouldBe(empty);
 

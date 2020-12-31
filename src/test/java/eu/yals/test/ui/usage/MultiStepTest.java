@@ -5,9 +5,8 @@ import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.pageobjects.external.Eki;
 import eu.yals.test.pageobjects.external.Wikipedia;
 import eu.yals.test.ui.SelenideTest;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,6 +20,8 @@ import static eu.yals.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
 import static eu.yals.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.*;
 import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Contains multi step tests for Front page
@@ -29,7 +30,7 @@ import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
  */
 @SpringBootTest
 public class MultiStepTest extends SelenideTest {
-    @Before
+    @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
@@ -76,7 +77,7 @@ public class MultiStepTest extends SelenideTest {
         String shortLink = RESULT_LINK.text();
         String pastedLink = LONG_URL_INPUT.val();
 
-        Assert.assertEquals(shortLink, pastedLink);
+        assertEquals(shortLink, pastedLink);
     }
 
     @Test
@@ -90,8 +91,8 @@ public class MultiStepTest extends SelenideTest {
         long numberAfterLinkSaved = HomePageObject.getNumberOfSavedLinks();
 
         //+1 logic is no longer valid, because someone else (i.e. other tests) can also store link within same time
-        Assert.assertTrue("Number Before: " + initialNumber + " Number after: " + numberAfterLinkSaved,
-                numberAfterLinkSaved > initialNumber);
+        assertTrue(numberAfterLinkSaved > initialNumber,
+                "Number Before: " + initialNumber + " Number after: " + numberAfterLinkSaved);
     }
 
     @Test

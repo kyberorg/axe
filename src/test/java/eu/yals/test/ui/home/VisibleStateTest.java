@@ -4,9 +4,9 @@ import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.utils.SelenideUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import static eu.yals.test.pageobjects.HomePageObject.OverallArea.*;
 import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
-import static org.junit.Assert.fail;
+
 
 /**
  * Checks state of front page (elements and so on...)
@@ -28,7 +28,7 @@ import static org.junit.Assert.fail;
  */
 @SpringBootTest
 public class VisibleStateTest extends SelenideTest {
-    @Before
+    @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
@@ -71,7 +71,7 @@ public class VisibleStateTest extends SelenideTest {
     @Test
     public void formHasOnlyOneButton() {
         List<SelenideElement> buttons = MAIN_AREA.findAll("vaadin-button");
-        Assert.assertEquals("Only 1 button expected", 1, buttons.size());
+        Assertions.assertEquals( 1, buttons.size(), "Only 1 button expected");
     }
 
     @Test
@@ -87,7 +87,7 @@ public class VisibleStateTest extends SelenideTest {
 
     @Test
     public void shouldHaveCorrectTitle() {
-        Assert.assertEquals("Link shortener for friends", SelenideUtils.getPageTitle());
+        Assertions.assertEquals("Link shortener for friends", SelenideUtils.getPageTitle());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class VisibleStateTest extends SelenideTest {
     public void inputFieldHasLabel() {
         LONG_URL_INPUT_LABEL.should(exist);
         String labelText = LONG_URL_INPUT_LABEL.getText();
-        Assert.assertTrue(StringUtils.isNotBlank(labelText));
+        Assertions.assertTrue(StringUtils.isNotBlank(labelText));
     }
 
     @Test
@@ -130,9 +130,9 @@ public class VisibleStateTest extends SelenideTest {
         String numberText = OVERALL_LINKS_NUMBER.getText();
         try {
             int numberOfSavedLinks = Integer.parseInt(numberText);
-            Assert.assertTrue(numberOfSavedLinks >= 0);
+            Assertions.assertTrue(numberOfSavedLinks >= 0);
         } catch (NumberFormatException e) {
-            fail("Number of saved links is not a valid number");
+            Assertions.fail("Number of saved links is not a valid number");
         }
     }
 }

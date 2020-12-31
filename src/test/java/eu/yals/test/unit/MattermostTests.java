@@ -4,11 +4,11 @@ import eu.yals.constants.App;
 import eu.yals.mm.Mattermost;
 import eu.yals.test.utils.mock.MattermostMock;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link Mattermost}
@@ -57,25 +57,25 @@ public class MattermostTests {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldBeExceptionWhenRequestHasBlankBody() {
-        Mattermost.createFromResponseBody("");
+        assertThrows(IllegalStateException.class, () -> Mattermost.createFromResponseBody(""));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldBeExceptionWhenRequestHasNullBody() {
-        Mattermost.createFromResponseBody(null);
+        assertThrows(IllegalStateException.class, () -> Mattermost.createFromResponseBody(null));
     }
 
     /**
      * When empty body - exception expected.
      */
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldBeExceptionWhenRequestHasEmptyBody() {
-        Mattermost.createFromResponseBody(" ");
+        assertThrows(IllegalStateException.class, () -> Mattermost.createFromResponseBody(" "));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldBeExceptionWhenRequestHasNoText() {
         String channelId = RandomStringUtils.randomAlphanumeric(CHANNEL_ID_LENGTH);
         String channelName = "channelName";
@@ -93,7 +93,8 @@ public class MattermostTests {
                 .withToken(token)
                 .withUserId(userId).withUsername(uzer);
 
-        Mattermost.createFromResponseBody(matterMock.toString());
+        assertThrows(NoSuchElementException.class, () -> Mattermost.createFromResponseBody(matterMock.toString()));
+
     }
 
     @Test
@@ -124,20 +125,19 @@ public class MattermostTests {
         assertEquals(uzer, mm.getUsername());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldBeExceptionWhenTextIsNotUrl() {
         String text = "notAnUrl";
         String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
         String userId = RandomStringUtils.randomAlphanumeric(USER_ID_LENGTH);
         String uzer = "uzer";
 
-
         MattermostMock matterMock = MattermostMock.create()
                 .withText(text)
                 .withToken(token)
                 .withUserId(userId).withUsername(uzer);
 
-        Mattermost.createFromResponseBody(matterMock.toString());
+        assertThrows(IllegalArgumentException.class, () -> Mattermost.createFromResponseBody(matterMock.toString()));
     }
 
     @Test

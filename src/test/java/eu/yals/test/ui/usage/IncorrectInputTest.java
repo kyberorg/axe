@@ -3,8 +3,8 @@ package eu.yals.test.ui.usage;
 import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.utils.UrlExtraValidator;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
@@ -22,7 +22,7 @@ public class IncorrectInputTest extends SelenideTest {
     private static final String MALFORMED_URL_TEXT = "malformed URL or not URL";
     private static final String NOT_ALLOWED_TEXT = "temporary not allowed";
 
-    @Before
+    @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
