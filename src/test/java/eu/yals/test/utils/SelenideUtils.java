@@ -20,7 +20,7 @@ public class SelenideUtils {
      * @param durationInSeconds wait duration in seconds.
      */
     public static void waitUntilSiteLoads(int durationInSeconds) {
-        $("body").waitUntil(visible, durationInSeconds * 1000);
+        $("body").waitUntil(visible, durationInSeconds * 1000L);
     }
 
     /**

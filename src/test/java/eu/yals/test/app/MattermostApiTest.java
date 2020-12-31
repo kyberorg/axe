@@ -12,7 +12,7 @@ import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import static eu.yals.constants.HttpCode.STATUS_200;
 import static eu.yals.constants.HttpCode.STATUS_400;
 import static eu.yals.test.TestUtils.assertContentType;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Usage tests for {@link MattermostRestController}.
@@ -83,7 +83,7 @@ public class MattermostApiTest extends UnirestTest {
         assertContentType(MimeType.APPLICATION_JSON, result);
 
         String mmText = getMMText(result);
-        assertTrue("Mattermost test should have username in message", mmText.contains(App.AT + uzer));
+        assertTrue(mmText.contains(App.AT + uzer), "Mattermost test should have username in message");
     }
 
     @Test
@@ -219,10 +219,10 @@ public class MattermostApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(STATUS_200, result.getStatus());
         assertTrue(
-                "Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object",
-                isResultMattermostReplyJson(result));
+                isResultMattermostReplyJson(result),
+                "Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object");
         String mmText = getMMText(result);
-        assertTrue("Text must contain description, if it is present", mmText.contains(description));
+        assertTrue(mmText.contains(description), "Text must contain description, if it is present");
     }
 
     @Test
@@ -240,10 +240,10 @@ public class MattermostApiTest extends UnirestTest {
         assertNotNull(result);
         assertEquals(STATUS_200, result.getStatus());
         assertTrue(
-                "Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object",
-                isResultMattermostReplyJson(result));
+                isResultMattermostReplyJson(result),
+                "Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object");
         String mmText = getMMText(result);
-        assertTrue("Text must contain description, if it is present", mmText.contains(description));
+        assertTrue(mmText.contains(description), "Text must contain description, if it is present");
     }
 
     private MattermostMock getMock(final String text) {
@@ -277,7 +277,7 @@ public class MattermostApiTest extends UnirestTest {
     }
 
     private void assertUsage(final String mmText) {
-        assertTrue("Text must contain info emoji", mmText.contains(App.Emoji.INFO));
-        assertTrue("Text must contain word 'Usage'", mmText.contains("Usage"));
+        assertTrue(mmText.contains(App.Emoji.INFO), "Text must contain info emoji");
+        assertTrue(mmText.contains("Usage"), "Text must contain word 'Usage'");
     }
 }

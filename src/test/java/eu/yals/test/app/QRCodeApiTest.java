@@ -9,7 +9,7 @@ import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 import static eu.yals.constants.HttpCode.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Testing locations related to QR codes.
@@ -195,7 +195,7 @@ public class QRCodeApiTest extends UnirestTest {
 
     @SuppressWarnings("SpellCheckingInspection")
     private void assertValidQRCode(final String qrCode) {
-        assertTrue("QR find, but cannot be empty", StringUtils.isNotBlank(qrCode));
+        assertTrue(StringUtils.isNotBlank(qrCode), "QR find, but cannot be empty");
 
         String[] qrCodeParts = qrCode.split(";");
         if (qrCodeParts.length > 1) //noinspection SpellCheckingInspection
@@ -225,7 +225,7 @@ public class QRCodeApiTest extends UnirestTest {
         bis.close();
 
         // QR code is square
-        assertEquals("Width is wrong", size, image.getWidth());
-        assertEquals("Height is wrong", size, image.getHeight());
+        assertEquals(size, image.getWidth(), "Width is wrong");
+        assertEquals(size, image.getHeight(), "Height is wrong");
     }
 }
