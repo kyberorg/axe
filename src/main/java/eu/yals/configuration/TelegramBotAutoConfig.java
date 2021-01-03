@@ -7,10 +7,10 @@ import eu.yals.utils.UrlExtraValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.BotSession;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -35,10 +35,6 @@ public class TelegramBotAutoConfig {
 
     private final TelegramBot telegramBot;
     private final AppUtils appUtils;
-
-    static {
-        ApiContextInitializer.init();
-    }
 
     /**
      * Constructor for Spring autowiring.
@@ -68,12 +64,11 @@ public class TelegramBotAutoConfig {
         log.info("{} Bot Status: {}", TAG, botStatus);
 
         if (isBotAvailable) {
-            TelegramBotsApi api = new TelegramBotsApi();
-            log.debug("{} Bot token: {}", TAG, telegramBot.getBotToken());
-
             try {
+                TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
+                log.debug("{} Bot token: {}", TAG, telegramBot.getBotToken());
                 sessions.add(api.registerBot(telegramBot));
-            } catch (TelegramApiRequestException e) {
+            } catch (TelegramApiException e) {
                 log.error("{} Failed to register bot", TAG);
                 log.debug("", e);
             }
