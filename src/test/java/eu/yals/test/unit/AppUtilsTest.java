@@ -1,9 +1,10 @@
 package eu.yals.test.unit;
 
 import eu.yals.utils.AppUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Test suite for {@link AppUtils}

@@ -9,11 +9,11 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static eu.yals.constants.HttpCode.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing Tech Parts and other non-standard locations
@@ -173,7 +173,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(STATUS_200, result.getStatus());
 
         String body = result.getBody();
-        assertTrue("robots.txt is empty", StringUtils.isNotBlank(body));
+        assertTrue(StringUtils.isNotBlank(body), "robots.txt is empty");
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
@@ -189,7 +189,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(STATUS_200, result.getStatus());
 
         String body = result.getBody();
-        assertTrue("humans.txt is empty", StringUtils.isNotBlank(body));
+        assertTrue(StringUtils.isNotBlank(body), "humans.txt is empty");
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
@@ -205,7 +205,7 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(STATUS_200, result.getStatus());
 
         String body = result.getBody();
-        assertTrue("favicon.ico is empty", StringUtils.isNotBlank(body));
+        assertTrue(StringUtils.isNotBlank(body), "favicon.ico is empty");
         //in Spring boot 2.2 favicon transferred without Content-Type Header, so we have to check Content-Length instead
         TestUtils.assertContentNotEmpty(result);
     }

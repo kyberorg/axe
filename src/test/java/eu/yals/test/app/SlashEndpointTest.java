@@ -10,13 +10,11 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static eu.yals.Endpoint.ForTests.SLASH_BASE;
 import static eu.yals.constants.HttpCode.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for /{ident}.
@@ -43,10 +41,10 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(true);
 
-        Assert.assertEquals(STATUS_302, result.getStatus());
-        Assert.assertTrue(result.getHeaders().containsKey(Header.LOCATION));
+        assertEquals(STATUS_302, result.getStatus());
+        assertTrue(result.getHeaders().containsKey(Header.LOCATION));
         String location = result.getHeaders().getFirst(Header.LOCATION);
-        Assert.assertTrue("Got empty " + Header.LOCATION + " header", StringUtils.isNotBlank(location));
+        assertTrue(StringUtils.isNotBlank(location), "Got empty " + Header.LOCATION + " header");
     }
 
     @Test
@@ -58,7 +56,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        Assert.assertEquals(STATUS_404, result.getStatus());
+        assertEquals(STATUS_404, result.getStatus());
     }
 
     private String store(final String urlToStore) {
@@ -69,7 +67,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        Assert.assertEquals(STATUS_201, result.getStatus());
+        assertEquals(STATUS_201, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);

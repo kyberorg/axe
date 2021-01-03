@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Useful stuff for testing
@@ -42,8 +42,8 @@ public class TestUtils {
      */
     public static void assertResultIsYalsErrorJson(final HttpResponse<String> result) {
         assertTrue(
-                "Response is not valid " + YalsErrorJson.class.getSimpleName(),
-                TestUtils.isValidErrorJson(result));
+                TestUtils.isValidErrorJson(result),
+                "Response is not valid " + YalsErrorJson.class.getSimpleName());
     }
 
     /**
@@ -92,7 +92,7 @@ public class TestUtils {
         } catch (NumberFormatException e) {
             fail(String.format("%s header value is not a number", Header.CONTENT_LENGTH));
         }
-        assertTrue("Content is empty", contentLength > 0);
+        assertTrue(contentLength > 0, "Content is empty");
     }
 
     /**

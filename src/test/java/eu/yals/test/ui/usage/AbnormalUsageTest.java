@@ -2,8 +2,8 @@ package eu.yals.test.ui.usage;
 
 import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.ui.SelenideTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.empty;
@@ -18,7 +18,7 @@ import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
  */
 @SpringBootTest
 public class AbnormalUsageTest extends SelenideTest {
-    @Before
+    @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");

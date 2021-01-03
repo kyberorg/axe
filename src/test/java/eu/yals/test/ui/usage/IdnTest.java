@@ -5,15 +5,15 @@ import eu.yals.test.pageobjects.HomePageObject;
 import eu.yals.test.pageobjects.external.*;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.utils.SelenideUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Contains IDN URL multi step tests for Front page.
@@ -24,7 +24,7 @@ import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
 @SuppressWarnings("SpellCheckingInspection")
 public class IdnTest extends SelenideTest {
 
-    @Before
+    @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
         open("/");
@@ -73,13 +73,13 @@ public class IdnTest extends SelenideTest {
     @Test
     public void germanUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://www.travemünde.de/");
-        Assert.assertEquals(TravemundeDe.TITLE_TEXT, SelenideUtils.getPageTitle());
+        assertEquals(TravemundeDe.TITLE_TEXT, SelenideUtils.getPageTitle());
     }
 
     @Test
     public void estonianUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://sõnaveeb.ee");
-        Assert.assertEquals(SonaveebEe.TITLE_TEXT, SelenideUtils.getPageTitle());
+        assertEquals(SonaveebEe.TITLE_TEXT, SelenideUtils.getPageTitle());
     }
 
     /**
