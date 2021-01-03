@@ -90,7 +90,7 @@ public class CorrectInputTest extends SelenideTest {
 
         String actualText = RESULT_LINK.getText();
         String hrefValue = RESULT_LINK.getAttribute("href");
-        assertEquals("link in 'href' value is not same as link shown text", actualText, hrefValue);
+        assertEquals(actualText, hrefValue, "link in 'href' value is not same as link shown text");
 
         QR_CODE_AREA.shouldBe(visible);
         QR_CODE.shouldBe(visible);

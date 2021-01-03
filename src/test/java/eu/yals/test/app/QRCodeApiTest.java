@@ -203,7 +203,7 @@ public class QRCodeApiTest extends UnirestTest {
             // base64,iVBORw0KGgoAAAAN...
             String[] valueParts = qrCodeParts[1].split(",");
             if (valueParts.length > 1) {
-                assertEquals("QR code must be encoded with base64", "base64", valueParts[0]);
+                assertEquals( "base64", valueParts[0], "QR code must be encoded with base64");
                 Base64.Decoder decoder = Base64.getDecoder();
                 byte[] decodedValue = decoder.decode(valueParts[1]);
                 assertNotNull(decodedValue);
