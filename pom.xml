@@ -5,7 +5,7 @@
 
     <groupId>eu.yals</groupId>
     <artifactId>yals</artifactId>
-    <version>2.7.5</version>
+    <version>2.7.6-dev</version>
     <packaging>jar</packaging>
 
     <name>yals</name>
@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.4.1</vaadin.version>
+        <vaadin.version>14.4.5</vaadin.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
