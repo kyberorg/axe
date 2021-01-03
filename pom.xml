@@ -127,7 +127,7 @@
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.11.02</version>
+            <version>3.11.09</version>
         </dependency>
 
         <!-- For extra validation of URL  -->
@@ -201,7 +201,7 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.1.6.Final</version>
+            <version>7.0.0.Final</version>
         </dependency>
 
         <!-- Spring Boot Tests -->
@@ -214,7 +214,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>5.16.0</version>
+            <version>5.17.2</version>
             <scope>test</scope>
         </dependency>
         <!-- Spring Annotation Processor for generating .properties metadata -->
@@ -283,7 +283,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.0.2</version>
+                <version>4.0.3</version>
                 <configuration>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
