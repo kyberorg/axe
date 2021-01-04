@@ -4,8 +4,6 @@ import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.WebBrowser;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
 import eu.yals.constants.MimeType;
@@ -227,28 +225,6 @@ public class AppUtils {
             log.debug("", e);
             throw new RuntimeException(e.getCause());
         }
-    }
-
-    /**
-     * Determines if client uses mobile OS (Android or iOS) to access site.
-     *
-     * @param vaadinSession valid {@link VaadinSession} from UI
-     * @return true, if client browser works on mobile operating system (Android or iOS), false - otherwise
-     */
-    public static boolean isMobile(final VaadinSession vaadinSession) {
-        WebBrowser browser = vaadinSession.getBrowser();
-        assert browser != null;
-        return browser.isIOS() || browser.isAndroid();
-    }
-
-    /**
-     * Opposite of {@link #isMobile(VaadinSession)}.
-     *
-     * @param vaadinSession valid {@link VaadinSession} from UI
-     * @return true, if client browser works on desktop operating system, false - otherwise
-     */
-    public static boolean isNotMobile(final VaadinSession vaadinSession) {
-        return !isMobile(vaadinSession);
     }
 
     /**

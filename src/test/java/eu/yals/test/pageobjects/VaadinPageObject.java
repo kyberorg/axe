@@ -3,7 +3,9 @@ package eu.yals.test.pageobjects;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Condition.disappears;
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
@@ -18,6 +20,6 @@ public class VaadinPageObject {
      * Ensures that site is loaded and Vaadin loading bar already disappear.
      */
     public static void waitForVaadin() {
-        $(LOADING_BAR).waitUntil(disappears, Configuration.timeout);
+        $(LOADING_BAR).shouldBe(hidden, Duration.ofMillis(Configuration.timeout));
     }
 }
