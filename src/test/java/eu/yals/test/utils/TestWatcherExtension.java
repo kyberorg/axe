@@ -1,12 +1,11 @@
 package eu.yals.test.utils;
 
 import eu.yals.test.TestApp;
-import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
 
-public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback, AfterEachCallback {
+public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback {
 
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
@@ -37,6 +36,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     public void testSuccessful(ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
         testSucceeded = true;
+        afterTest();
     }
 
     /**
@@ -48,14 +48,13 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     public void testFailed(ExtensionContext context, Throwable cause) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
         testSucceeded = false;
+        afterTest();
     }
 
     /**
      * Very last step of test execution.
-     * @param extensionContext JUnit's test {@link ExtensionContext}
      */
-    @Override
-    public void afterEach(ExtensionContext extensionContext) {
+    private void afterTest() {
         String testResult = testSucceeded ? "OK" : "FAIL";
         String timeTook = testDurationInMillis/1000 +" s";
 
