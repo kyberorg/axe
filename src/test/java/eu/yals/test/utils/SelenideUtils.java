@@ -1,5 +1,7 @@
 package eu.yals.test.utils;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.title;
@@ -20,7 +22,7 @@ public class SelenideUtils {
      * @param durationInSeconds wait duration in seconds.
      */
     public static void waitUntilSiteLoads(int durationInSeconds) {
-        $("body").waitUntil(visible, durationInSeconds * 1000L);
+        $("body").shouldBe(visible, Duration.ofSeconds(durationInSeconds));
     }
 
     /**
