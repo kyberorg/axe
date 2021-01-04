@@ -7,6 +7,17 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.7.6 (04/01/2021)
+Version Bump
+
+* Vaadin 14.4.5 (#259)
+* Spring Boot 2.4.1 (#259) 
+* Telegram Bots 5.0.1 (#259) + code adaptation (#270)
+* Small deps update (#259)
+* JUnit 4 replaced with JUnit 5 (#266)
+* Code: warnings fixed and deprecations and unused code removed (#280)
+* JUnit 5 test report problem fixed (#278)
+
 ### Version 2.7.5 (30/12/2020)
 No more leaks
 
@@ -110,7 +121,7 @@ Telegram Bot
 ### Version 2.3.1 (05/02/18)
 Mattermost multiple params support and fixes
 
-* Mattermost Bug: query with all spaces leaded to ":warning: Server Error" (#68)
+* Mattermost Bug: query with all spaces led to ":warning: Server Error" (#68)
 
 * Multiple param support (#69)
 
@@ -276,7 +287,7 @@ To adjust logging we use ENV variables or `-D` vars:
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
 ### About: Tests
-* Test URL is defined bu `-Dtest.url` property. Should be with protocol.
+* Test URL is defined by `-Dtest.url` property. Should be with protocol.
   
 * Browsers are defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge. 
 
