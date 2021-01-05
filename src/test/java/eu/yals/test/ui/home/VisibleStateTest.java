@@ -3,6 +3,7 @@ package eu.yals.test.ui.home;
 import com.codeborne.selenide.SelenideElement;
 import eu.yals.test.ui.SelenideTest;
 import eu.yals.test.utils.SelenideUtils;
+import eu.yals.ui.HomeView;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import static eu.yals.test.pageobjects.HomePageObject.OverallArea.*;
 import static eu.yals.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static eu.yals.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
@@ -71,7 +73,7 @@ public class VisibleStateTest extends SelenideTest {
     @Test
     public void formHasOnlyOneButton() {
         List<SelenideElement> buttons = MAIN_AREA.findAll("vaadin-button");
-        Assertions.assertEquals( 1, buttons.size(), "Only 1 button expected");
+        assertEquals( 1, buttons.size(), "Only 1 button expected");
     }
 
     @Test
@@ -87,12 +89,30 @@ public class VisibleStateTest extends SelenideTest {
 
     @Test
     public void shouldHaveCorrectTitle() {
-        Assertions.assertEquals("Link shortener for friends", SelenideUtils.getPageTitle());
+        assertEquals("Link shortener for friends", SelenideUtils.getPageTitle());
     }
 
     @Test
-    public void mainDivShouldHaveH2() {
+    public void mainDivShouldHaveTitle() {
         TITLE.should(exist);
+    }
+
+    @Test
+    public void titleShouldBeH2() {
+        assertEquals("h2", TITLE.getTagName().toLowerCase());
+    }
+
+    @Test
+    public void titleShouldHaveWordsLinksAndShort() {
+        TITLE.shouldHave(text("links"));
+        TITLE.shouldHave(text("short"));
+    }
+
+    @Test
+    public void inputFieldShouldBeAfterTitle() {
+        SelenideElement nextElement = TITLE.sibling(0);
+        nextElement.should(exist);
+        nextElement.shouldHave(id(HomeView.IDs.INPUT));
     }
 
     @Test
