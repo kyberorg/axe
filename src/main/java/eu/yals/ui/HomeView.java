@@ -119,12 +119,9 @@ public class HomeView extends HorizontalLayout {
     }
 
     private VerticalLayout mainArea() {
-        H2 title = new H2("Yet another link shortener");
+        H2 title = new H2("Make your links short");
         title.setId(IDs.TITLE);
-
-        Span subtitle = new Span("... for friends");
-        subtitle.setId(IDs.SUBTITLE);
-        subtitle.addClassName("italic");
+        title.addClassName("compact-title");
 
         input = new TextField("Your very long URL here:");
         input.setId(IDs.INPUT);
@@ -141,7 +138,7 @@ public class HomeView extends HorizontalLayout {
         submitButton.addClickListener(this::onSaveLink);
 
         VerticalLayout mainArea =
-                new VerticalLayout(title, subtitle, input, publicAccessBanner, submitButton);
+                new VerticalLayout(title, input, publicAccessBanner, submitButton);
         mainArea.setId(IDs.MAIN_AREA);
         mainArea.addClassNames("main-area", "border");
         return mainArea;
