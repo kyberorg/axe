@@ -129,6 +129,6 @@ body {
     background-color: transparent;
 }
 
-.italic {
-    font-style: italic;
+.compact-title {
+    margin-bottom: -0.5em;
 }
