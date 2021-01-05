@@ -103,6 +103,11 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     @Test
+    public void titleShouldHaveNoExtraSpaceBelow() {
+        TITLE.shouldHave(cssClass("compact-title"));
+    }
+
+    @Test
     public void titleShouldHaveWordsLinksAndShort() {
         TITLE.shouldHave(text("links"));
         TITLE.shouldHave(text("short"));
