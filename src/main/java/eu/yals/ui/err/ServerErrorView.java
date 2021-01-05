@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -35,6 +36,7 @@ import static eu.yals.utils.AppUtils.HTML_MODE;
 @UIScope
 @PageTitle("Yals: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = MainView.class)
+@CssImport("./css/error_views.css")
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>,
         HasUrlParameter<String> {
     public static final String TAG = "[" + ServerErrorView.class.getSimpleName() + "]";
