@@ -1,6 +1,7 @@
 package eu.yals.test.ui.main;
 
 import eu.yals.test.ui.SelenideTest;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +39,9 @@ public class MainViewTest extends SelenideTest {
     public void logoHasBackgroundAndItDiffersFromApp() {
         String appColor = $("html").getCssValue("background-color");
 
-        LOGO.shouldHave(cssValue("background-color",null));
         String elementColor = LOGO.getCssValue("background-color");
+        Assertions.assertTrue(StringUtils.isNotBlank(elementColor),
+                "Element must have 'background-color' css property");
 
         Assertions.assertNotEquals(elementColor, appColor);
     }
