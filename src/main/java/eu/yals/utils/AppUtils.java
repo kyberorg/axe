@@ -319,15 +319,6 @@ public class AppUtils {
         component.getElement().setProperty(HTML_MODE, stringWithHtml);
     }
 
-    /**
-     * Gets location of old yals UI aka old yals.
-     *
-     * @return string with URL or empty string
-     */
-    public String getOldUILocation() {
-        return env.getProperty(App.Properties.OLD_UI, "");
-    }
-
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

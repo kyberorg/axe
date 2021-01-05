@@ -4,10 +4,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
@@ -49,15 +47,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
-    private final AppUtils appUtils;
-
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
      *
      * @param appUtils application utils for determine dev mode
      */
     public MainView(final AppUtils appUtils) {
-        this.appUtils = appUtils;
 
         String siteTitle = appUtils.getEnv().getProperty("eu.yals.site-title", "Yals").toUpperCase();
 
@@ -78,8 +73,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         if (appUtils.isDevelopmentModeActivated()) {
             addMenuTab("Debug", DebugView.class, VaadinIcon.FLASK);
         }
-        //link to old yals
-        addLinkToOldYals();
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(tabs);
@@ -110,14 +103,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         link.setHighlightCondition(HighlightConditions.sameLocation());
         Tab tab = new Tab(link);
         tabToTarget.put(target, tab);
-        tabs.add(tab);
-    }
-
-    private void addLinkToOldYals() {
-        Icon icon = VaadinIcon.STEP_BACKWARD.create();
-        Span label = new Span("Old UI");
-        Anchor link = new Anchor(appUtils.getOldUILocation(), icon, label);
-        Tab tab = new Tab(link);
         tabs.add(tab);
     }
 
