@@ -30,6 +30,8 @@ import eu.yals.utils.AppUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+import static eu.yals.ui.MainView.IDs.APP_LOGO;
+
 @SpringComponent
 @UIScope
 @Push
@@ -47,7 +49,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
-    private AppUtils appUtils;
+    private final AppUtils appUtils;
 
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
@@ -81,10 +83,13 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(tabs);
+
+        setId(IDs.VIEW_ID);
     }
 
     private void addLogo() {
         Image logo = new Image("/images/logo.png", "Icon");
+        logo.setId(APP_LOGO);
         logo.addClassName("logo-image");
         Tab logoTab = new Tab(logo);
         logoTab.setEnabled(false);
@@ -133,5 +138,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("application-name", "Yals");
         settings.addMetaTag("msapplication-TileColor", "#ffc40d");
         settings.addMetaTag("theme-color", "#ffffff");
+    }
+
+    public static class IDs {
+        public static final String VIEW_ID = "mainView";
+        public static final String APP_LOGO = "appLogo";
     }
 }
