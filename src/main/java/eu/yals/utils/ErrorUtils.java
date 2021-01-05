@@ -1,6 +1,8 @@
 package eu.yals.utils;
 
 import com.bugsnag.Bugsnag;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.QueryParameters;
@@ -53,6 +55,18 @@ public class ErrorUtils {
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
         return sw.toString();
+    }
+
+    /**
+     * Creates Error Modal in the middle of page.
+     *
+     * @param text string with error
+     * @return created {@link Notification}
+     */
+    public static Notification getErrorNotification(final String text) {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        return AppUtils.getNotification(text, NotificationVariant.LUMO_ERROR);
     }
 
     /**

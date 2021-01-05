@@ -203,23 +203,6 @@ public class HomeView extends HorizontalLayout {
         return qrCodeArea;
     }
 
-    private Notification getErrorNotification(final String text) {
-        Notification notification = new Notification();
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        notification.setPosition(Notification.Position.MIDDLE);
-
-        HorizontalLayout layout = new HorizontalLayout();
-        Label label = new Label(text);
-        Button closeButton = new Button("OK", event -> notification.close());
-
-        label.getStyle().set("margin-right", "0.5rem");
-        closeButton.getStyle().set("margin-right", "0.5rem");
-
-        layout.add(label, closeButton);
-        notification.add(layout);
-        return notification;
-    }
-
     private Notification getLinkCopiedNotification() {
         final int notificationDuration = 3000;
         Notification notification =
@@ -464,7 +447,7 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void showError(final String errorMessage) {
-        errorNotification = getErrorNotification(errorMessage);
+        errorNotification = ErrorUtils.getErrorNotification(errorMessage);
         errorNotification.open();
     }
 

@@ -3,6 +3,11 @@ package eu.yals.utils;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import eu.yals.constants.App;
 import eu.yals.constants.Header;
@@ -225,6 +230,30 @@ public class AppUtils {
             log.debug("", e);
             throw new RuntimeException(e.getCause());
         }
+    }
+
+    /**
+     * Creates Modal in the middle of page.
+     *
+     * @param text string with error
+     * @param variant valid {@link NotificationVariant}
+     * @return created {@link Notification}
+     */
+    public static Notification getNotification(final String text, final NotificationVariant variant) {
+        Notification notification = new Notification();
+        notification.addThemeVariants(variant);
+        notification.setPosition(Notification.Position.MIDDLE);
+
+        HorizontalLayout layout = new HorizontalLayout();
+        Label label = new Label(text);
+        Button closeButton = new Button("OK", event -> notification.close());
+
+        label.getStyle().set("margin-right", "0.5rem");
+        closeButton.getStyle().set("margin-right", "0.5rem");
+
+        layout.add(label, closeButton);
+        notification.add(layout);
+        return notification;
     }
 
     /**
