@@ -16,9 +16,48 @@
 
         <!-- front layer: defines the shape of the Vaadin logo
              This is a negative image of the Yals logo, this can be done with Krita.
-              Start from white background and use eraser -->
+             Start from white background and use eraser.
+             Base64 version used to avoid loading "external" image -->
         <div class="logo-mask">
-            <img src="images/loading.png" width="160" height="44" alt="loading...">
+            <img src="data:image/png;base64,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
+Un4ZUQAAAABJRU5ErkJggg==" width="160" height="44" alt="loading...">
         </div>
     </div>
 
