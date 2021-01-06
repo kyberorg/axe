@@ -1,13 +1,11 @@
 package eu.yals.test.ui.main;
 
 import eu.yals.test.ui.SelenideTest;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static eu.yals.test.pageobjects.MainViewPageObject.LOGO;
 import static eu.yals.test.pageobjects.VaadinPageObject.waitForVaadin;
@@ -36,13 +34,12 @@ public class MainViewTest extends SelenideTest {
     }
 
     @Test
-    public void logoHasBackgroundAndItDiffersFromApp() {
-        String appColor = $("html").getCssValue("background-color");
-
+    public void logoBackgroundSameAsApp() {
         String elementColor = LOGO.getCssValue("background-color");
-        Assertions.assertTrue(StringUtils.isNotBlank(elementColor),
-                "Element must have 'background-color' css property");
 
-        Assertions.assertNotEquals(elementColor, appColor);
+        //this means that element's color is not defined and element uses app color.
+        String noColor = "rgba(0, 0, 0, 0)";
+
+        Assertions.assertEquals(elementColor, noColor);
     }
 }
