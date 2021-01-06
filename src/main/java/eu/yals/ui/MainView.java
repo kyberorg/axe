@@ -1,6 +1,7 @@
 package eu.yals.ui;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -78,6 +79,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addToDrawer(tabs);
 
         setId(IDs.VIEW_ID);
+
+        // hide the splash screen after the main view is loaded
+        UI.getCurrent().getPage().executeJs(
+                "document.querySelector('#splash-screen').classList.add('loaded')");
     }
 
     private void addLogo() {
@@ -123,6 +128,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("application-name", "Yals");
         settings.addMetaTag("msapplication-TileColor", "#ffc40d");
         settings.addMetaTag("theme-color", "#ffffff");
+
+        settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
     }
 
     public static class IDs {
