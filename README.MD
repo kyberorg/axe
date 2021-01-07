@@ -7,6 +7,14 @@ Just a simple link shortener like many others. Made for friends.
 
 ## Release Notes
 
+### Version 2.8 (07/01/2021)
+Fresh UI
+
+* More clean UI (#228)
+* Fancy loading indicator (#271)  
+* Removed dead link old.yals.eu (#285)
+* Fixed Mobile UI issues (#235)
+
 ### Version 2.7.6 (04/01/2021)
 Version Bump
 
