@@ -26,7 +26,7 @@
       "description": "String with token for telegram."
     },
     {
-      "name": "eu.yals.site-title",
+      "name": "app.site-title",
       "type": "java.lang.String",
       "description": "String with Site title for displaying at web page."
     }

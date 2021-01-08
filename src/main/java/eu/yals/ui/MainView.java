@@ -23,6 +23,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+import eu.yals.constants.App;
 import eu.yals.ui.dev.AppInfoView;
 import eu.yals.utils.AppUtils;
 
@@ -36,11 +37,11 @@ import static eu.yals.ui.MainView.IDs.APP_LOGO;
 @Push
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 @PWA(
-        name = "Yet another link shortener",
-        shortName = "yals",
+        name = "Yalsee - the link shortener",
+        shortName = "yalsee",
         offlinePath = "offline-page.html",
         offlineResources = {"images/logo.png"},
-        description = "Yet another link shortener for friends")
+        description = "Yalsee - the link shortener")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
@@ -55,7 +56,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
      */
     public MainView(final AppUtils appUtils) {
 
-        String siteTitle = appUtils.getEnv().getProperty("eu.yals.site-title", "Yals").toUpperCase();
+        String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
 
         DrawerToggle toggle = new DrawerToggle();
         setPrimarySection(Section.NAVBAR);
@@ -95,7 +96,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void addSubTitle() {
-        Tab subTitleTab = new Tab("Yet another link shortener");
+        Tab subTitleTab = new Tab("Yalsee - the link shortener");
         subTitleTab.setEnabled(false);
         subTitleTab.addClassName("subtitle-tab");
         tabs.add(subTitleTab);
@@ -124,8 +125,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addLink("manifest", "/site.webmanifest");
         settings.addLink("mask-icon", "/icons/safari-pinned-tab.svg");
 
-        settings.addMetaTag("apple-mobile-web-app-title", "Yals");
-        settings.addMetaTag("application-name", "Yals");
+        settings.addMetaTag("apple-mobile-web-app-title", "yalsee");
+        settings.addMetaTag("application-name", "yalsee");
         settings.addMetaTag("msapplication-TileColor", "#ffc40d");
         settings.addMetaTag("theme-color", "#ffffff");
 

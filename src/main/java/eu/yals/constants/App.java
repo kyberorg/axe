@@ -26,8 +26,8 @@ public final class App {
 
     public static class Mattermost {
         public static final String BOT_ICON = "https://yals.eu/favicon.ico";
-        public static final String BOT_NAME = "YalsBot";
-        public static final String SUPPORT_URL = "https://github.com/yadevee/yals/issues";
+        public static final String BOT_NAME = "YalseeBot";
+        public static final String SUPPORT_URL = "https://github.com/kyberorg/yalsee/issues";
     }
 
     public static class Properties {
@@ -39,6 +39,7 @@ public final class App {
         public static final String PROXY_PORT = "http.proxyPort";
         public static final String APPLICATION_STAGE = "application.stage";
         public static final String DEV_MODE = "app.devMode";
+        public static final String APP_SITE_TITLE = "app.site-title";
     }
 
     public static class Env {
@@ -48,7 +49,7 @@ public final class App {
     }
 
     public static class Git {
-        public static final String REPOSITORY = "https://github.com/yadevee/yals/commit";
+        public static final String REPOSITORY = "https://github.com/kyberorg/yalsee/commit";
     }
 
     public static class Params {

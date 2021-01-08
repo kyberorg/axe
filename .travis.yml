@@ -7,8 +7,8 @@ jdk: oraclejdk8
 
 env:
   global:
-    - D_ORG=yadevee
-    - D_PROJECT=yals
+    - D_ORG=kyberorg
+    - D_PROJECT=yalsee
     - G_BRANCH=${TRAVIS_BRANCH}
     - T_BUILD=${TRAVIS_JOB_NUMBER}
 
@@ -43,5 +43,5 @@ after_success:
 
 notifications:
   email:
-    - kyberorg@yadev.ee
+    - root@kyberorg.io
 

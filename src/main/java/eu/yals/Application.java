@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Application Start point.
  */
 @SpringBootApplication
-public class YalsApplication {
+public class Application {
 
     /**
      * Main class.
@@ -15,6 +15,6 @@ public class YalsApplication {
      * @param args standard signature
      */
     public static void main(final String[] args) {
-        SpringApplication.run(YalsApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }

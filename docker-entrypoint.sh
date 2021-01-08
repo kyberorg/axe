@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # usage: file_env VAR [DEFAULT]
-#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
-# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
-#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
+#    ie: file_env 'DB_PASSWORD' 'example'
+# (will allow for "$DB_PASSWORD_FILE" to fill in the value of
+#  "$DB_PASSWORD" from a file, especially for Docker's secrets feature)
 file_env() {
   local var="$1"
   local fileVar="${var}_FILE"
@@ -22,7 +22,7 @@ file_env() {
   unset "$fileVar"
 }
 
-file_env 'YALS_DB_PASSWORD'
+file_env 'DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
 file_env 'APM_TOKEN'
@@ -67,4 +67,4 @@ fi
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
 # End Issue 236 (Vaadin Production Mode) #
 
-exec java ${JAVA_OPTS} -jar /app/yals.jar
+exec java ${JAVA_OPTS} -jar /app/yalsee.jar

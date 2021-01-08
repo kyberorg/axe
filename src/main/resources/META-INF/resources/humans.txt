@@ -1,8 +1,8 @@
 /* TEAM */
     Idea and developer: Alexander Muravya (aka Kyberorg)
-    Contact: kyberorg [at] yadev [dot] eu
+    Contact: root [at] kyberorg [dot] io
     Twitter: @kyberorg
-    Facebook: alexandr.muravya
+    Facebook: kyberorg
     VK: kyberorg
     Location: Tallinn, Estonia
 

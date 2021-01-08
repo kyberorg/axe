@@ -14,7 +14,7 @@ def testUrl = "https://dev.yals.eu";
 pipeline {
   agent any;
   environment {
-    DOCKER_REPO = 'yadev/yals'
+    DOCKER_REPO = 'kyberorg/yalsee'
   }
   parameters {
     string(name: 'DOCKER_TAG', defaultValue: "", description: 'Custom Docker image Tag')
