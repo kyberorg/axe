@@ -85,7 +85,7 @@ public class VisibleStateTest extends SelenideTest {
 
     @Test
     public void shouldHaveCorrectTitle() {
-        Assertions.assertEquals("Link shortener for friends", SelenideUtils.getPageTitle());
+        assertEquals("Yalsee - the link shortener", SelenideUtils.getPageTitle());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class VisibleStateTest extends SelenideTest {
 
     @Test
     public void titleShouldBeH2() {
-        Assertions.assertEquals("h2", HomePageObject.MainArea.TITLE.getTagName().toLowerCase());
+        assertEquals("h2", HomePageObject.MainArea.TITLE.getTagName().toLowerCase());
     }
 
     @Test

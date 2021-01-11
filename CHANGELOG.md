@@ -26,7 +26,6 @@ No more leaks
 * Site title per each profile (#268)
 * Small ops changes (#262)
 
-
 ### Version 2.7.4 (27/11/2020)
 Internal Tweaks
 
@@ -73,8 +72,7 @@ Vaadin UI
 QR Code
 
 * Added QR code with short link (#134)
-* Added REST API Endpoint, which generates QR code from ident and optional size:
-`/api/qrCode/{ident}/{size}`
+* Added REST API Endpoint, which generates QR code from ident and optional size: `/api/qrCode/{ident}/{size}`
 
 ### Version 2.5.1 (25/09/19)
 Updates and better error handling
