@@ -20,7 +20,7 @@ import static eu.yals.constants.HttpCode.STATUS_500;
  */
 @SpringComponent
 @UIScope
-@PageTitle("Yals: Server Error Loop View")
+@PageTitle("Yalsee: Server Error Loop View")
 @Route(value = Endpoint.TNT.SERVER_ERROR_LOOP, layout = MainView.class)
 public class ServerErrorLoopView extends Div implements HasErrorParameter<NeedForLoopException> {
     @Override

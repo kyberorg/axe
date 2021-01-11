@@ -34,7 +34,7 @@ import static eu.yals.utils.AppUtils.HTML_MODE;
 @Slf4j
 @SpringComponent
 @UIScope
-@PageTitle("Yals: Error 500")
+@PageTitle("Yalsee: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = MainView.class)
 @CssImport("./css/error_views.css")
 public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>,

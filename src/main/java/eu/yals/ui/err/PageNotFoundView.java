@@ -17,7 +17,7 @@ import static eu.yals.constants.HttpCode.STATUS_404;
 
 @SpringComponent
 @UIScope
-@PageTitle("Yals: Error 404")
+@PageTitle("Yalsee: Error 404")
 @Route(value = Endpoint.UI.PAGE_404, layout = MainView.class)
 @CssImport("./css/error_views.css")
 public class PageNotFoundView extends VerticalLayout implements HasErrorParameter<PageNotFoundException> {

@@ -45,7 +45,7 @@ import static eu.yals.utils.push.PushCommand.UPDATE_COUNTER;
 @UIScope
 @CssImport("./css/home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
-@PageTitle("Link shortener for friends")
+@PageTitle("Yalsee - the link shortener")
 public class HomeView extends HorizontalLayout {
     private static final String TAG = "[" + HomeView.class.getSimpleName() + "]";
 

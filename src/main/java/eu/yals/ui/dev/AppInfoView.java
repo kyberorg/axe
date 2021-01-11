@@ -21,7 +21,7 @@ import eu.yals.utils.maven.MavenInfo;
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
-@PageTitle("Link shortener for friends: App Info")
+@PageTitle("Yalsee: App Info")
 public class AppInfoView extends VerticalLayout {
     private static final String UNDEFINED = "UNDEFINED";
     private static final int COMMIT_HASH_LENGTH = 7;

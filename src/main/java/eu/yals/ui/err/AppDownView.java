@@ -12,7 +12,7 @@ import org.springframework.transaction.CannotCreateTransactionException;
 
 import static eu.yals.constants.HttpCode.STATUS_503;
 
-@PageTitle("Yals: Error 503")
+@PageTitle("Yalsee: Error 503")
 @Route(value = Endpoint.UI.ERROR_PAGE_503, layout = MainView.class)
 @CssImport("./css/error_views.css")
 public class AppDownView extends VerticalLayout implements HasErrorParameter<CannotCreateTransactionException> {

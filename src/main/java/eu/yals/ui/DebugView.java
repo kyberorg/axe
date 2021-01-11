@@ -10,7 +10,7 @@ import eu.yals.Endpoint;
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.DEBUG_PAGE, layout = MainView.class)
-@PageTitle("Link shortener for friends: Debug Page")
+@PageTitle("Yalsee: Debug Page")
 public class DebugView extends Div {
 
     /**
