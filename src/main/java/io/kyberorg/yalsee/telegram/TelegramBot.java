@@ -64,12 +64,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
-            if (telegramCommand.isYalsCommand()) {
-                message = doYals();
+            if (telegramCommand.isYalseeCommand()) {
+                message = doYalsee();
             } else {
                 switch (telegramCommand) {
                     case NOT_A_COMMAND:
-                        message = doYals();
+                        message = doYalsee();
                         break;
                     case START:
                     case USAGE:
@@ -111,7 +111,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "Yals Bot";
+        return "Yalsee Bot";
     }
 
     @Override
@@ -119,7 +119,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return appUtils.getTelegramToken();
     }
 
-    private String doYals() {
+    private String doYalsee() {
         String message;
         if (telegramObject.getArguments() == TelegramArguments.EMPTY_ARGS) {
             throw new NoSuchElementException("Got " + telegramObject.getCommand()

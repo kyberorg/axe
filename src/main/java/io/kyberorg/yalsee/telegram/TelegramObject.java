@@ -78,9 +78,7 @@ public final class TelegramObject {
             case NOT_A_COMMAND:
                 this.arguments = createArgumentsFromMessageWithoutCommand(this.userMessage);
                 break;
-            case YALS:
-            case YALST:
-            case YALSL:
+            case YALSEE:
                 String remainedArgs = this.userMessage.replace(this.command.getCommandText(), "").trim();
                 this.arguments = createArgumentsFromMessageWithoutCommand(remainedArgs);
                 break;

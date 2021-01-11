@@ -28,7 +28,7 @@ MySQL can be stopped from `docker/localMySQL` directory by running:
 docker-compose down
 ```
 
-Use `@yals_local_bot` and its token (currently can be requested from [kyberorg](mailto:root@kyberorg.io)) for local run
+Use Telegram local Bot `@yls_local_bot` and its token (currently can be requested from [kyberorg](mailto:root@kyberorg.io)) for local run
 
 ### Logging
 To adjust logging we use ENV variables or `-D` vars:
@@ -91,3 +91,18 @@ Secrets:
 Volumes:
 
 * yals_dumps: should be mounted as `/opt/dumps` (volume to store heap dumps, when app crashed)
+
+#### About Telegram Bots
+| Stage     | Bot Name       | Human Readable Name | 
+|-----------|----------------|---------------------|
+| PROD      | yalsee_bot     | Yalsee Bot          |
+| Demo      | yls_demo_bot   | Yls Demo Bot        | 
+| Dev       | yls_dev_bot    | Yls Dev Bot         | 
+| Local     | yls_local_bot  | Yls Local Bot       |
+
+##### Bot description 
+* Name: Yls Dev Bot
+* Description: Dev.Yals.ee Link Shortener Bot
+* About: Makes long links short
+* Botpic: to be done
+* Commands: yalsee - https://longLink.tld description 
