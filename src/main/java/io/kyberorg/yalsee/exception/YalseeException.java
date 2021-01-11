@@ -11,14 +11,14 @@ import org.apache.commons.lang3.StringUtils;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class YalsException extends RuntimeException {
+public class YalseeException extends RuntimeException {
 
     private String messageToUser;
 
     /**
      * Creates empty exception without message to user.
      */
-    public YalsException() {
+    public YalseeException() {
     }
 
     /**
@@ -26,12 +26,12 @@ public class YalsException extends RuntimeException {
      *
      * @param message string with user-friendly message
      */
-    public YalsException(final String message) {
+    public YalseeException(final String message) {
         super(message);
     }
 
     /**
-     * Checks if {@link YalsException} object has not-empty {@link #messageToUser}.
+     * Checks if {@link YalseeException} object has not-empty {@link #messageToUser}.
      *
      * @return true - when {@link #messageToUser} contains non-empty string, false - elsewhere
      */

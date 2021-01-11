@@ -8,5 +8,5 @@ import io.kyberorg.yalsee.ui.special.RedirectToLinkView;
  *
  * @since 2.7
  */
-public class NeedForRedirectException extends YalsException {
+public class NeedForRedirectException extends YalseeException {
 }

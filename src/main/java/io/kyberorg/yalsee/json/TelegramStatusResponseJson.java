@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Data
 @RequiredArgsConstructor(staticName = "createWithStatus")
-public class TelegramStatusResponseJson implements YalsJson {
+public class TelegramStatusResponseJson implements YalseeJson {
     @JsonProperty("status")
     private final String status;
 

@@ -13,7 +13,7 @@ import java.util.Date;
  * @since 2.7
  */
 @Data
-public class YalsError {
+public class YalseeError {
     private String id;
     private final String timeStamp = new Date().toString();
     private String messageToUser;
@@ -24,6 +24,6 @@ public class YalsError {
 
     @Override
     public String toString() {
-        return YalsError.class.getSimpleName() + ": " + getTechMessage();
+        return YalseeError.class.getSimpleName() + ": " + getTechMessage();
     }
 }

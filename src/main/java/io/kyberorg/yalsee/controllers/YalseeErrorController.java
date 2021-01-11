@@ -5,11 +5,11 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.exception.error.YalsError;
-import io.kyberorg.yalsee.json.YalsErrorJson;
+import io.kyberorg.yalsee.exception.error.YalseeError;
+import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
-import io.kyberorg.yalsee.utils.YalsErrorKeeper;
+import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -28,10 +28,10 @@ import java.io.IOException;
  */
 @Slf4j
 @Controller
-public class YalsErrorController implements ErrorController {
-    private final String TAG = "[" + YalsErrorController.class.getSimpleName() + "]";
+public class YalseeErrorController implements ErrorController {
+    private final String TAG = "[" + YalseeErrorController.class.getSimpleName() + "]";
 
-    private final YalsErrorKeeper errorKeeper;
+    private final YalseeErrorKeeper errorKeeper;
     private final ErrorUtils errorUtils;
 
     private HttpServletRequest request;
@@ -45,11 +45,11 @@ public class YalsErrorController implements ErrorController {
     /**
      * Constructor for Spring autowiring.
      *
-     * @param yalsErrorKeeper for keeping errors in runtime
+     * @param yalseeErrorKeeper for keeping errors in runtime
      * @param errUtils        utils for manipulating with errors
      */
-    public YalsErrorController(final YalsErrorKeeper yalsErrorKeeper, final ErrorUtils errUtils) {
-        this.errorKeeper = yalsErrorKeeper;
+    public YalseeErrorController(final YalseeErrorKeeper yalseeErrorKeeper, final ErrorUtils errUtils) {
+        this.errorKeeper = yalseeErrorKeeper;
         this.errorUtils = errUtils;
     }
 
@@ -84,12 +84,12 @@ public class YalsErrorController implements ErrorController {
                 .addStatus(status)
                 .addPath(path)
                 .build();
-        YalsError yalsError = errorUtils.convertExceptionToYalsError(args);
+        YalseeError yalseeError = errorUtils.convertExceptionToYalsError(args);
 
-        YalsErrorJson errorJson = YalsErrorJson.createFromYalsError(yalsError);
-        String errorId = storeYalsError(yalsError);
+        YalseeErrorJson errorJson = YalseeErrorJson.createFromYalsError(yalseeError);
+        String errorId = storeYalsError(yalseeError);
 
-        errorUtils.reportToBugsnag(yalsError);
+        errorUtils.reportToBugsnag(yalseeError);
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         boolean isApiCall = AppUtils.isApiRequest(req);
@@ -162,11 +162,11 @@ public class YalsErrorController implements ErrorController {
         }
     }
 
-    private String storeYalsError(final YalsError yalsError) {
-        return errorKeeper.send(yalsError);
+    private String storeYalsError(final YalseeError yalseeError) {
+        return errorKeeper.send(yalseeError);
     }
 
-    private void responseWithJson(final YalsErrorJson json) throws IOException {
+    private void responseWithJson(final YalseeErrorJson json) throws IOException {
         response.setStatus(status);
         response.setContentType(MimeType.APPLICATION_JSON);
         response.getWriter().write(json.toString());

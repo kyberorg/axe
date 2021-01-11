@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.controllers.rest;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.json.MattermostResponseJson;
-import io.kyberorg.yalsee.json.YalsJson;
+import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.mm.Mattermost;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.services.mm.MattermostService;
@@ -52,7 +52,7 @@ public class MattermostRestController {
      * @return json given in response
      */
     @RequestMapping(method = RequestMethod.POST, value = Endpoint.Api.MM_API)
-    public YalsJson mm(final @RequestBody String body, final HttpServletRequest req) {
+    public YalseeJson mm(final @RequestBody String body, final HttpServletRequest req) {
         this.request = req;
         try {
             log.info("{} Got request from Mattermost. Body: {}", TAG, body);

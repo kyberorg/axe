@@ -8,10 +8,10 @@ import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.QueryParameters;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.HttpCode;
-import io.kyberorg.yalsee.exception.YalsException;
+import io.kyberorg.yalsee.exception.YalseeException;
 import io.kyberorg.yalsee.exception.error.UserMessageGenerator;
-import io.kyberorg.yalsee.exception.error.YalsError;
-import io.kyberorg.yalsee.exception.error.YalsErrorBuilder;
+import io.kyberorg.yalsee.exception.error.YalseeError;
+import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ import static io.kyberorg.yalsee.constants.App.NO_STATUS;
 @Component
 public class ErrorUtils {
 
-    private final YalsErrorKeeper errorKeeper;
+    private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
 
     /**
@@ -41,7 +41,7 @@ public class ErrorUtils {
      * @param errorKeeper error holder
      * @param bugsnag     Bugsnag bean
      */
-    public ErrorUtils(final YalsErrorKeeper errorKeeper, final Bugsnag bugsnag) {
+    public ErrorUtils(final YalseeErrorKeeper errorKeeper, final Bugsnag bugsnag) {
         this.errorKeeper = errorKeeper;
         this.bugsnag = bugsnag;
     }
@@ -71,12 +71,12 @@ public class ErrorUtils {
     }
 
     /**
-     * Extracts {@link YalsError} from {@link BeforeEvent}.
+     * Extracts {@link YalseeError} from {@link BeforeEvent}.
      *
-     * @param event {@link BeforeEvent} with {@link YalsError}
-     * @return extracted {@link YalsError}
+     * @param event {@link BeforeEvent} with {@link YalseeError}
+     * @return extracted {@link YalseeError}
      */
-    public YalsError getYalsErrorFromEvent(final BeforeEvent event) {
+    public YalseeError getYalsErrorFromEvent(final BeforeEvent event) {
         QueryParameters queryParameters = event.getLocation().getQueryParameters();
         if (queryParameters.getParameters().isEmpty()) return null;
         boolean errorIdKeyIsPresent = queryParameters.getParameters().containsKey(App.Params.ERROR_ID);
@@ -87,7 +87,7 @@ public class ErrorUtils {
         if (!errorIdKeyHasSingleValue) return null;
 
         String errorId = errorIdValues.get(0);
-        Optional<YalsError> yalsErrorOptional = errorKeeper.get(errorId);
+        Optional<YalseeError> yalsErrorOptional = errorKeeper.get(errorId);
         return yalsErrorOptional.orElse(null);
     }
 
@@ -115,15 +115,15 @@ public class ErrorUtils {
     }
 
     /**
-     * Converts exception to {@link YalsError}.
+     * Converts exception to {@link YalseeError}.
      *
      * @param args {@link Args} object
-     * @return converted {@link YalsError} object
+     * @return converted {@link YalseeError} object
      */
-    public YalsError convertExceptionToYalsError(final ErrorUtils.Args args) {
+    public YalseeError convertExceptionToYalsError(final ErrorUtils.Args args) {
         Throwable exceptionFromArgs = args.getException();
         boolean hasStatus = args.getStatus() != NO_STATUS;
-        YalsErrorBuilder yalsErrorBuilder;
+        YalseeErrorBuilder yalseeErrorBuilder;
 
         Throwable exception = findRootCause(exceptionFromArgs);
 
@@ -137,26 +137,26 @@ public class ErrorUtils {
             }
 
             this.enrichTechMessageWithStatusAndPath(techMessage, args);
-            yalsErrorBuilder = YalsErrorBuilder.withTechMessage(techMessage.toString());
+            yalseeErrorBuilder = YalseeErrorBuilder.withTechMessage(techMessage.toString());
 
             //user message based on status
-            yalsErrorBuilder.withMessageToUser(UserMessageGenerator.getMessageByStatus(args.getStatus()));
+            yalseeErrorBuilder.withMessageToUser(UserMessageGenerator.getMessageByStatus(args.getStatus()));
 
-            if (hasStatus) yalsErrorBuilder.withStatus(args.getStatus());
+            if (hasStatus) yalseeErrorBuilder.withStatus(args.getStatus());
 
-        } else if (exception instanceof YalsException) {
-            YalsException yalsException = (YalsException) exception;
+        } else if (exception instanceof YalseeException) {
+            YalseeException yalseeException = (YalseeException) exception;
 
-            StringBuilder techMessage = new StringBuilder(yalsException.getMessage());
+            StringBuilder techMessage = new StringBuilder(yalseeException.getMessage());
             this.enrichTechMessageWithStatusAndPath(techMessage, args);
 
-            yalsErrorBuilder = YalsErrorBuilder.withTechMessage(techMessage.toString());
+            yalseeErrorBuilder = YalseeErrorBuilder.withTechMessage(techMessage.toString());
 
-            if (yalsException.hasMessageToUser()) {
-                yalsErrorBuilder.withMessageToUser(yalsException.getMessageToUser());
+            if (yalseeException.hasMessageToUser()) {
+                yalseeErrorBuilder.withMessageToUser(yalseeException.getMessageToUser());
             }
 
-            if (hasStatus) yalsErrorBuilder.withStatus(args.getStatus());
+            if (hasStatus) yalseeErrorBuilder.withStatus(args.getStatus());
 
         } else {
             //general exception
@@ -164,35 +164,35 @@ public class ErrorUtils {
             StringBuilder techMessage = new StringBuilder(exceptionMessage);
             this.enrichTechMessageWithStatusAndPath(techMessage, args);
 
-            yalsErrorBuilder = YalsErrorBuilder.withTechMessage(techMessage.toString());
+            yalseeErrorBuilder = YalseeErrorBuilder.withTechMessage(techMessage.toString());
 
             //user message based on status
-            yalsErrorBuilder.withMessageToUser(UserMessageGenerator.getMessageByStatus(args.getStatus()));
+            yalseeErrorBuilder.withMessageToUser(UserMessageGenerator.getMessageByStatus(args.getStatus()));
 
-            if (hasStatus) yalsErrorBuilder.withStatus(args.getStatus());
+            if (hasStatus) yalseeErrorBuilder.withStatus(args.getStatus());
         }
 
-        yalsErrorBuilder.addRawException(exception);
-        return yalsErrorBuilder.build();
+        yalseeErrorBuilder.addRawException(exception);
+        return yalseeErrorBuilder.build();
     }
 
     /**
      * Reports issue to Bugsnag service.
      *
-     * @param yalsError {@link YalsError} objects
+     * @param yalseeError {@link YalseeError} objects
      */
-    public void reportToBugsnag(final YalsError yalsError) {
-        YalsException yalsException = new YalsException("Yalsee Error: " + yalsError.getId());
+    public void reportToBugsnag(final YalseeError yalseeError) {
+        YalseeException yalseeException = new YalseeException("Yalsee Error: " + yalseeError.getId());
         final String tabName = "Yalsee Error";
         bugsnag.addCallback(report -> {
-            report.addToTab(tabName, "id", yalsError.getId());
-            report.addToTab(tabName, "Timestamp", yalsError.getTimeStamp());
-            report.addToTab(tabName, "Message to user", yalsError.getMessageToUser());
-            report.addToTab(tabName, "Tech Message", yalsError.getTechMessage());
-            report.addToTab(tabName, "HTTP Status", yalsError.getHttpStatus());
-            report.addToTab(tabName, "Raw Exception", yalsError.getRawException());
+            report.addToTab(tabName, "id", yalseeError.getId());
+            report.addToTab(tabName, "Timestamp", yalseeError.getTimeStamp());
+            report.addToTab(tabName, "Message to user", yalseeError.getMessageToUser());
+            report.addToTab(tabName, "Tech Message", yalseeError.getTechMessage());
+            report.addToTab(tabName, "HTTP Status", yalseeError.getHttpStatus());
+            report.addToTab(tabName, "Raw Exception", yalseeError.getRawException());
         });
-        bugsnag.notify(yalsException);
+        bugsnag.notify(yalseeException);
     }
 
     /**

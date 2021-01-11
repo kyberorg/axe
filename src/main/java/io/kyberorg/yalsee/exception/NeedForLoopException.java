@@ -7,5 +7,5 @@ import io.kyberorg.yalsee.ui.err.ServerErrorLoopView;
  *
  * @since 2.7.4
  */
-public class NeedForLoopException extends YalsException {
+public class NeedForLoopException extends YalseeException {
 }

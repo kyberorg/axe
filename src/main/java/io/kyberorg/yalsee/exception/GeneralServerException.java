@@ -7,5 +7,5 @@ import io.kyberorg.yalsee.ui.err.ServerErrorView;
  *
  * @since 2.7
  */
-public class GeneralServerException extends YalsException {
+public class GeneralServerException extends YalseeException {
 }

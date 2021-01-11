@@ -2,12 +2,12 @@ package io.kyberorg.yalsee.exception.error;
 
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.HttpCode;
-import io.kyberorg.yalsee.exception.YalsException;
+import io.kyberorg.yalsee.exception.YalseeException;
 
 import java.util.HashMap;
 
 /**
- * Creates {@link YalsException#messageToUser} based on http status.
+ * Creates {@link YalseeException#messageToUser} based on http status.
  *
  * @since 2.7
  */

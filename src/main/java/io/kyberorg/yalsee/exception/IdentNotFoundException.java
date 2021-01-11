@@ -7,5 +7,5 @@ import io.kyberorg.yalsee.ui.err.IdentNotFoundView;
  *
  * @since 2.7.4
  */
-public class IdentNotFoundException extends YalsException {
+public class IdentNotFoundException extends YalseeException {
 }

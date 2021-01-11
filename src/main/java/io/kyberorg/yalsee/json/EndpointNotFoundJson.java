@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * @since 2.7
  */
 @Data(staticConstructor = "create")
-public class EndpointNotFoundJson implements YalsJson {
+public class EndpointNotFoundJson implements YalseeJson {
 
     @JsonProperty("endpoint")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

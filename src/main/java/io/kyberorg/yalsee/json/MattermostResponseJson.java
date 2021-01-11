@@ -15,7 +15,7 @@ import org.apache.commons.validator.GenericValidator;
  * @since 2.3
  */
 @Data
-public final class MattermostResponseJson implements YalsJson {
+public final class MattermostResponseJson implements YalseeJson {
 
     @JsonProperty("icon_url")
     private String iconUrl = App.Mattermost.BOT_ICON;

@@ -7,5 +7,5 @@ import io.kyberorg.yalsee.ui.err.PageNotFoundView;
  *
  * @since 2.7.4
  */
-public class PageNotFoundException extends YalsException {
+public class PageNotFoundException extends YalseeException {
 }

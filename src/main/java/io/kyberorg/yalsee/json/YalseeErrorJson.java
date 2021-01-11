@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.HttpCode;
-import io.kyberorg.yalsee.exception.error.YalsError;
+import io.kyberorg.yalsee.exception.error.YalseeError;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 @Builder
 @Getter
 @Setter
-public class YalsErrorJson implements YalsJson {
+public class YalseeErrorJson implements YalseeJson {
     @Builder.Default
     @JsonProperty("timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -50,13 +50,13 @@ public class YalsErrorJson implements YalsJson {
     private Throwable throwable = null;
 
     /**
-     * Creates {@link YalsErrorJson} with params from {@link YalsError}.
+     * Creates {@link YalseeErrorJson} with params from {@link YalseeError}.
      *
-     * @param error valid not empty {@link YalsError} object.
-     * @return {@link YalsErrorJson} with filled fields from given {@link YalsError}.
+     * @param error valid not empty {@link YalseeError} object.
+     * @return {@link YalseeErrorJson} with filled fields from given {@link YalseeError}.
      */
-    public static YalsErrorJson createFromYalsError(final YalsError error) {
-        YalsErrorJson.YalsErrorJsonBuilder json = YalsErrorJson.builder()
+    public static YalseeErrorJson createFromYalsError(final YalseeError error) {
+        YalseeErrorJson.YalseeErrorJsonBuilder json = YalseeErrorJson.builder()
                 .timestamp(error.getTimeStamp())
                 .message(error.getMessageToUser())
                 .techMessage(error.getTechMessage())
@@ -67,50 +67,50 @@ public class YalsErrorJson implements YalsJson {
     }
 
     /**
-     * Creates {@link YalsErrorJson} from set of errors.
+     * Creates {@link YalseeErrorJson} from set of errors.
      *
      * @param errors errors from validator
-     * @return {@link YalsErrorJson} filled with errors
+     * @return {@link YalseeErrorJson} filled with errors
      */
     @SuppressWarnings("rawtypes")
-    public static YalsErrorJson createFromSetOfErrors(final Set<ConstraintViolation> errors) {
+    public static YalseeErrorJson createFromSetOfErrors(final Set<ConstraintViolation> errors) {
         if (errors.isEmpty()) {
-            return YalsErrorJson.builder().message("Unknown error").build();
+            return YalseeErrorJson.builder().message("Unknown error").build();
         }
         if (errors.size() == 1) {
             String error = errors.stream().findFirst()
-                    .map(YalsErrorJson::convertConstraintViolationToErrorString)
+                    .map(YalseeErrorJson::convertConstraintViolationToErrorString)
                     .orElse("Unknown error");
-            return YalsErrorJson.builder().message(error).build();
+            return YalseeErrorJson.builder().message(error).build();
         } else {
             List<String> errorStrings = errors.parallelStream()
-                    .map(YalsErrorJson::convertConstraintViolationToErrorString)
+                    .map(YalseeErrorJson::convertConstraintViolationToErrorString)
                     .collect(Collectors.toList());
             StringBuilder errorStr = new StringBuilder("Multiple errors detected. ");
             for (String errorString : errorStrings) {
                 errorStr.append(errorString).append(App.NEW_LINE);
             }
-            return YalsErrorJson.builder().message(errorStr.toString()).build();
+            return YalseeErrorJson.builder().message(errorStr.toString()).build();
         }
     }
 
     /**
-     * Creates {@link YalsErrorJson} with message to user only.
+     * Creates {@link YalseeErrorJson} with message to user only.
      *
      * @param message string with user-friendly message
-     * @return {@link YalsErrorJson}
+     * @return {@link YalseeErrorJson}
      */
-    public static YalsErrorJson createWithMessage(final String message) {
-        return YalsErrorJson.builder().message(message).build();
+    public static YalseeErrorJson createWithMessage(final String message) {
+        return YalseeErrorJson.builder().message(message).build();
     }
 
     /**
      * Adds status without invoking builder.
      *
      * @param status int with http status: see {@link HttpCode}
-     * @return same {@link YalsErrorJson}, but with status
+     * @return same {@link YalseeErrorJson}, but with status
      */
-    public YalsErrorJson andStatus(final int status) {
+    public YalseeErrorJson andStatus(final int status) {
         setStatus(status);
         return this;
     }

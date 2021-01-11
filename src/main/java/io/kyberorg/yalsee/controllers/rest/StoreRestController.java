@@ -5,8 +5,8 @@ import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.json.StoreRequestJson;
 import io.kyberorg.yalsee.json.StoreResponseJson;
-import io.kyberorg.yalsee.json.YalsErrorJson;
-import io.kyberorg.yalsee.json.YalsJson;
+import io.kyberorg.yalsee.json.YalseeErrorJson;
+import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.StoreResult;
 import io.kyberorg.yalsee.services.LinkService;
@@ -58,7 +58,7 @@ public class StoreRestController {
      */
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT},
             value = Endpoint.Api.STORE_API)
-    public YalsJson store(final @RequestBody String body, final HttpServletResponse response) {
+    public YalseeJson store(final @RequestBody String body, final HttpServletResponse response) {
         log.info("{} got request: {}", TAG, body);
 
         Result parseResult = parseJson(body);
@@ -112,7 +112,7 @@ public class StoreRestController {
             log.error("{} {}", TAG, message);
             response.setStatus(HttpCode.STATUS_500);
 
-            YalsErrorJson errorJson = YalsErrorJson.builder()
+            YalseeErrorJson errorJson = YalseeErrorJson.builder()
                     .message(message).techMessage(e.getMessage()).throwable(e)
                     .status(HttpCode.STATUS_500)
                     .build();
@@ -126,7 +126,7 @@ public class StoreRestController {
             return Result.get().write(storeInput);
         } catch (Exception e) {
             log.info("{} unparseable JSON", TAG);
-            YalsErrorJson errorJson = YalsErrorJson.builder()
+            YalseeErrorJson errorJson = YalseeErrorJson.builder()
                     .status(HttpCode.STATUS_421)
                     .message("Unable to parse json")
                     .techMessage("Malformed JSON received. Got body: " + body)
@@ -159,7 +159,7 @@ public class StoreRestController {
         if (!errors.isEmpty()) {
             log.info("{} Value Violations found: {}", TAG, errors);
             Set<ConstraintViolation> errorSet = new HashSet<>(errors);
-            YalsErrorJson errorJson = YalsErrorJson.createFromSetOfErrors(errorSet).andStatus(HttpCode.STATUS_421);
+            YalseeErrorJson errorJson = YalseeErrorJson.createFromSetOfErrors(errorSet).andStatus(HttpCode.STATUS_421);
             return Result.get().write(errorJson);
         }
 
@@ -171,14 +171,14 @@ public class StoreRestController {
                 break;
             case UrlExtraValidator.LOCAL_URL_NOT_ALLOWED:
                 log.info("{} {} is not allowed", TAG, storeInput.getLink());
-                YalsErrorJson errorJson = YalsErrorJson.createWithMessage(messageFromExtraValidator)
+                YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage(messageFromExtraValidator)
                         .andStatus(HttpCode.STATUS_403);
                 result = Result.get().write(errorJson);
                 break;
             case UrlExtraValidator.URL_NOT_VALID:
             default:
                 log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
-                YalsErrorJson errorJson1 = YalsErrorJson.createWithMessage(messageFromExtraValidator)
+                YalseeErrorJson errorJson1 = YalseeErrorJson.createWithMessage(messageFromExtraValidator)
                         .andStatus(HttpCode.STATUS_421);
                 result = Result.get().write(errorJson1);
                 break;
@@ -186,7 +186,7 @@ public class StoreRestController {
         return result;
     }
 
-    private YalsJson storeLink(final String ident, final String decodedUrl, final HttpServletResponse response) {
+    private YalseeJson storeLink(final String ident, final String decodedUrl, final HttpServletResponse response) {
         StoreResult result = linkService.storeNew(ident, decodedUrl);
         if (result instanceof StoreResult.Success) {
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedUrl);
@@ -195,16 +195,16 @@ public class StoreRestController {
         } else if (result instanceof StoreResult.Fail) {
             log.error("{} Failed to save link: {}", TAG, decodedUrl);
             response.setStatus(HttpCode.STATUS_500);
-            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+            return YalseeErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         } else if (result instanceof StoreResult.DatabaseDown) {
             response.setStatus(HttpCode.STATUS_503);
             log.error("{} Database is DOWN", TAG, ((StoreResult.DatabaseDown) result).getException());
-            return YalsErrorJson.createWithMessage("The server is currently unable to handle the request")
+            return YalseeErrorJson.createWithMessage("The server is currently unable to handle the request")
                     .andStatus(HttpCode.STATUS_503);
         } else {
             log.error("{} Failed to save link: got unknown result object: {}", TAG, result);
             response.setStatus(HttpCode.STATUS_500);
-            return YalsErrorJson.createWithMessage("Failed to save your link. Internal server error.");
+            return YalseeErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         }
     }
 
@@ -219,19 +219,19 @@ public class StoreRestController {
 
     private boolean resultHasYalsErrorJson(final Result result) {
         if (result == null) return false;
-        return result.readValueType(Result.DEFAULT_KEY) == YalsErrorJson.class;
+        return result.readValueType(Result.DEFAULT_KEY) == YalseeErrorJson.class;
     }
 
-    private YalsErrorJson yalsErrorJson(final Result result, final HttpServletResponse response) {
-        YalsErrorJson errorJson = result.read(YalsErrorJson.class);
+    private YalseeErrorJson yalsErrorJson(final Result result, final HttpServletResponse response) {
+        YalseeErrorJson errorJson = result.read(YalseeErrorJson.class);
         response.setStatus(errorJson.getStatus());
         return errorJson;
     }
 
-    private YalsErrorJson conflict(final String usersIdent) {
+    private YalseeErrorJson conflict(final String usersIdent) {
         log.info("{} User Ident '{}' already exists", TAG, usersIdent);
         log.debug("{} Conflicting ident: {}", TAG, usersIdent);
-        return YalsErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
+        return YalseeErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
                 + " Try another one").andStatus(HttpCode.STATUS_409);
     }
 }

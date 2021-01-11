@@ -5,8 +5,8 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.json.EmptyJson;
 import io.kyberorg.yalsee.json.QRCodeResponseJson;
-import io.kyberorg.yalsee.json.YalsErrorJson;
-import io.kyberorg.yalsee.json.YalsJson;
+import io.kyberorg.yalsee.json.YalseeErrorJson;
+import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
@@ -52,22 +52,22 @@ public class QRCodeRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.QR_CODE_API + "/{ident}")
     @ResponseBody
-    public YalsJson getQRCode(final @PathVariable("ident") String ident, final HttpServletResponse resp) {
+    public YalseeJson getQRCode(final @PathVariable("ident") String ident, final HttpServletResponse resp) {
         this.response = resp;
 
-        YalsJson testResult = testIdentExist(ident);
-        if (testResult instanceof YalsErrorJson) {
+        YalseeJson testResult = testIdentExist(ident);
+        if (testResult instanceof YalseeErrorJson) {
             return testResult;
         }
 
         Optional<String> qrCode = getQRCode(ident, QRCodeService.DEFAULT_SIZE);
-        YalsJson result;
+        YalseeJson result;
         if (qrCode.isPresent()) {
             resp.setStatus(HttpCode.STATUS_200);
             result = QRCodeResponseJson.withQRCode(qrCode.get());
         } else {
             resp.setStatus(HttpCode.STATUS_500);
-            result = YalsErrorJson.createWithMessage("Failed to generate QR code. Internal error");
+            result = YalseeErrorJson.createWithMessage("Failed to generate QR code. Internal error");
         }
         return result;
     }
@@ -82,61 +82,61 @@ public class QRCodeRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.QR_CODE_API + "/{ident}/{size}")
     @ResponseBody
-    public YalsJson getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
-                                            final @PathVariable("size") int size,
-                                            final HttpServletResponse resp) {
+    public YalseeJson getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
+                                              final @PathVariable("size") int size,
+                                              final HttpServletResponse resp) {
         this.response = resp;
 
-        YalsJson sizeTestResult = testSize(size);
-        if (sizeTestResult instanceof YalsErrorJson) {
+        YalseeJson sizeTestResult = testSize(size);
+        if (sizeTestResult instanceof YalseeErrorJson) {
             return sizeTestResult;
         }
 
-        YalsJson identTestResult = testIdentExist(ident);
-        if (identTestResult instanceof YalsErrorJson) {
+        YalseeJson identTestResult = testIdentExist(ident);
+        if (identTestResult instanceof YalseeErrorJson) {
             return identTestResult;
         }
 
         Optional<String> qrCode = getQRCode(ident, size);
-        YalsJson result;
+        YalseeJson result;
         if (qrCode.isPresent()) {
             resp.setStatus(HttpCode.STATUS_200);
             result = QRCodeResponseJson.withQRCode(qrCode.get());
         } else {
             resp.setStatus(HttpCode.STATUS_500);
-            result = YalsErrorJson.createWithMessage("Failed to generate QR code. Internal error");
+            result = YalseeErrorJson.createWithMessage("Failed to generate QR code. Internal error");
         }
         return result;
     }
 
-    private YalsJson testIdentExist(final String ident) {
+    private YalseeJson testIdentExist(final String ident) {
         GetResult identFromDatabase = linkService.getLink(ident);
 
         if (identFromDatabase instanceof GetResult.NotFound) {
             log.debug("{} 0 idents found by request: {}", TAG, ident);
             response.setStatus(HttpCode.STATUS_404);
-            return YalsErrorJson.createWithMessage("No links found by this request. "
+            return YalseeErrorJson.createWithMessage("No links found by this request. "
                     + "Ident should be stored before requesting QR code").andStatus(HttpCode.STATUS_404);
         } else if (identFromDatabase instanceof GetResult.Fail) {
             log.debug("{} Failed to query DB for ident. Error: {}",
                     TAG, ((GetResult.Fail) identFromDatabase).getErrorMessage());
             response.setStatus(HttpCode.STATUS_500);
-            return YalsErrorJson.createWithMessage("Server Error: Something wrong at our side");
+            return YalseeErrorJson.createWithMessage("Server Error: Something wrong at our side");
         } else if (identFromDatabase instanceof GetResult.DatabaseDown) {
             log.debug("DB is DOWN");
             response.setStatus(HttpCode.STATUS_503);
-            return YalsErrorJson.createWithMessage("Server is unreachable. Please repeat request later")
+            return YalseeErrorJson.createWithMessage("Server is unreachable. Please repeat request later")
                     .andStatus(HttpCode.STATUS_503);
         } else {
             return EmptyJson.create();
         }
     }
 
-    private YalsJson testSize(final int sizeToTest) {
+    private YalseeJson testSize(final int sizeToTest) {
         if (sizeToTest <= 0) {
             log.error("{} invalid size {}. Replying 400", TAG, sizeToTest);
             response.setStatus(HttpCode.STATUS_400);
-            return YalsErrorJson.createWithMessage("Size must be positive number").andStatus(HttpCode.STATUS_400);
+            return YalseeErrorJson.createWithMessage("Size must be positive number").andStatus(HttpCode.STATUS_400);
         } else {
             return EmptyJson.create();
         }

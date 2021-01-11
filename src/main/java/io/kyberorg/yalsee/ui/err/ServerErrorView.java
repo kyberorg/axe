@@ -14,10 +14,10 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.controllers.YalsErrorController;
+import io.kyberorg.yalsee.controllers.YalseeErrorController;
 import io.kyberorg.yalsee.exception.GeneralServerException;
 import io.kyberorg.yalsee.exception.NeedForLoopException;
-import io.kyberorg.yalsee.exception.error.YalsError;
+import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
@@ -112,23 +112,23 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         }
     }
 
-    private void fillUIWithValuesFromError(final YalsError yalsError) {
-        if (StringUtils.isNotBlank(yalsError.getTimeStamp())) {
-            when.setText(yalsError.getTimeStamp());
+    private void fillUIWithValuesFromError(final YalseeError yalseeError) {
+        if (StringUtils.isNotBlank(yalseeError.getTimeStamp())) {
+            when.setText(yalseeError.getTimeStamp());
         }
-        if (StringUtils.isNotBlank(yalsError.getMessageToUser())) {
-            what.setText(yalsError.getMessageToUser());
+        if (StringUtils.isNotBlank(yalseeError.getMessageToUser())) {
+            what.setText(yalseeError.getMessageToUser());
         }
         triggerPanelsBasedOnTextInside(userMessagePanel, timeStampPanel);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
-            if (StringUtils.isNotBlank(yalsError.getTechMessage())) {
-                String techMessage = formatTechMessage(yalsError.getTechMessage());
+            if (StringUtils.isNotBlank(yalseeError.getTechMessage())) {
+                String techMessage = formatTechMessage(yalseeError.getTechMessage());
 
                 appUtils.pasteHtmlToComponent(techMessage, messageSpan);
             }
-            if (yalsError.getRawException() != null) {
-                String traceMessage = ErrorUtils.stackTraceToString(yalsError.getRawException());
+            if (yalseeError.getRawException() != null) {
+                String traceMessage = ErrorUtils.stackTraceToString(yalseeError.getRawException());
                 String trace = formatTrace(traceMessage);
 
                 appUtils.pasteHtmlToComponent(trace, traceSpan);
@@ -170,20 +170,20 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
     }
 
     /**
-     * EntryPoint from {@link YalsErrorController}.
+     * EntryPoint from {@link YalseeErrorController}.
      *
      * @param event     Vaadin Event with location, payload
      * @param parameter string goes after errors/500. We ignore it, because we use queryParams instead
      */
     @Override
     public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
-        YalsError yalsError = errorUtils.getYalsErrorFromEvent(event);
-        if (Objects.isNull(yalsError)) {
+        YalseeError yalseeError = errorUtils.getYalsErrorFromEvent(event);
+        if (Objects.isNull(yalseeError)) {
             event.rerouteToError(NeedForLoopException.class, Integer.toString(STATUS_500));
             return;
         }
 
-        switch (yalsError.getHttpStatus()) {
+        switch (yalseeError.getHttpStatus()) {
             case STATUS_404:
                 event.rerouteToError(NotFoundException.class);
                 return;
@@ -191,8 +191,8 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
                 event.rerouteToError(CannotCreateTransactionException.class);
                 return;
             default:
-                fillUIWithValuesFromError(yalsError);
-                event.rerouteToError(NeedForLoopException.class, Integer.toString(yalsError.getHttpStatus()));
+                fillUIWithValuesFromError(yalseeError);
+                event.rerouteToError(NeedForLoopException.class, Integer.toString(yalseeError.getHttpStatus()));
                 break;
         }
     }

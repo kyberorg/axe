@@ -5,5 +5,5 @@ package io.kyberorg.yalsee.json;
  *
  * @since 2.0
  */
-public interface YalsJson {
+public interface YalseeJson {
 }

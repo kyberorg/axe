@@ -10,7 +10,7 @@ import lombok.Data;
  * @since 2.6
  */
 @Data(staticConstructor = "withQRCode")
-public class QRCodeResponseJson implements YalsJson {
+public class QRCodeResponseJson implements YalseeJson {
     @JsonProperty("qr_code")
     private final String qrCode;
 

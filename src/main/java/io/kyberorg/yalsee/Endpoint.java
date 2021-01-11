@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee;
 
 import io.kyberorg.yalsee.controllers.AppOfflineController;
-import io.kyberorg.yalsee.controllers.YalsErrorController;
+import io.kyberorg.yalsee.controllers.YalseeErrorController;
 import io.kyberorg.yalsee.ui.err.ServerErrorView;
 
 /**
@@ -132,7 +132,7 @@ public final class Endpoint {
         /**
          * Catch-all errors endpoint. Served by:
          * <p>
-         * {@link YalsErrorController}
+         * {@link YalseeErrorController}
          */
         public static final String ERROR_PAGE = "/error";
 

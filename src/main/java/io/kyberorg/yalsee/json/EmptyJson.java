@@ -8,5 +8,5 @@ import lombok.Data;
  * @since 1.0
  */
 @Data(staticConstructor = "create")
-public class EmptyJson implements YalsJson {
+public class EmptyJson implements YalseeJson {
 }

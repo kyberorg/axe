@@ -2,8 +2,8 @@ package io.kyberorg.yalsee.controllers.rest;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.json.TelegramStatusResponseJson;
-import io.kyberorg.yalsee.json.YalsErrorJson;
-import io.kyberorg.yalsee.json.YalsJson;
+import io.kyberorg.yalsee.json.YalseeErrorJson;
+import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +44,12 @@ public class TelegramStatusRestController {
      * @return json with bot status
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Api.TELEGRAM_STATUS_API)
-    public YalsJson getBotStatus() {
+    public YalseeJson getBotStatus() {
         log.info("{} got request", TAG);
         if (bot == null) {
             //most likely you want want see it as application startup will fail
             log.error("{} Failed to autowire " + TelegramBot.class.getSimpleName(), TAG);
-            return YalsErrorJson.createWithMessage("Internal error: bot is missing");
+            return YalseeErrorJson.createWithMessage("Internal error: bot is missing");
         }
 
         if (appUtils.isTelegramDisabled()) {

@@ -10,7 +10,7 @@ import lombok.Data;
  * @since 1.0
  */
 @Data(staticConstructor = "create")
-public class StoreResponseJson implements YalsJson {
+public class StoreResponseJson implements YalseeJson {
     @JsonProperty("ident")
     private String ident;
 

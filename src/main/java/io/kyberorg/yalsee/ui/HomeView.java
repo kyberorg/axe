@@ -20,7 +20,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.exception.error.YalsErrorBuilder;
+import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.json.StoreRequestJson;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -310,7 +310,7 @@ public class HomeView extends HorizontalLayout {
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
-                errorUtils.reportToBugsnag(YalsErrorBuilder
+                errorUtils.reportToBugsnag(YalseeErrorBuilder
                         .withTechMessage(String.format("onSuccessStoreLink: Malformed JSON: %s",
                                 response.getBody().toPrettyString()
                         ))
@@ -322,7 +322,7 @@ public class HomeView extends HorizontalLayout {
                     TAG, response.getStatus(), response.getBody().toPrettyString());
 
             showError("Something wrong was happened at server-side. Issue already reported");
-            errorUtils.reportToBugsnag(YalsErrorBuilder
+            errorUtils.reportToBugsnag(YalseeErrorBuilder
                     .withTechMessage(String.format("onSuccessStoreLink: Got false positive. Body: %s",
                             response.getBody().toPrettyString()
                     ))
@@ -340,7 +340,7 @@ public class HomeView extends HorizontalLayout {
             log.error("{} Malformed Error Json", TAG);
             log.debug("", e);
             message = "Hups. Something went wrong at server-side";
-            errorUtils.reportToBugsnag(YalsErrorBuilder
+            errorUtils.reportToBugsnag(YalseeErrorBuilder
                     .withTechMessage(String.format("onFailStoreLink: Malformed JSON. Body: %s",
                             response.getBody().toPrettyString()
                     ))
@@ -412,7 +412,7 @@ public class HomeView extends HorizontalLayout {
                 qrCodeArea.setVisible(true);
             } else {
                 showError("Internal error. Got malformed reply from QR generator");
-                errorUtils.reportToBugsnag(YalsErrorBuilder
+                errorUtils.reportToBugsnag(YalseeErrorBuilder
                         .withTechMessage(String.format("onSuccessGenerateQRCode: Malformed JSON. Body: %s",
                                 response.getBody().toPrettyString()
                         ))
@@ -421,7 +421,7 @@ public class HomeView extends HorizontalLayout {
             }
         } else {
             showError("Internal error. Something is wrong at server-side");
-            errorUtils.reportToBugsnag(YalsErrorBuilder
+            errorUtils.reportToBugsnag(YalseeErrorBuilder
                     .withTechMessage(String.format("onSuccessGenerateQRCode: False positive. Body: %s",
                             response.getBody().toPrettyString()
                     ))
@@ -432,7 +432,7 @@ public class HomeView extends HorizontalLayout {
 
     private void onFailGenerateQRCode(final HttpResponse<JsonNode> response) {
         showError("Internal error. Got malformed reply from QR generator");
-        errorUtils.reportToBugsnag(YalsErrorBuilder
+        errorUtils.reportToBugsnag(YalseeErrorBuilder
                 .withTechMessage(String.format("onFailGenerateQRCode: Malformed JSON. Body: %s",
                         response.getBody().toPrettyString()
                 ))

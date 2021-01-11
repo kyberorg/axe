@@ -10,7 +10,7 @@ import lombok.Data;
  * @since 1.0
  */
 @Data(staticConstructor = "create")
-public class LinkResponseJson implements YalsJson {
+public class LinkResponseJson implements YalseeJson {
     @JsonProperty("link")
     private String link;
 

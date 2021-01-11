@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.test;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.json.YalsErrorJson;
+import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.test.utils.HostIdentifier;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.Headers;
@@ -36,14 +36,14 @@ public class TestUtils {
     }
 
     /**
-     * Result is {@link YalsErrorJson}.
+     * Result is {@link YalseeErrorJson}.
      *
      * @param result string with http response
      */
     public static void assertResultIsYalsErrorJson(final HttpResponse<String> result) {
         assertTrue(
                 TestUtils.isValidErrorJson(result),
-                "Response is not valid " + YalsErrorJson.class.getSimpleName());
+                "Response is not valid " + YalseeErrorJson.class.getSimpleName());
     }
 
     /**
@@ -176,7 +176,7 @@ public class TestUtils {
     private static boolean isValidErrorJson(HttpResponse<String> result) {
         String body = result.getBody();
         try {
-            YalsErrorJson errorJson = AppUtils.GSON.fromJson(body, YalsErrorJson.class);
+            YalseeErrorJson errorJson = AppUtils.GSON.fromJson(body, YalseeErrorJson.class);
             assertNotNull(errorJson);
             boolean hasNotEmptyMessageField = errorJson.getMessage() != null;
             boolean hasNotEmptyTimestampField = errorJson.getTimestamp() != null;

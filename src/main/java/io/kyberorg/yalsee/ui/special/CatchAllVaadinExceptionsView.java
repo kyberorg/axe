@@ -12,9 +12,9 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
-import io.kyberorg.yalsee.exception.error.YalsError;
+import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.utils.ErrorUtils;
-import io.kyberorg.yalsee.utils.YalsErrorKeeper;
+import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,7 +28,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 @UIScope
 public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasErrorParameter<Exception> {
 
-    private final YalsErrorKeeper yalsErrorKeeper;
+    private final YalseeErrorKeeper yalseeErrorKeeper;
     private final ErrorUtils errorUtils;
 
     /**
@@ -37,8 +37,8 @@ public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasE
      * @param errorKeeper holder for errors
      * @param errorUtils  utils for handling with errors
      */
-    public CatchAllVaadinExceptionsView(final YalsErrorKeeper errorKeeper, final ErrorUtils errorUtils) {
-        this.yalsErrorKeeper = errorKeeper;
+    public CatchAllVaadinExceptionsView(final YalseeErrorKeeper errorKeeper, final ErrorUtils errorUtils) {
+        this.yalseeErrorKeeper = errorKeeper;
         this.errorUtils = errorUtils;
     }
 
@@ -52,10 +52,10 @@ public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasE
                 .addStatus(STATUS_500)
                 .addPath(path)
                 .build();
-        YalsError yalsError = errorUtils.convertExceptionToYalsError(args);
+        YalseeError yalseeError = errorUtils.convertExceptionToYalsError(args);
 
-        String errorId = yalsErrorKeeper.send(yalsError);
-        errorUtils.reportToBugsnag(yalsError);
+        String errorId = yalseeErrorKeeper.send(yalseeError);
+        errorUtils.reportToBugsnag(yalseeError);
 
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
                 getMyHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);

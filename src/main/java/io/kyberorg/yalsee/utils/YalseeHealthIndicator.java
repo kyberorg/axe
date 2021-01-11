@@ -19,17 +19,17 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_200;
  * @since 2.7
  */
 @Component
-public class YalsHealthIndicator implements HealthIndicator {
+public class YalseeHealthIndicator implements HealthIndicator {
 
     private final AppUtils appUtils;
     private boolean appStarted = false;
 
     /**
-     * Creates {@link YalsHealthIndicator}.
+     * Creates {@link YalseeHealthIndicator}.
      *
      * @param appUtils application utils
      */
-    public YalsHealthIndicator(final AppUtils appUtils) {
+    public YalseeHealthIndicator(final AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 

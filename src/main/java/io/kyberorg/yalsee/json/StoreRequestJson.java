@@ -18,7 +18,7 @@ import static io.kyberorg.yalsee.utils.UrlExtraValidator.URL_MIN_SIZE;
  * @since 1.0
  */
 @Data(staticConstructor = "create")
-public class StoreRequestJson implements YalsJson {
+public class StoreRequestJson implements YalseeJson {
     @NotNull(message = "must be present")
     @Size(min = URL_MIN_SIZE, max = URL_MAX_SIZE)
     @URL(message = UrlExtraValidator.URL_NOT_VALID)
