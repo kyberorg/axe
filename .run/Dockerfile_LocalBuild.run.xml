@@ -25,7 +25,7 @@
       </settings>
     </deployment>
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="yals [clean, package]" run_configuration_type="MavenRunConfiguration" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="yalsee [clean, package]" run_configuration_type="MavenRunConfiguration" />
     </method>
   </configuration>
 </component>

@@ -140,7 +140,7 @@ public class VisibleStateTest extends SelenideTest {
     public void overallLinksTextExistsAndDisplayed() {
         HomePageObject.OverallArea.OVERALL_LINKS_TEXT.should(exist);
         HomePageObject.OverallArea.OVERALL_LINKS_TEXT.shouldBe(visible);
-        HomePageObject.OverallArea.OVERALL_LINKS_TEXT.shouldHave(text("Yals already saved"));
+        HomePageObject.OverallArea.OVERALL_LINKS_TEXT.shouldHave(text("Yalsee already saved"));
     }
 
     @Test

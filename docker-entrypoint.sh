@@ -54,8 +54,8 @@ APM_JAR="/apm-agent.jar"
 if [[ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]]; then
   export JAVA_OPTS="$JAVA_OPTS -javaagent:${APM_JAR}"
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yals"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.application_packages=eu.yals"
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yalsee"
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.application_packages=io.kyberorg.yalsee"
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.server_urls=${APM_SERVER}"
   if [ -n "${APM_TOKEN}" ]; then
     export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.secret_token=${APM_TOKEN}"

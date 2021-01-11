@@ -150,7 +150,7 @@ public class StoreApiTest extends UnirestTest {
 
     @Test
     public void onRequestWithLinkWithoutProtocolStatusIs201() {
-        String linkWithoutProtocol = "github.com/yadevee/yals/issues/50";
+        String linkWithoutProtocol = "github.com/kyberorg/yalsee/issues/50";
         String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);

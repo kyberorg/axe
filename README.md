@@ -1,8 +1,8 @@
-[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=Yals%2Ftrunk)](https://ci.yadev.eu/job/Yals/job/trunk/)
+[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=yals%2Ftrunk)](https://ci.yadev.eu/view/Yalsee/job/yals/job/trunk/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6a6b92ffc1841e49cef33eadf8aa201)](https://www.codacy.com/gh/yadevee/yals)
 
 # Yalsee - the link shortener
-Simple link shortener [yals.ee](https://yals.ee)
+Simple link shortener [yals.eu](https://yals.eu)
 
 Docker image: [`kyberorg/yalsee`](https://hub.docker.com/repository/docker/kyberorg/yalsee)
 

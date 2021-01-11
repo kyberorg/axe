@@ -186,13 +186,13 @@ pipeline {
           print 'Deploying to ' + deployTarget;
           script {
             if (deployTarget.equalsIgnoreCase("PROD")) {
-              deployCreds = 'prod-yals-deploy-creds';
+              deployCreds = 'prod-yalsee-deploy-hook';
               testUrl = "https://yals.eu";
             } else if (deployTarget.equalsIgnoreCase("Demo")) {
-              deployCreds = 'demo-yals-deploy-creds';
+              deployCreds = 'demo-yalsee-deploy-hook';
               testUrl = "https://demo.yals.eu";
             } else {
-              deployCreds = 'dev-yals-deploy-creds';
+              deployCreds = 'dev-yalsee-deploy-hook';
               testUrl = "https://dev.yals.eu";
             }
           }

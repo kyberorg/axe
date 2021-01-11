@@ -182,8 +182,8 @@ public class ErrorUtils {
      * @param yalsError {@link YalsError} objects
      */
     public void reportToBugsnag(final YalsError yalsError) {
-        YalsException yalsException = new YalsException("Yals Error: " + yalsError.getId());
-        final String tabName = "Yals Error";
+        YalsException yalsException = new YalsException("Yalsee Error: " + yalsError.getId());
+        final String tabName = "Yalsee Error";
         bugsnag.addCallback(report -> {
             report.addToTab(tabName, "id", yalsError.getId());
             report.addToTab(tabName, "Timestamp", yalsError.getTimeStamp());

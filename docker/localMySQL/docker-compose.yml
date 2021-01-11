@@ -6,10 +6,10 @@ networks:
 services:
   # Database
   db:
-    image: mariadb:10.4
+    image: library/mariadb:10.5.8
     volumes:
-      # Adjust me (/tmp/yalsdb - is folder on host)
-      - ./yalsdb:/var/lib/mysql
+      # Adjust me (/tmp/yalsee_db - is folder on host)
+      - ./yalsee_db:/var/lib/mysql
       - ./my.cnf:/etc/alternatives/my.cnf
     restart: always
     ports:
@@ -17,6 +17,9 @@ services:
     environment:
       PMA_USER: user
       PMA_PASSWORD: pass
+      MYSQL_DATABASE: yalsee
+      MYSQL_USER: yalsee
+      MYSQL_PASSWORD: yalsee
       MYSQL_ROOT_PASSWORD: password
     networks:
       - net

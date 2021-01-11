@@ -175,7 +175,7 @@ public class QRCodeApiTest extends UnirestTest {
     }
 
     private String getValidIdent() {
-        final String longUrlToSave = "https://github.com/yadevee/yals/issues";
+        final String longUrlToSave = "https://github.com/kyberorg/yalsee/issues";
         StoreRequestJson storeRequest = StoreRequestJson.create().withLink(longUrlToSave);
 
         HttpRequest request =

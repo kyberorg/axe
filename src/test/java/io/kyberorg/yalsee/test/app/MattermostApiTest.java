@@ -251,7 +251,7 @@ public class MattermostApiTest extends UnirestTest {
         return MattermostMock.create()
                 .withChannelId(RandomStringUtils.randomAlphanumeric(6))
                 .withChannelName("channelName")
-                .withCommand("yals")
+                .withCommand("yalsee")
                 .withTeamDomain("myTeam")
                 .withTeamId(RandomStringUtils.randomAlphanumeric(6))
                 .withText(text)

@@ -28,7 +28,7 @@ public class MattermostTests {
 
         String channelId = RandomStringUtils.randomAlphanumeric(CHANNEL_ID_LENGTH);
         String channelName = "channelName";
-        String command = "yals";
+        String command = "yalsee";
         String teamDomain = "myTeam";
         String teamId = RandomStringUtils.randomAlphanumeric(TEAM_ID_LENGTH);
         String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
@@ -79,7 +79,7 @@ public class MattermostTests {
     public void shouldBeExceptionWhenRequestHasNoText() {
         String channelId = RandomStringUtils.randomAlphanumeric(CHANNEL_ID_LENGTH);
         String channelName = "channelName";
-        String command = "yals";
+        String command = "yalsee";
         String teamDomain = "myTeam";
         String teamId = RandomStringUtils.randomAlphanumeric(TEAM_ID_LENGTH);
         String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);

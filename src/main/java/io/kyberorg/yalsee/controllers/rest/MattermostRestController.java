@@ -99,7 +99,7 @@ public class MattermostRestController {
 
     private MattermostResponseJson usage() {
         String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand()))
-                ? mattermost.getCommand() : "/yals";
+                ? mattermost.getCommand() : "/yalsee";
 
         return MattermostResponseJson.createWithText(App.Emoji.INFO + "  Usage: " + command
                 + " http://mysuperlonglink.tld [Optional Link Description]");

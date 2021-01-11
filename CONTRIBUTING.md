@@ -2,7 +2,7 @@
 
 ### Common info
 
-* I use [BugSnag](https://app.bugsnag.com/yadev/yals/errors) for capturing bugs
+* I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs
 
 ### How to start coding
 
@@ -12,7 +12,7 @@
 
 * Select all autodetected Spring facets
 
-* Use ``` YalsApplication.main() ``` to run application in IDE
+* Use ``` Application.main() ``` to run application in IDE
 
 ### About: local profile
 To develop with locally running dockerized MySQL database use `local` profile.
@@ -31,14 +31,14 @@ MySQL can be stopped from `docker/localMySQL` directory by running:
 docker-compose down
 ```
 
-Use `@yals_local_bot` and its token (currently can be requested from [kyberorg](mailto:kyberorg@yadev.eu)) for local run
+Use `@yals_local_bot` and its token (currently can be requested from [kyberorg](mailto:root@kyberorg.io)) for local run
 
 ### Logging
 To adjust logging we use ENV variables or `-D` vars:
 
 * Use `LOG_LEVEL_CORE` or `-Dlog.level.core` for setting overall log level
 
-* Use `LOG_LEVEL_APP` or `-Dlog.level.app` for setting application (package: `ee.yals`) log level
+* Use `LOG_LEVEL_APP` or `-Dlog.level.app` for setting application (package: `io.kyberorg.yalsee`) log level
 
 * Use `LOG_LEVEL_SPRING` or `-Dlog.level.spring` for setting Spring (package: `org.springframework`) log level
 
@@ -63,7 +63,7 @@ Can add several browsers like `chrome,firefox`
 
 * H2 (default profile) or MySQL database (local profile) needed to run.
 
-* I use [BugSnag](https://app.bugsnag.com/kyberorg/yalsee/errors) for capturing bugs. So token from Bugsnag needed.
+* I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs. So token from Bugsnag needed.
 
 #### Docker Swarm
 
@@ -89,7 +89,7 @@ Optional EnvVars:
 
 * PORT: `start server at port other than 8080 `
 
-* SERVER_URL: `https://yals.ee` (most likely don't needed as regulated by Spring profile)
+* SERVER_URL: `https://yals.eu` (most likely don't needed as regulated by Spring profile)
 
 * TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 

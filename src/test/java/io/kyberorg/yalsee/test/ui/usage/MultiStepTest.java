@@ -49,7 +49,7 @@ public class MultiStepTest extends SelenideTest {
     //@Test
     //TODO re-enable when #232 is fixed
     public void shortenItButtonClearsResultAndValueIfVisible() {
-        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
+        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/kyberorg/yalsee");
 
         RESULT_AREA.shouldBe(visible);
         LONG_URL_INPUT.shouldBe(empty);
@@ -64,7 +64,7 @@ public class MultiStepTest extends SelenideTest {
      */
     @Test
     public void copyLinkButtonShouldCopyShortLink() {
-        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
+        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/kyberorg/yalsee");
 
         RESULT_AREA.shouldBe(visible);
         COPY_LINK_ICON.shouldBe(visible);
@@ -84,7 +84,7 @@ public class MultiStepTest extends SelenideTest {
     public void linksCounterIncreasedValueAfterSave() throws InterruptedException {
         long initialNumber = HomePageObject.getNumberOfSavedLinks();
 
-        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/yadevee/yals");
+        HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/kyberorg/yalsee");
         //sometime it takes time to update counter. Waiting 5 seconds to prevent flaky test.
         TimeUnit.SECONDS.sleep(5);
 

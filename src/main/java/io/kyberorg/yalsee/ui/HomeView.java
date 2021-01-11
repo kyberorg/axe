@@ -145,7 +145,7 @@ public class HomeView extends HorizontalLayout {
     }
 
     private HorizontalLayout overallArea() {
-        Span overallTextStart = new Span("Yals already saved ");
+        Span overallTextStart = new Span("Yalsee already saved ");
 
         linkCounter = new Span();
         linkCounter.setId(IDs.OVERALL_LINKS_NUMBER);

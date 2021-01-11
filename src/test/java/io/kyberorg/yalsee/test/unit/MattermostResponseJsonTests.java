@@ -45,10 +45,10 @@ public class MattermostResponseJsonTests {
     }
 
     @Test
-    public void assertUserContainsYals() {
+    public void assertUserContainsYalsee() {
         MattermostResponseJson mmJson = MattermostResponseJson.createWithText("https://yals.eu");
         assertNotNull(mmJson.getUsername(), "Username is absent");
-        assertTrue(mmJson.getUsername().contains("Yals"), "Username do not contain word 'Yals'");
+        assertTrue(mmJson.getUsername().contains("Yalsee"), "Username do not contain word 'Yalsee'");
     }
 
 }
