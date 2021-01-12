@@ -14,6 +14,7 @@ public class TestApp {
 
     public static class Properties {
         public static final String TEST_URL = "test.url";
+        public static final String APP_SHORT_URL = "app.shortUrl";
         public static final String TEST_RUN_MODE = "test.runMode";
         public static final String BUILD_NAME = "test.buildName";
         public static final String REPORT_DIR = "test.reportdir";

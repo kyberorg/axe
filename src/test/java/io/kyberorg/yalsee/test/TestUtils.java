@@ -125,6 +125,17 @@ public class TestUtils {
     }
 
     /**
+     * Defines short URL App Uses for Links.
+     *
+     * @return string with URL app includes in short links
+     */
+    public static String getAppShortUrl() {
+        final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
+        String localRunValue = String.format("http://l.yls.ee:%d", serverPort);
+        return System.getProperty(TestApp.Properties.APP_SHORT_URL, localRunValue);
+    }
+
+    /**
      * Determines if tests are running locally (localhost).
      *
      * @return true if locally, false if not

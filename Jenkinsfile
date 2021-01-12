@@ -10,6 +10,7 @@ def deployCreds = '';
 
 def testEnabled = true;
 def testUrl = "https://dev.yals.ee";
+def appShortUrl = "https://d.yls.ee";
 
 pipeline {
   agent any;
@@ -95,6 +96,7 @@ pipeline {
         script {
           testEnabled = !params.SKIP_TESTS;
           testUrl = "https://dev.yals.ee";
+          appShortUrl = "https://d.yls.ee"
         }
       }
     }
@@ -135,6 +137,7 @@ pipeline {
         script {
           testEnabled = !params.SKIP_TESTS;
           testUrl = "https://demo.yals.ee";
+          appShortUrl = "https://q.yls.ee"
         }
       }
     }
@@ -188,12 +191,15 @@ pipeline {
             if (deployTarget.equalsIgnoreCase("PROD")) {
               deployCreds = 'prod-yalsee-deploy-hook';
               testUrl = "https://yals.ee";
+              appShortUrl = "https://yls.ee"
             } else if (deployTarget.equalsIgnoreCase("Demo")) {
               deployCreds = 'demo-yalsee-deploy-hook';
               testUrl = "https://demo.yals.ee";
+              appShortUrl = "https://q.yls.ee"
             } else {
               deployCreds = 'dev-yalsee-deploy-hook';
               testUrl = "https://dev.yals.ee";
+              appShortUrl = "https://d.yls.ee"
             }
           }
           script {
@@ -244,6 +250,7 @@ pipeline {
           testApp(url: testUrl, dParams: "-Dgrid.hostname=http://127.0.0.1:4444 " +
                   '-Dselenide.browser=chrome ' +
                   "-Dtest.buildName=${buildName} " +
+                  "-Dapp.shortUrl=${appShortUrl} " +
                   "-Dsurefire.rerunFailingTestsCount=2",
                   actions: 'clean test',
                   artifacts: "target/reports/**/*.png", failStep: false);

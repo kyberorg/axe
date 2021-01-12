@@ -26,6 +26,7 @@ public abstract class SelenideTest {
     private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Properties.Selenide.TIMEOUT, TestApp.Defaults.Selenide.TIMEOUT));
 
     protected final static String BASE_URL = TestUtils.getTestUrl();
+    protected final static String APP_SHORT_URL = TestUtils.getAppShortUrl();
 
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);

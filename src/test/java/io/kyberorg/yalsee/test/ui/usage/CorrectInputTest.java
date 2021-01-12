@@ -85,7 +85,7 @@ public class CorrectInputTest extends SelenideTest {
     private void checkExpectedBehavior() {
         RESULT_AREA.shouldBe(visible);
         RESULT_LINK.shouldBe(visible);
-        RESULT_LINK.shouldHave(text(BASE_URL));
+        RESULT_LINK.shouldHave(text(APP_SHORT_URL));
         COPY_LINK_ICON.shouldBe(visible);
 
         String actualText = RESULT_LINK.getText();
