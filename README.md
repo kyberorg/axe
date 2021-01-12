@@ -2,7 +2,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6a6b92ffc1841e49cef33eadf8aa201)](https://www.codacy.com/gh/yadevee/yals)
 
 # Yalsee - the link shortener
-Simple link shortener [yals.eu](https://yals.eu)
+Simple link shortener [yals.ee](https://yals.ee)
 
 Docker image: [`kyberorg/yalsee`](https://hub.docker.com/repository/docker/kyberorg/yalsee)
 

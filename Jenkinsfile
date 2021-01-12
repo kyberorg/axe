@@ -9,7 +9,7 @@ def deployTarget = 'Dev';
 def deployCreds = '';
 
 def testEnabled = true;
-def testUrl = "https://dev.yals.eu";
+def testUrl = "https://dev.yals.ee";
 
 pipeline {
   agent any;
@@ -94,7 +94,7 @@ pipeline {
         }
         script {
           testEnabled = !params.SKIP_TESTS;
-          testUrl = "https://dev.yals.eu";
+          testUrl = "https://dev.yals.ee";
         }
       }
     }
@@ -134,7 +134,7 @@ pipeline {
         }
         script {
           testEnabled = !params.SKIP_TESTS;
-          testUrl = "https://qa.yals.eu";
+          testUrl = "https://demo.yals.ee";
         }
       }
     }
@@ -187,13 +187,13 @@ pipeline {
           script {
             if (deployTarget.equalsIgnoreCase("PROD")) {
               deployCreds = 'prod-yalsee-deploy-hook';
-              testUrl = "https://yals.eu";
+              testUrl = "https://yals.ee";
             } else if (deployTarget.equalsIgnoreCase("Demo")) {
               deployCreds = 'demo-yalsee-deploy-hook';
-              testUrl = "https://demo.yals.eu";
+              testUrl = "https://demo.yals.ee";
             } else {
               deployCreds = 'dev-yalsee-deploy-hook';
-              testUrl = "https://dev.yals.eu";
+              testUrl = "https://dev.yals.ee";
             }
           }
           script {

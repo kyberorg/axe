@@ -41,7 +41,7 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
 export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
-## Issue 264 (OpenJ9 tuning). Based on https://yals.eu/dUxHlC
+## Issue 264 (OpenJ9 tuning). Based on https://yals.ee/dUxHlC
 export JAVA_OPTS="$JAVA_OPTS -Xgcpolicy:gencon"
 export JAVA_OPTS="$JAVA_OPTS -Xquickstart"
 export JAVA_OPTS="$JAVA_OPTS -Xtune:virtualized"

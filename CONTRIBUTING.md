@@ -70,7 +70,7 @@ Optional EnvVars:
 
 * LOG_LEVEL_APP: `see Logging part`
 * PORT: `start server at port other than 8080 `
-* SERVER_URL: `https://yals.eu` (most likely don't needed as regulated by Spring profile)
+* SERVER_URL: `https://yals.ee` (most likely don't needed as regulated by Spring profile)
 * TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 * DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
 * JAVA_DEBUG_PORT: `port for remote debugging` (this is internal port, need to expose it to connect from outside word)

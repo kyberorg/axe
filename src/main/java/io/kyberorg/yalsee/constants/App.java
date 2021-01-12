@@ -25,7 +25,7 @@ public final class App {
     }
 
     public static class Mattermost {
-        public static final String BOT_ICON = "https://yals.eu/favicon.ico";
+        public static final String BOT_ICON = "https://yals.ee/favicon.ico";
         public static final String BOT_NAME = "YalseeBot";
         public static final String SUPPORT_URL = "https://github.com/kyberorg/yalsee/issues";
     }

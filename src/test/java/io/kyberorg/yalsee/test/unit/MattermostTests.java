@@ -23,7 +23,7 @@ public class MattermostTests {
 
     @Test
     public void shouldBeValidObjectFromValidRequest() {
-        String host = "yals.eu";
+        String host = "yals.ee";
         String text = "https%3A%2F%2F" + host;
 
         String channelId = RandomStringUtils.randomAlphanumeric(CHANNEL_ID_LENGTH);
@@ -99,7 +99,7 @@ public class MattermostTests {
 
     @Test
     public void shouldBeValidObjectWithMissingFieldsWhenAreNotPresentIsBody() {
-        String host = "yals.eu";
+        String host = "yals.ee";
         String text = "https%3A%2F%2F" + host;
 
         String token = RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH);
