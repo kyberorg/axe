@@ -49,8 +49,8 @@ public class QRCodeService {
      * @return ready base64 encoded png with data:image/png stamp
      */
     public String getQRCodeFromIdent(final String ident, final int size) throws WriterException, IOException {
-        String serverUrl = appUtils.getServerUrl();
-        String fullLink = serverUrl + "/" + ident;
+        String shortUrl = appUtils.getShortUrl();
+        String fullLink = shortUrl + "/" + ident;
 
         byte[] qrCode = doQRCode(fullLink, size);
         String base64encodedQRCode = encodeQRCode(qrCode);

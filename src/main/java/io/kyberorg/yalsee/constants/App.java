@@ -40,6 +40,7 @@ public final class App {
         public static final String APPLICATION_STAGE = "application.stage";
         public static final String DEV_MODE = "app.devMode";
         public static final String APP_SITE_TITLE = "app.site-title";
+        public static final String SHORT_DOMAIN = "app.shortDomain";
     }
 
     public static class Env {

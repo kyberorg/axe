@@ -89,8 +89,8 @@ public class TelegramService {
         if (!isInitDone) {
             return NO_INIT;
         }
-        String serverHostname = appUtils.getServerUrl();
-        String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
+        String shortUrl = appUtils.getShortUrl();
+        String fullLink = shortUrl + "/" + savedLink.getIdent();
 
         String linkDescription = telegramObject.getArguments().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
@@ -98,9 +98,9 @@ public class TelegramService {
                     && (!telegramObject.getUsername().equals(App.NO_VALUE)))
                     ? "Okay " + App.AT + telegramObject.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
-            return greeting + fullYalsLink;
+            return greeting + fullLink;
         } else {
-            return fullYalsLink + " " + linkDescription;
+            return fullLink + " " + linkDescription;
         }
     }
 

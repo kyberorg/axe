@@ -29,5 +29,10 @@
       "name": "app.site-title",
       "type": "java.lang.String",
       "description": "String with Site title for displaying at web page."
+    },
+    {
+      "name": "app.shortDomain",
+      "type": "java.lang.String",
+      "description": "Short url domain used for links."
     }
   ] }

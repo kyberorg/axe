@@ -302,7 +302,7 @@ public class HomeView extends HorizontalLayout {
             String ident = json.getObject().getString("ident");
             log.debug("{} Got reply with ident: {}", TAG, ident);
             if (StringUtils.isNotBlank(ident)) {
-                shortLink.setText(appUtils.getServerUrl() + "/" + ident);
+                shortLink.setText(appUtils.getShortUrl() + "/" + ident);
                 shortLink.setHref(ident);
                 resultArea.setVisible(true);
                 clipboardHelper.setContent(shortLink.getText());
