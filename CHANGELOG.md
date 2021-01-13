@@ -1,3 +1,12 @@
+### Version 3.0 (13/01/2021)
+Yals -> Yalsee
+
+* Project renamed to `yalsee` (#296)
+* Yalsee will produce even shorter URL like `https://yls.ee/Cxwycs` (#288)   
+* Site URL changed from `https://yals.eu` to `https://yals.ee` (#287)  
+* New Telegram Bot: Yalsee Bot `@yalsee_bot` (#296)
+* Package name changed from `eu.yals` to `io.kyberorg.yalsee` (#296)
+
 ### Version 2.8 (07/01/2021)
 Fresh UI
 
