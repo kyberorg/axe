@@ -67,7 +67,8 @@ public class GetRestController {
         if (StringUtils.isBlank(ident)) {
             log.info("{} Got empty ident", TAG);
             response.setStatus(HttpCode.STATUS_400);
-            return YalseeErrorJson.createWithMessage("Request should be like this: " + Endpoint.Api.LINK_API + "/{ident}"
+            return YalseeErrorJson.createWithMessage("Request should be like this: "
+                    + Endpoint.Api.LINK_API + "/{ident}"
                     + " and ident should not be empty").andStatus(HttpCode.STATUS_400);
         }
 
@@ -75,7 +76,8 @@ public class GetRestController {
         if (!isIdentValid) {
             log.error("{} Request has not valid ident: {}", TAG, ident);
             response.setStatus(HttpCode.STATUS_400);
-            return YalseeErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string").andStatus(HttpCode.STATUS_400);
+            return YalseeErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string")
+                    .andStatus(HttpCode.STATUS_400);
         }
 
         GetResult result = linkService.getLink(ident);

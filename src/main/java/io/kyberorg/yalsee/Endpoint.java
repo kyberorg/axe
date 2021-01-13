@@ -1,9 +1,5 @@
 package io.kyberorg.yalsee;
 
-import io.kyberorg.yalsee.controllers.AppOfflineController;
-import io.kyberorg.yalsee.controllers.YalseeErrorController;
-import io.kyberorg.yalsee.ui.err.ServerErrorView;
-
 /**
  * List of application endpoints.
  *

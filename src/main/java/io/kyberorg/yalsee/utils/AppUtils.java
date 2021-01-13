@@ -273,7 +273,7 @@ public class AppUtils {
      */
     public String getShortUrl() {
         String shortDomain = env.getProperty(App.Properties.SHORT_DOMAIN, DUMMY_HOST);
-        if(shortDomain.equals(DUMMY_HOST)) {
+        if (shortDomain.equals(DUMMY_HOST)) {
             //no short URL - use server URL
             log.debug("No Short Domain defined - using Server URL");
             return getServerUrl();
