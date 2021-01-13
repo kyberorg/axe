@@ -47,6 +47,7 @@ server.pid
 .cache
 .mvn
 docker/localMySQL/yalsdb
+docker/localMySQL/yalsee_db
 /node_modules/
 
 package-lock.json

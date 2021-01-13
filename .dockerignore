@@ -6,5 +6,5 @@ node_modules
 .travis.yml
 checkstyle.xml
 Jenkinsfile
-README.MD
-yals.iml
+README.md
+yalsee.iml

@@ -3,19 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>eu.yals</groupId>
-    <artifactId>yals</artifactId>
-    <version>2.8</version>
+    <groupId>io.kyberorg</groupId>
+    <artifactId>yalsee</artifactId>
+    <version>3.0</version>
     <packaging>jar</packaging>
 
-    <name>yals</name>
-    <description>Yet another link shortener</description>
+    <name>yalsee</name>
+    <description>Yalsee - the link shortener </description>
 
     <developers>
         <developer>
             <id>kyberorg</id>
             <name>Alexander Muravya</name>
-            <email>kyberorg@yadev.eu</email>
+            <email>root@kyberorg.io</email>
             <roles>
                 <role>lead developer</role>
             </roles>
@@ -24,9 +24,9 @@
     </developers>
 
     <scm>
-        <url>https://github.com/yadevee/yals</url>
-        <connection>scm:git:https://github.com/yadevee/yals.git</connection>
-        <developerConnection>scm:git:https://github.com/yadevee/yals.git</developerConnection>
+        <url>https://github.com/kyberorg/yalsee</url>
+        <connection>scm:git:https://github.com/kyberorg/yalsee.git</connection>
+        <developerConnection>scm:git:https://github.com/kyberorg/yalsee.git</developerConnection>
     </scm>
 
     <properties>
@@ -54,12 +54,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Spring Boot Template Engine (for FTL files) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
-        </dependency>
-
         <!-- Spring Boot Logging -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,6 +70,12 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Vaadin -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin</artifactId>
         </dependency>
 
         <!-- Spring Boot Database Model layer -->
@@ -177,12 +177,6 @@
             <version>3.4.1</version>
         </dependency>
 
-        <!-- Vaadin -->
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin</artifactId>
-        </dependency>
-
         <!-- BugSnag: error reporting -->
         <dependency>
             <groupId>com.bugsnag</groupId>
@@ -249,7 +243,7 @@
 
 
     <build>
-        <finalName>yals</finalName>
+        <finalName>yalsee</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

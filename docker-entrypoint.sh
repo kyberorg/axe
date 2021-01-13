@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # usage: file_env VAR [DEFAULT]
-#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
-# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
-#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
+#    ie: file_env 'DB_PASSWORD' 'example'
+# (will allow for "$DB_PASSWORD_FILE" to fill in the value of
+#  "$DB_PASSWORD" from a file, especially for Docker's secrets feature)
 file_env() {
   local var="$1"
   local fileVar="${var}_FILE"
@@ -22,7 +22,7 @@ file_env() {
   unset "$fileVar"
 }
 
-file_env 'YALS_DB_PASSWORD'
+file_env 'DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
 file_env 'APM_TOKEN'
@@ -41,7 +41,7 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+UseContainerSupport"
 export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysActAsServerClassMachine"
 export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps"
 
-## Issue 264 (OpenJ9 tuning). Based on https://yals.eu/dUxHlC
+## Issue 264 (OpenJ9 tuning). Based on https://yals.ee/dUxHlC
 export JAVA_OPTS="$JAVA_OPTS -Xgcpolicy:gencon"
 export JAVA_OPTS="$JAVA_OPTS -Xquickstart"
 export JAVA_OPTS="$JAVA_OPTS -Xtune:virtualized"
@@ -54,8 +54,8 @@ APM_JAR="/apm-agent.jar"
 if [[ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]]; then
   export JAVA_OPTS="$JAVA_OPTS -javaagent:${APM_JAR}"
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yals"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.application_packages=eu.yals"
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yalsee"
+  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.application_packages=io.kyberorg.yalsee"
   export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.server_urls=${APM_SERVER}"
   if [ -n "${APM_TOKEN}" ]; then
     export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.secret_token=${APM_TOKEN}"
@@ -67,4 +67,4 @@ fi
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
 # End Issue 236 (Vaadin Production Mode) #
 
-exec java ${JAVA_OPTS} -jar /app/yals.jar
+exec java ${JAVA_OPTS} -jar /app/yalsee.jar
