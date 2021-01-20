@@ -149,7 +149,7 @@ pipeline {
       steps {
         script {
           deployTarget = input message: 'Select deploy target', ok: 'Deploy!',
-                  parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev', description: 'What is the server we deploy to?')]
+                  parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev\nNone', description: 'What is the server we deploy to?')]
           testEnabled = input message: 'Do you want to test', ok: 'Go next!',
                   parameters: [booleanParam(name: 'TEST_ENABLED', defaultValue: false, description: 'Enable if you want to test after deploy')]
         }
@@ -196,10 +196,14 @@ pipeline {
               deployCreds = 'demo-yalsee-deploy-hook';
               testUrl = "https://demo.yals.ee";
               appShortUrl = "https://q.yls.ee"
-            } else {
+            } else if (deployTarget.equalsIgnoreCase("Dev")) {
               deployCreds = 'dev-yalsee-deploy-hook';
               testUrl = "https://dev.yals.ee";
               appShortUrl = "https://d.yls.ee"
+            } else {
+              //no deploy - no further actions needed
+              currentBuild.result = 'SUCCESS'
+              return
             }
           }
           script {
