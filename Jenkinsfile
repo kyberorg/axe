@@ -8,6 +8,8 @@ def dockerFile = 'Dockerfile';
 def deployTarget = 'Dev';
 def deployCreds = '';
 
+def deployEnabled = true;
+
 def testEnabled = true;
 def testUrl = "https://dev.yals.ee";
 def appShortUrl = "https://d.yls.ee";
@@ -202,26 +204,33 @@ pipeline {
               appShortUrl = "https://d.yls.ee"
             } else {
               //no deploy - no further actions needed
-              currentBuild.result = 'SUCCESS'
-              return
+              deployEnabled = false
             }
           }
           script {
-            withCredentials([string(credentialsId: deployCreds, variable: 'HOOK')]) {
-                  deployLocation = "$HOOK" + '?tag='+ dockerTag;
+            if (deployEnabled) {
+              withCredentials([string(credentialsId: deployCreds, variable: 'HOOK')]) {
+                deployLocation = "$HOOK" + '?tag='+ dockerTag;
+              }
+              echo deployLocation;
+              deployToSwarm(hookUrl: deployLocation)
             }
           }
-          echo deployLocation;
-          deployToSwarm(hookUrl: deployLocation)
         }
       }
     }
 
     stage("Wait For Deploy prior Testing") {
       when {
-        expression {
-          return testEnabled
+        allOf {
+          expression {
+            return deployEnabled
+          }
+          expression {
+            return testEnabled
+          }
         }
+
       }
       steps {
         echo 'Waiting for deployment to complete prior starting smoke testing'
@@ -244,9 +253,15 @@ pipeline {
     }
     stage('App and UI Tests') {
       when {
-        expression {
-          return testEnabled
+        allOf {
+          expression {
+            return deployEnabled
+          }
+          expression {
+            return testEnabled
+          }
         }
+
       }
       steps {
         script {
