@@ -5,7 +5,6 @@
 * [Disclosure Policy](#disclosure-policy)
 * [Comments on this Policy](#comments-on-this-policy)
 
-
 ## Reporting a Bug
 
 Project maintainer take all security bugs in `yalsee` seriously.
