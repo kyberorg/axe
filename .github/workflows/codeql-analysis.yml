@@ -40,6 +40,9 @@ jobs:
           java-version: '11'
           architecture: x64
 
+      - name: Adjust Maven Settings
+        uses: s4u/maven-settings-action@v2.3.0
+
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
@@ -51,7 +54,7 @@ jobs:
           # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
       - run: |
-          mvn clean package -Dmaven.repo.remote=https://repo.yadev.eu/artifactory/jcenter -P production-mode,noTesting
+          mvn clean package -P production-mode,noTesting
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
