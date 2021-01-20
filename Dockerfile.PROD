@@ -6,7 +6,7 @@ VOLUME /tmp
 
 COPY ./target/yalsee.jar /app/
 COPY ./docker-entrypoint.sh /
-ADD https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-agent/1.19.0/elastic-apm-agent-1.19.0.jar /apm-agent.jar
+ADD https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-agent/1.20.0/elastic-apm-agent-1.20.0.jar /apm-agent.jar
 
 RUN sh -c 'chmod +x /docker-entrypoint.sh'
 RUN apt-get update && \
