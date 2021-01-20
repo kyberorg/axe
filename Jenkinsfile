@@ -8,6 +8,8 @@ def dockerFile = 'Dockerfile';
 def deployTarget = 'Dev';
 def deployCreds = '';
 
+def deployEnabled = true;
+
 def testEnabled = true;
 def testUrl = "https://dev.yals.ee";
 def appShortUrl = "https://d.yls.ee";
@@ -149,7 +151,7 @@ pipeline {
       steps {
         script {
           deployTarget = input message: 'Select deploy target', ok: 'Deploy!',
-                  parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev', description: 'What is the server we deploy to?')]
+                  parameters: [choice(name: 'DEPLOY_TARGET', choices: 'PROD\nDemo\nDev\nNone', description: 'What is the server we deploy to?')]
           testEnabled = input message: 'Do you want to test', ok: 'Go next!',
                   parameters: [booleanParam(name: 'TEST_ENABLED', defaultValue: false, description: 'Enable if you want to test after deploy')]
         }
@@ -196,28 +198,39 @@ pipeline {
               deployCreds = 'demo-yalsee-deploy-hook';
               testUrl = "https://demo.yals.ee";
               appShortUrl = "https://q.yls.ee"
-            } else {
+            } else if (deployTarget.equalsIgnoreCase("Dev")) {
               deployCreds = 'dev-yalsee-deploy-hook';
               testUrl = "https://dev.yals.ee";
               appShortUrl = "https://d.yls.ee"
+            } else {
+              //no deploy - no further actions needed
+              deployEnabled = false
             }
           }
           script {
-            withCredentials([string(credentialsId: deployCreds, variable: 'HOOK')]) {
-                  deployLocation = "$HOOK" + '?tag='+ dockerTag;
+            if (deployEnabled) {
+              withCredentials([string(credentialsId: deployCreds, variable: 'HOOK')]) {
+                deployLocation = "$HOOK" + '?tag='+ dockerTag;
+              }
+              echo deployLocation;
+              deployToSwarm(hookUrl: deployLocation)
             }
           }
-          echo deployLocation;
-          deployToSwarm(hookUrl: deployLocation)
         }
       }
     }
 
     stage("Wait For Deploy prior Testing") {
       when {
-        expression {
-          return testEnabled
+        allOf {
+          expression {
+            return deployEnabled
+          }
+          expression {
+            return testEnabled
+          }
         }
+
       }
       steps {
         echo 'Waiting for deployment to complete prior starting smoke testing'
@@ -240,9 +253,15 @@ pipeline {
     }
     stage('App and UI Tests') {
       when {
-        expression {
-          return testEnabled
+        allOf {
+          expression {
+            return deployEnabled
+          }
+          expression {
+            return testEnabled
+          }
         }
+
       }
       steps {
         script {
