@@ -42,6 +42,8 @@ jobs:
 
       - name: Adjust Maven Settings
         uses: s4u/maven-settings-action@v2.3.0
+        with:
+          mirrors: '[{"id": "repoOne", "name": "Repo One", "mirrorOf": "central", "url": "https://repo.yadev.eu/artifactory/central"}]'
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
@@ -54,7 +56,7 @@ jobs:
           # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
       - run: |
-          mvn clean package -P production-mode,noTesting
+          mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
