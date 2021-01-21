@@ -389,7 +389,7 @@
                         <artifactId>native-image-maven-plugin</artifactId>
                         <version>20.3.0</version>
                         <configuration>
-                            <buildArgs>-J-Xmx4G -H:+TraceClassInitialization -H:+ReportExceptionStackTraces
+                            <buildArgs>-J-Xmx4G -H:TraceClassInitialization -H:+ReportExceptionStackTraces
                                 -Dspring.graal.remove-unused-autoconfig=true -Dspring.graal.remove-yaml-support=true</buildArgs>
                             <imageName>${project.artifactId}</imageName>
                         </configuration>
