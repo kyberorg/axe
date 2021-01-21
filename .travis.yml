@@ -36,18 +36,18 @@ jobs:
         # Run GraalVM Native Image compilation of Spring Boot App
         - mvn -Pnative clean package
 
+        # Package to container
+        - export D_REPO=${D_ORG}/${D_PROJECT}
+        - docker build . -f Dockerfile.graal --tag=$D_REPO:$D_TAG
       name: "Native Image compile on Travis Host"
 
     - script:
         # Compile with Docker
-        - docker build . --tag=spring-boot-graal
+        - docker build . -f Dockerfile.graal --tag=spring-boot-graal
       name: "Native Image compile in Docker on Travis & Push to Heroku Container Registry"
-
-
 
 after_success:
   - export D_REPO=${D_ORG}/${D_PROJECT}
-  - docker tag $D_REPO:$D_TAG
 
   - echo "Logging in to Docker hub as $D_USER"
   - docker login -u $D_USER -p $D_PASS
