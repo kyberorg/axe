@@ -34,7 +34,7 @@ jobs:
         - native-image --version
 
         # Run GraalVM Native Image compilation of Spring Boot App
-        - mvn -Pnative clean package
+        - mvn -Pnative,noTesting clean package
 
         # Package to container
         - export D_REPO=${D_ORG}/${D_PROJECT}
