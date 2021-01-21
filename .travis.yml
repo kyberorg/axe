@@ -1,40 +1,53 @@
+dist: bionic
+language: minimal
+
 services:
   - docker
-
-language: java
-
-jdk: oraclejdk8
 
 env:
   global:
     - D_ORG=kyberorg
     - D_PROJECT=yalsee
-    - G_BRANCH=${TRAVIS_BRANCH}
-    - T_BUILD=${TRAVIS_JOB_NUMBER}
+    - D_TAG=native
+
+jobs:
+  include:
+    - script:
+        # Install GraalVM with SDKMAN
+        - curl -s "https://get.sdkman.io" | bash
+        - source "$HOME/.sdkman/bin/sdkman-init.sh"
+        - sdk install java 20.3.0.r11-grl
+
+        # Check if GraalVM was installed successfully
+        - java -version
+
+        # Install Maven, that uses GraalVM for later builds
+        - sdk install maven
+
+        # Show Maven using GraalVM JDK
+        - mvn --version
+
+        # Install GraalVM Native Image
+        - gu install native-image
+
+        # Check if Native Image was installed properly
+        - native-image --version
+
+        # Run GraalVM Native Image compilation of Spring Boot App
+        - mvn -Pnative clean package
+
+      name: "Native Image compile on Travis Host"
+
+    - script:
+        # Compile with Docker
+        - docker build . --tag=spring-boot-graal
+      name: "Native Image compile in Docker on Travis & Push to Heroku Container Registry"
+
+
 
 after_success:
-  - echo $TRAVIS_COMMIT > COMMIT
-
-  - export VERY_LATEST_COMMIT=`git describe --tags $(git rev-list --tags --max-count=1)`
-  - export LATEST_COMMIT_IN_BRANCH=`git describe --tags --abbrev=0`
-  - echo "Verbose info. Commit $TRAVIS_COMMIT, Very last tag (all branches) $VERY_LATEST_COMMIT, Last tag (in current branch) $LATEST_COMMIT_IN_BRANCH"
-  - export TAG=`if [ "$G_BRANCH" == "master" ]; then echo $LATEST_COMMIT_IN_BRANCH; else echo $VERY_LATEST_COMMIT; fi`
-  - echo $TAG > TAG
-
   - export D_REPO=${D_ORG}/${D_PROJECT}
-  - export G_TAG=`if [ "x$TRAVIS_TAG" == "x" ]; then echo "-"; else echo $TRAVIS_TAG; fi`
-  - echo "Verbose info. Build $T_BUILD. Git branch $G_BRANCH. Git Tag $G_TAG"
-  - export IS_TAG_BUILD=`if [ "$G_TAG" != "-" ]; then echo "yes"; else echo "no"; fi`
-
-  - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Building tagged build for tag $G_TAG" &&  docker build -t $D_REPO:$G_TAG .; fi
-  - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Logging in to Docker hub as $D_USER" && docker login -u $D_USER -p $D_PASS; fi
-  - if [ "$IS_TAG_BUILD" == "yes" ]; then echo "Pushing image to $D_REPO" && docker push $D_REPO && exit 0; fi
-
-  - export D_POINTER_TAG=`if [ "$G_BRANCH" == "master" ]; then echo "stable"; elif [ "$G_BRANCH" == "trunk" ]; then echo "latest"; else echo "$G_BRANCH-latest"; fi`
-  - echo "Building docker $D_REPO:travis-$T_BUILD"
-  - docker build -t $D_REPO:travis-$T_BUILD .
-  - echo "Adding additional pointer tag $D_REPO:$D_POINTER_TAG to travis-$T_BUILD"
-  - docker tag $D_REPO:travis-$T_BUILD $D_REPO:$D_POINTER_TAG
+  - docker tag $D_REPO:$D_TAG
 
   - echo "Logging in to Docker hub as $D_USER"
   - docker login -u $D_USER -p $D_PASS
