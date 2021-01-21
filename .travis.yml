@@ -41,11 +41,6 @@ jobs:
         - docker build . -f Dockerfile.graal --tag=$D_REPO:$D_TAG
       name: "Native Image compile on Travis Host"
 
-    - script:
-        # Compile with Docker
-        - docker build . -f Dockerfile.graal --tag=spring-boot-graal
-      name: "Native Image compile in Docker on Travis & Push to Heroku Container Registry"
-
 after_success:
   - export D_REPO=${D_ORG}/${D_PROJECT}
 
