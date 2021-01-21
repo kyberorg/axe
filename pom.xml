@@ -391,8 +391,10 @@
                         <configuration>
                             <buildArgs>-H:+ReportExceptionStackTraces
                                 -Dspring.native.verify=false
+                                -H:IncludeResourceBundles=javax.servlet.LocalStrings
                                 --initialize-at-build-time=org.apache.commons.logging.LogFactory
-                                -Dspring.graal.remove-unused-autoconfig=true -Dspring.graal.remove-yaml-support=true</buildArgs>
+                                -Dspring.graal.remove-unused-autoconfig=true -Dspring.graal.remove-yaml-support=true
+                            </buildArgs>
                             <imageName>${project.artifactId}</imageName>
                         </configuration>
                         <executions>
