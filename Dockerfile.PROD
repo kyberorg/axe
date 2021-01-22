@@ -11,7 +11,7 @@ ADD https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-a
 RUN sh -c 'chmod +x /docker-entrypoint.sh'
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y netcat curl jq && \
+    apt-get install -y haveged netcat curl jq && \
     apt -y autoremove && \
     rm -rf /var/lib/apt/lists/*
 

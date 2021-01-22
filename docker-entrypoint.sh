@@ -67,8 +67,4 @@ fi
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
 # End Issue 236 (Vaadin Production Mode) #
 
-# Issue 221 (Speed up startup) #
-export JAVA_OPTS="$JAVA_OPTS -XX:MaxMetaspaceSize=128m"
-# End Issue 221 (Speed up startup) #
-
 exec java ${JAVA_OPTS} -jar /app/yalsee.jar
