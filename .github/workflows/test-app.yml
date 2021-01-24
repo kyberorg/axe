@@ -1,4 +1,4 @@
-name: "Deploy draft"
+name: "Browser Automations Tests"
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
         required: false
 
 jobs:
-  deploy:
+  runTests:
     name: Browser Automations Tests
     runs-on: self-hosted
 
