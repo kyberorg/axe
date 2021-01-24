@@ -3,8 +3,8 @@ name: "Deploy draft"
 on: [push]
 
 jobs:
-  analyze:
-    name: Analyze
+  deploy:
+    name: Deploy Draft
     runs-on: self-hosted
 
     steps:
