@@ -17,6 +17,12 @@ jobs:
       - name: Complile
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
+     - name: Pass JAR to docker job
+       uses: actions/upload-artifact@v2
+       with:
+         name: yalsee.jar
+         path: target/yalsee.jar
+
   docker:
     name: Docker - build and push to DockerHub
     needs: build
@@ -28,6 +34,12 @@ jobs:
         with:
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_PASSWORD }}
+
+      - name: Download JAR
+        uses: actions/download-artifact@v2
+        with:
+          name: yalsee.jar
+          path: target/yalsee.jar
 
       - name: Build and push
         id: docker_build
