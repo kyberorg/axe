@@ -78,5 +78,17 @@ jobs:
         run:  mvn -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-${{ env.GITHUB_ACTION }} -Dapp.shortUrl=https://d.yls.ee -Dsurefire.rerunFailingTestsCount=2 clean test
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        uses: EnricoMi/publish-unit-test-result-action@v1.7
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Unit Test Results
+          comment_title: Unit Test Statistics
+          hide_comments: all but latest
+          comment_on_pr: true
+          test_changes_limit: 5
+          files: test-results/**/*.xml
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
+          check_run_annotations: all tests, skipped tests
 
