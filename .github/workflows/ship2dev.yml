@@ -87,7 +87,7 @@ jobs:
           hide_comments: all but latest
           comment_on_pr: true
           test_changes_limit: 5
-          files: test-results/**/*.xml
+          files: target/surefire-reports/**/*.xml
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
           check_run_annotations: all tests, skipped tests
