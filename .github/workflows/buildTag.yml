@@ -1,0 +1,39 @@
+name: "Build Tag"
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  buildTag:
+    name: Build Tag
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get the tag
+        run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
+
+      - name: Complile JAR
+        run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.HUB_USERNAME }}
+          password: ${{ secrets.HUB_PASSWORD }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: Dockerfile.PROD
+          push: true
+          tags: kyberorg/yalsee:$TAG
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
