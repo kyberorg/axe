@@ -28,7 +28,7 @@ public class AbnormalUsageTest extends SelenideTest {
     @Test
     public void extraArgumentsShouldBeIgnored() {
         final String EXTRA_ARGUMENT = "mineMetsa";
-        final String LINK_TO_SAVE = "https://vr.fi";
+        final String LINK_TO_SAVE = "https://github.com/kyberorg/yalsee/issues/322";
 
         open("/?" + EXTRA_ARGUMENT);
 
