@@ -6,7 +6,7 @@ on:
       - trunk
 
 jobs:
-  shipAndTest-Dev:
+  ship2dev:
     name: Ship
     runs-on: self-hosted
 
@@ -46,7 +46,7 @@ jobs:
         with:
           args: -X POST ${{ secrets.DEV_DEPLOY_HOOK }}
 
-      - name: Wait for deploy
+      - name: Wait for site appears online
         run: sleep 120
 
       - name: Test App
