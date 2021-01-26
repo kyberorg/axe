@@ -1,0 +1,42 @@
+name: "Ship to PROD"
+
+on:
+  release:
+
+jobs:
+  ship2prod:
+    name: Ship::PROD
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Complile JAR
+        run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.HUB_USERNAME }}
+          password: ${{ secrets.HUB_PASSWORD }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: Dockerfile.PROD
+          push: true
+          tags: kyberorg/yalsee:trunk
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Deploy
+        uses: wei/curl@master
+        with:
+          args: -X POST ${{ secrets.PROD_DEPLOY_HOOK }}
+
+      - name: Wait for site appears online
+        run: sleep 120
