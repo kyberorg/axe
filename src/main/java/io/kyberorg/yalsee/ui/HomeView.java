@@ -109,7 +109,7 @@ public class HomeView extends HorizontalLayout {
         linkCounter.setText(Long.toString(linksStored));
 
         input.setAutofocus(true);
-        input.setValueChangeMode(ValueChangeMode.TIMEOUT);
+        input.setValueChangeMode(ValueChangeMode.ON_BLUR);
         input.addValueChangeListener(event -> updateButtonState());
 
         mainArea.setVisible(true);
