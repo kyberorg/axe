@@ -3,7 +3,7 @@ name: "Build Tag"
 on:
   push:
     tags:
-      - *
+      - '*'
 
 jobs:
   buildTag:
