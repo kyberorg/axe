@@ -14,14 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Complile
+      - name: Complile JAR
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
-
-      - name: Pass JAR to docker job
-        uses: actions/upload-artifact@v2
-        with:
-          name: yalsee.jar
-          path: target/yalsee.jar
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -53,7 +47,7 @@ jobs:
         continue-on-error: true
         run:  mvn -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-${{ github.run_id }} -Dapp.shortUrl=https://d.yls.ee -Dsurefire.rerunFailingTestsCount=2 clean test
 
-      - name: Publish Screenshots of failing tests
+      - name: Publish Screenshots of failing tests, if any
         uses: actions/upload-artifact@v2
         continue-on-error: true
         with:
