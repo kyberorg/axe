@@ -53,6 +53,14 @@ jobs:
         continue-on-error: true
         run:  mvn -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-${{ env.GITHUB_ACTION }} -Dapp.shortUrl=https://d.yls.ee -Dsurefire.rerunFailingTestsCount=2 clean test
 
+      - name: Publish Screenshots of failing tests
+        uses: actions/upload-artifact@v2
+        if: failure()
+        continue-on-error: true
+        with:
+          name: failedTests
+          path: target/reports/**/*.png
+
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.7
         if: always()
@@ -67,4 +75,3 @@ jobs:
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
           check_run_annotations: all tests, skipped tests
-
