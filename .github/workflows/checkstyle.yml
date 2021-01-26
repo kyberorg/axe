@@ -29,5 +29,5 @@ jobs:
         with:
           checkstyle_config: checkstyle.xml
           reporter: 'github-pr-check'
-          tool_name: 'reviewdog'
+          tool_name: 'ReviewDog'
           fail_on_error: true
