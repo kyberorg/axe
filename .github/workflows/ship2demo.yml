@@ -61,7 +61,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Demo Unit Test Results
-          comment_title: Unit Test Statistics
+          comment_title: Demo Unit Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
           test_changes_limit: 5
