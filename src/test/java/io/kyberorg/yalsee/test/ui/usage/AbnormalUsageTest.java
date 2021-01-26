@@ -28,11 +28,11 @@ public class AbnormalUsageTest extends SelenideTest {
     @Test
     public void extraArgumentsShouldBeIgnored() {
         final String EXTRA_ARGUMENT = "mineMetsa";
-        final String LINK_TO_SAVE = "https://vr.fi";
+        final String linkToSave = "https://github.com/kyberorg/yalsee/issues/322";
 
         open("/?" + EXTRA_ARGUMENT);
 
-        HomePageObject.pasteValueInFormAndSubmitIt(LINK_TO_SAVE);
+        HomePageObject.pasteValueInFormAndSubmitIt(linkToSave);
 
         HomePageObject.ResultArea.RESULT_LINK.shouldNotBe(empty);
         HomePageObject.ResultArea.RESULT_LINK.shouldNotHave(text(EXTRA_ARGUMENT));
