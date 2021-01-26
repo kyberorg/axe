@@ -1,4 +1,4 @@
-name: "Ship to Dev System"
+name: "Ship and Test - Dev"
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - trunk
 
 jobs:
-  build:
-    name: Build JAR
+  shipAndTest-Dev:
+    name: Ship and Test to Dev
     runs-on: self-hosted
 
     steps:
@@ -23,23 +23,11 @@ jobs:
           name: yalsee.jar
           path: target/yalsee.jar
 
-  docker:
-    name: Docker - build and push to DockerHub
-    needs: build
-    runs-on: self-hosted
-
-    steps:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_PASSWORD }}
-
-      - name: Download JAR
-        uses: actions/download-artifact@v2
-        with:
-          name: yalsee.jar
-          path: target/yalsee.jar
 
       - name: Build and push
         id: docker_build
@@ -53,12 +41,6 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-  deploy:
-    name: Deploy image to Dev
-    needs: [build, docker]
-    runs-on: self-hosted
-
-    steps:
       - name: Deploy
         uses: wei/curl@master
         with:
@@ -67,12 +49,6 @@ jobs:
       - name: Wait for deploy
         run: sleep 120
 
-  testApp:
-    name: Run Application Automatic Tests
-    needs: [build, docker, deploy]
-    runs-on: self-hosted
-
-    steps:
       - name: Test App
         continue-on-error: true
         run:  mvn -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-${{ env.GITHUB_ACTION }} -Dapp.shortUrl=https://d.yls.ee -Dsurefire.rerunFailingTestsCount=2 clean test
