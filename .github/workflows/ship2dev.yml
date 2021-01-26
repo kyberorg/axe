@@ -7,7 +7,7 @@ on:
 
 jobs:
   shipAndTest-Dev:
-    name: Ship and Test to Dev
+    name: Ship
     runs-on: self-hosted
 
     steps:
