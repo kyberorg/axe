@@ -7,7 +7,7 @@ on:
 
 jobs:
   ship2dev:
-    name: Ship
+    name: Ship::Dev
     runs-on: self-hosted
 
     steps:
@@ -60,7 +60,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Unit Test Results
+          check_name: Dev Unit Test Results
           comment_title: Unit Test Statistics
           hide_comments: all but latest
           comment_on_pr: true

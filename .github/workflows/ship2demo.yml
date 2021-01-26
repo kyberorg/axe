@@ -7,7 +7,7 @@ on:
 
 jobs:
   ship2demo:
-    name: Ship
+    name: Ship::Demo
     runs-on: self-hosted
 
     steps:
@@ -45,7 +45,7 @@ jobs:
 
       - name: Test App
         continue-on-error: true
-        run:  mvn -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-${{ github.run_id }} -Dapp.shortUrl=https://q.yls.ee -Dsurefire.rerunFailingTestsCount=2 clean test
+        run:  mvn -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-${{ github.run_id }} -Dapp.shortUrl=https://q.yls.ee -Dsurefire.rerunFailingTestsCount=3 clean test
 
       - name: Publish Screenshots of failing tests, if any
         uses: actions/upload-artifact@v2
@@ -60,7 +60,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Unit Test Results
+          check_name: Demo Unit Test Results
           comment_title: Unit Test Statistics
           hide_comments: all but latest
           comment_on_pr: true
