@@ -40,8 +40,8 @@ jobs:
           java-version: '11'
           architecture: x64
 
-      - name: Adjust Maven Settings
-        uses: s4u/maven-settings-action@v2.3.0
+      #- name: Adjust Maven Settings
+      #  uses: s4u/maven-settings-action@v2.3.0
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
