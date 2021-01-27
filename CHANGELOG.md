@@ -1,3 +1,16 @@
+### Version 3.0.1 (27/01/2021)
+Security and Ops
+
+* Release-free deploy: `trunk` goes to `PROD` (#309)
+* Migrated to GitHub Actions with self-hosted runner (#307) (#320)
+* Reduced start-up to 20-25 seconds (#221)
+* Implemented Security policy in `SECURITY.md` (#283)
+* CodeQL tests code for security issues (#283)
+* Fixed long URL input behavior which led to flaky test (#322)  
+* CheckStyle Action test code style (#304)  
+* Bump APM Agent to `1.20` (#302)
+* Updated codacy badge (#311)
+
 ### Version 3.0 (13/01/2021)
 Yals -> Yalsee
 
