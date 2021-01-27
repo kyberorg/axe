@@ -131,6 +131,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("theme-color", "#ffffff");
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
+        //TODO replace it with value from Spring profile
+        settings.addInlineFromFile("gtag.dev.html", InitialPageSettings.WrapMode.NONE);
     }
 
     public static class IDs {
