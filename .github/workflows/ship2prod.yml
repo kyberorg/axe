@@ -1,7 +1,9 @@
 name: "Ship to PROD"
 
 on:
-  release:
+  push:
+    branches:
+      - trunk
 
 jobs:
   ship2prod:
