@@ -15,19 +15,20 @@ See [CONTRIBUTING.md](CONTRIBUTING.md)
 ## About: Git Branches, Tags and Releases
 | Branch    | Docker Tag     | Deploy Destination  |
 |-----------|----------------|---------------------|
-| trunk     | latest         | demo                |
-| (tag)     | (tag name)     | PROD                |
+| trunk     | trunk          | PROD                |
+| (PR)      | RC             | demo                |
+| (tag)     | (tag name)     | -                   |
 | any other | dev/custom tag | dev                 | 
 
 ### Trunk
 Considered as default branch.
 Should always be stable. 
+Deploys to Production
 
 ### Tags
-Build manually. Deploy Destination selected by user. By design, we use tags for Releases.
+Build manually. By design, I use tags for Releases aka Milestones.
 
 ### Other branches aka features
 * Always start from trunk branch.
 * Uses `dev` docker tag, unless custom (or branch named) tag provided.
 * Deploy destination = dev server
- 
