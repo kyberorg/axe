@@ -60,7 +60,7 @@ public class AppInfoPageTest extends SelenideTest {
     @Test
     public void publicAreaHasInfoAboutGoogleAnalytics() {
         TestEnv testedEnv = TestUtils.getTestEnv();
-        if(testedEnv.isGoogleAnalyticsEnabled()) {
+        if (testedEnv.isGoogleAnalyticsEnabled()) {
             GOOGLE_ANALYTICS_BANNER.should(exist);
             GOOGLE_ANALYTICS_BANNER.shouldBe(visible);
             GOOGLE_ANALYTICS_BANNER.shouldHave(text("Google Analytics"));

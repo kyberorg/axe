@@ -86,9 +86,9 @@ public class AppInfoView extends VerticalLayout {
         publicArea.setWidthFull();
         publicArea.add(versionRaw);
 
-        if(appUtils.isGoogleAnalyticsEnabled()) {
-            Span googleAnalyticsBanner = new Span("This site uses Google Analytics for statistics only. " +
-                    "We respect privacy and DNT (Do Not Track) header");
+        if (appUtils.isGoogleAnalyticsEnabled()) {
+            Span googleAnalyticsBanner = new Span("This site uses Google Analytics for statistics only. "
+                    + "We respect privacy and DNT (Do Not Track) header");
             googleAnalyticsBanner.setId(IDs.GOOGLE_ANALYTICS_BANNER);
             publicArea.add(googleAnalyticsBanner);
         }
