@@ -134,7 +134,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("theme-color", "#ffffff");
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
-        if(appUtils.isGoogleAnalyticsEnabled()) {
+        if (appUtils.isGoogleAnalyticsEnabled()) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
     }
