@@ -52,7 +52,7 @@ public class AppInfoView extends VerticalLayout {
     private void init() {
         setId(IDs.VIEW_ID);
 
-        HorizontalLayout publicInfoArea = publicInfoArea();
+        VerticalLayout publicInfoArea = publicInfoArea();
         add(publicInfoArea);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
@@ -61,8 +61,9 @@ public class AppInfoView extends VerticalLayout {
         }
     }
 
-    private HorizontalLayout publicInfoArea() {
-        HorizontalLayout publicArea = new HorizontalLayout();
+    private VerticalLayout publicInfoArea() {
+        VerticalLayout publicArea = new VerticalLayout();
+        HorizontalLayout versionRaw = new HorizontalLayout();
         publicArea.setId(IDs.PUBLIC_INFO_AREA);
 
         String latestTag = gitService.getLatestTag();
@@ -79,8 +80,11 @@ public class AppInfoView extends VerticalLayout {
         Span version = new Span(versionStart, commit, versionEnd);
         version.setId(IDs.VERSION);
 
+        versionRaw.setWidthFull();
+        versionRaw.add(version);
+
         publicArea.setWidthFull();
-        publicArea.add(version);
+        publicArea.add(versionRaw);
 
         if(appUtils.isGoogleAnalyticsEnabled()) {
             Span googleAnalyticsBanner = new Span("This site uses Google Analytics for statistics only. " +
