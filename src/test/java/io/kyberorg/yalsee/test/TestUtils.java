@@ -168,6 +168,15 @@ public class TestUtils {
     }
 
     /**
+     * Provides current test environment. Based on test url.
+     *
+     * @return env, based on {@link TestApp.Properties#TEST_URL} property. Default {@link TestEnv#LOCAL}
+     */
+    public static TestEnv getTestEnv() {
+        return TestEnv.getByTestUrl(getTestUrl());
+    }
+
+    /**
      * Following needed because in may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'

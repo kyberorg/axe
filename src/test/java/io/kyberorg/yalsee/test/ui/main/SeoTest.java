@@ -1,5 +1,7 @@
 package io.kyberorg.yalsee.test.ui.main;
 
+import io.kyberorg.yalsee.test.TestEnv;
+import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +22,18 @@ public class SeoTest extends SelenideTest {
 
     @Test
     public void correctGoogleAnalyticsScriptLoadedAndHidden() {
-        GOOGLE_ANALYTICS_CONTROL_SPAN.should(exist);
+        TestEnv testEnv = TestUtils.getTestEnv();
+        if(testEnv.isGoogleAnalyticsEnabled()) {
+            GOOGLE_ANALYTICS_CONTROL_SPAN.should(exist);
 
-        GOOGLE_ANALYTICS_CONTROL_SPAN.shouldNotBe(visible);
-        GOOGLE_ANALYTICS_CONTROL_SPAN.shouldHave(attribute("aria-hidden","true"));
+            GOOGLE_ANALYTICS_CONTROL_SPAN.shouldNotBe(visible);
+            GOOGLE_ANALYTICS_CONTROL_SPAN
+                    .shouldHave(attribute("aria-hidden", "true"));
 
-        //TODO value has hardcoded html name, change it with TestEnv enum/class jne, which provides per env based info
-        GOOGLE_ANALYTICS_CONTROL_SPAN.shouldHave(attribute("aria-valuetext","gtag.dev.html"));
+            GOOGLE_ANALYTICS_CONTROL_SPAN
+                    .shouldHave(attribute("aria-valuetext", testEnv.getGoogleAnalyticsFileName()));
+        } else {
+            GOOGLE_ANALYTICS_CONTROL_SPAN.shouldNot(exist);
+        }
     }
 }
