@@ -46,6 +46,8 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
 
+    private final AppUtils appUtils;
+
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
@@ -55,6 +57,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
      * @param appUtils application utils for determine dev mode
      */
     public MainView(final AppUtils appUtils) {
+        this.appUtils = appUtils;
 
         String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
 
@@ -131,6 +134,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("theme-color", "#ffffff");
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
+        if (appUtils.isGoogleAnalyticsEnabled()) {
+            settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
+        }
     }
 
     public static class IDs {

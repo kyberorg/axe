@@ -16,5 +16,6 @@ public class AppInfoPageObject {
         public static final SelenideElement PUBLIC_INFO_AREA = $("#" + AppInfoView.IDs.PUBLIC_INFO_AREA);
         public static final SelenideElement VERSION = $("#" + AppInfoView.IDs.VERSION);
         public static final SelenideElement COMMIT_LINK = $("#" + AppInfoView.IDs.COMMIT_LINK);
+        public static final SelenideElement GOOGLE_ANALYTICS_BANNER = $("#" + AppInfoView.IDs.GOOGLE_ANALYTICS_BANNER);
     }
 }

@@ -337,6 +337,24 @@ public class AppUtils {
         component.getElement().setProperty(HTML_MODE, stringWithHtml);
     }
 
+    /**
+     * Provides Google Analytics configuration for running environment.
+     *
+     * @return true - if Google Analytics enabled, false if not.
+     */
+    public boolean isGoogleAnalyticsEnabled() {
+        return Boolean.parseBoolean(getEnv().getProperty(App.Properties.GA_ENABLED));
+    }
+
+    /**
+     * Provides filename of html, where Google Analytics stored.
+     *
+     * @return string with filename and extension read from env
+     */
+    public String getGoggleAnalyticsFileName() {
+        return getEnv().getProperty(App.Properties.GA_FILE);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;
