@@ -41,6 +41,8 @@ public final class App {
         public static final String DEV_MODE = "app.devMode";
         public static final String APP_SITE_TITLE = "app.site-title";
         public static final String SHORT_DOMAIN = "app.shortDomain";
+        public static final String GA_ENABLED = "app.seo.ga.enabled";
+        public static final String GA_FILE = "app.seo.ga.file";
     }
 
     public static class Env {

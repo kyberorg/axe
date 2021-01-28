@@ -34,5 +34,15 @@
       "name": "app.shortDomain",
       "type": "java.lang.String",
       "description": "Short url domain used for links."
+    },
+    {
+      "name": "app.seo.ga.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables/Disables Google Analytics."
+    },
+    {
+      "name": "app.seo.ga.file",
+      "type": "java.lang.String",
+      "description": "Google Analytics file name. Has no effect when app.seo.ga.enabled set to false."
     }
   ] }

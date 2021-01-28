@@ -337,6 +337,14 @@ public class AppUtils {
         component.getElement().setProperty(HTML_MODE, stringWithHtml);
     }
 
+    public boolean isGoogleAnalyticsEnabled() {
+        return Boolean.parseBoolean(getEnv().getProperty(App.Properties.GA_ENABLED));
+    }
+
+    public String getGoggleAnalyticsFileName() {
+        return getEnv().getProperty(App.Properties.GA_FILE);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;
