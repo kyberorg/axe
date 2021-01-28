@@ -80,8 +80,14 @@ public class AppInfoView extends VerticalLayout {
         version.setId(IDs.VERSION);
 
         publicArea.setWidthFull();
-
         publicArea.add(version);
+
+        if(appUtils.isGoogleAnalyticsEnabled()) {
+            Span googleAnalyticsBanner = new Span("This site uses Google Analytics for statistics only. " +
+                    "We respect privacy and DNT (Do Not Track) header");
+            googleAnalyticsBanner.setId(IDs.GOOGLE_ANALYTICS_BANNER);
+            publicArea.add(googleAnalyticsBanner);
+        }
 
         return publicArea;
     }
@@ -115,5 +121,6 @@ public class AppInfoView extends VerticalLayout {
         public static final String VERSION = "version";
         public static final String COMMIT_LINK = "commitLink";
         public static final String DEV_INFO_AREA = "devInfoArea";
+        public static final String GOOGLE_ANALYTICS_BANNER = "googleAnalyticsBanner";
     }
 }

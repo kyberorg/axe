@@ -1,5 +1,7 @@
 package io.kyberorg.yalsee.test.ui.appinfo;
 
+import io.kyberorg.yalsee.test.TestEnv;
+import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +18,11 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  * @since 2.7
  */
 @SpringBootTest
-public class PublicInfoTest extends SelenideTest {
+public class AppInfoPageTest extends SelenideTest {
 
+    /**
+     * Test setup.
+     */
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
@@ -25,12 +30,18 @@ public class PublicInfoTest extends SelenideTest {
         waitForVaadin();
     }
 
+    /**
+     * Tests if public area is exists and visible.
+     */
     @Test
     public void publicAreaIsVisible() {
         PUBLIC_INFO_AREA.should(exist);
         PUBLIC_INFO_AREA.shouldBe(visible);
     }
 
+    /**
+     * Tests if public area has all elements that required to be.
+     */
     @Test
     public void publicAreaHasAllRequiredElements() {
         VERSION.shouldBe(visible);
@@ -40,7 +51,22 @@ public class PublicInfoTest extends SelenideTest {
         COMMIT_LINK.shouldBe(visible);
         COMMIT_LINK.shouldNotBe(empty);
         COMMIT_LINK.shouldHave(attribute("href"));
+    }
 
+    /**
+     * Tests if Google Analytics Banner if Google Analytics enabled for tested env,
+     * or absent if disabled.
+     */
+    @Test
+    public void publicAreaHasInfoAboutGoogleAnalytics() {
+        TestEnv testedEnv = TestUtils.getTestEnv();
+        if(testedEnv.isGoogleAnalyticsEnabled()) {
+            GOOGLE_ANALYTICS_BANNER.should(exist);
+            GOOGLE_ANALYTICS_BANNER.shouldBe(visible);
+            GOOGLE_ANALYTICS_BANNER.shouldHave(text("Google Analytics"));
+        } else {
+            GOOGLE_ANALYTICS_BANNER.shouldNot(exist);
+        }
     }
 
 }
