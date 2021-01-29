@@ -250,7 +250,7 @@ public class TechPartsTest extends UnirestTest {
     }
 
     /**
-     * Tests that link to Sitemap in robots.txt is valid (has word 'Sitemap' and points to correct location)
+     * Tests that link to Sitemap in robots.txt is valid (has word 'Sitemap' and points to correct location).
      */
     @Test
     public void sitemapLinkInRobotsTxtIsValid() {

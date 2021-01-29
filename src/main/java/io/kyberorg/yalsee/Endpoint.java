@@ -110,8 +110,9 @@ public final class Endpoint {
          * Application icon.
          */
         public static final String FAVICON_ICO = "/favicon.ico";
+
         /**
-         * Sitemap, which is needed for good SEO
+         * Sitemap, which is needed for good SEO.
          */
         public static final String SITEMAP_XML = "/sitemap.xml";
 
