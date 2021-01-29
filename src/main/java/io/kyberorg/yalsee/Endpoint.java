@@ -114,6 +114,10 @@ public final class Endpoint {
          * Application offline page.
          */
         public static final String APP_OFFLINE_PAGE = "app-offline.html";
+        /**
+         * Sitemap, which is needed for good SEO
+         */
+        public static final String SITEMAP_XML = "sitemap.xml";
     }
 
     /**
