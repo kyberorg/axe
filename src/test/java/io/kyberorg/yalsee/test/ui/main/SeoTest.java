@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MainViewPageObject.GOOGLE_ANALYTICS_CONTROL_SPAN;
 
@@ -48,5 +49,24 @@ public class SeoTest extends SelenideTest {
         } else {
             GOOGLE_ANALYTICS_CONTROL_SPAN.shouldNot(exist);
         }
+    }
+
+    /**
+     * Checks if we have meta needed meta.
+     */
+    @Test
+    public void hasNeededMetaTags() {
+        $("meta[name='title']").should(exist);
+        $("meta[name='description']").should(exist);
+        $("meta[name='og:type']").should(exist);
+        $("meta[name='og:url']").should(exist);
+        $("meta[name='og:title']").should(exist);
+        $("meta[name='og:image']").should(exist);
+        $("meta[name='twitter:card']").should(exist);
+        $("meta[name='twitter:url']").should(exist);
+        $("meta[name='twitter:title']").should(exist);
+        $("meta[name='twitter:description']").should(exist);
+        $("meta[name='twitter:image']").should(exist);
+
     }
 }

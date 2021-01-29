@@ -43,6 +43,7 @@ public final class App {
         public static final String SHORT_DOMAIN = "app.shortDomain";
         public static final String GA_ENABLED = "app.seo.ga.enabled";
         public static final String GA_FILE = "app.seo.ga.file";
+        public static final String CRAWLERS_ALLOWED = "app.seo.robots.crawl-allowed";
     }
 
     public static class Env {

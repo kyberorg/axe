@@ -355,6 +355,15 @@ public class AppUtils {
         return getEnv().getProperty(App.Properties.GA_FILE);
     }
 
+    /**
+     * Allow/Disallow crawlers (search engine bots), based on profile settings.
+     *
+     * @return true - if crawlers should be allow, false - elsewhere
+     */
+    public boolean areCrawlersAllowed() {
+        return Boolean.parseBoolean(getEnv().getProperty(App.Properties.CRAWLERS_ALLOWED));
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

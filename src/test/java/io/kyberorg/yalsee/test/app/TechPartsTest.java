@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.test.TestUtils;
@@ -12,8 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import static io.kyberorg.yalsee.constants.HttpCode.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Testing Tech Parts and other non-standard locations
@@ -208,5 +208,79 @@ public class TechPartsTest extends UnirestTest {
         assertTrue(StringUtils.isNotBlank(body), "favicon.ico is empty");
         //in Spring boot 2.2 favicon transferred without Content-Type Header, so we have to check Content-Length instead
         TestUtils.assertContentNotEmpty(result);
+    }
+
+    /**
+     * Tests that Sitemap is present and XML.
+     */
+    @Test
+    public void sitemapXmlIsPresentAndXml() {
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.SITEMAP_XML);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        log.debug("Response: {}", result);
+        if (result == null) return;
+
+        assertEquals(STATUS_200, result.getStatus());
+
+        String body = result.getBody();
+        assertTrue(StringUtils.isNotBlank(body), "sitemap.xml is empty");
+        TestUtils.assertContentType(MimeType.APPLICATION_XML, result);
+    }
+
+    /**
+     * Tests that robots.txt has link to Sitemap file.
+     */
+    @Test
+    public void robotsTxtHasSitemapLink() {
+        String[] bodyLineByLine = readRobotsLineByLine();
+        assertNotNull(bodyLineByLine, "Failed to read robots.txt");
+
+        String siteMapLine = null;
+        for (String line: bodyLineByLine) {
+           if (line.contains("Sitemap")) {
+               siteMapLine = line;
+               break;
+           }
+        }
+
+        assertNotNull(siteMapLine, "No sitemap line found in robots.txt");
+    }
+
+    /**
+     * Tests that link to Sitemap in robots.txt is valid (has word 'Sitemap' and points to correct location).
+     */
+    @Test
+    public void sitemapLinkInRobotsTxtIsValid() {
+        String[] bodyLineByLine = readRobotsLineByLine();
+        assertNotNull(bodyLineByLine, "Failed to read robots.txt");
+
+        String siteMapLine = null;
+        for (String line: bodyLineByLine) {
+            if (line.contains("Sitemap")) {
+                siteMapLine = line;
+                break;
+            }
+        }
+
+        assertNotNull(siteMapLine, "No sitemap line found in robots.txt");
+        assertTrue(siteMapLine.contains("sitemap.xml"),
+                "Sitemap line is invalid: points to wrong location: " + siteMapLine);
+        assertTrue(siteMapLine.contains(TEST_URL), "Sitemap line doesn't point to Test App URL");
+    }
+
+    private String[] readRobotsLineByLine() {
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.ROBOTS_TXT);
+        HttpResponse<String> result = request.asString();
+
+        log.debug("Response: {}", result);
+        if (result == null) return null;
+
+        assertEquals(STATUS_200, result.getStatus());
+
+        String body = result.getBody();
+        return body.split(App.NEW_LINE);
     }
 }

@@ -110,6 +110,12 @@ public final class Endpoint {
          * Application icon.
          */
         public static final String FAVICON_ICO = "/favicon.ico";
+
+        /**
+         * Sitemap, which is needed for good SEO.
+         */
+        public static final String SITEMAP_XML = "/sitemap.xml";
+
         /**
          * Application offline page.
          */
@@ -143,6 +149,11 @@ public final class Endpoint {
          * Server Error Loopback View. Intended to be used only within {@link ServerErrorView}.
          */
         public static final String SERVER_ERROR_LOOP = "server-error-loop";
+
+        /**
+         * Site Preview image for SEO.
+         */
+        public static final String PREVIEW_IMAGE = "/preview.png";
     }
 
     /**

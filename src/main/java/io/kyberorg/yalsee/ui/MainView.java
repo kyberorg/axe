@@ -23,6 +23,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -122,6 +123,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
     @Override
     public void configurePage(final InitialPageSettings settings) {
+        String title = "Yalsee - the link shortener";
+        String description = "The free URL shortener for making long and ugly links into short URLs"
+                + " that are easy to share and use.";
+
+        String previewImage = appUtils.getServerUrl() + Endpoint.TNT.PREVIEW_IMAGE;
+
         settings.addFavIcon("icon", "/icons/favicon-32x32.png", "32x32");
         settings.addLink("shortcut icon", "/icons/favicon-16x16.png");
         settings.addLink("apple-touch-icon", "/icons/apple-touch-icon.png");
@@ -132,6 +139,22 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("application-name", "yalsee");
         settings.addMetaTag("msapplication-TileColor", "#ffc40d");
         settings.addMetaTag("theme-color", "#ffffff");
+
+        //SEO Tags
+        settings.addMetaTag("title", title);
+        settings.addMetaTag("description", description);
+
+        settings.addMetaTag("og:type", "website");
+        settings.addMetaTag("og:url", appUtils.getServerUrl());
+        settings.addMetaTag("og:title", title);
+        settings.addMetaTag("og:description", description);
+        settings.addMetaTag("og:image", previewImage);
+
+        settings.addMetaTag("twitter:card", "summary_large_image");
+        settings.addMetaTag("twitter:url", appUtils.getServerUrl());
+        settings.addMetaTag("twitter:title", title);
+        settings.addMetaTag("twitter:description", description);
+        settings.addMetaTag("twitter:image", previewImage);
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
         if (appUtils.isGoogleAnalyticsEnabled()) {
