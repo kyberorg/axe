@@ -229,16 +229,8 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void robotsTxtHasSitemapLink() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.ROBOTS_TXT);
-        HttpResponse<String> result = request.asString();
-
-        log.debug("Response: {}", result);
-        if (result == null) return;
-
-        assertEquals(STATUS_200, result.getStatus());
-
-        String body = result.getBody();
-        String[] bodyLineByLine = body.split(App.NEW_LINE);
+        String[] bodyLineByLine = readRobotsLineByLine();
+        assertNotNull(bodyLineByLine, "Failed to read robots.txt");
 
         String siteMapLine = null;
         for (String line: bodyLineByLine) {
@@ -253,16 +245,8 @@ public class TechPartsTest extends UnirestTest {
 
     @Test
     public void sitemapLinkInRobotsTxtIfValid() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.ROBOTS_TXT);
-        HttpResponse<String> result = request.asString();
-
-        log.debug("Response: {}", result);
-        if (result == null) return;
-
-        assertEquals(STATUS_200, result.getStatus());
-
-        String body = result.getBody();
-        String[] bodyLineByLine = body.split(App.NEW_LINE);
+        String[] bodyLineByLine = readRobotsLineByLine();
+        assertNotNull(bodyLineByLine, "Failed to read robots.txt");
 
         String siteMapLine = null;
         for (String line: bodyLineByLine) {
@@ -276,5 +260,18 @@ public class TechPartsTest extends UnirestTest {
         assertTrue(siteMapLine.contains("sitemap.xml"),
                 "Sitemap line is invalid: points to wrong location: " + siteMapLine);
         assertTrue(siteMapLine.contains(TEST_URL), "Sitemap line doesn't point to Test App URL");
+    }
+
+    private String[] readRobotsLineByLine() {
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.ROBOTS_TXT);
+        HttpResponse<String> result = request.asString();
+
+        log.debug("Response: {}", result);
+        if (result == null) return null;
+
+        assertEquals(STATUS_200, result.getStatus());
+
+        String body = result.getBody();
+        return body.split(App.NEW_LINE);
     }
 }

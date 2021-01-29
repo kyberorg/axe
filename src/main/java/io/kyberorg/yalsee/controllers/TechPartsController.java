@@ -5,6 +5,7 @@ import com.redfin.sitemapgenerator.ChangeFreq;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.utils.AppUtils;
 import org.springframework.stereotype.Controller;
@@ -74,8 +75,20 @@ public class TechPartsController {
 
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.ROBOTS_TXT, produces = MimeType.TEXT_PLAIN)
     public @ResponseBody String getRobotsTxt() {
-        //FIXME impl
-        return "";
+        StringBuilder builder = new StringBuilder();
+        builder.append("User-agent: ").append("*").append(App.NEW_LINE);
+        builder.append("Crawl-delay: ").append("1000").append(App.NEW_LINE);
+
+        if (appUtils.areCrawlersAllowed()) {
+            builder.append("Allow: ");
+        } else {
+           builder.append("Disallow: ");
+        }
+        builder.append("/").append(App.NEW_LINE);
+
+        builder.append("Disallow: ").append("/vaadinServlet/").append(App.NEW_LINE);
+        builder.append("Sitemap: ").append(appUtils.getServerUrl()).append(Endpoint.Static.SITEMAP_XML);
+        return builder.toString();
     }
 
 }

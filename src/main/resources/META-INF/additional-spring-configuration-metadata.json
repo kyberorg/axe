@@ -44,5 +44,10 @@
       "name": "app.seo.ga.file",
       "type": "java.lang.String",
       "description": "Google Analytics file name. Has no effect when app.seo.ga.enabled set to false."
+    },
+    {
+      "name": "app.seo.robots.crawl-allowed",
+      "type": "java.lang.Boolean",
+      "description": "Defines if search engine crawlers are allowed to crawl site."
     }
   ] }

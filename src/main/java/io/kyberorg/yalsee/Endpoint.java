@@ -111,13 +111,14 @@ public final class Endpoint {
          */
         public static final String FAVICON_ICO = "/favicon.ico";
         /**
+         * Sitemap, which is needed for good SEO
+         */
+        public static final String SITEMAP_XML = "/sitemap.xml";
+
+        /**
          * Application offline page.
          */
         public static final String APP_OFFLINE_PAGE = "app-offline.html";
-        /**
-         * Sitemap, which is needed for good SEO
-         */
-        public static final String SITEMAP_XML = "sitemap.xml";
     }
 
     /**
