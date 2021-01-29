@@ -148,6 +148,11 @@ public final class Endpoint {
          * Server Error Loopback View. Intended to be used only within {@link ServerErrorView}.
          */
         public static final String SERVER_ERROR_LOOP = "server-error-loop";
+
+        /**
+         * Site Preview image for SEO.
+         */
+        public static final String PREVIEW_IMAGE = "/preview.png";
     }
 
     /**
