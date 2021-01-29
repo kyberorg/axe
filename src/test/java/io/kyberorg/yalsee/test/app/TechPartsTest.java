@@ -210,6 +210,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentNotEmpty(result);
     }
 
+    /**
+     * Tests that Sitemap is present and XML.
+     */
     @Test
     public void sitemapXmlIsPresentAndXml() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.SITEMAP_XML);
@@ -227,6 +230,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_XML, result);
     }
 
+    /**
+     * Tests that robots.txt has link to Sitemap file.
+     */
     @Test
     public void robotsTxtHasSitemapLink() {
         String[] bodyLineByLine = readRobotsLineByLine();
@@ -234,29 +240,32 @@ public class TechPartsTest extends UnirestTest {
 
         String siteMapLine = null;
         for (String line: bodyLineByLine) {
-           if(line.contains("Sitemap")) {
+           if (line.contains("Sitemap")) {
                siteMapLine = line;
                break;
            }
         }
 
-        assertNotNull(siteMapLine,"No sitemap line found in robots.txt");
+        assertNotNull(siteMapLine, "No sitemap line found in robots.txt");
     }
 
+    /**
+     * Tests that link to Sitemap in robots.txt is valid (has word 'Sitemap' and points to correct location)
+     */
     @Test
-    public void sitemapLinkInRobotsTxtIfValid() {
+    public void sitemapLinkInRobotsTxtIsValid() {
         String[] bodyLineByLine = readRobotsLineByLine();
         assertNotNull(bodyLineByLine, "Failed to read robots.txt");
 
         String siteMapLine = null;
         for (String line: bodyLineByLine) {
-            if(line.contains("Sitemap")) {
+            if (line.contains("Sitemap")) {
                 siteMapLine = line;
                 break;
             }
         }
 
-        assertNotNull(siteMapLine,"No sitemap line found in robots.txt");
+        assertNotNull(siteMapLine, "No sitemap line found in robots.txt");
         assertTrue(siteMapLine.contains("sitemap.xml"),
                 "Sitemap line is invalid: points to wrong location: " + siteMapLine);
         assertTrue(siteMapLine.contains(TEST_URL), "Sitemap line doesn't point to Test App URL");

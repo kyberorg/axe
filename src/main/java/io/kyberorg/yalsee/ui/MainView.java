@@ -124,8 +124,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     @Override
     public void configurePage(final InitialPageSettings settings) {
         String title = "Yalsee - the link shortener";
-        String description = "The free URL shortener for making long and ugly links into short URLs" +
-                " that are easy to share and use.";
+        String description = "The free URL shortener for making long and ugly links into short URLs"
+                + " that are easy to share and use.";
 
         String previewImage = appUtils.getServerUrl() + Endpoint.TNT.PREVIEW_IMAGE;
 

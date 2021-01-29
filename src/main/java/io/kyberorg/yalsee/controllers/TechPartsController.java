@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.util.Date;
 
+import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
+
 /**
  * Handles tech resources. Currently only Fail endpoint for tests.
  *
@@ -25,9 +27,16 @@ import java.util.Date;
 @Controller
 public class TechPartsController {
 
+    private static final double HIGH_PRIORITY = 1.0;
+    private static final double APP_INFO_PAGE_PRIORITY = 0.7;
     private final AppUtils appUtils;
 
-    public TechPartsController(AppUtils appUtils) {
+    /**
+     * Standard Spring constructor for Spring Boot autowiring.
+     *
+     * @param appUtils application utils
+     */
+    public TechPartsController(final AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 
@@ -48,24 +57,25 @@ public class TechPartsController {
      * @param response response object to write status to
      * @return string with generated XML
      */
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.SITEMAP_XML, produces = MimeType.APPLICATION_XML)
-    public @ResponseBody String getSitemap(HttpServletResponse response) {
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.SITEMAP_XML,
+            produces = MimeType.APPLICATION_XML)
+    public @ResponseBody String getSitemap(final HttpServletResponse response) {
         String baseUrl = appUtils.getServerUrl();
         WebSitemapGenerator sitemapGenerator;
 
         try {
             sitemapGenerator = new WebSitemapGenerator(baseUrl);
             WebSitemapUrl mainPage = new WebSitemapUrl.Options(baseUrl + "/" +  Endpoint.UI.HOME_PAGE)
-                    .lastMod(new Date()).priority(1.0).changeFreq(ChangeFreq.ALWAYS)
+                    .lastMod(new Date()).priority(HIGH_PRIORITY).changeFreq(ChangeFreq.ALWAYS)
                     .build();
 
             WebSitemapUrl appInfo = new WebSitemapUrl.Options(baseUrl + "/" + Endpoint.UI.APP_INFO_PAGE)
-                    .lastMod(new Date()).priority(0.7).changeFreq(ChangeFreq.WEEKLY)
+                    .lastMod(new Date()).priority(APP_INFO_PAGE_PRIORITY).changeFreq(ChangeFreq.WEEKLY)
                     .build();
 
             sitemapGenerator.addUrl(mainPage).addUrl(appInfo);
         } catch (MalformedURLException e) {
-            response.setStatus(500);
+            response.setStatus(STATUS_500);
             throw new RuntimeException("Server URL is unconfigured - cannot generate Sitemap.xml");
         }
 
@@ -73,6 +83,11 @@ public class TechPartsController {
         return Strings.join("", sitemapGenerator.writeAsStrings());
     }
 
+    /**
+     * Provides robots.txt in dynamic way.
+     *
+     * @return robots.txt content
+     */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.ROBOTS_TXT, produces = MimeType.TEXT_PLAIN)
     public @ResponseBody String getRobotsTxt() {
         StringBuilder builder = new StringBuilder();
