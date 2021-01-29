@@ -41,6 +41,12 @@ public class TechPartsController {
         throw new RuntimeException("I will always fail");
     }
 
+    /**
+     * Generates sitemap.xml dynamically.
+     *
+     * @param response response object to write status to
+     * @return string with generated XML
+     */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.SITEMAP_XML, produces = MimeType.APPLICATION_XML)
     public @ResponseBody String getSitemap(HttpServletResponse response) {
         String baseUrl = appUtils.getServerUrl();
@@ -65,4 +71,11 @@ public class TechPartsController {
         response.setContentType(MimeType.APPLICATION_XML);
         return Strings.join("", sitemapGenerator.writeAsStrings());
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.ROBOTS_TXT, produces = MimeType.TEXT_PLAIN)
+    public @ResponseBody String getRobotsTxt() {
+        //FIXME impl
+        return "";
+    }
+
 }
