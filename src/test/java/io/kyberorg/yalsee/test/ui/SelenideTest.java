@@ -100,8 +100,8 @@ public abstract class SelenideTest {
             commonInfoBuilder.append(String.format("Test URL: %s", BASE_URL)).append(App.NEW_LINE);
 
             if (runMode == TestApp.RunMode.GRID) {
-                commonInfoBuilder.append("Live Sessions: https://grid-ui.yadev.eu/#/").append(App.NEW_LINE);
-                commonInfoBuilder.append(String.format("TestVideo: https://grid-ui.yadev.eu/video/%s.mp4", BUILD_NAME))
+                commonInfoBuilder.append("Live Sessions: https://grid.kyberorg.io/#/").append(App.NEW_LINE);
+                commonInfoBuilder.append(String.format("TestVideo: https://grid.kyberorg.io/video/%s.mp4", BUILD_NAME))
                         .append(App.NEW_LINE);
             } else {
                 commonInfoBuilder.append(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY))
