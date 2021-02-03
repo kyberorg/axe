@@ -119,7 +119,7 @@ public final class Endpoint {
         /**
          * Application offline page.
          */
-        public static final String APP_OFFLINE_PAGE = "app-offline.html";
+        public static final String APP_OFFLINE_PAGE = "offline-page.html";
     }
 
     /**
