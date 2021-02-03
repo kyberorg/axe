@@ -16,12 +16,14 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Useful stuff for testing
+ * Useful stuff for testing.
  *
  * @since 2.0
  */
 public class TestUtils {
-
+    private TestUtils() {
+        throw new UnsupportedOperationException("Utility class");
+    }
     /**
      * Result contains JSON.
      *
@@ -104,7 +106,7 @@ public class TestUtils {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         final String localUrl;
 
-        if(StringUtils.isNotBlank(System.getProperty(TestApp.Properties.TEST_URL, ""))) {
+        if (StringUtils.isNotBlank(System.getProperty(TestApp.Properties.TEST_URL, ""))) {
             return System.getProperty(TestApp.Properties.TEST_URL);
         }
 
@@ -184,7 +186,7 @@ public class TestUtils {
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
      * @return string which contains content type without encoding
      */
-    private static String extractMime(String contentType) {
+    private static String extractMime(final String contentType) {
         assertNotNull(contentType);
 
         String[] contentTypeParts = contentType.split(";");
@@ -195,7 +197,7 @@ public class TestUtils {
         }
     }
 
-    private static boolean isValidErrorJson(HttpResponse<String> result) {
+    private static boolean isValidErrorJson(final HttpResponse<String> result) {
         String body = result.getBody();
         try {
             YalseeErrorJson errorJson = AppUtils.GSON.fromJson(body, YalseeErrorJson.class);

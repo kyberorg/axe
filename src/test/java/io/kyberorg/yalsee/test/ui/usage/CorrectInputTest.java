@@ -91,7 +91,12 @@ public class CorrectInputTest extends SelenideTest {
     @Test
     public void linkFromRussianWikipedia() {
         String link =
-                "https://ru.wikipedia.org/wiki/%D0%94%D0%B5%D0%BF%D0%BE%D1%80%D1%82%D0%B0%D1%86%D0%B8%D0%B8_%D0%B8%D0%B7_%D0%AD%D1%81%D1%82%D0%BE%D0%BD%D1%81%D0%BA%D0%BE%D0%B9_%D0%A1%D0%BE%D0%B2%D0%B5%D1%82%D1%81%D0%BA%D0%BE%D0%B9_%D0%A1%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B9_%D0%A0%D0%B5%D1%81%D0%BF%D1%83%D0%B1%D0%BB%D0%B8%D0%BA%D0%B8";
+                "https://ru.wikipedia.org/wiki/%D0%94%D0%B5%D0%BF%D0%BE%D1%80%D1%82%D0%B0%D1%86%D0%B8%D0%B8"
+                        + "_%D0%B8%D0%B7_%D0%AD%D1%81%D1%82%D0%BE%D0%BD%D1%81%D0%BA%D0%BE%D0%B9"
+                        + "_%D0%A1%D0%BE%D0%B2%D0%B5%D1%82%D1%81%D0%BA%D0%BE%D0%B9"
+                        + "_%D0%A1%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%"
+                        + "81%D0%BA%D0%BE%D0%B9"
+                        + "_%D0%A0%D0%B5%D1%81%D0%BF%D1%83%D0%B1%D0%BB%D0%B8%D0%BA%D0%B8";
         HomePageObject.pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
     }
@@ -101,7 +106,11 @@ public class CorrectInputTest extends SelenideTest {
      */
     @Test
     public void veryLongLinkFromFacebook() {
-        String link = "https://www.facebook.com/kallaskaja/?__cft__%5B0%5D=AZWCTMuD7IisNVDDgkRkbaKveUKUuFfnAXKNfKVON_JhRowIA8EJkAjmqU25goOf5OQFuUPLND19WYbO-njrGBA_xxRNkBUDwGqivdDx_bixKxXI7fq8rR9V_neqU3MkuB5OmNKJEPjsrMeTwMDLn2heVAIDHV176G6qhrzf1kZdlHZ0F2NdPRz3AceR4W64MtmgblwzwVCgribQ4sijefQl&__tn__=kC%2CP-R";
+        String link = "https://www.facebook.com/kallaskaja/"
+                + "?__cft__%5B0%5D=AZWCTMuD7IisNVDDgkRkbaKveUKUuFfnAXKNfKVON"
+                + "_JhRowIA8EJkAjmqU25goOf5OQFuUPLND19WYbO-njrGBA_xxRNkBUDwGqivdDx_bixKxXI7fq8rR9V"
+                + "_neqU3MkuB5OmNKJEPjsrMeTwMDLn2heVAIDHV176G6qhrzf1kZdlHZ0F2NdPRz3AceR4W64MtmgblwzwVCgrib"
+                + "Q4sijefQl&__tn__=kC%2CP-R";
         HomePageObject.pasteValueInFormAndSubmitIt(link);
         checkExpectedBehavior();
     }

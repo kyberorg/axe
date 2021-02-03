@@ -41,10 +41,10 @@ public class MainViewTest extends SelenideTest {
      */
     @Test
     public void logoShouldBeRounded() {
-        MainViewPageObject.LOGO.shouldHave(cssValue("border-top-left-radius","100%"));
-        MainViewPageObject.LOGO.shouldHave(cssValue("border-top-right-radius","100%"));
-        MainViewPageObject.LOGO.shouldHave(cssValue("border-bottom-left-radius","100%"));
-        MainViewPageObject.LOGO.shouldHave(cssValue("border-bottom-right-radius","100%"));
+        MainViewPageObject.LOGO.shouldHave(cssValue("border-top-left-radius", "100%"));
+        MainViewPageObject.LOGO.shouldHave(cssValue("border-top-right-radius", "100%"));
+        MainViewPageObject.LOGO.shouldHave(cssValue("border-bottom-left-radius", "100%"));
+        MainViewPageObject.LOGO.shouldHave(cssValue("border-bottom-right-radius", "100%"));
     }
 
     /**

@@ -21,12 +21,16 @@ import org.openqa.selenium.MutableCapabilities;
 @ExtendWith(ScreenShooterExtension.class) // automatically takes screenshot of every failed test
 @ExtendWith(TestWatcherExtension.class) // catching test results and logging results to System.out
 public abstract class SelenideTest {
-    private static final String REPORT_DIRECTORY = System.getProperty(TestApp.Properties.REPORT_DIR, TestApp.Defaults.Selenide.REPORT_DIR);
-    private static final String SELENIDE_BROWSER = System.getProperty(TestApp.Properties.Selenide.BROWSER, TestApp.Defaults.Selenide.BROWSER);
-    private static final long SELENIDE_TIMEOUT = Long.parseLong(System.getProperty(TestApp.Properties.Selenide.TIMEOUT, TestApp.Defaults.Selenide.TIMEOUT));
+    private static final String REPORT_DIRECTORY =
+            System.getProperty(TestApp.Properties.REPORT_DIR, TestApp.Defaults.Selenide.REPORT_DIR);
+    private static final String SELENIDE_BROWSER =
+            System.getProperty(TestApp.Properties.Selenide.BROWSER, TestApp.Defaults.Selenide.BROWSER);
+    private static final long SELENIDE_TIMEOUT =
+            Long.parseLong(System.getProperty(TestApp.Properties.Selenide.TIMEOUT, TestApp.Defaults.Selenide.TIMEOUT));
 
-    protected final static String BASE_URL = TestUtils.getTestUrl();
-    protected final static String APP_SHORT_URL = TestUtils.getAppShortUrl();
+    protected static final String BASE_URL = TestUtils.getTestUrl();
+    protected static final String APP_SHORT_URL = TestUtils.getAppShortUrl();
+    protected static final int EXTENDED_LOAD_TIMEOUT_SECONDS = 40;
 
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);

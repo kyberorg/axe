@@ -31,10 +31,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * Provides info about runner host name and host address.
  *
- * This is full copy of
- * https://raw.githubusercontent.com/SeleniumHQ/selenium/trunk/java/client/src/org/openqa/selenium/net/HostIdentifier.java
+ * This is full copy of https://yls.ee/siuOsi
  *
- * @since 2.8
+ * @since 2.7.6
  */
 public class HostIdentifier {
     private static final String HOST_NAME;

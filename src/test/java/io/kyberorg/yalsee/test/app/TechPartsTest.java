@@ -193,7 +193,7 @@ public class TechPartsTest extends UnirestTest {
     }
 
     /**
-     * Tests that robots.txt exists and content type is {@link MimeType#TEXT_PLAIN}
+     * Tests that robots.txt exists and content type is {@link MimeType#TEXT_PLAIN}.
      */
     @Test
     public void robotsTxtIsPresentAndText() {
@@ -213,7 +213,7 @@ public class TechPartsTest extends UnirestTest {
     }
 
     /**
-     * Tests that humans.txt exists and content type is {@link MimeType#TEXT_PLAIN}
+     * Tests that humans.txt exists and content type is {@link MimeType#TEXT_PLAIN}.
      */
     @Test
     public void humansTxtIsPresentAndText() {
