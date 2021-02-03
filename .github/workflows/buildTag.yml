@@ -14,11 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Get the tag
-        run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
-
-      - name: Echo Tag
-        run: echo ${TAG}
+      - name: Get Latest Tag
+        id: get_tag
+        uses: WyriHaximus/github-action-get-previous-tag@1.0.0
 
       - name: Complile JAR
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
@@ -36,7 +34,7 @@ jobs:
           context: ./
           file: Dockerfile.PROD
           push: true
-          tags: kyberorg/yalsee:${TAG}
+          tags: kyberorg/yalsee:${{ steps.get_tag.outputs.tag }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
