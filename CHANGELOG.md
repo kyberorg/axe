@@ -1,3 +1,10 @@
+### Version 3.0.2 (03/02/2021)
+SEO and Analytics
+
+* Installed Google Analytics (#298)
+* Added Some basic SEO Stuff (#308) 
+* Fixed release workflow (#327)
+
 ### Version 3.0.1 (27/01/2021)
 Security and Ops
 
