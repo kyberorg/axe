@@ -67,18 +67,18 @@ public abstract class SelenideTest {
      * Needs to run before {@link com.codeborne.selenide.Selenide#open()} method.
      */
     protected void tuneDriverWithCapabilities() {
-        if(shouldRunTestsAtGrid()) {
+        if (shouldRunTestsAtGrid()) {
             MutableCapabilities capabilities = new MutableCapabilities();
-            capabilities.setCapability("enableVnc", true);
-            capabilities.setCapability("screenResolution","1920x1080x24");
+            capabilities.setCapability("enableVnc",  true);
+            capabilities.setCapability("screenResolution", "1920x1080x24");
 
-            capabilities.setCapability("name", BUILD_NAME);
+            capabilities.setCapability("name",  BUILD_NAME);
 
-            capabilities.setCapability("enableVideo", true);
-            capabilities.setCapability("videoName", BUILD_NAME+".mp4");
+            capabilities.setCapability("enableVideo",  true);
+            capabilities.setCapability("videoName",  BUILD_NAME + ".mp4");
 
-            capabilities.setCapability("enableLog", true);
-            capabilities.setCapability("logName", BUILD_NAME+".log");
+            capabilities.setCapability("enableLog",  true);
+            capabilities.setCapability("logName",  BUILD_NAME + ".log");
 
             Configuration.browserCapabilities.merge(capabilities);
         }
@@ -94,8 +94,10 @@ public abstract class SelenideTest {
 
     private static void displayCommonInfo() {
         if (!isCommonInfoAlreadyShown) {
-            TestApp.RunMode runMode = TestApp.RunMode.valueOf(System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
-            String testLocation = runMode == TestApp.RunMode.GRID ? "at Grid ("+Configuration.remote+")" : "locally";
+            TestApp.RunMode runMode = TestApp.RunMode.valueOf(
+                    System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name())
+            );
+            String testLocation = runMode == TestApp.RunMode.GRID ? "at Grid ("+Configuration.remote + ")" : "locally";
 
             StringBuilder commonInfoBuilder =  new StringBuilder(App.NEW_LINE);
             commonInfoBuilder.append("=== UI Tests Common Info ===").append(App.NEW_LINE);
@@ -125,9 +127,9 @@ public abstract class SelenideTest {
     }
 
     private static String getGridFullUrl() {
-        final String HTTPS_PREFIX = "https://";
-        final String HTTP_PREFIX = "http://";
-        final String GRID_POSTFIX = "/wd/hub";
+        final String httpsPrefix = "https://";
+        final String httpPrefix = "http://";
+        final String gridPostfix = "/wd/hub";
 
         String selenideRemote = System.getProperty(TestApp.Properties.Selenide.REMOTE, "");
         if (StringUtils.isNotBlank(selenideRemote)) {
@@ -135,16 +137,16 @@ public abstract class SelenideTest {
         }
 
         String gridHostname = System.getProperty(TestApp.Properties.GRID_HOSTNAME);
-        boolean hostnameStringHasProtocol = gridHostname.startsWith(HTTPS_PREFIX) || gridHostname.startsWith(HTTP_PREFIX);
-        boolean hostnameStringHasGridPostfix = gridHostname.contains(GRID_POSTFIX);
+        boolean hostnameStringHasProtocol = gridHostname.startsWith(httpsPrefix) || gridHostname.startsWith(httpPrefix);
+        boolean hostnameStringHasGridPostfix = gridHostname.contains(gridPostfix);
         if (hostnameStringHasProtocol && hostnameStringHasGridPostfix) {
             return gridHostname;
         } else if(hostnameStringHasProtocol) {
-            return gridHostname + GRID_POSTFIX;
+            return gridHostname + gridPostfix;
         } else if(hostnameStringHasGridPostfix) {
-            return HTTP_PREFIX + gridHostname;
+            return httpPrefix + gridHostname;
         } else {
-            return HTTP_PREFIX + gridHostname + GRID_POSTFIX;
+            return httpPrefix + gridHostname + gridPostfix;
         }
     }
 

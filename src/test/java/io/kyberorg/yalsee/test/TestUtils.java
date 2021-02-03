@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @since 2.0
  */
-public class TestUtils {
+public final class TestUtils {
     private TestUtils() {
         throw new UnsupportedOperationException("Utility class");
     }
