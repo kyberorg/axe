@@ -132,7 +132,9 @@ public class TestUtils {
     public static String getAppShortUrl() {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         String localRunValue = String.format("http://l.yls.ee:%d", serverPort);
-        return System.getProperty(TestApp.Properties.APP_SHORT_URL, localRunValue);
+
+        TestedEnv testedEnv = getTestedEnv();
+        return (testedEnv == TestedEnv.LOCAL) ? localRunValue : testedEnv.getShortUrl();
     }
 
     /**
@@ -170,10 +172,10 @@ public class TestUtils {
     /**
      * Provides current test environment. Based on test url.
      *
-     * @return env, based on {@link TestApp.Properties#TEST_URL} property. Default {@link TestEnv#LOCAL}
+     * @return env, based on {@link TestApp.Properties#TEST_URL} property. Default {@link TestedEnv#LOCAL}
      */
-    public static TestEnv getTestEnv() {
-        return TestEnv.getByTestUrl(getTestUrl());
+    public static TestedEnv getTestedEnv() {
+        return TestedEnv.getByTestUrl(getTestUrl());
     }
 
     /**

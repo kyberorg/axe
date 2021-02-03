@@ -5,6 +5,11 @@ import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
 
+/**
+ * JUnit's 4 {@link TestWatcher} replacement.
+ *
+ * @since 2.7.6
+ */
 public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback {
 
     private static final String BUILD_NAME =

@@ -30,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QRCodeApiTest extends UnirestTest {
     public static final String TAG = "[" + QRCodeApiTest.class.getSimpleName() + "]";
 
+    /**
+     * Request for valid ident = Reply with Valid PNG QR Code.
+     */
     @Test
     public void onRequestQRCodeForValidIdentAppGivesValidPngQRCode() {
         final String ident = getValidIdent();
@@ -49,6 +52,11 @@ public class QRCodeApiTest extends UnirestTest {
         assertValidQRCode(qrCode);
     }
 
+    /**
+     * Request for valid ident = Reply with Valid PNG QR Code with default size.
+     *
+     * @throws Exception when failed to check size
+     */
     @Test
     public void onRequestQRCodeForValidIdentAppGivesValidPngQRCodeWithDefaultSize() throws Exception {
         final String ident = getValidIdent();
@@ -69,6 +77,9 @@ public class QRCodeApiTest extends UnirestTest {
         assertQRCodeHasExactSize(QRCodeService.DEFAULT_SIZE, qrCode);
     }
 
+    /**
+     * Request QR Code for ident that not exists = 404.
+     */
     @Test
     public void onRequestQRCodeWithNonExistingIdentAppGives404() {
         final String ident = "NotReallyValidIdent";
@@ -80,6 +91,9 @@ public class QRCodeApiTest extends UnirestTest {
         assertEquals(STATUS_404, result.getStatus());
     }
 
+    /**
+     * Request with only numbers = 404.
+     */
     @Test
     public void onRequestQRCodeWithOnlyNumbersAppGives404() {
         final int ident = 1234;
@@ -91,6 +105,9 @@ public class QRCodeApiTest extends UnirestTest {
         assertEquals(STATUS_404, result.getStatus());
     }
 
+    /**
+     * Request without ident = 404.
+     */
     @Test
     public void onRequestQRCodeWithNullAppGives404() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.QR_CODE_API + null);
@@ -101,6 +118,11 @@ public class QRCodeApiTest extends UnirestTest {
         assertEquals(STATUS_404, result.getStatus());
     }
 
+    /**
+     * Request for valid ident and desired size = Reply with Valid PNG QR Code with requested size.
+     *
+     * @throws Exception when failed to check size
+     */
     @Test
     public void onRequestQRCodeWithValidIdentAndSizeAppGivesQRCodeWithRequestedSize()
             throws Exception {
@@ -122,6 +144,9 @@ public class QRCodeApiTest extends UnirestTest {
         assertQRCodeHasExactSize(size, qrCode);
     }
 
+    /**
+     * Request for valid ident and negative size = 400.
+     */
     @Test
     public void onRequestQRCodeWithValidIdentAndNegativeSizeAppGives400() {
         final String ident = "IdentOne";
@@ -136,6 +161,9 @@ public class QRCodeApiTest extends UnirestTest {
         assertEquals(STATUS_400, result.getStatus());
     }
 
+    /**
+     * Request for valid ident and zero size = 400.
+     */
     @Test
     public void onRequestQRCodeWithValidIdentAndZeroSizeAppGives400() {
         final String ident = "IdentOne";
@@ -150,6 +178,9 @@ public class QRCodeApiTest extends UnirestTest {
         assertEquals(STATUS_400, result.getStatus());
     }
 
+    /**
+     * Request for valid ident and string (NaN) size = 400.
+     */
     @Test
     public void onRequestQRCodeWithValidIdentAndStringSizeAppGives400() {
         final String ident = "IdentOne";
@@ -164,6 +195,9 @@ public class QRCodeApiTest extends UnirestTest {
         assertEquals(STATUS_400, result.getStatus());
     }
 
+    /**
+     * Request with multilevel path = 404.
+     */
     @Test
     public void onRequestQRCodeToMultiLevelRequestAppGives404() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.QR_CODE_API + "/void/void2/dd");

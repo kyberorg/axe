@@ -42,6 +42,9 @@ public class GetApiTest extends UnirestTest {
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request with space ident = 400.
+     */
     @Test
     public void onRequestWithSpaceIdentStatusIs400() {
         String url = TEST_URL + Endpoint.ForTests.LINK_API + " ";
@@ -55,6 +58,9 @@ public class GetApiTest extends UnirestTest {
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request with non-alphanumeric chars = 400.
+     */
     @Test
     public void onRequestWithSpecialCharIdentStatusIs400() {
         String specChars = "%#";
@@ -72,6 +78,9 @@ public class GetApiTest extends UnirestTest {
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request something that not exists = 404.
+     */
     @Test
     public void onRequestWithNotExistingIdentStatusIs404() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + "notStoredIdent");
@@ -84,6 +93,9 @@ public class GetApiTest extends UnirestTest {
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request something that exists = 200.
+     */
     @Test
     public void onRequestWithExistingIdentStatusIs200() {
         String longLink = "http://virtadev.net"; // That very long, really

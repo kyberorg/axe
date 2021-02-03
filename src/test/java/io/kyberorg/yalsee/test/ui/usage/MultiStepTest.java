@@ -24,12 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Contains multi step tests for Front page
+ * Contains multi step tests for Front page.
  *
  * @since 1.0
  */
 @SpringBootTest
 public class MultiStepTest extends SelenideTest {
+    /**
+     * Test setup.
+     */
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
@@ -37,6 +40,9 @@ public class MultiStepTest extends SelenideTest {
         waitForVaadin();
     }
 
+    /**
+     * Close Button at Error Box closes it.
+     */
     @Test
     public void closeButtonReallyClosesErrorNotification() {
         HomePageObject.pasteValueInFormAndSubmitIt("veryLongStringWhichIsNotURL%&");
@@ -46,6 +52,10 @@ public class MultiStepTest extends SelenideTest {
         ERROR_MODAL.shouldNot(exist);
     }
 
+    /**
+     * Submit button hides result area and clear its values.
+     * Currently not working as it should. Bug filed.
+     */
     //@Test
     //TODO re-enable when #232 is fixed
     public void shortenItButtonClearsResultAndValueIfVisible() {
@@ -60,7 +70,7 @@ public class MultiStepTest extends SelenideTest {
     }
 
     /**
-     * Tests copy link button
+     * Tests copy link button.
      */
     @Test
     public void copyLinkButtonShouldCopyShortLink() {
@@ -80,6 +90,11 @@ public class MultiStepTest extends SelenideTest {
         assertEquals(shortLink, pastedLink);
     }
 
+    /**
+     * Counter value should increase after link saved.
+     *
+     * @throws InterruptedException when waiting fails
+     */
     @Test
     public void linksCounterIncreasedValueAfterSave() throws InterruptedException {
         long initialNumber = HomePageObject.getNumberOfSavedLinks();
@@ -95,6 +110,9 @@ public class MultiStepTest extends SelenideTest {
                 "Number Before: " + initialNumber + " Number after: " + numberAfterLinkSaved);
     }
 
+    /**
+     * Saves and retrieves link for russian wiki (tests encoding/decoding).
+     */
     @Test
     public void saveAndRetrieveLinkFromRussianWikipedia() {
         HomePageObject.pasteValueInFormAndSubmitIt(
@@ -107,6 +125,9 @@ public class MultiStepTest extends SelenideTest {
         articleTitle.shouldHave(text(Wikipedia.ARTICLE_TITLE));
     }
 
+    /**
+     * Saves and retrieves link with estonian letters.
+     */
     @Test
     public void linkWithEstonianLettersMustBeSavedAndReused() {
         HomePageObject.pasteValueInFormAndSubmitIt("http://eki.ee/dict/ekss/index.cgi?Q=l%C3%A4bi%20tulema");

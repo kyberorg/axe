@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.ui.MainView;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
- * Page Object for element at {@link MainView}
+ * Page Object for element at {@link MainView}.
  *
  * @since 2.8
  */

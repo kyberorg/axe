@@ -24,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SuppressWarnings("SpellCheckingInspection")
 public class IdnTest extends SelenideTest {
 
+    /**
+     * Test setup.
+     */
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
@@ -31,6 +34,9 @@ public class IdnTest extends SelenideTest {
         waitForVaadin();
     }
 
+    /**
+     * Stores russian URL.
+     */
     @Test
     public void russianUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://кто.рф");
@@ -39,6 +45,9 @@ public class IdnTest extends SelenideTest {
         eggs.should(exist);
     }
 
+    /**
+     * Stores finnish URL.
+     */
     @Test
     public void finnishUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://sää.fi");
@@ -47,6 +56,9 @@ public class IdnTest extends SelenideTest {
         logo.shouldHave(attribute("title", ForecaFi.LOGO_TITLE));
     }
 
+    /**
+     * Stores arabic URL.
+     */
     @Test
     public void arabicUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://www.101domain.com/عرب.htm");
@@ -59,6 +71,9 @@ public class IdnTest extends SelenideTest {
         uniqueClassElement.should(exist);
     }
 
+    /**
+     * Stores taiwanese URL.
+     */
     @Test
     public void taiwaneseUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://中文.tw/");
@@ -70,12 +85,18 @@ public class IdnTest extends SelenideTest {
         navTable.should(exist);
     }
 
+    /**
+     * Stores German Url.
+     */
     @Test
     public void germanUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://www.travemünde.de/");
         assertEquals(TravemundeDe.TITLE_TEXT, SelenideUtils.getPageTitle());
     }
 
+    /**
+     * Stores estonian URL.
+     */
     @Test
     public void estonianUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://sõnaveeb.ee");

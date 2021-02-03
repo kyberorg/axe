@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Testing telegram bot auto configuration
+ * Testing telegram bot auto configuration.
  *
  * @since 2.5
  */
@@ -24,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class TelegramAutoConfigTest extends UnirestTest {
     public static final String TAG = "[" + TelegramAutoConfigTest.class.getSimpleName() + "]";
 
+    /**
+     * Tests that /start command to Telegram Bot replied with non empty reply.
+     */
     @Test
     public void sendStartCommandGivesNonEmptyReply() {
         if (TestUtils.isLocalRun()) {

@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests for {@link Mattermost}
+ * Tests for {@link Mattermost}.
  *
  * @since 2.3
  */
@@ -21,6 +21,9 @@ public class MattermostTests {
     private static final int USER_ID_LENGTH = 6;
     private static final int TOKEN_LENGTH = 15;
 
+    /**
+     * Valid {@link Mattermost} object from valid request.
+     */
     @Test
     public void shouldBeValidObjectFromValidRequest() {
         String host = "yals.ee";
@@ -57,11 +60,17 @@ public class MattermostTests {
 
     }
 
+    /**
+     * {@link IllegalStateException} expected when empty body.
+     */
     @Test
     public void shouldBeExceptionWhenRequestHasBlankBody() {
         assertThrows(IllegalStateException.class, () -> Mattermost.createFromResponseBody(""));
     }
 
+    /**
+     * {@link IllegalStateException} expected when null body.
+     */
     @Test
     public void shouldBeExceptionWhenRequestHasNullBody() {
         assertThrows(IllegalStateException.class, () -> Mattermost.createFromResponseBody(null));
@@ -75,6 +84,9 @@ public class MattermostTests {
         assertThrows(IllegalStateException.class, () -> Mattermost.createFromResponseBody(" "));
     }
 
+    /**
+     * {@link NoSuchElementException} expected when request has no text.
+     */
     @Test
     public void shouldBeExceptionWhenRequestHasNoText() {
         String channelId = RandomStringUtils.randomAlphanumeric(CHANNEL_ID_LENGTH);
@@ -97,6 +109,9 @@ public class MattermostTests {
 
     }
 
+    /**
+     * Valid {@link Mattermost} object with missing fields expected if those fields are not present in body.
+     */
     @Test
     public void shouldBeValidObjectWithMissingFieldsWhenAreNotPresentIsBody() {
         String host = "yals.ee";
@@ -125,6 +140,9 @@ public class MattermostTests {
         assertEquals(uzer, mm.getUsername());
     }
 
+    /**
+     * {@link IllegalArgumentException} expected when text is not URL.
+     */
     @Test
     public void shouldBeExceptionWhenTextIsNotUrl() {
         String text = "notAnUrl";
@@ -140,6 +158,9 @@ public class MattermostTests {
         assertThrows(IllegalArgumentException.class, () -> Mattermost.createFromResponseBody(matterMock.toString()));
     }
 
+    /**
+     * URL is text should be correctly decoded.
+     */
     @Test
     public void urlInTextShouldBeDecodedIfValidUrl() {
         String text = "https%3A%2F%2Fyals.eu";

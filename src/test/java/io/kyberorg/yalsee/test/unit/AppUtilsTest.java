@@ -7,12 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
- * Test suite for {@link AppUtils}
+ * Test suite for {@link AppUtils}.
  *
  * @since 2.5
  */
 public class AppUtilsTest {
 
+    /**
+     * Tests that decoding works.
+     */
     @Test
     public void decodeRussianWikiUrl() {
         String encodedUrl = "https://ru.wikipedia.org/wiki/%D0%9E%D1%80%D0%B5%D1%81%D1%82";
@@ -21,6 +24,9 @@ public class AppUtilsTest {
         assertEquals(exceptedResult, AppUtils.decodeUrl(encodedUrl));
     }
 
+    /**
+     * Tests that decoder doesn't damage link that needs no encoding and it remains as is.
+     */
     @Test
     public void decodeFullyLatinUrl() {
         String url = "https://yals.ee";

@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.ui.err.IdentNotFoundView;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
- * Page Object for {@link IdentNotFoundView}. Contains elements from NotFoundView
+ * Page Object for {@link IdentNotFoundView}. Contains elements from NotFoundView.
  *
  * @since 2.7
  */

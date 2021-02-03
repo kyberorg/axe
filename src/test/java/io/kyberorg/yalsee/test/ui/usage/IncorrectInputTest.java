@@ -16,12 +16,20 @@ import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.QrCodeArea.QR_C
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
+/**
+ * Tries to input non valid values and checks returned result.
+ *
+ * @since 1.0
+ */
 @SpringBootTest
 public class IncorrectInputTest extends SelenideTest {
     private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
     private static final String MALFORMED_URL_TEXT = "malformed URL or not URL";
     private static final String NOT_ALLOWED_TEXT = "temporary not allowed";
 
+    /**
+     * Test setup.
+     */
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
@@ -29,6 +37,9 @@ public class IncorrectInputTest extends SelenideTest {
         waitForVaadin();
     }
 
+    /**
+     * On empty input form should be cleaned, result and QR Code areas are not visible.
+     */
     @Test
     public void emptyInput() {
         HomePageObject.pasteValueInFormAndSubmitIt("");
@@ -38,18 +49,28 @@ public class IncorrectInputTest extends SelenideTest {
         formIsClearedResultAndQRCodeAreNotVisible();
     }
 
+    /**
+     * On input with single space only submit button should be disabled.
+     */
     @Test
     public void singleSpace() {
         HomePageObject.pasteValueInForm(" ");
         submitButtonShouldBeDisabled();
     }
 
+    /**
+     * On input with two spaces submit button should be disabled.
+     */
     @Test
     public void twoSpaces() {
         HomePageObject.pasteValueInForm("  ");
         submitButtonShouldBeDisabled();
     }
 
+    /**
+     * On input with non valid stuff,
+     * form should be cleaned, result and QR Code areas are not visible and error box appears.
+     */
     @Test
     public void shortVariantOfNotUrlInput() {
         HomePageObject.pasteValueInFormAndSubmitIt("g&%g");
@@ -59,6 +80,10 @@ public class IncorrectInputTest extends SelenideTest {
         ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
 
+    /**
+     * On input with non valid stuff,
+     * form should be cleaned, result and QR Code areas are not visible and error box appears.
+     */
     @Test
     public void longVariantOfNotUrlInput() {
         HomePageObject.pasteValueInFormAndSubmitIt("veryLongStringWhichIsNotURL%&");
@@ -68,6 +93,10 @@ public class IncorrectInputTest extends SelenideTest {
         ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
 
+    /**
+     * On input with URL that contains spaces,
+     * form should be cleaned, result and QR Code areas are not visible and error box appears.
+     */
     @Test
     public void urlWithSpacesShallNotPass() {
         HomePageObject.pasteValueInFormAndSubmitIt("http://site with spaces.com");
@@ -77,6 +106,10 @@ public class IncorrectInputTest extends SelenideTest {
         ERROR_TEXT.shouldHave(text(UrlExtraValidator.URL_NOT_VALID));
     }
 
+    /**
+     * On input with URL that contains special chars,
+     * form should be cleaned, result and QR Code areas are not visible and error box appears.
+     */
     @Test
     public void urlWithSpecialCharsShallNotPass() {
         HomePageObject.pasteValueInFormAndSubmitIt("http://f%&k.com");
@@ -86,6 +119,10 @@ public class IncorrectInputTest extends SelenideTest {
         ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
 
+    /**
+     * On input with URL contains bad protocol,
+     * form should be cleaned, result and QR Code areas are not visible and error box appears.
+     */
     @Test
     public void urlWithBadProtocolShallNotPass() {
         HomePageObject.pasteValueInFormAndSubmitIt("file:///etc/passwd");
@@ -94,6 +131,10 @@ public class IncorrectInputTest extends SelenideTest {
         ERROR_TEXT.shouldHave(text("protocol not supported"));
     }
 
+    /**
+     * On input with URL that has single layer (without domain),
+     * form should be cleaned, result and QR Code areas are not visible and error box appears.
+     */
     @Test
     public void urlSingleLayerDomainLinksAreNotAllowed() {
         HomePageObject.pasteValueInFormAndSubmitIt("localhost");
@@ -102,6 +143,10 @@ public class IncorrectInputTest extends SelenideTest {
         ERROR_TEXT.shouldHave(text(NOT_ALLOWED_TEXT));
     }
 
+    /**
+     * On input with URL that chas single layer (without domain),
+     * form should be cleaned, result and QR Code areas are not visible and error box appears.
+     */
     @Test
     public void urlSingleDomainLinksAreNotAllowed() {
         HomePageObject.pasteValueInFormAndSubmitIt("localhost/ff.ff");

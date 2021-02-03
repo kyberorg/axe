@@ -12,12 +12,15 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
- * Simulates some not normal user activity
+ * Simulates some not normal user activity.
  *
  * @since 1.0
  */
 @SpringBootTest
 public class AbnormalUsageTest extends SelenideTest {
+    /**
+     * Test setup.
+     */
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
@@ -25,6 +28,9 @@ public class AbnormalUsageTest extends SelenideTest {
         waitForVaadin();
     }
 
+    /**
+     * Tests that app ignores extra attributes (?those_ones) in request.
+     */
     @Test
     public void extraArgumentsShouldBeIgnored() {
         final String EXTRA_ARGUMENT = "mineMetsa";

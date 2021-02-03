@@ -28,6 +28,14 @@ import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Provides info about runner host name and host address.
+ *
+ * This is full copy of
+ * https://raw.githubusercontent.com/SeleniumHQ/selenium/trunk/java/client/src/org/openqa/selenium/net/HostIdentifier.java
+ *
+ * @since 2.8
+ */
 public class HostIdentifier {
     private static final String HOST_NAME;
     private static final String HOST_ADDRESS;
@@ -98,10 +106,19 @@ public class HostIdentifier {
         HOST_ADDRESS = address;
     }
 
+    /**
+     * Gives executors hostname.
+     *
+     * @return string with hostname
+     */
     public static String getHostName() {
         return HOST_NAME;
     }
 
+    /**
+     * Gives executors host address.
+     * @return string with IP address.
+     */
     @SuppressWarnings("unused") //library code
     public static String getHostAddress() {
         return HOST_ADDRESS;

@@ -24,6 +24,9 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 @SpringBootTest
 public class HomePageTest extends SelenideTest {
 
+    /**
+     * Test Setup.
+     */
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
@@ -31,12 +34,18 @@ public class HomePageTest extends SelenideTest {
         waitForVaadin();
     }
 
+    /**
+     * On URL with slash (/) only opens front page.
+     */
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
         HomePageObject.MainArea.LONG_URL_INPUT.should(exist);
         HomePageObject.MainArea.SUBMIT_BUTTON.should(exist);
     }
 
+    /**
+     * Verifies that correct original site opens when clicked to link in result.
+     */
     @Test
     public void saveLinkAndClickOnResult() {
         HomePageObject.pasteValueInFormAndSubmitIt("https://vr.fi");
@@ -48,6 +57,9 @@ public class HomePageTest extends SelenideTest {
         verifyThatVROpened();
     }
 
+    /**
+     * Saves link, copies result, opens it and verifies that correct original site opens.
+     */
     @Test
     public void saveLinkAndCopyValueAndOpenIt() {
         HomePageObject.pasteValueInFormAndSubmitIt("https://vr.fi");
@@ -59,12 +71,18 @@ public class HomePageTest extends SelenideTest {
         verifyThatVROpened();
     }
 
+    /**
+     * Tests if request something that not exist yet, page 404 opens.
+     */
     @Test
     public void openSomethingNonExisting() {
         open("/perkele");
         verifyThatPage404Opened();
     }
 
+    /**
+     * Tests if request something that not exist yet deeper than single level, page 404 opens.
+     */
     @Test
     public void openSomethingNonExistingDeeperThanSingleLevel() {
         open("/void/something/here");

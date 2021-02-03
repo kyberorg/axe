@@ -10,12 +10,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for {@link MattermostResponseJson)}
+ * Tests for {@link MattermostResponseJson)}.
  *
  * @since 2.3
  */
 public class MattermostResponseJsonTests {
 
+    /**
+     * Tests that valid JSON that Mattermost sends in response has icon, text and username.
+     */
     @Test
     public void validJsonContainsIconTextAndUsername() {
         MattermostResponseJson mmJson = MattermostResponseJson.createWithText("https://yals.ee");
@@ -27,23 +30,35 @@ public class MattermostResponseJsonTests {
         assertTrue(StringUtils.isNotBlank(mmJson.getUsername()), "Username is absent");
     }
 
+    /**
+     * Tests that cannot replace icon with some random string that is not URL.
+     */
     @Test
     public void cannotReplaceIconWithStringWhichIsNotUrl() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> MattermostResponseJson.createWithText("https://yals.ee")
                 .replaceIconWith("Not an URL"));
     }
 
+    /**
+     * Tests than cannot construct {@link MattermostResponseJson} from text, that is not an URL.
+     */
     @Test
     public void cannotAddTextWhenNotContainUrlOrError() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> MattermostResponseJson.createWithText("Just a text"));
     }
 
+    /**
+     * Tests than cannot add goto location from text, that is not an URL.
+     */
     @Test
     public void cannotAddGoToLocationWhenItIsNotUrl() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> MattermostResponseJson.createWithText("https://yals.ee")
                 .addGotoLocation("Not an URL"));
     }
 
+    /**
+     * Tests that Bots username has software name (Yalsee).
+     */
     @Test
     public void assertUserContainsYalsee() {
         MattermostResponseJson mmJson = MattermostResponseJson.createWithText("https://yals.ee");
