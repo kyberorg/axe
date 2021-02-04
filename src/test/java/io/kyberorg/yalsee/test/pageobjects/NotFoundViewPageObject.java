@@ -10,11 +10,11 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 2.7
  */
-public class NotFoundViewPageObject {
+public final class NotFoundViewPageObject {
+
+    public static final SelenideElement TITLE = $("h1");
 
     private NotFoundViewPageObject() {
         throw new UnsupportedOperationException("Utility class");
     }
-
-    public static final SelenideElement TITLE = $("h1");
 }

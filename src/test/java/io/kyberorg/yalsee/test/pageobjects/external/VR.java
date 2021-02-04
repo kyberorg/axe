@@ -6,7 +6,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  * @since 2.2
  */
 @SuppressWarnings("SpellCheckingInspection") //this is Finnish lang
-public class VR {
+public final class VR {
     public static final String TITLE_TEXT = "Uudistunut vr.fi – tervetuloa yhteiselle matkalle - VR";
 
     private VR() {

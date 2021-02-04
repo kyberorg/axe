@@ -6,7 +6,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  * @since 2.5
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class SonaveebEe {
+public final class SonaveebEe {
     public static final String TITLE_TEXT = "Sõnaveeb";
 
     private SonaveebEe() {

@@ -55,6 +55,11 @@ public final class HomePageObject {
                 ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout vaadin-button");
     }
 
+    /**
+     * Number of links saved in application.
+     *
+     * @return non-negative long with number of saved links.
+     */
     public static long getNumberOfSavedLinks() {
         long linksCount;
         try {
@@ -65,21 +70,41 @@ public final class HomePageObject {
         return linksCount;
     }
 
+    /**
+     * Pastes link to input.
+     *
+     * @param link string with long URL to paste
+     */
     public static void pasteValueInForm(final String link) {
         MainArea.LONG_URL_INPUT.setValue(link);
     }
 
+    /**
+     * Pastes link to input and clicks submit button.
+     *
+     * @param link string with long URL to paste
+     */
     public static void pasteValueInFormAndSubmitIt(final String link) {
         pasteValueInForm(link);
         MainArea.SUBMIT_BUTTON.click();
     }
 
+    /**
+     * Pastes link to input, clicks submit button and opens result link in browser window.
+     *
+     * @param urlToStore string with long URL to store it
+     */
     public static void storeAndOpenSavedUrl(final String urlToStore) {
         pasteValueInFormAndSubmitIt(urlToStore);
         String shortLink = HomePageObject.ResultArea.RESULT_LINK.getText();
         open(shortLink);
     }
 
+    /**
+     * Retrieves result link from element.
+     *
+     * @return string with short URL
+     */
     public static String getSavedUrl() {
         return ResultArea.RESULT_LINK.getText();
     }

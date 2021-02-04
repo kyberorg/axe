@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 2.7.4
  */
-public class VaadinPageObject {
+public final class VaadinPageObject {
     public static final SelenideElement LOADING_BAR = $(".v-loading-indicator");
 
     /**

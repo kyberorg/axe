@@ -6,12 +6,12 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  * @since 2.5
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class ForecaFi {
+public final class ForecaFi {
+
+    public static final String LOGO = ".logo a";
+    public static final String LOGO_TITLE = "Foreca";
 
     private ForecaFi() {
         throw new UnsupportedOperationException("Utility class");
     }
-
-    public static final String LOGO = ".logo a";
-    public static final String LOGO_TITLE = "Foreca";
 }

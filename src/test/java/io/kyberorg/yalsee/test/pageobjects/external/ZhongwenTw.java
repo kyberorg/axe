@@ -6,7 +6,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  * @since 2.5
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class ZhongwenTw {
+public final class ZhongwenTw {
     public static final String NAV_TABLE = ".mbr-table";
 
     private ZhongwenTw() {

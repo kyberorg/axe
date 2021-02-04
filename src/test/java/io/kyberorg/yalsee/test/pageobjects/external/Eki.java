@@ -6,7 +6,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  * @since 2.5
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class Eki {
+public final class Eki {
     public static final String TITLE_TEXT =
             "[EKSS] \"Eesti keele seletav sõnaraamat\" 2009";
 

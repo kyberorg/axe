@@ -5,7 +5,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  *
  * @since 2.5
  */
-public class KtoRf {
+public final class KtoRf {
     public static final String DIV_EGGS = "div.eggs";
 
     private KtoRf() {

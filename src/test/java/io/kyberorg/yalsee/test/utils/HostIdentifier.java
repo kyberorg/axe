@@ -14,7 +14,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// This is full copy of https://yls.ee/siuOsi
+// This is almost full copy of https://yls.ee/siuOsi
 // Needed because this class cannot be find via Maven
 package io.kyberorg.yalsee.test.utils;
 
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Provides info about runner host name and host address.
  *
- * This is full copy of https://yls.ee/siuOsi
+ * This is almost full copy of https://yls.ee/siuOsi
  *
  * @since 2.7.6
  */
@@ -122,5 +122,9 @@ public class HostIdentifier {
     @SuppressWarnings("unused") //library code
     public static String getHostAddress() {
         return HOST_ADDRESS;
+    }
+
+    private HostIdentifier() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }

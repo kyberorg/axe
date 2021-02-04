@@ -19,7 +19,7 @@ public class TextFieldElement {
      * @param cssSelector string with valid CSS JQuery-styled selector. Ex. #myId or .myClass
      * @return created {@link TextFieldElement}
      */
-    public static TextFieldElement byCss(String cssSelector) {
+    public static TextFieldElement byCss(final String cssSelector) {
         TextFieldElement element = new TextFieldElement();
         element.cssSelector = cssSelector;
         return element;

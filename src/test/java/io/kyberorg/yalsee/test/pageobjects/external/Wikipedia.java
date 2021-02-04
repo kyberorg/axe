@@ -5,7 +5,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  *
  * @since 2.5
  */
-public class Wikipedia {
+public final class Wikipedia {
     public static final String ARTICLE_TITLE =
             "Депортации из Эстонской ССР";
 
