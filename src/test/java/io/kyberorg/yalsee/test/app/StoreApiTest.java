@@ -11,10 +11,11 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.Test;
 
+import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit testing for store API
+ * Unit testing for store API.
  *
  * @since 1.0
  */
@@ -22,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StoreApiTest extends UnirestTest {
     public static final String TAG = "[" + StoreApiTest.class.getSimpleName() + "]";
 
+    /**
+     * Request without body = 400.
+     */
     @Test
     public void onRequestWithoutBodyStatusIs400() {
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API);
@@ -30,9 +34,12 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(400, result.getStatus());
+        assertEquals(STATUS_400, result.getStatus());
     }
 
+    /**
+     * Request with empty body = 400.
+     */
     @Test
     public void onRequestWithEmptyBodyStatusIs400() {
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body("");
@@ -41,9 +48,12 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(400, result.getStatus());
+        assertEquals(STATUS_400, result.getStatus());
     }
 
+    /**
+     * Request with not JSON body = 421.
+     */
     @Test
     public void onRequestWithNonJsonBodyStatusIs421() {
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body("not a JSON");
@@ -52,11 +62,14 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request with JSON Body without link inside = 421.
+     */
     @Test
     public void onRequestWithJSONWithoutLinkParamStatusIs421() {
         HttpRequest request =
@@ -66,11 +79,14 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request with JSON Body with empty link inside = 421.
+     */
     @Test
     public void onRequestWithEmptyLinkStatusIs421() {
         String longLink = "";
@@ -82,11 +98,14 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request with JSON Body with non valid link inside = 421.
+     */
     @Test
     public void onRequestWithNotALinkStatusIs421() {
         String longLink = "not a Link";
@@ -98,11 +117,14 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
+    /**
+     * Request with JSON Body with valid link inside = 201 (created).
+     */
     @Test
     public void onRequestWithCorrectLinkStatusIs201() {
         String longLink = "http://virtadev.net"; // That very long, really
@@ -114,11 +136,14 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(201, result.getStatus());
+        assertEquals(STATUS_201, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
 
+    /**
+     * Request with JSON Body with valid link = 201 and reply with ident inside.
+     */
     @Test
     public void onRequestWithCorrectLinkReturnsJsonWithIdent() {
         String longLink = "http://virtadev.net"; // That very long, really
@@ -130,7 +155,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(201, result.getStatus());
+        assertEquals(STATUS_201, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -148,6 +173,9 @@ public class StoreApiTest extends UnirestTest {
         assertNotNull(replyJson.getIdent());
     }
 
+    /**
+     * Request with JSON Body with link without protocol = 201.
+     */
     @Test
     public void onRequestWithLinkWithoutProtocolStatusIs201() {
         String linkWithoutProtocol = "github.com/kyberorg/yalsee/issues/50";
@@ -159,7 +187,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(201, result.getStatus());
+        assertEquals(STATUS_201, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }

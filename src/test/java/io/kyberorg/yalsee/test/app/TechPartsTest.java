@@ -16,7 +16,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testing Tech Parts and other non-standard locations
+ * Testing Tech Parts and other non-standard locations.
  *
  * @since 2.5.1
  */
@@ -28,6 +28,9 @@ public class TechPartsTest extends UnirestTest {
     private static final String ALWAYS_NOT_FOUND_LOCATION = "/void/notFound";
     private static final String ALWAYS_NOT_FOUND_API_LOCATION = "/api/void/notFound";
 
+    /**
+     * Request has accept header with {@link MimeType#APPLICATION_JSON} value = Reply with JSON.
+     */
     @Test
     public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
@@ -42,6 +45,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * Reply with {@link MimeType#TEXT_HTML} by default.
+     */
     @Test
     public void byDefaultAppReturnHtmlWhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION);
@@ -55,8 +61,11 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.TEXT_HTML, result);
     }
 
+    /**
+     * Request to API with {@link MimeType#APPLICATION_JSON} header = Reply with JSON.
+     */
     @Test
-    public void onApiRequestWithHeaderAppReturnJsonWhenNothingFound() {
+    public void onApiRequestWithJSONHeaderAppReturnJsonWhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
                 .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
         HttpResponse<String> result = request.asString();
@@ -69,6 +78,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * Request to API without headers = Reply with JSON.
+     */
     @Test
     public void onApiRequestWithoutHeadersAppReturnJsonWhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION);
@@ -82,6 +94,10 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * Request to API with other that {@link MimeType#APPLICATION_JSON} content type
+     * (for example {@link MimeType#APPLICATION_XML}) = Reply with 406 (Not acceptable).
+     */
     @Test
     public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
@@ -94,6 +110,9 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(STATUS_406, result.getStatus());
     }
 
+    /**
+     * If client want {@link MimeType#APPLICATION_JSON}, we should reply with JSON even when we failed.
+     */
     @Test
     public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_ENDPOINT)
@@ -109,6 +128,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * By default app replies with {@link MimeType#TEXT_HTML}, when failed.
+     */
     @Test
     public void byDefaultAppReturnHtmlWhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_ENDPOINT);
@@ -122,6 +144,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.TEXT_HTML, result);
     }
 
+    /**
+     * On API request with {@link MimeType#APPLICATION_JSON} header, App replies with JSON.
+     */
     @Test
     public void onApiRequestWithHeaderAppReturnJsonWhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT)
@@ -136,6 +161,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * On API request without headers, App replies with JSON.
+     */
     @Test
     public void onApiRequestWithoutHeadersAppReturnJsonWhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT);
@@ -149,6 +177,10 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * Request to API with other that {@link MimeType#APPLICATION_JSON} content type
+     * (for example {@link MimeType#APPLICATION_XML}) = Reply with 406 (Not acceptable).
+     */
     @Test
     public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT)
@@ -160,6 +192,9 @@ public class TechPartsTest extends UnirestTest {
         assertEquals(STATUS_406, result.getStatus());
     }
 
+    /**
+     * Tests that robots.txt exists and content type is {@link MimeType#TEXT_PLAIN}.
+     */
     @Test
     public void robotsTxtIsPresentAndText() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.ROBOTS_TXT);
@@ -177,6 +212,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
+    /**
+     * Tests that humans.txt exists and content type is {@link MimeType#TEXT_PLAIN}.
+     */
     @Test
     public void humansTxtIsPresentAndText() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.HUMANS_TXT);
@@ -193,6 +231,9 @@ public class TechPartsTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
     }
 
+    /**
+     * Tests that favicon exists and icon.
+     */
     @Test
     public void faviconIsPresentAndIcon() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.Static.FAVICON_ICO);

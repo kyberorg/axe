@@ -12,13 +12,19 @@ import static com.codeborne.selenide.Selenide.open;
  *
  * @since 2.2
  */
-public class HomePageObject {
+public final class HomePageObject {
+
+    private HomePageObject() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     public static class MainArea {
         public static final SelenideElement MAIN_AREA = $("#" + HomeView.IDs.MAIN_AREA);
         public static final SelenideElement TITLE = $("#" + HomeView.IDs.TITLE);
-        public static final SelenideElement LONG_URL_INPUT_LABEL = TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getLabel();
-        public static final SelenideElement LONG_URL_INPUT = TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getInput();
+        public static final SelenideElement LONG_URL_INPUT_LABEL =
+                TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getLabel();
+        public static final SelenideElement LONG_URL_INPUT =
+                TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getInput();
         public static final SelenideElement BANNER = $("#" + HomeView.IDs.BANNER);
         public static final SelenideElement SUBMIT_BUTTON = $("#" + HomeView.IDs.SUBMIT_BUTTON);
     }
@@ -41,11 +47,19 @@ public class HomePageObject {
     }
 
     public static class ErrorModal {
-        public static final SelenideElement ERROR_MODAL = $("#vaadin-notification-card");
-        public static final SelenideElement ERROR_TEXT = ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout label");
-        public static final SelenideElement ERROR_BUTTON = ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout vaadin-button");
+        public static final SelenideElement ERROR_MODAL =
+                $("#vaadin-notification-card");
+        public static final SelenideElement ERROR_TEXT =
+                ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout label");
+        public static final SelenideElement ERROR_BUTTON =
+                ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout vaadin-button");
     }
 
+    /**
+     * Number of links saved in application.
+     *
+     * @return non-negative long with number of saved links.
+     */
     public static long getNumberOfSavedLinks() {
         long linksCount;
         try {
@@ -56,21 +70,41 @@ public class HomePageObject {
         return linksCount;
     }
 
-    public static void pasteValueInForm(String link) {
+    /**
+     * Pastes link to input.
+     *
+     * @param link string with long URL to paste
+     */
+    public static void pasteValueInForm(final String link) {
         MainArea.LONG_URL_INPUT.setValue(link);
     }
 
-    public static void pasteValueInFormAndSubmitIt(String link) {
+    /**
+     * Pastes link to input and clicks submit button.
+     *
+     * @param link string with long URL to paste
+     */
+    public static void pasteValueInFormAndSubmitIt(final String link) {
         pasteValueInForm(link);
         MainArea.SUBMIT_BUTTON.click();
     }
 
-    public static void storeAndOpenSavedUrl(String urlToStore) {
+    /**
+     * Pastes link to input, clicks submit button and opens result link in browser window.
+     *
+     * @param urlToStore string with long URL to store it
+     */
+    public static void storeAndOpenSavedUrl(final String urlToStore) {
         pasteValueInFormAndSubmitIt(urlToStore);
         String shortLink = HomePageObject.ResultArea.RESULT_LINK.getText();
         open(shortLink);
     }
 
+    /**
+     * Retrieves result link from element.
+     *
+     * @return string with short URL
+     */
     public static String getSavedUrl() {
         return ResultArea.RESULT_LINK.getText();
     }

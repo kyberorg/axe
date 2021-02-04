@@ -5,10 +5,16 @@ import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
 
+/**
+ * JUnit's 4 {@link TestWatcher} replacement.
+ *
+ * @since 2.7.6
+ */
 public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback {
 
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
+    private static final int MILLISECONDS_IN_SECOND = 1000;
 
 
     private String testName;
@@ -19,10 +25,11 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
 
     /**
      * Very first stage of running test. We use it for getting test name and logging executing startup.
+     *
      * @param extensionContext JUnit's test {@link ExtensionContext}
      */
     @Override
-    public void beforeTestExecution(ExtensionContext extensionContext) {
+    public void beforeTestExecution(final ExtensionContext extensionContext) {
         testName = setTestNameFromContext(extensionContext);
         testStartTime = System.currentTimeMillis();
         System.out.printf("Starting.... build '%s'. Test: '%s%n", BUILD_NAME, testName);
@@ -30,10 +37,11 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
 
     /**
      * Marks test as succeeded.
+     *
      * @param context JUnit's test {@link ExtensionContext}
      */
     @Override
-    public void testSuccessful(ExtensionContext context) {
+    public void testSuccessful(final ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
         testSucceeded = true;
         afterTest();
@@ -41,11 +49,12 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
 
     /**
      * Marks test as failed.
+     *
      * @param context JUnit's test {@link ExtensionContext}
      * @param cause exception led to test failure
      */
     @Override
-    public void testFailed(ExtensionContext context, Throwable cause) {
+    public void testFailed(final ExtensionContext context, final Throwable cause) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
         testSucceeded = false;
         afterTest();
@@ -56,7 +65,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     private void afterTest() {
         String testResult = testSucceeded ? "OK" : "FAIL";
-        String timeTook = testDurationInMillis/1000 +" s";
+        String timeTook = testDurationInMillis / MILLISECONDS_IN_SECOND + " s";
 
         System.out.printf("Finished(%s) build '%s'. Test: '%s, Time elapsed: %s%n",
                 testResult,

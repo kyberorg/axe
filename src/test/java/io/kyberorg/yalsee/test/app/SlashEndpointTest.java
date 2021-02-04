@@ -26,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SlashEndpointTest extends UnirestTest {
     public static final String TAG = "[" + SlashEndpointTest.class.getSimpleName() + "]";
 
+    /**
+     * Tests that stored URL redirects to original long URL.
+     */
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {
         String url = "https://ci.yadev.eu";
@@ -47,6 +50,9 @@ public class SlashEndpointTest extends UnirestTest {
         assertTrue(StringUtils.isNotBlank(location), "Got empty " + Header.LOCATION + " header");
     }
 
+    /**
+     * Request something that not exists = 404.
+     */
     @Test
     public void requestWithIdentThatNotStoredGivesStatus404() {
         String ident = "habaHaba";

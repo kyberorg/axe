@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.ui.main;
 
-import io.kyberorg.yalsee.test.TestEnv;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,8 +36,8 @@ public class SeoTest extends SelenideTest {
      */
     @Test
     public void correctGoogleAnalyticsScriptLoadedAndHidden() {
-        TestEnv testEnv = TestUtils.getTestEnv();
-        if (testEnv.isGoogleAnalyticsEnabled()) {
+        TestedEnv testedEnv = TestUtils.getTestedEnv();
+        if (testedEnv.isGoogleAnalyticsEnabled()) {
             GOOGLE_ANALYTICS_CONTROL_SPAN.should(exist);
 
             GOOGLE_ANALYTICS_CONTROL_SPAN.shouldNotBe(visible);
@@ -45,7 +45,7 @@ public class SeoTest extends SelenideTest {
                     .shouldHave(attribute("aria-hidden", "true"));
 
             GOOGLE_ANALYTICS_CONTROL_SPAN
-                    .shouldHave(attribute("aria-valuetext", testEnv.getGoogleAnalyticsFileName()));
+                    .shouldHave(attribute("aria-valuetext", testedEnv.getGoogleAnalyticsFileName()));
         } else {
             GOOGLE_ANALYTICS_CONTROL_SPAN.shouldNot(exist);
         }

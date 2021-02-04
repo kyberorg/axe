@@ -16,12 +16,14 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Useful stuff for testing
+ * Useful stuff for testing.
  *
  * @since 2.0
  */
-public class TestUtils {
-
+public final class TestUtils {
+    private TestUtils() {
+        throw new UnsupportedOperationException("Utility class");
+    }
     /**
      * Result contains JSON.
      *
@@ -104,7 +106,7 @@ public class TestUtils {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         final String localUrl;
 
-        if(StringUtils.isNotBlank(System.getProperty(TestApp.Properties.TEST_URL, ""))) {
+        if (StringUtils.isNotBlank(System.getProperty(TestApp.Properties.TEST_URL, ""))) {
             return System.getProperty(TestApp.Properties.TEST_URL);
         }
 
@@ -132,7 +134,9 @@ public class TestUtils {
     public static String getAppShortUrl() {
         final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
         String localRunValue = String.format("http://l.yls.ee:%d", serverPort);
-        return System.getProperty(TestApp.Properties.APP_SHORT_URL, localRunValue);
+
+        TestedEnv testedEnv = getTestedEnv();
+        return (testedEnv == TestedEnv.LOCAL) ? localRunValue : testedEnv.getShortUrl();
     }
 
     /**
@@ -170,10 +174,10 @@ public class TestUtils {
     /**
      * Provides current test environment. Based on test url.
      *
-     * @return env, based on {@link TestApp.Properties#TEST_URL} property. Default {@link TestEnv#LOCAL}
+     * @return env, based on {@link TestApp.Properties#TEST_URL} property. Default {@link TestedEnv#LOCAL}
      */
-    public static TestEnv getTestEnv() {
-        return TestEnv.getByTestUrl(getTestUrl());
+    public static TestedEnv getTestedEnv() {
+        return TestedEnv.getByTestUrl(getTestUrl());
     }
 
     /**
@@ -182,7 +186,7 @@ public class TestUtils {
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
      * @return string which contains content type without encoding
      */
-    private static String extractMime(String contentType) {
+    private static String extractMime(final String contentType) {
         assertNotNull(contentType);
 
         String[] contentTypeParts = contentType.split(";");
@@ -193,7 +197,7 @@ public class TestUtils {
         }
     }
 
-    private static boolean isValidErrorJson(HttpResponse<String> result) {
+    private static boolean isValidErrorJson(final HttpResponse<String> result) {
         String body = result.getBody();
         try {
             YalseeErrorJson errorJson = AppUtils.GSON.fromJson(body, YalseeErrorJson.class);

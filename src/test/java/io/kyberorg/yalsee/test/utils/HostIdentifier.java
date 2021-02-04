@@ -14,7 +14,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// This is full copy of https://raw.githubusercontent.com/SeleniumHQ/selenium/trunk/java/client/src/org/openqa/selenium/net/HostIdentifier.java
+// This is almost full copy of https://yls.ee/siuOsi
 // Needed because this class cannot be find via Maven
 package io.kyberorg.yalsee.test.utils;
 
@@ -28,7 +28,14 @@ import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
-public class HostIdentifier {
+/**
+ * Provides info about runner host name and host address.
+ *
+ * This is almost full copy of https://yls.ee/siuOsi
+ *
+ * @since 2.7.6
+ */
+public final class HostIdentifier {
     private static final String HOST_NAME;
     private static final String HOST_ADDRESS;
 
@@ -50,7 +57,8 @@ public class HostIdentifier {
                     process.waitFor(2, TimeUnit.SECONDS);
                 }
                 if (process.exitValue() == 0) {
-                    try (InputStreamReader isr = new InputStreamReader(process.getInputStream(), Charset.defaultCharset());
+                    try (InputStreamReader isr =
+                                 new InputStreamReader(process.getInputStream(), Charset.defaultCharset());
                          BufferedReader reader = new BufferedReader(isr)) {
                         host = reader.readLine();
                     }
@@ -98,12 +106,25 @@ public class HostIdentifier {
         HOST_ADDRESS = address;
     }
 
+    /**
+     * Gives executors hostname.
+     *
+     * @return string with hostname
+     */
     public static String getHostName() {
         return HOST_NAME;
     }
 
+    /**
+     * Gives executors host address.
+     * @return string with IP address.
+     */
     @SuppressWarnings("unused") //library code
     public static String getHostAddress() {
         return HOST_ADDRESS;
+    }
+
+    private HostIdentifier() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }

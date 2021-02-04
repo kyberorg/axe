@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 2.7.4
  */
-public class VaadinPageObject {
+public final class VaadinPageObject {
     public static final SelenideElement LOADING_BAR = $(".v-loading-indicator");
 
     /**
@@ -21,5 +21,9 @@ public class VaadinPageObject {
      */
     public static void waitForVaadin() {
         $(LOADING_BAR).shouldBe(hidden, Duration.ofMillis(Configuration.timeout));
+    }
+
+    private VaadinPageObject() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }

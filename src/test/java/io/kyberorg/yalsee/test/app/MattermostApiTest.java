@@ -31,6 +31,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MattermostApiTest extends UnirestTest {
     public static final String TAG = "[" + MattermostApiTest.class.getSimpleName() + "]";
 
+    private static final int CHANNEL_TEAM_USER_LENGTH = 6;
+    private static final int TOKEN_LENGTH = 15;
+
+    /**
+     * Request to store correct link = 200.
+     */
     @Test
     public void toNormalPayloadShouldReplyWith200AndCorrectJsonAndWithContentType() {
 
@@ -48,6 +54,9 @@ public class MattermostApiTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * If Payload JSON has extra space, app should drop it and store correct link.
+     */
     @Test
     public void toPayloadWithTrailingSpaceShouldReplyCorrectJson() {
         MattermostMock matterPayload = getMock("https%3A%2F%2Fyals.eu+"); // Space encodes as +
@@ -64,6 +73,9 @@ public class MattermostApiTest extends UnirestTest {
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
 
+    /**
+     * If request has username, reply should have it as well.
+     */
     @Test
     public void toPayloadWithUsernameShouldReplyWithCorrectJsonAndTextContainsThisUser() {
         String uzer = "uzer";
@@ -86,8 +98,11 @@ public class MattermostApiTest extends UnirestTest {
         assertTrue(mmText.contains(App.AT + uzer), "Mattermost test should have username in message");
     }
 
+    /**
+     * No body in request = 400.
+     */
     @Test
-    public void forReplyWithoutBodyShouldReplyWith400() {
+    public void forPayloadWithoutBodyShouldReplyWith400() {
         HttpRequest request =
                 Unirest.post(TEST_URL + Endpoint.Api.MM_API)
                         .body("")
@@ -100,8 +115,11 @@ public class MattermostApiTest extends UnirestTest {
         assertEquals(STATUS_400, result.getStatus());
     }
 
+    /**
+     * Something strange in request = 400.
+     */
     @Test
-    public void forReplyWithStrangeBodyShouldReplyWithUsage() {
+    public void forPayloadWithStrangeBodyShouldReplyWithUsage() {
         String strangeBody = "a=haba$b=more";
 
         HttpRequest request =
@@ -123,8 +141,11 @@ public class MattermostApiTest extends UnirestTest {
         assertUsage(mmText);
     }
 
+    /**
+     * Request body without link = Reply with 'usage' message.
+     */
     @Test
-    public void forReplyWhereTextIsNotLinkShouldReplyWithCorrectMMJsonAndErrorMessageWithUsage() {
+    public void forPayloadWhereTextIsNotLinkShouldReplyWithCorrectMMJsonAndErrorMessageWithUsage() {
         MattermostMock matterPayload = getMock("ThisIsStringWithoutUrl");
 
         HttpRequest request =
@@ -144,6 +165,9 @@ public class MattermostApiTest extends UnirestTest {
         assertUsage(mmText);
     }
 
+    /**
+     * Request with single space only = Reply with 'usage' message.
+     */
     @Test
     public void whenArgIsOnlySingleSpaceShouldShowUsage() {
         MattermostMock matterPayload = getMock("+");
@@ -164,6 +188,9 @@ public class MattermostApiTest extends UnirestTest {
         assertUsage(mmText);
     }
 
+    /**
+     * Request with spaces only = Reply with 'usage' message.
+     */
     @Test
     public void whenArgContainsOnlySpacesShouldShowUsage() {
         MattermostMock matterPayload = getMock("+++");
@@ -186,6 +213,9 @@ public class MattermostApiTest extends UnirestTest {
         assertUsage(mmText);
     }
 
+    /**
+     * Request has two parts and both are not links = Reply with 'usage' message.
+     */
     @Test
     public void whenTextContainTwoArgsAndFirstIsNotLinkShouldShowUsage() {
         MattermostMock matterPayload = getMock("First+Second");
@@ -205,6 +235,9 @@ public class MattermostApiTest extends UnirestTest {
         assertUsage(mmText);
     }
 
+    /**
+     * Request has link and desired description = Reply with short link and given description.
+     */
     @Test
     public void whenTextIsURLAndDescriptionShouldReturnShortLinkAndDescription() {
         String description = "TestDescription";
@@ -225,6 +258,9 @@ public class MattermostApiTest extends UnirestTest {
         assertTrue(mmText.contains(description), "Text must contain description, if it is present");
     }
 
+    /**
+     * Request has link and multi word description = Reply with short link and given multi word description.
+     */
     @Test
     public void whenTextHasMultiWordDescriptionShouldReturnShortLinkAndMultiWordDescription() {
         String description = "Multi Test Description";
@@ -249,14 +285,14 @@ public class MattermostApiTest extends UnirestTest {
     private MattermostMock getMock(final String text) {
 
         return MattermostMock.create()
-                .withChannelId(RandomStringUtils.randomAlphanumeric(6))
+                .withChannelId(RandomStringUtils.randomAlphanumeric(CHANNEL_TEAM_USER_LENGTH))
                 .withChannelName("channelName")
                 .withCommand("yalsee")
                 .withTeamDomain("myTeam")
-                .withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withTeamId(RandomStringUtils.randomAlphanumeric(CHANNEL_TEAM_USER_LENGTH))
                 .withText(text)
-                .withToken(RandomStringUtils.randomAlphanumeric(15))
-                .withUserId(RandomStringUtils.randomAlphanumeric(6))
+                .withToken(RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH))
+                .withUserId(RandomStringUtils.randomAlphanumeric(CHANNEL_TEAM_USER_LENGTH))
                 .withUsername("uzer");
     }
 

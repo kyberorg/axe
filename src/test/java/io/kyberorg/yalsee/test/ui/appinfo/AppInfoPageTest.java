@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.ui.appinfo;
 
-import io.kyberorg.yalsee.test.TestEnv;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,7 +59,7 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void publicAreaHasInfoAboutGoogleAnalytics() {
-        TestEnv testedEnv = TestUtils.getTestEnv();
+        TestedEnv testedEnv = TestUtils.getTestedEnv();
         if (testedEnv.isGoogleAnalyticsEnabled()) {
             GOOGLE_ANALYTICS_BANNER.should(exist);
             GOOGLE_ANALYTICS_BANNER.shouldBe(visible);
