@@ -22,4 +22,8 @@ public class VaadinPageObject {
     public static void waitForVaadin() {
         $(LOADING_BAR).shouldBe(hidden, Duration.ofMillis(Configuration.timeout));
     }
+
+    private VaadinPageObject() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 }

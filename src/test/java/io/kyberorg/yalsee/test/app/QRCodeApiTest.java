@@ -232,8 +232,7 @@ public class QRCodeApiTest extends UnirestTest {
         assertTrue(StringUtils.isNotBlank(qrCode), "QR find, but cannot be empty");
 
         String[] qrCodeParts = qrCode.split(";");
-        if (qrCodeParts.length > 1) //noinspection SpellCheckingInspection
-        {
+        if (qrCodeParts.length > 1) {
             // base64,iVBORw0KGgoAAAAN...
             String[] valueParts = qrCodeParts[1].split(",");
             if (valueParts.length > 1) {
@@ -250,7 +249,7 @@ public class QRCodeApiTest extends UnirestTest {
         }
     }
 
-    private void assertQRCodeHasExactSize(int size, String qrCode) throws IOException {
+    private void assertQRCodeHasExactSize(final int size, final String qrCode) throws IOException {
         String imageString = qrCode.split(",")[1];
         Base64.Decoder decoder = Base64.getDecoder();
         byte[] decodedImage = decoder.decode(imageString);

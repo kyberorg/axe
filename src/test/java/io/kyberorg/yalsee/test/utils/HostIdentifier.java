@@ -14,7 +14,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// This is full copy of https://raw.githubusercontent.com/SeleniumHQ/selenium/trunk/java/client/src/org/openqa/selenium/net/HostIdentifier.java
+// This is full copy of https://yls.ee/siuOsi
 // Needed because this class cannot be find via Maven
 package io.kyberorg.yalsee.test.utils;
 
@@ -57,7 +57,8 @@ public class HostIdentifier {
                     process.waitFor(2, TimeUnit.SECONDS);
                 }
                 if (process.exitValue() == 0) {
-                    try (InputStreamReader isr = new InputStreamReader(process.getInputStream(), Charset.defaultCharset());
+                    try (InputStreamReader isr =
+                                 new InputStreamReader(process.getInputStream(), Charset.defaultCharset());
                          BufferedReader reader = new BufferedReader(isr)) {
                         host = reader.readLine();
                     }

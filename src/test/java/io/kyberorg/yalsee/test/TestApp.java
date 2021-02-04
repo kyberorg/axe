@@ -7,7 +7,7 @@ import io.kyberorg.yalsee.constants.App;
  *
  * @since 2.5
  */
-public class TestApp {
+public final class TestApp {
     private TestApp() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -63,13 +63,13 @@ public class TestApp {
     }
 
     /**
-     * Defaultr values.
+     * Default values.
      */
     public static class Defaults {
         /**
          * String with default build name (myHost-210203-1826).
          */
-        public static final String BUILD_NAME = TestUtils.hostName() + "-"+ TestUtils.timeStamp();
+        public static final String BUILD_NAME = TestUtils.hostName() + "-" + TestUtils.timeStamp();
 
         /**
          * {@link Selenide}-related defaults.

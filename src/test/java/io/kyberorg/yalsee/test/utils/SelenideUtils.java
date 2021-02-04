@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.title;
  *
  * @since 2.7.4
  */
-public class SelenideUtils {
+public final class SelenideUtils {
     private SelenideUtils() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -21,12 +21,12 @@ public class SelenideUtils {
      *
      * @param durationInSeconds wait duration in seconds.
      */
-    public static void waitUntilSiteLoads(int durationInSeconds) {
+    public static void waitUntilSiteLoads(final int durationInSeconds) {
         $("body").shouldBe(visible, Duration.ofSeconds(durationInSeconds));
     }
 
     /**
-     * Just more readable alias for Selenide's {@link com.codeborne.selenide.Selenide#title()}
+     * Just more readable alias for Selenide's {@link com.codeborne.selenide.Selenide#title()}.
      *
      * @return string with title of opened page
      */

@@ -35,7 +35,8 @@ public class MattermostResponseJsonTests {
      */
     @Test
     public void cannotReplaceIconWithStringWhichIsNotUrl() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> MattermostResponseJson.createWithText("https://yals.ee")
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> MattermostResponseJson.createWithText("https://yals.ee")
                 .replaceIconWith("Not an URL"));
     }
 
@@ -44,7 +45,8 @@ public class MattermostResponseJsonTests {
      */
     @Test
     public void cannotAddTextWhenNotContainUrlOrError() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> MattermostResponseJson.createWithText("Just a text"));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> MattermostResponseJson.createWithText("Just a text"));
     }
 
     /**
@@ -52,7 +54,8 @@ public class MattermostResponseJsonTests {
      */
     @Test
     public void cannotAddGoToLocationWhenItIsNotUrl() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> MattermostResponseJson.createWithText("https://yals.ee")
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> MattermostResponseJson.createWithText("https://yals.ee")
                 .addGotoLocation("Not an URL"));
     }
 

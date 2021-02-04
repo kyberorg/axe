@@ -8,4 +8,8 @@ package io.kyberorg.yalsee.test.pageobjects.external;
 public class EuroLinuxIt {
     public static final String H1 = "h1";
     public static final String H1_TEXT = "€.linux.it";
+
+    public EuroLinuxIt() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 }

@@ -31,6 +31,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MattermostApiTest extends UnirestTest {
     public static final String TAG = "[" + MattermostApiTest.class.getSimpleName() + "]";
 
+    private static final int CHANNEL_TEAM_USER_LENGTH = 6;
+    private static final int TOKEN_LENGTH = 15;
+
     /**
      * Request to store correct link = 200.
      */
@@ -282,14 +285,14 @@ public class MattermostApiTest extends UnirestTest {
     private MattermostMock getMock(final String text) {
 
         return MattermostMock.create()
-                .withChannelId(RandomStringUtils.randomAlphanumeric(6))
+                .withChannelId(RandomStringUtils.randomAlphanumeric(CHANNEL_TEAM_USER_LENGTH))
                 .withChannelName("channelName")
                 .withCommand("yalsee")
                 .withTeamDomain("myTeam")
-                .withTeamId(RandomStringUtils.randomAlphanumeric(6))
+                .withTeamId(RandomStringUtils.randomAlphanumeric(CHANNEL_TEAM_USER_LENGTH))
                 .withText(text)
-                .withToken(RandomStringUtils.randomAlphanumeric(15))
-                .withUserId(RandomStringUtils.randomAlphanumeric(6))
+                .withToken(RandomStringUtils.randomAlphanumeric(TOKEN_LENGTH))
+                .withUserId(RandomStringUtils.randomAlphanumeric(CHANNEL_TEAM_USER_LENGTH))
                 .withUsername("uzer");
     }
 

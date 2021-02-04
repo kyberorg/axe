@@ -11,6 +11,7 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.Test;
 
+import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -33,7 +34,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(400, result.getStatus());
+        assertEquals(STATUS_400, result.getStatus());
     }
 
     /**
@@ -47,7 +48,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(400, result.getStatus());
+        assertEquals(STATUS_400, result.getStatus());
     }
 
     /**
@@ -61,7 +62,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -78,7 +79,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -97,7 +98,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -116,7 +117,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(421, result.getStatus());
+        assertEquals(STATUS_421, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -135,7 +136,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(201, result.getStatus());
+        assertEquals(STATUS_201, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
@@ -154,7 +155,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(201, result.getStatus());
+        assertEquals(STATUS_201, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -186,7 +187,7 @@ public class StoreApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(201, result.getStatus());
+        assertEquals(STATUS_201, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }

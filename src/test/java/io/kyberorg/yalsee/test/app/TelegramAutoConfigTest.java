@@ -11,6 +11,7 @@ import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import static io.kyberorg.yalsee.constants.HttpCode.STATUS_200;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -41,7 +42,7 @@ public class TelegramAutoConfigTest extends UnirestTest {
 
         logRequestAndResponse(request, apiResponse, TAG);
 
-        if (apiResponse.getStatus() == 200) {
+        if (apiResponse.getStatus() == STATUS_200) {
             String status = extractBotStatus(apiResponse);
             assertTrue(status.contains("Online"));
         } else {
@@ -51,7 +52,7 @@ public class TelegramAutoConfigTest extends UnirestTest {
         }
     }
 
-    private String extractBotStatus(HttpResponse<String> apiResponse) {
+    private String extractBotStatus(final HttpResponse<String> apiResponse) {
         TelegramStatusResponseJson json =
                 AppUtils.GSON.fromJson(apiResponse.getBody(), TelegramStatusResponseJson.class);
         return json.getStatus();

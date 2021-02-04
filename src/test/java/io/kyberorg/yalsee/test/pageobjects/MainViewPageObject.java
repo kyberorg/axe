@@ -10,7 +10,11 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 2.8
  */
-public class MainViewPageObject {
+public final class MainViewPageObject {
+
+    private MainViewPageObject() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     public static final SelenideElement LOGO = $("#" + MainView.IDs.APP_LOGO);
     public static final SelenideElement GOOGLE_ANALYTICS_CONTROL_SPAN = $("#gtag");
