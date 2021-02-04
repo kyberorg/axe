@@ -26,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @SpringBootTest
 public class VisibleStateTest extends SelenideTest {
+    /**
+     * Test setup.
+     */
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
@@ -90,7 +93,7 @@ public class VisibleStateTest extends SelenideTest {
     @Test
     public void formHasOnlyOneButton() {
         List<SelenideElement> buttons = HomePageObject.MainArea.MAIN_AREA.findAll("vaadin-button");
-        assertEquals( 1, buttons.size(), "Only 1 button expected");
+        assertEquals(1, buttons.size(), "Only 1 button expected");
     }
 
     /**

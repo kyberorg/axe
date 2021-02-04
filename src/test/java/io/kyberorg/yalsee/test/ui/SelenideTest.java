@@ -97,7 +97,8 @@ public abstract class SelenideTest {
             TestApp.RunMode runMode = TestApp.RunMode.valueOf(
                     System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name())
             );
-            String testLocation = runMode == TestApp.RunMode.GRID ? "at Grid ("+Configuration.remote + ")" : "locally";
+            String testLocation =
+                    runMode == TestApp.RunMode.GRID ? "at Grid (" + Configuration.remote + ")" : "locally";
 
             StringBuilder commonInfoBuilder =  new StringBuilder(App.NEW_LINE);
             commonInfoBuilder.append("=== UI Tests Common Info ===").append(App.NEW_LINE);
@@ -141,9 +142,9 @@ public abstract class SelenideTest {
         boolean hostnameStringHasGridPostfix = gridHostname.contains(gridPostfix);
         if (hostnameStringHasProtocol && hostnameStringHasGridPostfix) {
             return gridHostname;
-        } else if(hostnameStringHasProtocol) {
+        } else if (hostnameStringHasProtocol) {
             return gridHostname + gridPostfix;
-        } else if(hostnameStringHasGridPostfix) {
+        } else if (hostnameStringHasGridPostfix) {
             return httpPrefix + gridHostname;
         } else {
             return httpPrefix + gridHostname + gridPostfix;
