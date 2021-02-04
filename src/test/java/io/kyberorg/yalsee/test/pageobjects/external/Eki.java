@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects.external;
 
 /**
- * Page object for page http://eki.ee/dict/ekss/index.cgi
+ * Page object for page http://eki.ee/dict/ekss/index.cgi .
  *
  * @since 2.5
  */

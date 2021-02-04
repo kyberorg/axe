@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @since 2.7.6
  */
-public class HostIdentifier {
+public final class HostIdentifier {
     private static final String HOST_NAME;
     private static final String HOST_ADDRESS;
 

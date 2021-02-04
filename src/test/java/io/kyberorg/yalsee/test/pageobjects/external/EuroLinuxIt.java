@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects.external;
 
 /**
- * Page object for page http://€.linux.it
+ * Page object for page http://€.linux.it .
  *
  * @since 2.5
  */
