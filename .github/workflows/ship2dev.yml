@@ -45,7 +45,7 @@ jobs:
         run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-8)"
 
       - name: TMP echo
-        run: echo ${{ steps.deployed_commit.sha }}
+        run: echo ${{ steps.deployed_commit.outputs.sha }}
 
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v1.1
@@ -55,7 +55,7 @@ jobs:
           timeout: 120
           interval: 0.5
           hasActuator: true
-          commitSha: ${{ steps.deployed_commit.sha }}
+          commitSha: ${{ steps.deployed_commit.outputs.sha }}
 
       - name: Test App
         continue-on-error: true
