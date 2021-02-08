@@ -42,7 +42,10 @@ jobs:
 
       - name: Get deployed commit SHA
         id: deployed_commit
-        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+        run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-8)"
+
+      - name: TMP echo
+        run: echo ${{ steps.deployed_commit.sha }}
 
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v1.1
