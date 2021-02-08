@@ -48,9 +48,9 @@ jobs:
         run: echo ${{ steps.deployed_commit.outputs.sha }}
 
       - name: Wait for site appears online
-        uses: kyberorg/wait_for_new_version@v1.1
+        uses: kyberorg/wait_for_new_version@trunk
         with:
-          url: 'https://dev.yals.ee'
+          url: https://dev.yals.ee
           responseCode: 200
           timeout: 120
           interval: 0.5
