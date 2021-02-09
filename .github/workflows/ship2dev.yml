@@ -42,13 +42,13 @@ jobs:
 
       - name: Get deployed commit SHA
         id: deployed_commit
-        run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-8)"
+        run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-7)"
 
       - name: TMP echo
         run: echo ${{ steps.deployed_commit.outputs.sha }}
 
       - name: Wait for site appears online
-        uses: kyberorg/wait_for_new_version@trunk
+        uses: kyberorg/wait_for_new_version@v1.1
         with:
           url: https://dev.yals.ee
           responseCode: 200
