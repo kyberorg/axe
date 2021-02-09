@@ -40,5 +40,16 @@ jobs:
         with:
           args: -X POST ${{ secrets.PROD_DEPLOY_HOOK }}
 
+      - name: Get deployed commit SHA
+        id: deployed_commit
+        run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-7)"
+
       - name: Wait for site appears online
-        run: sleep 120
+        uses: kyberorg/wait_for_new_version@v1.1
+        with:
+          url: https://yals.ee
+          responseCode: 200
+          timeout: 120
+          interval: 1.5
+          hasActuator: true
+          commitSha: ${{ steps.deployed_commit.outputs.sha }}
