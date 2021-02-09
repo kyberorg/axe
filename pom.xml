@@ -303,7 +303,7 @@
                     </generateGitPropertiesFilename>
                 </configuration>
             </plugin>
-            <!-- Properties for this pom.xml -->
+            <!-- Properties for this pom.xml (used by MavenInfo.class for getting Vaadin version) -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
