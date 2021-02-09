@@ -53,7 +53,7 @@ jobs:
           url: https://dev.yals.ee
           responseCode: 200
           timeout: 120
-          interval: 0.5
+          interval: 1.5
           hasActuator: true
           commitSha: ${{ steps.deployed_commit.outputs.sha }}
 
