@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.4.5</vaadin.version>
+        <vaadin.version>14.4.7</vaadin.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,7 +43,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.1</version>
+        <version>2.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -138,7 +138,7 @@
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.11.09</version>
+            <version>3.11.11</version>
         </dependency>
 
         <!-- For extra validation of URL  -->
@@ -159,7 +159,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>5.0.1</version>
+            <version>5.0.1.1</version>
         </dependency>
 
         <!-- Emoji Parser -->
@@ -173,7 +173,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
+            <version>1.18.18</version>
         </dependency>
 
         <!-- QR Code generation -->
@@ -191,8 +191,8 @@
         <!-- BugSnag: error reporting -->
         <dependency>
             <groupId>com.bugsnag</groupId>
-            <version>[3.0,4.0)</version>
             <artifactId>bugsnag-spring</artifactId>
+            <version>3.6.2</version>
         </dependency>
 
         <!-- Clipboard Operations -->
@@ -223,21 +223,21 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!-- Selenide Test Framework -->
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>5.17.2</version>
+            <version>5.18.0</version>
             <scope>test</scope>
         </dependency>
+
         <!-- Spring Annotation Processor for generating .properties metadata -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
-
     </dependencies>
 
     <dependencyManagement>
@@ -258,7 +258,6 @@
             <url>https://maven.vaadin.com/vaadin-addons</url>
         </repository>
     </repositories>
-
 
     <build>
         <finalName>yalsee</finalName>
@@ -304,7 +303,7 @@
                     </generateGitPropertiesFilename>
                 </configuration>
             </plugin>
-            <!-- Properties for this pom.xml -->
+            <!-- Properties for this pom.xml (used by MavenInfo.class for getting Vaadin version) -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
@@ -321,16 +320,10 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Part of Maven - specified version explicitly for compatibility
-           with the maven-project-info-reports-plugin 3.0.0-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.9.1</version>
-            </plugin>
         </plugins>
     </build>
     <profiles>
+        <!-- Vaadin Production Mode -->
         <profile>
             <id>production-mode</id>
             <activation>
@@ -366,93 +359,8 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>release</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>coverage</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.6</version>
-                        <configuration>
-                            <excludes>
-                                <exclude>**com.steadystate*</exclude>
-                            </excludes>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <!-- Profile adds h2 database in runtime (for development) -->
-            <id>h2</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <dependencies>
-                <!-- In-memory database for testing purposes -->
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                    <scope>runtime</scope>
-                </dependency>
-            </dependencies>
-        </profile>
+
+        <!-- No Testing by default -->
         <profile>
             <id>noTesting</id>
             <properties>
@@ -460,19 +368,4 @@
             </properties>
         </profile>
     </profiles>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
-                    <failsOnError>false</failsOnError>
-                    <failOnViolation>false</failOnViolation>
-                    <detail>true</detail>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>
