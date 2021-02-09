@@ -1,3 +1,13 @@
+### Version 3.0.3 (09/02/2021)
+Small Improvements
+
+* An offline page updated and unified (#301)
+* Tests code cleanup (#314)
+* Version Dump and pom.xml clean up (#333)
+* Smart server waiting before running tests (#303)
+* Update Selenium Grid links at UI Tests summary (#323)
+* Actuator Endpoints unified (#317)
+
 ### Version 3.0.2 (03/02/2021)
 SEO and Analytics
 
