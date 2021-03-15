@@ -44,6 +44,12 @@ public abstract class UnirestTest {
         logResponse(response);
     }
 
+    /**
+     * Stores long link.
+     *
+     * @param longLink string with long URL to store
+     * @return string with ident
+     */
     protected String store(final String longLink) {
         String requestJson = StoreRequestJson.create().withLink(longLink).toString();
 
@@ -64,12 +70,18 @@ public abstract class UnirestTest {
         return replyJson.getIdent();
     }
 
-    protected String getStoredLink(String ident) {
+    /**
+     * Finds link by its ident.
+     *
+     * @param ident non empty string with ident to search
+     * @return string with long URL or {@link #LINK_NOT_FOUND_STATUS} if not found
+     */
+    protected String getStoredLink(final String ident) {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + ident);
         HttpResponse<JsonNode> result = request.asJson();
         logRequestAndResponse(request, result, TAG);
 
-        if(result.getStatus() == STATUS_200) {
+        if (result.getStatus() == STATUS_200) {
             return result.getBody().getObject().getString("link");
         } else if (result.getStatus() == STATUS_404) {
             return LINK_NOT_FOUND_STATUS;
@@ -78,10 +90,16 @@ public abstract class UnirestTest {
         }
     }
 
-    protected boolean verifyLinkIsStored(String ident) {
+    /**
+     * Check if link with given ident stored within application.
+     *
+     * @param ident string with ident to search
+     * @return true - if link found, false - else.
+     */
+    protected boolean verifyLinkIsStored(final String ident) {
         String storedLink = getStoredLink(ident);
         boolean responseIsNotEmpty = StringUtils.isNotBlank(storedLink);
-        boolean responseIsNotLinkNotFoundStatus = ! storedLink.equals(LINK_NOT_FOUND_STATUS);
+        boolean responseIsNotLinkNotFoundStatus = !storedLink.equals(LINK_NOT_FOUND_STATUS);
 
         return responseIsNotEmpty && responseIsNotLinkNotFoundStatus;
     }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Deletes malware links
+ * Deletes malware links.
  *
  * @since 3.0.4
  */
@@ -34,7 +34,7 @@ public class DeleteRestController {
     /**
      * Constructor for Spring autowiring.
      *
-     * @param linksService service for deleting links
+     * @param linkService service for deleting links
      * @param appUtils utils for getting valid delete token
      */
     public DeleteRestController(final LinkService linkService, final AppUtils appUtils) {
@@ -42,7 +42,14 @@ public class DeleteRestController {
         this.appUtils = appUtils;
     }
 
-    @DeleteMapping(Endpoint.Api.DELETE_LINK_API+"/{ident}")
+    /**
+     * Delete Link API Endpoint.
+     *
+     * @param ident string with valid ident. Link with given ident should be already stored in system
+     * @param request object which contains HTTP request. Needed for extracting request headers
+     * @return if deletion successfully done - 204 without body, {@link YalseeErrorJson} with error else.
+     */
+    @DeleteMapping(Endpoint.Api.DELETE_LINK_API + "/{ident}")
     public ResponseEntity<YalseeJson> deleteLink(final @PathVariable("ident") String ident,
                                                  final HttpServletRequest request) {
         log.info("{} got request: {\"Ident\": {}}", TAG, ident);
@@ -66,7 +73,7 @@ public class DeleteRestController {
 
         //token check
         String deleteToken = request.getHeader(Header.X_YALSEE_TOKEN);
-        if(StringUtils.isNotBlank(deleteToken)) {
+        if (StringUtils.isNotBlank(deleteToken)) {
             if (!deleteToken.equals(appUtils.getDeleteToken())) {
                 YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Wrong Delete Token")
                         .andStatus(HttpCode.STATUS_401);
@@ -80,14 +87,14 @@ public class DeleteRestController {
 
         //action
         DeleteResult result = linkService.deleteLink(ident);
-        if(result instanceof DeleteResult.Success) {
+        if (result instanceof DeleteResult.Success) {
             return ResponseEntity.noContent().build();
-        } else if(result instanceof DeleteResult.NotFound) {
+        } else if (result instanceof DeleteResult.NotFound) {
             YalseeErrorJson payload = YalseeErrorJson.createWithMessage(((DeleteResult.NotFound) result)
                     .getErrorMessage())
                     .andStatus(HttpCode.STATUS_404);
             return ResponseEntity.status(HttpCode.STATUS_404).body(payload);
-        } else if(result instanceof DeleteResult.DatabaseDown) {
+        } else if (result instanceof DeleteResult.DatabaseDown) {
             YalseeErrorJson payload =  YalseeErrorJson.createWithMessage(((DeleteResult.DatabaseDown) result)
                     .getErrorMessage())
                     .andStatus(HttpCode.STATUS_503);

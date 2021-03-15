@@ -73,11 +73,17 @@ public class LinkService {
         }
     }
 
+    /**
+     * Delete link from DB.
+     *
+     * @param ident string with ident searching link
+     * @return {@link DeleteResult} object with exec status and error message if applicable
+     */
     public DeleteResult deleteLink(final String ident) {
         Optional<Link> link;
         try {
             link = repo.findSingleByIdent(ident);
-            if(link.isPresent()) {
+            if (link.isPresent()) {
                 repo.delete(link.get());
                 return new DeleteResult.Success();
             } else {
