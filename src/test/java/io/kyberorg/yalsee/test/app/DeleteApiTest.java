@@ -83,7 +83,7 @@ public class DeleteApiTest extends UnirestTest {
     @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",
             disabledReason = "Only works when Deletion Token Provided")
     public void onRequestWithCorrectTokenButWrongIdentStatusIs404() {
-        String ident = "rnd123";
+        String ident = "rndStr";
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API+"/" + ident);
 
         request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeletionToken());

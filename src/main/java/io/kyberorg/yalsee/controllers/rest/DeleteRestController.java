@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Deletes malware links
@@ -44,8 +43,8 @@ public class DeleteRestController {
     }
 
     @DeleteMapping(Endpoint.Api.DELETE_LINK_API+"/{ident}")
-    public ResponseEntity<YalseeJson> deleteLink(final @PathVariable("ident") String ident, final HttpServletRequest request,
-                                     final HttpServletResponse response) {
+    public ResponseEntity<YalseeJson> deleteLink(final @PathVariable("ident") String ident,
+                                                 final HttpServletRequest request) {
         log.info("{} got request: {\"Ident\": {}}", TAG, ident);
 
         //ident check
@@ -74,7 +73,6 @@ public class DeleteRestController {
                 return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
             }
         } else {
-            response.setStatus(HttpCode.STATUS_401);
             YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Delete Token must be present")
                     .andStatus(HttpCode.STATUS_401);
             return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
@@ -90,7 +88,6 @@ public class DeleteRestController {
                     .andStatus(HttpCode.STATUS_404);
             return ResponseEntity.status(HttpCode.STATUS_404).body(payload);
         } else if(result instanceof DeleteResult.DatabaseDown) {
-            response.setStatus(HttpCode.STATUS_503);
             YalseeErrorJson payload =  YalseeErrorJson.createWithMessage(((DeleteResult.DatabaseDown) result)
                     .getErrorMessage())
                     .andStatus(HttpCode.STATUS_503);
@@ -101,7 +98,6 @@ public class DeleteRestController {
                     .andStatus(HttpCode.STATUS_500);
             return ResponseEntity.status(HttpCode.STATUS_500).body(payload);
         } else {
-            response.setStatus(HttpCode.STATUS_500);
             YalseeErrorJson payload =  YalseeErrorJson.createWithMessage("Unexpected failure")
                     .andStatus(HttpCode.STATUS_500);
             return ResponseEntity.status(HttpCode.STATUS_500).body(payload);
