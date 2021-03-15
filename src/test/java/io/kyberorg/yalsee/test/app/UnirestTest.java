@@ -1,14 +1,20 @@
 package io.kyberorg.yalsee.test.app;
 
+import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.json.StoreRequestJson;
+import io.kyberorg.yalsee.json.StoreResponseJson;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import kong.unirest.BodyPart;
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
+import io.kyberorg.yalsee.utils.AppUtils;
+import kong.unirest.*;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.lang.reflect.Field;
+
+import static io.kyberorg.yalsee.constants.HttpCode.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests, where we run application same ways in {@link SelenideTest} and test.
@@ -16,10 +22,13 @@ import java.lang.reflect.Field;
  *
  * @since 2.5.1
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 @Slf4j
 public abstract class UnirestTest {
     protected static final String TEST_URL = TestUtils.getTestUrl();
+
+    protected static final String LINK_NOT_FOUND_STATUS = "LINK_NOT_FOUND";
+
     private static String TAG = "[" + UnirestTest.class.getSimpleName() + "]";
 
     /**
@@ -33,6 +42,48 @@ public abstract class UnirestTest {
         TAG = tag;
         logRequest(request);
         logResponse(response);
+    }
+
+    protected String store(final String longLink) {
+        String requestJson = StoreRequestJson.create().withLink(longLink).toString();
+
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_201, result.getStatus());
+
+        String responseBody = result.getBody();
+        assertNotNull(responseBody);
+        assertFalse(responseBody.trim().isEmpty());
+
+        StoreResponseJson replyJson;
+        replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
+        return replyJson.getIdent();
+    }
+
+    protected String getStoredLink(String ident) {
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + ident);
+        HttpResponse<JsonNode> result = request.asJson();
+        logRequestAndResponse(request, result, TAG);
+
+        if(result.getStatus() == STATUS_200) {
+            return result.getBody().getObject().getString("link");
+        } else if (result.getStatus() == STATUS_404) {
+            return LINK_NOT_FOUND_STATUS;
+        } else {
+            throw new RuntimeException("Error occurred while retrieving link. Please see logs above");
+        }
+    }
+
+    protected boolean verifyLinkIsStored(String ident) {
+        String storedLink = getStoredLink(ident);
+        boolean responseIsNotEmpty = StringUtils.isNotBlank(storedLink);
+        boolean responseIsNotLinkNotFoundStatus = ! storedLink.equals(LINK_NOT_FOUND_STATUS);
+
+        return responseIsNotEmpty && responseIsNotLinkNotFoundStatus;
     }
 
     private void logRequest(final HttpRequest request) {

@@ -180,6 +180,10 @@ public final class TestUtils {
         return TestedEnv.getByTestUrl(getTestUrl());
     }
 
+    public static String getDeletionToken() {
+        return System.getProperty(TestApp.Properties.TEST_DELETE_TOKEN, App.NO_VALUE);
+    }
+
     /**
      * Following needed because in may contain something like 'application/json;encoding=UTF8'.
      *
