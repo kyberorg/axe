@@ -64,7 +64,7 @@ public class DeleteApiTest extends UnirestTest {
     @Test
     @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",
             disabledReason = "Only works when Deletion Token Provided")
-    public void onRequestWithCorrectTokenStatusIs200AndLinkDeleted() {
+    public void onRequestWithCorrectTokenStatusIs204AndLinkDeleted() {
         String ident = store("https://kyberorg.io");
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API+"/" + ident);
 
@@ -74,7 +74,7 @@ public class DeleteApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(STATUS_204, result.getStatus());
 
         assertFalse(verifyLinkIsStored(ident), "Link should be deleted");
     }
@@ -83,7 +83,7 @@ public class DeleteApiTest extends UnirestTest {
     @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",
             disabledReason = "Only works when Deletion Token Provided")
     public void onRequestWithCorrectTokenButWrongIdentStatusIs404() {
-        String ident = "random123";
+        String ident = "rnd123";
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API+"/" + ident);
 
         request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeletionToken());
@@ -110,7 +110,7 @@ public class DeleteApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(STATUS_204, result.getStatus());
 
         //second request
         HttpRequestWithBody request2 = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API+"/" + ident);
