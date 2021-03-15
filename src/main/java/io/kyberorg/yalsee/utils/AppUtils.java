@@ -364,6 +364,15 @@ public class AppUtils {
         return Boolean.parseBoolean(getEnv().getProperty(App.Properties.CRAWLERS_ALLOWED));
     }
 
+    /**
+     * Provides Delete Token for EnvVar if any.
+     *
+     * @return string with token, or {@link App#NO_VALUE}.
+     */
+    public String getDeleteToken() {
+        return getEnv().getProperty(App.Env.DELETE_TOKEN, App.NO_VALUE);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

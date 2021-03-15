@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
+import io.kyberorg.yalsee.result.DeleteResult;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.StoreResult;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +71,22 @@ public class LinkService {
             log.debug("", e);
             return new StoreResult.Fail("Failed to add new record");
         }
+    }
 
+    public DeleteResult deleteLink(final String ident) {
+        Optional<Link> link;
+        try {
+            link = repo.findSingleByIdent(ident);
+            if(link.isPresent()) {
+                repo.delete(link.get());
+                return new DeleteResult.Success();
+            } else {
+                return new DeleteResult.NotFound();
+            }
+        } catch (DataAccessResourceFailureException dbEx) {
+            return new DeleteResult.DatabaseDown();
+        } catch (Exception e) {
+            return new DeleteResult.Fail().withException(e);
+        }
     }
 }
