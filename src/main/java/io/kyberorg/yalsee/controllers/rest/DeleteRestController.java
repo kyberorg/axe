@@ -70,10 +70,12 @@ public class DeleteRestController {
         String deleteToken = request.getHeader(Header.X_YALSEE_TOKEN);
         if(StringUtils.isNotBlank(deleteToken)) {
             if (!deleteToken.equals(appUtils.getDeleteToken())) {
+                response.setStatus(HttpCode.STATUS_401);
                 return YalseeErrorJson.createWithMessage("Unauthorized: Wrong Delete Token")
                         .andStatus(HttpCode.STATUS_401);
             }
         } else {
+            response.setStatus(HttpCode.STATUS_401);
             return YalseeErrorJson.createWithMessage("Unauthorized: Delete Token must be present")
                     .andStatus(HttpCode.STATUS_401);
         }
@@ -84,15 +86,19 @@ public class DeleteRestController {
             response.setStatus(HttpCode.STATUS_200);
             return EmptyJson.create();
         } else if(result instanceof DeleteResult.NotFound) {
+            response.setStatus(HttpCode.STATUS_404);
             return YalseeErrorJson.createWithMessage(((DeleteResult.NotFound) result).getErrorMessage())
                     .andStatus(HttpCode.STATUS_404);
         } else if(result instanceof DeleteResult.DatabaseDown) {
+            response.setStatus(HttpCode.STATUS_503);
             return YalseeErrorJson.createWithMessage(((DeleteResult.DatabaseDown) result).getErrorMessage())
                     .andStatus(HttpCode.STATUS_503);
         } else if (result instanceof DeleteResult.Fail) {
             log.error(((DeleteResult.Fail) result).getException().getMessage());
+            response.setStatus(HttpCode.STATUS_500);
             return YalseeErrorJson.createWithMessage("Unexpected failure").andStatus(HttpCode.STATUS_500);
         } else {
+            response.setStatus(HttpCode.STATUS_500);
             return YalseeErrorJson.createWithMessage("Unexpected failure").andStatus(HttpCode.STATUS_500);
         }
     }
