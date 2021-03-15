@@ -180,7 +180,12 @@ public final class TestUtils {
         return TestedEnv.getByTestUrl(getTestUrl());
     }
 
-    public static String getDeletionToken() {
+    /**
+     * Provides delete token from test properties.
+     *
+     * @return string with token or {@link App#NO_VALUE}
+     */
+    public static String getDeleteToken() {
         return System.getProperty(TestApp.Properties.TEST_DELETE_TOKEN, App.NO_VALUE);
     }
 

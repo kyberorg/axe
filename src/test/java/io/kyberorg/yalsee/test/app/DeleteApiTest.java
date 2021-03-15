@@ -80,7 +80,7 @@ public class DeleteApiTest extends UnirestTest {
         String ident = store("https://kyberorg.io");
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
 
-        request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeletionToken());
+        request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -101,7 +101,7 @@ public class DeleteApiTest extends UnirestTest {
         String ident = "rndStr";
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
 
-        request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeletionToken());
+        request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -122,7 +122,7 @@ public class DeleteApiTest extends UnirestTest {
         //first request
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
 
-        request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeletionToken());
+        request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -132,7 +132,7 @@ public class DeleteApiTest extends UnirestTest {
 
         //second request
         HttpRequestWithBody request2 = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
-        request2.header(Header.X_YALSEE_TOKEN, TestUtils.getDeletionToken());
+        request2.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result2 = request2.asString();
 
         logRequestAndResponse(request2, result2, TAG);
