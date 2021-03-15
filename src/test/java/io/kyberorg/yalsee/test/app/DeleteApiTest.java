@@ -62,7 +62,7 @@ public class DeleteApiTest extends UnirestTest {
     }
 
     @Test
-    @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = "*",
+    @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",
             disabledReason = "Only works when Deletion Token Provided")
     public void onRequestWithCorrectTokenStatusIs200AndLinkDeleted() {
         String ident = store("https://kyberorg.io");
