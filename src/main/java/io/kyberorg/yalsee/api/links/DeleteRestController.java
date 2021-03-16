@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.controllers.rest;
+package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.Header;
@@ -45,20 +45,22 @@ public class DeleteRestController {
     /**
      * Delete Link API Endpoint.
      *
+     * DELETE /api/links/{ident}
+     *
      * @param ident string with valid ident. Link with given ident should be already stored in system
      * @param request object which contains HTTP request. Needed for extracting request headers
      * @return if deletion successfully done - 204 without body, {@link YalseeErrorJson} with error else.
      */
-    @DeleteMapping(Endpoint.Api.DELETE_LINK_API + "/{ident}")
+    @DeleteMapping(Endpoint.Api.DELETE_LINKS_API)
     public ResponseEntity<YalseeJson> deleteLink(final @PathVariable("ident") String ident,
                                                  final HttpServletRequest request) {
-        log.info("{} got request: {\"Ident\": {}}", TAG, ident);
+        log.info("{} got request DELETE request: {\"Ident\": {}}", TAG, ident);
 
         //ident check
         if (StringUtils.isBlank(ident)) {
             log.info("{} Got empty ident", TAG);
             YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Request should be like this: "
-                    + Endpoint.Api.DELETE_LINK_API + "/{ident}"
+                    + Endpoint.Api.DELETE_LINKS_API
                     + " and ident should not be empty").andStatus(HttpCode.STATUS_400);
             return ResponseEntity.badRequest().body(payload);
         }

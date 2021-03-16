@@ -26,7 +26,7 @@ public class DeleteApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithoutIdentStatusIs405() {
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API);
+        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -41,7 +41,7 @@ public class DeleteApiTest extends UnirestTest {
     @Test
     public void onRequestWithNoTokenStatusIs401() {
         String ident = store("https://kyberorg.io");
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
+        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -58,7 +58,7 @@ public class DeleteApiTest extends UnirestTest {
     @Test
     public void onRequestWithWrongTokenStatusIs401() {
         String ident = store("https://kyberorg.io");
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
+        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
         request.header(Header.X_YALSEE_TOKEN, "wrongTokenVoid");
         HttpResponse<String> result = request.asString();
 
@@ -78,7 +78,7 @@ public class DeleteApiTest extends UnirestTest {
             disabledReason = "Only works when Deletion Token Provided")
     public void onRequestWithCorrectTokenStatusIs204AndLinkDeleted() {
         String ident = store("https://kyberorg.io");
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
+        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
 
         request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
@@ -99,7 +99,7 @@ public class DeleteApiTest extends UnirestTest {
             disabledReason = "Only works when Deletion Token Provided")
     public void onRequestWithCorrectTokenButWrongIdentStatusIs404() {
         String ident = "rndStr";
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
+        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
 
         request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
@@ -120,7 +120,7 @@ public class DeleteApiTest extends UnirestTest {
         String ident = store("https://kyberorg.io");
 
         //first request
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
+        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
 
         request.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
@@ -131,7 +131,7 @@ public class DeleteApiTest extends UnirestTest {
         assertEquals(STATUS_204, result.getStatus());
 
         //second request
-        HttpRequestWithBody request2 = Unirest.delete(TEST_URL + Endpoint.Api.DELETE_LINK_API + "/" + ident);
+        HttpRequestWithBody request2 = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
         request2.header(Header.X_YALSEE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result2 = request2.asString();
 
