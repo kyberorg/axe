@@ -1,27 +1,21 @@
 package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
-import io.kyberorg.yalsee.constants.Header;
-import io.kyberorg.yalsee.constants.HttpCode;
-import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
-import io.kyberorg.yalsee.json.YalseeJson;
-import io.kyberorg.yalsee.result.DatabaseOperationResult;
-import io.kyberorg.yalsee.result.DeleteResult;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.utils.ApiUtils;
-import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.TokenChecker;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 
 /**
  * Deletes malware links.
@@ -34,17 +28,20 @@ public class DeleteRestController {
     private static final String TAG = "[" + DeleteRestController.class.getSimpleName() + "]";
 
     private final LinkService linkService;
-    private final AppUtils appUtils;
+    private final TokenChecker tokenChecker;
+    private final IdentValidator identValidator;
 
     /**
      * Constructor for Spring autowiring.
      *
      * @param linkService service for deleting links
-     * @param appUtils utils for getting valid delete token
+     * @param tokenChecker for checking token
+     * @param identValidator for validating ident param
      */
-    public DeleteRestController(final LinkService linkService, final AppUtils appUtils) {
+    public DeleteRestController(final LinkService linkService, TokenChecker tokenChecker, IdentValidator identValidator) {
         this.linkService = linkService;
-        this.appUtils = appUtils;
+        this.tokenChecker = tokenChecker;
+        this.identValidator = identValidator;
     }
 
     /**
@@ -57,86 +54,47 @@ public class DeleteRestController {
      * @return if deletion successfully done - 204 without body, {@link YalseeErrorJson} with error else.
      */
     @DeleteMapping(Endpoint.Api.DELETE_LINKS_API)
-    public ResponseEntity<YalseeJson> deleteLink(final @PathVariable("ident") String ident,
+    public ResponseEntity<?> deleteLink(final @PathVariable("ident") String ident,
                                                  final HttpServletRequest request) {
         log.info("{} got request DELETE request: {\"Ident\": {}}", TAG, ident);
 
-        //FIXME start
-
         //token check
-        OperationResult tokenCheck = TokenChecker.check(request);
-        if(tokenCheck.notOk()) {
-            return ApiUtils.handleTokenFail().getResponseEntity();
-        }
-
-        OperationResult identCheck = IdentValidator.validate(ident);
-        if(identCheck.notOk()) {
-            log.error("{} Request has not valid ident: {}", TAG, ident);
-            return ApiUtils.handleIdentFail().getResponseEntity();
-        }
-
-        DatabaseOperationResult deleteResult = linkService.deleteLinkWithIdent(ident);
-        if(deleteResult.ok()) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ApiUtils.handleDatabaseOperationFail().getResponseEntity();
-        }
-
-        //FIXME end
-
-        String deleteToken = request.getHeader(Header.X_YALSEE_TOKEN);
-        if (StringUtils.isNotBlank(deleteToken)) {
-            if (!deleteToken.equals(appUtils.getDeleteToken())) {
-                YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Wrong Delete Token")
-                        .andStatus(HttpCode.STATUS_401);
-                return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
-            }
-        } else {
-            YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Delete Token must be present")
-                    .andStatus(HttpCode.STATUS_401);
-            return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
+        OperationResult tokenCheck = tokenChecker.check(request);
+        if (tokenCheck.notOk()) {
+            return ApiUtils.handleTokenFail(tokenCheck);
         }
 
         //ident check
-        if (StringUtils.isBlank(ident)) {
-            log.info("{} Got empty ident", TAG);
-            YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Request should be like this: "
-                    + Endpoint.Api.DELETE_LINKS_API
-                    + " and ident should not be empty").andStatus(HttpCode.STATUS_400);
-            return ResponseEntity.badRequest().body(payload);
-        }
-
-        boolean isIdentValid = ident.matches(IdentGenerator.VALID_IDENT_PATTERN);
-        if (!isIdentValid) {
+        OperationResult identCheck = identValidator.validate(ident);
+        if (identCheck.notOk()) {
             log.error("{} Request has not valid ident: {}", TAG, ident);
-            YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string")
-                    .andStatus(HttpCode.STATUS_400);
-            return ResponseEntity.badRequest().body(payload);
+            return ApiUtils.handleIdentFail(identCheck);
         }
 
         //action
-        DeleteResult result = linkService.deleteLink(ident);
-        if (result instanceof DeleteResult.Success) {
+        OperationResult deleteResult = linkService.deleteLinkWithIdent(ident);
+        if(deleteResult.ok()) {
             return ResponseEntity.noContent().build();
-        } else if (result instanceof DeleteResult.NotFound) {
-            YalseeErrorJson payload = YalseeErrorJson.createWithMessage(((DeleteResult.NotFound) result)
-                    .getErrorMessage())
-                    .andStatus(HttpCode.STATUS_404);
-            return ResponseEntity.status(HttpCode.STATUS_404).body(payload);
-        } else if (result instanceof DeleteResult.DatabaseDown) {
-            YalseeErrorJson payload =  YalseeErrorJson.createWithMessage(((DeleteResult.DatabaseDown) result)
-                    .getErrorMessage())
-                    .andStatus(HttpCode.STATUS_503);
-            return ResponseEntity.status(HttpCode.STATUS_503).body(payload);
-        } else if (result instanceof DeleteResult.Fail) {
-            log.error(((DeleteResult.Fail) result).getException().getMessage());
-            YalseeErrorJson payload =  YalseeErrorJson.createWithMessage("Unexpected failure")
-                    .andStatus(HttpCode.STATUS_500);
-            return ResponseEntity.status(HttpCode.STATUS_500).body(payload);
         } else {
-            YalseeErrorJson payload =  YalseeErrorJson.createWithMessage("Unexpected failure")
-                    .andStatus(HttpCode.STATUS_500);
-            return ResponseEntity.status(HttpCode.STATUS_500).body(payload);
+            return handleDeleteOperationFail(deleteResult);
+        }
+    }
+
+    private ResponseEntity<YalseeErrorJson> handleDeleteOperationFail(final OperationResult result) {
+        String operationResult = result.getResult();
+        switch (operationResult) {
+            case OperationResult.ELEMENT_NOT_FOUND:
+                log.info("{} ident not found", TAG);
+                YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("No link with given ident stored")
+                        .andStatus(STATUS_404);
+                return ResponseEntity.status(STATUS_404).body(errorJson);
+            case OperationResult.SYSTEM_DOWN:
+                log.error("{} Database is DOWN", TAG);
+                return ApiUtils.handleSystemDown();
+            case OperationResult.GENERAL_FAIL:
+            default:
+                log.error("{} Error: {}", TAG, result.getMessage());
+                return ApiUtils.handleServerError();
         }
     }
 }

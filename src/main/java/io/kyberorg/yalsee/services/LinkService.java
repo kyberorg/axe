@@ -2,9 +2,9 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
-import io.kyberorg.yalsee.result.DatabaseOperationResult;
 import io.kyberorg.yalsee.result.DeleteResult;
 import io.kyberorg.yalsee.result.GetResult;
+import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.result.StoreResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -101,10 +101,22 @@ public class LinkService {
      * Delete link with given ident from DB.
      *
      * @param ident string with ident searching link
-     * @return {@link DeleteResult} object with exec status and error message if applicable
+     * @return {@link OperationResult} object with exec status and error message if applicable
      */
-    public DatabaseOperationResult deleteLinkWithIdent(String ident) {
-        //FIXME impl
-        return null;
+    public OperationResult deleteLinkWithIdent(final String ident) {
+        Optional<Link> link;
+        try {
+            link = repo.findSingleByIdent(ident);
+            if (link.isPresent()) {
+                repo.delete(link.get());
+                return OperationResult.success();
+            } else {
+                return OperationResult.elementNotFound();
+            }
+        } catch (DataAccessResourceFailureException dbEx) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
     }
 }
