@@ -4,11 +4,16 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.core.IdentGenerator;
+import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.json.YalseeJson;
+import io.kyberorg.yalsee.result.DatabaseOperationResult;
 import io.kyberorg.yalsee.result.DeleteResult;
+import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
+import io.kyberorg.yalsee.utils.ApiUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.TokenChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +61,42 @@ public class DeleteRestController {
                                                  final HttpServletRequest request) {
         log.info("{} got request DELETE request: {\"Ident\": {}}", TAG, ident);
 
+        //FIXME start
+
+        //token check
+        OperationResult tokenCheck = TokenChecker.check(request);
+        if(tokenCheck.notOk()) {
+            return ApiUtils.handleTokenFail().getResponseEntity();
+        }
+
+        OperationResult identCheck = IdentValidator.validate(ident);
+        if(identCheck.notOk()) {
+            log.error("{} Request has not valid ident: {}", TAG, ident);
+            return ApiUtils.handleIdentFail().getResponseEntity();
+        }
+
+        DatabaseOperationResult deleteResult = linkService.deleteLinkWithIdent(ident);
+        if(deleteResult.ok()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ApiUtils.handleDatabaseOperationFail().getResponseEntity();
+        }
+
+        //FIXME end
+
+        String deleteToken = request.getHeader(Header.X_YALSEE_TOKEN);
+        if (StringUtils.isNotBlank(deleteToken)) {
+            if (!deleteToken.equals(appUtils.getDeleteToken())) {
+                YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Wrong Delete Token")
+                        .andStatus(HttpCode.STATUS_401);
+                return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
+            }
+        } else {
+            YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Delete Token must be present")
+                    .andStatus(HttpCode.STATUS_401);
+            return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
+        }
+
         //ident check
         if (StringUtils.isBlank(ident)) {
             log.info("{} Got empty ident", TAG);
@@ -71,20 +112,6 @@ public class DeleteRestController {
             YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string")
                     .andStatus(HttpCode.STATUS_400);
             return ResponseEntity.badRequest().body(payload);
-        }
-
-        //token check
-        String deleteToken = request.getHeader(Header.X_YALSEE_TOKEN);
-        if (StringUtils.isNotBlank(deleteToken)) {
-            if (!deleteToken.equals(appUtils.getDeleteToken())) {
-                YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Wrong Delete Token")
-                        .andStatus(HttpCode.STATUS_401);
-                return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
-            }
-        } else {
-            YalseeErrorJson payload = YalseeErrorJson.createWithMessage("Unauthorized: Delete Token must be present")
-                    .andStatus(HttpCode.STATUS_401);
-            return ResponseEntity.status(HttpCode.STATUS_401).body(payload);
         }
 
         //action

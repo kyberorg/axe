@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
+import io.kyberorg.yalsee.result.DatabaseOperationResult;
 import io.kyberorg.yalsee.result.DeleteResult;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.StoreResult;
@@ -94,5 +95,16 @@ public class LinkService {
         } catch (Exception e) {
             return new DeleteResult.Fail().withException(e);
         }
+    }
+
+    /**
+     * Delete link with given ident from DB.
+     *
+     * @param ident string with ident searching link
+     * @return {@link DeleteResult} object with exec status and error message if applicable
+     */
+    public DatabaseOperationResult deleteLinkWithIdent(String ident) {
+        //FIXME impl
+        return null;
     }
 }
