@@ -36,7 +36,7 @@ public class TokenChecker {
      *
      * @param appUtils for getting correct token
      */
-    public TokenChecker(AppUtils appUtils) {
+    public TokenChecker(final AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 

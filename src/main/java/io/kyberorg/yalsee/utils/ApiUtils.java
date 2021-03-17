@@ -10,7 +10,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.*;
 /**
  * API tools and helper methods.
  */
-public class ApiUtils {
+public final class ApiUtils {
 
     private ApiUtils() {
         throw new UnsupportedOperationException("Utility class");
@@ -64,7 +64,7 @@ public class ApiUtils {
     /**
      * Handles negative ident validation result.
      *
-     * @param checkResult check result for analysis.
+     * @param validateResult check result for analysis.
      * @return ready to pass {@link ResponseEntity} with {@link YalseeErrorJson}
      */
     public static ResponseEntity<YalseeErrorJson> handleIdentFail(final OperationResult validateResult) {
