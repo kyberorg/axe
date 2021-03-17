@@ -50,6 +50,7 @@ public final class App {
         public static final String TELEGRAM_TOKEN = "TELEGRAM_TOKEN";
         public static final String SERVER_URL = "SERVER_URL";
         public static final String BUGSNAG_TOKEN = "BUGSNAG_TOKEN";
+        public static final String DELETE_TOKEN = "DELETE_TOKEN";
     }
 
     public static class Git {

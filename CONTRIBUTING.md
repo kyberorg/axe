@@ -65,6 +65,7 @@ EnvVars:
 * DB_PASSWORD or DB_PASSWORD_FILE: `password for db user`
 * TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
 * BUGSNAG_TOKEN or BUGSNAG_TOKEN_FILE: `token for BugSnag`
+* DELETE_TOKEN or DELETE_TOKEN_FILE: `temporary master token for deleting links` (needed until auth story introduced)
 
 Optional EnvVars:
 

@@ -18,6 +18,11 @@ public final class HttpCode {
     public static final int STATUS_201 = 201;
 
     /**
+     * 204 - no content.
+     */
+    public static final int STATUS_204 = 204;
+
+    /**
      * 301 - permanent redirect.
      */
     public static final int STATUS_301 = 301;
@@ -31,6 +36,11 @@ public final class HttpCode {
      * 400 - bad request.
      */
     public static final int STATUS_400 = 400;
+
+    /**
+     * 401 - Unauthorized.
+     */
+    public static final int STATUS_401 = 401;
 
     /**
      * 403 - forbidden.

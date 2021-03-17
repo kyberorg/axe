@@ -2,8 +2,6 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.controllers.rest.GetRestController;
-import io.kyberorg.yalsee.json.StoreRequestJson;
-import io.kyberorg.yalsee.json.StoreResponseJson;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;
@@ -15,7 +13,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import static io.kyberorg.yalsee.constants.HttpCode.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Testing {@link GetRestController}.
@@ -112,23 +111,5 @@ public class GetApiTest extends UnirestTest {
         TestUtils.assertResultIsJson(result);
     }
 
-    private String store(final String longLink) {
-        String requestJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestJson);
-        HttpResponse<String> result = request.asString();
-
-        logRequestAndResponse(request, result, TAG);
-
-        assertNotNull(result);
-        assertEquals(STATUS_201, result.getStatus());
-
-        String responseBody = result.getBody();
-        assertNotNull(responseBody);
-        assertFalse(responseBody.trim().isEmpty());
-
-        StoreResponseJson replyJson;
-        replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
-        return replyJson.getIdent();
-    }
 }

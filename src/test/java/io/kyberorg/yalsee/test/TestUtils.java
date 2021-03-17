@@ -181,6 +181,15 @@ public final class TestUtils {
     }
 
     /**
+     * Provides delete token from test properties.
+     *
+     * @return string with token or {@link App#NO_VALUE}
+     */
+    public static String getDeleteToken() {
+        return System.getProperty(TestApp.Properties.TEST_DELETE_TOKEN, App.NO_VALUE);
+    }
+
+    /**
      * Following needed because in may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'

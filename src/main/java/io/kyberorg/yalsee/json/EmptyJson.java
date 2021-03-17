@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.json;
 
+import com.google.gson.Gson;
 import lombok.Data;
 
 /**
@@ -9,4 +10,8 @@ import lombok.Data;
  */
 @Data(staticConstructor = "create")
 public class EmptyJson implements YalseeJson {
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
 }

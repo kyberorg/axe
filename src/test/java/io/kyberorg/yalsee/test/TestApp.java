@@ -22,6 +22,11 @@ public final class TestApp {
         public static final String TEST_URL = "test.url";
 
         /**
+         * String with delete token (should be provided separately to remain secret).
+         */
+        public static final String TEST_DELETE_TOKEN = "test.deleteToken";
+
+        /**
          * Grid or Local.
          */
         public static final String TEST_RUN_MODE = "test.runMode";

@@ -55,6 +55,20 @@ public final class Endpoint {
      */
     public static class Api {
         /**
+         * API for manipulating with links.
+         * <p>
+         * /api/links
+         */
+        public static final String LINKS_API = "/api/links";
+
+        /**
+         * API for deleting links.
+         * <p>
+         * DELETE /api/links/{ident}
+         */
+        public static final String DELETE_LINKS_API = LINKS_API + "/{ident}";
+
+        /**
          * API for storing links.
          * <p>
          * POST /api/store
@@ -93,6 +107,7 @@ public final class Endpoint {
          * Page 404 for API requests.
          */
         public static final String PAGE_404 = "/errors/404api";
+
     }
 
     public static class Static {

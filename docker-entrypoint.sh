@@ -26,6 +26,7 @@ file_env 'DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
 file_env 'APM_TOKEN'
+file_env 'DELETE_TOKEN'
 
 JAVA_OPTS=${JAVA_OPTS}
 

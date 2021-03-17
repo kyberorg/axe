@@ -41,4 +41,11 @@ public interface LinkRepo extends Repository<Link, Long> {
      * @return number of saved links
      */
     long count();
+
+    /**
+     * Deletes link from DB.
+     *
+     * @param linkToDelete {@link Link} object
+     */
+    void delete(Link linkToDelete);
 }
