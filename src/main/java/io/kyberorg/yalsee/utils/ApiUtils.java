@@ -7,19 +7,42 @@ import org.springframework.http.ResponseEntity;
 
 import static io.kyberorg.yalsee.constants.HttpCode.*;
 
+/**
+ * API tools and helper methods.
+ */
 public class ApiUtils {
 
+    private ApiUtils() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
+    /**
+     * Creates standard reply when system is down or partially available.
+     *
+     * @return {@link ResponseEntity} with {@link YalseeErrorJson} inside
+     */
     public static ResponseEntity<YalseeErrorJson> handleSystemDown() {
         YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Application is DOWN").andStatus(STATUS_503);
         return ResponseEntity.status(errorJson.getStatus()).body(errorJson);
     }
 
+    /**
+     * Creates standard reply when some error occurs at server side.
+     *
+     * @return {@link ResponseEntity} with {@link YalseeErrorJson} inside
+     */
     public static ResponseEntity<YalseeErrorJson> handleServerError() {
         YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Something wrong at our side")
                 .andStatus(STATUS_500);
         return ResponseEntity.status(STATUS_500).body(errorJson);
     }
 
+    /**
+     * Handles negative token check result.
+     *
+     * @param checkResult check result for analysis.
+     * @return ready to pass {@link ResponseEntity} with {@link YalseeErrorJson}
+     */
     public static ResponseEntity<YalseeErrorJson> handleTokenFail(final OperationResult checkResult) {
         String errorMarker = checkResult.getResult();
         YalseeErrorJson errorJson;
@@ -38,13 +61,19 @@ public class ApiUtils {
         return ResponseEntity.status(errorJson.getStatus()).body(errorJson);
     }
 
+    /**
+     * Handles negative ident validation result.
+     *
+     * @param checkResult check result for analysis.
+     * @return ready to pass {@link ResponseEntity} with {@link YalseeErrorJson}
+     */
     public static ResponseEntity<YalseeErrorJson> handleIdentFail(final OperationResult validateResult) {
         String errorReason = validateResult.getResult();
         YalseeErrorJson errorJson;
         switch (errorReason) {
             case IdentValidator.EMPTY_IDENT:
-                errorJson = YalseeErrorJson.createWithMessage("Request should be like this: " +
-                        "Endpoint.Api.DELETE_LINKS_API and ident should not be empty")
+                errorJson = YalseeErrorJson.createWithMessage("Request should be like this: "
+                        + "Endpoint.Api.DELETE_LINKS_API and ident should not be empty")
                         .andStatus(STATUS_400);
                 break;
             case IdentValidator.MALFORMED_IDENT:

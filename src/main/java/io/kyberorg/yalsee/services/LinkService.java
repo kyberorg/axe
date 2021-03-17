@@ -2,7 +2,6 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
-import io.kyberorg.yalsee.result.DeleteResult;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.result.StoreResult;
@@ -71,29 +70,6 @@ public class LinkService {
             log.error("{} Exception on storing new {}", TAG, Link.class.getSimpleName());
             log.debug("", e);
             return new StoreResult.Fail("Failed to add new record");
-        }
-    }
-
-    /**
-     * Delete link from DB.
-     *
-     * @param ident string with ident searching link
-     * @return {@link DeleteResult} object with exec status and error message if applicable
-     */
-    public DeleteResult deleteLink(final String ident) {
-        Optional<Link> link;
-        try {
-            link = repo.findSingleByIdent(ident);
-            if (link.isPresent()) {
-                repo.delete(link.get());
-                return new DeleteResult.Success();
-            } else {
-                return new DeleteResult.NotFound();
-            }
-        } catch (DataAccessResourceFailureException dbEx) {
-            return new DeleteResult.DatabaseDown();
-        } catch (Exception e) {
-            return new DeleteResult.Fail().withException(e);
         }
     }
 

@@ -18,22 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @since 3.0.4
  */
-public class DeleteApiTest extends UnirestTest {
-    private static final String TAG = "[" + DeleteApiTest.class.getSimpleName() + "]";
-
-    /**
-     * Tests that request without ident always returns status 405 (Method not implemented).
-     */
-    @Test
-    public void onRequestWithoutIdentStatusIs405() {
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API);
-        HttpResponse<String> result = request.asString();
-
-        logRequestAndResponse(request, result, TAG);
-
-        assertNotNull(result);
-        assertEquals(STATUS_405, result.getStatus());
-    }
+public class DeleteLinkApiTest extends UnirestTest {
+    private static final String TAG = "[" + DeleteLinkApiTest.class.getSimpleName() + "]";
 
     /**
      * Tests that on request without any token - 401 Unauthorized given in response.

@@ -24,8 +24,8 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
  */
 @Slf4j
 @RestController
-public class DeleteRestController {
-    private static final String TAG = "[" + DeleteRestController.class.getSimpleName() + "]";
+public class DeleteLinkRestController {
+    private static final String TAG = "[" + DeleteLinkRestController.class.getSimpleName() + "]";
 
     private final LinkService linkService;
     private final TokenChecker tokenChecker;
@@ -38,7 +38,8 @@ public class DeleteRestController {
      * @param tokenChecker for checking token
      * @param identValidator for validating ident param
      */
-    public DeleteRestController(final LinkService linkService, TokenChecker tokenChecker, IdentValidator identValidator) {
+    public DeleteLinkRestController(final LinkService linkService, final TokenChecker tokenChecker,
+                                    final IdentValidator identValidator) {
         this.linkService = linkService;
         this.tokenChecker = tokenChecker;
         this.identValidator = identValidator;
@@ -73,7 +74,7 @@ public class DeleteRestController {
 
         //action
         OperationResult deleteResult = linkService.deleteLinkWithIdent(ident);
-        if(deleteResult.ok()) {
+        if (deleteResult.ok()) {
             return ResponseEntity.noContent().build();
         } else {
             return handleDeleteOperationFail(deleteResult);
