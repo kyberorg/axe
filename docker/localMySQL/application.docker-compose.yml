@@ -1,0 +1,51 @@
+version: '3'
+
+networks:
+  net:
+
+services:
+  app:
+    image: kyberorg/yalsee:dev
+    restart: on-failure
+    ports:
+    - 8080:8080
+    networks:
+      - net
+    environment:
+      SPRING_PROFILES_ACTIVE: local, actuator
+      DB_HOST: db
+      DB_NAME: yalsee
+      DB_USER: yalsee
+      DB_PASSWORD: yalsee
+  # Database
+  db:
+    image: library/mariadb:10.5.9
+    volumes:
+      # Adjust me (/tmp/yalsee_db - is folder on host)
+      - ./yalsee_db:/var/lib/mysql
+      - ./my.cnf:/etc/alternatives/my.cnf
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      PMA_USER: user
+      PMA_PASSWORD: pass
+      MYSQL_DATABASE: yalsee
+      MYSQL_USER: yalsee
+      MYSQL_PASSWORD: yalsee
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - net
+  # phpmyadmin
+  phpmyadmin:
+    depends_on:
+      - db
+    image: library/phpmyadmin
+    restart: always
+    ports:
+      - '9090:80'
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - net
