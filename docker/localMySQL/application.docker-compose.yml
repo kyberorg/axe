@@ -4,6 +4,19 @@ networks:
   net:
 
 services:
+  app:
+    image: kyberorg/yalsee:dev
+    restart: on-failure
+    ports:
+    - 8080:8080
+    networks:
+      - net
+    environment:
+      SPRING_PROFILES_ACTIVE: local, actuator
+      DB_HOST: db
+      DB_NAME: yalsee
+      DB_USER: yalsee
+      DB_PASSWORD: yalsee
   # Database
   db:
     image: library/mariadb:10.5.9
@@ -36,4 +49,3 @@ services:
       MYSQL_ROOT_PASSWORD: password
     networks:
       - net
-
