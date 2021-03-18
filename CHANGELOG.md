@@ -1,3 +1,9 @@
+### Version 3.0.4 (18/03/2021)
+Delete Links API
+
+* Delete Link API (#344)
+* Dependencies updates (#346)
+
 ### Version 3.0.3 (09/02/2021)
 Small Improvements
 
