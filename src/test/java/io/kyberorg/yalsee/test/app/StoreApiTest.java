@@ -191,4 +191,23 @@ public class StoreApiTest extends UnirestTest {
 
         TestUtils.assertResultIsJson(result);
     }
+
+    /**
+     * Tests that API gives 403 status on request with banned link.
+     */
+    @Test
+    public void onRequestWithBannedLinkStatusIs403() {
+        String bannedUrl = "http://ct26737.tmweb.ru/compte/";
+        String correctJson = StoreRequestJson.create().withLink(bannedUrl).toString();
+
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_403, result.getStatus());
+
+        TestUtils.assertResultIsJson(result);
+    }
 }
