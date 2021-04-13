@@ -243,7 +243,7 @@ public class StoreRestController {
 
     private YalseeErrorJson banned(final String bannedUrl) {
         log.info("{} URL '{}' is banned", TAG, bannedUrl);
-        return YalseeErrorJson.createWithMessage("URL " + bannedUrl + "is banned. Try another one")
+        return YalseeErrorJson.createWithMessage("URL is banned. Try another one")
                 .andStatus(HttpCode.STATUS_403);
     }
 }
