@@ -79,6 +79,7 @@ public class StoreRestController {
         }
 
         if (BanHammer.shouldBeBanned(linkToStore)) {
+            response.setStatus(HttpCode.STATUS_403);
             return banned(linkToStore);
         }
 
