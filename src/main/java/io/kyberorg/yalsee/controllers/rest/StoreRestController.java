@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.controllers.rest;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
+import io.kyberorg.yalsee.core.BanHammer;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.json.StoreRequestJson;
 import io.kyberorg.yalsee.json.StoreResponseJson;
@@ -75,6 +76,10 @@ public class StoreRestController {
         Result validateResult = validateInput(storeInput);
         if (resultHasYalsErrorJson(validateResult)) {
             return yalsErrorJson(validateResult, response);
+        }
+
+        if (BanHammer.shouldBeBanned(linkToStore)) {
+            return banned(linkToStore);
         }
 
         String usersIdent = ""; //TODO replace by data from JSON
@@ -233,5 +238,11 @@ public class StoreRestController {
         log.debug("{} Conflicting ident: {}", TAG, usersIdent);
         return YalseeErrorJson.createWithMessage("We already have link stored with given ident:" + usersIdent
                 + " Try another one").andStatus(HttpCode.STATUS_409);
+    }
+
+    private YalseeErrorJson banned(final String bannedUrl) {
+        log.info("{} URL '{}' is banned", TAG, bannedUrl);
+        return YalseeErrorJson.createWithMessage("URL " + bannedUrl + "is banned. Try another one")
+                .andStatus(HttpCode.STATUS_403);
     }
 }
