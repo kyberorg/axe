@@ -9,11 +9,15 @@ import java.util.List;
  * @since 3.0.5
  */
 public final class BanHammer {
-    private static final List<String> banList = new ArrayList<>();
+    private static final List<String> BAN_LIST = new ArrayList<>();
 
     static {
         // @see issue #350
-        banList.add("tmweb.ru");
+        BAN_LIST.add("tmweb.ru");
+    }
+
+    private BanHammer() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     /**
@@ -24,8 +28,8 @@ public final class BanHammer {
      */
     public static boolean shouldBeBanned(final String url) {
         boolean belongsToBannedDomain = false;
-        for(String item : banList) {
-            if(url.contains(item)) {
+        for (String item : BAN_LIST) {
+            if (url.contains(item)) {
                 belongsToBannedDomain = true;
                 break;
             }
