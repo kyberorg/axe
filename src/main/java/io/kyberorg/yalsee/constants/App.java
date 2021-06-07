@@ -14,6 +14,7 @@ public final class App {
     public static final int NO_STATUS = -1;
     public static final String NEW_LINE = System.getProperty("line.separator");
     public static final String WEB_NEW_LINE = "<BR>";
+    public static final String URL_SAFE_SEPARATOR = ">>";
 
     private App() {
         throw new UnsupportedOperationException("Utility class");

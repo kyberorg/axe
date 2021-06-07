@@ -9,6 +9,7 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.exception.IdentNotFoundException;
@@ -61,7 +62,8 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
             if (searchResult instanceof GetResult.Success) {
                 String link = ((GetResult.Success) searchResult).getLink();
                 log.info("{} Got long URL. Redirecting to {}", TAG, link);
-                event.rerouteToError(NeedForRedirectException.class, link);
+                event.rerouteToError(NeedForRedirectException.class,
+                        route + App.URL_SAFE_SEPARATOR + link);
             } else if (searchResult instanceof GetResult.NotFound) {
                 log.info("{} No corresponding longURL found. Replying with 404. {\"Ident\": {}}", TAG, route);
                 rerouteTo404(route, event, Target.IDENT_NOT_FOUND);

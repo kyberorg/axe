@@ -14,6 +14,7 @@ import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.ui.MainView;
@@ -35,6 +36,7 @@ public class RedirectToLinkView extends VerticalLayout implements HasErrorParame
     private static final String TAG = "[" + RedirectToLinkView.class.getSimpleName() + "]";
 
     private FeederThread thread;
+    private final Span origSpan = new Span();
     private final Span targetSpan = new Span();
 
     private final Span counterSpan = new Span();
@@ -43,6 +45,7 @@ public class RedirectToLinkView extends VerticalLayout implements HasErrorParame
 
     private final Page page = UI.getCurrent().getPage();
 
+    private String origin = null;
     private String target = null;
 
     private final AppUtils appUtils;
@@ -54,7 +57,7 @@ public class RedirectToLinkView extends VerticalLayout implements HasErrorParame
         this.appUtils = appUtils;
 
         counterSpan.add(counterText, counterNum);
-        add(targetSpan, counterSpan);
+        add(origSpan, targetSpan, counterSpan);
     }
 
     @Override
@@ -72,10 +75,20 @@ public class RedirectToLinkView extends VerticalLayout implements HasErrorParame
     @Override
     public int setErrorParameter(final BeforeEnterEvent event,
                                  final ErrorParameter<NeedForRedirectException> parameter) {
-        String target = parameter.getCustomMessage();
-        this.target = target;
+        String message = parameter.getCustomMessage();
+        String[] parts = message.split(App.URL_SAFE_SEPARATOR);
+        if (parts.length != 2) {
+            log.error("Something wrong with received message {} it's length {}, but only 2 parts are excepted",
+                    message, parts.length);
+            return STATUS_500;
+        }
+
         //TODO if user - doRedirect right now
-        targetSpan.setText("target is: " + target);
+        this.origin = appUtils.getShortUrl() + "/" + parts[0];
+        this.target = parts[1];
+
+        origSpan.setText("Origin is: " + this.origin);
+        targetSpan.setText("target is: " + this.target);
 
         return STATUS_200;
     }
