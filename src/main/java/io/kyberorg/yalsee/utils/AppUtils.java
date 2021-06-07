@@ -382,6 +382,19 @@ public class AppUtils {
         return getEnv().getProperty(App.Properties.REDIRECT_PAGE_SKIP_MARK, App.NO_VALUE);
     }
 
+    public boolean hasRedirectSkipMark(String ident) {
+        return ident.endsWith(getRedirectPageSkipMark());
+    }
+
+    public String dropRedirectSkipMarkFrom(String ident) {
+        if (hasRedirectSkipMark(ident)) {
+            //remove only last char if it is skip mark
+            return ident.substring(0, ident.lastIndexOf(getRedirectPageSkipMark()));
+        } else {
+            return ident;
+        }
+    }
+
     /**
      * Reads redirect page skip from settings.
      *

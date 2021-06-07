@@ -83,14 +83,22 @@ public class RedirectToLinkView extends VerticalLayout implements HasErrorParame
             return STATUS_500;
         }
 
-        //TODO if user - doRedirect right now
         this.origin = appUtils.getShortUrl() + "/" + parts[0];
         this.target = parts[1];
 
+        if(shouldSkipRedirectPage()) {
+            log.info("{} skipping redirect page for {}", TAG, this.origin);
+            return doHeaderRedirect(target);
+        }
+
         origSpan.setText("Origin is: " + this.origin);
         targetSpan.setText("target is: " + this.target);
-
         return STATUS_200;
+    }
+
+    private boolean shouldSkipRedirectPage() {
+        //TODO add if link has owner -> true
+        return appUtils.hasRedirectSkipMark(this.origin);
     }
 
     private void doJSRedirect(String target) {
