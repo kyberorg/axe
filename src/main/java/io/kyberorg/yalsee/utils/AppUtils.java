@@ -373,6 +373,28 @@ public class AppUtils {
         return getEnv().getProperty(App.Env.DELETE_TOKEN, App.NO_VALUE);
     }
 
+    /**
+     * Reads redirect page skip from settings.
+     *
+     * @return string with skip mark or {@link App#NO_VALUE}
+     */
+    public String getRedirectPageSkipMark() {
+        return getEnv().getProperty(App.Properties.REDIRECT_PAGE_SKIP_MARK, App.NO_VALUE);
+    }
+
+    /**
+     * Reads redirect page skip from settings.
+     *
+     * @return int with timeout from settings or default timeout {@link App.Defaults#REDIRECT_PAGE_TIMEOUT_SECONDS}
+     */
+    public int getRedirectPageTimeout() {
+        String timeoutString =  getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
+        if(timeoutString.equals(App.NO_VALUE)) {
+            return App.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
+        }
+        return Integer.parseInt(timeoutString);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

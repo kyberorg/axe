@@ -49,5 +49,15 @@
       "name": "app.seo.robots.crawl-allowed",
       "type": "java.lang.Boolean",
       "description": "Defines if search engine crawlers are allowed to crawl site."
+    },
+    {
+      "name": "app.redirect-page.skip-mark",
+      "type": "java.lang.String",
+      "description": "Special symbol, which should be added to ident to skip redirect page."
+    },
+    {
+      "name": "app.redirect-page.timeout",
+      "type": "java.lang.Integer",
+      "description": "Timeout in second after which redirect page makes actual redirect."
     }
   ] }

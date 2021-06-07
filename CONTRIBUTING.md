@@ -79,6 +79,8 @@ Optional EnvVars:
 * APM_ENV: `environment in APM` (if not set - APM configuration won't be applied)
 * APM_SERVER: `https://my.apm.endpoint` (if not set - APM configuration won't be applied)
 * APM_TOKEN or APM_TOKEN_FILE: `token for Elastic APM` (if APM server requires token)
+* REDIRECT_PAGE_SKIP_MARK: `Special symbol, which should be added to ident to skip redirect page` (most likely don't needed as regulated by Spring profile)
+* REDIRECT_PAGE_TIMEOUT: `Timeout in second after which redirect page makes actual redirect` (most likely don't needed as regulated by Spring profile)
 
 Ports:
 

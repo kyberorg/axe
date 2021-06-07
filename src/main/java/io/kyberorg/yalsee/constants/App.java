@@ -44,6 +44,8 @@ public final class App {
         public static final String GA_ENABLED = "app.seo.ga.enabled";
         public static final String GA_FILE = "app.seo.ga.file";
         public static final String CRAWLERS_ALLOWED = "app.seo.robots.crawl-allowed";
+        public static final String REDIRECT_PAGE_SKIP_MARK = "app.redirect-page.skip-mark";
+        public static final String REDIRECT_PAGE_TIMEOUT = "app.redirect-page.timeout";
     }
 
     public static class Env {
@@ -65,5 +67,9 @@ public final class App {
         public static final int DEFAULT_QR_BLOCK_SIZE = 371;
         public static final int DEFAULT_QR_CODE_SIZE = 350;
         public static final float QR_BLOCK_RATIO = 0.943f; // 350/371
+    }
+
+    public static class Defaults {
+        public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
     }
 }
