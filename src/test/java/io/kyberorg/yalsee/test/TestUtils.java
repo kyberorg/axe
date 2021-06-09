@@ -8,6 +8,7 @@ import io.kyberorg.yalsee.test.utils.HostIdentifier;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @since 2.0
  */
+@Slf4j
 public final class TestUtils {
     private TestUtils() {
         throw new UnsupportedOperationException("Utility class");
@@ -190,6 +192,15 @@ public final class TestUtils {
     }
 
     /**
+     * Provides redirect page bypass symbol based on {@link TestedEnv}.
+     *
+     * @return string with bypass symbol
+     */
+    public static String getRedirectPageBypassSymbol() {
+        return getTestedEnv().getRedirectPageBypassSymbol();
+    }
+
+    /**
      * Following needed because in may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
@@ -208,11 +219,16 @@ public final class TestUtils {
 
     private static boolean isValidErrorJson(final HttpResponse<String> result) {
         String body = result.getBody();
+        log.debug("Body is: " + body);
         try {
             YalseeErrorJson errorJson = AppUtils.GSON.fromJson(body, YalseeErrorJson.class);
             assertNotNull(errorJson);
+            log.debug("ErrorJson: " + errorJson);
             boolean hasNotEmptyMessageField = errorJson.getMessage() != null;
             boolean hasNotEmptyTimestampField = errorJson.getTimestamp() != null;
+
+            log.debug("HasNotEmptyMessageField: " + hasNotEmptyMessageField);
+            log.debug("hasNotEmptyTimestampField: " + hasNotEmptyTimestampField);
 
             return hasNotEmptyMessageField || hasNotEmptyTimestampField;
         } catch (Exception e) {
