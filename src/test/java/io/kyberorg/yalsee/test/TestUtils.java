@@ -196,7 +196,7 @@ public final class TestUtils {
      *
      * @return string with bypass symbol
      */
-    public static String getRedirectPageBypassSymbol() {
+    public static String addRedirectPageBypassSymbol() {
         return getTestedEnv().getRedirectPageBypassSymbol();
     }
 

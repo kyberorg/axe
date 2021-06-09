@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
@@ -67,7 +68,7 @@ public class HomePageTest extends SelenideTest {
         $(shortLink).shouldBe(visible);
         String shortUrl = shortLink.getText();
 
-        open(shortUrl);
+        open(shortUrl + addRedirectPageBypassSymbol());
         verifyThatVROpened();
     }
 

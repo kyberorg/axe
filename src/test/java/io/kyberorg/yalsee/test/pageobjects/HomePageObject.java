@@ -1,12 +1,12 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
 import io.kyberorg.yalsee.ui.HomeView;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
 
 /**
  * Page Object for {@link HomeView}.
@@ -98,7 +98,7 @@ public final class HomePageObject {
     public static void storeAndOpenSavedUrl(final String urlToStore) {
         pasteValueInFormAndSubmitIt(urlToStore);
         String shortLink = HomePageObject.ResultArea.RESULT_LINK.getText();
-        open(shortLink + TestUtils.getRedirectPageBypassSymbol());
+        open(shortLink + addRedirectPageBypassSymbol());
     }
 
     /**
