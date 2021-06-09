@@ -45,6 +45,7 @@ public final class TestUtils {
      * @param result string with http response
      */
     public static void assertResultIsYalsErrorJson(final HttpResponse<String> result) {
+        log.info("Result: "+ result);
         assertTrue(
                 TestUtils.isValidErrorJson(result),
                 "Response is not valid " + YalseeErrorJson.class.getSimpleName());

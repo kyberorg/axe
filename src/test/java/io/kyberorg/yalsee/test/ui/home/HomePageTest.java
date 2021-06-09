@@ -55,6 +55,7 @@ public class HomePageTest extends SelenideTest {
         $(shortLink).shouldBe(visible);
         shortLink.click();
 
+        //FIXME this is no longer works, because of redirect page
         verifyThatVROpened();
     }
 
