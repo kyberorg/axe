@@ -217,16 +217,11 @@ public final class TestUtils {
 
     private static boolean isValidErrorJson(final HttpResponse<String> result) {
         String body = result.getBody();
-        System.out.println("Body is: " + body);
         try {
             YalseeErrorJson errorJson = AppUtils.GSON.fromJson(body, YalseeErrorJson.class);
             assertNotNull(errorJson);
-            System.out.println("ErrorJson: " + errorJson);
             boolean hasNotEmptyMessageField = errorJson.getMessage() != null;
             boolean hasNotEmptyTimestampField = errorJson.getTimestamp() != null;
-
-            System.out.println("HasNotEmptyMessageField: " + hasNotEmptyMessageField);
-            System.out.println("hasNotEmptyTimestampField: " + hasNotEmptyTimestampField);
 
             return hasNotEmptyMessageField || hasNotEmptyTimestampField;
         } catch (Exception e) {
