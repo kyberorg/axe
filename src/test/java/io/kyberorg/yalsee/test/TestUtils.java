@@ -8,7 +8,6 @@ import io.kyberorg.yalsee.test.utils.HostIdentifier;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @since 2.0
  */
-@Slf4j
 public final class TestUtils {
     private TestUtils() {
         throw new UnsupportedOperationException("Utility class");
@@ -45,7 +43,7 @@ public final class TestUtils {
      * @param result string with http response
      */
     public static void assertResultIsYalsErrorJson(final HttpResponse<String> result) {
-        log.info("Result: "+ result);
+        System.out.println("Result: "+ result);
         assertTrue(
                 TestUtils.isValidErrorJson(result),
                 "Response is not valid " + YalseeErrorJson.class.getSimpleName());
@@ -220,16 +218,16 @@ public final class TestUtils {
 
     private static boolean isValidErrorJson(final HttpResponse<String> result) {
         String body = result.getBody();
-        log.debug("Body is: " + body);
+        System.out.println("Body is: " + body);
         try {
             YalseeErrorJson errorJson = AppUtils.GSON.fromJson(body, YalseeErrorJson.class);
             assertNotNull(errorJson);
-            log.debug("ErrorJson: " + errorJson);
+            System.out.println("ErrorJson: " + errorJson);
             boolean hasNotEmptyMessageField = errorJson.getMessage() != null;
             boolean hasNotEmptyTimestampField = errorJson.getTimestamp() != null;
 
-            log.debug("HasNotEmptyMessageField: " + hasNotEmptyMessageField);
-            log.debug("hasNotEmptyTimestampField: " + hasNotEmptyTimestampField);
+            System.out.println("HasNotEmptyMessageField: " + hasNotEmptyMessageField);
+            System.out.println("hasNotEmptyTimestampField: " + hasNotEmptyTimestampField);
 
             return hasNotEmptyMessageField || hasNotEmptyTimestampField;
         } catch (Exception e) {
