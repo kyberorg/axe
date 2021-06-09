@@ -108,11 +108,13 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
     }
 
     private void applyStyle() {
+        redirectPage.setWidthFull();
+
         leftDiv.addClassName("responsive-div");
         centralLayout.addClassName("responsive-center");
         rightDiv.addClassName("responsive-div");
 
-        redirectPage.addClassNames("main-area", "border");
+        centralLayout.addClassNames("main-area", "border");
 
         nb.addClassName("bold");
     }
