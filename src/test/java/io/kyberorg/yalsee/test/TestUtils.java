@@ -43,7 +43,6 @@ public final class TestUtils {
      * @param result string with http response
      */
     public static void assertResultIsYalsErrorJson(final HttpResponse<String> result) {
-        System.out.println("Result: "+ result);
         assertTrue(
                 TestUtils.isValidErrorJson(result),
                 "Response is not valid " + YalseeErrorJson.class.getSimpleName());
@@ -231,6 +230,7 @@ public final class TestUtils {
 
             return hasNotEmptyMessageField || hasNotEmptyTimestampField;
         } catch (Exception e) {
+            e.printStackTrace(System.err);
             return false;
         }
     }
