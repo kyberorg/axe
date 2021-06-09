@@ -98,7 +98,7 @@ public class RedirectToLinkView extends VerticalLayout implements HasErrorParame
 
     private boolean shouldSkipRedirectPage() {
         //TODO add if link has owner -> true
-        return appUtils.hasRedirectSkipMark(this.origin);
+        return appUtils.hasRedirectPageBypassSymbol(this.origin);
     }
 
     private void doJSRedirect(String target) {

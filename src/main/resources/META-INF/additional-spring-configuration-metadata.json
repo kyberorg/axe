@@ -51,9 +51,9 @@
       "description": "Defines if search engine crawlers are allowed to crawl site."
     },
     {
-      "name": "app.redirect-page.skip-mark",
+      "name": "app.redirect-page.bypass-symbol",
       "type": "java.lang.String",
-      "description": "Special symbol, which should be added to ident to skip redirect page."
+      "description": "Special symbol, which should be added to ident to bypass (skip) redirect page."
     },
     {
       "name": "app.redirect-page.timeout",

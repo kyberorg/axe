@@ -45,7 +45,7 @@ public final class App {
         public static final String GA_ENABLED = "app.seo.ga.enabled";
         public static final String GA_FILE = "app.seo.ga.file";
         public static final String CRAWLERS_ALLOWED = "app.seo.robots.crawl-allowed";
-        public static final String REDIRECT_PAGE_SKIP_MARK = "app.redirect-page.skip-mark";
+        public static final String REDIRECT_PAGE_BYPASS_SYMBOL = "app.redirect-page.bypass-symbol";
         public static final String REDIRECT_PAGE_TIMEOUT = "app.redirect-page.timeout";
     }
 

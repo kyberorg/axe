@@ -378,18 +378,18 @@ public class AppUtils {
      *
      * @return string with skip mark or {@link App#NO_VALUE}
      */
-    public String getRedirectPageSkipMark() {
-        return getEnv().getProperty(App.Properties.REDIRECT_PAGE_SKIP_MARK, App.NO_VALUE);
+    public String getRedirectPageBypassSymbol() {
+        return getEnv().getProperty(App.Properties.REDIRECT_PAGE_BYPASS_SYMBOL, App.NO_VALUE);
     }
 
-    public boolean hasRedirectSkipMark(String ident) {
-        return ident.endsWith(getRedirectPageSkipMark());
+    public boolean hasRedirectPageBypassSymbol(String ident) {
+        return ident.endsWith(getRedirectPageBypassSymbol());
     }
 
-    public String dropRedirectSkipMarkFrom(String ident) {
-        if (hasRedirectSkipMark(ident)) {
+    public String dropRedirectPageBypassSymbolFrom(String ident) {
+        if (hasRedirectPageBypassSymbol(ident)) {
             //remove only last char if it is skip mark
-            return ident.substring(0, ident.lastIndexOf(getRedirectPageSkipMark()));
+            return ident.substring(0, ident.lastIndexOf(getRedirectPageBypassSymbol()));
         } else {
             return ident;
         }

@@ -61,7 +61,7 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
         String route = event.getLocation().getPath();
         if (isIdent(route)) {
             assert linkService != null;
-            String ident = appUtils.dropRedirectSkipMarkFrom(route);
+            String ident = appUtils.dropRedirectPageBypassSymbolFrom(route);
             GetResult searchResult = linkService.getLink(ident);
             if (searchResult instanceof GetResult.Success) {
                 String link = ((GetResult.Success) searchResult).getLink();
@@ -87,7 +87,7 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
     }
 
     private boolean isIdent(final String route) {
-        String ident = appUtils.dropRedirectSkipMarkFrom(route);
+        String ident = appUtils.dropRedirectPageBypassSymbolFrom(route);
         return ident.matches(IdentGenerator.VALID_IDENT_PATTERN);
     }
 
