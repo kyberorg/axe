@@ -43,6 +43,7 @@ import static io.kyberorg.yalsee.utils.push.PushCommand.UPDATE_COUNTER;
 @Slf4j
 @SpringComponent
 @UIScope
+@CssImport("./css/common_styles.css")
 @CssImport("./css/home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
 @PageTitle("Yalsee - the link shortener")
