@@ -7,6 +7,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.router.*;
@@ -38,7 +39,7 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
     private static final String TAG = "[" + RedirectView.class.getSimpleName() + "]";
 
     private final Span directAccessBanner = new Span("Not intended for direct use");
-    private final VerticalLayout redirectPage = new VerticalLayout();
+    private final HorizontalLayout redirectPage = new HorizontalLayout();
 
     private final Div leftDiv = new Div();
     private final VerticalLayout centralLayout = new VerticalLayout();
