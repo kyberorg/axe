@@ -382,11 +382,23 @@ public class AppUtils {
         return getEnv().getProperty(App.Properties.REDIRECT_PAGE_BYPASS_SYMBOL, App.NO_VALUE);
     }
 
-    public boolean hasRedirectPageBypassSymbol(String ident) {
+    /**
+     * Determines if ident has redirect page bypass symbol at the end.
+     *
+     * @param ident string with ident to check
+     * @return true - if ident has bypass symbol, false - if not
+     */
+    public boolean hasRedirectPageBypassSymbol(final String ident) {
         return ident.endsWith(getRedirectPageBypassSymbol());
     }
 
-    public String dropRedirectPageBypassSymbolFrom(String ident) {
+    /**
+     * Drops redirect page bypass symbol from provided ident string. It also check if string has this symbol.
+     *
+     * @param ident string with ident to check on bypass symbol.
+     * @return ident string without bypass symbol or same string, if ident hasn't bypass symbol.
+     */
+    public String dropRedirectPageBypassSymbolFrom(final String ident) {
         if (hasRedirectPageBypassSymbol(ident)) {
             //remove only last char if it is skip mark
             return ident.substring(0, ident.lastIndexOf(getRedirectPageBypassSymbol()));
@@ -402,7 +414,7 @@ public class AppUtils {
      */
     public int getRedirectPageTimeout() {
         String timeoutString =  getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
-        if(timeoutString.equals(App.NO_VALUE)) {
+        if (timeoutString.equals(App.NO_VALUE)) {
             return App.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
         }
         return Integer.parseInt(timeoutString);

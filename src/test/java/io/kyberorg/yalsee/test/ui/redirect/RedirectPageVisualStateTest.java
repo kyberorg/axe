@@ -86,7 +86,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
      * Tests that NB! element is bold and has "NB!" text.
      */
     @Test
-    public void NBElementIsBoldAndHasNBText() {
+    public void nbElementIsBoldAndHasNBText() {
         RedirectPageObject.Elements.NB.shouldBe(visible);
         RedirectPageObject.Elements.NB.shouldHave(cssClass("bold"));
         RedirectPageObject.Elements.NB.shouldHave(text("NB!"));
@@ -96,7 +96,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
      * Tests that Bypass Symbol is present and same as Symbol from Server Settings.
      */
     @Test
-    public void BypassSymbolIsPresentAndSameAsInSettings() {
+    public void bypassSymbolIsPresentAndSameAsInSettings() {
         RedirectPageObject.Elements.BYPASS_SYMBOL.shouldBe(visible);
         RedirectPageObject.Elements.BYPASS_SYMBOL.shouldNotBe(empty);
 

@@ -43,7 +43,7 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
      * @param appUtils application utils
      * @param linkService service to work with DB
      */
-    public SlashView(AppUtils appUtils, final LinkService linkService) {
+    public SlashView(final AppUtils appUtils, final LinkService linkService) {
         this.appUtils = appUtils;
         this.linkService = linkService;
     }

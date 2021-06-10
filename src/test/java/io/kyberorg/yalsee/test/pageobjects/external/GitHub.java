@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 3.0.5
  */
-public class GitHub {
+public final class GitHub {
 
     public static final SelenideElement GITHUB_HEADER = $(".gh-header");
 

@@ -78,8 +78,10 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
     /**
      * Creates {@link RedirectView}.
+     *
+     * @param appUtils application utils for getting settings.
      */
-    public RedirectView(AppUtils appUtils) {
+    public RedirectView(final AppUtils appUtils) {
         this.appUtils = appUtils;
 
         init();
@@ -131,13 +133,13 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
     }
 
     @Override
-    protected void onAttach(AttachEvent attachEvent) {
+    protected void onAttach(final AttachEvent attachEvent) {
         thread = new FeederThread(attachEvent.getUI(), this);
         thread.start();
     }
 
     @Override
-    protected void onDetach(DetachEvent detachEvent) {
+    protected void onDetach(final DetachEvent detachEvent) {
         thread.interrupt();
         thread = null;
     }
@@ -156,7 +158,7 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         this.origin = appUtils.getShortUrl() + "/" + parts[0];
         this.target = parts[1];
 
-        if(shouldSkipRedirectPage()) {
+        if (shouldSkipRedirectPage()) {
             log.info("{} skipping redirect page for {}", TAG, this.origin);
             return doHeaderRedirect(target);
         }
@@ -181,13 +183,13 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         return appUtils.hasRedirectPageBypassSymbol(this.origin);
     }
 
-    private void doJSRedirect(String target) {
+    private void doJSRedirect(final String target) {
         if (Objects.nonNull(this.page)) {
             this.page.setLocation(AppUtils.covertUnicodeToAscii(target));
         }
     }
 
-    private int doHeaderRedirect(String target) {
+    private int doHeaderRedirect(final String target) {
         if (StringUtils.isNotBlank(target)) {
             VaadinResponse.getCurrent().setHeader(Header.LOCATION, AppUtils.covertUnicodeToAscii(target));
             return STATUS_302;
@@ -226,7 +228,7 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
         private int count = 0;
 
-        public FeederThread(UI ui, RedirectView view) {
+        FeederThread(final UI ui, final RedirectView view) {
             this.ui = ui;
             this.view = view;
         }
@@ -235,7 +237,7 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         public void run() {
             try {
                 int redirectTimeout = view.appUtils.getRedirectPageTimeout();
-                while (count < redirectTimeout ) {
+                while (count < redirectTimeout) {
                     TimeUnit.SECONDS.sleep(1);
                     count++;
 
@@ -258,6 +260,6 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         public static final String HERE_LINK_ID = "hereLink";
         public static final String BYPASS_SYMBOL_ID = "bypassSymbol";
         public static final String COUNTER_ID = "counter";
-        public static final String NB ="nb";
+        public static final String NB = "nb";
     }
 }
