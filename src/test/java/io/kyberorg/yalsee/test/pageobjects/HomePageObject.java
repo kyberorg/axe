@@ -88,6 +88,11 @@ public final class HomePageObject {
     public static void pasteValueInFormAndSubmitIt(final String link) {
         pasteValueInForm(link);
         MainArea.SUBMIT_BUTTON.click();
+
+        //this should prevent flaky behaviour
+        if (!HomePageObject.ResultArea.RESULT_LINK.exists()) {
+            MainArea.SUBMIT_BUTTON.click();
+        }
     }
 
     /**
