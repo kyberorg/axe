@@ -46,7 +46,10 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
     private final Div rightDiv = new Div();
 
     private final Span firstTextLine = new Span("According to our records");
+
+    private final Span originLine = new Span();
     private final Anchor originLink = new Anchor();
+    private final Span originText = new Span();
 
     private final Span secondTextLine = new Span("is short link for");
     private final Anchor targetLink = new Anchor();
@@ -97,10 +100,11 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         nbSymbol.setText(appUtils.getRedirectPageBypassSymbol());
         nbSymbol.setId(IDs.BYPASS_SYMBOL_ID);
 
+        originLine.add(originLink, originText);
         redirectLine.add(rdrPreText, rdrCounter, rdrUnit, rdrClickText, rdrHereLink, rdrPostText);
         nbLine.add(nb, nbPreText, nbSymbol, nbPostText);
 
-        centralLayout.add(firstTextLine, originLink, secondTextLine, targetLink, redirectLine, nbLine);
+        centralLayout.add(firstTextLine, originLine, secondTextLine, targetLink, redirectLine, nbLine);
         redirectPage.add(leftDiv, centralLayout, rightDiv);
         add(directAccessBanner, redirectPage);
 
@@ -158,6 +162,8 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
         rdrHereLink.setHref(this.target);
 
+        originText.setText(makeLengthDifferenceLine());
+
         directAccessBanner.setVisible(false);
         redirectPage.setVisible(true);
         return STATUS_200;
@@ -182,6 +188,29 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
             log.error("{} Target is empty", TAG);
             return STATUS_500;
         }
+    }
+
+    private String makeLengthDifferenceLine() {
+        int lenDiff = this.target.length() - this.origin.length();
+        String adjective;
+
+        if (lenDiff > 0) {
+            adjective = "shorter";
+        } else if (lenDiff < 0) {
+            adjective = "longer";
+        } else {
+            adjective = "same length";
+        }
+
+        String lenLine;
+        if (lenDiff == 0) {
+            lenLine = String.format(" (%s)", adjective);
+        } else {
+            int lenDifference = lenDiff > 0 ? lenDiff : Math.abs(lenDiff);
+            String ch = lenDiff == 1 ? "char" : "chars";
+            lenLine = String.format(" (%d %s %s)", lenDifference, ch, adjective);
+        }
+        return lenLine;
     }
 
     private static final class FeederThread extends Thread {
