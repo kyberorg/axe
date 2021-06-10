@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.ui.HomeView;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
 
 /**
  * Page Object for {@link HomeView}.
@@ -90,14 +91,24 @@ public final class HomePageObject {
     }
 
     /**
+     * Pastes link to input, clicks submit button and returns result link.
+     *
+     * @param urlToStore String with long URL to store it
+     * @return string with short URL produced.
+     */
+    public static String storeAndReturnSavedUrl(final String urlToStore) {
+        pasteValueInFormAndSubmitIt(urlToStore);
+        return HomePageObject.ResultArea.RESULT_LINK.getText();
+    }
+
+    /**
      * Pastes link to input, clicks submit button and opens result link in browser window.
      *
      * @param urlToStore string with long URL to store it
      */
     public static void storeAndOpenSavedUrl(final String urlToStore) {
-        pasteValueInFormAndSubmitIt(urlToStore);
-        String shortLink = HomePageObject.ResultArea.RESULT_LINK.getText();
-        open(shortLink);
+        String shortLink = storeAndReturnSavedUrl(urlToStore);
+        open(shortLink + addRedirectPageBypassSymbol());
     }
 
     /**

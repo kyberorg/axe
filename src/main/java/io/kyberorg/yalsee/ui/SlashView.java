@@ -9,6 +9,7 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.exception.IdentNotFoundException;
@@ -33,14 +34,17 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 public class SlashView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
     private static final String TAG = "[" + SlashView.class.getSimpleName() + "]";
 
+    private final AppUtils appUtils;
     private final LinkService linkService;
 
     /**
      * Creates {@link SlashView}.
      *
+     * @param appUtils application utils
      * @param linkService service to work with DB
      */
-    public SlashView(final LinkService linkService) {
+    public SlashView(final AppUtils appUtils, final LinkService linkService) {
+        this.appUtils = appUtils;
         this.linkService = linkService;
     }
 
@@ -57,11 +61,13 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
         String route = event.getLocation().getPath();
         if (isIdent(route)) {
             assert linkService != null;
-            GetResult searchResult = linkService.getLink(route);
+            String ident = appUtils.dropRedirectPageBypassSymbolFrom(route);
+            GetResult searchResult = linkService.getLink(ident);
             if (searchResult instanceof GetResult.Success) {
                 String link = ((GetResult.Success) searchResult).getLink();
                 log.info("{} Got long URL. Redirecting to {}", TAG, link);
-                event.rerouteToError(NeedForRedirectException.class, link);
+                event.rerouteToError(NeedForRedirectException.class,
+                        route + App.URL_SAFE_SEPARATOR + link);
             } else if (searchResult instanceof GetResult.NotFound) {
                 log.info("{} No corresponding longURL found. Replying with 404. {\"Ident\": {}}", TAG, route);
                 rerouteTo404(route, event, Target.IDENT_NOT_FOUND);
@@ -81,7 +87,8 @@ public class SlashView extends VerticalLayout implements HasErrorParameter<NotFo
     }
 
     private boolean isIdent(final String route) {
-        return route.matches(IdentGenerator.VALID_IDENT_PATTERN);
+        String ident = appUtils.dropRedirectPageBypassSymbolFrom(route);
+        return ident.matches(IdentGenerator.VALID_IDENT_PATTERN);
     }
 
     private boolean isApiRequest(final String path) {

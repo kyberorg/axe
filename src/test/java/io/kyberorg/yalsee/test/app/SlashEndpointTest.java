@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import static io.kyberorg.yalsee.Endpoint.ForTests.SLASH_BASE;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
+import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -34,7 +35,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(false);
 
-        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident);
+        HttpRequest request = Unirest.get(TEST_URL + SLASH_BASE + ident + addRedirectPageBypassSymbol());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

@@ -373,6 +373,53 @@ public class AppUtils {
         return getEnv().getProperty(App.Env.DELETE_TOKEN, App.NO_VALUE);
     }
 
+    /**
+     * Reads redirect page bypass symbol from settings.
+     *
+     * @return string with skip mark or {@link App#NO_VALUE}
+     */
+    public String getRedirectPageBypassSymbol() {
+        return getEnv().getProperty(App.Properties.REDIRECT_PAGE_BYPASS_SYMBOL, App.NO_VALUE);
+    }
+
+    /**
+     * Determines if ident has redirect page bypass symbol at the end.
+     *
+     * @param ident string with ident to check
+     * @return true - if ident has bypass symbol, false - if not
+     */
+    public boolean hasRedirectPageBypassSymbol(final String ident) {
+        return ident.endsWith(getRedirectPageBypassSymbol());
+    }
+
+    /**
+     * Drops redirect page bypass symbol from provided ident string. It also check if string has this symbol.
+     *
+     * @param ident string with ident to check on bypass symbol.
+     * @return ident string without bypass symbol or same string, if ident hasn't bypass symbol.
+     */
+    public String dropRedirectPageBypassSymbolFrom(final String ident) {
+        if (hasRedirectPageBypassSymbol(ident)) {
+            //remove only last char if it is skip mark
+            return ident.substring(0, ident.lastIndexOf(getRedirectPageBypassSymbol()));
+        } else {
+            return ident;
+        }
+    }
+
+    /**
+     * Reads redirect page skip from settings.
+     *
+     * @return int with timeout from settings or default timeout {@link App.Defaults#REDIRECT_PAGE_TIMEOUT_SECONDS}
+     */
+    public int getRedirectPageTimeout() {
+        String timeoutString =  getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
+        if (timeoutString.equals(App.NO_VALUE)) {
+            return App.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
+        }
+        return Integer.parseInt(timeoutString);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_BUTTON;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
@@ -127,7 +128,7 @@ public class MultiStepTest extends SelenideTest {
                         + "%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B9_"
                         + "%D0%A0%D0%B5%D1%81%D0%BF%D1%83%D0%B1%D0%BB%D0%B8%D0%BA%D0%B8");
 
-        open(HomePageObject.getSavedUrl());
+        open(HomePageObject.getSavedUrl() + addRedirectPageBypassSymbol());
 
         SelenideElement articleTitle = $(Wikipedia.getArticleTitle());
         articleTitle.should(exist);
@@ -141,7 +142,7 @@ public class MultiStepTest extends SelenideTest {
     public void linkWithEstonianLettersMustBeSavedAndReused() {
         HomePageObject.pasteValueInFormAndSubmitIt("http://eki.ee/dict/ekss/index.cgi?Q=l%C3%A4bi%20tulema");
 
-        open(HomePageObject.getSavedUrl());
+        open(HomePageObject.getSavedUrl() + addRedirectPageBypassSymbol());
         SelenideElement titleSpan = $(Eki.getTitle());
         titleSpan.should(exist);
         titleSpan.shouldHave(text(Eki.TITLE_TEXT));

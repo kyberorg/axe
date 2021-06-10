@@ -190,6 +190,15 @@ public final class TestUtils {
     }
 
     /**
+     * Provides redirect page bypass symbol based on {@link TestedEnv} settings.
+     *
+     * @return string with bypass symbol
+     */
+    public static String addRedirectPageBypassSymbol() {
+        return getTestedEnv().getRedirectPageBypassSymbol();
+    }
+
+    /**
      * Following needed because in may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
@@ -216,6 +225,7 @@ public final class TestUtils {
 
             return hasNotEmptyMessageField || hasNotEmptyTimestampField;
         } catch (Exception e) {
+            e.printStackTrace(System.err);
             return false;
         }
     }
