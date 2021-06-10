@@ -88,7 +88,12 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
     private void init() {
         setId(IDs.VIEW_ID);
+
+        directAccessBanner.setId(IDs.DIRECT_ACCESS_BANNER);
+
         originLink.setId(IDs.ORIGIN_LINK_ID);
+        originText.setId(IDs.LEN_DIFF_ID);
+
         targetLink.setId(IDs.TARGET_LINK_ID);
 
         rdrCounter.setText(appUtils.getRedirectPageTimeout() + "");
@@ -96,6 +101,8 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
         rdrHereLink.setText("here");
         rdrHereLink.setId(IDs.HERE_LINK_ID);
+
+        nb.setId(IDs.NB);
 
         nbSymbol.setText(appUtils.getRedirectPageBypassSymbol());
         nbSymbol.setId(IDs.BYPASS_SYMBOL_ID);
@@ -242,12 +249,15 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         }
     }
 
-    private static class IDs {
-        public static final String VIEW_ID = "RedirectView";
+    public static class IDs {
+        public static final String VIEW_ID = "redirectView";
+        public static final String DIRECT_ACCESS_BANNER = "directAccessBanner";
         public static final String ORIGIN_LINK_ID = "originLink";
+        public static final String LEN_DIFF_ID = "lenDiff";
         public static final String TARGET_LINK_ID = "targetLink";
         public static final String HERE_LINK_ID = "hereLink";
         public static final String BYPASS_SYMBOL_ID = "bypassSymbol";
         public static final String COUNTER_ID = "counter";
+        public static final String NB ="nb";
     }
 }

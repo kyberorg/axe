@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.ui.home;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
+import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.VR;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
@@ -55,8 +56,7 @@ public class HomePageTest extends SelenideTest {
         $(shortLink).shouldBe(visible);
         shortLink.click();
 
-        //FIXME this is no longer works, because of redirect page
-        verifyThatVROpened();
+        verifyThatRedirectPageOpened();
     }
 
     /**
@@ -93,6 +93,10 @@ public class HomePageTest extends SelenideTest {
 
     private void verifyThatVROpened() {
         Assertions.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
+    }
+
+    private void verifyThatRedirectPageOpened() {
+        RedirectPageObject.VIEW.should(exist);
     }
 
     private void verifyThatPage404Opened() {
