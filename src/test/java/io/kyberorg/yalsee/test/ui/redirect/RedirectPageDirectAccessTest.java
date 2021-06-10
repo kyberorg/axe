@@ -25,7 +25,7 @@ public class RedirectPageDirectAccessTest extends SelenideTest {
     @BeforeEach
     public void beforeTest() {
         tuneDriverWithCapabilities();
-        open("/redirect");
+        open("/redirector");
         waitForVaadin();
     }
 

@@ -140,7 +140,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
     @Test
     public void lenDiffStringNumberIsPositiveAndHasWordShorter() {
         String lenDiffStringText = RedirectPageObject.Elements.LEN_DIFF_STRING.getText();
-        String numberStr = lenDiffStringText.replace("\\d+", "");
+        String numberStr = lenDiffStringText.replaceAll("[^0-9]", "");
         int number = Integer.parseInt(numberStr);
 
         Assertions.assertTrue(number > 0);
