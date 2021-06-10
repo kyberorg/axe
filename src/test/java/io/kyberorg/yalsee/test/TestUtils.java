@@ -190,7 +190,7 @@ public final class TestUtils {
     }
 
     /**
-     * Provides redirect page bypass symbol based on {@link TestedEnv}.
+     * Provides redirect page bypass symbol based on {@link TestedEnv} settings.
      *
      * @return string with bypass symbol
      */

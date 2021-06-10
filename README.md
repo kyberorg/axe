@@ -6,6 +6,12 @@ Simple link shortener [yals.ee](https://yals.ee), which produce links like [http
 
 Docker image: [`kyberorg/yalsee`](https://hub.docker.com/repository/docker/kyberorg/yalsee)
 
+### Note on Anti-phishing redirect page
+Since version `3.0.5` by default redirect when user opens short link redirect page with destination link shows.
+This was done intentionally to prevent phishing and malware activities. 
+
+To bypass this page just add manually `+` symbol to end of your short link. For example: [https://yls.ee/Cxwycs+](https://yls.ee/Cxwycs+)
+
 ## Release Notes
 Moved to [CHANGELOG](CHANGELOG.md).
 

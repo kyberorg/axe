@@ -374,7 +374,7 @@ public class AppUtils {
     }
 
     /**
-     * Reads redirect page skip from settings.
+     * Reads redirect page bypass symbol from settings.
      *
      * @return string with skip mark or {@link App#NO_VALUE}
      */

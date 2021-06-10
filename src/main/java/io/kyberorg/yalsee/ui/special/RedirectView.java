@@ -49,7 +49,7 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
     private final Span originLine = new Span();
     private final Anchor originLink = new Anchor();
-    private final Span originText = new Span();
+    private final Span lenDiffText = new Span();
 
     private final Span secondTextLine = new Span("is short link for");
     private final Anchor targetLink = new Anchor();
@@ -90,26 +90,20 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
     private void init() {
         setId(IDs.VIEW_ID);
-
         directAccessBanner.setId(IDs.DIRECT_ACCESS_BANNER);
-
         originLink.setId(IDs.ORIGIN_LINK_ID);
-        originText.setId(IDs.LEN_DIFF_ID);
-
+        lenDiffText.setId(IDs.LEN_DIFF_ID);
         targetLink.setId(IDs.TARGET_LINK_ID);
-
-        rdrCounter.setText(appUtils.getRedirectPageTimeout() + "");
         rdrCounter.setId(IDs.COUNTER_ID);
-
-        rdrHereLink.setText("here");
         rdrHereLink.setId(IDs.HERE_LINK_ID);
-
         nb.setId(IDs.NB);
-
-        nbSymbol.setText(appUtils.getRedirectPageBypassSymbol());
         nbSymbol.setId(IDs.BYPASS_SYMBOL_ID);
 
-        originLine.add(originLink, originText);
+        rdrCounter.setText(appUtils.getRedirectPageTimeout() + "");
+        rdrHereLink.setText("here");
+        nbSymbol.setText(appUtils.getRedirectPageBypassSymbol());
+
+        originLine.add(originLink, lenDiffText);
         redirectLine.add(rdrPreText, rdrCounter, rdrUnit, rdrClickText, rdrHereLink, rdrPostText);
         nbLine.add(nb, nbPreText, nbSymbol, nbPostText);
 
@@ -133,18 +127,6 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
     }
 
     @Override
-    protected void onAttach(final AttachEvent attachEvent) {
-        thread = new FeederThread(attachEvent.getUI(), this);
-        thread.start();
-    }
-
-    @Override
-    protected void onDetach(final DetachEvent detachEvent) {
-        thread.interrupt();
-        thread = null;
-    }
-
-    @Override
     public int setErrorParameter(final BeforeEnterEvent event,
                                  final ErrorParameter<NeedForRedirectException> parameter) {
         String message = parameter.getCustomMessage();
@@ -165,13 +147,12 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
         originLink.setText(this.origin);
         originLink.setHref(this.origin);
+        lenDiffText.setText(makeLengthDifferenceText());
 
         targetLink.setText(this.target);
         targetLink.setHref(this.target);
 
         rdrHereLink.setHref(this.target);
-
-        originText.setText(makeLengthDifferenceLine());
 
         directAccessBanner.setVisible(false);
         redirectPage.setVisible(true);
@@ -199,7 +180,7 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         }
     }
 
-    private String makeLengthDifferenceLine() {
+    private String makeLengthDifferenceText() {
         int lenDiff = this.target.length() - this.origin.length();
         String adjective;
 
@@ -220,6 +201,18 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
             lenLine = String.format(" (%d %s %s)", lenDifference, ch, adjective);
         }
         return lenLine;
+    }
+
+    @Override
+    protected void onAttach(final AttachEvent attachEvent) {
+        thread = new FeederThread(attachEvent.getUI(), this);
+        thread.start();
+    }
+
+    @Override
+    protected void onDetach(final DetachEvent detachEvent) {
+        thread.interrupt();
+        thread = null;
     }
 
     private static final class FeederThread extends Thread {
