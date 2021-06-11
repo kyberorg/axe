@@ -1,3 +1,10 @@
+### Version 3.0.5 (11/06/2021)
+Anti-Scam and Anti-Malware Actions
+
+* Anti-Scam Redirect Page (#353)
+* Banning Mechanism (#350)
+* tmweb.ru and weebly.com are banned (#350) (#357)
+
 ### Version 3.0.4 (18/03/2021)
 Delete Links API
 
