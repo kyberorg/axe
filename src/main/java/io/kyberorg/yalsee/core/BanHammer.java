@@ -14,6 +14,7 @@ public final class BanHammer {
     static {
         // @see issue #350
         BAN_LIST.add("tmweb.ru");
+        BAN_LIST.add("weebly.com");
     }
 
     private BanHammer() {
