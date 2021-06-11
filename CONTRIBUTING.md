@@ -14,7 +14,7 @@
 ### About: local profile
 To develop with locally running dockerized MySQL database use `local` profile.
 
-Profile can activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `local`
+Profile can be activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `local`
 
 MySQL can be started from `docker/localMySQL` directory by running:
 
