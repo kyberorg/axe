@@ -124,7 +124,11 @@ public class YalseeErrorController implements ErrorController {
         }
     }
 
-    @Override
+    /**
+     * Provides path to error page.
+     *
+     * @return string that contains path of error page.
+     */
     public String getErrorPath() {
         return Endpoint.TNT.ERROR_PAGE;
     }
