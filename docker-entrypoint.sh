@@ -68,4 +68,6 @@ fi
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
 # End Issue 236 (Vaadin Production Mode) #
 
+echo "Running java ${JAVA_OPTS} -jar /app/yalsee.jar"
+
 exec java ${JAVA_OPTS} -jar /app/yalsee.jar
