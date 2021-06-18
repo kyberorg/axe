@@ -12,7 +12,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.Registration;
@@ -110,8 +109,7 @@ public class HomeView extends HorizontalLayout {
         linkCounter.setText(Long.toString(linksStored));
 
         input.setAutofocus(true);
-        input.setValueChangeMode(ValueChangeMode.ON_CHANGE);
-        input.addValueChangeListener(event -> updateButtonState());
+        submitButton.setEnabled(true);
 
         mainArea.setVisible(true);
         overallArea.setVisible(true);
@@ -469,11 +467,6 @@ public class HomeView extends HorizontalLayout {
 
         qrCode.setSrc("");
         qrCodeArea.setVisible(false);
-    }
-
-    private void updateButtonState() {
-        boolean inputHasValue = StringUtils.isNotBlank(input.getValue());
-        submitButton.setEnabled(inputHasValue);
     }
 
     public static class IDs {
