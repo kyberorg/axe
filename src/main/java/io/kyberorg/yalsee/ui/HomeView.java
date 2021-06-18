@@ -120,7 +120,12 @@ public class HomeView extends HorizontalLayout {
     }
 
     private VerticalLayout mainArea() {
-        H2 title = new H2("Make your links short");
+        Span titlePartOne = new Span("Make your ");
+        Span longPart = new Span("long");
+        Span titleLastPart = new Span(" links short");
+
+        //H2 title = new H2("Make your links short");
+        H2 title = new H2(titlePartOne, longPart, titleLastPart);
         title.setId(IDs.TITLE);
         title.addClassName("compact-title");
 
