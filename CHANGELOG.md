@@ -1,3 +1,9 @@
+### Version 3.0.6 (18/06/2021)
+Updates
+
+* Spring Boot 2.4.2 -> 2.5.1 (#356)
+* Other dependencies (#356)
+
 ### Version 3.0.5 (11/06/2021)
 Anti-Scam and Anti-Malware Actions
 
