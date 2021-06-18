@@ -40,22 +40,22 @@
 /* Large devices (desktops/laptops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
     .responsive-div {
-        flex-basis: 15%;
+        flex-basis: 10%;
     }
 
     .responsive-center {
-        flex-basis: 70%;
+        flex-basis: 80%;
     }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) and (max-width: 1440.98px) {
     .responsive-div {
-        flex-basis: 20%;
+        flex-basis: 10%;
     }
 
     .responsive-center {
-        flex-basis: 60%;
+        flex-basis: 80%;
     }
 }
 
