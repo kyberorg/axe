@@ -35,7 +35,7 @@ public class RedirectPageDirectAccessTest extends SelenideTest {
     @Test
     public void onDirectAccessOnlyBannerShown() {
         RedirectPageObject.DIRECT_ACCESS_BANNER.shouldBe(visible);
-        RedirectPageObject.MAIN_AREA.shouldBe(hidden);
+        RedirectPageObject.REDIRECT_PAGE_CONTAINER.shouldBe(hidden);
     }
 
 }

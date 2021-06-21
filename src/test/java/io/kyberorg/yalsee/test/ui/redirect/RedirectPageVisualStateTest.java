@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.ui.redirect;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
+import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.apache.logging.log4j.util.Strings;
@@ -41,12 +42,12 @@ public class RedirectPageVisualStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that Main Area has Border.
+     * Tests that Page has Main Area and it has Border.
      */
     @Test
     public void mainAreaIsPresentAndHasBorder() {
-        RedirectPageObject.MAIN_AREA.shouldBe(visible);
-        RedirectPageObject.MAIN_AREA.shouldHave(cssClass("border"));
+        YalseeCommonsPageObject.MAIN_AREA.shouldBe(visible);
+        YalseeCommonsPageObject.MAIN_AREA.shouldHave(cssClass("border"));
     }
 
     /**

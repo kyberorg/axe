@@ -86,6 +86,7 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
     private void init() {
         setId(IDs.VIEW_ID);
         directAccessBanner.setId(IDs.DIRECT_ACCESS_BANNER);
+        redirectPage.setId(IDs.REDIRECT_PAGE);
         originLink.setId(IDs.ORIGIN_LINK_ID);
         lenDiffText.setId(IDs.LEN_DIFF_ID);
         targetLink.setId(IDs.TARGET_LINK_ID);
@@ -234,6 +235,7 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
     public static class IDs {
         public static final String VIEW_ID = "redirectView";
         public static final String DIRECT_ACCESS_BANNER = "directAccessBanner";
+        public static final String REDIRECT_PAGE = "redirectPage";
         public static final String ORIGIN_LINK_ID = "originLink";
         public static final String LEN_DIFF_ID = "lenDiff";
         public static final String TARGET_LINK_ID = "targetLink";
