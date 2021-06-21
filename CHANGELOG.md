@@ -1,3 +1,6 @@
+### Current
+* Use same MainArea pattern at all pages (#355)
+
 ### Version 3.0.6 (18/06/2021)
 Updates
 
