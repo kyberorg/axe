@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 3.0.7
  */
-public class YalseeCommonsPageObject {
+public final class YalseeCommonsPageObject {
     public static final SelenideElement MAIN_AREA = $(".main-area");
 
     private YalseeCommonsPageObject() {
