@@ -15,6 +15,10 @@ import static com.codeborne.selenide.Selenide.$;
 public class YalseeCommonsPageObject {
     public static final SelenideElement MAIN_AREA = $(".main-area");
 
+    private YalseeCommonsPageObject() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     /**
      * Verifies that page has elements of {@link YalseeLayout}.
      */

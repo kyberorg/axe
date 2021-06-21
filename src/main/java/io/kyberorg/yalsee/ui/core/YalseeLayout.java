@@ -16,6 +16,9 @@ public class YalseeLayout extends VerticalLayout {
     private final VerticalLayout centralLayout = new VerticalLayout();
     private final Div rightDiv = new Div();
 
+    /**
+     * Constructs Yalsee Layout elements and styles them.
+     */
     public YalseeLayout() {
         init();
         applyStyle();
@@ -36,7 +39,7 @@ public class YalseeLayout extends VerticalLayout {
     }
 
     @Override
-    public void add(Component... components) {
+    public void add(final Component... components) {
         centralLayout.add(components);
     }
 }
