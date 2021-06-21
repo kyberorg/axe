@@ -42,12 +42,11 @@ public class RedirectPageVisualStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that Page has Main Area and it has Border.
+     * Tests that Page has common application Layout.
      */
     @Test
-    public void mainAreaIsPresentAndHasBorder() {
-        YalseeCommonsPageObject.MAIN_AREA.shouldBe(visible);
-        YalseeCommonsPageObject.MAIN_AREA.shouldHave(cssClass("border"));
+    public void pageHasCommonLayout() {
+        YalseeCommonsPageObject.verifyThatPageHasYalseeLayout();
     }
 
     /**
