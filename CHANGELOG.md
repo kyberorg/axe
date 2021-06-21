@@ -1,4 +1,5 @@
 ### Current (3.0.7)
+* FR2: Submit button no longer disabled on empty input to prevent flaky tests (#367)
 * FR1: YalseeLayout: common layout for all pages (#355)
 
 ### Version 3.0.6 (18/06/2021)
