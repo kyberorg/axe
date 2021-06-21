@@ -1,3 +1,7 @@
 img {
     max-width: 100%;
 }
+
+.centered-image {
+    align-self: center;
+}
