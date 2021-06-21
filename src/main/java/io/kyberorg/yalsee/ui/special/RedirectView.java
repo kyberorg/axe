@@ -5,9 +5,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.router.*;
@@ -19,6 +17,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,15 +34,11 @@ import static io.kyberorg.yalsee.constants.HttpCode.*;
 @CssImport("./css/redirect_view.css")
 @Route(value = Endpoint.TNT.REDIRECTOR, layout = MainView.class)
 @PageTitle("Yalsee: Redirect Page")
-public class RedirectView extends VerticalLayout implements HasErrorParameter<NeedForRedirectException> {
+public class RedirectView extends YalseeLayout implements HasErrorParameter<NeedForRedirectException> {
     private static final String TAG = "[" + RedirectView.class.getSimpleName() + "]";
 
     private final Span directAccessBanner = new Span("Not intended for direct use");
-    private final HorizontalLayout redirectPage = new HorizontalLayout();
-
-    private final Div leftDiv = new Div();
-    private final VerticalLayout centralLayout = new VerticalLayout();
-    private final Div rightDiv = new Div();
+    private final VerticalLayout redirectPage = new VerticalLayout();
 
     private final Span firstTextLine = new Span("According to our records");
 
@@ -107,8 +102,7 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
         redirectLine.add(rdrPreText, rdrCounter, rdrUnit, rdrClickText, rdrHereLink, rdrPostText);
         nbLine.add(nb, nbPreText, nbSymbol, nbPostText);
 
-        centralLayout.add(firstTextLine, originLine, secondTextLine, targetLink, redirectLine, nbLine);
-        redirectPage.add(leftDiv, centralLayout, rightDiv);
+        redirectPage.add(firstTextLine, originLine, secondTextLine, targetLink, redirectLine, nbLine);
         add(directAccessBanner, redirectPage);
 
         redirectPage.setVisible(false);
@@ -116,13 +110,6 @@ public class RedirectView extends VerticalLayout implements HasErrorParameter<Ne
 
     private void applyStyle() {
         redirectPage.setWidthFull();
-
-        leftDiv.addClassName("responsive-div");
-        centralLayout.addClassName("responsive-center");
-        rightDiv.addClassName("responsive-div");
-
-        centralLayout.addClassNames("main-area", "border");
-
         nb.addClassName("bold");
     }
 
