@@ -6,7 +6,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 /**
- * Core View for all pages.
+ * Core Layout for all pages.
  *
  * @since 3.0.7
  */
@@ -17,7 +17,7 @@ public class YalseeLayout extends VerticalLayout {
     private final Div rightDiv = new Div();
 
     /**
-     * Constructs Yalsee Layout elements and styles them.
+     * Initialise Layout elements and styles them.
      */
     public YalseeLayout() {
         init();
@@ -31,6 +31,7 @@ public class YalseeLayout extends VerticalLayout {
 
     private void applyStyle() {
         page.setWidthFull();
+
         leftDiv.addClassName("responsive-div");
         centralLayout.addClassName("responsive-center");
         rightDiv.addClassName("responsive-div");

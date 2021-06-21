@@ -2,7 +2,6 @@ package io.kyberorg.yalsee.ui;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -22,7 +21,6 @@ public class DebugView extends YalseeLayout {
     public DebugView() {
         setId(DebugView.class.getSimpleName());
         add(new H2("Debug Page"));
-        add(new H3("It Works!"));
         add(new Text("Ready to debug something..."));
     }
 }

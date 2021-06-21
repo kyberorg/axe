@@ -1,5 +1,5 @@
-### Current
-* FR1: Use same Main Area pattern at all pages (#355)
+### Current (3.0.7)
+* FR1: YalseeLayout: common layout for all pages (#355)
 
 ### Version 3.0.6 (18/06/2021)
 Updates
