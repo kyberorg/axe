@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.ui.special;
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
@@ -13,6 +12,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.exception.error.YalseeError;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
 
@@ -26,7 +26,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
  */
 @SpringComponent
 @UIScope
-public class CatchAllVaadinExceptionsView extends VerticalLayout implements HasErrorParameter<Exception> {
+public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErrorParameter<Exception> {
 
     private final YalseeErrorKeeper yalseeErrorKeeper;
     private final ErrorUtils errorUtils;

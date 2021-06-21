@@ -8,7 +8,6 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -19,6 +18,7 @@ import io.kyberorg.yalsee.exception.GeneralServerException;
 import io.kyberorg.yalsee.exception.NeedForLoopException;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.*;
 @PageTitle("Yalsee: Error 500")
 @Route(value = Endpoint.UI.ERROR_PAGE_500, layout = MainView.class)
 @CssImport("./css/error_views.css")
-public class ServerErrorView extends VerticalLayout implements HasErrorParameter<GeneralServerException>,
+public class ServerErrorView extends YalseeLayout implements HasErrorParameter<GeneralServerException>,
         HasUrlParameter<String> {
     public static final String TAG = "[" + ServerErrorView.class.getSimpleName() + "]";
 
@@ -71,6 +71,7 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
         this.appUtils = appUtils;
 
         init();
+        applyStyle();
         add(title, subTitle, image, techInfo);
         this.setAlignItems(Alignment.CENTER);
     }
@@ -85,6 +86,11 @@ public class ServerErrorView extends VerticalLayout implements HasErrorParameter
 
         techInfo.setVisible(false);
         initTechInfo();
+    }
+
+    private void applyStyle() {
+        image.addClassName("centered-image");
+        techInfo.addClassName("centered-image");
     }
 
     private void onImageClick(final ClickEvent<Image> imageClickEvent) {

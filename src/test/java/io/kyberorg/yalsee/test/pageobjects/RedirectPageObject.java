@@ -19,7 +19,7 @@ public final class RedirectPageObject {
     public static final SelenideElement VIEW = $("#" + RedirectView.IDs.VIEW_ID);
 
     public static final SelenideElement DIRECT_ACCESS_BANNER = $("#" + RedirectView.IDs.DIRECT_ACCESS_BANNER);
-    public static final SelenideElement MAIN_AREA = $(".main-area");
+    public static final SelenideElement REDIRECT_PAGE_CONTAINER = $(RedirectView.IDs.REDIRECT_PAGE);
 
     public static final class Links {
         public static final SelenideElement ORIGIN_LINK = $("#" + RedirectView.IDs.ORIGIN_LINK_ID);

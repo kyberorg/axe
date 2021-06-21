@@ -4,13 +4,13 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.exception.IdentNotFoundException;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 
@@ -19,7 +19,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 @PageTitle("Yalsee: Error 404")
 @Route(value = Endpoint.UI.IDENT_404, layout = MainView.class)
 @CssImport("./css/error_views.css")
-public class IdentNotFoundView extends VerticalLayout implements HasErrorParameter<IdentNotFoundException> {
+public class IdentNotFoundView extends YalseeLayout implements HasErrorParameter<IdentNotFoundException> {
 
     private final H1 title = new H1();
     private final Span subTitle = new Span();
@@ -30,6 +30,7 @@ public class IdentNotFoundView extends VerticalLayout implements HasErrorParamet
      */
     public IdentNotFoundView() {
         init();
+        applyStyle();
         add(title, subTitle, image);
         this.setAlignItems(Alignment.CENTER);
     }
@@ -43,6 +44,10 @@ public class IdentNotFoundView extends VerticalLayout implements HasErrorParamet
 
         image.setSrc("images/404.jpg");
         image.setAlt("Error 404 Image");
+    }
+
+    private void applyStyle() {
+        image.addClassName("centered-image");
     }
 
     /**

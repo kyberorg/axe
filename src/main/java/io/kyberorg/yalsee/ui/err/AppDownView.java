@@ -4,10 +4,10 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_503;
@@ -15,7 +15,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_503;
 @PageTitle("Yalsee: Error 503")
 @Route(value = Endpoint.UI.ERROR_PAGE_503, layout = MainView.class)
 @CssImport("./css/error_views.css")
-public class AppDownView extends VerticalLayout implements HasErrorParameter<CannotCreateTransactionException> {
+public class AppDownView extends YalseeLayout implements HasErrorParameter<CannotCreateTransactionException> {
 
     private final H1 title = new H1();
     private final Span subTitle = new Span();
@@ -37,6 +37,8 @@ public class AppDownView extends VerticalLayout implements HasErrorParameter<Can
 
         image.setSrc("images/503.png");
         image.setAlt("Error 503 Image");
+
+        image.setHeight(image.getWidth());
     }
 
     @Override
