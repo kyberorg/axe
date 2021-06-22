@@ -4,13 +4,13 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.exception.PageNotFoundException;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 
@@ -20,7 +20,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 @PageTitle("Yalsee: Error 404")
 @Route(value = Endpoint.UI.PAGE_404, layout = MainView.class)
 @CssImport("./css/error_views.css")
-public class PageNotFoundView extends VerticalLayout implements HasErrorParameter<PageNotFoundException> {
+public class PageNotFoundView extends YalseeLayout implements HasErrorParameter<PageNotFoundException> {
 
     private final H1 title = new H1();
     private final Span subTitle = new Span();
@@ -31,6 +31,7 @@ public class PageNotFoundView extends VerticalLayout implements HasErrorParamete
      */
     public PageNotFoundView() {
         init();
+        applyStyle();
         add(title, subTitle, image);
         this.setAlignItems(Alignment.CENTER);
     }
@@ -43,6 +44,10 @@ public class PageNotFoundView extends VerticalLayout implements HasErrorParamete
 
         image.setSrc("images/404.jpg");
         image.setAlt("Error 404 Image");
+    }
+
+    private void applyStyle() {
+        image.addClassName("centered-image");
     }
 
     /**

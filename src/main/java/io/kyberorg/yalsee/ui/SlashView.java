@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.ui;
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
@@ -17,6 +16,7 @@ import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.exception.PageNotFoundException;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.services.LinkService;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.ui.err.AppDownView;
 import io.kyberorg.yalsee.ui.err.ServerErrorView;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -31,7 +31,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 @Slf4j
 @Controller
 @UIScope
-public class SlashView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
+public class SlashView extends YalseeLayout implements HasErrorParameter<NotFoundException> {
     private static final String TAG = "[" + SlashView.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
