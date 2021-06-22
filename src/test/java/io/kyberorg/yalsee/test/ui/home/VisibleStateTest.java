@@ -4,6 +4,8 @@ import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
+import io.kyberorg.yalsee.test.utils.browser.BrowserSize;
+import io.kyberorg.yalsee.test.utils.browser.BrowserUtils;
 import io.kyberorg.yalsee.ui.HomeView;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +18,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
+import static io.kyberorg.yalsee.test.utils.browser.BrowserUtils.EXTRA_SMALL_SCREEN_MAX_WIDTH_PIXELS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -135,6 +138,19 @@ public class VisibleStateTest extends SelenideTest {
     @Test
     public void titleShouldBeH2() {
         assertEquals("h2", HomePageObject.MainArea.TITLE.getTagName().toLowerCase());
+    }
+
+    /**
+     * Tests that title has word "long" if screen large or has not if screen is extra small (i.e phone).
+     */
+    @Test
+    public void titleShouldContainWordLong() {
+        BrowserSize browserSize = BrowserUtils.getBrowserSize();
+        if (browserSize.getWidth() > EXTRA_SMALL_SCREEN_MAX_WIDTH_PIXELS) {
+            HomePageObject.MainArea.TITLE.shouldHave(text("long"));
+        } else {
+            HomePageObject.MainArea.TITLE.shouldNot(have(text("long")));
+        }
     }
 
     /**
