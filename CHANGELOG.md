@@ -1,4 +1,5 @@
 ### Current (3.0.7)
+* FR5: Reduced white space on large screens (#369)
 * FR4: Smaller font size for note text for mobile screens (#371)
 * FR3: Image at error 503 refers to old yals.eu hostname (#373)
 * FR2: Submit button no longer disabled on empty input to prevent flaky tests (#367)

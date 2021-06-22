@@ -66,11 +66,11 @@
 /* Super large devices (large desktops, TVs, 1441px and up) */
 @media (min-width: 1441px) {
     .responsive-div {
-        flex-basis: 20%;
+        flex-basis: 15%;
     }
 
     .responsive-center {
-        flex-basis: 60%;
+        flex-basis: 70%;
     }
 
     .main-area {
