@@ -1,3 +1,16 @@
+### Current (3.0.7)
+* FR5: Reduced white space on large screens (#369)
+* FR4: Smaller font size for note text for mobile screens (#371)
+* FR3: Image at error 503 refers to old yals.eu hostname (#373)
+* FR2: Submit button no longer disabled on empty input to prevent flaky tests (#367)
+* FR1: YalseeLayout: common layout for all pages (#355)
+
+### Version 3.0.6 (18/06/2021)
+Updates
+
+* Spring Boot 2.4.2 -> 2.5.1 (#356)
+* Other dependencies (#356)
+
 ### Version 3.0.5 (11/06/2021)
 Anti-Scam and Anti-Malware Actions
 

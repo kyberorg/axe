@@ -14,6 +14,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.services.GitService;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
 import io.kyberorg.yalsee.utils.maven.MavenInfo;
@@ -22,7 +23,7 @@ import io.kyberorg.yalsee.utils.maven.MavenInfo;
 @UIScope
 @Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: App Info")
-public class AppInfoView extends VerticalLayout {
+public class AppInfoView extends YalseeLayout {
     private static final String UNDEFINED = "UNDEFINED";
     private static final int COMMIT_HASH_LENGTH = 7;
 

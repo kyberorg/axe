@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.ui.err;
 
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -8,6 +7,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.exception.GeneralServerException;
 import io.kyberorg.yalsee.exception.NeedForLoopException;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
@@ -22,7 +22,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 @UIScope
 @PageTitle("Yalsee: Server Error Loop View")
 @Route(value = Endpoint.TNT.SERVER_ERROR_LOOP, layout = MainView.class)
-public class ServerErrorLoopView extends Div implements HasErrorParameter<NeedForLoopException> {
+public class ServerErrorLoopView extends YalseeLayout implements HasErrorParameter<NeedForLoopException> {
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<NeedForLoopException> parameter) {
         event.rerouteToError(GeneralServerException.class, parameter.getCustomMessage());

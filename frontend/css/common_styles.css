@@ -35,10 +35,36 @@
     .responsive-center {
         flex-basis: 80%;
     }
+
+    .main-area {
+        font-size: large;
+    }
 }
 
 /* Large devices (desktops/laptops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
+    .responsive-div {
+        flex-basis: 10%;
+    }
+
+    .responsive-center {
+        flex-basis: 80%;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) and (max-width: 1440.98px) {
+    .responsive-div {
+        flex-basis: 10%;
+    }
+
+    .responsive-center {
+        flex-basis: 80%;
+    }
+}
+
+/* Super large devices (large desktops, TVs, 1441px and up) */
+@media (min-width: 1441px) {
     .responsive-div {
         flex-basis: 15%;
     }
@@ -46,27 +72,9 @@
     .responsive-center {
         flex-basis: 70%;
     }
-}
 
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) and (max-width: 1440.98px) {
-    .responsive-div {
-        flex-basis: 20%;
-    }
-
-    .responsive-center {
-        flex-basis: 60%;
-    }
-}
-
-/* Super large devices (large desktops, TVs, 1441px and up) */
-@media (min-width: 1441px) {
-    .responsive-div {
-        flex-basis: 25%;
-    }
-
-    .responsive-center {
-        flex-basis: 50%;
+    .main-area {
+        font-size: large;
     }
 }
 

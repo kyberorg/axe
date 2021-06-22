@@ -7,6 +7,7 @@ import io.kyberorg.yalsee.ui.HomeView;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
+import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
  * Page Object for {@link HomeView}.
@@ -88,6 +89,7 @@ public final class HomePageObject {
     public static void pasteValueInFormAndSubmitIt(final String link) {
         pasteValueInForm(link);
         MainArea.SUBMIT_BUTTON.click();
+        waitForVaadin();
     }
 
     /**

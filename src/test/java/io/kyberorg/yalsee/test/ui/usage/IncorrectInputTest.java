@@ -11,7 +11,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.*;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
-import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.SUBMIT_BUTTON;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
@@ -50,21 +49,25 @@ public class IncorrectInputTest extends SelenideTest {
     }
 
     /**
-     * On input with single space only submit button should be disabled.
+     * On input with single space only error box should appear.
      */
     @Test
     public void singleSpace() {
-        HomePageObject.pasteValueInForm(" ");
-        submitButtonShouldBeDisabled();
+        HomePageObject.pasteValueInFormAndSubmitIt(" ");
+
+        errorBoxShouldAppear();
+        ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
     }
 
     /**
-     * On input with two spaces submit button should be disabled.
+     * On input with two spaces error box should appear.
      */
     @Test
     public void twoSpaces() {
-        HomePageObject.pasteValueInForm("  ");
-        submitButtonShouldBeDisabled();
+        HomePageObject.pasteValueInFormAndSubmitIt("  ");
+
+        errorBoxShouldAppear();
+        ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
     }
 
     /**
@@ -167,7 +170,4 @@ public class IncorrectInputTest extends SelenideTest {
         LONG_URL_INPUT.shouldBe(empty);
     }
 
-    private void submitButtonShouldBeDisabled() {
-        SUBMIT_BUTTON.shouldHave(attribute("disabled"));
-    }
 }
