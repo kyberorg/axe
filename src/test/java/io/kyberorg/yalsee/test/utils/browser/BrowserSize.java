@@ -24,8 +24,8 @@ public class BrowserSize {
         //parse string
         String[] parts = sizeString.split("x");
         if (parts.length == 2) {
-            browserSize.width = Integer.getInteger(parts[0]);
-            browserSize.height = Integer.getInteger(parts[1]);
+            browserSize.width = Integer.parseInt(parts[0]);
+            browserSize.height = Integer.parseInt(parts[1]);
         } else {
             browserSize.width = INVALID_SIZE;
             browserSize.height = INVALID_SIZE;
