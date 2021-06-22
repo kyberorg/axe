@@ -1,4 +1,5 @@
 ### Current (3.0.7)
+* FR6: Added word `long` to title (#370)
 * FR5: Reduced white space on large screens (#369)
 * FR4: Smaller font size for note text for mobile screens (#371)
 * FR3: Image at error 503 refers to old yals.eu hostname (#373)

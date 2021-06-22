@@ -63,6 +63,7 @@ public class HomeView extends HorizontalLayout {
     private final ErrorUtils errorUtils;
     private Registration broadcasterRegistration;
 
+    private Span titleLongPart;
     private TextField input;
     private Button submitButton;
     private Anchor shortLink;
@@ -102,6 +103,8 @@ public class HomeView extends HorizontalLayout {
         leftDiv.addClassName("responsive-div");
         centralLayout.addClassName("responsive-center");
         rightDiv.addClassName("responsive-div");
+
+        titleLongPart.addClassName("title-long-text");
     }
 
     private void applyLoadState() {
@@ -119,11 +122,10 @@ public class HomeView extends HorizontalLayout {
 
     private VerticalLayout mainArea() {
         Span titlePartOne = new Span("Make your ");
-        Span longPart = new Span("long");
-        Span titleLastPart = new Span(" links short");
+        titleLongPart = new Span("long ");
+        Span titleLastPart = new Span("links short");
 
-        //H2 title = new H2("Make your links short");
-        H2 title = new H2(titlePartOne, longPart, titleLastPart);
+        H2 title = new H2(titlePartOne, titleLongPart, titleLastPart);
         title.setId(IDs.TITLE);
         title.addClassName("compact-title");
 

@@ -54,3 +54,10 @@ body {
 .compact-title {
     margin-bottom: -0.5em;
 }
+
+/* Hide word long for extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .title-long-text {
+        display: none;
+    }
+}
