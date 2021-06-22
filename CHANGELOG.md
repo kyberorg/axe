@@ -1,10 +1,12 @@
-### Current (3.0.7)
-* FR6: Added word `long` to title (#370)
-* FR5: Reduced white space on large screens (#369)
-* FR4: Smaller font size for note text for mobile screens (#371)
-* FR3: Image at error 503 refers to old yals.eu hostname (#373)
-* FR2: Submit button no longer disabled on empty input to prevent flaky tests (#367)
-* FR1: YalseeLayout: common layout for all pages (#355)
+### Version 3.0.7 (22/06/2021)
+Frontend improvements
+
+* Added word `long` to title (#370)
+* Reduced white space on large screens (#369)
+* Smaller font size for note text for mobile screens (#371)
+* Image at error 503 refers to old yals.eu hostname (#373)
+* Submit button no longer disabled on empty input to prevent flaky tests (#367)
+* YalseeLayout: common layout for all pages (#355)
 
 ### Version 3.0.6 (18/06/2021)
 Updates
