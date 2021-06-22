@@ -5,7 +5,7 @@ package io.kyberorg.yalsee.test.utils.browser;
  *
  * @since 3.0.7
  */
-public class BrowserUtils {
+public final class BrowserUtils {
 
     /**
      * Maximum screen width below which device considered as extra small (portrait phones).
@@ -19,5 +19,9 @@ public class BrowserUtils {
      */
     public static BrowserSize getBrowserSize() {
         return BrowserSize.fromSelenideConfiguration();
+    }
+
+    private BrowserUtils() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }

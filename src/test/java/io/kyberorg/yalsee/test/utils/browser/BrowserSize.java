@@ -9,12 +9,17 @@ import lombok.Data;
  * @since 3.0.7
  */
 @Data
-public class BrowserSize {
+public final class BrowserSize {
     public static final int INVALID_SIZE = -2;
 
     private int height;
     private int width;
 
+    /**
+     * Creates {@link BrowserSize} object, based on Selenide's {@link Configuration}.
+     *
+     * @return {@link BrowserSize} object with information from Selenide's {@link Configuration}.
+     */
     public static BrowserSize fromSelenideConfiguration() {
         return fromString(Configuration.browserSize);
     }
@@ -33,7 +38,5 @@ public class BrowserSize {
         return browserSize;
     }
 
-    private BrowserSize() { }
-
-
+    private BrowserSize() {}
 }
