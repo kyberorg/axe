@@ -38,5 +38,7 @@ public final class BrowserSize {
         return browserSize;
     }
 
-    private BrowserSize() {}
+    private BrowserSize() {
+
+    }
 }
