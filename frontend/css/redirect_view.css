@@ -1,5 +1,5 @@
-@media all and (min-width: 407px) {
-    .main-area {
+@media all and (min-height: 447px) and (min-width: 407px) {
+    #redirectPage {
         font-size: large;
     }
 }

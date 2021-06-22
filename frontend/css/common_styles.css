@@ -35,6 +35,10 @@
     .responsive-center {
         flex-basis: 80%;
     }
+
+    .main-area {
+        font-size: large;
+    }
 }
 
 /* Large devices (desktops/laptops, 992px and up) */
@@ -67,6 +71,10 @@
 
     .responsive-center {
         flex-basis: 50%;
+    }
+
+    .main-area {
+        font-size: large;
     }
 }
 
