@@ -63,8 +63,7 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+TransparentHugePage"
 ## End OpenJ9 tuning
 
 # Adding J9 Dump Options (#361) #
-export JAVA_OPTS="$JAVA_OPTS -Xdump:system+java:events=user,request=exclusive+prepwalk+serial+preempt"
-export JAVA_OPTS="$JAVA_OPTS -Xdump:heap:opts=CLASSIC"
+export JAVA_OPTS="$JAVA_OPTS -Xdump:heap:events=user,request=exclusive+prepwalk+serial"
 # End J9 Dump Options #
 
 # Issues 223 and 237 (APM Support) #
