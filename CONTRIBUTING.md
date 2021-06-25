@@ -30,6 +30,28 @@ docker-compose down
 
 Use Telegram local Bot `@yls_local_bot` and its token (currently can be requested from [kyberorg](mailto:root@kyberorg.io)) for local run
 
+### About:debugging and JMX interface
+Docker Stack @Dev has both Remote JVM Debug and JMX interfaces enabled, but to prevent misuse direct access to them is denied.
+Use jump host instead. So connection schema is: `Local PC (with IDE) -> Sabaton (aka JumpHost) -> Koda`
+
+* to use Remote JVM debugging run: 
+```shell
+ssh -v -N sabaton -J sabaton -L 8000:koda.kyberorg.io:8000 
+```
+and connect to:
+```
+localhost:8000
+```
+
+* to use JMX run:
+```shell
+ssh -v -N sabaton -J sabaton -L 8888:koda.kyberorg.io:8888 
+```
+and connect to:
+```
+localhost:8888
+```
+
 ### Logging
 To adjust logging we use ENV variables or `-D` vars:
 
