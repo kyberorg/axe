@@ -5,7 +5,7 @@
 
     <groupId>io.kyberorg</groupId>
     <artifactId>yalsee</artifactId>
-    <version>3.0.7</version>
+    <version>3.0.8-fr1</version>
     <packaging>jar</packaging>
 
     <name>yalsee</name>

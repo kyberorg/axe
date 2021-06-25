@@ -76,6 +76,7 @@ Optional EnvVars:
 * TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 * DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
 * JAVA_DEBUG_PORT: `port for remote debugging` (this is internal port, need to expose it to connect from outside word)
+* JAVA_JMX_PORT: `port for remote JMX` (this is internal port, need to expose it to connect from outside word)
 * APM_ENV: `environment in APM` (if not set - APM configuration won't be applied)
 * APM_SERVER: `https://my.apm.endpoint` (if not set - APM configuration won't be applied)
 * APM_TOKEN or APM_TOKEN_FILE: `token for Elastic APM` (if APM server requires token)
