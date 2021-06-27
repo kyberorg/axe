@@ -34,51 +34,40 @@ Use Telegram local Bot `@yls_local_bot` and its token (currently can be requeste
 Docker Stack at Dev Server aka `Koda` has both Remote JVM Debug (`tcp/8000`) and JMX interface (`tcp/8888`) enabled, but to prevent misuse direct access to them is denied.
 
 #### JMX
-* Since we use `OpenJ9 JVM`, there few limitations when using `VisualVM` for monitoring. Fore example, cannot make heap dump and so on.
+* Since I use `OpenJ9 JVM`, there are few limitations when using `VisualVM` for monitoring. For example cannot make heap dump and so on.
 
 * JMX interface configured without any security options and therefore cannot be used without SSH tunnel.
 
 #### SSH Tunnel (unrestricted Internet access)
 When you have SSH access to `Koda` and connection is unrestricted, you should establish SSH Tunnel to `Koda`. 
+
 So connection schema is: `localhost:8000 -> Koda@SSH -> Koda's localhost:8000`
-
-* to use Remote JVM debugging run:
 ```shell
-ssh -v -N -L 8000:koda:8000 koda  
-```
-and connect to:
-```
-localhost:8000
-```
-
-* to use JMX run:
-```shell
-ssh -v -N -L 8888:koda.kyberorg.io:8888 koda.kyberorg.io
-```
-and connect to:
-```
-localhost:8888
+ssh -v -N -L 8888:koda.kyberorg.io:8888 koda.kyberorg.io && 
+ssh -v -N -L 8000:koda.kyberorg.io:8000 koda.kyberorg.io
 ```
 
 #### SSH Tunnel via JumpHost (restricted Internet access)
 When internet access restricted you can use our jump host to access `Koda` server.
-It has SSH over HTTPS port, so there are chances to establish connection. 
+It has SSH over HTTPS port, so there are chances to establish connection.
 So connection schema is: `Local PC (with IDE) -> Sabaton (aka JumpHost) -> Koda`
 
-* to use Remote JVM debugging run: 
+* to use Remote JVM debugging run:
 ```shell
+ssh -v -N sabaton -J sabaton -L 8888:koda.kyberorg.io:8888 &&
 ssh -v -N sabaton -J sabaton -L 8000:koda.kyberorg.io:8000 
 ```
-and connect to:
+
+#### Remote debugging
+After SSH tunnel established connect to:
 ```
 localhost:8000
 ```
 
-* to use JMX run:
-```shell
-ssh -v -N sabaton -J sabaton -L 8888:koda.kyberorg.io:8888 
-```
-and connect to:
+or use IDEA configuration at `.run/Remove Debugging [Dev].run.xml`
+
+#### JMX
+To connect to JMX run use following without SSL and username/password:
 ```
 localhost:8888
 ```
