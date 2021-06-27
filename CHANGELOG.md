@@ -1,5 +1,6 @@
 ### Current
 * FR1: [Internal] Added JMX and fixed remote debugging for Dev (#361)
+* FR2: [Cleanup] Remove APM Stuff (#362)
 
 ### Version 3.0.7 (22/06/2021)
 Frontend improvements
