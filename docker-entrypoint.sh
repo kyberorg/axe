@@ -25,7 +25,6 @@ file_env() {
 file_env 'DB_PASSWORD'
 file_env 'TELEGRAM_TOKEN'
 file_env 'BUGSNAG_TOKEN'
-file_env 'APM_TOKEN'
 file_env 'DELETE_TOKEN'
 
 JAVA_OPTS=${JAVA_OPTS}
@@ -65,20 +64,6 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+TransparentHugePage"
 # Adding J9 Dump Options (#361). Created by https://yls.ee/MVeiwD
 export JAVA_OPTS="$JAVA_OPTS -Xdump:heap:events=user,request=exclusive+prepwalk+serial"
 # End J9 Dump Options #
-
-# Issues 223 and 237 (APM Support) #
-APM_JAR="/apm-agent.jar"
-if [[ -s "${APM_JAR}" && -n "${APM_ENV}" && -n "${APM_SERVER}" ]]; then
-  export JAVA_OPTS="$JAVA_OPTS -javaagent:${APM_JAR}"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.environment=${APM_ENV}"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.service_name=yalsee"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.application_packages=io.kyberorg.yalsee"
-  export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.server_urls=${APM_SERVER}"
-  if [ -n "${APM_TOKEN}" ]; then
-    export JAVA_OPTS="$JAVA_OPTS -Delastic.apm.secret_token=${APM_TOKEN}"
-  fi
-fi
-# End Issues 223 and 237 (APM Support) #
 
 # Issue 236 (Vaadin Production Mode) #
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"

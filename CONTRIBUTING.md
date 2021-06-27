@@ -119,9 +119,6 @@ Optional EnvVars:
 * DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
 * JAVA_DEBUG_PORT: `port for remote debugging` (this is internal port, need to expose it to connect from outside word)
 * JAVA_JMX_PORT: `port for remote JMX` (this is internal port, need to expose it to connect from outside word)
-* APM_ENV: `environment in APM` (if not set - APM configuration won't be applied)
-* APM_SERVER: `https://my.apm.endpoint` (if not set - APM configuration won't be applied)
-* APM_TOKEN or APM_TOKEN_FILE: `token for Elastic APM` (if APM server requires token)
 * REDIRECT_PAGE_BYPASS_SYMBOL: `Special symbol, which should be added to ident to bypass (skip) redirect page` (most likely don't needed as regulated by Spring profile)
 * REDIRECT_PAGE_TIMEOUT: `Timeout in second after which redirect page makes actual redirect` (most likely don't needed as regulated by Spring profile)
 
