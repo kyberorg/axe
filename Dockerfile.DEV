@@ -12,7 +12,7 @@ COPY --from=builder spring-boot-loader/ ./
 COPY --from=builder application/ ./
 
 COPY ./docker-entrypoint.sh ./
-RUN sh -c 'chmod +x /docker-entrypoint.sh'
+RUN sh -c 'chmod +x ./docker-entrypoint.sh'
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends haveged netcat curl jq \
