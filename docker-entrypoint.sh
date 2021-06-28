@@ -69,5 +69,5 @@ export JAVA_OPTS="$JAVA_OPTS -Xdump:heap:events=user,request=exclusive+prepwalk+
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
 # End Issue 236 (Vaadin Production Mode) #
 
-echo "Running java ${JAVA_OPTS} -jar /app/yalsee.jar"
-exec java ${JAVA_OPTS} -jar /app/yalsee.jar
+echo "Running java ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher"
+exec java ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher
