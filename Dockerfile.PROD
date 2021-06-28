@@ -1,19 +1,27 @@
-ARG JAVA_BASE=11-jre-openj9
-FROM adoptopenjdk:${JAVA_BASE}
+FROM adoptopenjdk:11-jre-openj9 as builder
 
-VOLUME /tmp
+COPY target/yalsee.jar yalsee.jar
 
-COPY ./target/yalsee.jar /app/
-COPY ./docker-entrypoint.sh /
+RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-RUN sh -c 'chmod +x /docker-entrypoint.sh'
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y haveged netcat curl jq && \
-    apt -y autoremove && \
-    rm -rf /var/lib/apt/lists/*
+FROM adoptopenjdk:11-jre-openj9 as runner
+WORKDIR /app
+COPY --from=builder  dependencies/ ./
+COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder application/ ./
 
-ENTRYPOINT ./docker-entrypoint.sh
+COPY ./docker-entrypoint.sh ./
+RUN sh -c 'chmod +x ./docker-entrypoint.sh'
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends haveged netcat curl jq \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
 
 EXPOSE 8080
 

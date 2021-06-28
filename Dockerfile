@@ -1,12 +1,18 @@
-ARG JAVA_BASE=11-jdk-openj9
-FROM adoptopenjdk:${JAVA_BASE}
+FROM adoptopenjdk:11-jre-openj9 as builder
 
-VOLUME /tmp
+COPY target/yalsee.jar yalsee.jar
+RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-COPY ./target/yalsee.jar /app/
-COPY ./docker-entrypoint.sh /
+FROM adoptopenjdk:11-jdk-openj9 as runner
+WORKDIR /app
+COPY --from=builder  dependencies/ ./
+COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder application/ ./
 
-RUN sh -c 'chmod +x /docker-entrypoint.sh'
-ENTRYPOINT ./docker-entrypoint.sh
+COPY ./docker-entrypoint.sh ./
+
+RUN sh -c 'chmod +x ./docker-entrypoint.sh'
+ENTRYPOINT ["./docker-entrypoint.sh"]
 
 EXPOSE 8080

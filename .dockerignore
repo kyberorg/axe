@@ -1,9 +1,6 @@
-.idea
-.run
-docker
-node_modules
-.gitignore
-.travis.yml
-checkstyle.xml
-README.md
-yalsee.iml
+# Ignore everything
+**
+# But JAR should stay
+!target/yalsee.jar
+# And docker-entrypoint
+!docker-entrypoint.sh
