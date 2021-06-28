@@ -1,19 +1,17 @@
 ARG JAVA_BASE=11-jre-openj9
 FROM adoptopenjdk:${JAVA_BASE}
 
-VOLUME /tmp
-
 COPY ./target/yalsee.jar /app/
 COPY ./docker-entrypoint.sh /
 
 RUN sh -c 'chmod +x /docker-entrypoint.sh'
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y haveged netcat curl jq && \
-    apt -y autoremove && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends haveged netcat curl jq \
+    && apt -y autoremove \
+    && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ./docker-entrypoint.sh
+ENTRYPOINT ["./docker-entrypoint.sh"]
 
 EXPOSE 8080
 
