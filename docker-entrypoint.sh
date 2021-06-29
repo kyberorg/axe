@@ -62,7 +62,7 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+TransparentHugePage"
 ## End OpenJ9 tuning
 
 # Adding J9 Dump Options (#361). Created by https://yls.ee/MVeiwD
-export JAVA_OPTS="$JAVA_OPTS -Xdump:system+heap:events=user,request=exclusive+prepwalk+serial,dsn=sysdump.dmp"
+export JAVA_OPTS="$JAVA_OPTS -Xdump:system+heap:events=user,request=exclusive+prepwalk+serial"
 # End J9 Dump Options #
 
 # Issue 236 (Vaadin Production Mode) #
