@@ -86,17 +86,6 @@ public final class MattermostResponseJson implements YalseeJson {
         return this;
     }
 
-    /**
-     * Modifies Mattermost response type.
-     *
-     * @param responseType valid {@link Mattermost.ResponseType}
-     * @return same json
-     */
-    public MattermostResponseJson setResponseTypeTo(final Mattermost.ResponseType responseType) {
-        this.responseType = responseType.toString();
-        return this;
-    }
-
     @Override
     public String toString() {
         return new Gson().toJson(this);

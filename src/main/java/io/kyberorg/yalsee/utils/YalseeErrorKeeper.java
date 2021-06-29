@@ -77,6 +77,6 @@ public class YalseeErrorKeeper {
         }
         logMessage.append("=============");
         logMessage.trimToSize();
-        log.error("{} {}", TAG, logMessage.toString());
+        log.error("{} {}", TAG, logMessage);
     }
 }

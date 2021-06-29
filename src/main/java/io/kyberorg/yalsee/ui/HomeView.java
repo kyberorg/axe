@@ -131,7 +131,7 @@ public class HomeView extends HorizontalLayout {
 
         input = new TextField("Your very long URL here:");
         input.setId(IDs.INPUT);
-        input.setPlaceholder("http://mysuperlongurlhere.tld");
+        input.setPlaceholder("https://mysuperlongurlhere.tld");
         input.setWidthFull();
 
         Span publicAccessBanner =
@@ -480,7 +480,6 @@ public class HomeView extends HorizontalLayout {
         public static final String VIEW_ID = "homeView";
         public static final String MAIN_AREA = "mainArea";
         public static final String TITLE = "siteTitle";
-        public static final String SUBTITLE = "subTitle";
         public static final String INPUT = "longUrlInput";
         public static final String BANNER = "publicAccessBanner";
         public static final String SUBMIT_BUTTON = "submitButton";

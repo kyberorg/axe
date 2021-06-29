@@ -16,7 +16,7 @@ public class YalseeException extends RuntimeException {
     private String messageToUser;
 
     /**
-     * Creates empty exception without message to user.
+     * Creates empty exception without message to user. Do not remove: leads to compile error.
      */
     public YalseeException() {
     }

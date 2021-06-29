@@ -102,7 +102,7 @@ public class IncorrectInputTest extends SelenideTest {
      */
     @Test
     public void urlWithSpacesShallNotPass() {
-        HomePageObject.pasteValueInFormAndSubmitIt("http://site with spaces.com");
+        HomePageObject.pasteValueInFormAndSubmitIt("https://site with spaces.com");
 
         formIsClearedResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();

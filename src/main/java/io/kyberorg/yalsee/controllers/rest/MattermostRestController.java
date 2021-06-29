@@ -102,7 +102,7 @@ public class MattermostRestController {
                 ? mattermost.getCommand() : "/yalsee";
 
         return MattermostResponseJson.createWithText(App.Emoji.INFO + "  Usage: " + command
-                + " http://mysuperlonglink.tld [Optional Link Description]");
+                + " https://mysuperlonglink.tld [Optional Link Description]");
     }
 
     private MattermostResponseJson serverError() {

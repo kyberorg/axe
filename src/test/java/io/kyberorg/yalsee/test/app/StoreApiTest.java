@@ -127,7 +127,7 @@ public class StoreApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithCorrectLinkStatusIs201() {
-        String longLink = "http://virtadev.net"; // That very long, really
+        String longLink = "https://kyberorg.io"; // That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
@@ -146,7 +146,7 @@ public class StoreApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithCorrectLinkReturnsJsonWithIdent() {
-        String longLink = "http://virtadev.net"; // That very long, really
+        String longLink = "https://kyberorg.io"; // That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);

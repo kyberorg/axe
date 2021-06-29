@@ -129,7 +129,7 @@ public abstract class UnirestTest {
                         .append(App.NEW_LINE);
             }
         }
-        log.info(String.format("%s %s", TAG, reqLog.toString()));
+        log.info(String.format("%s %s", TAG, reqLog));
     }
 
     private void logResponse(final HttpResponse response) {
@@ -146,7 +146,7 @@ public abstract class UnirestTest {
                         .append(App.NEW_LINE);
             }
         }
-        log.info(String.format("%s %s", TAG, respLog.toString()));
+        log.info(String.format("%s %s", TAG, respLog));
     }
 
     private Object getRequestBody(final HttpRequest request)

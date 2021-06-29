@@ -20,7 +20,7 @@ public class TelegramStatusResponseJson implements YalseeJson {
     private String name;
 
     /**
-     * Adds bot's name.
+     * Adds bot name.
      *
      * @param botName non-empty string with valid name for bot
      * @return json with stored bot name

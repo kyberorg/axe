@@ -19,6 +19,7 @@ public class AppOfflineController {
      *
      * @return string with path to static resource, contains page 503
      */
+    @SuppressWarnings("SameReturnValue") //serving static HTML page
     @RequestMapping(Endpoint.TNT.APP_OFFLINE)
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public String serveAppOfflinePage() {
