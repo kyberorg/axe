@@ -69,7 +69,7 @@ export JAVA_OPTS="$JAVA_OPTS -Xdump:system+heap:events=user,request=exclusive+pr
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
 # End Issue 236 (Vaadin Production Mode) #
 
-export JAVA_OPTS="$JAVA_OPTS -Xmx768m"
+export JAVA_OPTS="$JAVA_OPTS -Xmx1g"
 
 echo "Running java ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher"
 exec java ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher
