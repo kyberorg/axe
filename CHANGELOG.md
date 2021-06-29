@@ -1,8 +1,8 @@
 ### Version 3.0.8 (29/06/2021)
-* [Internal] &nbsp; Added JMX and fixed remote debugging for Dev (#361)
-* [Cleanup] Remove APM Stuff (#362)
-* [Cleanup]  Cleanup Docker image (#363)
-* [Docker] &nbsp; Moved from Fat Jar to Layered Docker image (#364)
+* [Internal] &nbsp;&nbsp; Added JMX and fixed remote debugging for Dev (#361)
+* [Cleanup] &nbsp; Remove APM Stuff (#362)
+* [Cleanup] &nbsp; Cleanup Docker image (#363)
+* [Docker] &nbsp;&nbsp;&nbsp; Moved from Fat Jar to Layered Docker image (#364)
 
 ### Version 3.0.7 (22/06/2021)
 Frontend improvements
