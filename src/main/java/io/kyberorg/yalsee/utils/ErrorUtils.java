@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.utils;
 
-import com.bugsnag.Bugsnag;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.router.BeforeEvent;
@@ -13,6 +12,7 @@ import io.kyberorg.yalsee.exception.error.UserMessageGenerator;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -29,21 +29,19 @@ import static io.kyberorg.yalsee.constants.App.NO_STATUS;
  *
  * @since 2.7
  */
+@Slf4j
 @Component
 public class ErrorUtils {
 
     private final YalseeErrorKeeper errorKeeper;
-    private final Bugsnag bugsnag;
 
     /**
      * Creates {@link ErrorUtils}.
      *
      * @param errorKeeper error holder
-     * @param bugsnag     Bugsnag bean
      */
-    public ErrorUtils(final YalseeErrorKeeper errorKeeper, final Bugsnag bugsnag) {
+    public ErrorUtils(final YalseeErrorKeeper errorKeeper) {
         this.errorKeeper = errorKeeper;
-        this.bugsnag = bugsnag;
     }
 
     /**
@@ -177,22 +175,12 @@ public class ErrorUtils {
     }
 
     /**
-     * Reports issue to Bugsnag service.
+     * Just logs error. This is stub function to replace Bugsnag.
      *
      * @param yalseeError {@link YalseeError} objects
      */
-    public void reportToBugsnag(final YalseeError yalseeError) {
-        YalseeException yalseeException = new YalseeException("Yalsee Error: " + yalseeError.getId());
-        final String tabName = "Yalsee Error";
-        bugsnag.addCallback(report -> {
-            report.addToTab(tabName, "id", yalseeError.getId());
-            report.addToTab(tabName, "Timestamp", yalseeError.getTimeStamp());
-            report.addToTab(tabName, "Message to user", yalseeError.getMessageToUser());
-            report.addToTab(tabName, "Tech Message", yalseeError.getTechMessage());
-            report.addToTab(tabName, "HTTP Status", yalseeError.getHttpStatus());
-            report.addToTab(tabName, "Raw Exception", yalseeError.getRawException());
-        });
-        bugsnag.notify(yalseeException);
+    public void reportError(final YalseeError yalseeError) {
+        log.error(yalseeError.toString());
     }
 
     /**

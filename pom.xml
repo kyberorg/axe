@@ -188,14 +188,7 @@
             <artifactId>javase</artifactId>
             <version>3.4.1</version>
         </dependency>
-
-        <!-- BugSnag: error reporting -->
-        <dependency>
-            <groupId>com.bugsnag</groupId>
-            <artifactId>bugsnag-spring</artifactId>
-            <version>3.6.2</version>
-        </dependency>
-
+        
         <!-- Clipboard Operations -->
         <dependency>
             <groupId>org.vaadin.olli</groupId>

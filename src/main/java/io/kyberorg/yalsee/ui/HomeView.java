@@ -131,7 +131,7 @@ public class HomeView extends HorizontalLayout {
 
         input = new TextField("Your very long URL here:");
         input.setId(IDs.INPUT);
-        input.setPlaceholder("http://mysuperlongurlhere.tld");
+        input.setPlaceholder("https://mysuperlongurlhere.tld");
         input.setWidthFull();
 
         Span publicAccessBanner =
@@ -316,7 +316,7 @@ public class HomeView extends HorizontalLayout {
                 generateQRCode(ident);
             } else {
                 showError("Internal error. Got malformed reply from server");
-                errorUtils.reportToBugsnag(YalseeErrorBuilder
+                errorUtils.reportError(YalseeErrorBuilder
                         .withTechMessage(String.format("onSuccessStoreLink: Malformed JSON: %s",
                                 response.getBody().toPrettyString()
                         ))
@@ -328,7 +328,7 @@ public class HomeView extends HorizontalLayout {
                     TAG, response.getStatus(), response.getBody().toPrettyString());
 
             showError("Something wrong was happened at server-side. Issue already reported");
-            errorUtils.reportToBugsnag(YalseeErrorBuilder
+            errorUtils.reportError(YalseeErrorBuilder
                     .withTechMessage(String.format("onSuccessStoreLink: Got false positive. Body: %s",
                             response.getBody().toPrettyString()
                     ))
@@ -346,7 +346,7 @@ public class HomeView extends HorizontalLayout {
             log.error("{} Malformed Error Json", TAG);
             log.debug("", e);
             message = "Hups. Something went wrong at server-side";
-            errorUtils.reportToBugsnag(YalseeErrorBuilder
+            errorUtils.reportError(YalseeErrorBuilder
                     .withTechMessage(String.format("onFailStoreLink: Malformed JSON. Body: %s",
                             response.getBody().toPrettyString()
                     ))
@@ -418,7 +418,7 @@ public class HomeView extends HorizontalLayout {
                 qrCodeArea.setVisible(true);
             } else {
                 showError("Internal error. Got malformed reply from QR generator");
-                errorUtils.reportToBugsnag(YalseeErrorBuilder
+                errorUtils.reportError(YalseeErrorBuilder
                         .withTechMessage(String.format("onSuccessGenerateQRCode: Malformed JSON. Body: %s",
                                 response.getBody().toPrettyString()
                         ))
@@ -427,7 +427,7 @@ public class HomeView extends HorizontalLayout {
             }
         } else {
             showError("Internal error. Something is wrong at server-side");
-            errorUtils.reportToBugsnag(YalseeErrorBuilder
+            errorUtils.reportError(YalseeErrorBuilder
                     .withTechMessage(String.format("onSuccessGenerateQRCode: False positive. Body: %s",
                             response.getBody().toPrettyString()
                     ))
@@ -438,7 +438,7 @@ public class HomeView extends HorizontalLayout {
 
     private void onFailGenerateQRCode(final HttpResponse<JsonNode> response) {
         showError("Internal error. Got malformed reply from QR generator");
-        errorUtils.reportToBugsnag(YalseeErrorBuilder
+        errorUtils.reportError(YalseeErrorBuilder
                 .withTechMessage(String.format("onFailGenerateQRCode: Malformed JSON. Body: %s",
                         response.getBody().toPrettyString()
                 ))
@@ -480,7 +480,6 @@ public class HomeView extends HorizontalLayout {
         public static final String VIEW_ID = "homeView";
         public static final String MAIN_AREA = "mainArea";
         public static final String TITLE = "siteTitle";
-        public static final String SUBTITLE = "subTitle";
         public static final String INPUT = "longUrlInput";
         public static final String BANNER = "publicAccessBanner";
         public static final String SUBMIT_BUTTON = "submitButton";

@@ -89,7 +89,7 @@ public class YalseeErrorController implements ErrorController {
         YalseeErrorJson errorJson = YalseeErrorJson.createFromYalsError(yalseeError);
         String errorId = storeYalsError(yalseeError);
 
-        errorUtils.reportToBugsnag(yalseeError);
+        errorUtils.reportError(yalseeError);
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         boolean isApiCall = AppUtils.isApiRequest(req);

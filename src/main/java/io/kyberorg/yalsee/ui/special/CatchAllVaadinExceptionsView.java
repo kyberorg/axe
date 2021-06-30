@@ -55,7 +55,7 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
         YalseeError yalseeError = errorUtils.convertExceptionToYalsError(args);
 
         String errorId = yalseeErrorKeeper.send(yalseeError);
-        errorUtils.reportToBugsnag(yalseeError);
+        errorUtils.reportError(yalseeError);
 
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
                 getMyHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
