@@ -65,6 +65,10 @@ export JAVA_OPTS="$JAVA_OPTS -XX:+TransparentHugePage"
 export JAVA_OPTS="$JAVA_OPTS -Xdump:system+heap:events=user,request=exclusive+prepwalk+serial"
 # End J9 Dump Options #
 
+# FIXME RAM Options (#390) #
+export JAVA_OPTS="$JAVA_OPTS -Xsoftmx1g -Xmx3g -Xaggressive -Xalwaysclassgc -Xmaxe30M"
+# FIXME End RAM Options #
+
 # Issue 236 (Vaadin Production Mode) #
 export JAVA_OPTS="$JAVA_OPTS -Dvaadin.production=true"
 # End Issue 236 (Vaadin Production Mode) #
