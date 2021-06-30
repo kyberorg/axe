@@ -66,7 +66,6 @@ export JAVA_OPTS="$JAVA_OPTS -Xdump:system+heap:events=user,request=exclusive+pr
 # End J9 Dump Options #
 
 # FIXME RAM Options (#390) #
-export JAVA_OPTS="$JAVA_OPTS -Xaggressive"
 # FIXME End RAM Options #
 
 # Issue 236 (Vaadin Production Mode) #
