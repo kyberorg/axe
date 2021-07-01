@@ -28,7 +28,7 @@ MySQL can be stopped from `docker/localMySQL` directory by running:
 docker-compose down
 ```
 
-Use Telegram local Bot `@yls_local_bot` and its token (currently can be requested from [kyberorg](mailto:root@kyberorg.io)) for local run
+Use Telegram local Bot `@yls_local_bot` and its token (currently can be requested from [kyberorg](mailto:alex@kyberorg.io)) for local run
 
 ### About:debugging and JMX interface
 Docker Stack at Dev Server aka `Koda` has both Remote JVM Debug (`tcp/8000`) and JMX interface (`tcp/8888`) enabled, but to prevent misuse direct access to them is denied.
