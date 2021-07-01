@@ -37,7 +37,9 @@ jobs:
       - name: Install Java 11
         uses: actions/setup-java@v2.1.0
         with:
+          distribution: 'adopt-openj9'
           java-version: '11'
+          check-latest: true
           architecture: x64
 
       #- name: Adjust Maven Settings
