@@ -64,7 +64,7 @@ public class QRCodeRestController {
         return handleRequest(resp, qrCode);
     }
 
-    private YalseeJson handleRequest(HttpServletResponse resp, Optional<String> qrCode) {
+    private YalseeJson handleRequest(final HttpServletResponse resp, final Optional<String> qrCode) {
         YalseeJson result;
         if (qrCode.isPresent()) {
             resp.setStatus(HttpCode.STATUS_200);
