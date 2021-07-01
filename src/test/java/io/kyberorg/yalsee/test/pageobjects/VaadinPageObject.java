@@ -5,7 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
@@ -20,7 +20,7 @@ public final class VaadinPageObject {
      * Ensures that site is loaded and Vaadin loading bar already disappear.
      */
     public static void waitForVaadin() {
-        $(LOADING_BAR).shouldBe(hidden, Duration.ofMillis(Configuration.timeout));
+        $(LOADING_BAR).shouldNotBe(visible, Duration.ofMillis(Configuration.timeout));
     }
 
     private VaadinPageObject() {
