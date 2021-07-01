@@ -19,7 +19,7 @@ on:
       ignoreLabel:
         description: 'Exclude PRs with this label'
         required: true
-        default: 'duplicate'
+        default: 'abandoned'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
