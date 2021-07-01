@@ -1,6 +1,3 @@
-[![Build Status](https://ci.yadev.eu/buildStatus/icon?job=yals%2Ftrunk)](https://ci.yadev.eu/view/Yalsee/job/yals/job/trunk/)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/8af7847efda742da9dd02d660ad6b5a9)](https://www.codacy.com/gh/kyberorg/yalsee/dashboard)
-
 # Yalsee - the link shortener
 Simple link shortener [yals.ee](https://yals.ee), which produce links like [https://yls.ee/Cxwycs](https://yls.ee/Cxwycs)
 
