@@ -5,7 +5,7 @@
 
     <groupId>io.kyberorg</groupId>
     <artifactId>yalsee</artifactId>
-    <version>3.0.9-fr1</version>
+    <version>3.0.8</version>
     <packaging>jar</packaging>
 
     <name>yalsee</name>
@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.6.2</vaadin.version>
+        <vaadin.version>14.5.3</vaadin.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
