@@ -8,17 +8,25 @@ updates:
   - package-ecosystem: "maven" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    commit-message:
+      prefix: "[Maven Deps]"
     assignees:
       - "kyberorg"
     labels:
       - "dependencies"
       - "PR"
-      
+    ignore:
+      - dependency-name: "hibernate-validator"
+        versions: ["7.x.x.Final"]
+      - dependency-name: "vaadin.version"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "[Actions Deps]"
     assignees:
       - "kyberorg"
     labels:
