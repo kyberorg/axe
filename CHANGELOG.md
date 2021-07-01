@@ -1,6 +1,3 @@
-### Current
-* FR1: [Security] Vaadin updated from `14.5.3` to `14.6.2`
-
 ### Version 3.0.8 (29/06/2021)
 * [Internal] &nbsp;&nbsp; Added JMX and fixed remote debugging for Dev (#361)
 * [Cleanup] &nbsp; Remove APM Stuff (#362)
