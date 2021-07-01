@@ -5,7 +5,7 @@
 
     <groupId>io.kyberorg</groupId>
     <artifactId>yalsee</artifactId>
-    <version>3.0.9-fr1</version>
+    <version>3.0.9-fr2</version>
     <packaging>jar</packaging>
 
     <name>yalsee</name>
@@ -15,7 +15,7 @@
         <developer>
             <id>kyberorg</id>
             <name>Alexander Muravya</name>
-            <email>root@kyberorg.io</email>
+            <email>alex@kyberorg.io</email>
             <roles>
                 <role>lead developer</role>
             </roles>
@@ -39,8 +39,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
-    <!-- Cannot be updated to 2.4.3 due to https://github.com/liquibase/liquibase/issues/1639 -->
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -217,6 +216,13 @@
             <artifactId>sitemapgen4j</artifactId>
             <version>1.1.2</version>
         </dependency>
+        
+        <!-- Spring Annotation Processor for generating .properties metadata -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Spring Boot Tests -->
         <dependency>
@@ -231,13 +237,6 @@
             <artifactId>selenide</artifactId>
             <version>5.22.0</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- Spring Annotation Processor for generating .properties metadata -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 
@@ -361,7 +360,7 @@
             </build>
         </profile>
 
-        <!-- No Testing by default -->
+        <!-- No Testing profile -->
         <profile>
             <id>noTesting</id>
             <properties>
