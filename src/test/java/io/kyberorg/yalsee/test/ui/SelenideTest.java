@@ -116,7 +116,7 @@ public abstract class SelenideTest {
             }
             commonInfoBuilder.append("==================").append(App.NEW_LINE);
 
-            System.out.println(commonInfoBuilder.toString());
+            System.out.println(commonInfoBuilder);
             isCommonInfoAlreadyShown = true;
         }
     }

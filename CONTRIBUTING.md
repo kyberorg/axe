@@ -81,8 +81,8 @@ To adjust logging we use ENV variables or `-D` vars:
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
 ### About: Tests
-* Test URL is defined by `-Dtest.url` property. Should be with protocol.
-* Browsers are defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge.
+* Test URL defined by `-Dtest.url` property. Should be with protocol.
+* Browsers defined by `-Dtest.browsers`. Supported browsers: Chrome, Firefox, Safari, IE, Edge.
 
 Can add several browsers like `chrome,firefox`
 

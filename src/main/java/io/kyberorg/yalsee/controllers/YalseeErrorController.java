@@ -129,6 +129,7 @@ public class YalseeErrorController implements ErrorController {
      *
      * @return string that contains path of error page.
      */
+    @SuppressWarnings("SameReturnValue") //to improve readability
     public String getErrorPath() {
         return Endpoint.TNT.ERROR_PAGE;
     }

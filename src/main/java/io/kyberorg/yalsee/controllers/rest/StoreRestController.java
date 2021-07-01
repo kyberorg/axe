@@ -131,7 +131,7 @@ public class StoreRestController {
             StoreRequestJson storeInput = AppUtils.GSON.fromJson(body, StoreRequestJson.class);
             return Result.get().write(storeInput);
         } catch (Exception e) {
-            log.info("{} unparseable JSON", TAG);
+            log.info("{} non-parseable JSON", TAG);
             YalseeErrorJson errorJson = YalseeErrorJson.builder()
                     .status(HttpCode.STATUS_421)
                     .message("Unable to parse json")
@@ -199,7 +199,8 @@ public class StoreRestController {
             response.setStatus(HttpCode.STATUS_201);
             return StoreResponseJson.create().withIdent(ident);
         } else if (result instanceof StoreResult.Fail) {
-            log.error("{} Failed to save link: {}", TAG, decodedUrl);
+            log.error("{} Failed to save link: {}, error reported: {}",
+                    TAG, decodedUrl, ((StoreResult.Fail) result).getErrorMessage());
             response.setStatus(HttpCode.STATUS_500);
             return YalseeErrorJson.createWithMessage("Failed to save your link. Internal server error.");
         } else if (result instanceof StoreResult.DatabaseDown) {

@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 public interface GetResult {
     class Success implements GetResult {
-        private String link;
+        private final String link;
 
         public Success(final String link) {
             this.link = link;
@@ -22,7 +22,7 @@ public interface GetResult {
     }
 
     class NotFound implements GetResult {
-        private String errorMessage;
+        private final String errorMessage;
 
         public NotFound() {
             this.errorMessage = "Nothing was found by this ident";

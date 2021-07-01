@@ -1,3 +1,6 @@
+### Current
+* FR1: Code cleanup (#368)
+
 ### Version 3.0.8 (29/06/2021)
 * [Internal] &nbsp;&nbsp; Added JMX and fixed remote debugging for Dev (#361)
 * [Cleanup] &nbsp; Remove APM Stuff (#362)

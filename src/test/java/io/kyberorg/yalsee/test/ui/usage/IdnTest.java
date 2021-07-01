@@ -76,7 +76,7 @@ public class IdnTest extends SelenideTest {
      */
     @Test
     public void taiwaneseUrl() {
-        HomePageObject.storeAndOpenSavedUrl("http://中文.tw/");
+        HomePageObject.storeAndOpenSavedUrl("https://中文.tw/");
 
         //needed because site site loads way too long
         SelenideUtils.waitUntilSiteLoads(EXTENDED_LOAD_TIMEOUT_SECONDS);
@@ -108,7 +108,7 @@ public class IdnTest extends SelenideTest {
      */
     @Test
     public void multiLanguageUrl() {
-        HomePageObject.storeAndOpenSavedUrl("http://€.linux.it");
+        HomePageObject.storeAndOpenSavedUrl("https://€.linux.it");
 
         // verify that opens Euro Linux Page
         SelenideElement h1 = $(EuroLinuxIt.H1);

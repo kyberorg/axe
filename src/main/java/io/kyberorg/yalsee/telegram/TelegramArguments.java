@@ -96,6 +96,7 @@ public final class TelegramArguments {
          *
          * @return {@link #EMPTY_ARGS}
          */
+        @SuppressWarnings("SameReturnValue") //to improve readability
         public TelegramArguments buildEmpty() {
             return EMPTY_ARGS;
         }

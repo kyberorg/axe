@@ -97,6 +97,7 @@ public final class MattermostArgumentSet {
          *
          * @return {@link #EMPTY_SET}
          */
+        @SuppressWarnings("SameReturnValue") //to improve readability
         public MattermostArgumentSet buildEmpty() {
             return EMPTY_SET;
         }

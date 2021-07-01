@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Controller
@@ -43,7 +44,7 @@ public class Page404ForApi {
 
         if (hasParams && hasYalsMethodParam && hasYalsPathParam) {
             HttpMethod method = HttpMethod.valueOf(req.getParameter("method"));
-            String path = URLDecoder.decode(req.getParameter("path"), "UTF-8");
+            String path = URLDecoder.decode(req.getParameter("path"), StandardCharsets.UTF_8);
             logRequest(method, path);
             payload = EndpointNotFoundJson.createWithEndpoint(method, path);
         } else {

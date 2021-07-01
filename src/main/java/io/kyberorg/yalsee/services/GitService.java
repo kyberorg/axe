@@ -1,12 +1,10 @@
 package io.kyberorg.yalsee.services;
 
-import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.utils.git.GitInfo;
 import io.kyberorg.yalsee.utils.git.MavenGitInfo;
 import io.kyberorg.yalsee.utils.git.NoGitInfo;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -50,21 +48,4 @@ public class GitService {
         }
     }
 
-    /**
-     * Verifies if commit hash present or not.
-     *
-     * @return true - if object has commit hash, else - false
-     */
-    public boolean commitPresent() {
-        return (!latestCommit.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestCommit));
-    }
-
-    /**
-     * Verifies if latest application tag present or not.
-     *
-     * @return true if present, false - if not.
-     */
-    public boolean tagPresent() {
-        return (!latestTag.equals(App.NO_VALUE) && StringUtils.isNotBlank(latestTag));
-    }
 }

@@ -72,7 +72,7 @@ public class TelegramService {
         try {
             savedLink = linkRepo.save(link);
         } catch (Exception e) {
-            log.error("{} Got exception while saving new Link {}", TAG, link.toString());
+            log.error("{} Got exception while saving new Link {}", TAG, link);
             log.debug("", e);
             savedLink = null;
         }

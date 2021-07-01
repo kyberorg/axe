@@ -140,7 +140,7 @@ public class MultiStepTest extends SelenideTest {
      */
     @Test
     public void linkWithEstonianLettersMustBeSavedAndReused() {
-        HomePageObject.pasteValueInFormAndSubmitIt("http://eki.ee/dict/ekss/index.cgi?Q=l%C3%A4bi%20tulema");
+        HomePageObject.pasteValueInFormAndSubmitIt("https://eki.ee/dict/ekss/index.cgi?Q=l%C3%A4bi%20tulema");
 
         open(HomePageObject.getSavedUrl() + addRedirectPageBypassSymbol());
         SelenideElement titleSpan = $(Eki.getTitle());

@@ -19,10 +19,11 @@ public class YalseeException extends RuntimeException {
      * Creates empty exception without message to user.
      */
     public YalseeException() {
+        super();
     }
 
     /**
-     * Creates exception wit message to user.
+     * Creates exception with message to user.
      *
      * @param message string with user-friendly message
      */

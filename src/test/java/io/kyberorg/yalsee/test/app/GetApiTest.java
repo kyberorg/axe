@@ -97,7 +97,7 @@ public class GetApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithExistingIdentStatusIs200() {
-        String longLink = "http://virtadev.net"; // That very long, really
+        String longLink = "https://kyberorg.io"; // That very long, really
         String ident = store(longLink);
 
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + ident);

@@ -61,6 +61,10 @@ public class QRCodeRestController {
         }
 
         Optional<String> qrCode = getQRCode(ident, QRCodeService.DEFAULT_SIZE);
+        return handleRequest(resp, qrCode);
+    }
+
+    private YalseeJson handleRequest(final HttpServletResponse resp, final Optional<String> qrCode) {
         YalseeJson result;
         if (qrCode.isPresent()) {
             resp.setStatus(HttpCode.STATUS_200);
@@ -98,15 +102,7 @@ public class QRCodeRestController {
         }
 
         Optional<String> qrCode = getQRCode(ident, size);
-        YalseeJson result;
-        if (qrCode.isPresent()) {
-            resp.setStatus(HttpCode.STATUS_200);
-            result = QRCodeResponseJson.withQRCode(qrCode.get());
-        } else {
-            resp.setStatus(HttpCode.STATUS_500);
-            result = YalseeErrorJson.createWithMessage("Failed to generate QR code. Internal error");
-        }
-        return result;
+        return handleRequest(resp, qrCode);
     }
 
     private YalseeJson testIdentExist(final String ident) {

@@ -23,7 +23,6 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 @SpringBootTest
 public class RedirectPageTest extends SelenideTest {
 
-    private final String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
     private String ourShortLink;
 
     /**
@@ -34,6 +33,7 @@ public class RedirectPageTest extends SelenideTest {
         tuneDriverWithCapabilities();
         if (Strings.isBlank(ourShortLink)) {
             open("/");
+            String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(ourLongLink);
         }
         open(ourShortLink);
