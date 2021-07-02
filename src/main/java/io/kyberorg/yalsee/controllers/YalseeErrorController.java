@@ -124,16 +124,6 @@ public class YalseeErrorController implements ErrorController {
         }
     }
 
-    /**
-     * Provides path to error page.
-     *
-     * @return string that contains path of error page.
-     */
-    @SuppressWarnings("SameReturnValue") //to improve readability
-    public String getErrorPath() {
-        return Endpoint.TNT.ERROR_PAGE;
-    }
-
     private int getCorrectStatus() {
         if (request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE) == null) {
             status = HttpCode.STATUS_500;
@@ -182,15 +172,14 @@ public class YalseeErrorController implements ErrorController {
             redirectToAppDownAnalogPage();
             return;
         }
-        String host = request.getRequestURI().replace(getErrorPath(), "");
         response.setStatus(HttpCode.STATUS_301);
-        response.setHeader(Header.LOCATION, host + "/" + Endpoint.UI.ERROR_PAGE_500 + "?"
+        response.setHeader(Header.LOCATION, "/" + Endpoint.UI.ERROR_PAGE_500 + "?"
                 + App.Params.ERROR_ID + "=" + errorId);
     }
 
     private void redirectToAppDownAnalogPage() {
-        String host = request.getRequestURI().replace(getErrorPath(), "");
         response.setStatus(HttpCode.STATUS_301);
-        response.setHeader(Header.LOCATION, host + Endpoint.TNT.APP_OFFLINE);
+        response.setHeader(Header.LOCATION, Endpoint.TNT.APP_OFFLINE);
     }
+
 }
