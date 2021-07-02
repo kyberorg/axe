@@ -3,9 +3,7 @@ package io.kyberorg.yalsee.ui.special;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
-import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinResponse;
-import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -15,8 +13,6 @@ import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
@@ -58,19 +54,8 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
         errorUtils.reportToBugsnag(yalseeError);
 
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
-                getMyHost() + "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
+                "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
 
         return STATUS_302;
     }
-
-    private String getMyHost() {
-        HttpServletRequest httpServletRequest =
-                ((VaadinServletRequest) VaadinRequest.getCurrent()).getHttpServletRequest();
-        String fullUrl = httpServletRequest.getRequestURL().toString();
-        String path = VaadinRequest.getCurrent().getPathInfo();
-
-        //fullUrl - path = host
-        return fullUrl.replace(path, "");
-    }
-
 }

@@ -3,7 +3,8 @@
 * FR2: [Deps Cleanup] Actualized info at pom.xml (#372)
 * FR3: [Doku Cleanup] Removed dead stuff from README.md (#382)
 * FR4: [Deps Updates] Dependabot and Dependabot updates (#408)
- 
+* FR5: [Security] Remediate Security Issues in code (#389)
+
 ### Version 3.0.8 (29/06/2021)
 * [Internal] &nbsp;&nbsp; Added JMX and fixed remote debugging for Dev (#361)
 * [Cleanup] &nbsp; Remove APM Stuff (#362)
