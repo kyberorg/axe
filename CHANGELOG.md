@@ -1,9 +1,9 @@
-### Current
-* FR1: [Code Cleanup] Code cleanup (#368)
-* FR2: [Deps Cleanup] Actualized info at pom.xml (#372)
-* FR3: [Doku Cleanup] Removed dead stuff from README.md (#382)
-* FR4: [Deps Updates] Dependabot and Dependabot updates (#408)
-* FR5: [Security] Remediate Security Issues in code (#389)
+### Version 3.0.9 (02/07/2021)
+* [Code Cleanup] &nbsp; Code cleanup (#368)
+* [Deps Cleanup] &nbsp; Actualized info at pom.xml (#372)
+* [Doku Cleanup] &nbsp; Removed dead stuff from README.md (#382)
+* [Deps Updates] &nbsp; Dependabot and Dependabot updates (#408) (#411)
+* [Security] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remediated Security Issues in code (#389)
 
 ### Version 3.0.8 (29/06/2021)
 * [Internal] &nbsp;&nbsp; Added JMX and fixed remote debugging for Dev (#361)
