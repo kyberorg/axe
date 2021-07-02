@@ -76,7 +76,7 @@ jobs:
           check_name: Demo Unit Test Results
           comment_title: Demo Unit Test Statistics
           hide_comments: all but latest
-          comment_on_pr: true
+          comment_mode: 'update last'
           test_changes_limit: 5
           files: target/surefire-reports/**/*.xml
           report_individual_runs: true
