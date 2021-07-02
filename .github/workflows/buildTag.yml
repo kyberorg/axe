@@ -16,7 +16,7 @@ jobs:
 
       - name: Get Latest Tag
         id: get_tag
-        uses: WyriHaximus/github-action-get-previous-tag@1.0.0
+        uses: WyriHaximus/github-action-get-previous-tag@v1.1
 
       - name: Complile JAR
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting

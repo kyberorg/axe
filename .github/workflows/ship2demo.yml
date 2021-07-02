@@ -45,7 +45,7 @@ jobs:
         run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-7)"
 
       - name: Wait for site appears online
-        uses: kyberorg/wait_for_new_version@v1.1
+        uses: kyberorg/wait_for_new_version@v2
         with:
           url: https://demo.yals.ee
           responseCode: 200
@@ -69,7 +69,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.7
+        uses: EnricoMi/publish-unit-test-result-action@v1.18
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
