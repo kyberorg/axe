@@ -14,14 +14,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Complile JAR
-        run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
-
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_PASSWORD }}
+
+      - name: Complile JAR
+        run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Build and push
         id: docker_build
