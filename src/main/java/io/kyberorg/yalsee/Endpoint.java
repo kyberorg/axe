@@ -69,18 +69,18 @@ public final class Endpoint {
         public static final String DELETE_LINKS_API = LINKS_API + "/{ident}";
 
         /**
+         * API for getting links.
+         * <p>
+         * GET /api/links/{ident}
+         */
+        public static final String GET_LINKS_API = LINKS_API + "/{ident}";
+
+        /**
          * API for storing links.
          * <p>
          * POST /api/store
          */
         public static final String STORE_API = "/api/store";
-
-        /**
-         * API for Getting links.
-         * <p>
-         * GET /api/link/{ident}
-         */
-        public static final String LINK_API = "/api/link";
 
         /**
          * Mattermost API.
@@ -182,7 +182,7 @@ public final class Endpoint {
         /**
          * Path for getting link.
          */
-        public static final String LINK_API = Api.LINK_API + "/";
+        public static final String GET_LINK_API = Api.LINKS_API + "/";
         /**
          * Path for retrieving QR code.
          */

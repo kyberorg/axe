@@ -77,7 +77,7 @@ public abstract class UnirestTest {
      * @return string with long URL or {@link #LINK_NOT_FOUND_STATUS} if not found
      */
     protected String getStoredLink(final String ident) {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.GET_LINK_API + ident);
         HttpResponse<JsonNode> result = request.asJson();
         logRequestAndResponse(request, result, TAG);
 

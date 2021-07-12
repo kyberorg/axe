@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.result;
 
+import com.google.gson.internal.Primitives;
 import lombok.Getter;
 
 /**
@@ -35,6 +36,7 @@ public class OperationResult {
 
     @Getter private String result;
     @Getter private String message;
+    private Object payload;
 
     /**
      * Default constructor.
@@ -124,5 +126,24 @@ public class OperationResult {
     public OperationResult withMessage(final String customMessage) {
         this.message = customMessage;
         return this;
+    }
+
+    /**
+     * Adds payload produced by operation.
+     *
+     * @param payload operation output object
+     * @return same object, but with added {@link #payload}
+     */
+    public OperationResult addPayload(Object payload) {
+        this.payload = payload;
+        return this;
+    }
+
+    public String getStringPayload() {
+        return getPayload(String.class);
+    }
+
+    private <T> T getPayload(final Class<T> classOfPayload) {
+        return Primitives.wrap(classOfPayload).cast(this.payload);
     }
 }

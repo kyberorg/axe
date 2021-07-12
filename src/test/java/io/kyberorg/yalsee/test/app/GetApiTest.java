@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
-import io.kyberorg.yalsee.controllers.rest.GetRestController;
+import io.kyberorg.yalsee.api.links.GetLinkRestController;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Testing {@link GetRestController}.
+ * Testing {@link GetLinkRestController}.
  *
  * @since 1.0
  */
@@ -26,17 +26,17 @@ public class GetApiTest extends UnirestTest {
     public static final String TAG = "[" + GetApiTest.class.getSimpleName() + "]";
 
     /**
-     * Request without ident = 400.
+     * Request without ident = 501.
      */
     @Test
-    public void onRequestWithoutIdentStatusIs400() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API);
+    public void onRequestWithoutIdentStatusIs501() {
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.GET_LINK_API);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(STATUS_501, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -46,14 +46,14 @@ public class GetApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithSpaceIdentStatusIs400() {
-        String url = TEST_URL + Endpoint.ForTests.LINK_API + " ";
+        String url = TEST_URL + Endpoint.ForTests.GET_LINK_API + " ";
         HttpRequest request = Unirest.get(AppUtils.covertUnicodeToAscii(url));
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(STATUS_501, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -65,7 +65,7 @@ public class GetApiTest extends UnirestTest {
         String specChars = "%#";
         String url =
                 TEST_URL
-                        + Endpoint.ForTests.LINK_API
+                        + Endpoint.ForTests.GET_LINK_API
                         + URLEncoder.encode(specChars, StandardCharsets.UTF_8); // because '%' should be encoded
         HttpRequest request = Unirest.get(url);
         HttpResponse<String> result = request.asString();
@@ -73,7 +73,7 @@ public class GetApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(STATUS_501, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -82,7 +82,7 @@ public class GetApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithNotExistingIdentStatusIs404() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + "notStoredIdent");
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.GET_LINK_API + "notStoredIdent");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -100,7 +100,7 @@ public class GetApiTest extends UnirestTest {
         String longLink = "https://kyberorg.io"; // That very long, really
         String ident = store(longLink);
 
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.GET_LINK_API + ident);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

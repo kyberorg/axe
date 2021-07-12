@@ -78,6 +78,11 @@ public final class HttpCode {
     public static final int STATUS_500 = 500;
 
     /**
+     * 501 - not implemented.
+     */
+    public static final int STATUS_501 = 501;
+
+    /**
      * 503 - application is down.
      */
     public static final int STATUS_503 = 503;

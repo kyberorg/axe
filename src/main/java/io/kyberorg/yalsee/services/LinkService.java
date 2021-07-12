@@ -38,6 +38,7 @@ public class LinkService {
      * @param ident string with ident to search against
      * @return search result
      */
+    @Deprecated(since = "3.1", forRemoval = true)
     public GetResult getLink(final String ident) {
         Optional<Link> result;
         try {
@@ -86,6 +87,28 @@ public class LinkService {
             if (link.isPresent()) {
                 repo.delete(link.get());
                 return OperationResult.success();
+            } else {
+                return OperationResult.elementNotFound();
+            }
+        } catch (DataAccessResourceFailureException dbEx) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
+    /**
+     * Provides long link by its ident.
+     *
+     * @param ident string with ident for searching link
+     * @return {@link OperationResult} object with exec status, payload (string containing long link) or error message.
+     */
+    public OperationResult getLinkWithIdent(final String ident) {
+        Optional<Link> link;
+        try {
+            link = repo.findSingleByIdent(ident);
+            if (link.isPresent()) {
+                return OperationResult.success().addPayload(link.get().getLink());
             } else {
                 return OperationResult.elementNotFound();
             }
