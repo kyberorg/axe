@@ -62,6 +62,11 @@ public final class Endpoint {
         public static final String LINKS_API = "/api/links";
 
         /**
+         * Link API + / + ident. For dokumentation.
+         */
+        public static final String LINKS_API_PLUS_IDENT = LINKS_API + "/{ident}";
+
+        /**
          * API for deleting links.
          * <p>
          * DELETE /api/links/{ident}
@@ -179,10 +184,6 @@ public final class Endpoint {
          * Just slash symbol (/). Application base.
          */
         public static final String SLASH_BASE = "/";
-        /**
-         * Path for getting link.
-         */
-        public static final String GET_LINK_API = Api.LINKS_API + "/";
         /**
          * Path for retrieving QR code.
          */

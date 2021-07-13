@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
+import static io.kyberorg.yalsee.constants.HttpCode.STATUS_501;
 
 /**
  * Gets long links.
@@ -40,6 +41,11 @@ public class GetLinkRestController {
     public GetLinkRestController(final LinkService linkService, final IdentValidator identValidator) {
         this.linkService = linkService;
         this.identValidator = identValidator;
+    }
+
+    @GetMapping(path = {Endpoint.Api.LINKS_API, Endpoint.Api.LINKS_API + "/"})
+    public ResponseEntity<?> getLinks() {
+        return ResponseEntity.status(STATUS_501).build();
     }
 
     @GetMapping(Endpoint.Api.GET_LINKS_API)

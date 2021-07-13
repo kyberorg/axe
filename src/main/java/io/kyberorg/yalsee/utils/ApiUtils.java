@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.utils;
 
+import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -74,8 +75,8 @@ public final class ApiUtils {
             case IdentValidator.EMPTY_IDENT:
                 //TODO fix message as it is used for get API as well
                 errorJson = YalseeErrorJson.createWithMessage("Request should be like this: "
-                        + "Endpoint.Api.DELETE_LINKS_API and ident should not be empty")
-                        .andStatus(STATUS_501);
+                        + Endpoint.Api.LINKS_API_PLUS_IDENT + " and ident should not be empty")
+                        .andStatus(STATUS_400);
                 break;
             case IdentValidator.MALFORMED_IDENT:
             default:
