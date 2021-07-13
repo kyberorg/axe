@@ -45,7 +45,9 @@ public class GetLinkRestController {
 
     @GetMapping(path = {Endpoint.Api.LINKS_API, Endpoint.Api.LINKS_API + "/"})
     public ResponseEntity<?> getLinks() {
-        return ResponseEntity.status(STATUS_501).build();
+        YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Not implemented yet")
+                .andStatus(STATUS_501);
+        return ResponseEntity.status(STATUS_501).body(errorJson);
     }
 
     @GetMapping(Endpoint.Api.GET_LINKS_API)
