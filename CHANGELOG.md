@@ -1,3 +1,11 @@
+### Milestone 3.0.10 (13/07/2021)
+Dependencies Bump
+
+* [Maven Deps] &nbsp;&nbsp; Bump telegrambots from 5.2.0 to 5.3.0
+* [Maven Deps] &nbsp;&nbsp; Bump selenide from 5.22.2 to 5.22.3
+* [Actions Deps] &nbsp; Bump EnricoMi/publish-unit-test-result-action from 1.18 to 1.19
+* [Ops] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fail fast: login to docker hub before compiling JAR (#422)
+
 ### Version 3.0.9 (02/07/2021)
 * [Code Cleanup] &nbsp; Code cleanup (#368)
 * [Deps Cleanup] &nbsp; Actualized info at pom.xml (#372)
