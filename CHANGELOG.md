@@ -1,10 +1,10 @@
 ### Milestone 3.0.10 (13/07/2021)
 Dependencies Bump
 
-* [Maven Deps] &nbsp;&nbsp; Bump telegrambots from 5.2.0 to 5.3.0
-* [Maven Deps] &nbsp;&nbsp; Bump selenide from 5.22.2 to 5.22.3
-* [Actions Deps] &nbsp; Bump EnricoMi/publish-unit-test-result-action from 1.18 to 1.19
-* [Ops] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fail fast: login to docker hub before compiling JAR (#422)
+* [Maven Deps] &nbsp;&nbsp; Bump telegrambots from 5.2.0 to 5.3.0 ([#417](https://github.com/kyberorg/yalsee/pull/417))
+* [Maven Deps] &nbsp;&nbsp; Bump selenide from 5.22.2 to 5.22.3 ([#420](https://github.com/kyberorg/yalsee/pull/420))
+* [Actions Deps] &nbsp; Bump EnricoMi/publish-unit-test-result-action from 1.18 to 1.19 ([#421](https://github.com/kyberorg/yalsee/pull/421))
+* [Ops] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fail fast: login to docker hub before compiling JAR ([#422](https://github.com/kyberorg/yalsee/pull/422))
 
 ### Version 3.0.9 (02/07/2021)
 * [Code Cleanup] &nbsp; Code cleanup (#368)
