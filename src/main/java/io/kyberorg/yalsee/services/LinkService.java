@@ -30,9 +30,9 @@ public class LinkService {
     private final LinkRepo repo;
 
     public static final String OP_MALFORMED_IDENT = "Ident is not valid";
-    public static final String OP_MALFORMED_URL = "Link is not valid";
+    public static final String OP_MALFORMED_URL = UrlExtraValidator.URL_NOT_VALID;
     public static final String OP_URL_BANNED = "URL is banned";
-    public static final String OP_LOCAL_URL_BANNED = "Local URLs are banned";
+    public static final String OP_LOCAL_URL_BANNED = UrlExtraValidator.LOCAL_URL_NOT_ALLOWED;
 
     /**
      * Constructor for Spring autowiring.
