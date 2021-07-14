@@ -40,6 +40,20 @@ public class StoreLinkApiTest extends UnirestTest {
     }
 
     /**
+     * Request without Content-Type header = 415.
+     */
+    @Test
+    public void onRequestWithoutContentTypeHeaderStatusIs415() {
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body("");
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_415, result.getStatus());
+    }
+
+    /**
      * Request with empty body = 400.
      */
     @Test
@@ -79,7 +93,9 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithJSONWithoutLinkParamStatusIs422() {
         HttpRequest request =
-                Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(EmptyJson.create().toString());
+                Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                        .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                        .body(EmptyJson.create().toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -98,7 +114,9 @@ public class StoreLinkApiTest extends UnirestTest {
         String longLink = "";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -117,7 +135,9 @@ public class StoreLinkApiTest extends UnirestTest {
         String longLink = "not a Link";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
