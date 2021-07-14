@@ -71,11 +71,11 @@ public class PostLinkRestController {
             //accepting ident if any
             if (StringUtils.isNotBlank(storeRequest.getIdent())) {
                 storeResult = linkService.createLink(storeRequest.getIdent(), storeRequest.getLink());
-            } else if (tokenCheck.getMessage().equals(TokenChecker.WRONG_TOKEN)) {
-                return ApiUtils.handleTokenFail(tokenCheck);
             } else {
                 return handleMalformedIdent();
             }
+        } else if (tokenCheck.getMessage().equals(TokenChecker.WRONG_TOKEN)) {
+            return ApiUtils.handleTokenFail(tokenCheck);
         } else {
             //used-defined ident discarded
             storeResult = linkService.createLink(storeRequest.getLink());
@@ -94,7 +94,7 @@ public class PostLinkRestController {
             case OperationResult.MALFORMED_INPUT:
                 //analyse message and send 422
                 if (storeResult.getMessage().equals(LinkService.OP_MALFORMED_URL)) {
-                    return handleMalformedUrl();
+                    return handleMalformedUrl(storeResult);
                 } else {
                     return handleMalformedIdent();
                 }
@@ -120,6 +120,13 @@ public class PostLinkRestController {
     private ResponseEntity<YalseeErrorJson> handleMalformedUrl() {
         YalseeErrorJson errorJson =
                 YalseeErrorJson.createWithMessage("Got malformed value at 'link' field. Should be valid URL")
+                        .andStatus(STATUS_422);
+        return ResponseEntity.unprocessableEntity().body(errorJson);
+    }
+
+    private ResponseEntity<YalseeErrorJson> handleMalformedUrl(final OperationResult operationResult) {
+        YalseeErrorJson errorJson =
+                YalseeErrorJson.createWithMessage(operationResult.getMessage())
                         .andStatus(STATUS_422);
         return ResponseEntity.unprocessableEntity().body(errorJson);
     }
