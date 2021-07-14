@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
+import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.StoreRequestJson;
 import io.kyberorg.yalsee.json.StoreResponseJson;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -47,10 +48,11 @@ public class PostLinkRestController {
         this.tokenChecker = tokenChecker;
     }
 
-    @PostMapping(Endpoint.Api.LINKS_API)
+    @PostMapping(value = Endpoint.Api.LINKS_API,
+            consumes = MimeType.APPLICATION_JSON, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> storeNewLink(@RequestBody(required = false) StoreRequestJson storeRequest,
                                           final HttpServletRequest request) {
-        log.info("{} got POST request: {\"Ident\": {}}", TAG, storeRequest);
+        log.info("{} got POST request: {\"JSON\": {}}", TAG, storeRequest);
 
         if (storeRequest == null) {
             YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Body should be a JSON object")
