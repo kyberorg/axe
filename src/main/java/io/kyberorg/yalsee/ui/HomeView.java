@@ -19,6 +19,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.json.StoreRequestJson;
 import io.kyberorg.yalsee.services.overall.OverallService;
@@ -35,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.olli.ClipboardHelper;
 
+import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_200;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_201;
 import static io.kyberorg.yalsee.utils.push.PushCommand.UPDATE_COUNTER;
@@ -290,7 +292,9 @@ public class HomeView extends HorizontalLayout {
         final String apiRoute = Endpoint.Api.LINKS_API;
         StoreRequestJson json = StoreRequestJson.create().withLink(link);
         HttpResponse<JsonNode> response =
-                Unirest.post(appUtils.getAPIHostPort() + apiRoute).body(json).asJson();
+                Unirest.post(appUtils.getAPIHostPort() + apiRoute)
+                        .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                        .body(json).asJson();
         log.debug("{} Got reply from Store API. Status: {}, Body: {}",
                 TAG, response.getStatus(), response.getBody().toPrettyString());
         if (response.isSuccess()) {
