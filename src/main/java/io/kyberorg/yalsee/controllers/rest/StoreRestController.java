@@ -133,7 +133,7 @@ public class StoreRestController {
         } catch (Exception e) {
             log.info("{} non-parseable JSON", TAG);
             YalseeErrorJson errorJson = YalseeErrorJson.builder()
-                    .status(HttpCode.STATUS_421)
+                    .status(HttpCode.STATUS_422)
                     .message("Unable to parse json")
                     .techMessage("Malformed JSON received. Got body: " + body)
                     .build();
@@ -165,7 +165,7 @@ public class StoreRestController {
         if (!errors.isEmpty()) {
             log.info("{} Value Violations found: {}", TAG, errors);
             Set<ConstraintViolation> errorSet = new HashSet<>(errors);
-            YalseeErrorJson errorJson = YalseeErrorJson.createFromSetOfErrors(errorSet).andStatus(HttpCode.STATUS_421);
+            YalseeErrorJson errorJson = YalseeErrorJson.createFromSetOfErrors(errorSet).andStatus(HttpCode.STATUS_422);
             return Result.get().write(errorJson);
         }
 
@@ -185,7 +185,7 @@ public class StoreRestController {
             default:
                 log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
                 YalseeErrorJson errorJson1 = YalseeErrorJson.createWithMessage(messageFromExtraValidator)
-                        .andStatus(HttpCode.STATUS_421);
+                        .andStatus(HttpCode.STATUS_422);
                 result = Result.get().write(errorJson1);
                 break;
         }

@@ -85,6 +85,7 @@ public final class Endpoint {
          * <p>
          * POST /api/store
          */
+        @Deprecated(forRemoval = true, since = "3.1")
         public static final String STORE_API = "/api/store";
 
         /**

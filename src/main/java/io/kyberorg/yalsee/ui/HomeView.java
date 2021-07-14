@@ -287,7 +287,7 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void sendLink(final String link) {
-        final String apiRoute = Endpoint.Api.STORE_API;
+        final String apiRoute = Endpoint.Api.LINKS_API;
         StoreRequestJson json = StoreRequestJson.create().withLink(link);
         HttpResponse<JsonNode> response =
                 Unirest.post(appUtils.getAPIHostPort() + apiRoute).body(json).asJson();

@@ -20,15 +20,15 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 1.0
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class StoreApiTest extends UnirestTest {
-    public static final String TAG = "[" + StoreApiTest.class.getSimpleName() + "]";
+public class StoreLinkApiTest extends UnirestTest {
+    public static final String TAG = "[" + StoreLinkApiTest.class.getSimpleName() + "]";
 
     /**
      * Request without body = 400.
      */
     @Test
     public void onRequestWithoutBodyStatusIs400() {
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -42,7 +42,7 @@ public class StoreApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithEmptyBodyStatusIs400() {
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body("");
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body("");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -52,72 +52,72 @@ public class StoreApiTest extends UnirestTest {
     }
 
     /**
-     * Request with not JSON body = 421.
+     * Request with not JSON body = 400.
      */
     @Test
-    public void onRequestWithNonJsonBodyStatusIs421() {
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body("not a JSON");
+    public void onRequestWithNonJsonBodyStatusIs400() {
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body("not a JSON");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_421, result.getStatus());
+        assertEquals(STATUS_400, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     /**
-     * Request with JSON Body without link inside = 421.
+     * Request with JSON Body without link inside = 422.
      */
     @Test
-    public void onRequestWithJSONWithoutLinkParamStatusIs421() {
+    public void onRequestWithJSONWithoutLinkParamStatusIs422() {
         HttpRequest request =
-                Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(EmptyJson.create().toString());
+                Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(EmptyJson.create().toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_421, result.getStatus());
+        assertEquals(STATUS_422, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     /**
-     * Request with JSON Body with empty link inside = 421.
+     * Request with JSON Body with empty link inside = 422.
      */
     @Test
-    public void onRequestWithEmptyLinkStatusIs421() {
+    public void onRequestWithEmptyLinkStatusIs422() {
         String longLink = "";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_421, result.getStatus());
+        assertEquals(STATUS_422, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
     /**
-     * Request with JSON Body with non valid link inside = 421.
+     * Request with JSON Body with non valid link inside = 422.
      */
     @Test
-    public void onRequestWithNotALinkStatusIs421() {
+    public void onRequestWithNotALinkStatusIs422() {
         String longLink = "not a Link";
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_421, result.getStatus());
+        assertEquals(STATUS_422, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -130,7 +130,7 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "https://kyberorg.io"; // That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -149,7 +149,7 @@ public class StoreApiTest extends UnirestTest {
         String longLink = "https://kyberorg.io"; // That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -181,7 +181,7 @@ public class StoreApiTest extends UnirestTest {
         String linkWithoutProtocol = "github.com/kyberorg/yalsee/issues/50";
         String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -200,7 +200,7 @@ public class StoreApiTest extends UnirestTest {
         String bannedUrl = "http://ct26737.tmweb.ru/compte/";
         String correctJson = StoreRequestJson.create().withLink(bannedUrl).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

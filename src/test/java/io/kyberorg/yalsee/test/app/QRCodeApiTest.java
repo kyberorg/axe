@@ -213,7 +213,7 @@ public class QRCodeApiTest extends UnirestTest {
         StoreRequestJson storeRequest = StoreRequestJson.create().withLink(longUrlToSave);
 
         HttpRequest request =
-                Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(storeRequest.toString());
+                Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(storeRequest.toString());
         HttpResponse<JsonNode> result = request.asJson();
 
         logRequestAndResponse(request, result, TAG);

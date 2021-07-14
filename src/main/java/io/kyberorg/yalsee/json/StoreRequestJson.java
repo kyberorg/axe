@@ -19,11 +19,19 @@ import static io.kyberorg.yalsee.utils.UrlExtraValidator.URL_MIN_SIZE;
  */
 @Data(staticConstructor = "create")
 public class StoreRequestJson implements YalseeJson {
+
+    public static final int IDENT_MIN_LEN = 2;
+    public static final int IDENT_MAX_LEN = 255;
+
     @NotNull(message = "must be present")
     @Size(min = URL_MIN_SIZE, max = URL_MAX_SIZE)
     @URL(message = UrlExtraValidator.URL_NOT_VALID)
     @JsonProperty("link")
     private String link;
+
+    @Size(min = IDENT_MIN_LEN, max = IDENT_MAX_LEN)
+    @JsonProperty("ident")
+    private String ident;
 
     /**
      * Creates {@link StoreRequestJson} with provided link.

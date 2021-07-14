@@ -53,7 +53,7 @@ public abstract class UnirestTest {
     protected String store(final String longLink) {
         String requestJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(requestJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
