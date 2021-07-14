@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.StoreRequestJson;
 import io.kyberorg.yalsee.services.QRCodeService;
 import kong.unirest.HttpRequest;
@@ -17,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
 
+import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
 import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -213,7 +215,9 @@ public class QRCodeApiTest extends UnirestTest {
         StoreRequestJson storeRequest = StoreRequestJson.create().withLink(longUrlToSave);
 
         HttpRequest request =
-                Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(storeRequest.toString());
+                Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                        .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                        .body(storeRequest.toString());
         HttpResponse<JsonNode> result = request.asJson();
 
         logRequestAndResponse(request, result, TAG);

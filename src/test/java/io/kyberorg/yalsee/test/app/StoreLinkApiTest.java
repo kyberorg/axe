@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.EmptyJson;
 import io.kyberorg.yalsee.json.StoreRequestJson;
 import io.kyberorg.yalsee.json.StoreResponseJson;
@@ -11,6 +12,7 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.Test;
 
+import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
 import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +44,9 @@ public class StoreLinkApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithEmptyBodyStatusIs400() {
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body("");
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body("");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -56,7 +60,9 @@ public class StoreLinkApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithNonJsonBodyStatusIs400() {
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body("not a JSON");
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body("not a JSON");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -130,7 +136,9 @@ public class StoreLinkApiTest extends UnirestTest {
         String longLink = "https://kyberorg.io"; // That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -149,7 +157,9 @@ public class StoreLinkApiTest extends UnirestTest {
         String longLink = "https://kyberorg.io"; // That very long, really
         String correctJson = StoreRequestJson.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -181,7 +191,9 @@ public class StoreLinkApiTest extends UnirestTest {
         String linkWithoutProtocol = "github.com/kyberorg/yalsee/issues/50";
         String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -200,7 +212,9 @@ public class StoreLinkApiTest extends UnirestTest {
         String bannedUrl = "http://ct26737.tmweb.ru/compte/";
         String correctJson = StoreRequestJson.create().withLink(bannedUrl).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API).body(correctJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

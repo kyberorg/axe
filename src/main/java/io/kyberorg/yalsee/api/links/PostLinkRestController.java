@@ -71,6 +71,8 @@ public class PostLinkRestController {
             //accepting ident if any
             if (StringUtils.isNotBlank(storeRequest.getIdent())) {
                 storeResult = linkService.createLink(storeRequest.getIdent(), storeRequest.getLink());
+            } else if (tokenCheck.getMessage().equals(TokenChecker.WRONG_TOKEN)) {
+                return ApiUtils.handleTokenFail(tokenCheck);
             } else {
                 return handleMalformedIdent();
             }
