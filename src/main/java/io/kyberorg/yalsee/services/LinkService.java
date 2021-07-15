@@ -6,7 +6,6 @@ import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.OperationResult;
-import io.kyberorg.yalsee.result.StoreResult;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.URLUtils;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
@@ -62,28 +61,6 @@ public class LinkService {
 
         return result.<GetResult>map(link -> new GetResult.Success(link.getLink()))
                 .orElseGet(GetResult.NotFound::new);
-    }
-
-    /**
-     * Stores new link into DB.
-     *
-     * @param ident string with part that identifies  short link
-     * @param link  string with long URL
-     * @return store result
-     */
-    @Deprecated(since = "3.1", forRemoval = true)
-    public StoreResult storeNew(final String ident, final String link) {
-        Link linkObject = Link.create(ident, link);
-        try {
-            repo.save(linkObject);
-            return new StoreResult.Success();
-        } catch (CannotCreateTransactionException e) {
-            return new StoreResult.DatabaseDown().withException(e);
-        } catch (Exception e) {
-            log.error("{} Exception on storing new {}", TAG, Link.class.getSimpleName());
-            log.debug("", e);
-            return new StoreResult.Fail("Failed to add new record");
-        }
     }
 
     /**

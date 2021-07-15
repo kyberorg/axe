@@ -81,14 +81,6 @@ public final class Endpoint {
         public static final String GET_LINKS_API = LINKS_API + "/{ident}";
 
         /**
-         * API for storing links.
-         * <p>
-         * POST /api/store
-         */
-        @Deprecated(forRemoval = true, since = "3.1")
-        public static final String STORE_API = "/api/store";
-
-        /**
          * Mattermost API.
          * <p>
          * POST /api/mm
