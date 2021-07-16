@@ -99,7 +99,7 @@ public class GetQRApiTest extends UnirestTest {
     }
 
     /**
-     * Request with only numbers = 404.
+     * Request with only numbers = 400.
      */
     @Test
     public void onRequestQRCodeWithOnlyNumbersAppGives404() {
@@ -109,7 +109,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(STATUS_400, result.getStatus());
     }
 
     /**
