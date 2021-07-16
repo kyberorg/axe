@@ -162,7 +162,7 @@ public class QRCodeService {
         OperationResult identCheck = identValidator.validate(ident);
         if (identCheck.notOk()) {
             log.error("{} Request has not valid ident: {}", TAG, ident);
-            return OperationResult.malformedInput().withMessage(ERR_MALFORMED_WIDTH);
+            return OperationResult.malformedInput().withMessage(ERR_MALFORMED_IDENT);
         }
 
         //width check

@@ -207,7 +207,7 @@ public class GetQRApiTest extends UnirestTest {
      */
     @Test
     public void onRequestQRCodeToMultiLevelRequestAppGives404() {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/void/void2/dd");
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/void/void2/dd/d");
         HttpResponse<JsonNode> result = request.asJson();
 
         logRequestAndResponse(request, result, TAG);
@@ -216,10 +216,10 @@ public class GetQRApiTest extends UnirestTest {
     }
 
     /**
-     * Request for valid ident and positive width but string (NaN) height = 404.
+     * Request for valid ident and positive width but string (NaN) height = 400.
      */
     @Test
-    public void onRequestQRCodeWithValidIdentAndWidthAndStringHeightAppGives404() {
+    public void onRequestQRCodeWithValidIdentAndWidthAndStringHeightAppGives400() {
         final String ident = getValidIdent();
         final int width = 10;
         final String height = "height";
@@ -230,7 +230,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(STATUS_400, result.getStatus());
     }
 
     /**

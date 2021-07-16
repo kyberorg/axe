@@ -23,8 +23,8 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
  */
 @Slf4j
 @RestController
-public class GetQRRestController {
-    private static final String TAG = "[" + GetQRRestController.class.getSimpleName() + "]";
+public class GetQrRestController {
+    private static final String TAG = "[" + GetQrRestController.class.getSimpleName() + "]";
 
     private final QRCodeService qrCodeService;
 
@@ -33,7 +33,7 @@ public class GetQRRestController {
      *
      * @param qrService    service which handles QR codes related actions
      */
-    public GetQRRestController(final QRCodeService qrService) {
+    public GetQrRestController(final QRCodeService qrService) {
         this.qrCodeService = qrService;
     }
 
@@ -55,8 +55,17 @@ public class GetQRRestController {
 
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_AND_SIZE, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
-                                                     final @PathVariable("size") int size) {
-        log.info("{} got GET request: {\"Ident\": {}, \"Size\": {}}", TAG, ident, size);
+                                                     final @PathVariable("size") String sizeString) {
+        log.info("{} got GET request: {\"Ident\": {}, \"Size\": {}}", TAG, ident, sizeString);
+
+        int size;
+        try {
+            size = Integer.parseInt(sizeString);
+        } catch (NumberFormatException e) {
+            YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Size should be positive number. Got string.")
+                    .andStatus(STATUS_400);
+            return ResponseEntity.badRequest().body(errorJson);
+        }
 
         OperationResult createQRCodeResult = qrCodeService.getQRCode(ident, size);
 
@@ -71,9 +80,30 @@ public class GetQRRestController {
 
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_WIDTH_AND_HEIGHT, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
-                                                     final @PathVariable("width") int width,
-                                                     final @PathVariable("height") int height) {
-        log.info("{} got GET request: {\"Ident\": {}, \"Width\": {}, \"Height\": {}}", TAG, ident, width, height);
+                                                     final @PathVariable("width") String widthString,
+                                                     final @PathVariable("height") String heightString) {
+        log.info("{} got GET request: {\"Ident\": {}, \"Width\": {}, \"Height\": {}}",
+                TAG, ident, widthString, heightString);
+
+        int width;
+        try {
+            width = Integer.parseInt(widthString);
+        } catch (NumberFormatException e) {
+            YalseeErrorJson errorJson = YalseeErrorJson
+                    .createWithMessage("Width should be positive number. Got string.")
+                    .andStatus(STATUS_400);
+            return ResponseEntity.badRequest().body(errorJson);
+        }
+
+        int height;
+        try {
+            height = Integer.parseInt(heightString);
+        } catch (NumberFormatException e) {
+            YalseeErrorJson errorJson = YalseeErrorJson
+                    .createWithMessage("Height should be positive number. Got string.")
+                    .andStatus(STATUS_400);
+            return ResponseEntity.badRequest().body(errorJson);
+        }
 
         OperationResult createQRCodeResult = qrCodeService.getQRCode(ident, width, height);
 
