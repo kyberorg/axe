@@ -24,6 +24,7 @@ import java.util.Optional;
  */
 @Slf4j
 @RestController
+@Deprecated(forRemoval = true, since = "3.1")
 public class QRCodeRestController {
     private static final String TAG = "[" + QRCodeRestController.class.getSimpleName() + "]";
 
@@ -111,7 +112,7 @@ public class QRCodeRestController {
         if (identFromDatabase instanceof GetResult.NotFound) {
             log.debug("{} 0 idents found by request: {}", TAG, ident);
             response.setStatus(HttpCode.STATUS_404);
-            return YalseeErrorJson.createWithMessage("No links found by this request. "
+            return YalseeErrorJson.createWithMessage("No links found by this ident. "
                     + "Ident should be stored before requesting QR code").andStatus(HttpCode.STATUS_404);
         } else if (identFromDatabase instanceof GetResult.Fail) {
             log.debug("{} Failed to query DB for ident. Error: {}",

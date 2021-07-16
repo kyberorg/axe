@@ -81,6 +81,34 @@ public final class Endpoint {
         public static final String GET_LINKS_API = LINKS_API + "/{ident}";
 
         /**
+         * API for manipulating with links.
+         * <p>
+         * /api/qr
+         */
+        public static final String QR_API = "/api/qr";
+
+        /**
+         * API for getting QR Code with default size for short links.
+         * <p>
+         * GET /api/qr/{ident}
+         */
+        public static final String GET_QR_WITH_IDENT = QR_API + "/{ident}";
+
+        /**
+         * API for getting QR Code with user defined size.
+         * <p>
+         * GET /api/qr/{ident}/{size}
+         */
+        public static final String GET_QR_WITH_IDENT_AND_SIZE = GET_QR_WITH_IDENT + "/{size}";
+
+        /**
+         * API for getting QR Code with user defined size.
+         * <p>
+         * GET /api/qr/{ident}/{width}/{height}
+         */
+        public static final String GET_QR_WITH_IDENT_WIDTH_AND_HEIGHT = GET_QR_WITH_IDENT + "/{width}/{height}";
+
+        /**
          * Mattermost API.
          * <p>
          * POST /api/mm
@@ -99,6 +127,7 @@ public final class Endpoint {
          * <p>
          * GET /api/qrCode/{ident}/{size}
          */
+        @Deprecated(forRemoval = true, since = "3.1")
         public static final String QR_CODE_API = "/api/qrCode";
 
         /**

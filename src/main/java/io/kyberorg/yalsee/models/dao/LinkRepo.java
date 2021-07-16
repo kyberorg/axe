@@ -36,6 +36,14 @@ public interface LinkRepo extends Repository<Link, Long> {
     long count();
 
     /**
+     * Counts how many links are saved under give ident.
+     *
+     * @param linkIdent string with ident to search against
+     * @return number of found links
+     */
+    long countByIdent(String linkIdent);
+
+    /**
      * Deletes link from DB.
      *
      * @param linkToDelete {@link Link} object

@@ -73,7 +73,6 @@ public final class ApiUtils {
         YalseeErrorJson errorJson;
         switch (errorReason) {
             case IdentValidator.EMPTY_IDENT:
-                //TODO fix message as it is used for get API as well
                 errorJson = YalseeErrorJson.createWithMessage("Request should be like this: "
                         + Endpoint.Api.LINKS_API_PLUS_IDENT + " and ident should not be empty")
                         .andStatus(STATUS_400);
