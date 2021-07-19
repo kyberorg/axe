@@ -1,3 +1,16 @@
+### Milestone 3.1 (20/07/2021)
+RESTify API
+
+:warning: there are breaking changes in API.
+
+API Endpoints were changes in order to fit with REST API template (#347).
+
+* `GET /api/link/{ident}` -> `GET /api/links/{ident}`
+* `POST/PUT /api/store` -> `POST /api/links`
+* `GET /qrcode/{ident}` -> `GET /qr/{ident}`
+* `GET /qrcode/{ident}/{size}` -> `GET /qr/{ident}/{size}`
+* `GET /qr/{ident}/{width}/{height}` added.
+
 ### Milestone 3.0.10 (13/07/2021)
 Dependencies Bump
 
