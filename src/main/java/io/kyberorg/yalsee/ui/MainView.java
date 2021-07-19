@@ -5,8 +5,10 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
@@ -74,6 +76,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addSubTitle();
         addMenuTab("Main", HomeView.class, VaadinIcon.HOME);
         addMenuTab("App Info", AppInfoView.class, VaadinIcon.INFO);
+        addMenuTab("API Doks", "https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.0",
+                VaadinIcon.CURLY_BRACKETS);
 
         // dev-only items
         if (appUtils.isDevelopmentModeActivated()) {
@@ -113,6 +117,14 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         link.setHighlightCondition(HighlightConditions.sameLocation());
         Tab tab = new Tab(link);
         tabToTarget.put(target, tab);
+        tabs.add(tab);
+    }
+
+    private void addMenuTab(final String label, final String targetUrl, final VaadinIcon icon) {
+        Icon iconElement = icon.create();
+        Span labelElement = new Span(label);
+        Anchor link = new Anchor(targetUrl, iconElement, labelElement);
+        Tab tab = new Tab(link);
         tabs.add(tab);
     }
 
