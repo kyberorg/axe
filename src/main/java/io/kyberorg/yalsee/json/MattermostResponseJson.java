@@ -2,8 +2,8 @@ package io.kyberorg.yalsee.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
+import io.kyberorg.yalsee.api.mm.MattermostRestController;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.controllers.rest.MattermostRestController;
 import io.kyberorg.yalsee.mm.Mattermost;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import lombok.Data;

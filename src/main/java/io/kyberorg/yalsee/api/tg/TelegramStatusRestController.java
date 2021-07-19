@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.controllers.rest;
+package io.kyberorg.yalsee.api.tg;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.json.TelegramStatusResponseJson;

@@ -1,10 +1,10 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.api.mm.MattermostRestController;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.controllers.rest.MattermostRestController;
 import io.kyberorg.yalsee.json.MattermostResponseJson;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.utils.mock.MattermostMock;
