@@ -21,7 +21,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
-import io.kyberorg.yalsee.json.StoreRequestJson;
+import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
@@ -290,7 +290,7 @@ public class HomeView extends HorizontalLayout {
 
     private void sendLink(final String link) {
         final String apiRoute = Endpoint.Api.LINKS_API;
-        StoreRequestJson json = StoreRequestJson.create().withLink(link);
+        PostLinkRequest json = PostLinkRequest.create().withLink(link);
         HttpResponse<JsonNode> response =
                 Unirest.post(appUtils.getAPIHostPort() + apiRoute)
                         .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)

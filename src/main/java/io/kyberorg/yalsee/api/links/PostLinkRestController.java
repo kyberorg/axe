@@ -4,8 +4,8 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.json.StoreRequestJson;
-import io.kyberorg.yalsee.json.StoreResponseJson;
+import io.kyberorg.yalsee.json.PostLinkRequest;
+import io.kyberorg.yalsee.json.PostLinkResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -54,12 +54,12 @@ public class PostLinkRestController {
      *
      * @param storeRequest JSON with link to save
      * @param request request object to retrieve headers from
-     * @return {@link ResponseEntity} with {@link StoreResponseJson} and resource URI in {@link Header#LOCATION}
+     * @return {@link ResponseEntity} with {@link PostLinkResponse} and resource URI in {@link Header#LOCATION}
      *  or {@link YalseeErrorJson}.
      */
     @PostMapping(value = Endpoint.Api.LINKS_API,
             consumes = MimeType.APPLICATION_JSON, produces = MimeType.APPLICATION_JSON)
-    public ResponseEntity<?> storeNewLink(final @RequestBody(required = false) StoreRequestJson storeRequest,
+    public ResponseEntity<?> storeNewLink(final @RequestBody(required = false) PostLinkRequest storeRequest,
                                           final HttpServletRequest request) {
         log.info("{} got POST request: {\"JSON\": {}}", TAG, storeRequest);
 
@@ -98,7 +98,7 @@ public class PostLinkRestController {
                         .path("/{ident}")
                         .buildAndExpand(storedLink.getIdent())
                         .toUri();
-                StoreResponseJson responseJson = StoreResponseJson.create().withIdent(storedLink.getIdent());
+                PostLinkResponse responseJson = PostLinkResponse.create().withIdent(storedLink.getIdent());
                 return ResponseEntity.created(uri).body(responseJson);
             case OperationResult.MALFORMED_INPUT:
                 //analyse message and send 422

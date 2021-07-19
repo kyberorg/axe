@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.api.links;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.core.IdentValidator;
-import io.kyberorg.yalsee.json.LinkResponseJson;
+import io.kyberorg.yalsee.json.GetLinkResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
@@ -58,7 +58,7 @@ public class GetLinkRestController {
      * Gets long link stored under given ident.
      *
      * @param ident part of link, that identify short link
-     * @return {@link ResponseEntity} with {@link LinkResponseJson} or {@link YalseeErrorJson}
+     * @return {@link ResponseEntity} with {@link GetLinkResponse} or {@link YalseeErrorJson}
      */
     @GetMapping(Endpoint.Api.GET_LINKS_API)
     public ResponseEntity<?> getLink(final @PathVariable("ident") String ident) {
@@ -83,7 +83,7 @@ public class GetLinkRestController {
                 log.info("{} encoding URL using punycode. Link: {} transformed to {}", TAG, longLink, punycodedUrl);
                 longLink = punycodedUrl;
             }
-            LinkResponseJson responseJson = LinkResponseJson.create().withLink(longLink);
+            GetLinkResponse responseJson = GetLinkResponse.create().withLink(longLink);
             return ResponseEntity.ok(responseJson);
         } else {
             return handleGetOperationFail(opResult);

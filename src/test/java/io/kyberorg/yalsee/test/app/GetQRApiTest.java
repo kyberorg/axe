@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.test.app;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.json.StoreRequestJson;
+import io.kyberorg.yalsee.json.PostLinkRequest;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -439,7 +439,7 @@ public class GetQRApiTest extends UnirestTest {
     private String getValidIdent() {
         if (this.ident == null) {
             final String longUrlToSave = "https://github.com/kyberorg/yalsee/issues";
-            StoreRequestJson storeRequest = StoreRequestJson.create().withLink(longUrlToSave);
+            PostLinkRequest storeRequest = PostLinkRequest.create().withLink(longUrlToSave);
 
             HttpRequest request =
                     Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)

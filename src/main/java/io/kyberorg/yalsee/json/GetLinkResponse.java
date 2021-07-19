@@ -10,17 +10,17 @@ import lombok.Data;
  * @since 1.0
  */
 @Data(staticConstructor = "create")
-public class LinkResponseJson implements YalseeJson {
+public class GetLinkResponse implements YalseeJson {
     @JsonProperty("link")
     private String link;
 
     /**
-     * Creates {@link LinkResponseJson} with given link param.
+     * Creates {@link GetLinkResponse} with given link param.
      *
      * @param shortLink string with short link
-     * @return {@link LinkResponseJson} containing link param.
+     * @return {@link GetLinkResponse} containing link param.
      */
-    public LinkResponseJson withLink(final String shortLink) {
+    public GetLinkResponse withLink(final String shortLink) {
         this.link = shortLink;
         return this;
     }

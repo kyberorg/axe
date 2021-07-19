@@ -10,17 +10,17 @@ import lombok.Data;
  * @since 1.0
  */
 @Data(staticConstructor = "create")
-public class StoreResponseJson implements YalseeJson {
+public class PostLinkResponse implements YalseeJson {
     @JsonProperty("ident")
     private String ident;
 
     /**
-     * Creates {@link StoreResponseJson} with given ident.
+     * Creates {@link PostLinkResponse} with given ident.
      *
      * @param ident string with ident.
      * @return json containing ident.
      */
-    public StoreResponseJson withIdent(final String ident) {
+    public PostLinkResponse withIdent(final String ident) {
         this.ident = ident;
         return this;
     }

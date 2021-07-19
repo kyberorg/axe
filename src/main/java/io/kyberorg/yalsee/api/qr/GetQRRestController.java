@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.api.qr;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.json.QRCodeResponseJson;
+import io.kyberorg.yalsee.json.QRCodeResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.QRCodeService;
@@ -43,7 +43,7 @@ public class GetQRRestController {
      * QR Code size: {@link App.QR#DEFAULT_QR_CODE_SIZE}x{@link App.QR#DEFAULT_QR_CODE_SIZE} px.
      *
      * @param ident part of URL, which identifies short link
-     * @return {@link ResponseEntity} with {@link QRCodeResponseJson} or {@link YalseeErrorJson}.
+     * @return {@link ResponseEntity} with {@link QRCodeResponse} or {@link YalseeErrorJson}.
      */
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCode(final @PathVariable("ident") String ident) {
@@ -54,7 +54,7 @@ public class GetQRRestController {
 
         if (createQRCodeResult.ok()) {
             log.info("{} created QR Code for {}", TAG, ident);
-            QRCodeResponseJson responseJson = QRCodeResponseJson.withQRCode(createQRCodeResult.getStringPayload());
+            QRCodeResponse responseJson = QRCodeResponse.withQRCode(createQRCodeResult.getStringPayload());
             return ResponseEntity.ok(responseJson);
         } else {
             return handleQRCreateFail(createQRCodeResult);
@@ -66,7 +66,7 @@ public class GetQRRestController {
      *
      * @param ident part of URL, which identifies short link
      * @param sizeString size in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
-     * @return {@link ResponseEntity} with {@link QRCodeResponseJson} or {@link YalseeErrorJson}.
+     * @return {@link ResponseEntity} with {@link QRCodeResponse} or {@link YalseeErrorJson}.
      */
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_AND_SIZE, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
@@ -87,7 +87,7 @@ public class GetQRRestController {
 
         if (createQRCodeResult.ok()) {
             log.info("{} created QR Code for {}", TAG, ident);
-            QRCodeResponseJson responseJson = QRCodeResponseJson.withQRCode(createQRCodeResult.getStringPayload());
+            QRCodeResponse responseJson = QRCodeResponse.withQRCode(createQRCodeResult.getStringPayload());
             return ResponseEntity.ok(responseJson);
         } else {
             return handleQRCreateFail(createQRCodeResult);
@@ -100,7 +100,7 @@ public class GetQRRestController {
      * @param ident part of URL, which identifies short link
      * @param widthString width in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
      * @param heightString height in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
-     * @return {@link ResponseEntity} with {@link QRCodeResponseJson} or {@link YalseeErrorJson}.
+     * @return {@link ResponseEntity} with {@link QRCodeResponse} or {@link YalseeErrorJson}.
      */
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_WIDTH_AND_HEIGHT, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
@@ -133,7 +133,7 @@ public class GetQRRestController {
 
         if (createQRCodeResult.ok()) {
             log.info("{} created QR Code for {}", TAG, ident);
-            QRCodeResponseJson responseJson = QRCodeResponseJson.withQRCode(createQRCodeResult.getStringPayload());
+            QRCodeResponse responseJson = QRCodeResponse.withQRCode(createQRCodeResult.getStringPayload());
             return ResponseEntity.ok(responseJson);
         } else {
             return handleQRCreateFail(createQRCodeResult);

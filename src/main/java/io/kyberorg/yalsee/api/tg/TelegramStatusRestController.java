@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.api.tg;
 
 import io.kyberorg.yalsee.Endpoint;
-import io.kyberorg.yalsee.json.TelegramStatusResponseJson;
+import io.kyberorg.yalsee.json.TelegramStatusResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.telegram.TelegramBot;
@@ -54,16 +54,16 @@ public class TelegramStatusRestController {
 
         if (appUtils.isTelegramDisabled()) {
             log.info("{} Telegram Bot is disabled", TAG);
-            return TelegramStatusResponseJson.createWithStatus(OFFLINE).withBotName("-");
+            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-");
         }
 
         try {
             String botName = bot.getMe().getUserName();
             String botStatus = ONLINE;
             log.info("{} telegram bot {} is {}", TAG, botName, botStatus);
-            return TelegramStatusResponseJson.createWithStatus(botStatus).withBotName(botName);
+            return TelegramStatusResponse.createWithStatus(botStatus).withBotName(botName);
         } catch (TelegramApiException e) {
-            return TelegramStatusResponseJson.createWithStatus(OFFLINE).withBotName("-");
+            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-");
         }
     }
 }

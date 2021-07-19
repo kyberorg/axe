@@ -3,8 +3,8 @@ package io.kyberorg.yalsee.test.app;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.EmptyJson;
-import io.kyberorg.yalsee.json.StoreRequestJson;
-import io.kyberorg.yalsee.json.StoreResponseJson;
+import io.kyberorg.yalsee.json.PostLinkRequest;
+import io.kyberorg.yalsee.json.PostLinkResponse;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;
@@ -112,7 +112,7 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithEmptyLinkStatusIs422() {
         String longLink = "";
-        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
+        String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
                 .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
@@ -133,7 +133,7 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithNotALinkStatusIs422() {
         String longLink = "not a Link";
-        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
+        String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
                 .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
@@ -154,7 +154,7 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithCorrectLinkStatusIs201() {
         String longLink = "https://kyberorg.io"; // That very long, really
-        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
+        String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
                 .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
@@ -175,7 +175,7 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithCorrectLinkReturnsJsonWithIdent() {
         String longLink = "https://kyberorg.io"; // That very long, really
-        String correctJson = StoreRequestJson.create().withLink(longLink).toString();
+        String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
                 .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
@@ -191,9 +191,9 @@ public class StoreLinkApiTest extends UnirestTest {
         assertNotNull(responseBody);
         assertFalse(responseBody.trim().isEmpty());
 
-        StoreResponseJson replyJson;
+        PostLinkResponse replyJson;
         try {
-            replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
+            replyJson = AppUtils.GSON.fromJson(responseBody, PostLinkResponse.class);
         } catch (Exception e) {
             fail("Could not parse reply JSON");
             return;
@@ -209,7 +209,7 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithLinkWithoutProtocolStatusIs201() {
         String linkWithoutProtocol = "github.com/kyberorg/yalsee/issues/50";
-        String correctJson = StoreRequestJson.create().withLink(linkWithoutProtocol).toString();
+        String correctJson = PostLinkRequest.create().withLink(linkWithoutProtocol).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
                 .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
@@ -230,7 +230,7 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithBannedLinkStatusIs403() {
         String bannedUrl = "http://ct26737.tmweb.ru/compte/";
-        String correctJson = StoreRequestJson.create().withLink(bannedUrl).toString();
+        String correctJson = PostLinkRequest.create().withLink(bannedUrl).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
                 .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
