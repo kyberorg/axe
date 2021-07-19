@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.StoreRequestJson;
@@ -48,9 +49,17 @@ public class PostLinkRestController {
         this.tokenChecker = tokenChecker;
     }
 
+    /**
+     * API that stores new links.
+     *
+     * @param storeRequest JSON with link to save
+     * @param request request object to retrieve headers from
+     * @return {@link ResponseEntity} with {@link StoreResponseJson} and resource URI in {@link Header#LOCATION}
+     *  or {@link YalseeErrorJson}.
+     */
     @PostMapping(value = Endpoint.Api.LINKS_API,
             consumes = MimeType.APPLICATION_JSON, produces = MimeType.APPLICATION_JSON)
-    public ResponseEntity<?> storeNewLink(@RequestBody(required = false) StoreRequestJson storeRequest,
+    public ResponseEntity<?> storeNewLink(final @RequestBody(required = false) StoreRequestJson storeRequest,
                                           final HttpServletRequest request) {
         log.info("{} got POST request: {\"JSON\": {}}", TAG, storeRequest);
 

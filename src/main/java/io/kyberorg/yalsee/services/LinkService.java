@@ -7,8 +7,8 @@ import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.AppUtils;
-import io.kyberorg.yalsee.utils.URLUtils;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -236,7 +236,7 @@ public class LinkService {
             return OperationResult.malformedInput().withMessage(OP_MALFORMED_URL);
         }
         String urlToStore;
-        urlToStore = URLUtils.normalizeUrl(link);
+        urlToStore = UrlUtils.normalizeUrl(link);
         String messageFromExtraValidator = UrlExtraValidator.isUrlValid(urlToStore);
         switch (messageFromExtraValidator) {
             case UrlExtraValidator.VALID:

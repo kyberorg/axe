@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.json.LinkResponseJson;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -43,6 +44,11 @@ public class GetLinkRestController {
         this.identValidator = identValidator;
     }
 
+    /**
+     * Wildcard API. Currently not implemented. Reserved to provide user's links.
+     *
+     * @return currently {@link YalseeErrorJson} with {@link HttpCode#STATUS_501}
+     */
     @GetMapping(path = {Endpoint.Api.LINKS_API, Endpoint.Api.LINKS_API + "/"})
     public ResponseEntity<?> getLinks() {
         YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Not implemented yet")

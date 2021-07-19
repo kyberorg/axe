@@ -24,8 +24,8 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
  */
 @Slf4j
 @RestController
-public class GetQrRestController {
-    private static final String TAG = "[" + GetQrRestController.class.getSimpleName() + "]";
+public class GetQRRestController {
+    private static final String TAG = "[" + GetQRRestController.class.getSimpleName() + "]";
 
     private final QRCodeService qrCodeService;
 
@@ -34,10 +34,17 @@ public class GetQrRestController {
      *
      * @param qrService    service which handles QR codes related actions
      */
-    public GetQrRestController(final QRCodeService qrService) {
+    public GetQRRestController(final QRCodeService qrService) {
         this.qrCodeService = qrService;
     }
 
+    /**
+     * Provides QR Code with encoded short link.
+     * QR Code size: {@link App.QR#DEFAULT_QR_CODE_SIZE}x{@link App.QR#DEFAULT_QR_CODE_SIZE} px.
+     *
+     * @param ident part of URL, which identifies short link
+     * @return {@link ResponseEntity} with {@link QRCodeResponseJson} or {@link YalseeErrorJson}.
+     */
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCode(final @PathVariable("ident") String ident) {
         log.info("{} got GET request: {\"Ident\": {}}", TAG, ident);
@@ -54,6 +61,13 @@ public class GetQrRestController {
         }
     }
 
+    /**
+     * Provides squared QR Code with encoded short link of given size.
+     *
+     * @param ident part of URL, which identifies short link
+     * @param sizeString size in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
+     * @return {@link ResponseEntity} with {@link QRCodeResponseJson} or {@link YalseeErrorJson}.
+     */
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_AND_SIZE, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
                                                      final @PathVariable("size") String sizeString) {
@@ -80,6 +94,14 @@ public class GetQrRestController {
         }
     }
 
+    /**
+     * Provides squared QR Code with encoded short link of given size.
+     *
+     * @param ident part of URL, which identifies short link
+     * @param widthString width in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
+     * @param heightString height in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
+     * @return {@link ResponseEntity} with {@link QRCodeResponseJson} or {@link YalseeErrorJson}.
+     */
     @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_WIDTH_AND_HEIGHT, produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
                                                      final @PathVariable("width") String widthString,
@@ -137,8 +159,8 @@ public class GetQrRestController {
                 }
             case OperationResult.ELEMENT_NOT_FOUND:
                 log.info("{} ident not found", TAG);
-                YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("No links found by this ident. " +
-                        "Ident should be stored before requesting QR code")
+                YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("No links found by this ident. "
+                        + "Ident should be stored before requesting QR code")
                         .andStatus(STATUS_404);
                 return ResponseEntity.status(STATUS_404).body(errorJson);
             case OperationResult.SYSTEM_DOWN:

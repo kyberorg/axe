@@ -78,6 +78,14 @@ public class QRCodeService {
         return doPng(base64encodedQRCode);
     }
 
+    /**
+     * Produces base64 encoded PNG with squared QR code, where encoded short link, with given size.
+     *
+     * @param ident string with ident, which will added to short url
+     * @param size positive integer with QR code size. Should be {@link App.QR#MINIMAL_SIZE_IN_PIXELS} px or more
+     * @return same as {{@link #getQRCode(String, int, int)}},
+     * plus {@link OperationResult#MALFORMED_INPUT} with {@link #ERR_MALFORMED_SIZE} message
+     */
     public OperationResult getQRCode(final String ident, final int size) {
         if (size <= 0) {
             log.error("{} Request has negative size: {}", TAG, size);

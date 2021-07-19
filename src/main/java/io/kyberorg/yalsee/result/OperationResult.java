@@ -162,7 +162,7 @@ public class OperationResult {
      * @param payload operation output object
      * @return same object, but with added {@link #payload}
      */
-    public OperationResult addPayload(Object payload) {
+    public OperationResult addPayload(final Object payload) {
         this.payload = payload;
         return this;
     }
