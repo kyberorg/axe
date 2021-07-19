@@ -26,8 +26,8 @@ public class PostLinkResponse implements YalseeJson {
      */
     public PostLinkResponse withIdent(final String ident) {
         this.ident = ident;
-        if (AppUtils.SHORT_URL != null) {
-            this.link = AppUtils.SHORT_URL + "/" + ident;
+        if (AppUtils.getShortUrlFromStaticContext() != null) {
+            this.link = AppUtils.getShortUrlFromStaticContext() + "/" + ident;
         }
         return this;
     }

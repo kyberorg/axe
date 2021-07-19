@@ -43,7 +43,7 @@ public class AppUtils {
      * This field is dirty hack to access Short URL from static context.
      * To be populated with {@link #populateStaticFields()}
      */
-    public static String SHORT_URL;
+    private static String shortUrl;
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     public static final String HTML_MODE = "innerHTML";
@@ -60,8 +60,16 @@ public class AppUtils {
         populateStaticFields();
     }
 
+    public static void setShortUrl(String shortUrl) {
+        AppUtils.shortUrl = shortUrl;
+    }
+
+    public static String getShortUrlFromStaticContext() {
+        return shortUrl;
+    }
+
     private void populateStaticFields() {
-        SHORT_URL = getShortUrl();
+        shortUrl = getShortUrl();
     }
 
     /**
