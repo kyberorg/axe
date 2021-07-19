@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
  * @since 3.1
  */
 @Slf4j
-public class UrlUtils {
+public final class UrlUtils {
     private static final String TAG = "[" + UrlUtils.class.getSimpleName() + "]";
 
     private UrlUtils() {

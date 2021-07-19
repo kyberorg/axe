@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_501;
 
@@ -56,8 +54,14 @@ public class GetLinkRestController {
         return ResponseEntity.status(STATUS_501).body(errorJson);
     }
 
+    /**
+     * Gets long link stored under given ident.
+     *
+     * @param ident part of link, that identify short link
+     * @return {@link ResponseEntity} with {@link LinkResponseJson} or {@link YalseeErrorJson}
+     */
     @GetMapping(Endpoint.Api.GET_LINKS_API)
-    public ResponseEntity<?> getLink(final @PathVariable("ident") String ident, final HttpServletRequest request) {
+    public ResponseEntity<?> getLink(final @PathVariable("ident") String ident) {
         log.info("{} got GET request: {\"Ident\": {}}", TAG, ident);
 
         //ident check
