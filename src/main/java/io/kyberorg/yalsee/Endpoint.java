@@ -123,14 +123,6 @@ public final class Endpoint {
         public static final String TELEGRAM_STATUS_API = "/api/tg/status";
 
         /**
-         * QR Code API.
-         * <p>
-         * GET /api/qrCode/{ident}/{size}
-         */
-        @Deprecated(forRemoval = true, since = "3.1")
-        public static final String QR_CODE_API = "/api/qrCode";
-
-        /**
          * Page 404 for API requests.
          */
         public static final String PAGE_404 = "/errors/404api";
@@ -206,10 +198,6 @@ public final class Endpoint {
          * Just slash symbol (/). Application base.
          */
         public static final String SLASH_BASE = "/";
-        /**
-         * Path for retrieving QR code.
-         */
-        public static final String QR_CODE_API = Api.QR_CODE_API + "/";
 
         // those two endpoints are used only in tests to simulate application error
         /**

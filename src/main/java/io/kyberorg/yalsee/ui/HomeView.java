@@ -397,11 +397,11 @@ public class HomeView extends HorizontalLayout {
         String qrCodeGeneratorRoute;
         if (size == 0) {
             qrCodeGeneratorRoute =
-                    String.format("%s/%s/%s", appUtils.getAPIHostPort(), Endpoint.Api.QR_CODE_API, ident);
+                    String.format("%s/%s/%s", appUtils.getAPIHostPort(), Endpoint.Api.QR_API, ident);
         } else {
             qrCodeGeneratorRoute =
                     String.format(
-                            "%s/%s/%s/%d", appUtils.getAPIHostPort(), Endpoint.Api.QR_CODE_API, ident, size);
+                            "%s/%s/%s/%d", appUtils.getAPIHostPort(), Endpoint.Api.QR_API, ident, size);
         }
 
         HttpResponse<JsonNode> response = Unirest.get(qrCodeGeneratorRoute).asJson();
