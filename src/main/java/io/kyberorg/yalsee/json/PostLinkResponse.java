@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
+import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
 
 /**
@@ -14,6 +15,9 @@ public class PostLinkResponse implements YalseeJson {
     @JsonProperty("ident")
     private String ident;
 
+    @JsonProperty("link")
+    private String link;
+
     /**
      * Creates {@link PostLinkResponse} with given ident.
      *
@@ -22,6 +26,9 @@ public class PostLinkResponse implements YalseeJson {
      */
     public PostLinkResponse withIdent(final String ident) {
         this.ident = ident;
+        if (AppUtils.SHORT_URL != null) {
+            this.link = AppUtils.SHORT_URL + "/" + ident;
+        }
         return this;
     }
 

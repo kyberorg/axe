@@ -39,6 +39,12 @@ public class AppUtils {
     @Getter
     private final Environment env;
 
+    /**
+     * This field is dirty hack to access Short URL from static context.
+     * To be populated with {@link #populateStaticFields()}
+     */
+    public static String SHORT_URL;
+
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     public static final String HTML_MODE = "innerHTML";
     private static final String DUMMY_HOST = "DummyHost";
@@ -51,6 +57,11 @@ public class AppUtils {
      */
     public AppUtils(final Environment env) {
         this.env = env;
+        populateStaticFields();
+    }
+
+    private void populateStaticFields() {
+        SHORT_URL = getShortUrl();
     }
 
     /**

@@ -204,6 +204,43 @@ public class StoreLinkApiTest extends UnirestTest {
     }
 
     /**
+     * Request with JSON Body with valid link = 201 and reply with short FQDN link inside.
+     */
+    @Test
+    public void onRequestWithCorrectLinkReturnsJsonWithShortFQDNLink() {
+        String longLink = "https://kyberorg.io"; // That very long, really
+        String correctJson = PostLinkRequest.create().withLink(longLink).toString();
+
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(correctJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_201, result.getStatus());
+
+        String responseBody = result.getBody();
+        assertNotNull(responseBody);
+        assertFalse(responseBody.trim().isEmpty());
+
+        PostLinkResponse replyJson;
+        try {
+            replyJson = AppUtils.GSON.fromJson(responseBody, PostLinkResponse.class);
+        } catch (Exception e) {
+            fail("Could not parse reply JSON");
+            return;
+        }
+
+        assertNotNull(replyJson);
+        assertNotNull(replyJson.getLink());
+
+        assertTrue(replyJson.getLink().contains(TestUtils.getTestedEnv().getShortUrl()),
+                "Link in JSON should contain short URL");
+    }
+
+    /**
      * Request with JSON Body with link without protocol = 201.
      */
     @Test
