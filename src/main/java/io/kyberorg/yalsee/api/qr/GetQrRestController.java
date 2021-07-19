@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.api.qr;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.QRCodeResponseJson;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -42,7 +43,7 @@ public class GetQrRestController {
         log.info("{} got GET request: {\"Ident\": {}}", TAG, ident);
 
         OperationResult createQRCodeResult = qrCodeService.getQRCode(ident,
-                QRCodeService.DEFAULT_SIZE, QRCodeService.DEFAULT_SIZE);
+                App.QR.DEFAULT_QR_CODE_SIZE, App.QR.DEFAULT_QR_CODE_SIZE);
 
         if (createQRCodeResult.ok()) {
             log.info("{} created QR Code for {}", TAG, ident);
@@ -62,7 +63,8 @@ public class GetQrRestController {
         try {
             size = Integer.parseInt(sizeString);
         } catch (NumberFormatException e) {
-            YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Size should be positive number. Got string.")
+            YalseeErrorJson errorJson = YalseeErrorJson
+                    .createWithMessage(QRCodeService.ERR_MALFORMED_SIZE)
                     .andStatus(STATUS_400);
             return ResponseEntity.badRequest().body(errorJson);
         }
@@ -90,7 +92,7 @@ public class GetQrRestController {
             width = Integer.parseInt(widthString);
         } catch (NumberFormatException e) {
             YalseeErrorJson errorJson = YalseeErrorJson
-                    .createWithMessage("Width should be positive number. Got string.")
+                    .createWithMessage(QRCodeService.ERR_MALFORMED_WIDTH)
                     .andStatus(STATUS_400);
             return ResponseEntity.badRequest().body(errorJson);
         }
@@ -100,7 +102,7 @@ public class GetQrRestController {
             height = Integer.parseInt(heightString);
         } catch (NumberFormatException e) {
             YalseeErrorJson errorJson = YalseeErrorJson
-                    .createWithMessage("Height should be positive number. Got string.")
+                    .createWithMessage(QRCodeService.ERR_MALFORMED_HEIGHT)
                     .andStatus(STATUS_400);
             return ResponseEntity.badRequest().body(errorJson);
         }
@@ -124,20 +126,12 @@ public class GetQrRestController {
                         log.info("{} not valid ident", TAG);
                         return ApiUtils.handleIdentFail(result);
                     case QRCodeService.ERR_MALFORMED_SIZE:
-                        log.info("{} not valid size", TAG);
-                        YalseeErrorJson errJson = YalseeErrorJson.createWithMessage("Size must be positive number")
+                    case QRCodeService.ERR_MALFORMED_WIDTH:
+                    case QRCodeService.ERR_MALFORMED_HEIGHT:
+                        log.info("{} not valid size/width/height", TAG);
+                        YalseeErrorJson errJson = YalseeErrorJson.createWithMessage(result.getMessage())
                                 .andStatus(STATUS_400);
                         return ResponseEntity.badRequest().body(errJson);
-                    case QRCodeService.ERR_MALFORMED_WIDTH:
-                        log.info("{} not valid width", TAG);
-                        YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Width must be positive number")
-                                .andStatus(STATUS_400);
-                        return ResponseEntity.badRequest().body(errorJson);
-                    case QRCodeService.ERR_MALFORMED_HEIGHT:
-                        log.info("{} not valid height", TAG);
-                        YalseeErrorJson errorJson1 = YalseeErrorJson.createWithMessage("Height must be positive number")
-                                .andStatus(STATUS_400);
-                        return ResponseEntity.badRequest().body(errorJson1);
                     default:
                         return ApiUtils.handleServerError();
                 }

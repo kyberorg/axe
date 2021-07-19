@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.controllers.rest;
 
 import com.google.zxing.WriterException;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.json.EmptyJson;
 import io.kyberorg.yalsee.json.QRCodeResponseJson;
@@ -61,7 +62,7 @@ public class QRCodeRestController {
             return testResult;
         }
 
-        Optional<String> qrCode = getQRCode(ident, QRCodeService.DEFAULT_SIZE);
+        Optional<String> qrCode = getQRCode(ident, App.QR.DEFAULT_QR_CODE_SIZE);
         return handleRequest(resp, qrCode);
     }
 

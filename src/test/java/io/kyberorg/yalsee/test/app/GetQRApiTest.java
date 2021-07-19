@@ -1,9 +1,9 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.StoreRequestJson;
-import io.kyberorg.yalsee.services.QRCodeService;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -81,7 +81,7 @@ public class GetQRApiTest extends UnirestTest {
 
         String qrCode = body.getObject().getString("qr_code");
         assertValidQRCode(qrCode);
-        assertQRCodeHasExactSize(qrCode, QRCodeService.DEFAULT_SIZE);
+        assertQRCodeHasExactSize(qrCode, App.QR.DEFAULT_QR_CODE_SIZE);
     }
 
     /**
@@ -169,6 +169,40 @@ public class GetQRApiTest extends UnirestTest {
     }
 
     /**
+     * Request for valid ident and too small size = 400.
+     */
+    @Test
+    public void onRequestQRCodeWithValidIdentAndTooSmallSizeAppGives400() {
+        final String ident = getValidIdent();
+        final int size = 22;
+
+        HttpRequest request =
+                Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + size);
+        HttpResponse<JsonNode> result = request.asJson();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(STATUS_400, result.getStatus());
+    }
+
+    /**
+     * Request for valid ident and float size = 400.
+     */
+    @Test
+    public void onRequestQRCodeWithValidIdentAndFloatSizeAppGives400() {
+        final String ident = getValidIdent();
+        final double size = 44.33;
+
+        HttpRequest request =
+                Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + size);
+        HttpResponse<JsonNode> result = request.asJson();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(STATUS_400, result.getStatus());
+    }
+
+    /**
      * Request for valid ident and zero size = 400.
      */
     @Test
@@ -239,8 +273,8 @@ public class GetQRApiTest extends UnirestTest {
     @Test
     public void onRequestQRCodeWithValidIdentAndNegativeWidthAndHeightAppGives400() {
         final String ident = getValidIdent();
-        final int width = -10;
-        final int height = -15;
+        final int width = -40;
+        final int height = -55;
 
         HttpRequest request =
                 Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);
@@ -257,8 +291,8 @@ public class GetQRApiTest extends UnirestTest {
     @Test
     public void onRequestQRCodeWithValidIdentPositiveWidthAndNegativeHeightAppGives400() {
         final String ident = getValidIdent();
-        final int width = 20;
-        final int height = -15;
+        final int width = 40;
+        final int height = -35;
 
         HttpRequest request =
                 Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);
@@ -294,7 +328,7 @@ public class GetQRApiTest extends UnirestTest {
     public void onRequestQRCodeWithValidIdentAndZeroWidthAndPositiveHeightAppGives400() {
         final String ident = getValidIdent();
         final int width = 0;
-        final int height = 15;
+        final int height = 35;
 
         HttpRequest request =
                 Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);
@@ -311,8 +345,62 @@ public class GetQRApiTest extends UnirestTest {
     @Test
     public void onRequestQRCodeWithValidIdentAndPositiveWidthAndZeroHeightAppGives400() {
         final String ident = getValidIdent();
-        final int width = 20;
+        final int width = 40;
         final int height = 0;
+
+        HttpRequest request =
+                Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);
+        HttpResponse<JsonNode> result = request.asJson();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(STATUS_400, result.getStatus());
+    }
+
+    /**
+     * Request for valid ident and floating width and height = 400.
+     */
+    @Test
+    public void onRequestQRCodeWithValidIdentAndFloatWidthAndHeightAppGives400() {
+        final String ident = getValidIdent();
+        final double width = 46.53;
+        final double height = 35.36;
+
+        HttpRequest request =
+                Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);
+        HttpResponse<JsonNode> result = request.asJson();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(STATUS_400, result.getStatus());
+    }
+
+    /**
+     * Request for valid ident and too small width and height = 400.
+     */
+    @Test
+    public void onRequestQRCodeWithValidIdentAndTooSmallWidthAndHeightAppGives400() {
+        final String ident = getValidIdent();
+        final double width = 10;
+        final double height = 25;
+
+        HttpRequest request =
+                Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);
+        HttpResponse<JsonNode> result = request.asJson();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertEquals(STATUS_400, result.getStatus());
+    }
+
+    /**
+     * Request for valid ident and normal width and to small height = 400.
+     */
+    @Test
+    public void onRequestQRCodeWithValidIdentAndNormalWidthAndTooSmallHeightAppGives400() {
+        final String ident = getValidIdent();
+        final double width = 34;
+        final double height = 20;
 
         HttpRequest request =
                 Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);
@@ -330,8 +418,8 @@ public class GetQRApiTest extends UnirestTest {
     public void onRequestQRCodeWithValidIdentAndPositiveWidthAndHeightAppGives200AndQRCodeWithCorrectSizes()
             throws IOException {
         final String ident = getValidIdent();
-        final int width = 10;
-        final int height = 5;
+        final int width = 40;
+        final int height = 35;
 
         HttpRequest request =
                 Unirest.get(TEST_URL + Endpoint.Api.QR_API + "/" + ident + "/" + width + "/" + height);

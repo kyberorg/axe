@@ -68,6 +68,7 @@ public final class App {
         public static final int DEFAULT_QR_BLOCK_SIZE = 371;
         public static final int DEFAULT_QR_CODE_SIZE = 350;
         public static final float QR_BLOCK_RATIO = 0.943f; // 350/371
+        public static final int MINIMAL_SIZE_IN_PIXELS = 33;
     }
 
     public static class Defaults {

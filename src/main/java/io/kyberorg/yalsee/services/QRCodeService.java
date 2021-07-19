@@ -5,6 +5,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -25,12 +26,13 @@ import java.util.Base64;
 public class QRCodeService {
     private static final String TAG = "[" + QRCodeService.class.getSimpleName() + "]";
 
-    public static final int DEFAULT_SIZE = 350;
-
     public static final String ERR_MALFORMED_IDENT = "Ident is not valid";
-    public static final String ERR_MALFORMED_SIZE = "Size must be positive number";
-    public static final String ERR_MALFORMED_WIDTH = "Width must be positive number";
-    public static final String ERR_MALFORMED_HEIGHT = "Height must be positive number";
+    public static final String ERR_MALFORMED_SIZE = "Size is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+            + "px or more";
+    public static final String ERR_MALFORMED_WIDTH = "Width is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+            + "px or more";
+    public static final String ERR_MALFORMED_HEIGHT = "Height is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+            + "px or more";
     public static final String ERR_QR_CREATE_IO_EXCEPTION = "Failed to create QR code: I/O exception";
 
     private final AppUtils appUtils;
@@ -54,10 +56,10 @@ public class QRCodeService {
      * Produces PNG with QR code, where encoded short link.
      *
      * @param ident string with ident, which will added to server url
-     * @return base64 encoded png with data:image/png stamp with default size {@link #DEFAULT_SIZE}
+     * @return base64 encoded png with data:image/png stamp with default size {@link App.QR#DEFAULT_QR_CODE_SIZE}
      */
     public String getQRCodeFromIdent(final String ident) throws IOException, WriterException {
-        return getQRCodeFromIdent(ident, DEFAULT_SIZE);
+        return getQRCodeFromIdent(ident, App.QR.DEFAULT_QR_CODE_SIZE);
     }
 
     /**
@@ -97,7 +99,7 @@ public class QRCodeService {
      *
      * {@link OperationResult#MALFORMED_INPUT} with {@link OperationResult#message}:
      * {@link #ERR_MALFORMED_IDENT}, {@link #ERR_MALFORMED_WIDTH}, {@link #ERR_MALFORMED_HEIGHT}
-     * when ident, width or height is malformed or negative.
+     * when ident, width or height is malformed, negative or less then {@link App.QR#MINIMAL_SIZE_IN_PIXELS}.
      * {@link OperationResult#ELEMENT_NOT_FOUND} when nothing stored under given ident
      * {@link OperationResult#SYSTEM_DOWN} when system or its parts unreachable
      * {@link OperationResult#GENERAL_FAIL} with {@link OperationResult#message} when something unexpected happened.
@@ -166,13 +168,13 @@ public class QRCodeService {
         }
 
         //width check
-        if (width <= 0) {
+        if (width < App.QR.MINIMAL_SIZE_IN_PIXELS) {
             log.error("{} Request has negative width: {}", TAG, width);
             return OperationResult.malformedInput().withMessage(ERR_MALFORMED_WIDTH);
         }
 
         //height check
-        if (height <= 0) {
+        if (height < App.QR.MINIMAL_SIZE_IN_PIXELS) {
             log.error("{} Request has negative height: {}", TAG, height);
             return OperationResult.malformedInput().withMessage(ERR_MALFORMED_HEIGHT);
         }
