@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Store Endpoint outgoing JSON.
@@ -26,8 +27,10 @@ public class PostLinkResponse implements YalseeJson {
      */
     public PostLinkResponse withIdent(final String ident) {
         this.ident = ident;
-        if (AppUtils.getShortUrlFromStaticContext() != null) {
-            this.link = AppUtils.getShortUrlFromStaticContext() + "/" + ident;
+
+        String shortUrl = AppUtils.getShortUrlFromStaticContext();
+        if (StringUtils.isNotBlank(shortUrl)) {
+            this.link = shortUrl + "/" + ident;
         }
         return this;
     }

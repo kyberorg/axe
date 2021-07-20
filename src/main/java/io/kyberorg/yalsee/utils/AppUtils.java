@@ -60,10 +60,6 @@ public class AppUtils {
         populateStaticFields();
     }
 
-    public static void setShortUrl(String shortUrl) {
-        AppUtils.shortUrl = shortUrl;
-    }
-
     public static String getShortUrlFromStaticContext() {
         return shortUrl;
     }
