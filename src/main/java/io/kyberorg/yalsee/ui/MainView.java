@@ -76,8 +76,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addSubTitle();
         addMenuTab("Main", HomeView.class, VaadinIcon.HOME);
         addMenuTab("App Info", AppInfoView.class, VaadinIcon.INFO);
-        addMenuTab("API Doks", App.Api.API_DOKS_URL,
-                VaadinIcon.CURLY_BRACKETS);
+        addMenuTab("API Doks", App.Api.API_DOKS_URL, VaadinIcon.CURLY_BRACKETS);
 
         // dev-only items
         if (appUtils.isDevelopmentModeActivated()) {
