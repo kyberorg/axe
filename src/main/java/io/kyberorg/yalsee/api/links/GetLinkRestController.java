@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
+import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.json.GetLinkResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -45,7 +46,7 @@ public class GetLinkRestController {
     /**
      * Wildcard API. Currently not implemented. Reserved to provide user's links.
      *
-     * @return currently {@link YalseeErrorJson} with {@link HttpCode#STATUS_501}
+     * @return currently {@link ResponseEntity} with {@link YalseeErrorJson} and {@link HttpCode#STATUS_501}
      */
     @GetMapping(path = {Endpoint.Api.LINKS_API, Endpoint.Api.LINKS_API + "/"})
     public ResponseEntity<?> getLinks() {
@@ -60,7 +61,8 @@ public class GetLinkRestController {
      * @param ident part of link, that identify short link
      * @return {@link ResponseEntity} with {@link GetLinkResponse} or {@link YalseeErrorJson}
      */
-    @GetMapping(Endpoint.Api.GET_LINKS_API)
+    @GetMapping(value = Endpoint.Api.GET_LINKS_API,
+            produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getLink(final @PathVariable("ident") String ident) {
         log.info("{} got GET request: {\"Ident\": {}}", TAG, ident);
 

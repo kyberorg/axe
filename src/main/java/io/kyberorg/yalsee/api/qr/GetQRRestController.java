@@ -49,8 +49,7 @@ public class GetQRRestController {
     public ResponseEntity<?> getQRCode(final @PathVariable("ident") String ident) {
         log.info("{} got GET request: {\"Ident\": {}}", TAG, ident);
 
-        OperationResult createQRCodeResult = qrCodeService.getQRCode(ident,
-                App.QR.DEFAULT_QR_CODE_SIZE, App.QR.DEFAULT_QR_CODE_SIZE);
+        OperationResult createQRCodeResult = qrCodeService.getQRCode(ident);
 
         if (createQRCodeResult.ok()) {
             log.info("{} created QR Code for {}", TAG, ident);
@@ -65,10 +64,11 @@ public class GetQRRestController {
      * Provides squared QR Code with encoded short link of given size.
      *
      * @param ident part of URL, which identifies short link
-     * @param sizeString size in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
+     * @param sizeString size in pixels. Minimum: {@link App.QR#MINIMAL_SIZE_IN_PIXELS} px
      * @return {@link ResponseEntity} with {@link QRCodeResponse} or {@link YalseeErrorJson}.
      */
-    @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_AND_SIZE, produces = MimeType.APPLICATION_JSON)
+    @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_AND_SIZE,
+            produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
                                                      final @PathVariable("size") String sizeString) {
         log.info("{} got GET request: {\"Ident\": {}, \"Size\": {}}", TAG, ident, sizeString);
@@ -77,10 +77,7 @@ public class GetQRRestController {
         try {
             size = Integer.parseInt(sizeString);
         } catch (NumberFormatException e) {
-            YalseeErrorJson errorJson = YalseeErrorJson
-                    .createWithMessage(QRCodeService.ERR_MALFORMED_SIZE)
-                    .andStatus(STATUS_400);
-            return ResponseEntity.badRequest().body(errorJson);
+            return handleNumberFormatException(QRCodeService.ERR_MALFORMED_SIZE);
         }
 
         OperationResult createQRCodeResult = qrCodeService.getQRCode(ident, size);
@@ -95,14 +92,15 @@ public class GetQRRestController {
     }
 
     /**
-     * Provides squared QR Code with encoded short link of given size.
+     * Provides QR Code with encoded short link of given width and height.
      *
      * @param ident part of URL, which identifies short link
-     * @param widthString width in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
-     * @param heightString height in pixels. Minimum {@link App.QR#MINIMAL_SIZE_IN_PIXELS}
+     * @param widthString width in pixels. Minimum: {@link App.QR#MINIMAL_SIZE_IN_PIXELS} px
+     * @param heightString height in pixels. Minimum: {@link App.QR#MINIMAL_SIZE_IN_PIXELS} px
      * @return {@link ResponseEntity} with {@link QRCodeResponse} or {@link YalseeErrorJson}.
      */
-    @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_WIDTH_AND_HEIGHT, produces = MimeType.APPLICATION_JSON)
+    @GetMapping(value = Endpoint.Api.GET_QR_WITH_IDENT_WIDTH_AND_HEIGHT,
+            produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> getQRCodeWithCustomSize(final @PathVariable("ident") String ident,
                                                      final @PathVariable("width") String widthString,
                                                      final @PathVariable("height") String heightString) {
@@ -113,20 +111,14 @@ public class GetQRRestController {
         try {
             width = Integer.parseInt(widthString);
         } catch (NumberFormatException e) {
-            YalseeErrorJson errorJson = YalseeErrorJson
-                    .createWithMessage(QRCodeService.ERR_MALFORMED_WIDTH)
-                    .andStatus(STATUS_400);
-            return ResponseEntity.badRequest().body(errorJson);
+            return handleNumberFormatException(QRCodeService.ERR_MALFORMED_WIDTH);
         }
 
         int height;
         try {
             height = Integer.parseInt(heightString);
         } catch (NumberFormatException e) {
-            YalseeErrorJson errorJson = YalseeErrorJson
-                    .createWithMessage(QRCodeService.ERR_MALFORMED_HEIGHT)
-                    .andStatus(STATUS_400);
-            return ResponseEntity.badRequest().body(errorJson);
+            return handleNumberFormatException(QRCodeService.ERR_MALFORMED_HEIGHT);
         }
 
         OperationResult createQRCodeResult = qrCodeService.getQRCode(ident, width, height);
@@ -171,5 +163,12 @@ public class GetQRRestController {
                 log.error("{} Error: {}", TAG, result.getMessage());
                 return ApiUtils.handleServerError();
         }
+    }
+
+    private ResponseEntity<YalseeErrorJson> handleNumberFormatException(final String message) {
+        YalseeErrorJson errorJson = YalseeErrorJson
+                .createWithMessage(message)
+                .andStatus(STATUS_400);
+        return ResponseEntity.badRequest().body(errorJson);
     }
 }

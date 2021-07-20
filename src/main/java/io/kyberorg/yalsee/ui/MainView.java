@@ -76,7 +76,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addSubTitle();
         addMenuTab("Main", HomeView.class, VaadinIcon.HOME);
         addMenuTab("App Info", AppInfoView.class, VaadinIcon.INFO);
-        addMenuTab("API Doks", "https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.0",
+        addMenuTab("API Doks", App.Api.API_DOKS_URL,
                 VaadinIcon.CURLY_BRACKETS);
 
         // dev-only items

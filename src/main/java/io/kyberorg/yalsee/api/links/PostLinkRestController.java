@@ -41,7 +41,7 @@ public class PostLinkRestController {
     /**
      * Constructor for Spring autowiring.
      *
-     * @param linkService service for getting links
+     * @param linkService service for storing links
      * @param tokenChecker for checking token
      */
     public PostLinkRestController(final LinkService linkService, final TokenChecker tokenChecker) {
@@ -52,24 +52,24 @@ public class PostLinkRestController {
     /**
      * API that stores new links.
      *
-     * @param storeRequest JSON with link to save
-     * @param request request object to retrieve headers from
+     * @param requestJson {@link PostLinkRequest} JSON with link to save
+     * @param request {@link HttpServletRequest} object to retrieve headers from. Populated by Spring
      * @return {@link ResponseEntity} with {@link PostLinkResponse} and resource URI in {@link Header#LOCATION}
      *  or {@link YalseeErrorJson}.
      */
     @PostMapping(value = Endpoint.Api.LINKS_API,
             consumes = MimeType.APPLICATION_JSON, produces = MimeType.APPLICATION_JSON)
-    public ResponseEntity<?> storeNewLink(final @RequestBody(required = false) PostLinkRequest storeRequest,
+    public ResponseEntity<?> storeNewLink(final @RequestBody(required = false) PostLinkRequest requestJson,
                                           final HttpServletRequest request) {
-        log.info("{} got POST request: {\"JSON\": {}}", TAG, storeRequest);
+        log.info("{} got POST request: {\"JSON\": {}}", TAG, requestJson);
 
-        if (storeRequest == null) {
+        if (requestJson == null) {
             YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Body should be a JSON object")
                     .andStatus(STATUS_400);
             return ResponseEntity.badRequest().body(errorJson);
         }
 
-        if (StringUtils.isBlank(storeRequest.getLink())) {
+        if (StringUtils.isBlank(requestJson.getLink())) {
             return handleMalformedUrl();
         }
 
@@ -78,8 +78,8 @@ public class PostLinkRestController {
         OperationResult tokenCheck = tokenChecker.check(request);
         if (tokenCheck.ok()) {
             //accepting ident if any
-            if (StringUtils.isNotBlank(storeRequest.getIdent())) {
-                storeResult = linkService.createLink(storeRequest.getIdent(), storeRequest.getLink());
+            if (StringUtils.isNotBlank(requestJson.getIdent())) {
+                storeResult = linkService.createLink(requestJson.getIdent(), requestJson.getLink());
             } else {
                 return handleMalformedIdent();
             }
@@ -87,7 +87,7 @@ public class PostLinkRestController {
             return ApiUtils.handleTokenFail(tokenCheck);
         } else {
             //used-defined ident discarded
-            storeResult = linkService.createLink(storeRequest.getLink());
+            storeResult = linkService.createLink(requestJson.getLink());
         }
 
         switch (storeResult.getResult()) {

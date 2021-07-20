@@ -74,4 +74,8 @@ public final class App {
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
     }
+
+    public static class Api {
+        public static final String API_DOKS_URL = "https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.1";
+    }
 }

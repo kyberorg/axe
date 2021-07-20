@@ -12,7 +12,8 @@ RESTify API
 
 
 * Added `GET /qr/{ident}/{width}/{height}` endpoint.
-* Added API [Dokumentation Page](https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.0) ([#347](https://github.com/kyberorg/yalsee/issue/347))
+* Added API [Dokumentation Page](https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.1) ([#347](https://github.com/kyberorg/yalsee/issue/347))
+
 ### Milestone 3.0.10 (13/07/2021)
 Dependencies Bump
 

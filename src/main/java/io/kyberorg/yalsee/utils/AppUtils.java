@@ -60,12 +60,17 @@ public class AppUtils {
         populateStaticFields();
     }
 
-    public static String getShortUrlFromStaticContext() {
-        return shortUrl;
-    }
-
     private void populateStaticFields() {
         shortUrl = getShortUrl();
+    }
+
+    /**
+     * Dirty hack to obtain Server's Short URL from non-Spring objects.
+     *
+     * @return string with short URL.
+     */
+    public static String getShortUrlFromStaticContext() {
+        return shortUrl;
     }
 
     /**

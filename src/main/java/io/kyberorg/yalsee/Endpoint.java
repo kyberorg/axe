@@ -81,7 +81,7 @@ public final class Endpoint {
         public static final String GET_LINKS_API = LINKS_API + "/{ident}";
 
         /**
-         * API for manipulating with links.
+         * API for manipulating with QR Codes.
          * <p>
          * /api/qr
          */
@@ -102,7 +102,7 @@ public final class Endpoint {
         public static final String GET_QR_WITH_IDENT_AND_SIZE = GET_QR_WITH_IDENT + "/{size}";
 
         /**
-         * API for getting QR Code with user defined size.
+         * API for getting QR Code with user defined width and height.
          * <p>
          * GET /api/qr/{ident}/{width}/{height}
          */

@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -54,7 +55,8 @@ public class DeleteLinkRestController {
      * @param request object which contains HTTP request. Needed for extracting request headers
      * @return if deletion successfully done - 204 without body, {@link YalseeErrorJson} with error else.
      */
-    @DeleteMapping(Endpoint.Api.DELETE_LINKS_API)
+    @DeleteMapping(value = Endpoint.Api.DELETE_LINKS_API,
+            produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> deleteLink(final @PathVariable("ident") String ident,
                                                  final HttpServletRequest request) {
         log.info("{} got request DELETE request: {\"Ident\": {}}", TAG, ident);

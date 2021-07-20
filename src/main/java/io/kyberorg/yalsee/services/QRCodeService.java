@@ -53,29 +53,13 @@ public class QRCodeService {
     }
 
     /**
-     * Produces PNG with QR code, where encoded short link.
+     * Produces base64 encoded PNG with QR code with encoded short link and {@link App.QR#DEFAULT_QR_CODE_SIZE}.
      *
-     * @param ident string with ident, which will added to server url
-     * @return base64 encoded png with data:image/png stamp with default size {@link App.QR#DEFAULT_QR_CODE_SIZE}
+     * @param ident string with ident, which will added to short url
+     * @return same as {{@link #getQRCode(String, int, int)}},
      */
-    public String getQRCodeFromIdent(final String ident) throws IOException, WriterException {
-        return getQRCodeFromIdent(ident, App.QR.DEFAULT_QR_CODE_SIZE);
-    }
-
-    /**
-     * Produces PNG with QR code, where encoded short link, with given size.
-     *
-     * @param ident string with ident, which will added to server url
-     * @param size  positive integer with QR code size.
-     * @return ready base64 encoded png with data:image/png stamp
-     */
-    public String getQRCodeFromIdent(final String ident, final int size) throws WriterException, IOException {
-        String shortUrl = appUtils.getShortUrl();
-        String fullLink = shortUrl + "/" + ident;
-
-        byte[] qrCode = doQRCode(fullLink, size);
-        String base64encodedQRCode = encodeQRCode(qrCode);
-        return doPng(base64encodedQRCode);
+    public OperationResult getQRCode(final String ident) {
+        return getQRCode(ident, App.QR.DEFAULT_QR_CODE_SIZE, App.QR.DEFAULT_QR_CODE_SIZE);
     }
 
     /**
