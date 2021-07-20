@@ -6,7 +6,8 @@ import io.kyberorg.yalsee.json.MattermostResponse;
 import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.mm.Mattermost;
 import io.kyberorg.yalsee.models.Link;
-import io.kyberorg.yalsee.services.mm.MattermostService;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.LinkService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ import java.util.Objects;
 public class MattermostRestController {
     private static final String TAG = "[" + MattermostRestController.class.getSimpleName() + "]";
 
-    private final MattermostService mmService;
+    private final LinkService linkService;
 
     private Mattermost mattermost;
 
@@ -38,10 +39,10 @@ public class MattermostRestController {
     /**
      * Constructor for Spring autowiring.
      *
-     * @param mattermostService service for performing actions
+     * @param linkService service for saving links
      */
-    public MattermostRestController(final MattermostService mattermostService) {
-        this.mmService = mattermostService;
+    public MattermostRestController(final LinkService linkService) {
+        this.linkService = linkService;
     }
 
     /**
@@ -61,12 +62,13 @@ public class MattermostRestController {
             String mmUrl = mattermost.getArgumentSet().getUrl();
             log.debug("{} Request Parsed. Saving link. mmUrl: {}", TAG, mmUrl);
 
-            Link savedLink = mmService.storeLink(mmUrl);
-            if (Objects.nonNull(savedLink)) {
+            OperationResult storeResult = linkService.createLink(mmUrl);
+            if (storeResult.ok()) {
                 log.info("{} Link saved. Replying back", TAG);
-                return success(savedLink);
+                return success(storeResult.getPayload(Link.class));
             } else {
-                log.error("{} Was unable to save link. Service returned NULL. Body: {}", TAG, body);
+                log.error("{} Was unable to save link. Service returned error: {}. Body: {}",
+                        TAG, storeResult.getMessage(), body);
                 return serverError();
             }
         } catch (NoSuchElementException | IllegalArgumentException e) {
