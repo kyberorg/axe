@@ -10,6 +10,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.utils.ApiUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,7 +82,7 @@ public class GetLinkRestController {
             log.info("{} Hit. {\"Ident\": {}, \"Link found\": {}}", TAG, ident, longLink);
             if (!AppUtils.isAscii(longLink)) {
                 // Handle international domains by detecting non-ascii and converting them to punycode
-                String punycodedUrl = AppUtils.covertUnicodeToAscii(longLink);
+                String punycodedUrl = UrlUtils.covertUnicodeToAscii(longLink);
                 log.info("{} encoding URL using punycode. Link: {} transformed to {}", TAG, longLink, punycodedUrl);
                 longLink = punycodedUrl;
             }
