@@ -4,7 +4,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.json.EndpointNotFoundJson;
+import io.kyberorg.yalsee.json.EndpointNotFoundResponse;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
@@ -40,16 +40,16 @@ public class Page404ForApi {
             hasYalsPathParam = req.getQueryString().contains("path");
         }
 
-        EndpointNotFoundJson payload;
+        EndpointNotFoundResponse payload;
 
         if (hasParams && hasYalsMethodParam && hasYalsPathParam) {
             HttpMethod method = HttpMethod.valueOf(req.getParameter("method"));
             String path = URLDecoder.decode(req.getParameter("path"), StandardCharsets.UTF_8);
             logRequest(method, path);
-            payload = EndpointNotFoundJson.createWithEndpoint(method, path);
+            payload = EndpointNotFoundResponse.createWithEndpoint(method, path);
         } else {
             logRequest(req);
-            payload = EndpointNotFoundJson.create();
+            payload = EndpointNotFoundResponse.create();
         }
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);

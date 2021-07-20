@@ -18,20 +18,28 @@ import static io.kyberorg.yalsee.utils.UrlExtraValidator.URL_MIN_SIZE;
  * @since 1.0
  */
 @Data(staticConstructor = "create")
-public class StoreRequestJson implements YalseeJson {
+public class PostLinkRequest implements YalseeJson {
+
+    public static final int IDENT_MIN_LEN = 2;
+    public static final int IDENT_MAX_LEN = 255;
+
     @NotNull(message = "must be present")
     @Size(min = URL_MIN_SIZE, max = URL_MAX_SIZE)
     @URL(message = UrlExtraValidator.URL_NOT_VALID)
     @JsonProperty("link")
     private String link;
 
+    @Size(min = IDENT_MIN_LEN, max = IDENT_MAX_LEN)
+    @JsonProperty("ident")
+    private String ident;
+
     /**
-     * Creates {@link StoreRequestJson} with provided link.
+     * Creates {@link PostLinkRequest} with provided link.
      *
      * @param longLink field with long link to shorten
      * @return JSON which contains long link in {@link #link} param
      */
-    public StoreRequestJson withLink(final String longLink) {
+    public PostLinkRequest withLink(final String longLink) {
         this.link = longLink;
         return this;
     }

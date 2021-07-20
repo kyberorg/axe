@@ -2,8 +2,8 @@ package io.kyberorg.yalsee.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
+import io.kyberorg.yalsee.api.mm.MattermostRestController;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.controllers.rest.MattermostRestController;
 import io.kyberorg.yalsee.mm.Mattermost;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import lombok.Data;
@@ -15,7 +15,7 @@ import org.apache.commons.validator.GenericValidator;
  * @since 2.3
  */
 @Data
-public final class MattermostResponseJson implements YalseeJson {
+public final class MattermostResponse implements YalseeJson {
 
     @JsonProperty("icon_url")
     private String iconUrl = App.Mattermost.BOT_ICON;
@@ -32,7 +32,7 @@ public final class MattermostResponseJson implements YalseeJson {
     @JsonProperty("username")
     private final String username = App.Mattermost.BOT_NAME;
 
-    private MattermostResponseJson() {
+    private MattermostResponse() {
     }
 
     /**
@@ -41,8 +41,8 @@ public final class MattermostResponseJson implements YalseeJson {
      * @param text string with message text
      * @return JSON which sent to requester mattermost
      */
-    public static MattermostResponseJson createWithText(final String text) {
-        MattermostResponseJson mmJson = new MattermostResponseJson();
+    public static MattermostResponse createWithText(final String text) {
+        MattermostResponse mmJson = new MattermostResponse();
 
         boolean containsUrl = UrlExtraValidator.isStringContainsUrl(text);
         boolean isErrorMessage = text.contains(App.Emoji.WARNING);
@@ -62,7 +62,7 @@ public final class MattermostResponseJson implements YalseeJson {
      * @return same JSON but with replaced icon
      */
     @SuppressWarnings("UnusedReturnValue") //by design
-    public MattermostResponseJson replaceIconWith(final String iconUrl) {
+    public MattermostResponse replaceIconWith(final String iconUrl) {
         if (GenericValidator.isUrl(iconUrl)) {
             this.iconUrl = iconUrl;
         } else {
@@ -77,7 +77,7 @@ public final class MattermostResponseJson implements YalseeJson {
      * @param gotoLocation string contains gotoLocation.
      * @return json which sends in response
      */
-    public MattermostResponseJson addGotoLocation(final String gotoLocation) {
+    public MattermostResponse addGotoLocation(final String gotoLocation) {
         if (GenericValidator.isUrl(gotoLocation)) {
             this.gotoLocation = gotoLocation;
         } else {

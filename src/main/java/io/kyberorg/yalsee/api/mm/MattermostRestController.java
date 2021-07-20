@@ -1,8 +1,8 @@
-package io.kyberorg.yalsee.controllers.rest;
+package io.kyberorg.yalsee.api.mm;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.json.MattermostResponseJson;
+import io.kyberorg.yalsee.json.MattermostResponse;
 import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.mm.Mattermost;
 import io.kyberorg.yalsee.models.Link;
@@ -80,7 +80,7 @@ public class MattermostRestController {
         }
     }
 
-    private MattermostResponseJson success(final Link savedLink) {
+    private MattermostResponse success(final Link savedLink) {
         String serverHostname = getServerHostname(request);
         String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
 
@@ -91,22 +91,22 @@ public class MattermostRestController {
                     ? "Okay " + App.AT + mattermost.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
 
-            return MattermostResponseJson.createWithText(greeting + fullYalsLink);
+            return MattermostResponse.createWithText(greeting + fullYalsLink);
         } else {
-            return MattermostResponseJson.createWithText(fullYalsLink + " " + linkDescription);
+            return MattermostResponse.createWithText(fullYalsLink + " " + linkDescription);
         }
     }
 
-    private MattermostResponseJson usage() {
+    private MattermostResponse usage() {
         String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand()))
                 ? mattermost.getCommand() : "/yalsee";
 
-        return MattermostResponseJson.createWithText(App.Emoji.INFO + "  Usage: " + command
+        return MattermostResponse.createWithText(App.Emoji.INFO + "  Usage: " + command
                 + " https://mysuperlonglink.tld [Optional Link Description]");
     }
 
-    private MattermostResponseJson serverError() {
-        return MattermostResponseJson.createWithText(App.Emoji.WARNING + " Server Error")
+    private MattermostResponse serverError() {
+        return MattermostResponse.createWithText(App.Emoji.WARNING + " Server Error")
                 .addGotoLocation(App.Mattermost.SUPPORT_URL);
     }
 

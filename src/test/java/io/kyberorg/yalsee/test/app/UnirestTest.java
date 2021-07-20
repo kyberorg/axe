@@ -2,8 +2,9 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.json.StoreRequestJson;
-import io.kyberorg.yalsee.json.StoreResponseJson;
+import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.json.PostLinkRequest;
+import io.kyberorg.yalsee.json.PostLinkResponse;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -13,6 +14,7 @@ import org.junit.platform.commons.util.StringUtils;
 
 import java.lang.reflect.Field;
 
+import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
 import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,9 +53,11 @@ public abstract class UnirestTest {
      * @return string with ident
      */
     protected String store(final String longLink) {
-        String requestJson = StoreRequestJson.create().withLink(longLink).toString();
+        String requestJson = PostLinkRequest.create().withLink(longLink).toString();
 
-        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.STORE_API).body(requestJson);
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .body(requestJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
@@ -65,8 +69,8 @@ public abstract class UnirestTest {
         assertNotNull(responseBody);
         assertFalse(responseBody.trim().isEmpty());
 
-        StoreResponseJson replyJson;
-        replyJson = AppUtils.GSON.fromJson(responseBody, StoreResponseJson.class);
+        PostLinkResponse replyJson;
+        replyJson = AppUtils.GSON.fromJson(responseBody, PostLinkResponse.class);
         return replyJson.getIdent();
     }
 
@@ -77,7 +81,7 @@ public abstract class UnirestTest {
      * @return string with long URL or {@link #LINK_NOT_FOUND_STATUS} if not found
      */
     protected String getStoredLink(final String ident) {
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.LINK_API + ident);
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
         HttpResponse<JsonNode> result = request.asJson();
         logRequestAndResponse(request, result, TAG);
 

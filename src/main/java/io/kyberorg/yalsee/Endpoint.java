@@ -62,6 +62,11 @@ public final class Endpoint {
         public static final String LINKS_API = "/api/links";
 
         /**
+         * Link API + / + ident. For dokumentation.
+         */
+        public static final String LINKS_API_PLUS_IDENT = LINKS_API + "/{ident}";
+
+        /**
          * API for deleting links.
          * <p>
          * DELETE /api/links/{ident}
@@ -69,18 +74,39 @@ public final class Endpoint {
         public static final String DELETE_LINKS_API = LINKS_API + "/{ident}";
 
         /**
-         * API for storing links.
+         * API for getting links.
          * <p>
-         * POST /api/store
+         * GET /api/links/{ident}
          */
-        public static final String STORE_API = "/api/store";
+        public static final String GET_LINKS_API = LINKS_API + "/{ident}";
 
         /**
-         * API for Getting links.
+         * API for manipulating with QR Codes.
          * <p>
-         * GET /api/link/{ident}
+         * /api/qr
          */
-        public static final String LINK_API = "/api/link";
+        public static final String QR_API = "/api/qr";
+
+        /**
+         * API for getting QR Code with default size for short links.
+         * <p>
+         * GET /api/qr/{ident}
+         */
+        public static final String GET_QR_WITH_IDENT = QR_API + "/{ident}";
+
+        /**
+         * API for getting QR Code with user defined size.
+         * <p>
+         * GET /api/qr/{ident}/{size}
+         */
+        public static final String GET_QR_WITH_IDENT_AND_SIZE = GET_QR_WITH_IDENT + "/{size}";
+
+        /**
+         * API for getting QR Code with user defined width and height.
+         * <p>
+         * GET /api/qr/{ident}/{width}/{height}
+         */
+        public static final String GET_QR_WITH_IDENT_WIDTH_AND_HEIGHT = GET_QR_WITH_IDENT + "/{width}/{height}";
 
         /**
          * Mattermost API.
@@ -95,13 +121,6 @@ public final class Endpoint {
          * GET /api/tg/status
          */
         public static final String TELEGRAM_STATUS_API = "/api/tg/status";
-
-        /**
-         * QR Code API.
-         * <p>
-         * GET /api/qrCode/{ident}/{size}
-         */
-        public static final String QR_CODE_API = "/api/qrCode";
 
         /**
          * Page 404 for API requests.
@@ -179,14 +198,6 @@ public final class Endpoint {
          * Just slash symbol (/). Application base.
          */
         public static final String SLASH_BASE = "/";
-        /**
-         * Path for getting link.
-         */
-        public static final String LINK_API = Api.LINK_API + "/";
-        /**
-         * Path for retrieving QR code.
-         */
-        public static final String QR_CODE_API = Api.QR_CODE_API + "/";
 
         // those two endpoints are used only in tests to simulate application error
         /**

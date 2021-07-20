@@ -1,11 +1,11 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.api.mm.MattermostRestController;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.controllers.rest.MattermostRestController;
-import io.kyberorg.yalsee.json.MattermostResponseJson;
+import io.kyberorg.yalsee.json.MattermostResponse;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.utils.mock.MattermostMock;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -253,7 +253,7 @@ public class MattermostApiTest extends UnirestTest {
         assertEquals(STATUS_200, result.getStatus());
         assertTrue(
                 isResultMattermostReplyJson(result),
-                "Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object");
+                "Reply should valid " + MattermostResponse.class.getSimpleName() + " object");
         String mmText = getMMText(result);
         assertTrue(mmText.contains(description), "Text must contain description, if it is present");
     }
@@ -277,7 +277,7 @@ public class MattermostApiTest extends UnirestTest {
         assertEquals(STATUS_200, result.getStatus());
         assertTrue(
                 isResultMattermostReplyJson(result),
-                "Reply should valid " + MattermostResponseJson.class.getSimpleName() + " object");
+                "Reply should valid " + MattermostResponse.class.getSimpleName() + " object");
         String mmText = getMMText(result);
         assertTrue(mmText.contains(description), "Text must contain description, if it is present");
     }
@@ -299,7 +299,7 @@ public class MattermostApiTest extends UnirestTest {
     private boolean isResultMattermostReplyJson(final HttpResponse<String> result) {
         String body = result.getBody();
         try {
-            MattermostResponseJson mmJson = AppUtils.GSON.fromJson(body, MattermostResponseJson.class);
+            MattermostResponse mmJson = AppUtils.GSON.fromJson(body, MattermostResponse.class);
             return mmJson != null;
         } catch (Exception e) {
             return false;
@@ -308,7 +308,7 @@ public class MattermostApiTest extends UnirestTest {
 
     private String getMMText(final HttpResponse<String> result) {
         String body = result.getBody();
-        MattermostResponseJson mmJson = AppUtils.GSON.fromJson(body, MattermostResponseJson.class);
+        MattermostResponse mmJson = AppUtils.GSON.fromJson(body, MattermostResponse.class);
         return mmJson.getText();
     }
 

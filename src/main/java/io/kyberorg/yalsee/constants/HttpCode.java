@@ -68,14 +68,24 @@ public final class HttpCode {
     public static final int STATUS_409 = 409;
 
     /**
-     * 421 - unprocessable entry.
+     * 415 - Unsupported Media Type
      */
-    public static final int STATUS_421 = 421;
+    public static final int STATUS_415 = 415;
+
+    /**
+     * 422 - unprocessable entry.
+     */
+    public static final int STATUS_422 = 422;
 
     /**
      * 500 - server error.
      */
     public static final int STATUS_500 = 500;
+
+    /**
+     * 501 - not implemented.
+     */
+    public static final int STATUS_501 = 501;
 
     /**
      * 503 - application is down.

@@ -5,7 +5,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.core.IdentValidator;
+import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -17,49 +21,119 @@ import java.util.Base64;
  *
  * @since 2.6
  */
+@Slf4j
 @Service
 public class QRCodeService {
-    public static final int DEFAULT_SIZE = 350;
+    private static final String TAG = "[" + QRCodeService.class.getSimpleName() + "]";
+
+    public static final String ERR_MALFORMED_IDENT = "Ident is not valid";
+    public static final String ERR_MALFORMED_SIZE = "Size is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+            + "px or more";
+    public static final String ERR_MALFORMED_WIDTH = "Width is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+            + "px or more";
+    public static final String ERR_MALFORMED_HEIGHT = "Height is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+            + "px or more";
+    public static final String ERR_QR_CREATE_IO_EXCEPTION = "Failed to create QR code: I/O exception";
+
     private final AppUtils appUtils;
+    private final IdentValidator identValidator;
+    private final LinkService linkService;
 
     /**
      * Constructor for Spring autowiring.
      *
      * @param appUtils application utils
+     * @param identValidator for validating idents
+     * @param linkService for manipulating with links
      */
-    public QRCodeService(final AppUtils appUtils) {
+    public QRCodeService(final AppUtils appUtils, final IdentValidator identValidator, final LinkService linkService) {
         this.appUtils = appUtils;
+        this.identValidator = identValidator;
+        this.linkService = linkService;
     }
 
     /**
-     * Produces PNG with QR code, where encoded short link.
+     * Produces base64 encoded PNG with QR code with encoded short link and {@link App.QR#DEFAULT_QR_CODE_SIZE}.
      *
-     * @param ident string with ident, which will added to server url
-     * @return base64 encoded png with data:image/png stamp with default size {@link #DEFAULT_SIZE}
+     * @param ident string with ident, which will added to short url
+     * @return same as {{@link #getQRCode(String, int, int)}},
      */
-    public String getQRCodeFromIdent(final String ident) throws IOException, WriterException {
-        return getQRCodeFromIdent(ident, DEFAULT_SIZE);
+    public OperationResult getQRCode(final String ident) {
+        return getQRCode(ident, App.QR.DEFAULT_QR_CODE_SIZE, App.QR.DEFAULT_QR_CODE_SIZE);
     }
 
     /**
-     * Produces PNG with QR code, where encoded short link, with given size.
+     * Produces base64 encoded PNG with squared QR code, where encoded short link, with given size.
      *
-     * @param ident string with ident, which will added to server url
-     * @param size  positive integer with QR code size.
-     * @return ready base64 encoded png with data:image/png stamp
+     * @param ident string with ident, which will added to short url
+     * @param size positive integer with QR code size. Should be {@link App.QR#MINIMAL_SIZE_IN_PIXELS} px or more
+     * @return same as {{@link #getQRCode(String, int, int)}},
+     * plus {@link OperationResult#MALFORMED_INPUT} with {@link #ERR_MALFORMED_SIZE} message
      */
-    public String getQRCodeFromIdent(final String ident, final int size) throws WriterException, IOException {
+    public OperationResult getQRCode(final String ident, final int size) {
+        if (size <= 0) {
+            log.error("{} Request has negative size: {}", TAG, size);
+            return OperationResult.malformedInput().withMessage(ERR_MALFORMED_SIZE);
+        }
+        return getQRCode(ident, size, size);
+    }
+
+    /**
+     * Produces base64 encoded PNG with QR code, where encoded short link, with given width and height.
+     *
+     * @param ident string with ident, which will added to short url
+     * @param width positive integer with QR code width
+     * @param height positive integer with QR code height
+     * @return {@link OperationResult} with:
+     *
+     * {@link OperationResult#OK} and {@link String} with base64 encoded PNG with QR code
+     * in {@link OperationResult#payload}.
+     *
+     * {@link OperationResult#MALFORMED_INPUT} with {@link OperationResult#message}:
+     * {@link #ERR_MALFORMED_IDENT}, {@link #ERR_MALFORMED_WIDTH}, {@link #ERR_MALFORMED_HEIGHT}
+     * when ident, width or height is malformed, negative or less then {@link App.QR#MINIMAL_SIZE_IN_PIXELS}.
+     * {@link OperationResult#ELEMENT_NOT_FOUND} when nothing stored under given ident
+     * {@link OperationResult#SYSTEM_DOWN} when system or its parts unreachable
+     * {@link OperationResult#GENERAL_FAIL} with {@link OperationResult#message} when something unexpected happened.
+     */
+    public OperationResult getQRCode(final String ident, final int width, final int height) {
+        //input check
+        OperationResult validateParamsResult = checkInputs(ident, width, height);
+        if (validateParamsResult.notOk()) {
+            return validateParamsResult;
+        }
+
+        //searching for ident
+        OperationResult identSearchResult = linkService.isLinkWithIdentExist(ident);
+        if (identSearchResult.notOk()) {
+            return identSearchResult;
+        }
+
+        //action
         String shortUrl = appUtils.getShortUrl();
         String fullLink = shortUrl + "/" + ident;
 
-        byte[] qrCode = doQRCode(fullLink, size);
+        byte[] qrCode;
+        try {
+            qrCode = doQRCode(fullLink, width, height);
+        } catch (WriterException | IOException e) {
+            log.error("{} failed to create QR code: {}", TAG, e.getMessage());
+            return OperationResult.generalFail().withMessage(ERR_QR_CREATE_IO_EXCEPTION);
+        }
+
         String base64encodedQRCode = encodeQRCode(qrCode);
-        return doPng(base64encodedQRCode);
+        String png = doPng(base64encodedQRCode);
+
+        return OperationResult.success().addPayload(png);
     }
 
     private byte[] doQRCode(final String text, final int size) throws WriterException, IOException {
+        return doQRCode(text, size, size);
+    }
+
+    private byte[] doQRCode(final String text, final int width, final int height) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, size, size);
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
 
         ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
@@ -75,5 +149,27 @@ public class QRCodeService {
     private String doPng(final String base64encodedQRCode) {
         final String pngMarker = "data:image/png";
         return pngMarker + ";" + base64encodedQRCode;
+    }
+
+    private OperationResult checkInputs(final String ident, final int width, final int height) {
+        //ident check
+        OperationResult identCheck = identValidator.validate(ident);
+        if (identCheck.notOk()) {
+            log.error("{} Request has not valid ident: {}", TAG, ident);
+            return OperationResult.malformedInput().withMessage(ERR_MALFORMED_IDENT);
+        }
+
+        //width check
+        if (width < App.QR.MINIMAL_SIZE_IN_PIXELS) {
+            log.error("{} Request has negative width: {}", TAG, width);
+            return OperationResult.malformedInput().withMessage(ERR_MALFORMED_WIDTH);
+        }
+
+        //height check
+        if (height < App.QR.MINIMAL_SIZE_IN_PIXELS) {
+            log.error("{} Request has negative height: {}", TAG, height);
+            return OperationResult.malformedInput().withMessage(ERR_MALFORMED_HEIGHT);
+        }
+        return OperationResult.success();
     }
 }

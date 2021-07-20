@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.services.mm;
 
-import io.kyberorg.yalsee.controllers.rest.MattermostRestController;
+import io.kyberorg.yalsee.api.mm.MattermostRestController;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;

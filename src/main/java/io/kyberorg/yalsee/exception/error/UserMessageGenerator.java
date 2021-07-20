@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.exception.error;
 
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.YalseeException;
 
@@ -20,6 +21,7 @@ public final class UserMessageGenerator {
         MAPPING.put(HttpCode.STATUS_400, "Got malformed request");
         MAPPING.put(HttpCode.STATUS_404, "Requested resource was not found at server");
         MAPPING.put(HttpCode.STATUS_405, "API called with wrong method");
+        MAPPING.put(HttpCode.STATUS_415, "Unsupported MimeType, maybe " + Header.CONTENT_TYPE + " Header is missing");
         MAPPING.put(HttpCode.STATUS_500, DEFAULT_MESSAGE);
         MAPPING.put(HttpCode.STATUS_503, "Application is down");
     }

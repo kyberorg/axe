@@ -1,3 +1,19 @@
+### Milestone 3.1 (20/07/2021)
+RESTify API
+
+:warning: there are breaking changes in API.
+
+* API Endpoints were changes in order to fit with REST API template ([#347](https://github.com/kyberorg/yalsee/issue/347)).
+
+  * `GET /api/link/{ident}` -> `GET /api/links/{ident}`
+  * `POST/PUT /api/store` -> `POST /api/links`
+  * `GET /qrcode/{ident}` -> `GET /qr/{ident}`
+  * `GET /qrcode/{ident}/{size}` -> `GET /qr/{ident}/{size}`
+
+
+* Added `GET /qr/{ident}/{width}/{height}` endpoint.
+* Added API [Dokumentation Page](https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.1) ([#347](https://github.com/kyberorg/yalsee/issue/347))
+
 ### Milestone 3.0.10 (13/07/2021)
 Dependencies Bump
 

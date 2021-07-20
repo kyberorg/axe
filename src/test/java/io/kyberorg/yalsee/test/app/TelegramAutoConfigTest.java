@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.json.TelegramStatusResponseJson;
+import io.kyberorg.yalsee.json.TelegramStatusResponse;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;
@@ -53,8 +53,8 @@ public class TelegramAutoConfigTest extends UnirestTest {
     }
 
     private String extractBotStatus(final HttpResponse<String> apiResponse) {
-        TelegramStatusResponseJson json =
-                AppUtils.GSON.fromJson(apiResponse.getBody(), TelegramStatusResponseJson.class);
+        TelegramStatusResponse json =
+                AppUtils.GSON.fromJson(apiResponse.getBody(), TelegramStatusResponse.class);
         return json.getStatus();
     }
 }

@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.result;
 
+import com.google.gson.internal.Primitives;
 import lombok.Getter;
 
 /**
@@ -33,8 +34,19 @@ public class OperationResult {
      */
     public static final String SYSTEM_DOWN = "OP_SYSTEM_DOWN";
 
+    /**
+     * Status raised, when attempted to store something that already exists.
+     */
+    public static final String CONFLICT = "OP_CONFLICT";
+
+    /**
+     * Status, that indicated that access to requested resource or action is not allowed.
+     */
+    public static final String BANNED = "OP_NO_ACCESS";
+
     @Getter private String result;
     @Getter private String message;
+    private Object payload;
 
     /**
      * Default constructor.
@@ -42,14 +54,21 @@ public class OperationResult {
     protected OperationResult() { }
 
     /**
+     * Constructs object with given status.
+     *
+     * @param status string with one of given statuses.
+     */
+    private OperationResult(final String status) {
+        this.result = status;
+    }
+
+    /**
      * Create object with {@link #GENERAL_FAIL} status.
      *
      * @return new object.
      */
     public static OperationResult generalFail() {
-        OperationResult result = new OperationResult();
-        result.result = GENERAL_FAIL;
-        return result;
+        return new OperationResult(GENERAL_FAIL);
     }
 
     /**
@@ -58,9 +77,7 @@ public class OperationResult {
      * @return new object.
      */
     public static OperationResult malformedInput() {
-        OperationResult result = new OperationResult();
-        result.result = MALFORMED_INPUT;
-        return result;
+        return new OperationResult(MALFORMED_INPUT);
     }
 
     /**
@@ -69,9 +86,7 @@ public class OperationResult {
      * @return new object.
      */
     public static OperationResult success() {
-        OperationResult result = new OperationResult();
-        result.result = OK;
-        return result;
+        return new OperationResult(OK);
     }
 
     /**
@@ -80,8 +95,7 @@ public class OperationResult {
      * @return new object.
      */
     public static OperationResult databaseDown() {
-        OperationResult result = new OperationResult();
-        result.result = SYSTEM_DOWN;
+        OperationResult result = new OperationResult(SYSTEM_DOWN);
         result.message = "Database is DOWN";
         return result;
     }
@@ -92,9 +106,25 @@ public class OperationResult {
      * @return new object.
      */
     public static OperationResult elementNotFound() {
-        OperationResult result = new OperationResult();
-        result.result = ELEMENT_NOT_FOUND;
-        return result;
+        return new OperationResult(ELEMENT_NOT_FOUND);
+    }
+
+    /**
+     * Create object with {@link #CONFLICT} status.
+     *
+     * @return new object.
+     */
+    public static OperationResult conflict() {
+        return new OperationResult(CONFLICT);
+    }
+
+    /**
+     * Create object with {@link #BANNED} status.
+     *
+     * @return new object.
+     */
+    public static OperationResult banned() {
+        return new OperationResult(BANNED);
     }
 
     /**
@@ -124,5 +154,39 @@ public class OperationResult {
     public OperationResult withMessage(final String customMessage) {
         this.message = customMessage;
         return this;
+    }
+
+    /**
+     * Adds payload produced by operation.
+     *
+     * @param payload operation output object
+     * @return same object, but with added {@link #payload}
+     */
+    public OperationResult addPayload(final Object payload) {
+        this.payload = payload;
+        return this;
+    }
+
+    /**
+     * Returns payload as a {@link String}.
+     *
+     * @return string store in payload.
+     * @throws ClassCastException when payload contains something else but not {@link String}.
+     */
+    public String getStringPayload() {
+        return getPayload(String.class);
+    }
+
+    /**
+     * Returns payload value with requested class.
+     * For example: {@link #getPayload(Long)} will return {@link Long} object.
+     *
+     * @param classOfPayload class of object stored in {@link #payload}
+     * @param <T> Java generics param.
+     * @return object stored in {@link #payload} converted to requested class.
+     * @throws ClassCastException when payload contains something else, but not object of requested class.
+     */
+    public  <T> T getPayload(final Class<T> classOfPayload) {
+        return Primitives.wrap(classOfPayload).cast(this.payload);
     }
 }

@@ -16,22 +16,22 @@ import javax.validation.constraints.NotNull;
  * @since 2.7
  */
 @Data(staticConstructor = "create")
-public class EndpointNotFoundJson implements YalseeJson {
+public class EndpointNotFoundResponse implements YalseeJson {
 
     @JsonProperty("endpoint")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Endpoint endpoint;
 
     /**
-     * Creates {@link EndpointNotFoundJson} from endpoint method and path.
+     * Creates {@link EndpointNotFoundResponse} from endpoint method and path.
      *
      * @param method {@link HttpMethod} method aka GET/POST...
      * @param path   string with path to endpoint
      * @return json with endpoint built from given params
      */
-    public static EndpointNotFoundJson createWithEndpoint(final @NotNull HttpMethod method,
-                                                          final @NotNull String path) {
-        EndpointNotFoundJson self = new EndpointNotFoundJson();
+    public static EndpointNotFoundResponse createWithEndpoint(final @NotNull HttpMethod method,
+                                                              final @NotNull String path) {
+        EndpointNotFoundResponse self = new EndpointNotFoundResponse();
         self.endpoint = Endpoint.create(method, path);
         return self;
     }

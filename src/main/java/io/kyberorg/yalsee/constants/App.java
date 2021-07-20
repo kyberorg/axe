@@ -68,9 +68,14 @@ public final class App {
         public static final int DEFAULT_QR_BLOCK_SIZE = 371;
         public static final int DEFAULT_QR_CODE_SIZE = 350;
         public static final float QR_BLOCK_RATIO = 0.943f; // 350/371
+        public static final int MINIMAL_SIZE_IN_PIXELS = 33;
     }
 
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
+    }
+
+    public static class Api {
+        public static final String API_DOKS_URL = "https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.1";
     }
 }
