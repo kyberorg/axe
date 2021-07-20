@@ -3,7 +3,6 @@ package io.kyberorg.yalsee.services.telegram;
 import com.vdurmont.emoji.EmojiParser;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.Link;
-import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.telegram.TelegramObject;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -22,7 +21,6 @@ public class TelegramService {
     public static final String TAG = "[" + TelegramService.class.getSimpleName() + "]";
     public static final String NO_INIT = "Didn't correctly initialized. Did you run telegramService.init()?";
 
-    private final LinkRepo linkRepo;
     private final AppUtils appUtils;
 
 
@@ -32,11 +30,9 @@ public class TelegramService {
     /**
      * Constructor for Spring autowiring.
      *
-     * @param linkRepo links table repo to manipulate with DB
      * @param appUtils application utils
      */
-    public TelegramService(final LinkRepo linkRepo, final AppUtils appUtils) {
-        this.linkRepo = linkRepo;
+    public TelegramService(final AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 
