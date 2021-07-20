@@ -2,7 +2,6 @@ package io.kyberorg.yalsee.services.telegram;
 
 import com.vdurmont.emoji.EmojiParser;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.telegram.TelegramBot;
@@ -49,34 +48,6 @@ public class TelegramService {
     public void init(final TelegramObject telegramObject) {
         this.telegramObject = telegramObject;
         isInitDone = true;
-    }
-
-    /**
-     * Stores link to DB.
-     *
-     * @param longUrl string with long url
-     * @return {@link Link} which represents saved record
-     */
-    public Link storeLink(final String longUrl) {
-        String ident;
-        try {
-            do {
-                ident = IdentGenerator.generateNewIdent();
-            } while (linkRepo.findSingleByIdent(ident).isPresent());
-        } catch (Exception e) {
-            return null;
-        }
-
-        Link link = Link.create(ident, longUrl);
-        Link savedLink;
-        try {
-            savedLink = linkRepo.save(link);
-        } catch (Exception e) {
-            log.error("{} Got exception while saving new Link {}", TAG, link);
-            log.debug("", e);
-            savedLink = null;
-        }
-        return savedLink;
     }
 
     /**

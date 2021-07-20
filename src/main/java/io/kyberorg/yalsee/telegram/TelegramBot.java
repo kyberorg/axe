@@ -2,6 +2,8 @@ package io.kyberorg.yalsee.telegram;
 
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.Link;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.telegram.TelegramService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final Message NO_MESSAGE = new Message();
 
     private final TelegramService telegramService;
+    private final LinkService linkService;
     private final AppUtils appUtils;
 
     private Update update;
@@ -36,11 +39,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     /**
      * Constructor for Spring autowiring.
      *
-     * @param telegramService service for acting with DB
+     * @param telegramService service for making responses
+     * @param linkService service for acting with links
      * @param appUtils        application utils
      */
-    public TelegramBot(final TelegramService telegramService, final AppUtils appUtils) {
+    public TelegramBot(final TelegramService telegramService, final LinkService linkService, final AppUtils appUtils) {
         this.telegramService = telegramService;
+        this.linkService = linkService;
         this.appUtils = appUtils;
     }
 
@@ -131,9 +136,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String url = telegramObject.getArguments().getUrl();
 
-        Link savedLink = telegramService.storeLink(url);
-        if (Objects.nonNull(savedLink)) {
-            message = telegramService.success(savedLink);
+
+        OperationResult storeResult = linkService.createLink(url);
+        if (storeResult.ok()) {
+            message = telegramService.success(storeResult.getPayload(Link.class));
         } else {
             message = telegramService.serverError();
         }
