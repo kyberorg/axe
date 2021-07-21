@@ -293,7 +293,6 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void saveLink(final String link) {
-
         OperationResult saveLinkOperation = linkService.createLink(link);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
@@ -307,23 +306,13 @@ public class HomeView extends HorizontalLayout {
         cleanForm();
 
         Link savedLink = successfulResult.getPayload(Link.class);
-        if (savedLink != null) {
-            log.debug("{} New link successfully saved: {}", TAG, savedLink);
-            shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
-            shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
-            resultArea.setVisible(true);
-            clipboardHelper.setContent(shortLink.getText());
-            Broadcaster.broadcast(Push.command(UPDATE_COUNTER).toString());
-            generateQRCode(savedLink.getIdent());
-        } else {
-            log.error("{} Got reply without payload. OperationResult: {}", TAG, successfulResult);
-            showError("Something wrong was happened at server-side. Issue already reported");
-            errorUtils.reportToBugsnag(YalseeErrorBuilder
-                    .withTechMessage(String.format("onSuccessStoreLink: Got reply without payload. OperationResult: %s",
-                            successfulResult
-                    ))
-                    .withStatus(STATUS_500).build());
-        }
+        log.debug("{} New link successfully saved: {}", TAG, savedLink);
+        shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
+        shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
+        resultArea.setVisible(true);
+        clipboardHelper.setContent(shortLink.getText());
+        Broadcaster.broadcast(Push.command(UPDATE_COUNTER).toString());
+        generateQRCode(savedLink.getIdent());
     }
 
     private void onFailStoreLink(final OperationResult opResult) {
@@ -365,11 +354,13 @@ public class HomeView extends HorizontalLayout {
     private void generateQRCode(final String ident) {
         int size = calculateQRCodeSize();
         OperationResult getQRCodeResult;
+
         if (size >= App.QR.MINIMAL_SIZE_IN_PIXELS) {
             getQRCodeResult = qrCodeService.getQRCode(ident, size);
         } else {
             getQRCodeResult = qrCodeService.getQRCode(ident);
         }
+
         if (getQRCodeResult.ok()) {
             onSuccessGenerateQRCode(getQRCodeResult);
         } else {
@@ -378,16 +369,8 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void onSuccessGenerateQRCode(final OperationResult goodResult) {
-        if (StringUtils.isNotBlank(goodResult.getStringPayload())) {
-            this.qrCode.setSrc(goodResult.getStringPayload());
-            qrCodeArea.setVisible(true);
-        } else {
-            showError("Failed to generate QR Code. Something is wrong at server-side. Issue reported.");
-            errorUtils.reportToBugsnag(YalseeErrorBuilder
-                    .withTechMessage(String.format("onSuccessGenerateQRCode: Empty payload. OpResult: %s", goodResult))
-                    .withStatus(STATUS_500)
-                    .build());
-        }
+        this.qrCode.setSrc(goodResult.getStringPayload());
+        qrCodeArea.setVisible(true);
     }
 
     private void onFailGenerateQRCode(final OperationResult operationResult) {
