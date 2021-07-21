@@ -153,16 +153,6 @@ public class AppUtils {
     }
 
     /**
-     * Provides URL base for calling API from application internally.
-     *
-     * @return string (https://localhost:<port>)
-     */
-    public String getAPIHostPort() {
-        return "http://localhost" + ":" + env.getProperty(App.Properties.SERVER_PORT, "8080");
-    }
-
-
-    /**
      * Checks string if it has ASCII symbols or not.
      *
      * @param str any string

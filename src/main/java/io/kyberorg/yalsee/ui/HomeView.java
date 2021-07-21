@@ -19,9 +19,11 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
-import io.kyberorg.yalsee.json.PostLinkRequest;
+import io.kyberorg.yalsee.models.Link;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.LinkService;
+import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
@@ -29,17 +31,11 @@ import io.kyberorg.yalsee.utils.UrlUtils;
 import io.kyberorg.yalsee.utils.push.Broadcaster;
 import io.kyberorg.yalsee.utils.push.Push;
 import io.kyberorg.yalsee.utils.push.PushCommand;
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
-import kong.unirest.Unirest;
-import kong.unirest.json.JSONException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.olli.ClipboardHelper;
 
-import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_200;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_201;
+import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 import static io.kyberorg.yalsee.utils.push.PushCommand.UPDATE_COUNTER;
 
 @Slf4j
@@ -62,6 +58,8 @@ public class HomeView extends HorizontalLayout {
     private final Component qrCodeArea = qrCodeArea();
 
     private final OverallService overallService;
+    private final LinkService linkService;
+    private final QRCodeService qrCodeService;
     private final AppUtils appUtils;
     private final ErrorUtils errorUtils;
     private Registration broadcasterRegistration;
@@ -81,12 +79,17 @@ public class HomeView extends HorizontalLayout {
      * Create {@link HomeView}.
      *
      * @param overallService overall service for getting number of links
+     * @param linkService    service for saving links
+     * @param qrCodeService  service for getting QR Code for saved link
      * @param appUtils       application utils for getting server location and API location
      * @param errorUtils     error utils to report to bugsnag
      */
     public HomeView(
-            final OverallService overallService, final AppUtils appUtils, final ErrorUtils errorUtils) {
+            final OverallService overallService, final LinkService linkService, final QRCodeService qrCodeService,
+            final AppUtils appUtils, final ErrorUtils errorUtils) {
         this.overallService = overallService;
+        this.linkService = linkService;
+        this.qrCodeService = qrCodeService;
         this.appUtils = appUtils;
         this.errorUtils = errorUtils;
 
@@ -276,7 +279,7 @@ public class HomeView extends HorizontalLayout {
 
         if (isFormValid) {
             cleanResults();
-            sendLink(longUrl);
+            saveLink(longUrl);
         } else {
             log.debug("{} Form is not valid", TAG);
         }
@@ -289,77 +292,43 @@ public class HomeView extends HorizontalLayout {
         //All other actions are performed by component wrapper
     }
 
-    private void sendLink(final String link) {
-        final String apiRoute = Endpoint.Api.LINKS_API;
-        PostLinkRequest json = PostLinkRequest.create().withLink(link);
-        HttpResponse<JsonNode> response =
-                Unirest.post(appUtils.getAPIHostPort() + apiRoute)
-                        .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
-                        .body(json).asJson();
-        log.debug("{} Got reply from Store API. Status: {}, Body: {}",
-                TAG, response.getStatus(), response.getBody().toPrettyString());
-        if (response.isSuccess()) {
-            onSuccessStoreLink(response);
+    private void saveLink(final String link) {
+
+        OperationResult saveLinkOperation = linkService.createLink(link);
+        if (saveLinkOperation.ok()) {
+            onSuccessStoreLink(saveLinkOperation);
         } else {
-            onFailStoreLink(response);
+            onFailStoreLink(saveLinkOperation);
         }
     }
 
-    private void onSuccessStoreLink(final HttpResponse<JsonNode> response) {
+    private void onSuccessStoreLink(final OperationResult successfulResult) {
         cleanErrors();
         cleanForm();
-        if (response.getStatus() == STATUS_201) {
-            JsonNode json = response.getBody();
-            String ident = json.getObject().getString("ident");
-            log.debug("{} Got reply with ident: {}", TAG, ident);
-            if (StringUtils.isNotBlank(ident)) {
-                shortLink.setText(appUtils.getShortUrl() + "/" + ident);
-                shortLink.setHref(appUtils.getShortUrl() + "/" + ident);
-                resultArea.setVisible(true);
-                clipboardHelper.setContent(shortLink.getText());
-                Broadcaster.broadcast(Push.command(UPDATE_COUNTER).toString());
-                generateQRCode(ident);
-            } else {
-                showError("Internal error. Got malformed reply from server");
-                errorUtils.reportToBugsnag(YalseeErrorBuilder
-                        .withTechMessage(String.format("onSuccessStoreLink: Malformed JSON: %s",
-                                response.getBody().toPrettyString()
-                        ))
-                        .withStatus(response.getStatus())
-                        .build());
-            }
-        } else {
-            log.error("{} Got false positive. Status: {}, Body: {}",
-                    TAG, response.getStatus(), response.getBody().toPrettyString());
 
+        Link savedLink = successfulResult.getPayload(Link.class);
+        if (savedLink != null) {
+            log.debug("{} New link successfully saved: {}", TAG, savedLink);
+            shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
+            shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
+            resultArea.setVisible(true);
+            clipboardHelper.setContent(shortLink.getText());
+            Broadcaster.broadcast(Push.command(UPDATE_COUNTER).toString());
+            generateQRCode(savedLink.getIdent());
+        } else {
+            log.error("{} Got reply without payload. OperationResult: {}", TAG, successfulResult);
             showError("Something wrong was happened at server-side. Issue already reported");
             errorUtils.reportToBugsnag(YalseeErrorBuilder
-                    .withTechMessage(String.format("onSuccessStoreLink: Got false positive. Body: %s",
-                            response.getBody().toPrettyString()
+                    .withTechMessage(String.format("onSuccessStoreLink: Got reply without payload. OperationResult: %s",
+                            successfulResult
                     ))
-                    .withStatus(response.getStatus()).build());
+                    .withStatus(STATUS_500).build());
         }
     }
 
-    private void onFailStoreLink(final HttpResponse<JsonNode> response) {
-        JsonNode json = response.getBody();
-        log.error("{} Failed to store link. Reply: {}", TAG, json);
-        String message;
-        try {
-            message = json.getObject().getString("message");
-        } catch (JSONException e) {
-            log.error("{} Malformed Error Json", TAG);
-            log.debug("", e);
-            message = "Hups. Something went wrong at server-side";
-            errorUtils.reportToBugsnag(YalseeErrorBuilder
-                    .withTechMessage(String.format("onFailStoreLink: Malformed JSON. Body: %s",
-                            response.getBody().toPrettyString()
-                    ))
-                    .withStatus(response.getStatus()).addRawException(e)
-                    .build());
-        }
-
-        showError(message);
+    private void onFailStoreLink(final OperationResult opResult) {
+        log.error("{} Failed to store link. Operation Result: {}", TAG, opResult);
+        showError(opResult.getMessage());
     }
 
     private void updateCounter() {
@@ -395,66 +364,41 @@ public class HomeView extends HorizontalLayout {
 
     private void generateQRCode(final String ident) {
         int size = calculateQRCodeSize();
-        String qrCodeGeneratorRoute;
-        if (size == 0) {
-            qrCodeGeneratorRoute =
-                    String.format("%s/%s/%s", appUtils.getAPIHostPort(), Endpoint.Api.QR_API, ident);
+        OperationResult getQRCodeResult;
+        if (size >= App.QR.MINIMAL_SIZE_IN_PIXELS) {
+            getQRCodeResult = qrCodeService.getQRCode(ident, size);
         } else {
-            qrCodeGeneratorRoute =
-                    String.format(
-                            "%s/%s/%s/%d", appUtils.getAPIHostPort(), Endpoint.Api.QR_API, ident, size);
+            getQRCodeResult = qrCodeService.getQRCode(ident);
         }
-
-        HttpResponse<JsonNode> response = Unirest.get(qrCodeGeneratorRoute).asJson();
-        log.debug("{} Got reply from QR Code API. Status: {}, Body: {}",
-                TAG, response.getStatus(), response.getBody().toPrettyString());
-        if (response.isSuccess()) {
-            onSuccessGenerateQRCode(response);
+        if (getQRCodeResult.ok()) {
+            onSuccessGenerateQRCode(getQRCodeResult);
         } else {
-            onFailGenerateQRCode(response);
+            onFailGenerateQRCode(getQRCodeResult);
         }
     }
 
-    private void onSuccessGenerateQRCode(final HttpResponse<JsonNode> response) {
-        if (response.getStatus() == STATUS_200) {
-            String qrCode = response.getBody().getObject().getString("qr_code");
-            if (StringUtils.isNotBlank(qrCode)) {
-                this.qrCode.setSrc(qrCode);
-                qrCodeArea.setVisible(true);
-            } else {
-                showError("Internal error. Got malformed reply from QR generator");
-                errorUtils.reportToBugsnag(YalseeErrorBuilder
-                        .withTechMessage(String.format("onSuccessGenerateQRCode: Malformed JSON. Body: %s",
-                                response.getBody().toPrettyString()
-                        ))
-                        .withStatus(response.getStatus())
-                        .build());
-            }
+    private void onSuccessGenerateQRCode(final OperationResult goodResult) {
+        if (StringUtils.isNotBlank(goodResult.getStringPayload())) {
+            this.qrCode.setSrc(goodResult.getStringPayload());
+            qrCodeArea.setVisible(true);
         } else {
-            showError("Internal error. Something is wrong at server-side");
+            showError("Failed to generate QR Code. Something is wrong at server-side. Issue reported.");
             errorUtils.reportToBugsnag(YalseeErrorBuilder
-                    .withTechMessage(String.format("onSuccessGenerateQRCode: False positive. Body: %s",
-                            response.getBody().toPrettyString()
-                    ))
-                    .withStatus(response.getStatus())
+                    .withTechMessage(String.format("onSuccessGenerateQRCode: Empty payload. OpResult: %s", goodResult))
+                    .withStatus(STATUS_500)
                     .build());
         }
     }
 
-    private void onFailGenerateQRCode(final HttpResponse<JsonNode> response) {
-        showError("Internal error. Got malformed reply from QR generator");
+    private void onFailGenerateQRCode(final OperationResult operationResult) {
+        log.error("{} Get QR Code OpResult: {}", TAG, operationResult);
+        showError("Internal error. QR generation failed");
         errorUtils.reportToBugsnag(YalseeErrorBuilder
-                .withTechMessage(String.format("onFailGenerateQRCode: Malformed JSON. Body: %s",
-                        response.getBody().toPrettyString()
-                ))
-                .withStatus(response.getStatus())
+                .withTechMessage(String.format("onFailGenerateQRCode: Operation failed. OpResult: %s", operationResult))
+                .withStatus(STATUS_500)
                 .build());
         this.qrCode.setSrc("");
         qrCodeArea.setVisible(false);
-
-        if (response.getBody() != null) {
-            log.error("{} QR Code Reply JSON: {}", TAG, response.getBody());
-        }
     }
 
     private void showError(final String errorMessage) {
