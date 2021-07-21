@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.test.app;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.api.links.GetLinkRestController;
 import io.kyberorg.yalsee.test.TestUtils;
-import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -47,7 +47,7 @@ public class GetLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithSpaceIdentStatusIs501() {
         String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + " ";
-        HttpRequest request = Unirest.get(AppUtils.covertUnicodeToAscii(url));
+        HttpRequest request = Unirest.get(UrlUtils.covertUnicodeUrlToAscii(url));
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

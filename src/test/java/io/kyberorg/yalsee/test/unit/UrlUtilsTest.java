@@ -1,17 +1,17 @@
 package io.kyberorg.yalsee.test.unit;
 
-import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
- * Test suite for {@link AppUtils}.
+ * Test suite for {@link UrlUtils}.
  *
  * @since 2.5
  */
-public class AppUtilsTest {
+public class UrlUtilsTest {
 
     /**
      * Tests that decoding works.
@@ -21,7 +21,7 @@ public class AppUtilsTest {
         String encodedUrl = "https://ru.wikipedia.org/wiki/%D0%9E%D1%80%D0%B5%D1%81%D1%82";
         String exceptedResult = "https://ru.wikipedia.org/wiki/Орест";
 
-        assertEquals(exceptedResult, AppUtils.decodeUrl(encodedUrl));
+        assertEquals(exceptedResult, UrlUtils.decodeUrl(encodedUrl));
     }
 
     /**
@@ -32,6 +32,6 @@ public class AppUtilsTest {
         String url = "https://yals.ee";
         String expectedResult = "https://yals.ee";
 
-        assertEquals(expectedResult, AppUtils.decodeUrl(url));
+        assertEquals(expectedResult, UrlUtils.decodeUrl(url));
     }
 }
