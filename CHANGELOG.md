@@ -1,3 +1,14 @@
+### Milestone 3.1.1 (21/07/2021)
+Service-first approach
+
+* Calling Services internally instead of using API ([#419](https://github.com/kyberorg/yalsee/issue/419))
+* Telegram and Mattermost Bots using LinkService ([#426](https://github.com/kyberorg/yalsee/issue/426))
+* Move all URL related functions from AppUtils to URLUtils class ([#425](https://github.com/kyberorg/yalsee/issue/425))
+* [Maven Deps]: Bump unirest-java from 3.11.11 to 3.11.12 ([#427](https://github.com/kyberorg/yalsee/pull/427))
+* [Maven Deps]: Bump commons-io from 2.10.0 to 2.11.0 ([#428](https://github.com/kyberorg/yalsee/pull/428))
+* [Maven Deps]: Bump selenide from 5.22.3 to 5.23.0 ([#429](https://github.com/kyberorg/yalsee/pull/429))
+* Remove version from everywhere ([#431](https://github.com/kyberorg/yalsee/issue/431))
+
 ### Milestone 3.1 (20/07/2021)
 RESTify API
 
