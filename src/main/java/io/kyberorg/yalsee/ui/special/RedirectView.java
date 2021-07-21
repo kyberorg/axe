@@ -155,13 +155,13 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
 
     private void doJSRedirect(final String target) {
         if (Objects.nonNull(this.page)) {
-            this.page.setLocation(UrlUtils.covertUnicodeToAscii(target));
+            this.page.setLocation(UrlUtils.covertUnicodeUrlToAscii(target));
         }
     }
 
     private int doHeaderRedirect(final String target) {
         if (StringUtils.isNotBlank(target)) {
-            VaadinResponse.getCurrent().setHeader(Header.LOCATION, UrlUtils.covertUnicodeToAscii(target));
+            VaadinResponse.getCurrent().setHeader(Header.LOCATION, UrlUtils.covertUnicodeUrlToAscii(target));
             return STATUS_302;
         } else {
             log.error("{} Target is empty", TAG);

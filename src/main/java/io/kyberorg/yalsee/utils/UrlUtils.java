@@ -37,7 +37,7 @@ public final class UrlUtils {
             try {
                 String fullUrl = makeFullUri(link).toString();
                 log.trace("{} Link {} became {} after adding schema", TAG, link, fullUrl);
-                String convertedUrl = covertUnicodeToAscii(fullUrl);
+                String convertedUrl = covertUnicodeUrlToAscii(fullUrl);
                 log.trace("{} Link {} converted to {}", TAG, fullUrl, convertedUrl);
                 return convertedUrl;
             } catch (RuntimeException e) {
@@ -78,7 +78,7 @@ public final class UrlUtils {
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,
      * @throws RuntimeException if URL malformed or not URL
      */
-    public static String covertUnicodeToAscii(final String url) {
+    public static String covertUnicodeUrlToAscii(final String url) {
         if (url == null) return null;
 
         String trimUrl = url.trim();

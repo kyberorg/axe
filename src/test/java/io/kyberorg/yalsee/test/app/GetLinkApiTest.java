@@ -47,7 +47,7 @@ public class GetLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithSpaceIdentStatusIs501() {
         String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + " ";
-        HttpRequest request = Unirest.get(UrlUtils.covertUnicodeToAscii(url));
+        HttpRequest request = Unirest.get(UrlUtils.covertUnicodeUrlToAscii(url));
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

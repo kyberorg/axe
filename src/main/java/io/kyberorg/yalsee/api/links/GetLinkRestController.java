@@ -82,7 +82,7 @@ public class GetLinkRestController {
             log.info("{} Hit. {\"Ident\": {}, \"Link found\": {}}", TAG, ident, longLink);
             if (!AppUtils.isAscii(longLink)) {
                 // Handle international domains by detecting non-ascii and converting them to punycode
-                String punycodedUrl = UrlUtils.covertUnicodeToAscii(longLink);
+                String punycodedUrl = UrlUtils.covertUnicodeUrlToAscii(longLink);
                 log.info("{} encoding URL using punycode. Link: {} transformed to {}", TAG, longLink, punycodedUrl);
                 longLink = punycodedUrl;
             }
