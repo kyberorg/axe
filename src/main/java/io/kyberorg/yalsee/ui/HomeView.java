@@ -25,6 +25,7 @@ import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import io.kyberorg.yalsee.utils.push.Broadcaster;
 import io.kyberorg.yalsee.utils.push.Push;
 import io.kyberorg.yalsee.utils.push.PushCommand;
@@ -264,7 +265,7 @@ public class HomeView extends HorizontalLayout {
             isFormValid = false;
         } else {
             try {
-                longUrl = AppUtils.makeFullUri(longUrl).toString();
+                longUrl = UrlUtils.makeFullUri(longUrl).toString();
             } catch (RuntimeException e) {
                 log.error("{} URL validation failed", TAG);
                 log.debug("", e);

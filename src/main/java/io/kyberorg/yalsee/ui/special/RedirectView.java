@@ -19,6 +19,7 @@ import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -154,13 +155,13 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
 
     private void doJSRedirect(final String target) {
         if (Objects.nonNull(this.page)) {
-            this.page.setLocation(AppUtils.covertUnicodeToAscii(target));
+            this.page.setLocation(UrlUtils.covertUnicodeUrlToAscii(target));
         }
     }
 
     private int doHeaderRedirect(final String target) {
         if (StringUtils.isNotBlank(target)) {
-            VaadinResponse.getCurrent().setHeader(Header.LOCATION, AppUtils.covertUnicodeToAscii(target));
+            VaadinResponse.getCurrent().setHeader(Header.LOCATION, UrlUtils.covertUnicodeUrlToAscii(target));
             return STATUS_302;
         } else {
             log.error("{} Target is empty", TAG);

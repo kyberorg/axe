@@ -6,7 +6,6 @@ import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.OperationResult;
-import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -193,7 +192,7 @@ public class LinkService {
         //Action
         try {
             //decoding URL before saving to DB
-            String decodedLink = AppUtils.decodeUrl(urlToStore);
+            String decodedLink = UrlUtils.decodeUrl(urlToStore);
             log.trace("{} Link {} became {} after decoding", TAG, urlToStore, decodedLink);
 
             //action
