@@ -5,7 +5,10 @@ RUN java -Djarmode=layertools -jar yalsee.jar extract
 
 FROM adoptopenjdk:11-jdk-openj9 as runner
 # Create user and set ownership and permissions as required
-RUN adduser -D yalsee && mkdir /app && chown -R yalsee /app
+RUN useradd --user-group --create-home --no-log-init --shell /bin/bash yalsee \
+    && mkdir /app \
+    && chown -R yalsee /app
+
 WORKDIR /app
 COPY --from=builder  dependencies/ ./
 COPY --from=builder snapshot-dependencies/ ./
