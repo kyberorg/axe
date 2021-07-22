@@ -240,12 +240,22 @@ public class HomeView extends HorizontalLayout {
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * Triggers actions when {@link LinkSavedEvent} received.
+     *
+     * @param event event object with modified data inside
+     */
     @Subscribe
     public void onLinkSavedEvent(final LinkSavedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkSavedEvent.class.getSimpleName(), event);
         updateCounter();
     }
 
+    /**
+     * Triggers actions when {@link LinkDeletedEvent} received.
+     *
+     * @param event event object with modified data inside
+     */
     @Subscribe
     public void onLinkDeletedEvent(final LinkDeletedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);

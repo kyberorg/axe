@@ -119,7 +119,7 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-    
+
         <!-- EventBus: event-driven changes -->
         <dependency>
             <groupId>org.greenrobot</groupId>
