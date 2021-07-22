@@ -14,11 +14,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.events.LinkDeletedEvent;
+import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -28,15 +29,13 @@ import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
-import io.kyberorg.yalsee.utils.push.Broadcaster;
-import io.kyberorg.yalsee.utils.push.Push;
-import io.kyberorg.yalsee.utils.push.PushCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.vaadin.olli.ClipboardHelper;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
-import static io.kyberorg.yalsee.utils.push.PushCommand.UPDATE_COUNTER;
 
 @Slf4j
 @SpringComponent
@@ -62,7 +61,7 @@ public class HomeView extends HorizontalLayout {
     private final QRCodeService qrCodeService;
     private final AppUtils appUtils;
     private final ErrorUtils errorUtils;
-    private Registration broadcasterRegistration;
+    private UI ui;
 
     private Span titleLongPart;
     private TextField input;
@@ -225,30 +224,29 @@ public class HomeView extends HorizontalLayout {
 
     @Override
     protected void onAttach(final AttachEvent attachEvent) {
-        UI ui = attachEvent.getUI();
-        broadcasterRegistration = Broadcaster.register(message -> ui.access(() -> {
-            log.trace("{} Push received. {} ID: {}, Message: {}",
-                    TAG, HomeView.class.getSimpleName(), ui.getUIId(), message);
-            Push push = Push.fromMessage(message);
-            if (push.valid()) {
-                PushCommand command = push.getPushCommand();
-                if (command == UPDATE_COUNTER) {
-                    updateCounter();
-                } else {
-                    log.warn("{} got unknown push command: '{}'", TAG, push.getPushCommand());
-                }
-            } else {
-                log.debug("{} not valid push command: '{}'", TAG, message);
-            }
-        }));
+        super.onAttach(attachEvent);
+        ui = attachEvent.getUI();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDetach(final DetachEvent detachEvent) {
         // Cleanup
-        log.trace("{} {} {} detached", TAG, HomeView.class.getSimpleName(), detachEvent.getUI().getUIId());
-        broadcasterRegistration.remove();
-        broadcasterRegistration = null;
+        super.onDetach(detachEvent);
+        ui = null;
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onLinkSavedEvent(final LinkSavedEvent event) {
+        log.trace("{} {} received: {}", TAG, LinkSavedEvent.class.getSimpleName(), event);
+        updateCounter();
+    }
+
+    @Subscribe
+    public void onLinkDeletedEvent(final LinkDeletedEvent event) {
+        log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);
+        updateCounter();
     }
 
     private void onSaveLink(final ClickEvent<Button> buttonClickEvent) {
@@ -311,7 +309,6 @@ public class HomeView extends HorizontalLayout {
         shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         resultArea.setVisible(true);
         clipboardHelper.setContent(shortLink.getText());
-        Broadcaster.broadcast(Push.command(UPDATE_COUNTER).toString());
         generateQRCode(savedLink.getIdent());
     }
 
@@ -321,7 +318,9 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void updateCounter() {
-        linkCounter.setText(Long.toString(overallService.numberOfStoredLinks()));
+        if (ui != null) {
+            ui.access(() -> linkCounter.setText(Long.toString(overallService.numberOfStoredLinks())));
+        }
     }
 
     private int calculateQRCodeSize() {

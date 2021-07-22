@@ -2,6 +2,8 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.core.BanHammer;
 import io.kyberorg.yalsee.core.IdentGenerator;
+import io.kyberorg.yalsee.events.LinkDeletedEvent;
+import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.GetResult;
@@ -10,6 +12,7 @@ import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -74,6 +77,7 @@ public class LinkService {
             link = repo.findSingleByIdent(ident);
             if (link.isPresent()) {
                 repo.delete(link.get());
+                EventBus.getDefault().post(LinkDeletedEvent.create());
                 return OperationResult.success();
             } else {
                 return OperationResult.elementNotFound();
@@ -199,6 +203,7 @@ public class LinkService {
             Link linkObject = Link.create(ident, decodedLink);
             Link savedLink = repo.save(linkObject);
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedLink);
+            EventBus.getDefault().post(LinkSavedEvent.create());
             return OperationResult.success().addPayload(savedLink);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
