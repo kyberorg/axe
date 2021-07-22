@@ -77,7 +77,7 @@ public class LinkService {
             link = repo.findSingleByIdent(ident);
             if (link.isPresent()) {
                 repo.delete(link.get());
-                EventBus.getDefault().post(LinkDeletedEvent.create());
+                EventBus.getDefault().post(LinkDeletedEvent.createWith(link.get()));
                 return OperationResult.success();
             } else {
                 return OperationResult.elementNotFound();
@@ -203,7 +203,7 @@ public class LinkService {
             Link linkObject = Link.create(ident, decodedLink);
             Link savedLink = repo.save(linkObject);
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedLink);
-            EventBus.getDefault().post(LinkSavedEvent.create());
+            EventBus.getDefault().post(LinkSavedEvent.createWith(savedLink));
             return OperationResult.success().addPayload(savedLink);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();

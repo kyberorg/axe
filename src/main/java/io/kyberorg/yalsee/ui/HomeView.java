@@ -227,6 +227,9 @@ public class HomeView extends HorizontalLayout {
         super.onAttach(attachEvent);
         ui = attachEvent.getUI();
         EventBus.getDefault().register(this);
+
+        //update counter every page load
+        updateCounter();
     }
 
     @Override
