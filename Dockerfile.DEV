@@ -5,6 +5,12 @@ COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
 FROM adoptopenjdk:11-jdk-openj9 as runner
+
+# Create user and set ownership and permissions as required
+RUN useradd --user-group --create-home --no-log-init --shell /bin/bash yalsee \
+    && mkdir /app \
+    && chown -R yalsee /app
+
 WORKDIR /app
 COPY --from=builder  dependencies/ ./
 COPY --from=builder snapshot-dependencies/ ./
@@ -20,6 +26,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+USER yalsee
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
 EXPOSE 8080
