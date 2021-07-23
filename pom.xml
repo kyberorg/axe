@@ -120,6 +120,12 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
 
+        <!-- EventBus: event-driven changes -->
+        <dependency>
+            <groupId>org.greenrobot</groupId>
+            <artifactId>eventbus</artifactId>
+            <version>3.2.0</version>
+        </dependency>
         <!-- Working with JSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
