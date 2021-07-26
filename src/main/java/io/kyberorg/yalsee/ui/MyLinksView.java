@@ -15,6 +15,7 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.models.LinkInfo;
@@ -70,6 +71,7 @@ public class MyLinksView extends YalseeLayout {
         grid.removeAllColumns();
         grid.addColumn(LinkInfo::getIdent).setHeader("Link");
         //FIXME implement me: link update
+        grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         //grid.addEditColumn(LinkInfo::getDescription).text(this::updateLinkInfo)
         //        .setHeader("Description");
         grid.addComponentColumn(this::qrImage).setHeader("QR Code");
@@ -140,8 +142,10 @@ public class MyLinksView extends YalseeLayout {
 
     private Image qrImage(LinkInfo linkInfo) {
         Image image = new Image();
-        //FIXME implement: set QR code of needed size from Service
-        image.setSrc("");
+        OperationResult qrCodeResult = qrCodeService.getQRCode(linkInfo.getIdent(), App.QR.MINIMAL_SIZE_IN_PIXELS);
+        if (qrCodeResult.ok()) {
+            image.setSrc(qrCodeResult.getStringPayload());
+        }
         image.setAlt("QR Code");
         image.setId(Long.toString(linkInfo.getId()));
         image.addClickListener(this::onQRCodeClicked);
