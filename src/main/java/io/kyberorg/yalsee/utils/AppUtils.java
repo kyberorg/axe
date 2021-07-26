@@ -9,6 +9,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
@@ -53,6 +54,19 @@ public class AppUtils {
     public AppUtils(final Environment env) {
         this.env = env;
         populateStaticFields();
+    }
+
+    /**
+     * Retrieve Session ID from given {@link VaadinSession}.
+     *
+     * @param currentVaadinSession current {@link VaadinSession} used in UI.
+     * @return string with ID or null
+     */
+    public static String getSessionId(VaadinSession current) {
+        if (VaadinSession.getCurrent() != null && VaadinSession.getCurrent().getSession() != null) {
+            return VaadinSession.getCurrent().getSession().getId();
+        }
+        return null;
     }
 
     private void populateStaticFields() {
