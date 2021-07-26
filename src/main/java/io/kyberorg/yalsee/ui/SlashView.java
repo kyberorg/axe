@@ -14,7 +14,7 @@ import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.exception.IdentNotFoundException;
 import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.exception.PageNotFoundException;
-import io.kyberorg.yalsee.result.GetResult;
+import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.ui.err.AppDownView;
@@ -62,16 +62,17 @@ public class SlashView extends YalseeLayout implements HasErrorParameter<NotFoun
         if (isIdent(route)) {
             assert linkService != null;
             String ident = appUtils.dropRedirectPageBypassSymbolFrom(route);
-            GetResult searchResult = linkService.getLink(ident);
-            if (searchResult instanceof GetResult.Success) {
-                String link = ((GetResult.Success) searchResult).getLink();
+            OperationResult searchResult = linkService.getLinkWithIdent(ident);
+
+            if (searchResult.ok()) {
+                String link = searchResult.getStringPayload();
                 log.info("{} Got long URL. Redirecting to {}", TAG, link);
                 event.rerouteToError(NeedForRedirectException.class,
                         route + App.URL_SAFE_SEPARATOR + link);
-            } else if (searchResult instanceof GetResult.NotFound) {
+            } else if (searchResult.getResult().equals(OperationResult.ELEMENT_NOT_FOUND)) {
                 log.info("{} No corresponding longURL found. Replying with 404. {\"Ident\": {}}", TAG, route);
                 rerouteTo404(route, event, Target.IDENT_NOT_FOUND);
-            } else if (searchResult instanceof GetResult.DatabaseDown) {
+            } else if (searchResult.getResult().equals(OperationResult.SYSTEM_DOWN)) {
                 log.info("{} Database is DOWN. Replying with 503", TAG);
                 event.rerouteTo(AppDownView.class);
             } else {

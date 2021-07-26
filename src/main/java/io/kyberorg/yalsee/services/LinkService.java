@@ -7,7 +7,6 @@ import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
-import io.kyberorg.yalsee.result.GetResult;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.internal.LinkInfoService;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
@@ -47,27 +46,6 @@ public class LinkService {
     public LinkService(final LinkRepo repo, final LinkInfoService linkInfoService) {
         this.repo = repo;
         this.linkInfoService = linkInfoService;
-    }
-
-    /**
-     * Provides stored link by its ident.
-     *
-     * @param ident string with ident to search against
-     * @return search result
-     */
-    @Deprecated(since = "3.1", forRemoval = true)
-    public GetResult getLink(final String ident) {
-        Optional<Link> result;
-        try {
-            result = repo.findSingleByIdent(ident);
-        } catch (DataAccessResourceFailureException e) {
-            return new GetResult.DatabaseDown().withException(e);
-        } catch (Exception e) {
-            return new GetResult.Fail().withException(e);
-        }
-
-        return result.<GetResult>map(link -> new GetResult.Success(link.getLink()))
-                .orElseGet(GetResult.NotFound::new);
     }
 
     /**
