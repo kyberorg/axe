@@ -36,7 +36,7 @@
             <column name="description" type="text">
                 <constraints nullable="true"/>
             </column>
-            <column name="session" type="varchar(32)">
+            <column name="session" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
             <column name="created" type="timestamp"/>
