@@ -2,12 +2,14 @@ package io.kyberorg.yalsee.result;
 
 import com.google.gson.internal.Primitives;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Class that defines result of operation. Operation can be any action: validation, query from database and so on.
  *
  * @since 3.0.4
  */
+@ToString
 public class OperationResult {
     /**
      * Status, that indicates operation success.

@@ -306,7 +306,7 @@ public class HomeView extends HorizontalLayout {
 
     private void saveLink(final String link) {
         String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        OperationResult saveLinkOperation = linkService.createLink(link, sessionId);
+        OperationResult saveLinkOperation = linkService.createLink(null, link, sessionId);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
         } else {
