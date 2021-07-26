@@ -14,6 +14,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -304,7 +305,8 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void saveLink(final String link) {
-        OperationResult saveLinkOperation = linkService.createLink(link);
+        String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
+        OperationResult saveLinkOperation = linkService.createLink(link, sessionId);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
         } else {
