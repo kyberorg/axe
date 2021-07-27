@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services.internal;
 
+import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkInfoRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +78,12 @@ public class LinkInfoService {
     public void update(LinkInfo updatedLinkInfo) {
         updatedLinkInfo.setUpdated(Timestamp.from(Instant.now()));
         repo.save(updatedLinkInfo);
+    }
+
+    public Optional<LinkInfo> getLinkInfoByLink(Link link) {
+        if (link == null) return Optional.empty();
+        LinkInfo linkInfo = repo.findSingleByIdent(link.getIdent());
+        return Optional.ofNullable(linkInfo);
     }
 
     private boolean linkInfoExistsForIdent(final String ident) {

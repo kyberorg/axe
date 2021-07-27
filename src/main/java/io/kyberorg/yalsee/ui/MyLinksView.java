@@ -20,6 +20,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
+import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
@@ -43,25 +44,30 @@ public class MyLinksView extends YalseeLayout {
     private final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
 
     private final Span sessionBanner = new Span();
+    private final Span debugBanner = new Span();
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
     private Grid.Column<LinkInfo> descriptionColumn;
     private Grid.Column<LinkInfo> qrCodeColumn;
+    private Grid.Column<LinkInfo> sessionColumn;
 
 
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
     private final LinkService linkService;
+    private final AppUtils appUtils;
     private UI ui;
+    private String sessionId;
 
     /**
      * Creates {@link MyLinksView}.
      */
     public MyLinksView(final LinkInfoService linkInfoService, final QRCodeService qrCodeService,
-                       final LinkService linkService) {
+                       final LinkService linkService, AppUtils appUtils) {
         this.linkInfoService = linkInfoService;
         this.qrCodeService = qrCodeService;
         this.linkService = linkService;
+        this.appUtils = appUtils;
 
         setId(MyLinksView.class.getSimpleName());
         init();
@@ -70,12 +76,18 @@ public class MyLinksView extends YalseeLayout {
 
     private void init() {
         sessionBanner.setId(IDs.BANNER);
+        debugBanner.setId(IDs.DEBUG);
         grid.setId(IDs.GRID);
+
+        sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
 
         grid.removeAllColumns();
         linkColumn = grid.addColumn(LinkInfo::getIdent).setHeader("Link");
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
+        if (appUtils.isDevelopmentModeActivated()) {
+            sessionColumn = grid.addColumn(LinkInfo::getSession).setHeader("Session ID");
+        }
 
         // You can use any renderer for the item details. By default, the
         // details are opened and closed by clicking the rows.
@@ -121,14 +133,28 @@ public class MyLinksView extends YalseeLayout {
             grid.getEditor().save();
             grid.getEditor().cancel();
         }).setFilter("event.key === 'Enter'");
+
+        //Saving by clicking mouse
+        grid.getElement().addEventListener("click", event -> {
+            grid.getEditor().save();
+            grid.getEditor().cancel();
+        });
         //editor end
 
-        add(sessionBanner, grid);
+        add(sessionBanner);
+        if (appUtils.isDevelopmentModeActivated()) {
+            add(debugBanner);
+        }
+        add(grid);
     }
 
     private void applyLoadState() {
         sessionBanner.setText("Those are links stored in current session. " +
                 "Soon you will be able to store them permanently, once we introduce users");
+
+        if (appUtils.isDevelopmentModeActivated()) {
+            debugBanner.setText("Session ID: " + sessionId);
+        }
     }
 
     @Override
@@ -155,7 +181,10 @@ public class MyLinksView extends YalseeLayout {
     @Subscribe
     public void onLinkSavedEvent(final LinkSavedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkSavedEvent.class.getSimpleName(), event);
-        updateGrid();
+        //act only if link saved within our session
+        if (getSessionIdFromLink(event.getLink()).equals(sessionId)) {
+            updateGrid();
+        }
     }
 
     /**
@@ -166,11 +195,15 @@ public class MyLinksView extends YalseeLayout {
     @Subscribe
     public void onLinkDeletedEvent(final LinkDeletedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);
-        updateGrid();
+        //act only if link deleted was saved within our session
+        if (getSessionIdFromLink(event.getLink()).equals(sessionId)) {
+            updateGrid();
+        }
     }
 
     private void updateGrid() {
-        grid.setItems(linkInfoService.getAllRecordWithSession(AppUtils.getSessionId(VaadinSession.getCurrent())));
+        log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
+        grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
     }
 
     private Image qrImage(LinkInfo linkInfo) {
@@ -232,9 +265,19 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
+    private String getSessionIdFromLink(Link linkFromEvent) {
+        Optional<LinkInfo> linkInfo = linkInfoService.getLinkInfoByLink(linkFromEvent);
+        if (linkInfo.isPresent()) {
+            return linkInfo.get().getSession();
+        } else {
+            return "";
+        }
+    }
+
     public static class IDs {
         public static final String BANNER = "banner";
         public static final String GRID = "grid";
+        public static final String DEBUG = "debugSpan";
     }
 
 }
