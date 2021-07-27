@@ -4,10 +4,16 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.editor.Editor;
+import com.vaadin.flow.component.grid.editor.EditorSaveEvent;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -30,7 +36,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.WeakHashMap;
 
 @Slf4j
 @SpringComponent
@@ -42,6 +51,10 @@ public class MyLinksView extends YalseeLayout {
 
     private final Span sessionBanner = new Span();
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
+    private Grid.Column<LinkInfo> linkColumn;
+    private Grid.Column<LinkInfo> descriptionColumn;
+    private Grid.Column<LinkInfo> qrCodeColumn;
+
 
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
@@ -66,15 +79,13 @@ public class MyLinksView extends YalseeLayout {
         sessionBanner.setId(IDs.BANNER);
         grid.setId(IDs.GRID);
 
-        //grid.setSingleCellEdit(true);
-
         grid.removeAllColumns();
-        grid.addColumn(LinkInfo::getIdent).setHeader("Link");
+        linkColumn = grid.addColumn(LinkInfo::getIdent).setHeader("Link");
         //FIXME implement me: link update
-        grid.addColumn(LinkInfo::getDescription).setHeader("Description");
+        descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         //grid.addEditColumn(LinkInfo::getDescription).text(this::updateLinkInfo)
         //        .setHeader("Description");
-        grid.addComponentColumn(this::qrImage).setHeader("QR Code");
+       qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
 
         // You can use any renderer for the item details. By default, the
         // details are opened and closed by clicking the rows.
@@ -89,6 +100,53 @@ public class MyLinksView extends YalseeLayout {
                 .withProperty("updated", linkInfo -> linkInfo.getUpdated().toString())
                 // This is now how we open the details
                 .withEventHandler("handleClick", person -> grid.getDataProvider().refreshItem(person)));
+
+        //binder and editor
+        Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
+        Editor<LinkInfo> editor = grid.getEditor();
+        editor.setBuffered(false);
+        editor.setBinder(binder);
+
+
+        Div validationStatus = new Div();
+        validationStatus.setId("validation");
+
+        TextField editDescriptionField = new TextField();
+        binder.forField(editDescriptionField).bind("description");
+        descriptionColumn.setEditorComponent(editDescriptionField);
+
+        Collection<Button> editButtons = Collections.newSetFromMap(new WeakHashMap<>());
+        Grid.Column<LinkInfo> editorColumn = grid.addComponentColumn(linkInfo -> {
+            Button edit = new Button("Edit");
+            edit.addClassName("edit");
+            edit.addClickListener(e -> {
+                editor.editItem(linkInfo);
+                editDescriptionField.focus();
+            });
+            edit.setEnabled(!editor.isOpen());
+            editButtons.add(edit);
+            return edit;
+        });
+
+        editor.addOpenListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
+        editor.addCloseListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
+
+        Button save = new Button("Save", e -> editor.save());
+        save.addClassName("save");
+
+        Button cancel = new Button("Cancel", e -> editor.cancel());
+        cancel.addClassName("cancel");
+
+        // Add a keypress listener that listens for an escape key up event.
+        // Note! some browsers return key as Escape and some as Esc
+        grid.getElement().addEventListener("keyup", event -> editor.cancel())
+                .setFilter("event.key === 'Escape' || event.key === 'Esc'");
+
+        Div buttons = new Div(save, cancel);
+        editorColumn.setEditorComponent(buttons);
+
+        editor.addSaveListener(this::onLinkInfoSaved);
+        //editor end
 
         add(sessionBanner, grid);
     }
@@ -133,6 +191,11 @@ public class MyLinksView extends YalseeLayout {
     @Subscribe
     public void onLinkDeletedEvent(final LinkDeletedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);
+        updateGrid();
+    }
+
+    private void onLinkInfoSaved(EditorSaveEvent<LinkInfo> editorSaveEvent) {
+        linkInfoService.update(editorSaveEvent.getItem());
         updateGrid();
     }
 
@@ -197,11 +260,6 @@ public class MyLinksView extends YalseeLayout {
         } else {
             return "";
         }
-    }
-
-    private void updateLinkInfo(LinkInfo linkInfoItem, String newValue) {
-        linkInfoItem.setDescription(newValue);
-        linkInfoService.update(linkInfoItem);
     }
 
     public static class IDs {
