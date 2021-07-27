@@ -231,6 +231,22 @@ public class AppUtils {
     }
 
     /**
+     * Provides host of short url used for links. Runtime value.
+     *
+     * @return string with short domain, if found or Server Url from {@link #getServerUrl()}
+     */
+    public String getShortDomain() {
+        String shortDomain = env.getProperty(App.Properties.SHORT_DOMAIN, DUMMY_HOST);
+        if (shortDomain.equals(DUMMY_HOST)) {
+            //no short URL - use server domain
+            log.debug("No Short Domain defined - using Server Domain");
+            return getServerUrl().replace("https://", "").replace("http://", "");
+        } else {
+            return shortDomain;
+        }
+    }
+
+    /**
      * Provides token for telegram.
      *
      * @return token from env if found or {@link #DUMMY_TOKEN}.

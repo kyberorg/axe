@@ -33,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -82,7 +84,12 @@ public class MyLinksView extends YalseeLayout {
         sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
 
         grid.removeAllColumns();
-        linkColumn = grid.addColumn(LinkInfo::getIdent).setHeader("Link");
+
+        linkColumn = grid.addColumn(TemplateRenderer.<LinkInfo>of("[[item.shortDomain]]/[[item.ident]]")
+                .withProperty("shortDomain", this::getShortDomain)
+                .withProperty("ident", LinkInfo::getIdent))
+                .setHeader("Link");
+
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
         if (appUtils.isDevelopmentModeActivated()) {
@@ -93,13 +100,14 @@ public class MyLinksView extends YalseeLayout {
         // details are opened and closed by clicking the rows.
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
                 "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
-                        + "<div><b>[[item.longLink]]</b><br>" +
+                        + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
                         "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
                         "</div>"
                         + "</div>")
+                .withProperty("href", this::getHrefLink)
                 .withProperty("longLink", this::getLongLink)
-                .withProperty("created", linkInfo -> linkInfo.getCreated().toString())
-                .withProperty("updated", linkInfo -> linkInfo.getUpdated().toString())
+                .withProperty("created", this::getCreatedTime)
+                .withProperty("updated", this::getUpdatedTime)
                 // This is now how we open the details
                 .withEventHandler("handleClick", person -> grid.getDataProvider().refreshItem(person)));
 
@@ -256,6 +264,14 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
+    private String getShortDomain(LinkInfo linkInfo) {
+        return appUtils.getShortDomain();
+    }
+
+    private String getHrefLink(LinkInfo linkInfo) {
+        return appUtils.getShortUrl() + "/" + linkInfo.getIdent();
+    }
+
     private String getLongLink(LinkInfo linkInfo) {
         OperationResult result = linkService.getLinkWithIdent(linkInfo.getIdent());
         if (result.ok()) {
@@ -263,6 +279,19 @@ public class MyLinksView extends YalseeLayout {
         } else {
             return "";
         }
+    }
+
+    private String getCreatedTime(LinkInfo linkInfo) {
+        return getTime(linkInfo.getCreated());
+    }
+
+    private String getUpdatedTime(LinkInfo linkInfo) {
+        return getTime(linkInfo.getUpdated());
+    }
+
+    private String getTime(Timestamp ts) {
+        Date date = new Date(ts.getTime());
+        return date.toString();
     }
 
     private String getSessionIdFromLink(Link linkFromEvent) {
