@@ -13,7 +13,7 @@ public class EditableLink extends AbstractSinglePropertyField<TextField, String>
     @Getter private final TextField editIdentField;
 
     public EditableLink(final String shortDomain) {
-        super("", "", false);
+        super("value", "", false);
         this.shortDomainPart = new Text(shortDomain + "/");
         this.editIdentField = new TextField();
 
