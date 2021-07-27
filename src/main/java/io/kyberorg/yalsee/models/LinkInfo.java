@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.models;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
  * @since 3.2
  */
 @Data
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "link_info")
 public class LinkInfo {

@@ -74,11 +74,8 @@ public class MyLinksView extends YalseeLayout {
 
         grid.removeAllColumns();
         linkColumn = grid.addColumn(LinkInfo::getIdent).setHeader("Link");
-        //FIXME implement me: link update
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
-        //grid.addEditColumn(LinkInfo::getDescription).text(this::updateLinkInfo)
-        //        .setHeader("Description");
-       qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
+        qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
 
         // You can use any renderer for the item details. By default, the
         // details are opened and closed by clicking the rows.
@@ -119,6 +116,11 @@ public class MyLinksView extends YalseeLayout {
                 updateGrid();
             }
         });
+        //Saving by click Enter
+        grid.getElement().addEventListener("keydown", event -> {
+            grid.getEditor().save();
+            grid.getEditor().cancel();
+        }).setFilter("event.key === 'Enter'");
         //editor end
 
         add(sessionBanner, grid);
