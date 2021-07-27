@@ -7,6 +7,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.ui.core.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
 @SpringComponent
@@ -22,5 +23,7 @@ public class DebugView extends YalseeLayout {
         setId(DebugView.class.getSimpleName());
         add(new H2("Debug Page"));
         add(new Text("Ready to debug something..."));
+
+        add(new EditableLink("yls.ee"));
     }
 }
