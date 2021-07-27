@@ -26,6 +26,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.internal.LinkInfoService;
+import io.kyberorg.yalsee.ui.core.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
@@ -115,15 +116,15 @@ public class MyLinksView extends YalseeLayout {
         Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
 
-        TextField editIdentField = new TextField();
+        EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
         // Close the editor in case of backward between components
-        editIdentField.getElement()
+        editableLink.getElement()
                 .addEventListener("keydown",
                         event -> grid.getEditor().cancel())
                 .setFilter("event.key === 'Tab' && event.shiftKey");
 
-        binder.forField(editIdentField).bind("ident");
-        descriptionColumn.setEditorComponent(editIdentField);
+        binder.forField(editableLink).bind("ident");
+
 
         TextField editDescriptionField = new TextField();
         // Close the editor in case of backward between components
@@ -135,7 +136,10 @@ public class MyLinksView extends YalseeLayout {
         binder.forField(editDescriptionField).bind("description");
         descriptionColumn.setEditorComponent(editDescriptionField);
 
-        grid.addItemDoubleClickListener(event -> grid.getEditor().editItem(event.getItem()));
+        grid.addItemDoubleClickListener(event -> {
+            grid.getEditor().editItem(event.getItem());
+            editDescriptionField.focus();
+        });
 
         grid.getEditor().addCloseListener(event -> {
             if (binder.getBean() != null) {
