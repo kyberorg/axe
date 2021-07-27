@@ -115,6 +115,15 @@ public class MyLinksView extends YalseeLayout {
         Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
 
+        TextField editLinkField = new TextField();
+        // Close the editor in case of backward between components
+        editLinkField.getElement()
+                .addEventListener("keydown",
+                        event -> grid.getEditor().cancel())
+                .setFilter("event.key === 'Tab' && event.shiftKey");
+        binder.forField(editLinkField).bind("ident");
+        linkColumn.setEditorComponent(editLinkField);
+
         TextField editDescriptionField = new TextField();
         // Close the editor in case of backward between components
         editDescriptionField.getElement()
