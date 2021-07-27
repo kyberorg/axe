@@ -138,7 +138,6 @@ public class MyLinksView extends YalseeLayout {
 
         grid.addItemDoubleClickListener(event -> {
             grid.getEditor().editItem(event.getItem());
-            editDescriptionField.focus();
         });
 
         grid.getEditor().addCloseListener(event -> {

@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.ui.core;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.Text;
@@ -9,7 +10,7 @@ import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 
 @Tag("editable-link")
-public class EditableLink implements HasValue<EditableLink, String>, HasValue.ValueChangeEvent<String> {
+public class EditableLink extends Component implements HasValue<EditableLink, String>, HasValue.ValueChangeEvent<String> {
     @Getter private final Text shortDomainPart;
     @Getter private final TextField editIdentField;
 
