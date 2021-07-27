@@ -152,8 +152,8 @@ public class MyLinksView extends YalseeLayout {
 
         //Saving by clicking mouse
         grid.getElement().addEventListener("click", event -> {
-            grid.getEditor().save();
-            grid.getEditor().cancel();
+            //TODO remove after debug
+            log.info(String.valueOf(event.getSource().toString()));
         });
         //editor end
 
