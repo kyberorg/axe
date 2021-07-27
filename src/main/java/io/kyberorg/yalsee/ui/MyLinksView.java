@@ -115,14 +115,15 @@ public class MyLinksView extends YalseeLayout {
         Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
 
-        TextField editLinkField = new TextField();
+        TextField editIdentField = new TextField();
         // Close the editor in case of backward between components
-        editLinkField.getElement()
+        editIdentField.getElement()
                 .addEventListener("keydown",
                         event -> grid.getEditor().cancel())
                 .setFilter("event.key === 'Tab' && event.shiftKey");
-        binder.forField(editLinkField).bind("ident");
-        linkColumn.setEditorComponent(editLinkField);
+
+        binder.forField(editIdentField).bind("ident");
+        descriptionColumn.setEditorComponent(editIdentField);
 
         TextField editDescriptionField = new TextField();
         // Close the editor in case of backward between components
@@ -134,10 +135,7 @@ public class MyLinksView extends YalseeLayout {
         binder.forField(editDescriptionField).bind("description");
         descriptionColumn.setEditorComponent(editDescriptionField);
 
-        grid.addItemDoubleClickListener(event -> {
-            grid.getEditor().editItem(event.getItem());
-            editDescriptionField.focus();
-        });
+        grid.addItemDoubleClickListener(event -> grid.getEditor().editItem(event.getItem()));
 
         grid.getEditor().addCloseListener(event -> {
             if (binder.getBean() != null) {
