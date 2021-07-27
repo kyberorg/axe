@@ -151,10 +151,7 @@ public class MyLinksView extends YalseeLayout {
         }).setFilter("event.key === 'Enter'");
 
         //Saving by clicking mouse
-        grid.getElement().addEventListener("click", event -> {
-            //TODO remove after debug
-            log.info(String.valueOf(event.getSource().toString()));
-        });
+
         //editor end
 
         add(sessionBanner);
