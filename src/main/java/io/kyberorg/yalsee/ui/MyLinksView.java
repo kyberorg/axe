@@ -4,13 +4,17 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.EditorCloseEvent;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -49,11 +53,13 @@ public class MyLinksView extends YalseeLayout {
     private final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
 
     private final Span sessionBanner = new Span();
+    private final Span lonelyBanner = new Span();
     private final Span debugBanner = new Span();
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
     private Grid.Column<LinkInfo> descriptionColumn;
     private Grid.Column<LinkInfo> qrCodeColumn;
+    private Grid.Column<LinkInfo> deleteColumn;
     private Grid.Column<LinkInfo> sessionColumn;
 
     private Binder<LinkInfo> binder;
@@ -99,6 +105,7 @@ public class MyLinksView extends YalseeLayout {
 
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
+        deleteColumn = grid.addComponentColumn(this::createDeleteButton).setHeader("Actions");
         if (appUtils.isDevelopmentModeActivated()) {
             sessionColumn = grid.addColumn(LinkInfo::getSession).setHeader("Session ID");
         }
@@ -192,9 +199,14 @@ public class MyLinksView extends YalseeLayout {
         sessionBanner.setText("Those are links stored in current session. " +
                 "Soon you will be able to store them permanently, once we introduce users");
 
-        if (appUtils.isDevelopmentModeActivated()) {
-            debugBanner.setText("Session ID: " + sessionId);
+        lonelyBanner.setText("It looks lonely here. What about saving something at " + new Anchor("/"));
+
+        if (isGridEmpty()) {
+            lonelyBanner.setVisible(false);
         }
+
+        debugBanner.setText("Session ID: " + sessionId);
+        debugBanner.setVisible(appUtils.isDevelopmentModeActivated());
     }
 
     @Override
@@ -203,7 +215,7 @@ public class MyLinksView extends YalseeLayout {
         ui = attachEvent.getUI();
         EventBus.getDefault().register(this);
 
-        updateGrid();
+        updateData();
     }
 
     @Override
@@ -249,14 +261,31 @@ public class MyLinksView extends YalseeLayout {
     private void onLinkEvent(final Link link) {
         //act only if link deleted was saved within our session
         if (getSessionIdFromLink(link).equals(sessionId)) {
-            updateGrid();
+            updateData();
         }
     }
 
-    private void updateGrid() {
+    private void updateData() {
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
-            ui.access(() -> grid.setItems(linkInfoService.getAllRecordWithSession(sessionId)));
+            ui.access(() -> {
+                grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
+                lonelyBanner.setVisible(!isGridEmpty());
+            });
+        }
+    }
+
+    private Button createDeleteButton(LinkInfo item) {
+        Button deleteButton = new Button("Delete", clickEvent -> onDeleteButtonClick(item));
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        return deleteButton;
+    }
+
+    private void onDeleteButtonClick(LinkInfo item) {
+        if (item != null) {
+            deleteLinkAndLinkInfo(item);
+        } else {
+            ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
         }
     }
 
@@ -311,8 +340,27 @@ public class MyLinksView extends YalseeLayout {
         } else {
             ErrorUtils.getErrorNotification("Not saved. Internal error: ID mismatch").open();
         }
+        updateData();
+    }
 
-        updateGrid();
+    private void deleteLinkAndLinkInfo(LinkInfo linkInfo) {
+        if (linkInfo == null) return;
+        OperationResult deleteLinkResult = linkService.deleteLinkWithIdent(linkInfo.getIdent());
+        //no reason to remove LinkInfo manually as linkService.deleteLinkWithIdent going this.
+        //also no reason to updateData on success as it will be updated by LinkDeletedEvent
+        if (deleteLinkResult.ok()) return;
+        switch (deleteLinkResult.getResult()) {
+            case OperationResult.ELEMENT_NOT_FOUND:
+                ErrorUtils.getErrorNotification("Deletion failed: no such link found").open();
+                break;
+            case OperationResult.SYSTEM_DOWN:
+                ErrorUtils.getErrorNotification("System is partly inaccessible. Try again later").open();
+                break;
+            case OperationResult.GENERAL_FAIL:
+            default:
+                ErrorUtils.getErrorNotification("Something wrong at server-side. Try again later").open();
+                break;
+        }
     }
 
     private Image qrImage(LinkInfo linkInfo) {
@@ -402,6 +450,10 @@ public class MyLinksView extends YalseeLayout {
         } else {
             return "";
         }
+    }
+
+    private boolean isGridEmpty() {
+        return grid.getDataProvider().size(new Query<>()) == 0;
     }
 
     public static class IDs {
