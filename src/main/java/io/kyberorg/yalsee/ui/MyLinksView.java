@@ -123,7 +123,7 @@ public class MyLinksView extends YalseeLayout {
                 .withProperty("created", this::getCreatedTime)
                 .withProperty("updated", this::getUpdatedTime)
                 // This is now how we open the details
-                .withEventHandler("handleClick", person -> grid.getDataProvider().refreshItem(person)));
+                .withEventHandler("handleClick", item -> grid.getDataProvider().refreshItem(item)));
 
         //binder and editor
         initGridEditor();
@@ -270,6 +270,7 @@ public class MyLinksView extends YalseeLayout {
         if (ui != null) {
             ui.access(() -> {
                 grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
+                grid.getDataProvider().refreshAll();
                 lonelyBanner.setVisible(!isGridEmpty());
             });
         }
