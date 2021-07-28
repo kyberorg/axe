@@ -56,6 +56,7 @@ public class MyLinksView extends YalseeLayout {
     private Grid.Column<LinkInfo> qrCodeColumn;
     private Grid.Column<LinkInfo> sessionColumn;
 
+    private Binder<LinkInfo> binder;
 
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
@@ -125,7 +126,7 @@ public class MyLinksView extends YalseeLayout {
         //User-mode activation
         grid.getElement().addEventListener("keydown", event -> {
             userModeActivated = true;
-            initGridEditor();
+            updateGridEditor();
         }).setFilter("event.key === 'R' && event.shiftKey");
 
         add(sessionBanner);
@@ -136,7 +137,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void initGridEditor() {
-        Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
+        binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
 
         if (userModeActivated) {
@@ -163,13 +164,28 @@ public class MyLinksView extends YalseeLayout {
         descriptionColumn.setEditorComponent(editDescriptionField);
 
         grid.addItemDoubleClickListener(event -> grid.getEditor().editItem(event.getItem()));
-        
+
         grid.getEditor().addCloseListener(this::updateLinkInfo);
         //Saving by click Enter
         grid.getElement().addEventListener("keydown", event -> {
             grid.getEditor().save();
             grid.getEditor().cancel();
         }).setFilter("event.key === 'Enter'");
+    }
+
+    private void updateGridEditor() {
+        if (userModeActivated) {
+            EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
+            // Close the editor in case of backward between components
+            editableLink.getElement()
+                    .addEventListener("keydown",
+                            event -> grid.getEditor().cancel())
+                    .setFilter("event.key === 'Tab' && event.shiftKey");
+
+            binder.forField(editableLink).bind("ident");
+
+            linkColumn.setEditorComponent(editableLink);
+        }
     }
 
     private void applyLoadState() {
@@ -255,7 +271,7 @@ public class MyLinksView extends YalseeLayout {
             } else {
                 //TODO replace with real-user check once users are there
                 if (userModeActivated) {
-                    OperationResult getLinkResult = linkService.getLinkByIdent(linkInfo.getIdent());
+                    OperationResult getLinkResult = linkService.getLinkByIdent(oldLinkInfo.get().getIdent());
                     if (getLinkResult.ok()) {
                         Link link = getLinkResult.getPayload(Link.class);
                         link.setIdent(linkInfo.getIdent());
