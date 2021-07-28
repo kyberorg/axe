@@ -118,6 +118,24 @@ public class MyLinksView extends YalseeLayout {
                 .withEventHandler("handleClick", person -> grid.getDataProvider().refreshItem(person)));
 
         //binder and editor
+        initGridEditor();
+
+        //editor end
+
+        //User-mode activation
+        grid.getElement().addEventListener("keydown", event -> {
+            userModeActivated = true;
+            initGridEditor();
+        }).setFilter("event.key === 'R' && event.shiftKey");
+
+        add(sessionBanner);
+        if (appUtils.isDevelopmentModeActivated()) {
+            add(debugBanner);
+        }
+        add(grid);
+    }
+
+    private void initGridEditor() {
         Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
 
@@ -158,18 +176,6 @@ public class MyLinksView extends YalseeLayout {
             grid.getEditor().save();
             grid.getEditor().cancel();
         }).setFilter("event.key === 'Enter'");
-
-        //editor end
-
-        //User-mode activation
-        grid.getElement().addEventListener("keydown", event -> userModeActivated = true)
-                .setFilter("event.key === 'R' && event.shiftKey");
-
-        add(sessionBanner);
-        if (appUtils.isDevelopmentModeActivated()) {
-            add(debugBanner);
-        }
-        add(grid);
     }
 
     private void applyLoadState() {
