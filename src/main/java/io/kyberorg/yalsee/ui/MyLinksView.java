@@ -279,19 +279,19 @@ public class MyLinksView extends YalseeLayout {
                         if (linkUpdateResult.ok()) {
                             linkInfoService.update(linkInfo);
                         } else {
-                            ErrorUtils.getErrorNotification(linkUpdateResult.getMessage());
+                            ErrorUtils.getErrorNotification(linkUpdateResult.getMessage()).open();
                         }
                     } else {
-                        ErrorUtils.getErrorNotification("Failed to update back-part");
+                        ErrorUtils.getErrorNotification("Failed to update back-part").open();
                         return;
                     }
                 } else {
                     ErrorUtils.getErrorNotification("Back-part updates are allowed only for users. " +
-                            "Become user once we introduce them");
+                            "Become user once we introduce them").open();
                 }
             }
         } else {
-            ErrorUtils.getErrorNotification("Not saved. Internal error: ID mismatch");
+            ErrorUtils.getErrorNotification("Not saved. Internal error: ID mismatch").open();
         }
 
         updateGrid();
