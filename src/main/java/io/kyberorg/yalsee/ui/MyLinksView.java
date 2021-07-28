@@ -6,6 +6,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.editor.EditorCloseEvent;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,6 +21,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
+import io.kyberorg.yalsee.events.LinkUpdatedEvent;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -59,8 +61,10 @@ public class MyLinksView extends YalseeLayout {
     private final QRCodeService qrCodeService;
     private final LinkService linkService;
     private final AppUtils appUtils;
+
     private UI ui;
     private String sessionId;
+    private boolean userModeActivated;
 
     /**
      * Creates {@link MyLinksView}.
@@ -83,12 +87,13 @@ public class MyLinksView extends YalseeLayout {
         grid.setId(IDs.GRID);
 
         sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
+        userModeActivated = false;
 
         grid.removeAllColumns();
 
         linkColumn = grid.addColumn(TemplateRenderer.<LinkInfo>of("[[item.shortDomain]]/[[item.ident]]")
-                .withProperty("shortDomain", this::getShortDomain)
-                .withProperty("ident", LinkInfo::getIdent))
+                        .withProperty("shortDomain", this::getShortDomain)
+                        .withProperty("ident", LinkInfo::getIdent))
                 .setHeader("Link");
 
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
@@ -100,11 +105,11 @@ public class MyLinksView extends YalseeLayout {
         // You can use any renderer for the item details. By default, the
         // details are opened and closed by clicking the rows.
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
-                "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
-                        + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
-                        "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
-                        "</div>"
-                        + "</div>")
+                        "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                                + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
+                                "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
+                                "</div>"
+                                + "</div>")
                 .withProperty("href", this::getHrefLink)
                 .withProperty("longLink", this::getLongLink)
                 .withProperty("created", this::getCreatedTime)
@@ -124,7 +129,9 @@ public class MyLinksView extends YalseeLayout {
                 .setFilter("event.key === 'Tab' && event.shiftKey");
 
         binder.forField(editableLink).bind("ident");
-        linkColumn.setEditorComponent(editableLink);
+        if (userModeActivated) {
+            linkColumn.setEditorComponent(editableLink);
+        }
 
         TextField editDescriptionField = new TextField();
         // Close the editor in case of backward between components
@@ -144,15 +151,19 @@ public class MyLinksView extends YalseeLayout {
                 updateGrid();
             }
         });
+
+        grid.getEditor().addCloseListener(this::updateLinkInfo);
         //Saving by click Enter
         grid.getElement().addEventListener("keydown", event -> {
             grid.getEditor().save();
             grid.getEditor().cancel();
         }).setFilter("event.key === 'Enter'");
 
-        //Saving by clicking mouse
-
         //editor end
+
+        //User-mode activation
+        grid.getElement().addEventListener("keydown", event -> userModeActivated = true)
+                .setFilter("event.key === 'R' && event.shiftKey");
 
         add(sessionBanner);
         if (appUtils.isDevelopmentModeActivated()) {
@@ -194,10 +205,7 @@ public class MyLinksView extends YalseeLayout {
     @Subscribe
     public void onLinkSavedEvent(final LinkSavedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkSavedEvent.class.getSimpleName(), event);
-        //act only if link saved within our session
-        if (getSessionIdFromLink(event.getLink()).equals(sessionId)) {
-            updateGrid();
-        }
+        onLinkEvent(event.getLink());
     }
 
     /**
@@ -208,15 +216,69 @@ public class MyLinksView extends YalseeLayout {
     @Subscribe
     public void onLinkDeletedEvent(final LinkDeletedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);
+        onLinkEvent(event.getLink());
+    }
+
+    /**
+     * Triggers actions when {@link LinkUpdatedEvent} received.
+     *
+     * @param event event object with modified data inside
+     */
+    @Subscribe
+    public void onLinkUpdatedEvent(final LinkUpdatedEvent event) {
+        log.trace("{} {} received: {}", TAG, LinkUpdatedEvent.class.getSimpleName(), event);
+        onLinkEvent(event.getLink());
+    }
+
+    private void onLinkEvent(final Link link) {
         //act only if link deleted was saved within our session
-        if (getSessionIdFromLink(event.getLink()).equals(sessionId)) {
+        if (getSessionIdFromLink(link).equals(sessionId)) {
             updateGrid();
         }
     }
 
     private void updateGrid() {
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
-        grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
+        if (ui != null) {
+            ui.access(() -> grid.setItems(linkInfoService.getAllRecordWithSession(sessionId)));
+        }
+    }
+
+    private void updateLinkInfo(EditorCloseEvent<LinkInfo> event) {
+        LinkInfo linkInfo = event.getItem();
+        if (linkInfo == null) return;
+        Optional<LinkInfo> oldLinkInfo = linkInfoService.getLinkInfoById(linkInfo.getId());
+        if (oldLinkInfo.isPresent()) {
+            boolean identNotUpdated = linkInfo.getIdent().equals(oldLinkInfo.get().getIdent());
+            if (identNotUpdated) {
+                linkInfoService.update(linkInfo);
+            } else {
+                //TODO replace with real-user check once users are there
+                if (userModeActivated) {
+                    OperationResult getLinkResult = linkService.getLinkByIdent(linkInfo.getIdent());
+                    if (getLinkResult.ok()) {
+                        Link link = getLinkResult.getPayload(Link.class);
+                        link.setIdent(linkInfo.getIdent());
+                        OperationResult linkUpdateResult = linkService.updateLink(link);
+                        if (linkUpdateResult.ok()) {
+                            linkInfoService.update(linkInfo);
+                        } else {
+                            ErrorUtils.getErrorNotification(linkUpdateResult.getMessage());
+                        }
+                    } else {
+                        ErrorUtils.getErrorNotification("Failed to update back-part");
+                        return;
+                    }
+                } else {
+                    ErrorUtils.getErrorNotification("Back-part updates are allowed only for users. " +
+                            "Become user once we introduce them");
+                }
+            }
+        } else {
+            ErrorUtils.getErrorNotification("Not saved. Internal error: ID mismatch");
+        }
+
+        updateGrid();
     }
 
     private Image qrImage(LinkInfo linkInfo) {
