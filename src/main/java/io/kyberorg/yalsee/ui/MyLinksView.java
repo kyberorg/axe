@@ -279,7 +279,25 @@ public class MyLinksView extends YalseeLayout {
                         if (linkUpdateResult.ok()) {
                             linkInfoService.update(linkInfo);
                         } else {
-                            ErrorUtils.getErrorNotification(linkUpdateResult.getMessage()).open();
+                            if (linkUpdateResult.getMessage() == null) {
+                                String errorMessage;
+                                switch (linkUpdateResult.getResult()) {
+                                    case OperationResult.CONFLICT:
+                                        errorMessage = "We already have link with given ident. Please try another one";
+                                        break;
+                                    case OperationResult.SYSTEM_DOWN:
+                                        errorMessage = "Failed to update data. System is partly inaccessible. " +
+                                                "Try again later";
+                                        break;
+                                    case OperationResult.GENERAL_FAIL:
+                                    default:
+                                        errorMessage = "Something unexpected happened at server-side. Try again later.";
+                                        break;
+                                }
+                                ErrorUtils.getErrorNotification(errorMessage).open();
+                            } else {
+                                ErrorUtils.getErrorNotification(linkUpdateResult.getMessage()).open();
+                            }
                         }
                     } else {
                         ErrorUtils.getErrorNotification("Failed to update back-part").open();
