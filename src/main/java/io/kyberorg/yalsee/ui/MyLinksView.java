@@ -345,9 +345,14 @@ public class MyLinksView extends YalseeLayout {
 
     private void deleteLinkAndLinkInfo(LinkInfo linkInfo) {
         if (linkInfo == null) return;
+        if (!linkInfo.getSession().equals(this.sessionId)) {
+            ErrorUtils.getErrorNotification("Failed to delete link: link from wrong session").open();
+            return;
+        }
+
         OperationResult deleteLinkResult = linkService.deleteLinkWithIdent(linkInfo.getIdent());
         //no reason to remove LinkInfo manually as linkService.deleteLinkWithIdent going this.
-        //also no reason to updateData on success as it will be updated by LinkDeletedEvent
+        //also, no reason to updateData on success as it will be updated by LinkDeletedEvent
         if (deleteLinkResult.ok()) return;
         switch (deleteLinkResult.getResult()) {
             case OperationResult.ELEMENT_NOT_FOUND:
