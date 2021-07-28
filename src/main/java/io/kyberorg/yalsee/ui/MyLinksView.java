@@ -244,7 +244,8 @@ public class MyLinksView extends YalseeLayout {
     @Subscribe
     public void onLinkDeletedEvent(final LinkDeletedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);
-        onLinkEvent(event.getLink());
+        //no session control possible since link and its info are gone.
+        updateData();
     }
 
     /**
