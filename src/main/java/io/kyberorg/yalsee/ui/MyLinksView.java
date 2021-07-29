@@ -81,6 +81,7 @@ public class MyLinksView extends YalseeLayout {
         this.appUtils = appUtils;
 
         setId(MyLinksView.class.getSimpleName());
+
         init();
         setIds();
         applyLoadState();
@@ -176,7 +177,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void applyLoadState() {
-        noRecordsBanner.setVisible(gridHasElements());
+        noRecordsBanner.setVisible(!gridHasElements());
     }
 
     @Override
@@ -444,5 +445,4 @@ public class MyLinksView extends YalseeLayout {
         public static final String DELETE_COLUMN_CLASS = "deleteCol";
         public static final String ITEM_DETAILS_CLASS = "item-details";
     }
-
 }
