@@ -142,8 +142,9 @@ public class CorrectInputTest extends SelenideTest {
         MY_LINKS_NOTE_LINK.shouldHave(text("My Links"));
         String myLinksNoteLinkHref = MY_LINKS_NOTE_LINK.getAttribute("href");
         String myLinksPagePath = Endpoint.UI.MY_LINKS_PAGE;
-        assertEquals(myLinksPagePath, myLinksNoteLinkHref, "link in 'href' should lead to MyLinks page");
-        
+        assert myLinksNoteLinkHref != null;
+        assertTrue(myLinksNoteLinkHref.endsWith(myLinksPagePath), "link in 'href' should lead to MyLinks page");
+
         LONG_URL_INPUT.shouldBe(empty);
 
         ERROR_MODAL.shouldNot(exist);
