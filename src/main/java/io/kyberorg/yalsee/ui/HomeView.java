@@ -234,8 +234,12 @@ public class HomeView extends HorizontalLayout {
 
         myLinksNoteText.add(myLinksNoteStart, myLinksNoteLink, myLinkNoteEnd);
         myLinksNoteArea.add(myLinksNoteText);
+
         myLinksNoteArea.addClassNames("my-links-note-area", "border", "joint-area");
+        myLinksNoteArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        myLinksNoteArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         myLinksNoteArea.setWidthFull();
+        
         return myLinksNoteArea;
     }
 
