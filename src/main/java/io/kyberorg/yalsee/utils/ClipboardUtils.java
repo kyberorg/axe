@@ -23,20 +23,15 @@ public final class ClipboardUtils {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    /**
-     * Copies link to Clipboard and shows notification.
-     *
-     * @param link string with link to copy
-     */
-    public static void copyLinkToClipboard(final String textToCopy) {
+    public static void copyLinkToClipboard(final String textToCopy, Notification.Position notificationPosition) {
         copyToClipboard(textToCopy);
-        getLinkCopiedNotification().open();
+        getLinkCopiedNotification(notificationPosition).open();
     }
 
-    private static Notification getLinkCopiedNotification() {
+    private static Notification getLinkCopiedNotification(Notification.Position notificationPosition) {
         final int notificationDuration = 3000;
         Notification notification =
-                new Notification("Short link copied", notificationDuration, Notification.Position.MIDDLE);
+                new Notification("Short link copied", notificationDuration, notificationPosition);
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         return notification;
     }

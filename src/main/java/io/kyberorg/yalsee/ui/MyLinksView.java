@@ -12,6 +12,7 @@ import com.vaadin.flow.component.grid.editor.EditorCloseEvent;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
@@ -351,15 +352,15 @@ public class MyLinksView extends YalseeLayout {
         String shortDomain = appUtils.getShortDomain();
         String ident = linkInfo.getIdent();
         String shortLink = appUtils.getShortUrl() + "/" + ident;
-        
+
         if (DeviceUtils.isExtraSmallDevice()) {
             link.setText(ident);
         } else {
             link.setText(shortDomain + "/" + ident);
         }
-
-
-        link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink));
+        
+        link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink,
+                Notification.Position.BOTTOM_CENTER));
         return link;
     }
 
