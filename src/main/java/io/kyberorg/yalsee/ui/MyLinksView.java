@@ -96,7 +96,6 @@ public class MyLinksView extends YalseeLayout {
         sessionBanner.setText("Those are links stored in current session. " +
                 "Soon you will be able to store them permanently, once we introduce users");
 
-
         noRecordsBannerText.setText("It looks lonely here. What about saving something at ");
         noRecordsBannerLink.setHref("/");
         noRecordsBannerLink.setText("MainPage");
@@ -185,7 +184,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void applyLoadState() {
-        noRecordsBanner.setVisible(!gridHasElements());
+        noRecordsBanner.setVisible(gridIsEmpty());
     }
 
     @Override
@@ -259,7 +258,7 @@ public class MyLinksView extends YalseeLayout {
             ui.access(() -> {
                 grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
                 grid.getDataProvider().refreshAll();
-                noRecordsBanner.setVisible(gridHasElements());
+                noRecordsBanner.setVisible(gridIsEmpty());
             });
         }
     }
@@ -438,8 +437,8 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private boolean gridHasElements() {
-        return grid.getDataProvider().size(new Query<>()) != 0;
+    private boolean gridIsEmpty() {
+        return grid.getDataProvider().size(new Query<>()) == 0;
     }
 
     public static class IDs {
@@ -455,6 +454,5 @@ public class MyLinksView extends YalseeLayout {
         public static final String QR_CODE_COLUMN_CLASS = "qrCodeCol";
         public static final String DELETE_COLUMN_CLASS = "deleteCol";
         public static final String ITEM_DETAILS_CLASS = "item-details";
-
     }
 }
