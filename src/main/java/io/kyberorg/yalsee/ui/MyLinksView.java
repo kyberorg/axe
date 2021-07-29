@@ -32,7 +32,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.internal.LinkInfoService;
-import io.kyberorg.yalsee.ui.core.EditableLink;
+import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
@@ -54,6 +54,8 @@ public class MyLinksView extends YalseeLayout {
 
     private final Span sessionBanner = new Span();
     private final Span noRecordsBanner = new Span();
+    private final Span noRecordsBannerText = new Span();
+    private final Anchor noRecordsBannerLink = new Anchor();
 
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
@@ -94,7 +96,11 @@ public class MyLinksView extends YalseeLayout {
         sessionBanner.setText("Those are links stored in current session. " +
                 "Soon you will be able to store them permanently, once we introduce users");
 
-        noRecordsBanner.setText("It looks lonely here. What about saving something at " + new Anchor("/"));
+
+        noRecordsBannerText.setText("It looks lonely here. What about saving something at ");
+        noRecordsBannerLink.setHref("/");
+        noRecordsBannerLink.setText("MainPage");
+        noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
 
         grid.removeAllColumns();
         linkColumn = grid.addColumn(TemplateRenderer.<LinkInfo>of("[[item.shortDomain]]/[[item.ident]]")
@@ -167,8 +173,10 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void setIds() {
-        sessionBanner.setId(IDs.BANNER);
+        sessionBanner.setId(IDs.SESSION_BANNER);
         noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
+        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
+        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
         grid.setId(IDs.GRID);
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
         descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
@@ -435,14 +443,18 @@ public class MyLinksView extends YalseeLayout {
     }
 
     public static class IDs {
-        public static final String BANNER = "banner";
+        public static final String SESSION_BANNER = "sessionBanner";
         public static final String GRID = "grid";
+
         public static final String NO_RECORDS_BANNER = "noRecordsBanner";
+        public static final String NO_RECORDS_BANNER_TEXT = "noRecordsBannerText";
+        public static final String NO_RECORDS_BANNER_LINK = "noRecordsBannerLink";
 
         public static final String LINK_COLUMN_CLASS = "linkCol";
         public static final String DESCRIPTION_COLUMN_CLASS = "descriptionCol";
         public static final String QR_CODE_COLUMN_CLASS = "qrCodeCol";
         public static final String DELETE_COLUMN_CLASS = "deleteCol";
         public static final String ITEM_DETAILS_CLASS = "item-details";
+
     }
 }

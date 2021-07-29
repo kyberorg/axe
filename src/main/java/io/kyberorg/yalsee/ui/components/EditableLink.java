@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.core;
+package io.kyberorg.yalsee.ui.components;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasValue;
@@ -11,8 +11,10 @@ import lombok.Getter;
 
 @Tag("editable-link")
 public class EditableLink extends Composite<HorizontalLayout> implements HasValue<EditableLink, String>, HasValue.ValueChangeEvent<String> {
-    @Getter private final Label shortDomainPart;
-    @Getter private final TextField editIdentField;
+    @Getter
+    private final Label shortDomainPart;
+    @Getter
+    private final TextField editIdentField;
 
     public EditableLink(final String shortDomain) {
         this.shortDomainPart = new Label(shortDomain + "/");
