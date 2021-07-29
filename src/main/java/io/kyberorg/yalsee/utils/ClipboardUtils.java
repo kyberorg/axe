@@ -29,6 +29,7 @@ public final class ClipboardUtils {
      * @param link string with link to copy
      */
     public static void copyLinkToClipboard(final String textToCopy) {
+        copyToClipboard(textToCopy);
         getLinkCopiedNotification().open();
     }
 
