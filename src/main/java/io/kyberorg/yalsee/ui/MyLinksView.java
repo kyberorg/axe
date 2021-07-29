@@ -53,16 +53,13 @@ public class MyLinksView extends YalseeLayout {
     private final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
 
     private final Span sessionBanner = new Span();
-    private final Span lonelyBanner = new Span();
-    private final Span debugBanner = new Span();
+    private final Span noRecordsBanner = new Span();
+
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
     private Grid.Column<LinkInfo> descriptionColumn;
     private Grid.Column<LinkInfo> qrCodeColumn;
     private Grid.Column<LinkInfo> deleteColumn;
-    private Grid.Column<LinkInfo> sessionColumn;
-
-    private Binder<LinkInfo> binder;
 
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
@@ -85,19 +82,20 @@ public class MyLinksView extends YalseeLayout {
 
         setId(MyLinksView.class.getSimpleName());
         init();
+        setIds();
         applyLoadState();
     }
 
     private void init() {
-        sessionBanner.setId(IDs.BANNER);
-        debugBanner.setId(IDs.DEBUG);
-        grid.setId(IDs.GRID);
-
         sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
         userModeActivated = false;
 
-        grid.removeAllColumns();
+        sessionBanner.setText("Those are links stored in current session. " +
+                "Soon you will be able to store them permanently, once we introduce users");
 
+        noRecordsBanner.setText("It looks lonely here. What about saving something at " + new Anchor("/"));
+
+        grid.removeAllColumns();
         linkColumn = grid.addColumn(TemplateRenderer.<LinkInfo>of("[[item.shortDomain]]/[[item.ident]]")
                         .withProperty("shortDomain", this::getShortDomain)
                         .withProperty("ident", LinkInfo::getIdent))
@@ -106,14 +104,10 @@ public class MyLinksView extends YalseeLayout {
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
         deleteColumn = grid.addComponentColumn(this::createDeleteButton).setHeader("Actions");
-        if (appUtils.isDevelopmentModeActivated()) {
-            sessionColumn = grid.addColumn(LinkInfo::getSession).setHeader("Session ID");
-        }
 
-        // You can use any renderer for the item details. By default, the
-        // details are opened and closed by clicking the rows.
+        //Item Details
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
-                        "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                        "<div class='" + IDs.ITEM_DETAILS_CLASS + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
                                 + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
                                 "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
                                 "</div>"
@@ -125,26 +119,17 @@ public class MyLinksView extends YalseeLayout {
                 // This is now how we open the details
                 .withEventHandler("handleClick", item -> grid.getDataProvider().refreshItem(item)));
 
-        //binder and editor
         initGridEditor();
 
-        //editor end
-
         //User-mode activation
-        grid.getElement().addEventListener("keydown", event -> {
-            userModeActivated = true;
-            updateGridEditor();
-        }).setFilter("event.key === 'R' && event.shiftKey");
+        grid.getElement().addEventListener("keydown", event -> userModeActivated = true)
+                .setFilter("event.key === 'R' && event.shiftKey");
 
-        add(sessionBanner);
-        if (appUtils.isDevelopmentModeActivated()) {
-            add(debugBanner);
-        }
-        add(grid);
+        add(sessionBanner, noRecordsBanner, grid);
     }
 
     private void initGridEditor() {
-        binder = new Binder<>(LinkInfo.class);
+        Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
 
         if (userModeActivated) {
@@ -180,33 +165,18 @@ public class MyLinksView extends YalseeLayout {
         }).setFilter("event.key === 'Enter'");
     }
 
-    private void updateGridEditor() {
-        if (userModeActivated) {
-            EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
-            // Close the editor in case of backward between components
-            editableLink.getElement()
-                    .addEventListener("keydown",
-                            event -> grid.getEditor().cancel())
-                    .setFilter("event.key === 'Tab' && event.shiftKey");
-
-            binder.forField(editableLink).bind("ident");
-
-            linkColumn.setEditorComponent(editableLink);
-        }
+    private void setIds() {
+        sessionBanner.setId(IDs.BANNER);
+        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
+        grid.setId(IDs.GRID);
+        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
+        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
+        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
+        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
     }
 
     private void applyLoadState() {
-        sessionBanner.setText("Those are links stored in current session. " +
-                "Soon you will be able to store them permanently, once we introduce users");
-
-        lonelyBanner.setText("It looks lonely here. What about saving something at " + new Anchor("/"));
-
-        if (isGridEmpty()) {
-            lonelyBanner.setVisible(false);
-        }
-
-        debugBanner.setText("Session ID: " + sessionId);
-        debugBanner.setVisible(appUtils.isDevelopmentModeActivated());
+        noRecordsBanner.setVisible(gridHasElements());
     }
 
     @Override
@@ -215,7 +185,7 @@ public class MyLinksView extends YalseeLayout {
         ui = attachEvent.getUI();
         EventBus.getDefault().register(this);
 
-        updateData();
+        updateDataAndState();
     }
 
     @Override
@@ -245,7 +215,7 @@ public class MyLinksView extends YalseeLayout {
     public void onLinkDeletedEvent(final LinkDeletedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);
         //no session control possible since link and its info are gone.
-        updateData();
+        updateDataAndState();
     }
 
     /**
@@ -262,32 +232,26 @@ public class MyLinksView extends YalseeLayout {
     private void onLinkEvent(final Link link) {
         //act only if link deleted was saved within our session
         if (getSessionIdFromLink(link).equals(sessionId)) {
-            updateData();
+            updateDataAndState();
         }
     }
 
-    private void updateData() {
+    private void onDeleteButtonClick(final LinkInfo item) {
+        if (item != null) {
+            deleteLinkAndLinkInfo(item);
+        } else {
+            ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
+        }
+    }
+
+    private void updateDataAndState() {
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
             ui.access(() -> {
                 grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
                 grid.getDataProvider().refreshAll();
-                lonelyBanner.setVisible(!isGridEmpty());
+                noRecordsBanner.setVisible(gridHasElements());
             });
-        }
-    }
-
-    private Button createDeleteButton(LinkInfo item) {
-        Button deleteButton = new Button("Delete", clickEvent -> onDeleteButtonClick(item));
-        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        return deleteButton;
-    }
-
-    private void onDeleteButtonClick(LinkInfo item) {
-        if (item != null) {
-            deleteLinkAndLinkInfo(item);
-        } else {
-            ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
         }
     }
 
@@ -342,7 +306,7 @@ public class MyLinksView extends YalseeLayout {
         } else {
             ErrorUtils.getErrorNotification("Not saved. Internal error: ID mismatch").open();
         }
-        updateData();
+        updateDataAndState();
     }
 
     private void deleteLinkAndLinkInfo(LinkInfo linkInfo) {
@@ -370,7 +334,13 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private Image qrImage(LinkInfo linkInfo) {
+    private Button createDeleteButton(final LinkInfo item) {
+        Button deleteButton = new Button("Delete", clickEvent -> onDeleteButtonClick(item));
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        return deleteButton;
+    }
+
+    private Image qrImage(final LinkInfo linkInfo) {
         Image image = new Image();
         OperationResult qrCodeResult = qrCodeService.getQRCode(linkInfo.getIdent(), App.QR.MINIMAL_SIZE_IN_PIXELS);
         if (qrCodeResult.ok()) {
@@ -459,14 +429,20 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private boolean isGridEmpty() {
-        return grid.getDataProvider().size(new Query<>()) == 0;
+    private boolean gridHasElements() {
+        return grid.getDataProvider().size(new Query<>()) != 0;
     }
 
     public static class IDs {
         public static final String BANNER = "banner";
         public static final String GRID = "grid";
-        public static final String DEBUG = "debugSpan";
+        public static final String NO_RECORDS_BANNER = "noRecordsBanner";
+
+        public static final String LINK_COLUMN_CLASS = "linkCol";
+        public static final String DESCRIPTION_COLUMN_CLASS = "descriptionCol";
+        public static final String QR_CODE_COLUMN_CLASS = "qrCodeCol";
+        public static final String DELETE_COLUMN_CLASS = "deleteCol";
+        public static final String ITEM_DETAILS_CLASS = "item-details";
     }
 
 }
