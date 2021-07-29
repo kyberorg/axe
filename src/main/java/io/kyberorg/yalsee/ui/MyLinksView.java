@@ -35,6 +35,7 @@ import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
+import io.kyberorg.yalsee.utils.DeviceUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
@@ -350,8 +351,13 @@ public class MyLinksView extends YalseeLayout {
         String shortDomain = appUtils.getShortDomain();
         String ident = linkInfo.getIdent();
         String shortLink = appUtils.getShortUrl() + "/" + ident;
+        
+        if (DeviceUtils.isExtraSmallDevice()) {
+            link.setText(ident);
+        } else {
+            link.setText(shortDomain + "/" + ident);
+        }
 
-        link.setText(shortDomain + "/" + ident);
 
         link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink));
         return link;
