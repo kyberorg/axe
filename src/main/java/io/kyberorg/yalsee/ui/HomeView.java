@@ -103,7 +103,7 @@ public class HomeView extends HorizontalLayout {
         this.setId(IDs.VIEW_ID);
 
         add(leftDiv, centralLayout, rightDiv);
-        centralLayout.add(mainArea, overallArea, resultArea, qrCodeArea, myLinksNoteArea);
+        centralLayout.add(mainArea, overallArea, resultArea, myLinksNoteArea, qrCodeArea);
     }
 
     private void applyStyle() {
@@ -239,7 +239,7 @@ public class HomeView extends HorizontalLayout {
         myLinksNoteArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         myLinksNoteArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         myLinksNoteArea.setWidthFull();
-        
+
         return myLinksNoteArea;
     }
 
