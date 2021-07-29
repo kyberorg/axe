@@ -347,6 +347,7 @@ public class HomeView extends HorizontalLayout {
         shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         resultArea.setVisible(true);
+        myLinksNoteArea.setVisible(true);
         clipboardHelper.setContent(shortLink.getText());
         generateQRCode(savedLink.getIdent());
     }
