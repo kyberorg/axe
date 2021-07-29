@@ -18,7 +18,6 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -35,6 +34,7 @@ import io.kyberorg.yalsee.services.internal.LinkInfoService;
 import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
@@ -90,7 +90,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void init() {
-        sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
+        sessionId = AppUtils.getSessionId();
         userModeActivated = false;
 
         sessionBanner.setText("Those are links stored in current session. " +
@@ -102,11 +102,8 @@ public class MyLinksView extends YalseeLayout {
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
 
         grid.removeAllColumns();
-        linkColumn = grid.addColumn(TemplateRenderer.<LinkInfo>of("[[item.shortDomain]]/[[item.ident]]")
-                        .withProperty("shortDomain", this::getShortDomain)
-                        .withProperty("ident", LinkInfo::getIdent))
-                .setHeader("Link");
 
+        linkColumn = grid.addComponentColumn(this::link).setHeader("Link");
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
         deleteColumn = grid.addComponentColumn(this::createDeleteButton).setHeader("Actions");
@@ -348,6 +345,18 @@ public class MyLinksView extends YalseeLayout {
         return deleteButton;
     }
 
+    private Span link(final LinkInfo linkInfo) {
+        Span link = new Span();
+        String shortDomain = appUtils.getShortDomain();
+        String ident = linkInfo.getIdent();
+        String shortLink = appUtils.getShortUrl() + "/" + ident;
+
+        link.setText(shortDomain + "/" + ident);
+
+        link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink));
+        return link;
+    }
+
     private Image qrImage(final LinkInfo linkInfo) {
         Image image = new Image();
         OperationResult qrCodeResult = qrCodeService.getQRCode(linkInfo.getIdent(), App.QR.MINIMAL_SIZE_IN_PIXELS);
@@ -396,10 +405,6 @@ public class MyLinksView extends YalseeLayout {
         } else {
             return Optional.empty();
         }
-    }
-
-    private String getShortDomain(LinkInfo linkInfo) {
-        return appUtils.getShortDomain();
     }
 
     private String getHrefLink(LinkInfo linkInfo) {

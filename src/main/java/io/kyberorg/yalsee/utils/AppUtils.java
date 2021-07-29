@@ -59,10 +59,9 @@ public class AppUtils {
     /**
      * Retrieve Session ID from given {@link VaadinSession}.
      *
-     * @param currentVaadinSession current {@link VaadinSession} used in UI.
      * @return string with ID or null
      */
-    public static String getSessionId(VaadinSession current) {
+    public static String getSessionId() {
         if (VaadinSession.getCurrent() != null && VaadinSession.getCurrent().getSession() != null) {
             return VaadinSession.getCurrent().getSession().getId();
         }
@@ -135,7 +134,7 @@ public class AppUtils {
         boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
         if (acceptHeaderPresent) {
             @SuppressWarnings("UnnecessaryLocalVariable") //increase readability
-                    boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
+            boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
             return hasExactMimeType;
         } else {
             return false;
@@ -177,11 +176,10 @@ public class AppUtils {
     }
 
 
-
     /**
      * Creates Modal in the middle of page.
      *
-     * @param text string with error
+     * @param text    string with error
      * @param variant valid {@link NotificationVariant}
      * @return created {@link Notification}
      */
@@ -375,7 +373,7 @@ public class AppUtils {
      * @return int with timeout from settings or default timeout {@link App.Defaults#REDIRECT_PAGE_TIMEOUT_SECONDS}
      */
     public int getRedirectPageTimeout() {
-        String timeoutString =  getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
+        String timeoutString = getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
         if (timeoutString.equals(App.NO_VALUE)) {
             return App.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
         }
