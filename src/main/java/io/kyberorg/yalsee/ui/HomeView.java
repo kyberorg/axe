@@ -125,6 +125,7 @@ public class HomeView extends HorizontalLayout {
         overallArea.setVisible(true);
         resultArea.setVisible(false);
         qrCodeArea.setVisible(false);
+        myLinksNoteArea.setVisible(false);
     }
 
     private VerticalLayout mainArea() {
@@ -220,15 +221,19 @@ public class HomeView extends HorizontalLayout {
         HorizontalLayout myLinksNoteArea = new HorizontalLayout();
         myLinksNoteArea.setId(IDs.MY_LINKS_NOTE_AREA);
 
-        Span myLinksNoteText = new Span("FYI: You can find your link and QR Code at ");
+        Span myLinksNoteText = new Span();
+
+        Span myLinksNoteStart = new Span("FYI: You can find your link and QR Code at ");
         Anchor myLinksNoteLink = new Anchor("/" + Endpoint.UI.MY_LINKS_PAGE, "My Links");
-        Span myLinkNotePostText = new Span(" page");
+        Span myLinkNoteEnd = new Span(" page");
 
         myLinksNoteText.setId(IDs.MY_LINKS_NOTE_TEXT);
+        myLinksNoteStart.setId(IDs.MY_LINKS_NOTE_START);
         myLinksNoteLink.setId(IDs.MY_LINKS_NOTE_LINK);
-        myLinkNotePostText.setId(IDs.MY_LINKS_NOTE_POST_TEXT);
+        myLinkNoteEnd.setId(IDs.MY_LINKS_NOTE_END);
 
-        myLinksNoteArea.add(myLinksNoteText, myLinksNoteLink, myLinkNotePostText);
+        myLinksNoteText.add(myLinksNoteStart, myLinksNoteLink, myLinkNoteEnd);
+        myLinksNoteArea.add(myLinksNoteText);
         myLinksNoteArea.addClassNames("my-links-note-area", "border", "joint-area");
         myLinksNoteArea.setWidthFull();
         return myLinksNoteArea;
@@ -465,8 +470,8 @@ public class HomeView extends HorizontalLayout {
 
         public static final String MY_LINKS_NOTE_AREA = "myLinksNoteArea";
         public static final String MY_LINKS_NOTE_TEXT = "myLinksNoteText";
+        public static final String MY_LINKS_NOTE_START = "myLinksNoteStart";
         public static final String MY_LINKS_NOTE_LINK = "myLinksNoteLink";
-        public static final String MY_LINKS_NOTE_POST_TEXT = "myLinksNotePostText";
+        public static final String MY_LINKS_NOTE_END = "myLinksNoteEnd";
     }
-
 }

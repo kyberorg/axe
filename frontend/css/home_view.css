@@ -22,6 +22,11 @@ body {
     text-align: center;
 }
 
+.my-links-note-area {
+    background: #f0f0f0;
+    padding-left: 1em;
+}
+
 /* Use it for area that needed to "together" with upper area */
 .joint-area {
     margin-top: 0;
@@ -41,6 +46,13 @@ body {
 @media all and (min-width: 531px) {
     #shortLink {
         font-size: xx-large;
+    }
+}
+
+/* Font size for Text in MyLinks Note Area */
+@media all and (min-width: 531px) {
+    #myLinksNoteText {
+        font-size: large;
     }
 }
 

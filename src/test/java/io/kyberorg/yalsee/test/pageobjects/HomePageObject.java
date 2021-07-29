@@ -53,7 +53,7 @@ public final class HomePageObject {
         public static final SelenideElement MY_LINKS_NOTE_TEXT = $("#" + HomeView.IDs.MY_LINKS_NOTE_TEXT);
         public static final SelenideElement MY_LINKS_NOTE_LINK = $("#" + HomeView.IDs.MY_LINKS_NOTE_LINK);
         public static final SelenideElement MY_LINKS_NOTE_POST_TEXT =
-                $("#" + HomeView.IDs.MY_LINKS_NOTE_POST_TEXT);
+                $("#" + HomeView.IDs.MY_LINKS_NOTE_END);
     }
 
     public static class ErrorModal {
