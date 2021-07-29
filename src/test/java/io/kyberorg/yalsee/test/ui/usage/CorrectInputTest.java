@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.test.ui.usage;
 
+import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
+import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MyLinksNoteArea.*;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ResultArea.*;
@@ -129,6 +131,19 @@ public class CorrectInputTest extends SelenideTest {
         QR_CODE.shouldBe(visible);
         assertTrue(QR_CODE.isImage(), "QR code is not image");
 
+        MY_LINKS_NOTE_AREA.shouldBe(visible);
+        MY_LINKS_NOTE_TEXT.shouldBe(visible);
+        MY_LINKS_NOTE_LINK.shouldBe(visible);
+        MY_LINKS_NOTE_POST_TEXT.shouldBe(visible);
+
+        MY_LINKS_NOTE_TEXT.shouldHave(text("link")).shouldHave(text("QR Code"));
+        MY_LINKS_NOTE_POST_TEXT.shouldHave(text("page"));
+
+        MY_LINKS_NOTE_LINK.shouldHave(text("My Links"));
+        String myLinksNoteLinkHref = MY_LINKS_NOTE_LINK.getAttribute("href");
+        String myLinksPagePath = Endpoint.UI.MY_LINKS_PAGE;
+        assertEquals(myLinksPagePath, myLinksNoteLinkHref, "link in 'href' should lead to MyLinks page");
+        
         LONG_URL_INPUT.shouldBe(empty);
 
         ERROR_MODAL.shouldNot(exist);

@@ -56,6 +56,7 @@ public class HomeView extends HorizontalLayout {
     private final Component overallArea = overallArea();
     private final Component resultArea = resultArea();
     private final Component qrCodeArea = qrCodeArea();
+    private final Component myLinksNoteArea = myLinksNoteArea();
 
     private final OverallService overallService;
     private final LinkService linkService;
@@ -102,7 +103,7 @@ public class HomeView extends HorizontalLayout {
         this.setId(IDs.VIEW_ID);
 
         add(leftDiv, centralLayout, rightDiv);
-        centralLayout.add(mainArea, overallArea, resultArea, qrCodeArea);
+        centralLayout.add(mainArea, overallArea, resultArea, qrCodeArea, myLinksNoteArea);
     }
 
     private void applyStyle() {
@@ -213,6 +214,24 @@ public class HomeView extends HorizontalLayout {
         qrCodeArea.addClassNames("qr-area", "border", "joint-area");
         qrCodeArea.setWidthFull();
         return qrCodeArea;
+    }
+
+    private HorizontalLayout myLinksNoteArea() {
+        HorizontalLayout myLinksNoteArea = new HorizontalLayout();
+        myLinksNoteArea.setId(IDs.MY_LINKS_NOTE_AREA);
+
+        Span myLinksNoteText = new Span("FYI: You can find your link and QR Code at ");
+        Anchor myLinksNoteLink = new Anchor("/" + Endpoint.UI.MY_LINKS_PAGE, "My Links");
+        Span myLinkNotePostText = new Span(" page");
+
+        myLinksNoteText.setId(IDs.MY_LINKS_NOTE_TEXT);
+        myLinksNoteLink.setId(IDs.MY_LINKS_NOTE_LINK);
+        myLinkNotePostText.setId(IDs.MY_LINKS_NOTE_POST_TEXT);
+
+        myLinksNoteArea.add(myLinksNoteText, myLinksNoteLink, myLinkNotePostText);
+        myLinksNoteArea.addClassNames("my-links-note-area", "border", "joint-area");
+        myLinksNoteArea.setWidthFull();
+        return myLinksNoteArea;
     }
 
     private Notification getLinkCopiedNotification() {
@@ -420,6 +439,8 @@ public class HomeView extends HorizontalLayout {
 
         qrCode.setSrc("");
         qrCodeArea.setVisible(false);
+
+        myLinksNoteArea.setVisible(false);
     }
 
     public static class IDs {
@@ -441,6 +462,11 @@ public class HomeView extends HorizontalLayout {
 
         public static final String QR_CODE_AREA = "qrCodeArea";
         public static final String QR_CODE = "qrCode";
+
+        public static final String MY_LINKS_NOTE_AREA = "myLinksNoteArea";
+        public static final String MY_LINKS_NOTE_TEXT = "myLinksNoteText";
+        public static final String MY_LINKS_NOTE_LINK = "myLinksNoteLink";
+        public static final String MY_LINKS_NOTE_POST_TEXT = "myLinksNotePostText";
     }
 
 }

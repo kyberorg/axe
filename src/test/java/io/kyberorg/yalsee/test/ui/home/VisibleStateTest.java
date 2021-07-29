@@ -57,7 +57,7 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     *  Tests that area with overall info exists and visible.
+     * Tests that area with overall info exists and visible.
      */
     @Test
     public void overallAreaIsVisible() {
@@ -78,6 +78,14 @@ public class VisibleStateTest extends SelenideTest {
      */
     @Test
     public void qrCodeAreaIsHidden() {
+        HomePageObject.QrCodeArea.QR_CODE_AREA.shouldNotBe(visible);
+    }
+
+    /**
+     * Tests that by default area with My Links Note Area is hidden.
+     */
+    @Test
+    public void myLinksNoteAreaIsHidden() {
         HomePageObject.QrCodeArea.QR_CODE_AREA.shouldNotBe(visible);
     }
 
