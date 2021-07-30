@@ -19,6 +19,7 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -54,6 +55,8 @@ import java.util.Optional;
 public class MyLinksView extends YalseeLayout {
     private final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
 
+    private final String USER_MODE_FLAG = "UserMode";
+
     private final Span sessionBanner = new Span();
     private final Span noRecordsBanner = new Span();
     private final Span noRecordsBannerText = new Span();
@@ -72,7 +75,6 @@ public class MyLinksView extends YalseeLayout {
 
     private UI ui;
     private String sessionId;
-    private boolean userModeActivated;
 
     /**
      * Creates {@link MyLinksView}.
@@ -93,7 +95,7 @@ public class MyLinksView extends YalseeLayout {
 
     private void init() {
         sessionId = AppUtils.getSessionId();
-        userModeActivated = false;
+        VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.FALSE);
 
         sessionBanner.setText("Those are links stored in current session. " +
                 "Soon you will be able to store them permanently, once we introduce users");
@@ -124,11 +126,14 @@ public class MyLinksView extends YalseeLayout {
                 // This is now how we open the details
                 .withEventHandler("handleClick", item -> grid.getDataProvider().refreshItem(item)));
 
-        initGridEditor();
+        grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         //User-mode activation
-        grid.getElement().addEventListener("keydown", event -> userModeActivated = true)
+        grid.getElement().addEventListener("keydown", event ->
+                        VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE))
                 .setFilter("event.key === 'R' && event.shiftKey");
+
+        initGridEditor();
 
         add(sessionBanner, noRecordsBanner, grid);
     }
@@ -137,6 +142,7 @@ public class MyLinksView extends YalseeLayout {
         Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
 
+        boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
         if (userModeActivated) {
             EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
             // Close the editor in case of backward between components
@@ -272,6 +278,7 @@ public class MyLinksView extends YalseeLayout {
                 linkInfoService.update(linkInfo);
             } else {
                 //TODO replace with real-user check once users are there
+                boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
                 if (userModeActivated) {
                     OperationResult getLinkResult = linkService.getLinkByIdent(oldLinkInfo.get().getIdent());
                     if (getLinkResult.ok()) {
