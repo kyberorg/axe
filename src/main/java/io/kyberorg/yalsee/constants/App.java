@@ -78,4 +78,9 @@ public final class App {
     public static class Api {
         public static final String API_DOKS_URL = "https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.1";
     }
+
+    public static class Session {
+        public static final int MAX_INACTIVE_INTERVAL_SECONDS = 30;
+        public static final int POLL_INTERVAL_IN_MILLIS = 3000;
+    }
 }

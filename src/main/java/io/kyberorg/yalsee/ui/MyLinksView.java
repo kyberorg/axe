@@ -181,7 +181,6 @@ public class MyLinksView extends YalseeLayout {
             binder.forField(editableLink).bind("ident");
 
             linkColumn.setEditorComponent(editableLink);
-            grid.getEditor().refresh();
         }
     }
 
