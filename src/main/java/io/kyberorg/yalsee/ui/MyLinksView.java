@@ -131,8 +131,10 @@ public class MyLinksView extends YalseeLayout {
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         //User-mode activation
-        grid.getElement().addEventListener("keydown", event ->
-                        VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE))
+        grid.getElement().addEventListener("keydown", event -> {
+                    VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
+                    activateLinkEditor();
+                })
                 .setFilter("event.key === 'R' && event.shiftKey");
 
         initGridEditor();
@@ -142,7 +144,7 @@ public class MyLinksView extends YalseeLayout {
 
     private void initGridEditor() {
         grid.getEditor().setBinder(binder);
-        
+
         TextField editDescriptionField = new TextField();
         // Close the editor in case of backward between components
         editDescriptionField.getElement()
@@ -163,7 +165,7 @@ public class MyLinksView extends YalseeLayout {
         }).setFilter("event.key === 'Enter'");
     }
 
-    private void setLinkEditor() {
+    private void activateLinkEditor() {
         boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
         if (userModeActivated) {
             EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
@@ -202,7 +204,6 @@ public class MyLinksView extends YalseeLayout {
         EventBus.getDefault().register(this);
 
         updateDataAndState();
-        setLinkEditor();
     }
 
     @Override
