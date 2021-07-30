@@ -155,7 +155,10 @@ public class MyLinksView extends YalseeLayout {
         binder.forField(editDescriptionField).bind("description");
         descriptionColumn.setEditorComponent(editDescriptionField);
 
-        grid.addItemDoubleClickListener(event -> grid.getEditor().editItem(event.getItem()));
+        grid.addItemDoubleClickListener(event -> {
+            grid.getEditor().editItem(event.getItem());
+            editDescriptionField.focus();
+        });
 
         grid.getEditor().addCloseListener(this::updateLinkInfo);
         //Saving by click Enter
@@ -178,6 +181,7 @@ public class MyLinksView extends YalseeLayout {
             binder.forField(editableLink).bind("ident");
 
             linkColumn.setEditorComponent(editableLink);
+            grid.getEditor().refresh();
         }
     }
 
