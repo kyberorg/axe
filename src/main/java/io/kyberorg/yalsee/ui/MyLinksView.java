@@ -73,8 +73,10 @@ public class MyLinksView extends YalseeLayout {
     private final LinkService linkService;
     private final AppUtils appUtils;
 
+    private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
     private UI ui;
     private String sessionId;
+
 
     /**
      * Creates {@link MyLinksView}.
@@ -139,23 +141,8 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void initGridEditor() {
-        Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
         grid.getEditor().setBinder(binder);
-
-        boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
-        if (userModeActivated) {
-            EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
-            // Close the editor in case of backward between components
-            editableLink.getElement()
-                    .addEventListener("keydown",
-                            event -> grid.getEditor().cancel())
-                    .setFilter("event.key === 'Tab' && event.shiftKey");
-
-            binder.forField(editableLink).bind("ident");
-
-            linkColumn.setEditorComponent(editableLink);
-        }
-
+        
         TextField editDescriptionField = new TextField();
         // Close the editor in case of backward between components
         editDescriptionField.getElement()
@@ -174,6 +161,22 @@ public class MyLinksView extends YalseeLayout {
             grid.getEditor().save();
             grid.getEditor().cancel();
         }).setFilter("event.key === 'Enter'");
+    }
+
+    private void setLinkEditor() {
+        boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
+        if (userModeActivated) {
+            EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
+            // Close the editor in case of backward between components
+            editableLink.getElement()
+                    .addEventListener("keydown",
+                            event -> grid.getEditor().cancel())
+                    .setFilter("event.key === 'Tab' && event.shiftKey");
+
+            binder.forField(editableLink).bind("ident");
+
+            linkColumn.setEditorComponent(editableLink);
+        }
     }
 
     private void setIds() {
@@ -199,6 +202,7 @@ public class MyLinksView extends YalseeLayout {
         EventBus.getDefault().register(this);
 
         updateDataAndState();
+        setLinkEditor();
     }
 
     @Override
