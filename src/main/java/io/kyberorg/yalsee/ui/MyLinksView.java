@@ -353,12 +353,13 @@ public class MyLinksView extends YalseeLayout {
         String ident = linkInfo.getIdent();
         String shortLink = appUtils.getShortUrl() + "/" + ident;
 
-        if (DeviceUtils.isExtraSmallDevice()) {
+        DeviceUtils deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
+        if (deviceUtils != null && deviceUtils.isExtraSmallDevice()) {
             link.setText(ident);
         } else {
             link.setText(shortDomain + "/" + ident);
         }
-        
+
         link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink,
                 Notification.Position.BOTTOM_CENTER));
         return link;
