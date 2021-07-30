@@ -92,8 +92,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         //session tricks
         VaadinSession.getCurrent().getSession().setMaxInactiveInterval(App.Session.MAX_INACTIVE_INTERVAL_SECONDS);
-        UI.getCurrent().setPollInterval(App.Session.POLL_INTERVAL_IN_MILLIS);
-
+        
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
