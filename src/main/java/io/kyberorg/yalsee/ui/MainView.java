@@ -21,7 +21,6 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
@@ -90,9 +89,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         setId(IDs.VIEW_ID);
 
-        //session tricks
-        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(App.Session.MAX_INACTIVE_INTERVAL_SECONDS);
-        
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");

@@ -40,6 +40,7 @@ import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.DeviceUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -459,7 +460,7 @@ public class MyLinksView extends YalseeLayout {
     private String getSessionIdFromLink(Link linkFromEvent) {
         Optional<LinkInfo> linkInfo = linkInfoService.getLinkInfoByLink(linkFromEvent);
         if (linkInfo.isPresent()) {
-            return linkInfo.get().getSession();
+            return StringUtils.isNotBlank(linkInfo.get().getSession()) ? linkInfo.get().getSession() : "";
         } else {
             return "";
         }
