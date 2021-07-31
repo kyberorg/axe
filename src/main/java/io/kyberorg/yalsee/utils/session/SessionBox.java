@@ -15,7 +15,12 @@ public class SessionBox {
         vaadinSessions.put(sessionId, vaadinSession);
     }
 
+    public static void removeSession(VaadinSession vaadinSession) {
+        vaadinSessions.remove(vaadinSession.getSession().getId());
+    }
+
     static Map<String, VaadinSession> getVaadinSessions() {
         return vaadinSessions;
     }
+
 }

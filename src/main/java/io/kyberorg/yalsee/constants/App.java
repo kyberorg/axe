@@ -47,6 +47,7 @@ public final class App {
         public static final String CRAWLERS_ALLOWED = "app.seo.robots.crawl-allowed";
         public static final String REDIRECT_PAGE_BYPASS_SYMBOL = "app.redirect-page.bypass-symbol";
         public static final String REDIRECT_PAGE_TIMEOUT = "app.redirect-page.timeout";
+        public static final String SESSION_TIMEOUT = "app.session.timeout";
     }
 
     public static class Env {
@@ -73,6 +74,7 @@ public final class App {
 
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
+        public static final int SESSION_TIMEOUT_SECONDS = 3600;
     }
 
     public static class Api {
@@ -81,5 +83,6 @@ public final class App {
 
     public static class Session {
         public static final int MAX_INACTIVE_INTERVAL_SECONDS = 180;
+        public static final int SESSION_WATCH_DOG_INTERVAL_MILLIS = 20000; //20 seconds
     }
 }

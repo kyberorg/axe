@@ -133,10 +133,15 @@ public class MyLinksView extends YalseeLayout {
 
         //User-mode activation
         grid.getElement().addEventListener("keydown", event -> {
-                    VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
-                    activateLinkEditor();
-                })
+            VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
+            activateLinkEditor();
+        })
                 .setFilter("event.key === 'R' && event.shiftKey");
+
+        //Logout emulation (for tests)
+        grid.getElement().addEventListener("keydown", event ->
+                appUtils.endVaadinSession(VaadinSession.getCurrent())
+        ).setFilter("event.key === 'Q' && event.shiftKey");
 
         initGridEditor();
 

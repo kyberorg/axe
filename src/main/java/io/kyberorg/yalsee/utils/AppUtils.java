@@ -13,6 +13,7 @@ import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.utils.session.SessionBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -378,6 +379,20 @@ public class AppUtils {
             return App.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
         }
         return Integer.parseInt(timeoutString);
+    }
+
+    public int getSessionTimeout() {
+        String timeoutString = getEnv().getProperty(App.Properties.SESSION_TIMEOUT, App.NO_VALUE);
+        if (timeoutString.equals(App.NO_VALUE)) {
+            return App.Defaults.SESSION_TIMEOUT_SECONDS;
+        }
+        return Integer.parseInt(timeoutString);
+    }
+
+    public void endVaadinSession(VaadinSession session) {
+        SessionBox.removeSession(session);
+        session.getSession().invalidate();
+        session.close();
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {
