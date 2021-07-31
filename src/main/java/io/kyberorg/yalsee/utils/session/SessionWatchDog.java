@@ -39,7 +39,7 @@ public class SessionWatchDog {
     }
 
     private boolean isSessionExpired(VaadinSession vaadinSession) {
-        int timeoutInSeconds = 120;
+        int timeoutInSeconds = appUtils.getSessionTimeout();
         Instant sessionCreatedTime = Instant.ofEpochMilli(vaadinSession.getSession().getCreationTime());
         Instant now = Instant.now();
         Instant sessionExpirationTime = sessionCreatedTime.plusSeconds(timeoutInSeconds);
