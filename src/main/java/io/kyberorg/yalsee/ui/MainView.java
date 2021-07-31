@@ -30,6 +30,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.session.SessionBox;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -91,6 +92,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         setId(IDs.VIEW_ID);
 
         //session tricks
+        SessionBox.storeSession(VaadinSession.getCurrent());
         VaadinSession.getCurrent().getSession().setMaxInactiveInterval(App.Session.MAX_INACTIVE_INTERVAL_SECONDS);
 
         // hide the splash screen after the main view is loaded
