@@ -117,12 +117,12 @@ public class MyLinksView extends YalseeLayout {
 
         //Item Details
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
-                        "<div class='" + IDs.ITEM_DETAILS_CLASS + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
-                                + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
-                                "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
-                                "</div>"
-                                + "</div>")
-                .withProperty("href", this::getHrefLink)
+                "<div class='" + IDs.ITEM_DETAILS_CLASS + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                        + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
+                        "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
+                        "</div>"
+                        + "</div>")
+                .withProperty("href", this::getLongLink)
                 .withProperty("longLink", this::getLongLink)
                 .withProperty("created", this::getCreatedTime)
                 .withProperty("updated", this::getUpdatedTime)
@@ -434,10 +434,6 @@ public class MyLinksView extends YalseeLayout {
         } else {
             return Optional.empty();
         }
-    }
-
-    private String getHrefLink(LinkInfo linkInfo) {
-        return appUtils.getShortUrl() + "/" + linkInfo.getIdent();
     }
 
     private String getLongLink(LinkInfo linkInfo) {
