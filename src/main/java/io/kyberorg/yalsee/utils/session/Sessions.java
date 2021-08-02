@@ -25,4 +25,24 @@ public class Sessions {
     public boolean hasHttpSession() {
         return Objects.nonNull(httpSession);
     }
+
+    public boolean httpSessionAlreadyInvalidated() {
+        boolean httpSessionExists = hasHttpSession();
+        if (!httpSessionExists) return true;
+        try {
+            httpSession.getCreationTime();
+            return false;
+        } catch (IllegalStateException e) {
+            return true;
+        }
+    }
+
+    public String getSessionId() {
+        if (hasHttpSession()) {
+            return getHttpSession().getId();
+        } else {
+            return "";
+        }
+    }
+    
 }

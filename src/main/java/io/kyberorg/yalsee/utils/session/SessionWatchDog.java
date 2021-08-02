@@ -25,6 +25,13 @@ public class SessionWatchDog {
     @Scheduled(fixedRate = SESSION_WATCH_DOG_INTERVAL_MILLIS)
     public void endExpiredVaadinSessions() {
         log.debug("{} Starting Session Cleanup", TAG);
+        //removing already invalidated sessions from list as reading their attributes leads to exceptions.
+        SessionBox.getSessions().values().parallelStream()
+                .filter(Sessions::hasHttpSession)
+                .filter(Sessions::httpSessionAlreadyInvalidated).map(Sessions::getSessionId)
+                .forEach(this::removeSessionFromBox);
+
+        //searching for expired sessions
         List<Sessions> expiredSessions = SessionBox.getSessions().values().parallelStream()
                 .filter(Sessions::hasHttpSession)
                 .filter(this::isSessionExpired).collect(Collectors.toList());
@@ -49,5 +56,11 @@ public class SessionWatchDog {
     private void endSession(final Sessions sessions) {
         log.debug("{} Removing expired session {}", TAG, sessions.getHttpSession().getId());
         appUtils.endSession(sessions);
+    }
+
+    private void removeSessionFromBox(String sessionId) {
+        log.debug("{} removing already gone session from {}. Session ID: {} ",
+                TAG, SessionBox.class.getSimpleName(), sessionId);
+        SessionBox.getSessions().remove(sessionId);
     }
 }
