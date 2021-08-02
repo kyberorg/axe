@@ -14,6 +14,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.utils.session.SessionBox;
+import io.kyberorg.yalsee.utils.session.Sessions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -389,9 +390,17 @@ public class AppUtils {
         return Integer.parseInt(timeoutString);
     }
 
-    public void endVaadinSession(VaadinSession session) {
-        SessionBox.removeSession(session);
-        session.getSession().invalidate();
+    public void endSession(final Sessions sessions) {
+        SessionBox.removeRecord(sessions);
+        sessions.getHttpSession().invalidate();
+        sessions.getVaadinSession().close();
+    }
+
+    public void endVaadinSession(final VaadinSession session) {
+        if (session.getSession() != null) {
+            SessionBox.removeVaadinSession(session);
+            session.getSession().invalidate();
+        }
         session.close();
     }
 

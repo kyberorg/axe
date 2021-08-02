@@ -6,21 +6,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SessionBox {
-    private static final Map<String, VaadinSession> vaadinSessions = new HashMap<>();
+    private static final Map<String, Sessions> sessions = new HashMap<>();
 
-    public static void storeSession(VaadinSession vaadinSession) {
+    public static void storeSession(final VaadinSession vaadinSession) {
         if (vaadinSession == null || vaadinSession.getSession() == null) return;
         String sessionId = vaadinSession.getSession().getId();
-        if (vaadinSessions.containsKey(sessionId)) return;
-        vaadinSessions.put(sessionId, vaadinSession);
+        if (sessions.containsKey(sessionId)) return;
+        sessions.put(sessionId, Sessions.of(vaadinSession));
     }
 
-    public static void removeSession(VaadinSession vaadinSession) {
-        vaadinSessions.remove(vaadinSession.getSession().getId());
+    public static void removeVaadinSession(final VaadinSession vaadinSession) {
+        sessions.remove(vaadinSession.getSession().getId());
     }
 
-    static Map<String, VaadinSession> getVaadinSessions() {
-        return vaadinSessions;
+    public static void removeRecord(final Sessions sessionsRecord) {
+        sessions.remove(sessionsRecord.getHttpSession().getId());
+    }
+
+    static Map<String, Sessions> getSessions() {
+        return sessions;
     }
 
 }

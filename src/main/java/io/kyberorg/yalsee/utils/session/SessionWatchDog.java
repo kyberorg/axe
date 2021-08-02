@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.utils.session;
 
-import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,7 +25,8 @@ public class SessionWatchDog {
     @Scheduled(fixedRate = SESSION_WATCH_DOG_INTERVAL_MILLIS)
     public void endExpiredVaadinSessions() {
         log.debug("{} Starting Session Cleanup", TAG);
-        List<VaadinSession> expiredSessions = SessionBox.getVaadinSessions().values().parallelStream()
+        List<Sessions> expiredSessions = SessionBox.getSessions().values().parallelStream()
+                .filter(Sessions::hasHttpSession)
                 .filter(this::isSessionExpired).collect(Collectors.toList());
 
         if (expiredSessions.isEmpty()) {
@@ -38,16 +38,16 @@ public class SessionWatchDog {
         expiredSessions.forEach(this::endSession);
     }
 
-    private boolean isSessionExpired(VaadinSession vaadinSession) {
+    private boolean isSessionExpired(final Sessions sessions) {
         int timeoutInSeconds = appUtils.getSessionTimeout();
-        Instant sessionCreatedTime = Instant.ofEpochMilli(vaadinSession.getSession().getCreationTime());
+        Instant sessionCreatedTime = Instant.ofEpochMilli(sessions.getHttpSession().getCreationTime());
         Instant now = Instant.now();
         Instant sessionExpirationTime = sessionCreatedTime.plusSeconds(timeoutInSeconds);
         return now.isAfter(sessionExpirationTime);
     }
 
-    private void endSession(VaadinSession vaadinSession) {
-        log.debug("{} Removing expired session {}", TAG, vaadinSession.getSession().getId());
-        appUtils.endVaadinSession(vaadinSession);
+    private void endSession(final Sessions sessions) {
+        log.debug("{} Removing expired session {}", TAG, sessions.getHttpSession().getId());
+        appUtils.endSession(sessions);
     }
 }
