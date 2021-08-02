@@ -31,6 +31,6 @@ public final class DeviceUtils {
      * @return true - if client device is extra small, false - if not.
      */
     public boolean isExtraSmallDevice() {
-        return screenWidth <= EXTRA_SMALL_WIDTH_BREAKPOINT_PIXELS;
+        return screenWidth > 0 && screenWidth <= EXTRA_SMALL_WIDTH_BREAKPOINT_PIXELS;
     }
 }
