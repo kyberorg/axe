@@ -77,6 +77,7 @@ public class MyLinksView extends YalseeLayout {
     private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
     private UI ui;
     private String sessionId;
+    private DeviceUtils deviceUtils;
 
 
     /**
@@ -99,6 +100,7 @@ public class MyLinksView extends YalseeLayout {
     private void init() {
         sessionId = AppUtils.getSessionId();
         VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.FALSE);
+        deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
 
         sessionBanner.setText("Those are links stored in current session. " +
                 "Soon you will be able to store them permanently, once we introduce users");
@@ -117,11 +119,11 @@ public class MyLinksView extends YalseeLayout {
 
         //Item Details
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
-                "<div class='" + IDs.ITEM_DETAILS_CLASS + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
-                        + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
-                        "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
-                        "</div>"
-                        + "</div>")
+                        "<div class='" + IDs.ITEM_DETAILS_CLASS + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                                + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
+                                "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
+                                "</div>"
+                                + "</div>")
                 .withProperty("href", this::getLongLink)
                 .withProperty("longLink", this::getLongLink)
                 .withProperty("created", this::getCreatedTime)
@@ -133,9 +135,9 @@ public class MyLinksView extends YalseeLayout {
 
         //User-mode activation
         grid.getElement().addEventListener("keydown", event -> {
-            VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
-            activateLinkEditor();
-        })
+                    VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
+                    activateLinkEditor();
+                })
                 .setFilter("event.key === 'R' && event.shiftKey");
 
         //Logout emulation (for tests)
@@ -374,8 +376,7 @@ public class MyLinksView extends YalseeLayout {
         String ident = linkInfo.getIdent();
         String shortLink = appUtils.getShortUrl() + "/" + ident;
 
-        DeviceUtils deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
-        if (deviceUtils != null && deviceUtils.isExtraSmallDevice()) {
+        if (isSmallScreen()) {
             link.setText(ident);
         } else {
             link.setText(shortDomain + "/" + ident);
@@ -469,6 +470,23 @@ public class MyLinksView extends YalseeLayout {
 
     private boolean gridIsEmpty() {
         return grid.getDataProvider().size(new Query<>()) == 0;
+    }
+
+    private boolean isSmallScreen() {
+        boolean isSmallScreen = false;
+        if (deviceUtils != null && deviceUtils.areDetailsSet()) {
+            if (deviceUtils.isExtraSmallDevice()) {
+                isSmallScreen = true;
+            }
+        } else {
+            //fallback to user agent detection
+            boolean hasBrowserInfo = VaadinSession.getCurrent() != null &&
+                    VaadinSession.getCurrent().getBrowser() != null;
+            if (hasBrowserInfo && DeviceUtils.isMobileDevice(VaadinSession.getCurrent().getBrowser())) {
+                isSmallScreen = true;
+            }
+        }
+        return isSmallScreen;
     }
 
     public static class IDs {
