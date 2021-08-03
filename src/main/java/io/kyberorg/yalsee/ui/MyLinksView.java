@@ -78,7 +78,7 @@ public class MyLinksView extends YalseeLayout {
     private UI ui;
     private String sessionId;
     private DeviceUtils deviceUtils;
-
+    private boolean clientHasSmallScreen;
 
     /**
      * Creates {@link MyLinksView}.
@@ -101,6 +101,7 @@ public class MyLinksView extends YalseeLayout {
         sessionId = AppUtils.getSessionId();
         VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.FALSE);
         deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
+        clientHasSmallScreen = isSmallScreen();
 
         sessionBanner.setText("Those are links stored in current session. " +
                 "Soon you will be able to store them permanently, once we introduce users");
@@ -376,7 +377,7 @@ public class MyLinksView extends YalseeLayout {
         String ident = linkInfo.getIdent();
         String shortLink = appUtils.getShortUrl() + "/" + ident;
 
-        if (isSmallScreen()) {
+        if (clientHasSmallScreen) {
             link.setText(ident);
         } else {
             link.setText(shortDomain + "/" + ident);
