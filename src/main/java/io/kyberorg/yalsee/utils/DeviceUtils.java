@@ -23,7 +23,16 @@ public final class DeviceUtils {
     }
 
     public static boolean isMobileDevice(final WebBrowser webBrowser) {
-        return webBrowser.isAndroid() || webBrowser.isIPhone() || webBrowser.isWindowsPhone();
+        boolean mobileBrowser = webBrowser.isAndroid() || webBrowser.isIPhone() || webBrowser.isWindowsPhone();
+        if (mobileBrowser) {
+            return true;
+        }
+        //Fix for Firefox on iPhone
+        if (webBrowser.isFirefox()) {
+            boolean isFirefoxOnPC = webBrowser.isLinux() || webBrowser.isChromeOS() || webBrowser.isWindows() || webBrowser.isMacOSX();
+            return !isFirefoxOnPC;
+        }
+        return false;
     }
 
     private DeviceUtils(UI ui) throws InitializationException {
