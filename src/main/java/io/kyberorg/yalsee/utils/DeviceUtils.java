@@ -27,10 +27,12 @@ public final class DeviceUtils {
         if (mobileBrowser) {
             return true;
         }
-        //Fix for Firefox on iPhone
-        if (webBrowser.isFirefox()) {
-            boolean isFirefoxOnPC = webBrowser.isLinux() || webBrowser.isChromeOS() || webBrowser.isWindows() || webBrowser.isMacOSX();
-            return !isFirefoxOnPC;
+        //Fix for Firefox on iPhone (it is detected as Safari,
+        // but true Safari never should get there because 'mobileBrowser' condition works for it)
+        if (webBrowser.isFirefox() || webBrowser.isSafari()) {
+            boolean isBrowserRunOnPC = webBrowser.isLinux() || webBrowser.isChromeOS()
+                    || webBrowser.isWindows() || webBrowser.isMacOSX();
+            return !isBrowserRunOnPC;
         }
         return false;
     }
