@@ -23,18 +23,7 @@ public final class DeviceUtils {
     }
 
     public static boolean isMobileDevice(final WebBrowser webBrowser) {
-        boolean mobileBrowser = webBrowser.isAndroid() || webBrowser.isIPhone() || webBrowser.isWindowsPhone();
-        if (mobileBrowser) {
-            return true;
-        }
-        //Fix for Firefox on iPhone (it is detected as Safari,
-        // but true Safari never should get there because 'mobileBrowser' condition works for it)
-        if (webBrowser.isFirefox() || webBrowser.isSafari()) {
-            boolean isBrowserRunOnPC = webBrowser.isLinux() || webBrowser.isChromeOS()
-                    || webBrowser.isWindows() || webBrowser.isMacOSX();
-            return !isBrowserRunOnPC;
-        }
-        return false;
+        return webBrowser.isAndroid() || webBrowser.isIPhone() || webBrowser.isWindowsPhone();
     }
 
     private DeviceUtils(UI ui) throws InitializationException {
