@@ -21,9 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 2.0
  */
 public final class TestUtils {
+    private static final String QR_CODE_MARKER = "data:image/png;base64";
+
     private TestUtils() {
         throw new UnsupportedOperationException("Utility class");
     }
+
     /**
      * Result contains JSON.
      *
@@ -140,6 +143,15 @@ public final class TestUtils {
     }
 
     /**
+     * Same as {@link #getAppShortUrl()}, but without schema.
+     *
+     * @return string with short domain of tested instance.
+     */
+    public static String getAppShortDomain() {
+        return getAppShortUrl().replace("https://", "").replace("http://", "");
+    }
+
+    /**
      * Determines if tests are running locally (localhost).
      *
      * @return true if locally, false if not
@@ -196,6 +208,11 @@ public final class TestUtils {
      */
     public static String addRedirectPageBypassSymbol() {
         return getTestedEnv().getRedirectPageBypassSymbol();
+    }
+
+
+    public static boolean isQRCode(final String imageSource) {
+        return StringUtils.isNotBlank(imageSource) && imageSource.contains(QR_CODE_MARKER);
     }
 
     /**

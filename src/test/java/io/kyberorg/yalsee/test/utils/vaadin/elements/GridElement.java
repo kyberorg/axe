@@ -48,7 +48,7 @@ public class GridElement {
     public ElementsCollection getDataRowCells(final int rowNumber) {
         if (rowNumber > 0) {
             getDataRows().shouldBe(sizeNotEqual(0));
-            return getDataRows().get(rowNumber).$$("td");
+            return getDataRows().get(rowNumber - 1).$$("td");
         } else {
             throw new IllegalArgumentException("Row Number cannot be negative");
         }
@@ -78,6 +78,7 @@ public class GridElement {
         } else {
             row = getDataRowCells(rowNumber);
         }
+        row.shouldHave(sizeNotEqual(0));
         return row.get(cellNumber).$("slot").getAttribute("name");
     }
 }

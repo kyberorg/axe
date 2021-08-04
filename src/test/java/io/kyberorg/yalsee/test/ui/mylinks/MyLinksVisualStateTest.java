@@ -1,6 +1,9 @@
 package io.kyberorg.yalsee.test.ui.mylinks;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,11 +13,10 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Banners.*;
-import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
-import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid.GRID;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.PAGE;
 
 public class MyLinksVisualStateTest extends SelenideTest {
+    private final MyLinksViewPageObject pageObject = new MyLinksViewPageObject();
 
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
@@ -30,6 +32,7 @@ public class MyLinksVisualStateTest extends SelenideTest {
         }
         tuneDriverWithCapabilities();
         open("/myLinks");
+        MyLinksViewPageObject.cleanSession();
         VaadinPageObject.waitForVaadin();
         pageOpened = true;
     }
@@ -73,51 +76,59 @@ public class MyLinksVisualStateTest extends SelenideTest {
 
     @Test
     public void gridShouldExist() {
-        GRID.should(exist);
-        GRID.shouldBe(visible);
+        SelenideElement grid = pageObject.getGrid().getSelfElement();
+        grid.should(exist);
+        grid.shouldBe(visible);
     }
 
     @Test
     public void gridShouldHaveHeader() {
-        Grid.Header.ROW.should(exist);
-        Grid.Header.ROW.shouldBe(visible);
+        SelenideElement headerRow = pageObject.getGrid().getHeader().getRow();
+        headerRow.should(exist);
+        headerRow.shouldBe(visible);
     }
 
     @Test
     public void gridShouldHave4Columns() {
-        Grid.Header.CELLS.shouldHave(size(4));
+        ElementsCollection headerCells = pageObject.getGrid().getHeader().getCells();
+        headerCells.shouldHave(size(4));
     }
 
     @Test
     public void linkColumnHeaderShouldExistAndHaveText() {
-        Grid.Header.LINK_CELL.should(exist);
-        Grid.Header.LINK_CELL.shouldBe(visible);
-        Grid.Header.LINK_CELL.shouldHave(text("Link"));
+        SelenideElement linkCell = pageObject.getGrid().getHeader().getLinkCell();
+        linkCell.should(exist);
+        linkCell.shouldBe(visible);
+        linkCell.shouldHave(text("Link"));
     }
 
     @Test
     public void descriptionColumnHeaderShouldExistAndHaveText() {
-        Grid.Header.DESCRIPTION_CELL.should(exist);
-        Grid.Header.DESCRIPTION_CELL.shouldBe(visible);
-        Grid.Header.DESCRIPTION_CELL.shouldHave(text("Description"));
+        SelenideElement descriptionCell = pageObject.getGrid().getHeader().getDescriptionCell();
+        descriptionCell.should(exist);
+        descriptionCell.shouldBe(visible);
+        descriptionCell.shouldHave(text("Description"));
     }
 
     @Test
     public void qrCodeColumnHeaderShouldExistAndHaveText() {
-        Grid.Header.QR_CODE_CELL.should(exist);
-        Grid.Header.QR_CODE_CELL.shouldBe(visible);
-        Grid.Header.QR_CODE_CELL.shouldHave(text("QR Code"));
+        SelenideElement qrCodeCell = pageObject.getGrid().getHeader().getQrCodeCell();
+        qrCodeCell.should(exist);
+        qrCodeCell.shouldBe(visible);
+        qrCodeCell.shouldHave(text("QR Code"));
     }
 
     @Test
     public void actionsColumnHeaderShouldExistAndHaveText() {
-        Grid.Header.ACTIONS_CELL.should(exist);
-        Grid.Header.ACTIONS_CELL.shouldBe(visible);
-        Grid.Header.ACTIONS_CELL.shouldHave(text("Actions"));
+        SelenideElement actionsCell = pageObject.getGrid().getHeader().getActionCell();
+        actionsCell.should(exist);
+        actionsCell.shouldBe(visible);
+        actionsCell.shouldHave(text("Actions"));
     }
 
     @Test
     public void gridShouldHaveNoItems() {
-        Grid.Data.ROWS.shouldHave(size(0));
+        ElementsCollection gridDataRows = pageObject.getGrid().getGridData().getDataRows();
+        gridDataRows.shouldHave(size(0));
     }
 }
