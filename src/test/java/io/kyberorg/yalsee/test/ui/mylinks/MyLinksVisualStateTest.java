@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.test.ui.mylinks;
 
+import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ public class MyLinksVisualStateTest extends SelenideTest {
 
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
-    private boolean pageOpened = false;
+    private static boolean pageOpened = false;
 
     /**
      * Test Setup.
@@ -46,7 +47,7 @@ public class MyLinksVisualStateTest extends SelenideTest {
 
     @Test
     public void sessionBannerShouldHaveNeededWords() {
-        SESSION_BANNER.shouldHave(text("sessions"));
+        SESSION_BANNER.shouldHave(text("session"));
         SESSION_BANNER.shouldHave(text("users"));
     }
 
@@ -67,7 +68,7 @@ public class MyLinksVisualStateTest extends SelenideTest {
     public void noRecordsBannerHasLinkToMainPage() {
         NO_RECORDS_BANNER_LINK.should(exist);
         NO_RECORDS_BANNER_LINK.shouldBe(visible);
-        NO_RECORDS_BANNER_LINK.shouldHave(attribute("href", "/"));
+        NO_RECORDS_BANNER_LINK.shouldHave(attribute("href", TestUtils.getTestUrl() + "/"));
     }
 
     @Test
