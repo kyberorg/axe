@@ -129,6 +129,33 @@ public class MyLinksViewPageObject {
                 }
             }
         }
+
+        public static class GridItem {
+            @Data(staticConstructor = "of")
+            public static class Details {
+                private final SelenideElement itemDetails;
+                
+                public SelenideElement getLongLink() {
+                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_LINK_CLASS);
+                }
+
+                public SelenideElement getCreatedTimeLabel() {
+                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS);
+                }
+
+                public SelenideElement getCreatedTime() {
+                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_CREATED_TIME_CLASS);
+                }
+
+                public SelenideElement getUpdatedTimeLabel() {
+                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS);
+                }
+
+                public SelenideElement getUpdatedTime() {
+                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_UPDATED_TIME_CLASS);
+                }
+            }
+        }
     }
 
     public static void cleanSession() {

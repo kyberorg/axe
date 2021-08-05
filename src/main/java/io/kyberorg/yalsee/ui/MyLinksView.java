@@ -116,7 +116,7 @@ public class MyLinksView extends YalseeLayout {
         cleanButton.setText("Delete all");
         cleanButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         cleanButton.addClickListener(this::onCleanButtonClick);
-        cleanButton.getStyle().set("align-self", "end");
+        cleanButton.getStyle().set("align-self", "flex-end");
 
         grid.removeAllColumns();
 
@@ -127,9 +127,15 @@ public class MyLinksView extends YalseeLayout {
 
         //Item Details
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
-                        "<div class='" + IDs.ITEM_DETAILS_CLASS + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
-                                + "<div><b><a href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
-                                "<div>Created: [[item.created]], Updated: [[item.updated]]</div>" +
+                        "<div class='" + IDs.ITEM_DETAILS_CLASS
+                                + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                                + "<div><b><a class='"
+                                + IDs.ITEM_DETAILS_LINK_CLASS + "' href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
+                                "<div><span class='"
+                                + IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS + "'>Created: </span><span class='"
+                                + IDs.ITEM_DETAILS_CREATED_TIME_CLASS + "'>[[item.created]]<span><span class='"
+                                + IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS + "'>, Updated: <span><span class='"
+                                + IDs.ITEM_DETAILS_UPDATED_TIME_CLASS + "'>[[item.updated]]<span></div>" +
                                 "</div>"
                                 + "</div>")
                 .withProperty("href", this::getLongLink)
@@ -512,5 +518,10 @@ public class MyLinksView extends YalseeLayout {
         public static final String QR_CODE_COLUMN_CLASS = "qrCodeCol";
         public static final String DELETE_COLUMN_CLASS = "deleteCol";
         public static final String ITEM_DETAILS_CLASS = "item-details";
+        public static final String ITEM_DETAILS_LINK_CLASS = "long-link";
+        public static final String ITEM_DETAILS_CREATED_TIME_LABEL_CLASS = "created-time-label";
+        public static final String ITEM_DETAILS_CREATED_TIME_CLASS = "created-time";
+        public static final String ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS = "updated-time-label";
+        public static final String ITEM_DETAILS_UPDATED_TIME_CLASS = "updated-time";
     }
 }

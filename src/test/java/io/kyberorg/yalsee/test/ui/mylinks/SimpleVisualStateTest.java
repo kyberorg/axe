@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Banners.*;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 
-public class MyLinksVisualStateTest extends SelenideTest {
+public class SimpleVisualStateTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
     private static boolean pageOpened = false;
@@ -31,6 +31,7 @@ public class MyLinksVisualStateTest extends SelenideTest {
         open("/myLinks");
         VaadinPageObject.waitForVaadin();
         cleanSession();
+        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
         pageOpened = true;
     }
 

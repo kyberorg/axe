@@ -34,6 +34,7 @@ public class StateWithOneLinkSavedTest extends SelenideTest {
         open("/myLinks");
         VaadinPageObject.waitForVaadin();
         cleanSession();
+        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
 
         //saving one link
         open("/");
