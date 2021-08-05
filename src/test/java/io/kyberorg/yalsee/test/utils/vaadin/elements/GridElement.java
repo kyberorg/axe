@@ -37,12 +37,8 @@ public class GridElement {
         return getHeader().$$("th");
     }
 
-    public SelenideElement getDataPart() {
-        return $vaadin(cssSelector).shadowRoot("tbody#items");
-    }
-
     public ElementsCollection getDataRows() {
-        return getDataPart().$$("tr");
+        return getDataItems().$$("tr");
     }
 
     public ElementsCollection getDataRowCells(final int rowNumber) {
@@ -66,6 +62,10 @@ public class GridElement {
     public SelenideElement getCell(int rowNumber, int cellNumber) {
         String slotName = getCellSlotName(rowNumber, cellNumber);
         return $("vaadin-grid-cell-content[slot=" + slotName + "]");
+    }
+
+    private SelenideElement getDataItems() {
+        return $vaadin(cssSelector).shadowRoot("tbody#items");
     }
 
     private String getCellSlotName(int rowNumber, int cellNumber) throws IllegalArgumentException, ElementNotFound {

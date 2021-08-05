@@ -4,7 +4,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
-import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,12 +12,10 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Banners;
+import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class StateWithOneLinkSaved extends SelenideTest {
-    private final MyLinksViewPageObject pageObject = new MyLinksViewPageObject();
-
+public class StateWithOneLinkSavedTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
     private static boolean pageOpened = false;
@@ -32,18 +29,21 @@ public class StateWithOneLinkSaved extends SelenideTest {
             return;
         }
         tuneDriverWithCapabilities();
+
         //session cleanup
         open("/myLinks");
-        MyLinksViewPageObject.cleanSession();
+        VaadinPageObject.waitForVaadin();
+        cleanSession();
 
         //saving one link
         open("/");
+        VaadinPageObject.waitForVaadin();
         HomePageObject.pasteValueInFormAndSubmitIt("https://kyberorg.io");
 
         //doing to page
         open("/myLinks");
         VaadinPageObject.waitForVaadin();
-        
+
         pageOpened = true;
     }
 
@@ -62,12 +62,12 @@ public class StateWithOneLinkSaved extends SelenideTest {
 
     @Test
     public void gridHasOneItem() {
-        pageObject.getGrid().getGridData().getDataRows().shouldHave(size(1));
+        Grid.GridData.get().getDataRows().shouldHave(size(1));
     }
 
     @Test
     public void linkCellContainsStringWithShortLink() {
-        SelenideElement link = pageObject.getGrid().getGridData().getRow(1).getLinkCell();
+        SelenideElement link = Grid.GridData.get().getRow(1).getLinkCell();
         link.should(exist);
         link.shouldBe(visible);
         link.shouldHave(text("/"));
@@ -76,7 +76,7 @@ public class StateWithOneLinkSaved extends SelenideTest {
 
     @Test
     public void descriptionCellShouldBeEmpty() {
-        SelenideElement description = pageObject.getGrid().getGridData().getRow(1).getDescriptionCell();
+        SelenideElement description = Grid.GridData.get().getRow(1).getDescriptionCell();
         description.should(exist);
         description.shouldBe(visible);
         description.shouldBe(empty);
@@ -84,11 +84,11 @@ public class StateWithOneLinkSaved extends SelenideTest {
 
     @Test
     public void qrCodeCellHasQRCode() {
-        SelenideElement qrCodeCell = pageObject.getGrid().getGridData().getRow(1).getQRCodeCell();
+        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
         qrCodeCell.should(exist);
         qrCodeCell.shouldBe(visible);
 
-        SelenideElement qrCode = MyLinksViewPageObject.extractQRCodeFromCell(qrCodeCell);
+        SelenideElement qrCode = Grid.GridData.get().getRow(1).getQRCode();
         qrCode.should(exist);
         assertTrue(qrCode.isImage(), "QR code is not image");
 
@@ -100,21 +100,20 @@ public class StateWithOneLinkSaved extends SelenideTest {
 
     @Test
     public void qrCodeCellIsClickable() {
-        SelenideElement qrCodeCell = pageObject.getGrid().getGridData().getRow(1).getQRCodeCell();
+        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCode();
         qrCodeCell.shouldBe(enabled);
     }
 
     @Test
     public void actionsCellHasOneButton() {
-        SelenideElement actionsCell = pageObject.getGrid().getGridData().getRow(1).getActionsCell();
+        SelenideElement actionsCell = Grid.GridData.get().getRow(1).getActionsCell();
         ElementsCollection vaadinButtons = actionsCell.$("flow-component-renderer").$$("vaadin-button");
         vaadinButtons.shouldHave(size(1));
     }
 
     @Test
     public void actionsCellHasDeleteButton() {
-        SelenideElement actionsCell = pageObject.getGrid().getGridData().getRow(1).getActionsCell();
-        SelenideElement deleteButton = MyLinksViewPageObject.extractButtonFromCell(actionsCell);
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.should(exist);
         deleteButton.shouldBe(visible);
         deleteButton.shouldHave(text("Delete"));
@@ -122,9 +121,14 @@ public class StateWithOneLinkSaved extends SelenideTest {
 
     @Test
     public void deleteButtonIsActive() {
-        SelenideElement actionsCell = pageObject.getGrid().getGridData().getRow(1).getActionsCell();
-        SelenideElement deleteButton = MyLinksViewPageObject.extractButtonFromCell(actionsCell);
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.shouldBe(enabled);
     }
 
+    @Test
+    public void itemDetailsShouldBeHidden() {
+        SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
+        itemDetails.should(exist);
+        itemDetails.shouldBe(hidden);
+    }
 }

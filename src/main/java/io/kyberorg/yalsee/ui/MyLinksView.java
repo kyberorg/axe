@@ -63,6 +63,8 @@ public class MyLinksView extends YalseeLayout {
     private final Span noRecordsBannerText = new Span();
     private final Anchor noRecordsBannerLink = new Anchor();
 
+    private final Button cleanButton = new Button();
+
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
     private Grid.Column<LinkInfo> descriptionColumn;
@@ -111,6 +113,11 @@ public class MyLinksView extends YalseeLayout {
         noRecordsBannerLink.setText("MainPage");
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
 
+        cleanButton.setText("Delete all");
+        cleanButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        cleanButton.addClickListener(this::onCleanButtonClick);
+        cleanButton.getStyle().set("align-self", "end");
+
         grid.removeAllColumns();
 
         linkColumn = grid.addComponentColumn(this::link).setHeader("Link");
@@ -141,14 +148,9 @@ public class MyLinksView extends YalseeLayout {
                 })
                 .setFilter("event.key === 'R' && event.shiftKey");
 
-        //Logout emulation (for tests)
-        grid.getElement().addEventListener("keydown", event ->
-                appUtils.endVaadinSession(VaadinSession.getCurrent())
-        ).setFilter("event.key === 'Q' && event.shiftKey");
-
         initGridEditor();
 
-        add(sessionBanner, noRecordsBanner, grid);
+        add(sessionBanner, noRecordsBanner, cleanButton, grid);
     }
 
     private void initGridEditor() {
@@ -198,6 +200,7 @@ public class MyLinksView extends YalseeLayout {
         noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
         noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
         noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
+        cleanButton.setId(IDs.CLEAN_BUTTON);
         grid.setId(IDs.GRID);
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
         descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
@@ -272,6 +275,10 @@ public class MyLinksView extends YalseeLayout {
         } else {
             ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
         }
+    }
+
+    private void onCleanButtonClick(ClickEvent<Button> buttonClickEvent) {
+        appUtils.endVaadinSession(VaadinSession.getCurrent());
     }
 
     private void updateDataAndState() {
@@ -492,12 +499,14 @@ public class MyLinksView extends YalseeLayout {
 
     public static class IDs {
         public static final String SESSION_BANNER = "sessionBanner";
-        public static final String GRID = "grid";
 
         public static final String NO_RECORDS_BANNER = "noRecordsBanner";
         public static final String NO_RECORDS_BANNER_TEXT = "noRecordsBannerText";
         public static final String NO_RECORDS_BANNER_LINK = "noRecordsBannerLink";
 
+        public static final String CLEAN_BUTTON = "cleanButton";
+
+        public static final String GRID = "grid";
         public static final String LINK_COLUMN_CLASS = "linkCol";
         public static final String DESCRIPTION_COLUMN_CLASS = "descriptionCol";
         public static final String QR_CODE_COLUMN_CLASS = "qrCodeCol";
