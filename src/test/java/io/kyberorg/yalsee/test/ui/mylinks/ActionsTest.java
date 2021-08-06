@@ -117,31 +117,7 @@ public class ActionsTest extends SelenideTest {
 
         Grid.GridData.get().getDataRows().shouldHave(size(3));
     }
-
-    @Test
-    public void saveThreeLinksDeleteOneTwoShouldStay() {
-        saveOneLink();
-        saveOneLink();
-        saveOneLink();
-
-        openMyLinksPage();
-
-        Grid.GridData.get().getDataRows().shouldHave(size(3));
-
-        SelenideElement firstDeleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
-        SelenideElement secondDeleteButton = Grid.GridData.get().getRow(2).getDeleteButton();
-
-        secondDeleteButton.click();
-        //wait for action completes
-        VaadinPageObject.waitForVaadin();
-
-        firstDeleteButton.click();
-        VaadinPageObject.waitForVaadin();
-
-        openMyLinksPage();
-        Grid.GridData.get().getDataRows().shouldHave(size(1));
-    }
-
+    
     @Test
     public void eachItemHasCorrectShortAndLongLinks() {
         String longUrlOne = "https://github.com/kyberorg/yalsee/issues/195";
