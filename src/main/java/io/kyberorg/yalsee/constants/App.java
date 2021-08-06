@@ -82,7 +82,6 @@ public final class App {
     }
 
     public static class Session {
-        public static final int MAX_INACTIVE_INTERVAL_SECONDS = 180;
         public static final int SESSION_WATCH_DOG_INTERVAL_MILLIS = 20000; //20 seconds
     }
 }
