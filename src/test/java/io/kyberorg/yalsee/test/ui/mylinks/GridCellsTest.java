@@ -93,7 +93,7 @@ public class GridCellsTest extends SelenideTest {
         updatedTime.shouldNotBe(empty);
 
         //created time = updated time
-        assertEquals(createdTime, updatedTime);
+        assertEquals(createdTime.getText(), updatedTime.getText());
 
         //clean up
         if (itemDetailsElement.isDisplayed()) {
