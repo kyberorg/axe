@@ -124,6 +124,11 @@ public final class UrlUtils {
         }
     }
 
+    public static String removeProtocol(final String urlWithProtocol) {
+        return urlWithProtocol.replaceFirst("https", "").replaceFirst("http", "")
+                .replaceFirst("ftp", "").replaceFirst("://", "");
+    }
+
     private static String replaceSpacesInUrl(final String originUrl) {
         return originUrl.replaceAll(" ", "+");
     }

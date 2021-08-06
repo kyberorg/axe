@@ -16,7 +16,7 @@ import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSes
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ActionsWithOneLinkSavedTest extends SelenideTest {
+public class GridCellsTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
     private static boolean pageOpened = false;

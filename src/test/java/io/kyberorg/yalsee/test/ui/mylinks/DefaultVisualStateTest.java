@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Banners.*;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 
-public class SimpleVisualStateTest extends SelenideTest {
+public class DefaultVisualStateTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
     private static boolean pageOpened = false;

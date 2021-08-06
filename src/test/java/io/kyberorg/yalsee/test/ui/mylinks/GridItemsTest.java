@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class StateWithOneLinkSavedTest extends SelenideTest {
+public class GridItemsTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
     private static boolean pageOpened = false;
