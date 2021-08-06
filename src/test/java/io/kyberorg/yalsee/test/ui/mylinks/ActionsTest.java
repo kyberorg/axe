@@ -132,9 +132,10 @@ public class ActionsTest extends SelenideTest {
         SelenideElement secondDeleteButton = Grid.GridData.get().getRow(2).getDeleteButton();
 
         secondDeleteButton.click();
-        firstDeleteButton.click();
-
         //wait for action completes
+        VaadinPageObject.waitForVaadin();
+
+        firstDeleteButton.click();
         VaadinPageObject.waitForVaadin();
 
         openMyLinksPage();
