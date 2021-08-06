@@ -69,19 +69,23 @@ public abstract class SelenideTest {
     protected void tuneDriverWithCapabilities() {
         if (shouldRunTestsAtGrid()) {
             MutableCapabilities capabilities = new MutableCapabilities();
-            capabilities.setCapability("enableVnc",  true);
+            capabilities.setCapability("enableVnc", true);
             capabilities.setCapability("screenResolution", "1920x1080x24");
 
-            capabilities.setCapability("name",  BUILD_NAME);
+            capabilities.setCapability("name", BUILD_NAME);
 
-            capabilities.setCapability("enableVideo",  true);
-            capabilities.setCapability("videoName",  BUILD_NAME + ".mp4");
+            capabilities.setCapability("enableVideo", true);
+            capabilities.setCapability("videoName", BUILD_NAME + ".mp4");
 
-            capabilities.setCapability("enableLog",  true);
-            capabilities.setCapability("logName",  BUILD_NAME + ".log");
+            capabilities.setCapability("enableLog", true);
+            capabilities.setCapability("logName", BUILD_NAME + ".log");
 
             Configuration.browserCapabilities.merge(capabilities);
         }
+    }
+
+    protected boolean isGridRun() {
+        return shouldRunTestsAtGrid();
     }
 
     /**
@@ -100,7 +104,7 @@ public abstract class SelenideTest {
             String testLocation =
                     runMode == TestApp.RunMode.GRID ? "at Grid (" + Configuration.remote + ")" : "locally";
 
-            StringBuilder commonInfoBuilder =  new StringBuilder(App.NEW_LINE);
+            StringBuilder commonInfoBuilder = new StringBuilder(App.NEW_LINE);
             commonInfoBuilder.append("=== UI Tests Common Info ===").append(App.NEW_LINE);
             commonInfoBuilder.append(String.format("BuildName: %s", BUILD_NAME)).append(App.NEW_LINE);
             commonInfoBuilder.append(String.format("Will test %s", testLocation)).append(App.NEW_LINE);
