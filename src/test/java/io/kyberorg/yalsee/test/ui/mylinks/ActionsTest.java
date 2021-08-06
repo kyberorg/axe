@@ -18,6 +18,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ActionsTest extends SelenideTest {
     /**
@@ -42,19 +43,8 @@ public class ActionsTest extends SelenideTest {
         Grid.GridData.get().getDataRows().shouldHave(size(1));
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.click();
-        Grid.GridData.get().getDataRows().shouldHave(size(0));
-    }
 
-    @Test
-    public void deleteButtonRemovesRecordFromGridAndSameAfterReload() {
-        saveOneLink();
-        openMyLinksPage();
-
-        Grid.GridData.get().getDataRows().shouldHave(size(1));
-        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
-        deleteButton.click();
-        Grid.GridData.get().getDataRows().shouldHave(size(0));
-
+        //reload needed - because Vaadin just hides element in grid
         openMyLinksPage();
         Grid.GridData.get().getDataRows().shouldHave(size(0));
     }
@@ -109,7 +99,7 @@ public class ActionsTest extends SelenideTest {
 
             row.getQRCode().should(exist);
             row.getQRCode().shouldBe(visible);
-            row.getQRCode().shouldNotBe(empty);
+            assertTrue(row.getQRCode().isImage());
 
             row.getDeleteButton().should(exist);
             row.getDeleteButton().shouldBe(visible);
@@ -144,7 +134,6 @@ public class ActionsTest extends SelenideTest {
         secondDeleteButton.click();
         firstDeleteButton.click();
 
-        Grid.GridData.get().getDataRows().shouldHave(size(1));
         openMyLinksPage();
         Grid.GridData.get().getDataRows().shouldHave(size(1));
     }
@@ -175,6 +164,7 @@ public class ActionsTest extends SelenideTest {
         String actualLongUrlOne = Grid.GridItem.Details.of(rowOne.getItemDetails()).getLongLink().getText();
         assertEquals(longUrlOne, actualLongUrlOne);
 
+        rowTwo.getDescriptionCell().click();
         String actualLongUrlTwo = Grid.GridItem.Details.of(rowTwo.getItemDetails()).getLongLink().getText();
         assertEquals(longUrlTwo, actualLongUrlTwo);
     }

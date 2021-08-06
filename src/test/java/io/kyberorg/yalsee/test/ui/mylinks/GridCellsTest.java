@@ -50,20 +50,13 @@ public class GridCellsTest extends SelenideTest {
     }
 
     @Test
-    public void onItemClickItemDetailsOpened() {
-        SelenideElement item = Grid.GridData.get().getRow(1).getDescriptionCell();
-        item.click();
-        SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
-        itemDetails.should(exist);
-        itemDetails.shouldBe(visible);
-    }
-
-    @Test
     public void onItemClickItemDetailsOpenedAndHaveAllNeededElementsInside() {
         SelenideElement item = Grid.GridData.get().getRow(1).getDescriptionCell();
         item.click();
         SelenideElement itemDetailsElement = Grid.GridData.get().getRow(1).getItemDetails();
         Grid.GridItem.Details itemDetails = Grid.GridItem.Details.of(itemDetailsElement);
+        itemDetailsElement.should(exist);
+        itemDetailsElement.shouldBe(visible);
 
         //long link
         SelenideElement longLink = itemDetails.getLongLink();
@@ -106,7 +99,10 @@ public class GridCellsTest extends SelenideTest {
         String link = linkCell.getText();
         linkCell.click();
         String textFromClipboard = Selenide.clipboard().getText();
-        assertEquals(link, textFromClipboard);
+        assertEquals("http://" + link, textFromClipboard);
+
+        //closing item details, which opens within same click
+        linkCell.click();
     }
 
     @Test
@@ -116,20 +112,22 @@ public class GridCellsTest extends SelenideTest {
         SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.should(exist);
         descriptionEditor.should(visible);
+        descriptionEditor.pressEscape();
     }
 
     @Test
     public void onClickToQRCodeModalOpens() {
-        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
-        qrCodeCell.click();
+        SelenideElement qrCode = Grid.GridData.get().getRow(1).getQRCode();
+        qrCode.click();
         Grid.GridItem.BigQRCodeModal.MODAL.should(exist);
         Grid.GridItem.BigQRCodeModal.MODAL.should(visible);
+        Grid.GridItem.BigQRCodeModal.MODAL.pressEscape();
     }
 
     @Test
     public void bigQRCodeModalHasQRCode() {
-        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
-        qrCodeCell.click();
+        SelenideElement qrCode = Grid.GridData.get().getRow(1).getQRCode();
+        qrCode.click();
         SelenideElement bigQRCode = Grid.GridItem.BigQRCodeModal.QR_CODE;
         bigQRCode.should(exist);
         bigQRCode.should(visible);
@@ -138,6 +136,8 @@ public class GridCellsTest extends SelenideTest {
         bigQRCode.shouldHave(attribute("src"));
         assertTrue(TestUtils.isQRCode(bigQRCode.getAttribute("src")), "Image is not valid QR Code");
         bigQRCode.shouldHave(attribute("alt", "QR Code"));
+
+        Grid.GridItem.BigQRCodeModal.MODAL.pressEscape();
     }
 
     @Test
@@ -145,12 +145,14 @@ public class GridCellsTest extends SelenideTest {
         final int exceptedWidth = 350;
         final int exceptedHeight = 350;
 
-        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
-        qrCodeCell.click();
+        SelenideElement qrCode = Grid.GridData.get().getRow(1).getQRCode();
+        qrCode.click();
         SelenideElement bigQRCode = Grid.GridItem.BigQRCodeModal.QR_CODE;
 
         assertEquals(exceptedWidth, bigQRCode.getSize().getWidth());
         assertEquals(exceptedHeight, bigQRCode.getSize().getHeight());
+
+        Grid.GridItem.BigQRCodeModal.MODAL.pressEscape();
     }
 
     @Test
