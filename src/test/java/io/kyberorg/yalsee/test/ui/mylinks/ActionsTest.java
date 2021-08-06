@@ -134,6 +134,9 @@ public class ActionsTest extends SelenideTest {
         secondDeleteButton.click();
         firstDeleteButton.click();
 
+        //wait for action completes
+        VaadinPageObject.waitForVaadin();
+
         openMyLinksPage();
         Grid.GridData.get().getDataRows().shouldHave(size(1));
     }

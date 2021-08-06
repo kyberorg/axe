@@ -101,8 +101,11 @@ public class GridCellsTest extends SelenideTest {
         String textFromClipboard = Selenide.clipboard().getText();
         assertEquals("http://" + link, textFromClipboard);
 
-        //closing item details, which opens within same click
-        linkCell.click();
+        //closing item details if opened, which opens within same click
+        SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
+        if (itemDetails.isDisplayed()) {
+            linkCell.click();
+        }
     }
 
     @Test
