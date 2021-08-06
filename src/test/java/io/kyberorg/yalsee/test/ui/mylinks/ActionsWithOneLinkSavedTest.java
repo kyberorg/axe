@@ -1,6 +1,8 @@
 package io.kyberorg.yalsee.test.ui.mylinks;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -12,13 +14,21 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ActionsWithOneLinkSavedTest extends SelenideTest {
+    //emulating @BeforeAll behavior
+    // this needed because tuneDriverWithCapabilities(); is not static
+    private static boolean pageOpened = false;
+
     /**
      * Test Setup.
      */
     @BeforeEach
     public void beforeTest() {
+        if (pageOpened) {
+            return;
+        }
         tuneDriverWithCapabilities();
 
         //cleaning session
@@ -35,6 +45,8 @@ public class ActionsWithOneLinkSavedTest extends SelenideTest {
         //doing to page
         open("/myLinks");
         VaadinPageObject.waitForVaadin();
+
+        pageOpened = true;
     }
 
     @Test
@@ -59,7 +71,7 @@ public class ActionsWithOneLinkSavedTest extends SelenideTest {
         longLink.shouldBe(visible);
         assertEquals("a", longLink.getTagName());
         String longLinkText = longLink.getText();
-        longLink.shouldHave(attribute("href", longLinkText));
+        longLink.shouldHave(attribute("href", longLinkText + "/"));
 
         //created time label
         SelenideElement createdTimeLabel = itemDetails.getCreatedTimeLabel();
@@ -80,11 +92,72 @@ public class ActionsWithOneLinkSavedTest extends SelenideTest {
         updatedTimeLabel.shouldBe(visible);
         updatedTimeLabel.shouldNotBe(empty);
         updatedTimeLabel.shouldHave(text("Updated"));
-        
+
         //updated time
         SelenideElement updatedTime = itemDetails.getUpdatedTime();
         updatedTime.should(exist);
         updatedTime.shouldBe(visible);
         updatedTime.shouldNotBe(empty);
+    }
+
+    @Test
+    public void onClickToLinkShortLinkCopiedToClipboard() {
+        SelenideElement linkCell = Grid.GridData.get().getRow(1).getLinkCell();
+        String link = linkCell.getText();
+        linkCell.click();
+        String textFromClipboard = Selenide.clipboard().getText();
+        assertEquals(link, textFromClipboard);
+    }
+
+    @Test
+    public void onDoubleClickToDescriptionEditorOpens() {
+        SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.doubleClick();
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        descriptionEditor.should(exist);
+        descriptionEditor.should(visible);
+    }
+
+    @Test
+    public void onClickToQRCodeModalOpens() {
+        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
+        qrCodeCell.click();
+        Grid.GridItem.BigQRCodeModal.MODAL.should(exist);
+        Grid.GridItem.BigQRCodeModal.MODAL.should(visible);
+    }
+
+    @Test
+    public void bigQRCodeModalHasQRCode() {
+        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
+        qrCodeCell.click();
+        SelenideElement bigQRCode = Grid.GridItem.BigQRCodeModal.QR_CODE;
+        bigQRCode.should(exist);
+        bigQRCode.should(visible);
+
+        assertTrue(bigQRCode.isImage(), "QR code is not image");
+        bigQRCode.shouldHave(attribute("src"));
+        assertTrue(TestUtils.isQRCode(bigQRCode.getAttribute("src")), "Image is not valid QR Code");
+        bigQRCode.shouldHave(attribute("alt", "QR Code"));
+    }
+
+    @Test
+    public void bigQRCodeHasCorrectSize() {
+        final int exceptedWidth = 350;
+        final int exceptedHeight = 350;
+
+        SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
+        qrCodeCell.click();
+        SelenideElement bigQRCode = Grid.GridItem.BigQRCodeModal.QR_CODE;
+
+        assertEquals(exceptedWidth, bigQRCode.getSize().getWidth());
+        assertEquals(exceptedHeight, bigQRCode.getSize().getHeight());
+    }
+
+    @Test
+    public void deleteButtonShouldExistAndBeActive() {
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
+        deleteButton.should(exist);
+        deleteButton.should(visible);
+        deleteButton.should(enabled);
     }
 }

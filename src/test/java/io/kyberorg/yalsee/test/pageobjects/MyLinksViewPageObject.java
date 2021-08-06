@@ -107,6 +107,10 @@ public class MyLinksViewPageObject {
                     return gridElement.getCell(this.rowNumber, 1);
                 }
 
+                public SelenideElement getDescriptionEditor() {
+                    return getDescriptionCell().$("flow-component-renderer vaadin-text-field");
+                }
+
                 public SelenideElement getQRCodeCell() {
                     return gridElement.getCell(this.rowNumber, 2);
                 }
@@ -134,7 +138,7 @@ public class MyLinksViewPageObject {
             @Data(staticConstructor = "of")
             public static class Details {
                 private final SelenideElement itemDetails;
-                
+
                 public SelenideElement getLongLink() {
                     return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_LINK_CLASS);
                 }
@@ -154,6 +158,11 @@ public class MyLinksViewPageObject {
                 public SelenideElement getUpdatedTime() {
                     return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_UPDATED_TIME_CLASS);
                 }
+            }
+
+            public static class BigQRCodeModal {
+                public static final SelenideElement MODAL = $("vaadin-dialog-overlay#overlay");
+                public static SelenideElement QR_CODE = MODAL.$("flow-component-renderer div img");
             }
         }
     }

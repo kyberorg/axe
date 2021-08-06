@@ -129,7 +129,6 @@ public class StateWithOneLinkSavedTest extends SelenideTest {
     @Test
     public void itemDetailsShouldBeHidden() {
         SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
-        itemDetails.should(exist);
-        itemDetails.shouldBe(hidden);
+        itemDetails.shouldNot(exist);
     }
 }
