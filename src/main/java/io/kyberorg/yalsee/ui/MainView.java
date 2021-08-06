@@ -93,7 +93,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         //session tricks
         SessionBox.storeSession(VaadinSession.getCurrent());
-        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(App.Session.MAX_INACTIVE_INTERVAL_SECONDS);
+        //VaadinSession.getCurrent().getSession().setMaxInactiveInterval(App.Session.MAX_INACTIVE_INTERVAL_SECONDS);
 
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
