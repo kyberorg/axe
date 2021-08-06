@@ -91,6 +91,14 @@ public class GridCellsTest extends SelenideTest {
         updatedTime.should(exist);
         updatedTime.shouldBe(visible);
         updatedTime.shouldNotBe(empty);
+
+        //created time = updated time
+        assertEquals(createdTime, updatedTime);
+
+        //clean up
+        if (itemDetailsElement.isDisplayed()) {
+            item.click();
+        }
     }
 
     @Test
