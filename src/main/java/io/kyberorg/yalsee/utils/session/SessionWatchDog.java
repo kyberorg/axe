@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +16,7 @@ import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCH_DOG_INTERVA
 
 @Slf4j
 @Component
-public class SessionWatchDog {
+public class SessionWatchDog implements HttpSessionListener {
     private static final String TAG = "[" + SessionWatchDog.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
@@ -43,6 +46,17 @@ public class SessionWatchDog {
         }
 
         expiredSessions.forEach(this::endSession);
+    }
+
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        log.debug("{} HTTP session created {}", TAG, se.getSession().getId());
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent se) {
+        log.debug("{} HTTP session Destroyed {}, Session age: {}", TAG, se.getSession().getId(),
+                Duration.ofMillis(System.currentTimeMillis() - se.getSession().getCreationTime()));
     }
 
     private boolean isSessionExpired(final Sessions sessions) {
