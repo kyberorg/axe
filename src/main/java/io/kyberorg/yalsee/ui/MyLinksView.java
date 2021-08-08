@@ -159,6 +159,58 @@ public class MyLinksView extends YalseeLayout {
         add(sessionBanner, noRecordsBanner, endSessionButton, grid);
     }
 
+    private Span link(final LinkInfo linkInfo) {
+        Span link = new Span();
+        String shortDomain = appUtils.getShortDomain();
+        String ident = linkInfo.getIdent();
+        String shortLink = appUtils.getShortUrl() + "/" + ident;
+
+        if (clientHasSmallScreen) {
+            link.setText(ident);
+        } else {
+            link.setText(shortDomain + "/" + ident);
+        }
+
+        link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink,
+                Notification.Position.BOTTOM_CENTER));
+        return link;
+    }
+
+    private Image qrImage(final LinkInfo linkInfo) {
+        Image image = new Image();
+        OperationResult qrCodeResult = qrCodeService.getQRCode(linkInfo.getIdent(), App.QR.MINIMAL_SIZE_IN_PIXELS);
+        if (qrCodeResult.ok()) {
+            image.setSrc(qrCodeResult.getStringPayload());
+        }
+        image.setAlt("QR Code");
+        image.setId(Long.toString(linkInfo.getId()));
+        image.addClickListener(this::onQRCodeClicked);
+        return image;
+    }
+
+    private Button createDeleteButton(final LinkInfo item) {
+        Button deleteButton = new Button("Delete", clickEvent -> onDeleteButtonClick(item));
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        return deleteButton;
+    }
+
+    private String getLongLink(LinkInfo linkInfo) {
+        OperationResult result = linkService.getLinkWithIdent(linkInfo.getIdent());
+        if (result.ok()) {
+            return result.getStringPayload();
+        } else {
+            return "";
+        }
+    }
+
+    private String getCreatedTime(LinkInfo linkInfo) {
+        return getTime(linkInfo.getCreated());
+    }
+
+    private String getUpdatedTime(LinkInfo linkInfo) {
+        return getTime(linkInfo.getUpdated());
+    }
+
     private void initGridEditor() {
         grid.getEditor().setBinder(binder);
 
@@ -378,41 +430,6 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private Button createDeleteButton(final LinkInfo item) {
-        Button deleteButton = new Button("Delete", clickEvent -> onDeleteButtonClick(item));
-        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        return deleteButton;
-    }
-
-    private Span link(final LinkInfo linkInfo) {
-        Span link = new Span();
-        String shortDomain = appUtils.getShortDomain();
-        String ident = linkInfo.getIdent();
-        String shortLink = appUtils.getShortUrl() + "/" + ident;
-
-        if (clientHasSmallScreen) {
-            link.setText(ident);
-        } else {
-            link.setText(shortDomain + "/" + ident);
-        }
-
-        link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink,
-                Notification.Position.BOTTOM_CENTER));
-        return link;
-    }
-
-    private Image qrImage(final LinkInfo linkInfo) {
-        Image image = new Image();
-        OperationResult qrCodeResult = qrCodeService.getQRCode(linkInfo.getIdent(), App.QR.MINIMAL_SIZE_IN_PIXELS);
-        if (qrCodeResult.ok()) {
-            image.setSrc(qrCodeResult.getStringPayload());
-        }
-        image.setAlt("QR Code");
-        image.setId(Long.toString(linkInfo.getId()));
-        image.addClickListener(this::onQRCodeClicked);
-        return image;
-    }
-
     private void onQRCodeClicked(ClickEvent<Image> imageClickEvent) {
         Optional<Image> bigQRCode = getBigQRCode(imageClickEvent);
         bigQRCode.ifPresentOrElse(qrCode -> {
@@ -449,23 +466,6 @@ public class MyLinksView extends YalseeLayout {
         } else {
             return Optional.empty();
         }
-    }
-
-    private String getLongLink(LinkInfo linkInfo) {
-        OperationResult result = linkService.getLinkWithIdent(linkInfo.getIdent());
-        if (result.ok()) {
-            return result.getStringPayload();
-        } else {
-            return "";
-        }
-    }
-
-    private String getCreatedTime(LinkInfo linkInfo) {
-        return getTime(linkInfo.getCreated());
-    }
-
-    private String getUpdatedTime(LinkInfo linkInfo) {
-        return getTime(linkInfo.getUpdated());
     }
 
     private String getTime(Timestamp ts) {
