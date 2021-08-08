@@ -6,8 +6,6 @@ import io.kyberorg.yalsee.test.utils.vaadin.elements.GridElement;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import lombok.Data;
 
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
@@ -30,7 +28,7 @@ public class MyLinksViewPageObject {
         public static final SelenideElement NO_RECORDS_BANNER_LINK = $("#" + MyLinksView.IDs.NO_RECORDS_BANNER_LINK);
     }
 
-    public static final SelenideElement CLEAN_BUTTON = $("#" + MyLinksView.IDs.CLEAN_BUTTON);
+    public static final SelenideElement END_SESSION_BUTTON = $("#" + MyLinksView.IDs.END_SESSION_BUTTON);
     public static final SelenideElement GRID = $("vaadin-grid#" + MyLinksView.IDs.GRID);
 
     public static class Grid {
@@ -168,8 +166,6 @@ public class MyLinksViewPageObject {
     }
 
     public static void cleanSession() {
-        CLEAN_BUTTON.should(exist);
-        CLEAN_BUTTON.shouldBe(enabled);
-        CLEAN_BUTTON.click();
+        END_SESSION_BUTTON.click();
     }
 }

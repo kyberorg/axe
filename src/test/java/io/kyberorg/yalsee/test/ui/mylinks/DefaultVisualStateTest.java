@@ -73,6 +73,13 @@ public class DefaultVisualStateTest extends SelenideTest {
     }
 
     @Test
+    public void endSessionButtonShouldExistAndBeActive() {
+        END_SESSION_BUTTON.should(exist);
+        END_SESSION_BUTTON.shouldBe(visible);
+        END_SESSION_BUTTON.shouldBe(enabled);
+    }
+
+    @Test
     public void gridShouldExist() {
         GRID.should(exist);
         GRID.shouldBe(visible);

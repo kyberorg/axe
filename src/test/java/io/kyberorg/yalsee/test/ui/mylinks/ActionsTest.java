@@ -15,8 +15,7 @@ import java.util.List;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
-import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
+import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -149,6 +148,19 @@ public class ActionsTest extends SelenideTest {
         assertEquals(longUrlTwo, actualLongUrlTwo);
     }
 
+    @Test
+    public void endSessionButtonEndSessionAndRemovesAllGridRecords() {
+        saveOneLink();
+        openMyLinksPage();
+
+        Grid.GridData.get().getDataRows().shouldHave(size(1));
+        END_SESSION_BUTTON.click();
+        //page should be refreshed automagically
+        VaadinPageObject.waitForVaadin();
+
+        Grid.GridData.get().getDataRows().shouldHave(size(0));
+    }
+
     private void saveOneLink() {
         saveOneLink("https://kyberorg.io");
     }
@@ -159,7 +171,7 @@ public class ActionsTest extends SelenideTest {
         HomePageObject.pasteValueInFormAndSubmitIt(url);
     }
 
-    public void openMyLinksPage() {
+    private void openMyLinksPage() {
         open("/myLinks");
         VaadinPageObject.waitForVaadin();
     }

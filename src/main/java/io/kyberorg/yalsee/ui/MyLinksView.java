@@ -63,7 +63,7 @@ public class MyLinksView extends YalseeLayout {
     private final Span noRecordsBannerText = new Span();
     private final Anchor noRecordsBannerLink = new Anchor();
 
-    private final Button cleanButton = new Button();
+    private final Button endSessionButton = new Button();
 
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
@@ -113,10 +113,10 @@ public class MyLinksView extends YalseeLayout {
         noRecordsBannerLink.setText("MainPage");
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
 
-        cleanButton.setText("Delete all");
-        cleanButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        cleanButton.addClickListener(this::onCleanButtonClick);
-        cleanButton.getStyle().set("align-self", "flex-end");
+        endSessionButton.setText("End Session");
+        endSessionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        endSessionButton.addClickListener(this::onCleanButtonClick);
+        endSessionButton.getStyle().set("align-self", "flex-end");
 
         grid.removeAllColumns();
 
@@ -156,7 +156,7 @@ public class MyLinksView extends YalseeLayout {
 
         initGridEditor();
 
-        add(sessionBanner, noRecordsBanner, cleanButton, grid);
+        add(sessionBanner, noRecordsBanner, endSessionButton, grid);
     }
 
     private void initGridEditor() {
@@ -206,7 +206,7 @@ public class MyLinksView extends YalseeLayout {
         noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
         noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
         noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
-        cleanButton.setId(IDs.CLEAN_BUTTON);
+        endSessionButton.setId(IDs.END_SESSION_BUTTON);
         grid.setId(IDs.GRID);
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
         descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
@@ -510,7 +510,7 @@ public class MyLinksView extends YalseeLayout {
         public static final String NO_RECORDS_BANNER_TEXT = "noRecordsBannerText";
         public static final String NO_RECORDS_BANNER_LINK = "noRecordsBannerLink";
 
-        public static final String CLEAN_BUTTON = "cleanButton";
+        public static final String END_SESSION_BUTTON = "endSessionButton";
 
         public static final String GRID = "grid";
         public static final String LINK_COLUMN_CLASS = "linkCol";
