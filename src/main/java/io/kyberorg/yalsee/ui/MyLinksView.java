@@ -113,7 +113,7 @@ public class MyLinksView extends YalseeLayout {
         noRecordsBannerLink.setText("MainPage");
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
 
-        endSessionButton.setText("End Session");
+        endSessionButton.setText("End session");
         endSessionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         endSessionButton.addClickListener(this::onCleanButtonClick);
         endSessionButton.getStyle().set("align-self", "flex-end");
