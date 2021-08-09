@@ -141,8 +141,8 @@ public class MyLinksView extends YalseeLayout {
                                 + IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS + "'>Created: </span><span class='"
                                 + IDs.ITEM_DETAILS_CREATED_TIME_CLASS + "'>[[item.created]]</span><span class='"
                                 + IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS + "'>, Updated: </span><span class='"
-                                + IDs.ITEM_DETAILS_UPDATED_TIME_CLASS + "'>[[item.updated]]</span></div>" +
-                                "</div>"
+                                + IDs.ITEM_DETAILS_UPDATED_TIME_CLASS + "'>[[item.updated]]</span></div>"
+                                + "</div>"
                                 + "</div>")
                 .withProperty("href", this::getLongLink)
                 .withProperty("longLink", this::getLongLink)

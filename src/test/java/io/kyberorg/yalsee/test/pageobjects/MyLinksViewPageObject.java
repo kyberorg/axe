@@ -137,7 +137,7 @@ public final class MyLinksViewPageObject {
             }
 
             @Data
-            public static class Row {
+            public static final class Row {
                 private final int rowNumber;
 
                 private Row(final int rowNumber) {
