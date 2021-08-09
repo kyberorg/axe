@@ -12,31 +12,39 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCH_DOG_INTERVAL_MILLIS;
+import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL_MILLIS;
 
 @Slf4j
 @Component
-public class SessionWatchDog implements HttpSessionListener {
-    private static final String TAG = "[" + SessionWatchDog.class.getSimpleName() + "]";
+public class SessionWatchdog implements HttpSessionListener {
+    private static final String TAG = "[" + SessionWatchdog.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
 
-    public SessionWatchDog(final AppUtils appUtils) {
+    /**
+     * Spring constructor for autowiring.
+     *
+     * @param appUtils application utils for reading session timeout from and ending session.
+     */
+    public SessionWatchdog(final AppUtils appUtils) {
         this.appUtils = appUtils;
     }
 
-    @Scheduled(fixedRate = SESSION_WATCH_DOG_INTERVAL_MILLIS)
+    /**
+     * Finds expired sessions, ends 'em and removes from {@link SessionBox}.
+     */
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL_MILLIS)
     public void endExpiredVaadinSessions() {
         log.debug("{} Starting Session Cleanup", TAG);
         //removing already invalidated sessions from list as reading their attributes leads to exceptions.
         SessionBox.getSessions().values().parallelStream()
-                .filter(Sessions::hasHttpSession)
-                .filter(Sessions::httpSessionAlreadyInvalidated).map(Sessions::getSessionId)
+                .filter(SessionBoxRecord::hasHttpSession)
+                .filter(SessionBoxRecord::httpSessionAlreadyInvalidated).map(SessionBoxRecord::getSessionId)
                 .forEach(this::removeSessionFromBox);
 
         //searching for expired sessions
-        List<Sessions> expiredSessions = SessionBox.getSessions().values().parallelStream()
-                .filter(Sessions::hasHttpSession)
+        List<SessionBoxRecord> expiredSessions = SessionBox.getSessions().values().parallelStream()
+                .filter(SessionBoxRecord::hasHttpSession)
                 .filter(this::isSessionExpired).collect(Collectors.toList());
 
         if (expiredSessions.isEmpty()) {
@@ -49,30 +57,30 @@ public class SessionWatchDog implements HttpSessionListener {
     }
 
     @Override
-    public void sessionCreated(HttpSessionEvent se) {
+    public void sessionCreated(final HttpSessionEvent se) {
         log.debug("{} HTTP session created {}", TAG, se.getSession().getId());
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent se) {
+    public void sessionDestroyed(final HttpSessionEvent se) {
         log.debug("{} HTTP session Destroyed {}, Session age: {}", TAG, se.getSession().getId(),
                 Duration.ofMillis(System.currentTimeMillis() - se.getSession().getCreationTime()));
     }
 
-    private boolean isSessionExpired(final Sessions sessions) {
+    private boolean isSessionExpired(final SessionBoxRecord sessionBoxRecord) {
         int timeoutInSeconds = appUtils.getSessionTimeout();
-        Instant sessionCreatedTime = Instant.ofEpochMilli(sessions.getHttpSession().getCreationTime());
+        Instant sessionCreatedTime = Instant.ofEpochMilli(sessionBoxRecord.getHttpSession().getCreationTime());
         Instant now = Instant.now();
         Instant sessionExpirationTime = sessionCreatedTime.plusSeconds(timeoutInSeconds);
         return now.isAfter(sessionExpirationTime);
     }
 
-    private void endSession(final Sessions sessions) {
-        log.debug("{} Removing expired session {}", TAG, sessions.getHttpSession().getId());
-        appUtils.endSession(sessions);
+    private void endSession(final SessionBoxRecord sessionBoxRecord) {
+        log.debug("{} Removing expired session {}", TAG, sessionBoxRecord.getHttpSession().getId());
+        appUtils.endSession(sessionBoxRecord);
     }
 
-    private void removeSessionFromBox(String sessionId) {
+    private void removeSessionFromBox(final String sessionId) {
         log.debug("{} removing already gone session from {}. Session ID: {} ",
                 TAG, SessionBox.class.getSimpleName(), sessionId);
         SessionBox.getSessions().remove(sessionId);

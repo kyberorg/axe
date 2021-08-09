@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Link Info table mapped Java Object.
+ * LinkInfo table mapped Java Object.
  *
  * @since 3.2
  */
@@ -32,7 +32,7 @@ public class LinkInfo {
     @Column(name = DESCRIPTION_COLUMN)
     private String description;
 
-    @Column(name = SESSION_COLUMN, length = 32)
+    @Column(name = SESSION_COLUMN)
     private String session;
 
     @Column(name = CREATED_COLUMN, nullable = false)

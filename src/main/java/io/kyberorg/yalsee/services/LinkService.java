@@ -9,7 +9,6 @@ import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.OperationResult;
-import io.kyberorg.yalsee.services.internal.LinkInfoService;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -271,6 +270,7 @@ public class LinkService {
         if (identValidationResult.notOk()) {
             return identValidationResult;
         }
+
         //Action
         try {
             //decoding URL before saving to DB

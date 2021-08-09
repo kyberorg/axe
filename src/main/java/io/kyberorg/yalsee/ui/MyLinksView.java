@@ -30,9 +30,9 @@ import io.kyberorg.yalsee.events.LinkUpdatedEvent;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.LinkInfoService;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
-import io.kyberorg.yalsee.services.internal.LinkInfoService;
 import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -100,7 +100,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void init() {
-        sessionId = AppUtils.getSessionId();
+        sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
         VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.FALSE);
         deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
         clientHasSmallScreen = isSmallScreen();

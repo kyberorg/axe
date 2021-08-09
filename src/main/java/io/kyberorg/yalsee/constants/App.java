@@ -74,7 +74,7 @@ public final class App {
 
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
-        public static final int SESSION_TIMEOUT_SECONDS = 3600;
+        public static final int SESSION_TIMEOUT_SECONDS = 1800;
     }
 
     public static class Api {
@@ -82,6 +82,6 @@ public final class App {
     }
 
     public static class Session {
-        public static final int SESSION_WATCH_DOG_INTERVAL_MILLIS = 20000; //20 seconds
+        public static final int SESSION_WATCHDOG_INTERVAL_MILLIS = 20000; //20 seconds
     }
 }

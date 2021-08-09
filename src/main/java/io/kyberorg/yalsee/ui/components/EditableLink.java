@@ -9,13 +9,26 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 
+/**
+ * This Component is combination of {@link Label} with Short Domain and editable {@link TextField} with ident.
+ * It implements {@link HasValue} interface by proxying methods to editable part, which is {@link TextField}.
+ *
+ * @since 3.2
+ */
 @Tag("editable-link")
-public class EditableLink extends Composite<HorizontalLayout> implements HasValue<EditableLink, String>, HasValue.ValueChangeEvent<String> {
+public class EditableLink extends Composite<HorizontalLayout> implements
+        HasValue<EditableLink, String>, HasValue.ValueChangeEvent<String> {
+
     @Getter
     private final Label shortDomainPart;
     @Getter
     private final TextField editIdentField;
 
+    /**
+     * Creates object.
+     *
+     * @param shortDomain string with short domain (i.e. yls.ee)
+     */
     public EditableLink(final String shortDomain) {
         this.shortDomainPart = new Label(shortDomain + "/");
         this.editIdentField = new TextField();
@@ -24,7 +37,7 @@ public class EditableLink extends Composite<HorizontalLayout> implements HasValu
     }
 
     @Override
-    public void setValue(String value) {
+    public void setValue(final String value) {
         editIdentField.setValue(value);
     }
 
@@ -50,12 +63,12 @@ public class EditableLink extends Composite<HorizontalLayout> implements HasValu
 
     @SuppressWarnings("unchecked")
     @Override
-    public Registration addValueChangeListener(ValueChangeListener listener) {
+    public Registration addValueChangeListener(final ValueChangeListener listener) {
         return editIdentField.addValueChangeListener(listener);
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) {
+    public void setReadOnly(final boolean readOnly) {
         editIdentField.setReadOnly(readOnly);
     }
 
@@ -65,7 +78,7 @@ public class EditableLink extends Composite<HorizontalLayout> implements HasValu
     }
 
     @Override
-    public void setRequiredIndicatorVisible(boolean requiredIndicatorVisible) {
+    public void setRequiredIndicatorVisible(final boolean requiredIndicatorVisible) {
         editIdentField.setRequiredIndicatorVisible(requiredIndicatorVisible);
     }
 

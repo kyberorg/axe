@@ -14,7 +14,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.utils.session.SessionBox;
-import io.kyberorg.yalsee.utils.session.Sessions;
+import io.kyberorg.yalsee.utils.session.SessionBoxRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.net.URI;
 
 /**
@@ -60,12 +61,15 @@ public class AppUtils {
 
     /**
      * Retrieve Session ID from given {@link VaadinSession}.
+     * Note: parameter here is really needed,
+     * because {@link VaadinSession#getCurrent()} may not exist outside UI scope/objects.
      *
+     * @param vaadinSession current {@link VaadinSession} object from UI.
      * @return string with ID or null
      */
-    public static String getSessionId() {
-        if (VaadinSession.getCurrent() != null && VaadinSession.getCurrent().getSession() != null) {
-            return VaadinSession.getCurrent().getSession().getId();
+    public static String getSessionId(final VaadinSession vaadinSession) {
+        if (vaadinSession != null && vaadinSession.getSession() != null) {
+            return vaadinSession.getSession().getId();
         }
         return null;
     }
@@ -240,7 +244,7 @@ public class AppUtils {
         if (shortDomain.equals(DUMMY_HOST)) {
             //no short URL - use server domain
             log.debug("No Short Domain defined - using Server Domain");
-            return getServerUrl().replace("https://", "").replace("http://", "");
+            return UrlUtils.removeProtocol(getServerUrl());
         } else {
             return shortDomain;
         }
@@ -382,6 +386,11 @@ public class AppUtils {
         return Integer.parseInt(timeoutString);
     }
 
+    /**
+     * Reads Session Timeout from settings.
+     *
+     * @return int with  timeout from settings or default timeout {@link App.Defaults#SESSION_TIMEOUT_SECONDS}
+     */
     public int getSessionTimeout() {
         String timeoutString = getEnv().getProperty(App.Properties.SESSION_TIMEOUT, App.NO_VALUE);
         if (timeoutString.equals(App.NO_VALUE)) {
@@ -390,12 +399,23 @@ public class AppUtils {
         return Integer.parseInt(timeoutString);
     }
 
-    public void endSession(final Sessions sessions) {
-        SessionBox.removeRecord(sessions);
-        sessions.getHttpSession().invalidate();
-        sessions.getVaadinSession().close();
+    /**
+     * Ends current session.
+     * Removes session from {@link SessionBox}, invalidates {@link HttpSession} and closes {@link VaadinSession}.
+     *
+     * @param sessionBoxRecord {@link SessionBoxRecord} object to end.
+     */
+    public void endSession(final SessionBoxRecord sessionBoxRecord) {
+        SessionBox.removeRecord(sessionBoxRecord);
+        sessionBoxRecord.getHttpSession().invalidate();
+        sessionBoxRecord.getVaadinSession().close();
     }
 
+    /**
+     * Ends Vaadin Session. Invalidates bound {@link HttpSession} if any and closes {@link VaadinSession}.
+     *
+     * @param session {@link VaadinSession} to remove.
+     */
     public void endVaadinSession(final VaadinSession session) {
         if (session.getSession() != null) {
             SessionBox.removeVaadinSession(session);
