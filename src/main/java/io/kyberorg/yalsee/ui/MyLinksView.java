@@ -54,9 +54,8 @@ import java.util.Optional;
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: My Links")
 public class MyLinksView extends YalseeLayout {
-    private final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
-
-    private final String USER_MODE_FLAG = "UserMode";
+    private static final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
+    private static final String USER_MODE_FLAG = "UserMode";
 
     private final Span sessionBanner = new Span();
     private final Span noRecordsBanner = new Span();
@@ -84,9 +83,14 @@ public class MyLinksView extends YalseeLayout {
 
     /**
      * Creates {@link MyLinksView}.
+     *
+     * @param linkInfoService service for operating with LinkInfo.
+     * @param qrCodeService   QR Code Service..
+     * @param linkService     service for operating with Links.
+     * @param appUtils        application utilities.
      */
     public MyLinksView(final LinkInfoService linkInfoService, final QRCodeService qrCodeService,
-                       final LinkService linkService, AppUtils appUtils) {
+                       final LinkService linkService, final AppUtils appUtils) {
         this.linkInfoService = linkInfoService;
         this.qrCodeService = qrCodeService;
         this.linkService = linkService;
@@ -105,8 +109,8 @@ public class MyLinksView extends YalseeLayout {
         deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
         clientHasSmallScreen = isSmallScreen();
 
-        sessionBanner.setText("Those are links stored in current session. " +
-                "Soon you will be able to store them permanently, once we introduce users");
+        sessionBanner.setText("Those are links stored in current session. "
+                + "Soon you will be able to store them permanently, once we introduce users");
 
         noRecordsBannerText.setText("It looks lonely here. What about saving something at ");
         noRecordsBannerLink.setHref("/");
@@ -128,10 +132,12 @@ public class MyLinksView extends YalseeLayout {
         //Item Details
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
                         "<div class='" + IDs.ITEM_DETAILS_CLASS
-                                + "' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                                + "' style='border: 1px solid gray; padding: 10px; width: 100%; "
+                                + "box-sizing: border-box;'>"
                                 + "<div><b><a class='"
-                                + IDs.ITEM_DETAILS_LINK_CLASS + "' href=\"[[item.href]]\">[[item.longLink]]</a></b><br>" +
-                                "<div><span class='"
+                                + IDs.ITEM_DETAILS_LINK_CLASS + "' href=\"[[item.href]]\">[[item.longLink]]</a></b>"
+                                + "<br>"
+                                + "<div><span class='"
                                 + IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS + "'>Created: </span><span class='"
                                 + IDs.ITEM_DETAILS_CREATED_TIME_CLASS + "'>[[item.created]]</span><span class='"
                                 + IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS + "'>, Updated: </span><span class='"
@@ -194,7 +200,7 @@ public class MyLinksView extends YalseeLayout {
         return deleteButton;
     }
 
-    private String getLongLink(LinkInfo linkInfo) {
+    private String getLongLink(final LinkInfo linkInfo) {
         OperationResult result = linkService.getLinkWithIdent(linkInfo.getIdent());
         if (result.ok()) {
             return result.getStringPayload();
@@ -203,11 +209,11 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private String getCreatedTime(LinkInfo linkInfo) {
+    private String getCreatedTime(final LinkInfo linkInfo) {
         return getTime(linkInfo.getCreated());
     }
 
-    private String getUpdatedTime(LinkInfo linkInfo) {
+    private String getUpdatedTime(final LinkInfo linkInfo) {
         return getTime(linkInfo.getUpdated());
     }
 
@@ -271,7 +277,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     @Override
-    protected void onAttach(AttachEvent attachEvent) {
+    protected void onAttach(final AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         ui = attachEvent.getUI();
         EventBus.getDefault().register(this);
@@ -280,7 +286,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     @Override
-    protected void onDetach(DetachEvent detachEvent) {
+    protected void onDetach(final DetachEvent detachEvent) {
         super.onDetach(detachEvent);
         ui = null;
         EventBus.getDefault().unregister(this);
@@ -335,7 +341,7 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private void onCleanButtonClick(ClickEvent<Button> buttonClickEvent) {
+    private void onCleanButtonClick(final ClickEvent<Button> buttonClickEvent) {
         appUtils.endVaadinSession(VaadinSession.getCurrent());
     }
 
@@ -350,7 +356,7 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private void updateLinkInfo(EditorCloseEvent<LinkInfo> event) {
+    private void updateLinkInfo(final EditorCloseEvent<LinkInfo> event) {
         LinkInfo linkInfo = event.getItem();
         if (linkInfo == null) return;
         Optional<LinkInfo> oldLinkInfo = linkInfoService.getLinkInfoById(linkInfo.getId());
@@ -377,8 +383,8 @@ public class MyLinksView extends YalseeLayout {
                                         errorMessage = "We already have link with given ident. Please try another one";
                                         break;
                                     case OperationResult.SYSTEM_DOWN:
-                                        errorMessage = "Failed to update data. System is partly inaccessible. " +
-                                                "Try again later";
+                                        errorMessage = "Failed to update data. System is partly inaccessible. "
+                                                + "Try again later";
                                         break;
                                     case OperationResult.GENERAL_FAIL:
                                     default:
@@ -395,8 +401,8 @@ public class MyLinksView extends YalseeLayout {
                         return;
                     }
                 } else {
-                    ErrorUtils.getErrorNotification("Back-part updates are allowed only for users. " +
-                            "Become user once we introduce them").open();
+                    ErrorUtils.getErrorNotification("Back-part updates are allowed only for users. "
+                            + "Become user once we introduce them").open();
                 }
             }
         } else {
@@ -405,7 +411,7 @@ public class MyLinksView extends YalseeLayout {
         updateDataAndState();
     }
 
-    private void deleteLinkAndLinkInfo(LinkInfo linkInfo) {
+    private void deleteLinkAndLinkInfo(final LinkInfo linkInfo) {
         if (linkInfo == null) return;
         if (!linkInfo.getSession().equals(this.sessionId)) {
             ErrorUtils.getErrorNotification("Failed to delete link: link from wrong session").open();
@@ -430,7 +436,7 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private void onQRCodeClicked(ClickEvent<Image> imageClickEvent) {
+    private void onQRCodeClicked(final ClickEvent<Image> imageClickEvent) {
         Optional<Image> bigQRCode = getBigQRCode(imageClickEvent);
         bigQRCode.ifPresentOrElse(qrCode -> {
             Dialog dialog = new Dialog();
@@ -443,7 +449,7 @@ public class MyLinksView extends YalseeLayout {
         ErrorUtils.getErrorNotification("Internal Error: No info about stored link found").open();
     }
 
-    private Optional<Image> getBigQRCode(ClickEvent<Image> imageClickEvent) {
+    private Optional<Image> getBigQRCode(final ClickEvent<Image> imageClickEvent) {
         Optional<String> linkInfoId = imageClickEvent.getSource().getId();
         if (linkInfoId.isPresent()) {
             Optional<LinkInfo> linkInfo = linkInfoService.getLinkInfoById(Long.parseLong(linkInfoId.get()));
@@ -468,12 +474,12 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private String getTime(Timestamp ts) {
+    private String getTime(final Timestamp ts) {
         Date date = new Date(ts.getTime());
         return date.toString();
     }
 
-    private String getSessionIdFromLink(Link linkFromEvent) {
+    private String getSessionIdFromLink(final Link linkFromEvent) {
         Optional<LinkInfo> linkInfo = linkInfoService.getLinkInfoByLink(linkFromEvent);
         if (linkInfo.isPresent()) {
             return StringUtils.isNotBlank(linkInfo.get().getSession()) ? linkInfo.get().getSession() : "";
@@ -494,8 +500,8 @@ public class MyLinksView extends YalseeLayout {
             }
         } else {
             //fallback to user agent detection
-            boolean hasBrowserInfo = VaadinSession.getCurrent() != null &&
-                    VaadinSession.getCurrent().getBrowser() != null;
+            boolean hasBrowserInfo = VaadinSession.getCurrent() != null
+                    && VaadinSession.getCurrent().getBrowser() != null;
             if (hasBrowserInfo && DeviceUtils.isMobileDevice(VaadinSession.getCurrent().getBrowser())) {
                 isSmallScreen = true;
             }

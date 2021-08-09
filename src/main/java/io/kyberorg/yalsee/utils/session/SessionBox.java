@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @since 3.2
  */
-public class SessionBox {
+public final class SessionBox {
     private static final Map<String, SessionBoxRecord> SESSIONS = new HashMap<>();
 
     private SessionBox() {

@@ -80,7 +80,7 @@ public class GridElement {
      * @throws IllegalArgumentException when arguments provided are not valid: negative number.
      * @throws ElementNotFound          when cell is not found
      */
-    public SelenideElement getCell(int rowNumber, int cellNumber) {
+    public SelenideElement getCell(final int rowNumber, final int cellNumber) {
         String slotName = getCellSlotName(rowNumber, cellNumber);
         return $("vaadin-grid-cell-content[slot=" + slotName + "]");
     }
@@ -89,7 +89,7 @@ public class GridElement {
         return $vaadin(cssSelector).shadowRoot("tbody#items");
     }
 
-    private String getCellSlotName(int rowNumber, int cellNumber) throws IllegalArgumentException, ElementNotFound {
+    private String getCellSlotName(final int rowNumber, final int cellNumber) throws IllegalArgumentException, ElementNotFound {
         if (rowNumber < 0) throw new IllegalArgumentException("Got negative row number");
         if (cellNumber < 0) throw new IllegalArgumentException("Got negative cell number");
 

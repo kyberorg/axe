@@ -13,8 +13,8 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 3.2
  */
-public class MyLinksViewPageObject {
-    private static final GridElement gridElement = GridElement.byCss("vaadin-grid#" + MyLinksView.IDs.GRID);
+public final class MyLinksViewPageObject {
+    private static final GridElement GRID_ELEMENT = GridElement.byCss("vaadin-grid#" + MyLinksView.IDs.GRID);
     public static final SelenideElement PAGE = $("#" + MyLinksView.class.getSimpleName());
 
     private MyLinksViewPageObject() {
@@ -35,6 +35,11 @@ public class MyLinksViewPageObject {
         public static class Header {
             private static Header SELF = null;
 
+            /**
+             * Header object.
+             *
+             * @return {@link Header} singleton.
+             */
             public static Header get() {
                 if (SELF == null) {
                     SELF = new Header();
@@ -42,34 +47,69 @@ public class MyLinksViewPageObject {
                 return SELF;
             }
 
+            /**
+             * Header Row.
+             *
+             * @return {@link SelenideElement} with Header Row.
+             */
             public SelenideElement getRow() {
-                return gridElement.getHeader();
+                return GRID_ELEMENT.getHeader();
             }
 
+            /**
+             * Header Cells.
+             *
+             * @return {@link ElementsCollection} of Header Cells.
+             */
             public ElementsCollection getCells() {
-                return gridElement.getHeadersCells();
+                return GRID_ELEMENT.getHeadersCells();
             }
 
+            /**
+             * Link Cell.
+             *
+             * @return {@link SelenideElement} with Link Cell.
+             */
             public SelenideElement getLinkCell() {
-                return gridElement.getCell(0, 0);
+                return GRID_ELEMENT.getCell(0, 0);
             }
 
+            /**
+             * Description Cell.
+             *
+             * @return {@link SelenideElement} with Description Cell.
+             */
             public SelenideElement getDescriptionCell() {
-                return gridElement.getCell(0, 1);
+                return GRID_ELEMENT.getCell(0, 1);
             }
 
+            /**
+             * QR Code Cell.
+             *
+             * @return {@link SelenideElement} with QR Code Cell.
+             */
             public SelenideElement getQrCodeCell() {
-                return gridElement.getCell(0, 2);
+                return GRID_ELEMENT.getCell(0, 2);
             }
 
+            /**
+             * Action Cell.
+             *
+             * @return {@link SelenideElement} with Action Cell.
+             */
             public SelenideElement getActionCell() {
-                return gridElement.getCell(0, 3);
+                return GRID_ELEMENT.getCell(0, 3);
             }
         }
 
         public static class GridData {
             private static GridData SELF = null;
 
+            /**
+             * Grid Data object.
+             *
+             * @return {@link GridData} singleton.
+             */
             public static GridData get() {
                 if (SELF == null) {
                     SELF = new GridData();
@@ -77,10 +117,21 @@ public class MyLinksViewPageObject {
                 return SELF;
             }
 
+            /**
+             * Data Rows.
+             *
+             * @return {@link ElementsCollection} of Data Rows.
+             */
             public ElementsCollection getDataRows() {
-                return gridElement.getDataRows();
+                return GRID_ELEMENT.getDataRows();
             }
 
+            /**
+             * Data Row by its number.
+             *
+             * @param rowNumber row number starting from 1. Direction is up-to-down.
+             * @return {@link Row}, which represents given row.
+             */
             public Row getRow(final int rowNumber) {
                 return new Row(rowNumber);
             }
@@ -89,7 +140,7 @@ public class MyLinksViewPageObject {
             public static class Row {
                 private final int rowNumber;
 
-                public Row(final int rowNumber) {
+                private Row(final int rowNumber) {
                     if (rowNumber > 0) {
                         this.rowNumber = rowNumber;
                     } else {
@@ -97,36 +148,76 @@ public class MyLinksViewPageObject {
                     }
                 }
 
+                /**
+                 * Link Cell.
+                 *
+                 * @return {@link SelenideElement} with Link Cell.
+                 */
                 public SelenideElement getLinkCell() {
-                    return gridElement.getCell(this.rowNumber, 0);
+                    return GRID_ELEMENT.getCell(this.rowNumber, 0);
                 }
 
+                /**
+                 * Description Cell.
+                 *
+                 * @return {@link SelenideElement} with Description Cell.
+                 */
                 public SelenideElement getDescriptionCell() {
-                    return gridElement.getCell(this.rowNumber, 1);
+                    return GRID_ELEMENT.getCell(this.rowNumber, 1);
                 }
 
+                /**
+                 * Description Editor.
+                 *
+                 * @return {@link SelenideElement} with Description Editor.
+                 */
                 public SelenideElement getDescriptionEditor() {
                     return getDescriptionCell().$("flow-component-renderer vaadin-text-field");
                 }
 
+                /**
+                 * QR Code Cell.
+                 *
+                 * @return {@link SelenideElement} with QR Code Cell.
+                 */
                 public SelenideElement getQRCodeCell() {
-                    return gridElement.getCell(this.rowNumber, 2);
+                    return GRID_ELEMENT.getCell(this.rowNumber, 2);
                 }
 
+                /**
+                 * QR Code Element.
+                 *
+                 * @return {@link SelenideElement} with QR Code element.
+                 */
                 public SelenideElement getQRCode() {
                     return getQRCodeCell().$("flow-component-renderer img");
                 }
 
+                /**
+                 * Actions Cell.
+                 *
+                 * @return {@link SelenideElement} with Actions Cell.
+                 */
                 public SelenideElement getActionsCell() {
-                    return gridElement.getCell(this.rowNumber, 3);
+                    return GRID_ELEMENT.getCell(this.rowNumber, 3);
                 }
 
+                /**
+                 * Delete Button Element.
+                 *
+                 * @return {@link SelenideElement} with Delete Button Element.
+                 */
                 public SelenideElement getDeleteButton() {
                     return getActionsCell().$("flow-component-renderer vaadin-button");
                 }
 
+                /**
+                 * Item Details Element.
+                 *
+                 * @return {@link SelenideElement} with Item Details Element.
+                 */
                 public SelenideElement getItemDetails() {
-                    SelenideElement itemDetailsCell = gridElement.getCell(this.rowNumber, 4);
+                    SelenideElement itemDetailsCell = GRID_ELEMENT.getCell(this.rowNumber, 4);
                     return itemDetailsCell.$("div.item-details");
                 }
             }
@@ -137,22 +228,47 @@ public class MyLinksViewPageObject {
             public static class Details {
                 private final SelenideElement itemDetails;
 
+                /**
+                 * Long Link Element.
+                 *
+                 * @return {@link SelenideElement} with Long Link Element.
+                 */
                 public SelenideElement getLongLink() {
                     return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_LINK_CLASS);
                 }
 
+                /**
+                 * Label for Created Time.
+                 *
+                 * @return {@link SelenideElement} with Created Time Label.
+                 */
                 public SelenideElement getCreatedTimeLabel() {
                     return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS);
                 }
 
+                /**
+                 * Created Time Span.
+                 *
+                 * @return {@link SelenideElement} with Created Time Span.
+                 */
                 public SelenideElement getCreatedTime() {
                     return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_CREATED_TIME_CLASS);
                 }
 
+                /**
+                 * Label for Updated Time.
+                 *
+                 * @return {@link SelenideElement} with Updated Time Label.
+                 */
                 public SelenideElement getUpdatedTimeLabel() {
                     return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS);
                 }
 
+                /**
+                 * Updated Time Span.
+                 *
+                 * @return {@link SelenideElement} with Updated Time Span.
+                 */
                 public SelenideElement getUpdatedTime() {
                     return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_UPDATED_TIME_CLASS);
                 }
@@ -160,11 +276,14 @@ public class MyLinksViewPageObject {
 
             public static class BigQRCodeModal {
                 public static final SelenideElement MODAL = $("vaadin-dialog-overlay#overlay");
-                public static SelenideElement QR_CODE = MODAL.$("flow-component-renderer div img");
+                public static final SelenideElement QR_CODE = MODAL.$("flow-component-renderer div img");
             }
         }
     }
 
+    /**
+     * Cleans current session by clicking {@link #END_SESSION_BUTTON}.
+     */
     public static void cleanSession() {
         END_SESSION_BUTTON.click();
     }

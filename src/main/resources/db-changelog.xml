@@ -4,7 +4,6 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
-    
     <changeSet id="1" author="kyberorg">
         <createTable tableName="links">
             <column name="id" autoIncrement="true" type="bigint">
@@ -18,13 +17,11 @@
             </column>
         </createTable>
     </changeSet>
-    
     <changeSet id="2" author="kyberorg">
         <modifyDataType columnName="link"
                         newDataType="varchar(15613)"
                         tableName="links"/>
     </changeSet>
-    
     <changeSet id="3" author="kyberorg">
         <createTable tableName="link_info">
             <column name="id" autoIncrement="true" type="bigint">
