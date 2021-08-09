@@ -9,7 +9,7 @@ import lombok.Data;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
- * Page Object {@link MyLinksView}
+ * Page Object for {@link MyLinksView}.
  *
  * @since 3.2
  */

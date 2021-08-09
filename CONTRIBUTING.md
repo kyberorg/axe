@@ -139,7 +139,7 @@ Optional EnvVars:
   likely don't needed as regulated by Spring profile)
 * REDIRECT_PAGE_TIMEOUT: `Timeouts in second after which redirect page makes actual redirect` (most likely don't needed
   as regulated by Spring profile)
-* SESSION_TIMEOUT `Timeout in seconds after which cuurent session ends` (most likely don't needed as regulated by Spring
+* SESSION_TIMEOUT `Timeout in seconds after which current session ends` (most likely don't needed as regulated by Spring
   profile)
 
 Ports:

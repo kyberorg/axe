@@ -2,8 +2,8 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
-import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +12,14 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
+import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+/**
+ * Tests Grid Editor at {@link MyLinksView}.
+ *
+ * @since 3.2
+ */
 public class EditorTest extends SelenideTest {
     /**
      * Test Setup.
@@ -24,20 +30,23 @@ public class EditorTest extends SelenideTest {
 
         //session cleanup
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        waitForVaadin(); //this is needed to prevent unopened page after reload.
 
         //saving one link
         open("/");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         HomePageObject.pasteValueInFormAndSubmitIt("https://kyberorg.io");
 
         //doing to page
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
     }
 
+    /**
+     * Tests that Description is updated immediately after Editor closes.
+     */
     @Test
     public void descriptionShouldBeUpdatedImmediately() {
         String newDescription = "New Description";
@@ -52,6 +61,9 @@ public class EditorTest extends SelenideTest {
         descriptionCell.shouldHave(text(newDescription));
     }
 
+    /**
+     * Tests that updated Description stay even after Page reloaded.
+     */
     @Test
     public void descriptionStayAfterPageReload() {
         String newDescription = "Description should stay";
@@ -64,22 +76,25 @@ public class EditorTest extends SelenideTest {
 
         //reload page
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
 
         descriptionCell.shouldNotBe(empty);
         descriptionCell.shouldHave(text(newDescription));
     }
 
+    /**
+     * Tests that Editor edits only one Record.
+     */
     @Test
     public void editorShouldEditOnlyOneRecord() {
         //saving one more link
         open("/");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/kyberorg/yalsee/issues/195");
 
         //open MyLink page again
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
 
         String newDescription = "The Description";
         SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
@@ -96,6 +111,9 @@ public class EditorTest extends SelenideTest {
         secondDescription.shouldBe(empty);
     }
 
+    /**
+     * Tests that editor updates Record's Updated Time after Edit.
+     */
     @Test
     public void updateTimeUpdatedAfterEdit() {
         String newDescription = "Testing update time";

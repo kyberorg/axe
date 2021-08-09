@@ -3,8 +3,9 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
-import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.ui.MyLinksView;
+import io.kyberorg.yalsee.ui.err.PageNotFoundView;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,15 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
+import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests {@link MyLinksView} by performing different actions with its elements.
+ *
+ * @since 3.2
+ */
 public class ActionsTest extends SelenideTest {
     /**
      * Test Setup.
@@ -29,11 +36,14 @@ public class ActionsTest extends SelenideTest {
 
         //cleaning session
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        waitForVaadin(); //this is needed to prevent unopened page after reload.
     }
 
+    /**
+     * Tests that Delete Button removes Record from Grid.
+     */
     @Test
     public void deleteButtonRemovesRecordFromGrid() {
         saveOneLink();
@@ -48,6 +58,10 @@ public class ActionsTest extends SelenideTest {
         Grid.GridData.get().getDataRows().shouldHave(size(0));
     }
 
+    /**
+     * Tests that Delete Button really deletes Record,
+     * so link is no longer in system and {@link PageNotFoundView} appears.
+     */
     @Test
     public void deleteButtonDeletesRecord() {
         saveOneLink();
@@ -65,6 +79,9 @@ public class ActionsTest extends SelenideTest {
         NotFoundViewPageObject.TITLE.shouldHave(text("404"));
     }
 
+    /**
+     * Tests that Grid Have Size 2 if 2 Links saved.
+     */
     @Test
     public void gridShouldHaveSizeTwoIfTwoLinksSaved() {
         saveOneLink();
@@ -74,8 +91,11 @@ public class ActionsTest extends SelenideTest {
         Grid.GridData.get().getDataRows().shouldHave(size(2));
     }
 
+    /**
+     * Tests that each Row has all needed Elements.
+     */
     @Test
-    public void eachItemHasAllElements() {
+    public void eachRowHasAllElements() {
         saveOneLink();
         saveOneLink();
         openMyLinksPage();
@@ -106,6 +126,9 @@ public class ActionsTest extends SelenideTest {
         }
     }
 
+    /**
+     * Tests that Grid Have Size 3 if 3 Links saved.
+     */
     @Test
     public void gridShouldHaveSizeThreeIfThreeLinksSaved() {
         saveOneLink();
@@ -116,9 +139,12 @@ public class ActionsTest extends SelenideTest {
 
         Grid.GridData.get().getDataRows().shouldHave(size(3));
     }
-    
+
+    /**
+     * Tests that each Row has own Short and Long Links.
+     */
     @Test
-    public void eachItemHasCorrectShortAndLongLinks() {
+    public void eachRowHasOwnShortAndLongLinks() {
         String longUrlOne = "https://github.com/kyberorg/yalsee/issues/195";
         String longUrlTwo = "https://gist.github.com/kyberorg/e3621b30a217addf8566736dc47eb997";
 
@@ -148,15 +174,18 @@ public class ActionsTest extends SelenideTest {
         assertEquals(longUrlTwo, actualLongUrlTwo);
     }
 
+    /**
+     * Tests that EndSession Button ends Session and removes All Grid Records.
+     */
     @Test
-    public void endSessionButtonEndSessionAndRemovesAllGridRecords() {
+    public void endSessionButtonEndsSessionAndRemovesAllGridRecords() {
         saveOneLink();
         openMyLinksPage();
 
         Grid.GridData.get().getDataRows().shouldHave(size(1));
         END_SESSION_BUTTON.click();
         //page should be refreshed automagically
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
 
         Grid.GridData.get().getDataRows().shouldHave(size(0));
     }
@@ -167,12 +196,12 @@ public class ActionsTest extends SelenideTest {
 
     private void saveOneLink(final String url) {
         open("/");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         HomePageObject.pasteValueInFormAndSubmitIt(url);
     }
 
     private void openMyLinksPage() {
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
     }
 }

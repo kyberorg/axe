@@ -84,7 +84,12 @@ public abstract class SelenideTest {
         }
     }
 
-    protected boolean isGridRun() {
+    /**
+     * Are we running remotely (i.e. Grid/Selenoid etc) ?
+     *
+     * @return true - if we are running tests at remotely, false if not.
+     */
+    protected boolean isRemoteRun() {
         return shouldRunTestsAtGrid();
     }
 

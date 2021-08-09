@@ -29,18 +29,39 @@ public class GridElement {
         return element;
     }
 
+    /**
+     * Provides Grid's Header element.
+     *
+     * @return Grid's Header {@link SelenideElement}.
+     */
     public SelenideElement getHeader() {
         return $vaadin(cssSelector).shadowRoot("thead#header > tr");
     }
 
+    /**
+     * Provides Grid's Header as cells collection.
+     *
+     * @return {@link ElementsCollection} with Grid Header's cells.
+     */
     public ElementsCollection getHeadersCells() {
         return getHeader().$$("th");
     }
 
+    /**
+     * Provides Data Rows as collection of row elements.
+     *
+     * @return {@link ElementsCollection} of Data Rows.
+     */
     public ElementsCollection getDataRows() {
         return getDataItems().$$("tr");
     }
 
+    /**
+     * Provides Data Row's cells as {@link ElementsCollection}.
+     *
+     * @param rowNumber data row number. Starting from 1. Direction is up-to-down.
+     * @return {@link ElementsCollection} of cells in row number {@code rowNumber}.
+     */
     public ElementsCollection getDataRowCells(final int rowNumber) {
         if (rowNumber > 0) {
             getDataRows().shouldBe(sizeNotEqual(0));

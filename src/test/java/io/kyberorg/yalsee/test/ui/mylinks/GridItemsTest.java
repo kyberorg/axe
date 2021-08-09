@@ -4,8 +4,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
-import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +13,14 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
+import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests {@link MyLinksView} visual state with one link saved.
+ *
+ * @since 3.2
+ */
 public class GridItemsTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
@@ -32,28 +38,34 @@ public class GridItemsTest extends SelenideTest {
 
         //session cleanup
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        waitForVaadin(); //this is needed to prevent unopened page after reload.
 
         //saving one link
         open("/");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         HomePageObject.pasteValueInFormAndSubmitIt("https://kyberorg.io");
 
         //doing to page
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
 
         pageOpened = true;
     }
 
+    /**
+     * Tests that Session Banner exists.
+     */
     @Test
     public void sessionBannerShouldExist() {
         Banners.SESSION_BANNER.should(exist);
         Banners.SESSION_BANNER.shouldBe(visible);
     }
 
+    /**
+     * Tests that No Records Banner is hidden.
+     */
     @Test
     public void noRecordsBannerShouldBeHidden() {
         Banners.NO_RECORDS_BANNER.shouldBe(hidden);
@@ -61,11 +73,17 @@ public class GridItemsTest extends SelenideTest {
         Banners.NO_RECORDS_BANNER_LINK.shouldBe(hidden);
     }
 
+    /**
+     * Tests that Grid has only one Item.
+     */
     @Test
     public void gridHasOneItem() {
         Grid.GridData.get().getDataRows().shouldHave(size(1));
     }
 
+    /**
+     * Tests that Link Cell contains String with Short Link.
+     */
     @Test
     public void linkCellContainsStringWithShortLink() {
         SelenideElement link = Grid.GridData.get().getRow(1).getLinkCell();
@@ -75,6 +93,9 @@ public class GridItemsTest extends SelenideTest {
         link.shouldHave(text(TestUtils.getAppShortDomain()));
     }
 
+    /**
+     * Tests that Description Cell is empty.
+     */
     @Test
     public void descriptionCellShouldBeEmpty() {
         SelenideElement description = Grid.GridData.get().getRow(1).getDescriptionCell();
@@ -83,6 +104,9 @@ public class GridItemsTest extends SelenideTest {
         description.shouldBe(empty);
     }
 
+    /**
+     * Tests that QR Code Cell has QR Code.
+     */
     @Test
     public void qrCodeCellHasQRCode() {
         SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCodeCell();
@@ -99,12 +123,18 @@ public class GridItemsTest extends SelenideTest {
         qrCode.shouldHave(attribute("alt", "QR Code"));
     }
 
+    /**
+     * Tests that QR Code Cell is clickable.
+     */
     @Test
     public void qrCodeCellIsClickable() {
         SelenideElement qrCodeCell = Grid.GridData.get().getRow(1).getQRCode();
         qrCodeCell.shouldBe(enabled);
     }
 
+    /**
+     * Tests that Actions Cell has one Button.
+     */
     @Test
     public void actionsCellHasOneButton() {
         SelenideElement actionsCell = Grid.GridData.get().getRow(1).getActionsCell();
@@ -112,6 +142,9 @@ public class GridItemsTest extends SelenideTest {
         vaadinButtons.shouldHave(size(1));
     }
 
+    /**
+     * Tests that Actions Cell has Delete Button.
+     */
     @Test
     public void actionsCellHasDeleteButton() {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
@@ -120,12 +153,18 @@ public class GridItemsTest extends SelenideTest {
         deleteButton.shouldHave(text("Delete"));
     }
 
+    /**
+     * Tests that Delete Button is active.
+     */
     @Test
     public void deleteButtonIsActive() {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.shouldBe(enabled);
     }
 
+    /**
+     * Tests that ItemDetails Element is hidden.
+     */
     @Test
     public void itemDetailsShouldBeHidden() {
         SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();

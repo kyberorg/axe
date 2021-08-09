@@ -86,7 +86,7 @@ public class VisibleStateTest extends SelenideTest {
      */
     @Test
     public void myLinksNoteAreaIsHidden() {
-        HomePageObject.QrCodeArea.QR_CODE_AREA.shouldNotBe(visible);
+        HomePageObject.MyLinksNoteArea.MY_LINKS_NOTE_AREA.shouldNotBe(visible);
     }
 
     /**

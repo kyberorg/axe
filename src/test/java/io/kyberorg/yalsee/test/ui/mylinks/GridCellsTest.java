@@ -4,7 +4,6 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
-import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +12,15 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
+import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests Grid state by interacting with its cells.
+ *
+ * @since 3.2
+ */
 public class GridCellsTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
@@ -33,22 +38,25 @@ public class GridCellsTest extends SelenideTest {
 
         //cleaning session
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        waitForVaadin(); //this is needed to prevent unopened page after reload.
 
         //saving one link
         open("/");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
         HomePageObject.pasteValueInFormAndSubmitIt("https://kyberorg.io");
 
         //doing to page
         open("/myLinks");
-        VaadinPageObject.waitForVaadin();
+        waitForVaadin();
 
         pageOpened = true;
     }
 
+    /**
+     * Tests that on Item Click ItemDetails are opened and have all Needed Elements inside.
+     */
     @Test
     public void onItemClickItemDetailsOpenedAndHaveAllNeededElementsInside() {
         SelenideElement item = Grid.GridData.get().getRow(1).getDescriptionCell();
@@ -101,9 +109,12 @@ public class GridCellsTest extends SelenideTest {
         }
     }
 
+    /**
+     * Tests that on Click to Link Short Link copied to Clipboard.
+     */
     @Test
     public void onClickToLinkShortLinkCopiedToClipboard() {
-        if (isGridRun()) {
+        if (isRemoteRun()) {
             //currently, we have problem accessing remote clipboard.
             //TODO remove once fixed
             return;
@@ -121,6 +132,9 @@ public class GridCellsTest extends SelenideTest {
         }
     }
 
+    /**
+     * Tests that on double Click to Description opens Editor.
+     */
     @Test
     public void onDoubleClickToDescriptionEditorOpens() {
         SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
@@ -128,18 +142,28 @@ public class GridCellsTest extends SelenideTest {
         SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.should(exist);
         descriptionEditor.should(visible);
+
+        //cleanup
         descriptionEditor.pressEscape();
     }
 
+    /**
+     * Tests that on Click to QR Code opens Modal with big QR Code.
+     */
     @Test
     public void onClickToQRCodeModalOpens() {
         SelenideElement qrCode = Grid.GridData.get().getRow(1).getQRCode();
         qrCode.click();
         Grid.GridItem.BigQRCodeModal.MODAL.should(exist);
         Grid.GridItem.BigQRCodeModal.MODAL.should(visible);
+
+        //cleanup
         Grid.GridItem.BigQRCodeModal.MODAL.pressEscape();
     }
 
+    /**
+     * Tests that big QR Code Modal has QR Code inside.
+     */
     @Test
     public void bigQRCodeModalHasQRCode() {
         SelenideElement qrCode = Grid.GridData.get().getRow(1).getQRCode();
@@ -153,9 +177,13 @@ public class GridCellsTest extends SelenideTest {
         assertTrue(TestUtils.isQRCode(bigQRCode.getAttribute("src")), "Image is not valid QR Code");
         bigQRCode.shouldHave(attribute("alt", "QR Code"));
 
+        //cleanup
         Grid.GridItem.BigQRCodeModal.MODAL.pressEscape();
     }
 
+    /**
+     * Tests that big QR Code has Correct Size.
+     */
     @Test
     public void bigQRCodeHasCorrectSize() {
         final int exceptedWidth = 350;
@@ -168,9 +196,13 @@ public class GridCellsTest extends SelenideTest {
         assertEquals(exceptedWidth, bigQRCode.getSize().getWidth());
         assertEquals(exceptedHeight, bigQRCode.getSize().getHeight());
 
+        //cleanup
         Grid.GridItem.BigQRCodeModal.MODAL.pressEscape();
     }
 
+    /**
+     * Tests that Delete Button exists and active.
+     */
     @Test
     public void deleteButtonShouldExistAndBeActive() {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
