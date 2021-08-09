@@ -2,12 +2,14 @@ package io.kyberorg.yalsee.result;
 
 import com.google.gson.internal.Primitives;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Class that defines result of operation. Operation can be any action: validation, query from database and so on.
  *
  * @since 3.0.4
  */
+@ToString
 public class OperationResult {
     /**
      * Status, that indicates operation success.
@@ -44,14 +46,17 @@ public class OperationResult {
      */
     public static final String BANNED = "OP_NO_ACCESS";
 
-    @Getter private String result;
-    @Getter private String message;
+    @Getter
+    private String result;
+    @Getter
+    private String message;
     private Object payload;
 
     /**
      * Default constructor.
      */
-    protected OperationResult() { }
+    protected OperationResult() {
+    }
 
     /**
      * Constructs object with given status.
@@ -182,11 +187,11 @@ public class OperationResult {
      * For example: {@link #getPayload(Long)} will return {@link Long} object.
      *
      * @param classOfPayload class of object stored in {@link #payload}
-     * @param <T> Java generics param.
+     * @param <T>            Java generics param.
      * @return object stored in {@link #payload} converted to requested class.
      * @throws ClassCastException when payload contains something else, but not object of requested class.
      */
-    public  <T> T getPayload(final Class<T> classOfPayload) {
+    public <T> T getPayload(final Class<T> classOfPayload) {
         return Primitives.wrap(classOfPayload).cast(this.payload);
     }
 }
