@@ -177,8 +177,8 @@ public class MyLinksView extends YalseeLayout {
             link.setText(shortDomain + "/" + ident);
         }
 
-        link.addClickListener(event -> ClipboardUtils.copyLinkToClipboard(shortLink,
-                Notification.Position.BOTTOM_CENTER));
+        link.addClickListener(event -> ClipboardUtils.copyToClipboardAndNotify(shortLink,
+                "Short link copied", Notification.Position.BOTTOM_CENTER));
         return link;
     }
 

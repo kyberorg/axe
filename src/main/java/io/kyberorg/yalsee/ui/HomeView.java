@@ -7,7 +7,6 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -28,13 +27,13 @@ import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.vaadin.olli.ClipboardHelper;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
@@ -69,7 +68,6 @@ public class HomeView extends HorizontalLayout {
     private TextField input;
     private Button submitButton;
     private Anchor shortLink;
-    private ClipboardHelper clipboardHelper;
     private Image qrCode;
 
     private Span linkCounter;
@@ -187,16 +185,13 @@ public class HomeView extends HorizontalLayout {
 
         com.vaadin.flow.component.icon.Icon copyLinkImage;
         copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.COPY);
+        copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
         copyLinkImage.addClickListener(this::copyLinkToClipboard);
-
-        clipboardHelper = new ClipboardHelper();
-        clipboardHelper.wrap(copyLinkImage);
-        clipboardHelper.setId(IDs.COPY_LINK_BUTTON);
 
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-        resultArea.add(emptySpan, shortLink, clipboardHelper);
+        resultArea.add(emptySpan, shortLink, copyLinkImage);
         resultArea.addClassNames("result-area", "border");
         resultArea.setWidthFull();
         return resultArea;
@@ -241,14 +236,6 @@ public class HomeView extends HorizontalLayout {
         myLinksNoteArea.setWidthFull();
 
         return myLinksNoteArea;
-    }
-
-    private Notification getLinkCopiedNotification() {
-        final int notificationDuration = 3000;
-        Notification notification =
-                new Notification("Short link copied", notificationDuration, Notification.Position.MIDDLE);
-        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        return notification;
     }
 
     @Override
@@ -328,8 +315,8 @@ public class HomeView extends HorizontalLayout {
     private void copyLinkToClipboard(
             final ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
         log.trace("{} Copy link button clicked. From client? {}", TAG, buttonClickEvent.isFromClient());
-        getLinkCopiedNotification().open();
-        //All other actions are performed by component wrapper
+        ClipboardUtils.copyToClipboardAndNotify(shortLink.getText(),
+                "Short link copied", Notification.Position.MIDDLE);
     }
 
     private void saveLink(final String link) {
@@ -352,7 +339,6 @@ public class HomeView extends HorizontalLayout {
         shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         resultArea.setVisible(true);
         myLinksNoteArea.setVisible(true);
-        clipboardHelper.setContent(shortLink.getText());
         generateQRCode(savedLink.getIdent());
     }
 

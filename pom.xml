@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    
     <groupId>io.kyberorg</groupId>
     <artifactId>yalsee</artifactId>
     <version>edge</version>
     <packaging>jar</packaging>
-
+    
     <name>yalsee</name>
-    <description>Yalsee - the link shortener </description>
-
+    <description>Yalsee - the link shortener</description>
+    
     <developers>
         <developer>
             <id>kyberorg</id>
@@ -22,31 +22,31 @@
             <timezone>Europe/Tallinn</timezone>
         </developer>
     </developers>
-
+    
     <scm>
         <url>https://github.com/kyberorg/yalsee</url>
         <connection>scm:git:https://github.com/kyberorg/yalsee.git</connection>
         <developerConnection>scm:git:https://github.com/kyberorg/yalsee.git</developerConnection>
     </scm>
-
+    
     <properties>
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
         <vaadin.version>14.5.3</vaadin.version>
-
+        
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
+    
     <dependencies>
         <!-- Spring MVC -->
         <dependency>
@@ -64,62 +64,62 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
-
+        
         <!-- Spring Boot Logging -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
-
+        
         <!-- Spring Boot Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
+        
         <!-- Spring Boot Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
-
+        
         <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin</artifactId>
         </dependency>
-
+        
         <!-- Spring Boot Database Model layer -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
+        
         <!-- Spring Boot JDBC Driver layer -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-
+        
         <!-- MySQL Driver for production use-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        
         <!-- In-memory database for default profile and testing purposes -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
-
+        
         <!-- Database migration tool -->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-
+        
         <!-- EventBus: event-driven changes -->
         <dependency>
             <groupId>org.greenrobot</groupId>
@@ -132,56 +132,56 @@
             <artifactId>gson</artifactId>
             <version>2.8.7</version>
         </dependency>
-
+        
         <!-- Useful methods for strings -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
-
+        
         <!-- Calling own REST from controllers -->
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
             <version>3.11.12</version>
         </dependency>
-
+        
         <!-- For extra validation of URL  -->
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>1.7</version>
         </dependency>
-
+        
         <!-- For retrieve info from Git -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
         </dependency>
-
+        
         <!-- Telegram Bot -->
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>5.3.0</version>
         </dependency>
-
+        
         <!-- Emoji Parser -->
         <dependency>
             <groupId>com.vdurmont</groupId>
             <artifactId>emoji-java</artifactId>
             <version>5.1.1</version>
         </dependency>
-
+        
         <!-- Lombok: code auto generation -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
         </dependency>
-
+        
         <!-- QR Code generation -->
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -193,21 +193,14 @@
             <artifactId>javase</artifactId>
             <version>3.4.1</version>
         </dependency>
-
+        
         <!-- BugSnag: error reporting -->
         <dependency>
             <groupId>com.bugsnag</groupId>
             <artifactId>bugsnag-spring</artifactId>
             <version>3.6.2</version>
         </dependency>
-
-        <!-- Clipboard Operations -->
-        <dependency>
-            <groupId>org.vaadin.olli</groupId>
-            <artifactId>clipboardhelper</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-
+        
         <!-- Hibernate URL Validator -->
         <!-- Note: version 7.0.0.FINAL cannot be compiled. Do NOT update. -->
         <dependency>
@@ -215,28 +208,28 @@
             <artifactId>hibernate-validator</artifactId>
             <version>6.2.0.Final</version>
         </dependency>
-
+        
         <!-- Sitemap generator -->
         <dependency>
             <groupId>com.github.dfabulich</groupId>
             <artifactId>sitemapgen4j</artifactId>
             <version>1.1.2</version>
         </dependency>
-
+        
         <!-- Spring Annotation Processor for generating .properties metadata -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
+        
         <!-- Spring Boot Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        
         <!-- Selenide Test Framework -->
         <dependency>
             <groupId>com.codeborne</groupId>
@@ -245,7 +238,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -257,14 +250,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
+    
     <repositories>
         <repository>
             <id>vaadin-addons</id>
             <url>https://maven.vaadin.com/vaadin-addons</url>
         </repository>
     </repositories>
-
+    
     <build>
         <finalName>yalsee</finalName>
         <plugins>
@@ -338,14 +331,14 @@
             <properties>
                 <vaadin.productionMode>true</vaadin.productionMode>
             </properties>
-
+            
             <dependencies>
                 <dependency>
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-server-production-mode</artifactId>
                 </dependency>
             </dependencies>
-
+            
             <build>
                 <plugins>
                     <plugin>
@@ -365,7 +358,7 @@
                 </plugins>
             </build>
         </profile>
-
+        
         <!-- No Testing profile -->
         <profile>
             <id>noTesting</id>

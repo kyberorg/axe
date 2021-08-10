@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  *
  * @see https://cookbook.vaadin.com/copy-to-clipboard
- * @since 3.2
+ * @since 3.1.2
  */
 @Slf4j
 @UIScope
@@ -23,25 +23,30 @@ public final class ClipboardUtils {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    public static void copyLinkToClipboard(final String textToCopy, Notification.Position notificationPosition) {
+    /**
+     * Copies text and shows Notification with given text and {@link Notification.Position}.
+     *
+     * @param textToCopy           string with text to copy to clipboard
+     * @param notificationText     string with notification text
+     * @param notificationPosition position of notification
+     */
+    public static void copyToClipboardAndNotify(final String textToCopy, final String notificationText,
+                                                final Notification.Position notificationPosition) {
         copyToClipboard(textToCopy);
-        getLinkCopiedNotification(notificationPosition).open();
+        getLinkCopiedNotification(notificationText, notificationPosition).open();
     }
 
-    private static Notification getLinkCopiedNotification(Notification.Position notificationPosition) {
+    private static void copyToClipboard(final String textToCopy) {
+        UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", textToCopy);
+    }
+
+    private static Notification getLinkCopiedNotification(final String notificationText,
+                                                          final Notification.Position notificationPosition) {
         final int notificationDuration = 3000;
         Notification notification =
-                new Notification("Short link copied", notificationDuration, notificationPosition);
+                new Notification(notificationText, notificationDuration, notificationPosition);
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         return notification;
     }
 
-    /**
-     * Copies given text to Clipboard.
-     *
-     * @param textToCopy string to copy
-     */
-    private static void copyToClipboard(final String textToCopy) {
-        UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", textToCopy);
-    }
 }
