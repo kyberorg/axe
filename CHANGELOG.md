@@ -1,3 +1,10 @@
+### Milestone 3.2 (10/08/2021)
+
+Table with links saved in current session
+
+* My Links Page ([#195](https://github.com/kyberorg/yalsee/issue/195))
+* Rework Push notifications ([#205](https://github.com/kyberorg/yalsee/issue/205))
+
 ### Milestone 3.1.2 (09/08/2021)
 
 Small improvements

@@ -21,6 +21,7 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
@@ -29,6 +30,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.session.SessionBox;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +77,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addLogo();
         addSubTitle();
         addMenuTab("Main", HomeView.class, VaadinIcon.HOME);
+        addMenuTab("My Links", MyLinksView.class, VaadinIcon.TABLE);
         addMenuTab("App Info", AppInfoView.class, VaadinIcon.INFO);
         addMenuTab("API Doks", App.Api.API_DOKS_URL, VaadinIcon.CURLY_BRACKETS);
 
@@ -87,6 +90,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addToDrawer(tabs);
 
         setId(IDs.VIEW_ID);
+
+        //session tricks
+        SessionBox.storeSession(VaadinSession.getCurrent());
 
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(

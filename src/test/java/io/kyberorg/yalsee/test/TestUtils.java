@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.test.utils.HostIdentifier;
 import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -21,9 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 2.0
  */
 public final class TestUtils {
+    private static final String QR_CODE_MARKER = "data:image/png;base64";
+
     private TestUtils() {
         throw new UnsupportedOperationException("Utility class");
     }
+
     /**
      * Result contains JSON.
      *
@@ -140,6 +144,15 @@ public final class TestUtils {
     }
 
     /**
+     * Same as {@link #getAppShortUrl()}, but without schema.
+     *
+     * @return string with short domain of tested instance.
+     */
+    public static String getAppShortDomain() {
+        return UrlUtils.removeProtocol(getAppShortUrl());
+    }
+
+    /**
      * Determines if tests are running locally (localhost).
      *
      * @return true if locally, false if not
@@ -196,6 +209,16 @@ public final class TestUtils {
      */
     public static String addRedirectPageBypassSymbol() {
         return getTestedEnv().getRedirectPageBypassSymbol();
+    }
+
+    /**
+     * Determines if image source is QR code. It just evaluates if it has {@link #QR_CODE_MARKER} or not.
+     *
+     * @param imageSource string with src attribute content.
+     * @return true if image source contains QR Code, false otherwise.
+     */
+    public static boolean isQRCode(final String imageSource) {
+        return StringUtils.isNotBlank(imageSource) && imageSource.contains(QR_CODE_MARKER);
     }
 
     /**

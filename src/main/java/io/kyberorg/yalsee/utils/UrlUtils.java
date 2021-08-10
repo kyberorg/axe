@@ -124,6 +124,17 @@ public final class UrlUtils {
         }
     }
 
+    /**
+     * Removes protocol/schema (HTTP/HTTPS/FTP) part from URL string.
+     *
+     * @param urlWithProtocol string with URL, which contains protocol/schema part.
+     * @return string with same URL, but without protocol or same string if string has no protocol.
+     */
+    public static String removeProtocol(final String urlWithProtocol) {
+        return urlWithProtocol.replaceFirst("https", "").replaceFirst("http", "")
+                .replaceFirst("ftp", "").replaceFirst("://", "");
+    }
+
     private static String replaceSpacesInUrl(final String originUrl) {
         return originUrl.replaceAll(" ", "+");
     }

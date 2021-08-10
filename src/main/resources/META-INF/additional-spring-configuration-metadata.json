@@ -59,5 +59,10 @@
       "name": "app.redirect-page.timeout",
       "type": "java.lang.Integer",
       "description": "Timeout in second after which redirect page makes actual redirect."
+    },
+    {
+      "name": "app.session.timeout",
+      "type": "java.lang.String",
+      "description": "Vaadin Session Timeout in seconds."
     }
   ] }

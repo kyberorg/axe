@@ -48,6 +48,14 @@ public final class HomePageObject {
         public static final SelenideElement QR_CODE = $("#" + HomeView.IDs.QR_CODE);
     }
 
+    public static class MyLinksNoteArea {
+        public static final SelenideElement MY_LINKS_NOTE_AREA = $("#" + HomeView.IDs.MY_LINKS_NOTE_AREA);
+        public static final SelenideElement MY_LINKS_NOTE_TEXT = $("#" + HomeView.IDs.MY_LINKS_NOTE_TEXT);
+        public static final SelenideElement MY_LINKS_NOTE_LINK = $("#" + HomeView.IDs.MY_LINKS_NOTE_LINK);
+        public static final SelenideElement MY_LINKS_NOTE_POST_TEXT =
+                $("#" + HomeView.IDs.MY_LINKS_NOTE_END);
+    }
+
     public static class ErrorModal {
         public static final SelenideElement ERROR_MODAL =
                 $("#vaadin-notification-card");

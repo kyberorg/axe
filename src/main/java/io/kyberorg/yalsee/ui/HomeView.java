@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -54,6 +55,7 @@ public class HomeView extends HorizontalLayout {
     private final Component overallArea = overallArea();
     private final Component resultArea = resultArea();
     private final Component qrCodeArea = qrCodeArea();
+    private final Component myLinksNoteArea = myLinksNoteArea();
 
     private final OverallService overallService;
     private final LinkService linkService;
@@ -99,7 +101,7 @@ public class HomeView extends HorizontalLayout {
         this.setId(IDs.VIEW_ID);
 
         add(leftDiv, centralLayout, rightDiv);
-        centralLayout.add(mainArea, overallArea, resultArea, qrCodeArea);
+        centralLayout.add(mainArea, overallArea, resultArea, myLinksNoteArea, qrCodeArea);
     }
 
     private void applyStyle() {
@@ -121,6 +123,7 @@ public class HomeView extends HorizontalLayout {
         overallArea.setVisible(true);
         resultArea.setVisible(false);
         qrCodeArea.setVisible(false);
+        myLinksNoteArea.setVisible(false);
     }
 
     private VerticalLayout mainArea() {
@@ -209,6 +212,32 @@ public class HomeView extends HorizontalLayout {
         return qrCodeArea;
     }
 
+    private HorizontalLayout myLinksNoteArea() {
+        HorizontalLayout myLinksNoteArea = new HorizontalLayout();
+        myLinksNoteArea.setId(IDs.MY_LINKS_NOTE_AREA);
+
+        Span myLinksNoteText = new Span();
+
+        Span myLinksNoteStart = new Span("FYI: You can find your link and QR Code at ");
+        Anchor myLinksNoteLink = new Anchor("/" + Endpoint.UI.MY_LINKS_PAGE, "My Links");
+        Span myLinkNoteEnd = new Span(" page");
+
+        myLinksNoteText.setId(IDs.MY_LINKS_NOTE_TEXT);
+        myLinksNoteStart.setId(IDs.MY_LINKS_NOTE_START);
+        myLinksNoteLink.setId(IDs.MY_LINKS_NOTE_LINK);
+        myLinkNoteEnd.setId(IDs.MY_LINKS_NOTE_END);
+
+        myLinksNoteText.add(myLinksNoteStart, myLinksNoteLink, myLinkNoteEnd);
+        myLinksNoteArea.add(myLinksNoteText);
+
+        myLinksNoteArea.addClassNames("my-links-note-area", "border", "joint-area");
+        myLinksNoteArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        myLinksNoteArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        myLinksNoteArea.setWidthFull();
+
+        return myLinksNoteArea;
+    }
+
     @Override
     protected void onAttach(final AttachEvent attachEvent) {
         super.onAttach(attachEvent);
@@ -291,7 +320,8 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void saveLink(final String link) {
-        OperationResult saveLinkOperation = linkService.createLink(link);
+        String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
+        OperationResult saveLinkOperation = linkService.createLink(null, link, sessionId);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
         } else {
@@ -308,6 +338,7 @@ public class HomeView extends HorizontalLayout {
         shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         resultArea.setVisible(true);
+        myLinksNoteArea.setVisible(true);
         generateQRCode(savedLink.getIdent());
     }
 
@@ -404,6 +435,8 @@ public class HomeView extends HorizontalLayout {
 
         qrCode.setSrc("");
         qrCodeArea.setVisible(false);
+
+        myLinksNoteArea.setVisible(false);
     }
 
     public static class IDs {
@@ -425,6 +458,11 @@ public class HomeView extends HorizontalLayout {
 
         public static final String QR_CODE_AREA = "qrCodeArea";
         public static final String QR_CODE = "qrCode";
-    }
 
+        public static final String MY_LINKS_NOTE_AREA = "myLinksNoteArea";
+        public static final String MY_LINKS_NOTE_TEXT = "myLinksNoteText";
+        public static final String MY_LINKS_NOTE_START = "myLinksNoteStart";
+        public static final String MY_LINKS_NOTE_LINK = "myLinksNoteLink";
+        public static final String MY_LINKS_NOTE_END = "myLinksNoteEnd";
+    }
 }

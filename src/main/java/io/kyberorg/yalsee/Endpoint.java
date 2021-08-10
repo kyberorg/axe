@@ -48,6 +48,11 @@ public final class Endpoint {
          * Page for displaying software info (avoid adding it in PROD mode).
          */
         public static final String APP_INFO_PAGE = "appInfo";
+
+        /**
+         * Page with user's links or current session links.
+         */
+        public static final String MY_LINKS_PAGE = "myLinks";
     }
 
     /**
