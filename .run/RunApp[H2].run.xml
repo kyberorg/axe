@@ -14,6 +14,9 @@
     <option name="VM_PARAMETERS" value="-Dvaadin.production=true" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="LOG_LEVEL_APP" value="DEBUG" />
+    </envs>
     <method v="2">
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="yalsee [clean, package]" run_configuration_type="MavenRunConfiguration" />
     </method>

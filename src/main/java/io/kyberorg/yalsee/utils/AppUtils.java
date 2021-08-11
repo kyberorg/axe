@@ -9,9 +9,12 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.utils.session.SessionBox;
+import io.kyberorg.yalsee.utils.session.SessionBoxRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.net.URI;
 
 /**
@@ -53,6 +57,21 @@ public class AppUtils {
     public AppUtils(final Environment env) {
         this.env = env;
         populateStaticFields();
+    }
+
+    /**
+     * Retrieve Session ID from given {@link VaadinSession}.
+     * Note: parameter here is really needed,
+     * because {@link VaadinSession#getCurrent()} may not exist outside UI scope/objects.
+     *
+     * @param vaadinSession current {@link VaadinSession} object from UI.
+     * @return string with ID or null
+     */
+    public static String getSessionId(final VaadinSession vaadinSession) {
+        if (vaadinSession != null && vaadinSession.getSession() != null) {
+            return vaadinSession.getSession().getId();
+        }
+        return null;
     }
 
     private void populateStaticFields() {
@@ -121,7 +140,7 @@ public class AppUtils {
         boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
         if (acceptHeaderPresent) {
             @SuppressWarnings("UnnecessaryLocalVariable") //increase readability
-                    boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
+            boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
             return hasExactMimeType;
         } else {
             return false;
@@ -163,11 +182,10 @@ public class AppUtils {
     }
 
 
-
     /**
      * Creates Modal in the middle of page.
      *
-     * @param text string with error
+     * @param text    string with error
      * @param variant valid {@link NotificationVariant}
      * @return created {@link Notification}
      */
@@ -213,6 +231,22 @@ public class AppUtils {
             URI serverUri = UrlUtils.makeFullUri(getServerUrl());
             String scheme = serverUri.getScheme() != null ? serverUri.getScheme() + "://" : "http://";
             return scheme + shortDomain;
+        }
+    }
+
+    /**
+     * Provides host of short url used for links. Runtime value.
+     *
+     * @return string with short domain, if found or Server Url from {@link #getServerUrl()}
+     */
+    public String getShortDomain() {
+        String shortDomain = env.getProperty(App.Properties.SHORT_DOMAIN, DUMMY_HOST);
+        if (shortDomain.equals(DUMMY_HOST)) {
+            //no short URL - use server domain
+            log.debug("No Short Domain defined - using Server Domain");
+            return UrlUtils.removeProtocol(getServerUrl());
+        } else {
+            return shortDomain;
         }
     }
 
@@ -345,11 +379,49 @@ public class AppUtils {
      * @return int with timeout from settings or default timeout {@link App.Defaults#REDIRECT_PAGE_TIMEOUT_SECONDS}
      */
     public int getRedirectPageTimeout() {
-        String timeoutString =  getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
+        String timeoutString = getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
         if (timeoutString.equals(App.NO_VALUE)) {
             return App.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
         }
         return Integer.parseInt(timeoutString);
+    }
+
+    /**
+     * Reads Session Timeout from settings.
+     *
+     * @return int with  timeout from settings or default timeout {@link App.Defaults#SESSION_TIMEOUT_SECONDS}
+     */
+    public int getSessionTimeout() {
+        String timeoutString = getEnv().getProperty(App.Properties.SESSION_TIMEOUT, App.NO_VALUE);
+        if (timeoutString.equals(App.NO_VALUE)) {
+            return App.Defaults.SESSION_TIMEOUT_SECONDS;
+        }
+        return Integer.parseInt(timeoutString);
+    }
+
+    /**
+     * Ends current session.
+     * Removes session from {@link SessionBox}, invalidates {@link HttpSession} and closes {@link VaadinSession}.
+     *
+     * @param sessionBoxRecord {@link SessionBoxRecord} object to end.
+     */
+    public void endSession(final SessionBoxRecord sessionBoxRecord) {
+        SessionBox.removeRecord(sessionBoxRecord);
+        sessionBoxRecord.getHttpSession().invalidate();
+        sessionBoxRecord.getVaadinSession().close();
+    }
+
+    /**
+     * Ends Vaadin Session. Invalidates bound {@link HttpSession} if any and closes {@link VaadinSession}.
+     *
+     * @param session {@link VaadinSession} to remove.
+     */
+    public void endVaadinSession(final VaadinSession session) {
+        if (session.getSession() != null) {
+            SessionBox.removeVaadinSession(session);
+            session.getSession().invalidate();
+        }
+        session.close();
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {
