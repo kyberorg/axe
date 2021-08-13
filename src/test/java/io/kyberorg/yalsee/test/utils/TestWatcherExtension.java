@@ -1,9 +1,11 @@
 package io.kyberorg.yalsee.test.utils;
 
+import com.codeborne.selenide.Configuration;
 import io.kyberorg.yalsee.test.TestApp;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
+import org.openqa.selenium.MutableCapabilities;
 
 /**
  * JUnit's 4 {@link TestWatcher} replacement.
@@ -32,6 +34,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     public void beforeTestExecution(final ExtensionContext extensionContext) {
         testName = setTestNameFromContext(extensionContext);
         testStartTime = System.currentTimeMillis();
+        addTestNameToVideo(testName);
         System.out.printf("Starting.... build '%s'. Test: '%s%n", BUILD_NAME, testName);
     }
 
@@ -72,6 +75,12 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
                 BUILD_NAME,
                 testName,
                 timeTook);
+    }
+
+    private void addTestNameToVideo(final String testName) {
+        MutableCapabilities capabilities = new MutableCapabilities();
+        capabilities.setCapability("name", testName);
+        Configuration.browserCapabilities.merge(capabilities);
     }
 
     private String setTestNameFromContext(final ExtensionContext context) {

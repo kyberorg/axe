@@ -72,8 +72,6 @@ public abstract class SelenideTest {
             capabilities.setCapability("enableVnc", true);
             capabilities.setCapability("screenResolution", "1920x1080x24");
 
-            capabilities.setCapability("name", BUILD_NAME);
-
             capabilities.setCapability("enableVideo", true);
             capabilities.setCapability("videoName", BUILD_NAME + ".mp4");
 
