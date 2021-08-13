@@ -126,5 +126,4 @@ public class DeleteLinkApiTest extends UnirestTest {
         assertNotNull(result2);
         assertEquals(STATUS_404, result2.getStatus());
     }
-
 }
