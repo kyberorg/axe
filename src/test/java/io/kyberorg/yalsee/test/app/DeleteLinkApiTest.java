@@ -126,13 +126,4 @@ public class DeleteLinkApiTest extends UnirestTest {
         assertNotNull(result2);
         assertEquals(STATUS_404, result2.getStatus());
     }
-
-    @Test
-    public void flowControlTest() {
-        String ident = store("https://kyberorg.io");
-        HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
-        HttpResponse<String> result = request.asString();
-        assertEquals(STATUS_404, result.getStatus());
-    }
-
 }

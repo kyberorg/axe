@@ -88,7 +88,7 @@ jobs:
           deduplicate_classes_by_file_name: false
           check_run_annotations: all tests, skipped tests
 
-      - name: No failed Tests - Delete Test Video
+      - name: Delete Test Video (No failed tests)
         if: steps.runTests.outcome == 'success'
         uses: wei/curl@master
         with:

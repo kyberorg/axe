@@ -59,6 +59,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%d%m%y-%H%M')"
 
       - name: Test App
+        id: runTests
         continue-on-error: true
         run: mvn -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }}  -Dsurefire.rerunFailingTestsCount=3 clean test
         env:
@@ -87,8 +88,8 @@ jobs:
           deduplicate_classes_by_file_name: false
           check_run_annotations: all tests, skipped tests
 
-      - name: No failed Tests - Delete Test Video
-        if: success()
+      - name: Delete Test Video (No failed tests)
+        if: steps.runTests.outcome == 'success'
         uses: wei/curl@master
         with:
           args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-dev-${{ steps.date.outputs.date }}
