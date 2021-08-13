@@ -86,3 +86,9 @@ jobs:
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
           check_run_annotations: all tests, skipped tests
+
+      - name: No failed Tests - Delete Test Video
+        if: success()
+        uses: wei/curl@master
+        with:
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-dev-${{ steps.date.outputs.date }}
