@@ -88,5 +88,8 @@ jobs:
           check_run_annotations: all tests, skipped tests
 
       - name: Delete Test Video, if no failed tests
-        run: echo "All Good, video no longer needed"
         if: success()
+        uses: wei/curl@master
+        with:
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-dev-${{ steps.date.outputs.date }}
+
