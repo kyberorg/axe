@@ -55,6 +55,7 @@ public abstract class SelenideTest {
 
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
+            Configuration.driverManagerEnabled = false;
             //will run tests at Grid
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
