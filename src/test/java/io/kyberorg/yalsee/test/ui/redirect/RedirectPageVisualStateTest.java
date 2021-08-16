@@ -23,6 +23,9 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  */
 @SpringBootTest
 public class RedirectPageVisualStateTest extends SelenideTest {
+    //emulating @BeforeAll behavior
+    // this needed because tuneDriverWithCapabilities(); is not static
+    private static boolean pageOpened = false;
 
     private final String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
     private String ourShortLink;
@@ -32,6 +35,9 @@ public class RedirectPageVisualStateTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
+        if (pageOpened) {
+            return;
+        }
         tuneDriverWithCapabilities();
         if (Strings.isBlank(ourShortLink)) {
             open("/");
@@ -39,6 +45,8 @@ public class RedirectPageVisualStateTest extends SelenideTest {
         }
         open(ourShortLink);
         waitForVaadin();
+
+        pageOpened = true;
     }
 
     /**
