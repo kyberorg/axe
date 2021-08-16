@@ -12,9 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * Base for all UI Tests, which run with Selenide.
@@ -72,20 +69,19 @@ public abstract class SelenideTest {
      */
     protected void tuneDriverWithCapabilities() {
         if (shouldRunTestsAtGrid()) {
+            String runningSuiteName = getSuiteName();
+
             MutableCapabilities capabilities = new MutableCapabilities();
             capabilities.setCapability("enableVnc", true);
             capabilities.setCapability("screenResolution", "1920x1080x24");
 
             capabilities.setCapability("enableVideo", true);
-            capabilities.setCapability("videoName", BUILD_NAME + ".mp4");
+            capabilities.setCapability("videoName", BUILD_NAME + "-" + runningSuiteName + ".mp4");
 
             capabilities.setCapability("enableLog", true);
-            capabilities.setCapability("logName", BUILD_NAME + ".log");
+            capabilities.setCapability("logName", BUILD_NAME + "-" + runningSuiteName + ".log");
 
-            Map<String, Object> selenoidOptions = new HashMap<>(1);
-            selenoidOptions.put("name", getClass().getSimpleName());
-
-            capabilities.setCapability("selenoid:options", selenoidOptions);
+            capabilities.setCapability("name", runningSuiteName);
 
             Configuration.browserCapabilities.merge(capabilities);
         }
@@ -167,4 +163,10 @@ public abstract class SelenideTest {
         }
     }
 
+    private String getSuiteName() {
+        String clazzName = getClass().getSimpleName();
+        String fullPackage = getClass().getPackageName();
+
+        return fullPackage.replace("io.kyberorg.yalsee.test.ui.", "") + "." + clazzName;
+    }
 }
