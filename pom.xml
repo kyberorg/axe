@@ -14,7 +14,7 @@
     <developers>
         <developer>
             <id>kyberorg</id>
-            <name>Alexander Muravya</name>
+            <name>Aleksandr Muravja</name>
             <email>alex@kyberorg.io</email>
             <roles>
                 <role>lead developer</role>
@@ -38,6 +38,10 @@
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Plugins version: used 2+ times -->
+        <git.plugin.version>4.9.10</git.plugin.version>
+        <properties.plugin.version>1.0.0</properties.plugin.version>
     </properties>
     
     <parent>
@@ -294,7 +298,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.9.10</version>
+                <version>${git.plugin.version}</version>
                 <configuration>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
@@ -306,7 +310,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>${properties.plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
@@ -365,6 +369,48 @@
             <properties>
                 <maven.test.skip>true</maven.test.skip>
             </properties>
+        </profile>
+
+        <!-- Testing only profile: compile and run only tests -->
+        <profile>
+            <id>testing-only</id>
+            <build>
+                <plugins>
+                    <!-- Disable Git info plugin execution -->
+                    <plugin>
+                        <groupId>pl.project13.maven</groupId>
+                        <artifactId>git-commit-id-plugin</artifactId>
+                        <version>${git.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Disable Properties plugin execution -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>properties-maven-plugin</artifactId>
+                        <version>${properties.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Disable Vaadin execution -->
+                    <plugin>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
+                        <version>${vaadin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
