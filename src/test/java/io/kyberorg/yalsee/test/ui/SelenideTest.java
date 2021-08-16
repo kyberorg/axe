@@ -12,6 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Base for all UI Tests, which run with Selenide.
@@ -77,6 +80,11 @@ public abstract class SelenideTest {
 
             capabilities.setCapability("enableLog", true);
             capabilities.setCapability("logName", BUILD_NAME + ".log");
+
+            Map<String, Object> selenoidOptions = new HashMap<>(1);
+            selenoidOptions.put("name", "testNameHere");
+
+            capabilities.setCapability("selenoid:options", selenoidOptions);
 
             Configuration.browserCapabilities.merge(capabilities);
         }
