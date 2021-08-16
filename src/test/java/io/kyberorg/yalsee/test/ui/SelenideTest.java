@@ -83,7 +83,7 @@ public abstract class SelenideTest {
             capabilities.setCapability("logName", BUILD_NAME + ".log");
 
             Map<String, Object> selenoidOptions = new HashMap<>(1);
-            selenoidOptions.put("name", "testNameHere");
+            selenoidOptions.put("name", getClass().getSimpleName());
 
             capabilities.setCapability("selenoid:options", selenoidOptions);
 
