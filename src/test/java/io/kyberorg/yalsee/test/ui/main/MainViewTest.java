@@ -16,15 +16,23 @@ import static com.codeborne.selenide.Selenide.open;
  * @since 2.8
  */
 public class MainViewTest extends SelenideTest {
+    //emulating @BeforeAll behavior
+    // this needed because tuneDriverWithCapabilities(); is not static
+    private static boolean pageOpened = false;
 
     /**
      * Test Setup.
      */
     @BeforeEach
     public void beforeTest() {
+        if (pageOpened) {
+            return;
+        }
         tuneDriverWithCapabilities();
         open("/");
         VaadinPageObject.waitForVaadin();
+
+        pageOpened = true;
     }
 
     /**
