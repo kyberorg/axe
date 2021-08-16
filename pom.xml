@@ -40,8 +40,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Plugins version: used 2+ times -->
-        <properties.plugin.version>1.0.0</properties.plugin.version>
         <git.plugin.version>4.9.10</git.plugin.version>
+        <properties.plugin.version>1.0.0</properties.plugin.version>
     </properties>
     
     <parent>
