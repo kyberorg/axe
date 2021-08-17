@@ -7,8 +7,6 @@ import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -23,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  *
  * @since 3.2
  */
-@Execution(ExecutionMode.CONCURRENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EditorTest extends SelenideTest {
     /**
