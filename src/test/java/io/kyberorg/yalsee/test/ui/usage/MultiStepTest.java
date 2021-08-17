@@ -7,8 +7,10 @@ import io.kyberorg.yalsee.test.pageobjects.external.Wikipedia;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openqa.selenium.Keys;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 1.0
  */
-@SpringBootTest
+@Execution(ExecutionMode.CONCURRENT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MultiStepTest extends SelenideTest {
     /**
      * Timeout to prevent flaky tests in seconds.

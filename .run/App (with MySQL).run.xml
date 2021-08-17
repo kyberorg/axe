@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="App (with MySQL)" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot">
+        <module name="yalsee"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="io.kyberorg.yalsee.Application"/>
+        <option name="DEBUG_MODE" value="true"/>
+        <option name="ACTIVE_PROFILES" value="local"/>
+        <option name="ALTERNATIVE_JRE_PATH"/>
+        <option name="SHORTEN_COMMAND_LINE" value="NONE"/>
+        <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+            <option name="RunConfigurationTask" enabled="true" run_configuration_name="localMySQL: Compose Deployment"
+                    run_configuration_type="docker-deploy"/>
+        </method>
+    </configuration>
+</component>
