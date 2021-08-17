@@ -9,6 +9,8 @@ import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -21,6 +23,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  * Test default visual state of {@link MyLinksView}. This state, when user just opens page without doing something else.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Execution(ExecutionMode.CONCURRENT)
 public class DefaultVisualStateTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static

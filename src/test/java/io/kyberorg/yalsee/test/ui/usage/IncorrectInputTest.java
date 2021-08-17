@@ -6,6 +6,8 @@ import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -21,6 +23,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  * @since 1.0
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Execution(ExecutionMode.CONCURRENT)
 public class IncorrectInputTest extends SelenideTest {
     private static final String CANNOT_EMPTY_TEXT = "cannot be empty";
     private static final String MALFORMED_URL_TEXT = "malformed URL or not URL";
