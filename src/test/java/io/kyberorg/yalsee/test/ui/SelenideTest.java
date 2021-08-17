@@ -72,13 +72,13 @@ public abstract class SelenideTest {
             capabilities.setCapability("enableVnc", true);
             capabilities.setCapability("screenResolution", "1920x1080x24");
 
-            capabilities.setCapability("name", BUILD_NAME);
+            capabilities.setCapability("name", getSuiteName());
 
             capabilities.setCapability("enableVideo", true);
-            capabilities.setCapability("videoName", BUILD_NAME + ".mp4");
+            capabilities.setCapability("videoName", getVideoName());
 
             capabilities.setCapability("enableLog", true);
-            capabilities.setCapability("logName", BUILD_NAME + ".log");
+            capabilities.setCapability("logName", getLogName());
 
             Configuration.browserCapabilities.merge(capabilities);
         }
@@ -160,4 +160,18 @@ public abstract class SelenideTest {
         }
     }
 
+    private String getSuiteName() {
+        String clazzName = getClass().getSimpleName();
+        String fullPackage = getClass().getPackageName();
+
+        return fullPackage.replace("io.kyberorg.yalsee.test.ui.", "") + "." + clazzName;
+    }
+
+    private String getLogName() {
+        return BUILD_NAME + "-" + getSuiteName() + ".log";
+    }
+
+    private String getVideoName() {
+        return BUILD_NAME + "-" + getSuiteName() + ".mp4";
+    }
 }
