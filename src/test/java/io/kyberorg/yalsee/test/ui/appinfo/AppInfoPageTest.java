@@ -25,21 +25,22 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 public class AppInfoPageTest extends SelenideTest {
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
-    private static boolean pageOpened = false;
+    private static boolean beforeTestsExecuted = false;
 
     /**
-     * Test setup.
+     * Test setup. Emulates @BeforeAll behavior.
      */
     @BeforeEach
-    public void beforeTest() {
-        if (pageOpened) {
+    public void beforeTests() {
+        if (beforeTestsExecuted) {
             return;
         }
         tuneDriverWithCapabilities();
+        displayTestInfo();
         open("/appInfo");
         waitForVaadin();
 
-        pageOpened = true;
+        beforeTestsExecuted = true;
     }
 
     /**

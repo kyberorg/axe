@@ -37,13 +37,15 @@ public abstract class SelenideTest {
     private static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
 
-    private static boolean isCommonInfoAlreadyShown;
+    private static boolean setupAlreadyExecuted;
 
     /**
-     * Common Runner Setup and Info.
+     * Common Runner Setup and Info. Runs once per application.
      */
     @BeforeAll
     public static void setUp() {
+        if (setupAlreadyExecuted) return;
+
         Configuration.baseUrl = BASE_URL;
         Configuration.reportsFolder = REPORT_DIRECTORY;
         Configuration.timeout = SELENIDE_TIMEOUT;
@@ -60,8 +62,10 @@ public abstract class SelenideTest {
             //application runs in docker container
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name());
         }
-        //display common information
+        //display common information - once
         displayCommonInfo();
+
+        setupAlreadyExecuted = true;
     }
 
     /**
@@ -86,8 +90,14 @@ public abstract class SelenideTest {
         }
     }
 
+    protected void displayTestInfo() {
+        System.out.printf("Starting testing TestSuite %s %s", getSuiteName(), App.NEW_LINE);
+        System.out.printf("Test Video: %s %s", getVideoName(), App.NEW_LINE);
+        System.out.printf("Test Logs: %s %s", getLogName(), App.NEW_LINE);
+    }
+
     /**
-     * Are we running remotely (i.e. Grid/Selenoid etc) ?
+     * Are we running remotely (i.e. Grid/Selenoid etc.) ?
      *
      * @return true - if we are running tests at remotely, false if not.
      */
@@ -105,32 +115,31 @@ public abstract class SelenideTest {
     }
 
     private static void displayCommonInfo() {
-        if (!isCommonInfoAlreadyShown) {
-            TestApp.RunMode runMode = TestApp.RunMode.valueOf(
-                    System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name())
-            );
-            String testLocation =
-                    runMode == TestApp.RunMode.GRID ? "at Grid (" + Configuration.remote + ")" : "locally";
 
-            StringBuilder commonInfoBuilder = new StringBuilder(App.NEW_LINE);
-            commonInfoBuilder.append("=== UI Tests Common Info ===").append(App.NEW_LINE);
-            commonInfoBuilder.append(String.format("BuildName: %s", BUILD_NAME)).append(App.NEW_LINE);
-            commonInfoBuilder.append(String.format("Will test %s", testLocation)).append(App.NEW_LINE);
-            commonInfoBuilder.append(String.format("Test URL: %s", BASE_URL)).append(App.NEW_LINE);
+        TestApp.RunMode runMode = TestApp.RunMode.valueOf(
+                System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name())
+        );
+        String testLocation =
+                runMode == TestApp.RunMode.GRID ? "at Grid (" + Configuration.remote + ")" : "locally";
 
-            if (runMode == TestApp.RunMode.GRID) {
-                commonInfoBuilder.append("Live Sessions: https://grid.kyberorg.io/#/").append(App.NEW_LINE);
-                commonInfoBuilder.append(String.format("TestVideo: https://grid.kyberorg.io/video/%s.mp4", BUILD_NAME))
-                        .append(App.NEW_LINE);
-            } else {
-                commonInfoBuilder.append(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY))
-                        .append(App.NEW_LINE);
-            }
-            commonInfoBuilder.append("==================").append(App.NEW_LINE);
+        StringBuilder commonInfoBuilder = new StringBuilder(App.NEW_LINE);
+        commonInfoBuilder.append("=== UI Tests Common Info ===").append(App.NEW_LINE);
+        commonInfoBuilder.append(String.format("BuildName: %s", BUILD_NAME)).append(App.NEW_LINE);
+        commonInfoBuilder.append(String.format("Will test %s", testLocation)).append(App.NEW_LINE);
+        commonInfoBuilder.append(String.format("Test URL: %s", BASE_URL)).append(App.NEW_LINE);
 
-            System.out.println(commonInfoBuilder);
-            isCommonInfoAlreadyShown = true;
+        if (runMode == TestApp.RunMode.GRID) {
+            commonInfoBuilder.append("Live Sessions: https://grid.kyberorg.io/#/").append(App.NEW_LINE);
+            commonInfoBuilder.append(String.format("TestVideo: https://grid.kyberorg.io/video/%s.mp4", BUILD_NAME))
+                    .append(App.NEW_LINE);
+        } else {
+            commonInfoBuilder.append(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY))
+                    .append(App.NEW_LINE);
         }
+        commonInfoBuilder.append("==================").append(App.NEW_LINE);
+
+        System.out.println(commonInfoBuilder);
+
     }
 
     private static boolean shouldRunTestsAtGrid() {
