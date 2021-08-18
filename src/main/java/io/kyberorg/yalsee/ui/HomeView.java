@@ -148,6 +148,7 @@ public class HomeView extends HorizontalLayout {
         submitButton.setId(IDs.SUBMIT_BUTTON);
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener(this::onSaveLink);
+        submitButton.addClickShortcut(Key.ENTER);
 
         VerticalLayout mainArea =
                 new VerticalLayout(title, input, publicAccessBanner, submitButton);
