@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.test.utils;
 
+import com.codeborne.selenide.WebDriverRunner;
 import io.kyberorg.yalsee.test.TestApp;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -17,12 +18,23 @@ public final class GridUtils {
     private final String gridUrl;
     private String sessionId;
 
+    /**
+     * Creates {@link GridUtils} linked to current session.
+     *
+     * @param sessionId non-empty string with session identifier. For Selenide use {@link WebDriverRunner#driver()}.
+     * @return {@link GridUtils} instance linked to given session.
+     */
     public static GridUtils getInstance(final String sessionId) {
         GridUtils gridUtils = new GridUtils();
         gridUtils.sessionId = sessionId;
         return gridUtils;
     }
 
+    /**
+     * Provides Grid (aka Selenoid) URL constructed from application properties.
+     *
+     * @return string with Grid URL with protocol and grid standard postfix ({@literal /wd/hub}).
+     */
     public static String getGridFullUrl() {
         final String httpsPrefix = "https://";
         final String httpPrefix = "http://";
@@ -51,6 +63,11 @@ public final class GridUtils {
         this.gridUrl = getGridFullUrl();
     }
 
+    /**
+     * Provides remote clipboard content by querying Selenoid API. If query fails - it fails test.
+     *
+     * @return clipboard content or empty string, if failed.
+     */
     public String getClipboardValue() {
         final String endpointUrl = this.gridUrl + "/clipboard/" + this.sessionId;
         HttpResponse<String> httpResponse = Unirest.get(endpointUrl).asString();
