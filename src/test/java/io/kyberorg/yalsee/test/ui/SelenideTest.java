@@ -5,6 +5,7 @@ import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.utils.GridUtils;
 import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -51,7 +52,7 @@ public abstract class SelenideTest {
         Configuration.fastSetValue = true;
 
         if (shouldRunTestsAtGrid()) {
-            Configuration.remote = getGridFullUrl();
+            Configuration.remote = GridUtils.getGridFullUrl();
             //will run tests at Grid
             System.setProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.GRID.name());
         } else {
@@ -101,6 +102,7 @@ public abstract class SelenideTest {
         System.out.println("Testing is Done");
     }
 
+
     private static void displayCommonInfo() {
         if (!isCommonInfoAlreadyShown) {
             TestApp.RunMode runMode = TestApp.RunMode.valueOf(
@@ -134,30 +136,6 @@ public abstract class SelenideTest {
         String selenideRemote = System.getProperty(TestApp.Properties.Selenide.REMOTE, "");
         String gridHostname = System.getProperty(TestApp.Properties.GRID_HOSTNAME, "");
         return StringUtils.isNotBlank(selenideRemote) || StringUtils.isNotBlank(gridHostname);
-    }
-
-    private static String getGridFullUrl() {
-        final String httpsPrefix = "https://";
-        final String httpPrefix = "http://";
-        final String gridPostfix = "/wd/hub";
-
-        String selenideRemote = System.getProperty(TestApp.Properties.Selenide.REMOTE, "");
-        if (StringUtils.isNotBlank(selenideRemote)) {
-            return selenideRemote;
-        }
-
-        String gridHostname = System.getProperty(TestApp.Properties.GRID_HOSTNAME);
-        boolean hostnameStringHasProtocol = gridHostname.startsWith(httpsPrefix) || gridHostname.startsWith(httpPrefix);
-        boolean hostnameStringHasGridPostfix = gridHostname.contains(gridPostfix);
-        if (hostnameStringHasProtocol && hostnameStringHasGridPostfix) {
-            return gridHostname;
-        } else if (hostnameStringHasProtocol) {
-            return gridHostname + gridPostfix;
-        } else if (hostnameStringHasGridPostfix) {
-            return httpPrefix + gridHostname;
-        } else {
-            return httpPrefix + gridHostname + gridPostfix;
-        }
     }
 
 }

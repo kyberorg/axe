@@ -5,11 +5,13 @@ import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.test.utils.GridUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
@@ -114,15 +116,17 @@ public class GridCellsTest extends SelenideTest {
      */
     @Test
     public void onClickToLinkShortLinkCopiedToClipboard() {
-        if (isRemoteRun()) {
-            //currently, we have problem accessing remote clipboard.
-            //TODO remove once fixed
-            return;
-        }
         SelenideElement linkCell = Grid.GridData.get().getRow(1).getLinkCell();
         String link = linkCell.getText();
         linkCell.click();
-        String textFromClipboard = Selenide.clipboard().getText();
+        String textFromClipboard;
+        if (isRemoteRun()) {
+            final GridUtils gridUtils = GridUtils.getInstance(driver().getSessionId().toString());
+            textFromClipboard = gridUtils.getClipboardValue();
+        } else {
+            textFromClipboard = Selenide.clipboard().getText();
+        }
+
         assertEquals("http://" + link, textFromClipboard);
 
         //closing item details if opened, which opens within same click
