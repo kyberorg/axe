@@ -59,8 +59,13 @@ public final class GridUtils {
         }
     }
 
+    private static String getGridApiUrl() {
+        final String gridPostfix = "/wd/hub";
+        return getGridFullUrl().replaceAll(gridPostfix, "");
+    }
+
     private GridUtils() {
-        this.gridUrl = getGridFullUrl();
+        this.gridUrl = getGridApiUrl();
     }
 
     /**

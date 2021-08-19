@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.GridUtils;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -126,8 +127,8 @@ public class GridCellsTest extends SelenideTest {
         } else {
             textFromClipboard = Selenide.clipboard().getText();
         }
-
-        assertEquals("http://" + link, textFromClipboard);
+        String linkFromClipboard = UrlUtils.removeProtocol(textFromClipboard);
+        assertEquals("http://" + link, linkFromClipboard);
 
         //closing item details if opened, which opens within same click
         SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
