@@ -11,7 +11,7 @@ public class URLDecodeException extends RuntimeException {
      *
      * @param cause UnsupportedEncodingException
      */
-    public URLDecodeException(Throwable cause) {
+    public URLDecodeException(final Throwable cause) {
         super(cause);
     }
 }
