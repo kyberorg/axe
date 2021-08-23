@@ -283,7 +283,6 @@ public class HomeView extends HorizontalLayout {
         log.trace("{} Submit button clicked. By client? {}", TAG, buttonClickEvent.isFromClient());
 
         cleanErrors();
-        cleanResults();
 
         boolean isFormValid = true;
         String longUrl = input.getValue();

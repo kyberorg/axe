@@ -78,8 +78,12 @@ public class HomePageTest extends SelenideTest {
      */
     @Test
     public void saveLinkByClickingEnterAndVerify() {
-        HomePageObject.pasteValueInForm("https://vr.fi'");
+        HomePageObject.pasteValueInForm("https://vr.fi");
         HomePageObject.MainArea.SUBMIT_BUTTON.pressEnter();
+
+        //dirty hack to handle double Enter (occurs time to time)
+        closeErrorBoxIfDisplayed();
+
         SelenideElement shortLink = HomePageObject.ResultArea.RESULT_LINK;
         $(shortLink).shouldBe(visible);
         String shortUrl = shortLink.getText();
@@ -117,5 +121,11 @@ public class HomePageTest extends SelenideTest {
     private void verifyThatPage404Opened() {
         NotFoundViewPageObject.TITLE.shouldBe(visible);
         NotFoundViewPageObject.TITLE.shouldHave(text("404"));
+    }
+
+    private void closeErrorBoxIfDisplayed() {
+        if (HomePageObject.ErrorModal.ERROR_MODAL.isDisplayed()) {
+            HomePageObject.ErrorModal.ERROR_BUTTON.click();
+        }
     }
 }
