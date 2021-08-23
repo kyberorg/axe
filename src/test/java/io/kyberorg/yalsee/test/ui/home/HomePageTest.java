@@ -74,6 +74,25 @@ public class HomePageTest extends SelenideTest {
     }
 
     /**
+     * Saves link by clicking enter, copies result, opens it and verifies that correct original site opens.
+     */
+    @Test
+    public void saveLinkByClickingEnterAndVerify() {
+        HomePageObject.pasteValueInForm("https://vr.fi");
+        HomePageObject.MainArea.SUBMIT_BUTTON.pressEnter();
+
+        //dirty hack to handle double Enter (occurs time to time)
+        closeErrorBoxIfDisplayed();
+
+        SelenideElement shortLink = HomePageObject.ResultArea.RESULT_LINK;
+        $(shortLink).shouldBe(visible);
+        String shortUrl = shortLink.getText();
+
+        open(shortUrl + addRedirectPageBypassSymbol());
+        verifyThatVROpened();
+    }
+
+    /**
      * Tests if request something that not exist yet, page 404 opens.
      */
     @Test
@@ -102,5 +121,11 @@ public class HomePageTest extends SelenideTest {
     private void verifyThatPage404Opened() {
         NotFoundViewPageObject.TITLE.shouldBe(visible);
         NotFoundViewPageObject.TITLE.shouldHave(text("404"));
+    }
+
+    private void closeErrorBoxIfDisplayed() {
+        if (HomePageObject.ErrorModal.ERROR_MODAL.isDisplayed()) {
+            HomePageObject.ErrorModal.ERROR_BUTTON.click();
+        }
     }
 }
