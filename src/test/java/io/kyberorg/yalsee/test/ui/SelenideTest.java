@@ -12,8 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
 
-import static com.codeborne.selenide.Selenide.closeWindow;
-
 
 /**
  * Base for all UI Tests, which run with Selenide.
@@ -110,7 +108,6 @@ public abstract class SelenideTest {
      */
     @AfterAll
     public static void tearDown() {
-        closeWindow();
         System.out.println("Testing is Done");
     }
 
