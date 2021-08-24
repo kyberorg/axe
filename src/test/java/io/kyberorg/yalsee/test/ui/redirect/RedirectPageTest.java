@@ -8,7 +8,6 @@ import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -22,7 +21,6 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 3.0.5
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class RedirectPageTest extends SelenideTest {
 

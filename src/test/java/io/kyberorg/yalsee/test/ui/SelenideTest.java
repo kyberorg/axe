@@ -115,7 +115,6 @@ public abstract class SelenideTest {
     }
 
     private static void displayCommonInfo() {
-
         TestApp.RunMode runMode = TestApp.RunMode.valueOf(
                 System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name())
         );

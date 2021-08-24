@@ -7,7 +7,6 @@ import io.kyberorg.yalsee.test.pageobjects.external.Wikipedia;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openqa.selenium.Keys;
@@ -27,11 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Contains multi step tests for Front page.
+ * Contains multistep tests for Front page.
  *
  * @since 1.0
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class MultiStepTest extends SelenideTest {
     /**

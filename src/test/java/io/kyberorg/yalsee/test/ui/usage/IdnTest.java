@@ -7,7 +7,6 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -22,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 2.5
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 @SuppressWarnings("SpellCheckingInspection")
 public class IdnTest extends SelenideTest {

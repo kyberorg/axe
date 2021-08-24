@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -29,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 1.0
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class VisibleStateTest extends SelenideTest {
     //emulating @BeforeAll behavior

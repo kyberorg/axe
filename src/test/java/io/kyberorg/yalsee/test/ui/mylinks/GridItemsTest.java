@@ -8,7 +8,6 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -24,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 3.2
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class GridItemsTest extends SelenideTest {
     //emulating @BeforeAll behavior

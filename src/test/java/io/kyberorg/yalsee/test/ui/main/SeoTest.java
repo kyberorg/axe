@@ -6,7 +6,6 @@ import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -20,7 +19,6 @@ import static io.kyberorg.yalsee.test.pageobjects.MainViewPageObject.GOOGLE_ANAL
  *
  * @since 3.0.2
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class SeoTest extends SelenideTest {
 
