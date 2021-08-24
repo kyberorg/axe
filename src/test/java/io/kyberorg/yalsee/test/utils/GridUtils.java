@@ -83,4 +83,21 @@ public final class GridUtils {
             return "";
         }
     }
+
+    /**
+     * Cleans clipboard by sending empty string.
+     */
+    public void cleanClipboard() {
+        pasteValueToClipboard("");
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private void pasteValueToClipboard(final String value) {
+        final String endpointUrl = this.gridUrl + "/clipboard/" + this.sessionId;
+        HttpResponse<String> response = Unirest.post(endpointUrl).body(value).asString();
+        if (!response.isSuccess()) {
+            fail("Failed to access remote clipboard. Grid reported: " + response.getStatusText());
+        }
+
+    }
 }

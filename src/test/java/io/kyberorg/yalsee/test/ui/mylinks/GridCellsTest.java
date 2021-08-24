@@ -117,12 +117,17 @@ public class GridCellsTest extends SelenideTest {
      */
     @Test
     public void onClickToLinkShortLinkCopiedToClipboard() {
+        final GridUtils gridUtils = GridUtils.getInstance(driver().getSessionId().toString());
+        if (isRemoteRun()) {
+            gridUtils.cleanClipboard();
+        }
         SelenideElement linkCell = Grid.GridData.get().getRow(1).getLinkCell();
         String link = linkCell.getText();
         linkCell.click();
         String textFromClipboard;
         if (isRemoteRun()) {
-            final GridUtils gridUtils = GridUtils.getInstance(driver().getSessionId().toString());
+
+            gridUtils.cleanClipboard();
             textFromClipboard = gridUtils.getClipboardValue();
         } else {
             textFromClipboard = Selenide.clipboard().getText();
