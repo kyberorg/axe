@@ -126,8 +126,6 @@ public class GridCellsTest extends SelenideTest {
         linkCell.click();
         String textFromClipboard;
         if (isRemoteRun()) {
-
-            gridUtils.cleanClipboard();
             textFromClipboard = gridUtils.getClipboardValue();
         } else {
             textFromClipboard = Selenide.clipboard().getText();
