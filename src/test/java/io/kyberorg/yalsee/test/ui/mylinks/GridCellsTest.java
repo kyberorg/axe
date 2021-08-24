@@ -25,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @since 3.2
  */
 public class GridCellsTest extends SelenideTest {
+    // timeout waiting for link to be copied to clipboard
+    private static final int COPY_TO_CLIPBOARD_WAITING_TIMEOUT_IN_MILLIS = 1500;
     //emulating @BeforeAll behavior
     // this needed because tuneDriverWithCapabilities(); is not static
     private static boolean pageOpened = false;
@@ -113,25 +115,48 @@ public class GridCellsTest extends SelenideTest {
     }
 
     /**
-     * Tests that on Click to Link Short Link copied to Clipboard.
+     * Tests that on Click to Link Short Link copied to Clipboard (local edition).
      */
     @Test
-    public void onClickToLinkShortLinkCopiedToClipboard() {
-        final GridUtils gridUtils = GridUtils.getInstance(driver().getSessionId().toString());
+    public void onClickToLinkShortLinkCopiedToLocalClipboard() {
         if (isRemoteRun()) {
-            gridUtils.cleanClipboard();
+            return;
         }
+        Selenide.clipboard().setText("");
         SelenideElement linkCell = Grid.GridData.get().getRow(1).getLinkCell();
         String link = linkCell.getText();
         linkCell.click();
-        String textFromClipboard;
-        if (isRemoteRun()) {
-            textFromClipboard = gridUtils.getClipboardValue();
-        } else {
-            textFromClipboard = Selenide.clipboard().getText();
-        }
+        Selenide.sleep(COPY_TO_CLIPBOARD_WAITING_TIMEOUT_IN_MILLIS);
+        String textFromClipboard = Selenide.clipboard().getText();
         String linkFromClipboard = UrlUtils.removeProtocol(textFromClipboard);
-        assertEquals("http://" + link, linkFromClipboard);
+        assertEquals(link, linkFromClipboard);
+
+        //closing item details if opened, which opens within same click
+        SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
+        if (itemDetails.isDisplayed()) {
+            linkCell.click();
+        }
+    }
+
+    /**
+     * Tests that on Click to Link Short Link copied to Clipboard (remote aka Grid edition).
+     */
+    @Test
+    public void onClickToLinkShortLinkCopiedToRemoteClipboard() {
+        if (!isRemoteRun()) {
+            return;
+        }
+        final GridUtils gridUtils = GridUtils.getInstance(driver().getSessionId().toString());
+        gridUtils.cleanClipboard();
+
+        SelenideElement linkCell = Grid.GridData.get().getRow(1).getLinkCell();
+        String link = linkCell.getText();
+        linkCell.click();
+        Selenide.sleep(COPY_TO_CLIPBOARD_WAITING_TIMEOUT_IN_MILLIS);
+
+        String textFromClipboard = gridUtils.getClipboardValue();
+        String linkFromClipboard = UrlUtils.removeProtocol(textFromClipboard);
+        assertEquals(link, linkFromClipboard);
 
         //closing item details if opened, which opens within same click
         SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
