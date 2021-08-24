@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.utils;
 
+import io.kyberorg.yalsee.exception.URLDecodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -113,14 +114,15 @@ public final class UrlUtils {
      *
      * @param encodedUrl string with URL where encoded chars are present or not
      * @return string with decoded URL or same string if URL has no chars to encode
+     * @throws URLDecodeException thrown when application it failed to decode URL.
      */
-    public static String decodeUrl(final String encodedUrl) {
+    public static String decodeUrl(final String encodedUrl) throws URLDecodeException {
         try {
             return URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
             log.error("{} Failed to decode URL", TAG);
             log.debug("", e);
-            throw new RuntimeException(e.getCause());
+            throw new URLDecodeException(e.getCause());
         }
     }
 

@@ -5,6 +5,7 @@ import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.events.LinkUpdatedEvent;
+import io.kyberorg.yalsee.exception.URLDecodeException;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
@@ -228,7 +229,7 @@ public class LinkService {
             return OperationResult.success().addPayload(savedLink);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
-        } catch (RuntimeException decodeException) {
+        } catch (URLDecodeException decodeException) {
             log.error("{} {}", TAG, decodeException.getMessage());
             return OperationResult.generalFail().withMessage("Failed to decode URL");
         } catch (Exception e) {
@@ -285,7 +286,7 @@ public class LinkService {
             return OperationResult.success().addPayload(updatedLink);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
-        } catch (RuntimeException decodeException) {
+        } catch (URLDecodeException decodeException) {
             log.error("{} {}", TAG, decodeException.getMessage());
             return OperationResult.generalFail().withMessage("Failed to decode URL");
         } catch (Exception e) {
