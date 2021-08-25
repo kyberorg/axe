@@ -7,8 +7,6 @@ public class YalseeTest {
     private static YalseeTest instance = null;
     private static boolean welcomeExecuted = false;
 
-    public String testString;
-
     public static YalseeTest getInstance() {
         if (instance == null) {
             instance = new YalseeTest();

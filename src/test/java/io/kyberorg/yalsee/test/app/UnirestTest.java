@@ -6,10 +6,14 @@ import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.json.PostLinkResponse;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.YalseeTest;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.*;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -26,12 +30,18 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Slf4j
+@ExtendWith(TestWatcherExtension.class) // catching test results and logging results to System.out
 public abstract class UnirestTest {
     protected static final String TEST_URL = TestUtils.getTestUrl();
 
     protected static final String LINK_NOT_FOUND_STATUS = "LINK_NOT_FOUND";
 
     private static String TAG = "[" + UnirestTest.class.getSimpleName() + "]";
+
+    @BeforeAll
+    public static void init() {
+        YalseeTest.getInstance().printWelcome();
+    }
 
     /**
      * Logs both request and response.
@@ -77,7 +87,7 @@ public abstract class UnirestTest {
     /**
      * Finds link by its ident.
      *
-     * @param ident non empty string with ident to search
+     * @param ident non-empty string with ident to search
      * @return string with long URL or {@link #LINK_NOT_FOUND_STATUS} if not found
      */
     protected String getStoredLink(final String ident) {
