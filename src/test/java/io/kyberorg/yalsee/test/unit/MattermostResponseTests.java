@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.unit;
 
 import io.kyberorg.yalsee.json.MattermostResponse;
+import io.kyberorg.yalsee.test.YalseeTest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.GenericValidator;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 2.3
  */
-public class MattermostResponseTests {
+public class MattermostResponseTests extends YalseeTest {
 
     /**
      * Tests that valid JSON that Mattermost sends in response has icon, text and username.

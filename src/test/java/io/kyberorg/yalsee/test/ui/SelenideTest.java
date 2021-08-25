@@ -6,7 +6,6 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.YalseeTest;
-import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +19,7 @@ import org.openqa.selenium.MutableCapabilities;
  * @since 1.0
  */
 @ExtendWith(ScreenShooterExtension.class) // automatically takes screenshot of every failed test
-@ExtendWith(TestWatcherExtension.class) // catching test results and logging results to System.out
-public abstract class SelenideTest {
+public abstract class SelenideTest extends YalseeTest {
     private static final String REPORT_DIRECTORY =
             System.getProperty(TestApp.Properties.REPORT_DIR, TestApp.Defaults.Selenide.REPORT_DIR);
     private static final String SELENIDE_BROWSER =
@@ -65,7 +63,6 @@ public abstract class SelenideTest {
         displayCommonInfo();
 
         setupAlreadyExecuted = true;
-        YalseeTest.getInstance().printWelcome();
     }
 
     /**
