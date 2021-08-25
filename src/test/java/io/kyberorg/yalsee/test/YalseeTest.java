@@ -5,7 +5,6 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
 import lombok.Getter;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
@@ -35,14 +34,6 @@ public abstract class YalseeTest {
         displayCommonInfo();
         registerShutdownHook(YalseeTest::afterAllTests);
         Mutex.getInstance().markInitAsExecuted();
-    }
-
-    /**
-     * After each Suite aka TestClass.
-     */
-    @AfterAll
-    public static void afterSuite() {
-        System.out.println("Suite completed...");
     }
 
     /**
