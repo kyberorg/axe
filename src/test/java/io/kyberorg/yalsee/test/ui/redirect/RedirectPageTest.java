@@ -31,7 +31,6 @@ public class RedirectPageTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";

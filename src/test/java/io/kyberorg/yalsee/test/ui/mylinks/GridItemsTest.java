@@ -37,7 +37,6 @@ public class GridItemsTest extends SelenideTest {
         if (pageOpened) {
             return;
         }
-        tuneDriverWithCapabilities();
 
         //session cleanup
         open("/myLinks");

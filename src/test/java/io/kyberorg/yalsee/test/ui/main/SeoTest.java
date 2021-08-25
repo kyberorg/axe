@@ -27,7 +27,6 @@ public class SeoTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
         open("/");
         VaadinPageObject.waitForVaadin();
     }

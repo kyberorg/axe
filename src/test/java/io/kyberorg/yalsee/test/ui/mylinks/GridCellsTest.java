@@ -37,7 +37,6 @@ public class GridCellsTest extends SelenideTest {
         if (pageOpened) {
             return;
         }
-        tuneDriverWithCapabilities();
 
         //cleaning session
         open("/myLinks");

@@ -39,7 +39,6 @@ public class RedirectPageVisualStateTest extends SelenideTest {
         if (pageOpened) {
             return;
         }
-        tuneDriverWithCapabilities();
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(ourLongLink);

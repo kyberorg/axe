@@ -35,7 +35,6 @@ public class ActionsTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
 
         //cleaning session
         open("/myLinks");

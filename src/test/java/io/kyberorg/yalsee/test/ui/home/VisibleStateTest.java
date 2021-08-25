@@ -42,7 +42,6 @@ public class VisibleStateTest extends SelenideTest {
         if (pageOpened) {
             return;
         }
-        tuneDriverWithCapabilities();
         open("/");
         waitForVaadin();
 

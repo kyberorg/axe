@@ -30,7 +30,6 @@ public class IdnTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
         open("/");
         waitForVaadin();
     }

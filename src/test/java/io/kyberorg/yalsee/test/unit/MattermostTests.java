@@ -2,7 +2,6 @@ package io.kyberorg.yalsee.test.unit;
 
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.mm.Mattermost;
-import io.kyberorg.yalsee.test.YalseeTest;
 import io.kyberorg.yalsee.test.utils.mock.MattermostMock;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @since 2.3
  */
-public class MattermostTests extends YalseeTest {
+public class MattermostTests extends UnitTest {
     private static final int CHANNEL_ID_LENGTH = 6;
     private static final int TEAM_ID_LENGTH = 6;
     private static final int USER_ID_LENGTH = 6;

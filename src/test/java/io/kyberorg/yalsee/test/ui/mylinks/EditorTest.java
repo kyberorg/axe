@@ -29,8 +29,6 @@ public class EditorTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
-
         //session cleanup
         open("/myLinks");
         waitForVaadin();

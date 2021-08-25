@@ -35,7 +35,6 @@ public class DefaultVisualStateTest extends SelenideTest {
         if (pageOpened) {
             return;
         }
-        tuneDriverWithCapabilities();
         open("/myLinks");
         waitForVaadin();
         cleanSession();

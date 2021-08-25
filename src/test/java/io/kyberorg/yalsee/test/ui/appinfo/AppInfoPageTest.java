@@ -33,8 +33,6 @@ public class AppInfoPageTest extends SelenideTest {
         if (beforeTestsExecuted) {
             return;
         }
-        tuneDriverWithCapabilities();
-        displayTestInfo();
         open("/appInfo");
         waitForVaadin();
 

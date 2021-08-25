@@ -31,7 +31,6 @@ public class MainViewTest extends SelenideTest {
         if (pageOpened) {
             return;
         }
-        tuneDriverWithCapabilities();
         open("/");
         VaadinPageObject.waitForVaadin();
 

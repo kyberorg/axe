@@ -41,7 +41,6 @@ public class MultiStepTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
         open("/");
         waitForVaadin();
     }

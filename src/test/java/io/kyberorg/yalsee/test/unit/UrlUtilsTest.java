@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.test.unit;
 
-import io.kyberorg.yalsee.test.YalseeTest;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 2.5
  */
-public class UrlUtilsTest extends YalseeTest {
+public class UrlUtilsTest extends UnitTest {
 
     /**
      * Tests that decoding works.
