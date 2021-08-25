@@ -5,6 +5,7 @@ import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.YalseeTest;
 import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -64,6 +65,7 @@ public abstract class SelenideTest {
         displayCommonInfo();
 
         setupAlreadyExecuted = true;
+        YalseeTest.getInstance().printWelcome();
     }
 
     /**
