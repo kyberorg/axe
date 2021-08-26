@@ -98,7 +98,7 @@ public final class TestApp {
             /**
              * Timeout in milliseconds.
              */
-            public static final String TIMEOUT = "4000";
+            public static final String TIMEOUT = "10000";
 
             /**
              * Chrome browser.
