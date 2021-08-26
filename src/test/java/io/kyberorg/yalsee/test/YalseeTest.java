@@ -49,7 +49,6 @@ public abstract class YalseeTest {
      */
     public static void afterAllTests() {
         if (Mutex.getInstance().isAfterTestsExecuted()) return;
-        SelenideTest.closeDriver();
         System.out.println("Testing is completed");
         printSummary();
         Mutex.getInstance().markAfterTestsAsExecuted();

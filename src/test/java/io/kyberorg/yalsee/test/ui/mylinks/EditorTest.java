@@ -127,6 +127,9 @@ public class EditorTest extends SelenideTest {
 
         descriptionCell.click();
         SelenideElement itemDetailsElement = Grid.GridData.get().getRow(1).getItemDetails();
+        if (!itemDetailsElement.isDisplayed()) {
+            descriptionCell.click();
+        }
         SelenideElement createdTimeSpan = Grid.GridItem.Details.of(itemDetailsElement).getCreatedTime();
         SelenideElement updatedTimeSpan = Grid.GridItem.Details.of(itemDetailsElement).getUpdatedTime();
 
