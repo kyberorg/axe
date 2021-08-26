@@ -162,7 +162,7 @@ public abstract class YalseeTest {
                 .append(" from ").append(testReport.countSuites()).append(" suites completed in ")
                 .append(totalTimeSpent);
 
-        System.out.println(summary);
+        System.err.println(summary);
     }
 
     private static class Mutex {
@@ -172,7 +172,7 @@ public abstract class YalseeTest {
         @Getter
         private boolean afterTestsExecuted = false;
 
-        public static Mutex getInstance() {
+        public static synchronized Mutex getInstance() {
             if (instance == null) {
                 instance = new Mutex();
             }
