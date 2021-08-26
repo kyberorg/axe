@@ -112,6 +112,8 @@ public abstract class YalseeTest {
     private static void printSummary() {
         TestReport testReport = TestReport.getInstance();
         System.out.println("here is tests summary...");
+        System.out.println();
+        System.out.println();
         StringBuilder summary = new StringBuilder("===== Tests Summary =====");
         summary.append(App.NEW_LINE);
 
@@ -162,7 +164,7 @@ public abstract class YalseeTest {
                 .append(" from ").append(testReport.countSuites()).append(" suites completed in ")
                 .append(totalTimeSpent);
 
-        summary.append(String.valueOf(App.NEW_LINE).repeat(3));
+        summary.append(String.valueOf(App.NEW_LINE).repeat(2));
         System.out.println(summary);
     }
 
