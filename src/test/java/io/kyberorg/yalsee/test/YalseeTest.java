@@ -162,7 +162,8 @@ public abstract class YalseeTest {
                 .append(" from ").append(testReport.countSuites()).append(" suites completed in ")
                 .append(totalTimeSpent);
 
-        System.err.println(summary);
+        summary.append(String.valueOf(App.NEW_LINE).repeat(3));
+        System.out.println(summary);
     }
 
     private static class Mutex {
