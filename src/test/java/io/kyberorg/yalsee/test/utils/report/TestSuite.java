@@ -18,7 +18,7 @@ public class TestSuite {
     @Override
     public String toString() {
         String fullPackage = suiteClazz.getPackageName();
-        return fullPackage.replace(TEST_ROOT_PACKAGE + ".", "");
+        return fullPackage.replace(TEST_ROOT_PACKAGE + ".", "") + "." + suiteClazz.getSimpleName();
     }
 
 }

@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.ui;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.TestUtils;
@@ -42,6 +43,14 @@ public abstract class SelenideTest extends YalseeTest {
             Configuration.remote = getGridFullUrl();
             tuneDriverWithCapabilities();
         }
+    }
+
+    /**
+     * Closing driver after all tests, to avoid exception.
+     * Runs once per application by {@link YalseeTest#afterAllTests()}
+     */
+    public static void closeDriver() {
+        Selenide.closeWebDriver();
     }
 
     private static void tuneDriverWithCapabilities() {

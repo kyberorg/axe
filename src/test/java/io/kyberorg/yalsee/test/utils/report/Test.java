@@ -8,8 +8,18 @@ import lombok.EqualsAndHashCode;
 public class Test {
     @EqualsAndHashCode.Include
     private final String name;
+
+    /**
+     * This field set by {@link TestReport#reportTestFinished(TestSuite, Test)} automatically.
+     */
+    @EqualsAndHashCode.Include
+    private TestSuite testSuite;
     private TestResult testResult;
-    private String timeTook;
+    private long timeTookMillis;
+
+    private Throwable failCause;
+    private String ignoreReason;
+    private Throwable abortedCause;
 
 
     private Test(final String testName) {

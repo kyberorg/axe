@@ -1,10 +1,10 @@
 package io.kyberorg.yalsee.test.utils;
 
-import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.utils.report.Test;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import io.kyberorg.yalsee.test.utils.report.TestResult;
 import io.kyberorg.yalsee.test.utils.report.TestSuite;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
@@ -18,15 +18,11 @@ import java.util.Optional;
  */
 public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback {
 
-    private static final String BUILD_NAME =
-            System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
-    private static final int MILLISECONDS_IN_SECOND = 1000;
-
     private TestSuite testSuite;
     private Test test;
 
     private long testStartTime;
-    private float testDurationInMillis;
+    private long testDurationInMillis;
 
     /**
      * Very first stage of running test. We use it for getting test name and logging executing startup.
@@ -35,8 +31,6 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     @Override
     public void beforeTestExecution(final ExtensionContext extensionContext) {
-        testSuite = TestSuite.create(extensionContext.getRequiredTestClass());
-        test = Test.create(setTestNameFromContext(extensionContext));
         testStartTime = System.currentTimeMillis();
     }
 
@@ -48,7 +42,12 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     @Override
     public void testSuccessful(final ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        test = Test.create(setTestNameFromContext(context));
+
         test.setTestResult(TestResult.PASSED);
+
         afterTest();
     }
 
@@ -61,28 +60,47 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     @Override
     public void testFailed(final ExtensionContext context, final Throwable cause) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        test = Test.create(setTestNameFromContext(context));
+
         test.setTestResult(TestResult.FAILED);
+        test.setFailCause(cause);
+
         afterTest();
     }
 
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         testDurationInMillis = 0;
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        test = Test.create(setTestNameFromContext(context));
+
         test.setTestResult(TestResult.IGNORED);
+        reason.ifPresent(s -> test.setIgnoreReason(s));
+
+        afterTest();
     }
 
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
         testDurationInMillis = 0;
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        test = Test.create(setTestNameFromContext(context));
+
         test.setTestResult(TestResult.ABORTED);
+        test.setAbortedCause(cause);
+
+        afterTest();
     }
 
     /**
      * Very last step of test execution.
      */
     private void afterTest() {
-        String timeTook = testDurationInMillis / MILLISECONDS_IN_SECOND + " s";
-        test.setTimeTook(timeTook);
+        test.setTimeTookMillis(testDurationInMillis);
 
         TestReport.getInstance().reportTestFinished(testSuite, test);
         printReport();
@@ -90,13 +108,27 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
 
     private void printReport() {
         TestReport report = TestReport.getInstance();
-        System.out.printf("Failed: %d, Passed: %d, Ignored: %d, Aborted: %d of %d suites. Total: %d\n",
-                report.countFailedTests(),
-                report.countPassedTests(),
-                report.countIgnoredTests(),
-                report.countAbortedTests(),
-                report.countSuites(),
-                report.countCompletedTests());
+
+        StringBuilder sb = new StringBuilder();
+        if (report.countFailedTests() > 0) {
+            sb.append("Failed: ").append(report.countFailedTests()).append(", ");
+        }
+        if (report.countPassedTests() > 0) {
+            sb.append("Passed: ").append(report.countPassedTests()).append(", ");
+        }
+        if (report.countIgnoredTests() > 0) {
+            sb.append("Ignored: ").append(report.countIgnoredTests()).append(", ");
+        }
+        if (report.countAbortedTests() > 0) {
+            sb.append("Aborted: ").append(report.countAbortedTests()).append(", ");
+        }
+
+        String stringWithoutTrailingComma = StringUtils.chop(sb.toString().trim());
+
+        String reportString = stringWithoutTrailingComma + " from " + report.countSuites() + " suites. " +
+                "Total: " + report.countCompletedTests() + " tests.";
+
+        System.out.println(reportString);
     }
 
     private String setTestNameFromContext(final ExtensionContext context) {

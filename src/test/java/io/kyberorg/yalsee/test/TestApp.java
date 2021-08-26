@@ -47,6 +47,11 @@ public final class TestApp {
         public static final String GRID_HOSTNAME = "grid.hostname";
 
         /**
+         * Boolean (true/false) should passed tests be included in tests summary.
+         */
+        public static final String REPORT_PASSED_TESTS = "test.report.passed";
+
+        /**
          * {@link Selenide} related constants.
          */
         public static class Selenide {
@@ -75,6 +80,11 @@ public final class TestApp {
          * String with default build name (myHost-210203-1826).
          */
         public static final String BUILD_NAME = TestUtils.hostName() + "-" + TestUtils.timeStamp();
+
+        /**
+         * By default, passed tests are not included in summary.
+         */
+        public static final String REPORT_PASSED_TESTS = "false";
 
         /**
          * {@link Selenide}-related defaults.

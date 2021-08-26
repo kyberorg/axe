@@ -1,9 +1,11 @@
 package io.kyberorg.yalsee.test.utils.report;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class TestReport {
     private static TestReport singleInstance;
@@ -50,6 +52,29 @@ public class TestReport {
         return countPassedTests() + countFailedTests() + countIgnoredTests() + countAbortedTests();
     }
 
+    public List<Test> getFailedTests() {
+        return getTestsByResult(TestResult.FAILED);
+    }
+
+    public List<Test> getPassedTests() {
+        return getTestsByResult(TestResult.PASSED);
+    }
+
+    public List<Test> getIgnoredTests() {
+        return getTestsByResult(TestResult.IGNORED);
+    }
+
+    public List<Test> getAbortedTests() {
+        return getTestsByResult(TestResult.ABORTED);
+    }
+
+    public Duration getTotalTimeSpent() {
+        List<Test> allTests = new ArrayList<>();
+        reportMap.values().forEach(allTests::addAll);
+        long totalTimeMillis = allTests.stream().map(Test::getTimeTookMillis).reduce(0L, Long::sum);
+        return Duration.ofMillis(totalTimeMillis);
+    }
+
     public void reportTestFinished(TestSuite testSuite, Test test) {
         List<Test> testsList;
         if (reportMap.containsKey(testSuite)) {
@@ -63,10 +88,18 @@ public class TestReport {
             //element already exists - skipping
             return;
         }
+        //attaching linked testSuite
+        test.setTestSuite(testSuite);
         //element not exists in list - adding
         testsList.add(test);
         reportMap.putIfAbsent(testSuite, testsList);
         updateCounters(test);
+    }
+
+    private List<Test> getTestsByResult(final TestResult result) {
+        List<Test> allTests = new ArrayList<>();
+        reportMap.values().forEach(allTests::addAll);
+        return allTests.stream().filter(test -> test.getTestResult() == result).collect(Collectors.toList());
     }
 
     private void updateCounters(final Test test) {

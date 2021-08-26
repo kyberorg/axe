@@ -4,10 +4,14 @@ import com.codeborne.selenide.Configuration;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
+import io.kyberorg.yalsee.test.utils.report.Test;
+import io.kyberorg.yalsee.test.utils.report.TestReport;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.util.StringUtils;
+
+import java.util.Locale;
 
 /**
  * Global methods.
@@ -22,6 +26,10 @@ public abstract class YalseeTest {
     protected static final String BASE_URL = TestUtils.getTestUrl();
     protected static final String REPORT_DIRECTORY =
             System.getProperty(TestApp.Properties.REPORT_DIR, TestApp.Defaults.Selenide.REPORT_DIR);
+
+    private static final boolean REPORT_PASSED_TESTS =
+            Boolean.parseBoolean(
+                    System.getProperty(TestApp.Properties.REPORT_PASSED_TESTS, TestApp.Defaults.REPORT_PASSED_TESTS));
 
     /**
      * Global init (before all tests).
@@ -41,8 +49,9 @@ public abstract class YalseeTest {
      */
     public static void afterAllTests() {
         if (Mutex.getInstance().isAfterTestsExecuted()) return;
-
+        SelenideTest.closeDriver();
         System.out.println("Testing is completed");
+        printSummary();
         Mutex.getInstance().markAfterTestsAsExecuted();
     }
 
@@ -99,6 +108,62 @@ public abstract class YalseeTest {
 
     private static void registerShutdownHook(final Runnable method) {
         Runtime.getRuntime().addShutdownHook(new Thread(method));
+    }
+
+    private static void printSummary() {
+        TestReport testReport = TestReport.getInstance();
+        System.out.println("here is tests summary...");
+        StringBuilder summary = new StringBuilder("===== Tests Summary =====");
+        summary.append(App.NEW_LINE);
+
+        summary.append("----- ").append(testReport.countFailedTests()).append(" tests failed").append(" -----");
+        summary.append(App.NEW_LINE);
+        for (Test test : testReport.getFailedTests()) {
+            summary.append(test.getTestSuite()).append(".").append(test);
+            if (test.getFailCause() != null) {
+                summary.append(" Reason: ").append(test.getFailCause().getMessage());
+            }
+            summary.append(App.NEW_LINE);
+        }
+        summary.append("----- ").append(testReport.countPassedTests()).append(" tests passed").append(" -----");
+        summary.append(App.NEW_LINE);
+        if (REPORT_PASSED_TESTS) {
+            for (Test test : testReport.getPassedTests()) {
+                summary.append(test.getTestSuite()).append(".").append(test);
+                summary.append(App.NEW_LINE);
+            }
+        } else {
+            summary.append("Passed tests are not included. Please use -D")
+                    .append(TestApp.Properties.REPORT_PASSED_TESTS).append("=true to include them.");
+            summary.append(App.NEW_LINE);
+        }
+
+        summary.append("----- ").append(testReport.countIgnoredTests()).append(" tests ignored").append(" -----");
+        summary.append(App.NEW_LINE);
+        for (Test test : testReport.getIgnoredTests()) {
+            summary.append(test.getTestSuite()).append(".").append(test);
+            if (StringUtils.isNotBlank(test.getIgnoreReason())) {
+                summary.append(" Reason: ").append(test.getIgnoreReason());
+            }
+            summary.append(App.NEW_LINE);
+        }
+
+        summary.append("----- ").append(testReport.countAbortedTests()).append(" tests aborted").append(" -----");
+        summary.append(App.NEW_LINE);
+        for (Test test : testReport.getAbortedTests()) {
+            summary.append(test.getTestSuite()).append(".").append(test);
+            if (test.getAbortedCause() != null) {
+                summary.append(" Reason: ").append(test.getAbortedCause().getMessage());
+            }
+            summary.append(App.NEW_LINE);
+        }
+
+        String totalTimeSpent = testReport.getTotalTimeSpent().toString().substring(2).toLowerCase(Locale.ROOT);
+        summary.append("Total tests run: ").append(testReport.countCompletedTests())
+                .append(" from ").append(testReport.countSuites()).append(" suites completed in ")
+                .append(totalTimeSpent);
+
+        System.out.println(summary);
     }
 
     private static class Mutex {
