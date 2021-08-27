@@ -32,10 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class MultiStepTest extends SelenideTest {
+
     /**
      * Timeout to prevent flaky tests in seconds.
      */
     private static final int TIMEOUT_TO_PREVENT_FLAKY_TESTS = 5;
+
     /**
      * Test setup.
      */

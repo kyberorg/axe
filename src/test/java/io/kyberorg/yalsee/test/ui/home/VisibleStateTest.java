@@ -9,7 +9,7 @@ import io.kyberorg.yalsee.test.utils.browser.BrowserUtils;
 import io.kyberorg.yalsee.ui.HomeView;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -30,22 +30,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class VisibleStateTest extends SelenideTest {
-    //emulating @BeforeAll behavior
-    // this needed because tuneDriverWithCapabilities(); is not static
-    private static boolean pageOpened = false;
 
     /**
      * Test setup.
      */
-    @BeforeEach
-    public void beforeTest() {
-        if (pageOpened) {
-            return;
-        }
+    @BeforeAll
+    public static void beforeTests() {
         open("/");
         waitForVaadin();
-
-        pageOpened = true;
     }
 
     /**

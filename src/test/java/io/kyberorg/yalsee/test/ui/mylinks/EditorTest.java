@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class EditorTest extends SelenideTest {
+
     /**
      * Test Setup.
      */

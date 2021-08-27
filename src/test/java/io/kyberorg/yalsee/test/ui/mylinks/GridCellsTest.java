@@ -5,7 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -25,19 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class GridCellsTest extends SelenideTest {
-    //emulating @BeforeAll behavior
-    // this needed because tuneDriverWithCapabilities(); is not static
-    private static boolean pageOpened = false;
 
     /**
      * Test Setup.
      */
-    @BeforeEach
-    public void beforeTest() {
-        if (pageOpened) {
-            return;
-        }
-
+    @BeforeAll
+    public static void beforeTests() {
         //cleaning session
         open("/myLinks");
         waitForVaadin();
@@ -52,8 +45,6 @@ public class GridCellsTest extends SelenideTest {
         //doing to page
         open("/myLinks");
         waitForVaadin();
-
-        pageOpened = true;
     }
 
     /**

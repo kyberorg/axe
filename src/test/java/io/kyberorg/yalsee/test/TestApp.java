@@ -49,7 +49,7 @@ public final class TestApp {
         /**
          * Boolean (true/false) should passed tests be included in tests summary.
          */
-        public static final String REPORT_PASSED_TESTS = "test.report.passed";
+        public static final String REPORT_PASSED_TESTS = "test.summary.include.passed";
 
         /**
          * {@link Selenide} related constants.

@@ -8,7 +8,7 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -24,29 +24,20 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class RedirectPageVisualStateTest extends SelenideTest {
-    //emulating @BeforeAll behavior
-    // this needed because tuneDriverWithCapabilities(); is not static
-    private static boolean pageOpened = false;
-
-    private final String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
-    private String ourShortLink;
+    private static final String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
+    private static String ourShortLink;
 
     /**
      * Test Setup.
      */
-    @BeforeEach
-    public void beforeTest() {
-        if (pageOpened) {
-            return;
-        }
+    @BeforeAll
+    public static void beforeTests() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(ourLongLink);
         }
         open(ourShortLink);
         waitForVaadin();
-
-        pageOpened = true;
     }
 
     /**

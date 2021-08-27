@@ -4,21 +4,22 @@ import com.codeborne.selenide.Configuration;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
-import io.kyberorg.yalsee.test.utils.report.Test;
+import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.time.Duration;
 import java.util.Locale;
 
 /**
- * Global methods.
+ * Global methods and execution control for all tests.
  *
  * @since 3.2.1
  */
-@ExtendWith(TestWatcherExtension.class) // catching test results and logging results to System.out
+@ExtendWith(TestWatcherExtension.class) // catching test results and logging results to TestReport.
 public abstract class YalseeTest {
 
     protected static final String BUILD_NAME =
@@ -36,26 +37,28 @@ public abstract class YalseeTest {
      */
     @BeforeAll
     public static void init() {
-        if (Mutex.getInstance().isInitExecuted()) return;
+        if (Mutex.getMutex().isInitExecuted()) return;
         defineRunMode();
         SelenideTest.initSelenide();
         displayCommonInfo();
         registerShutdownHook(YalseeTest::afterAllTests);
-        Mutex.getInstance().markInitAsExecuted();
+        TestTimer.getTimer().startTimer();
+        Mutex.getMutex().markInitAsExecuted();
     }
 
     /**
-     * After all tests.
+     * Global TearDown (After all tests).
      */
     public static void afterAllTests() {
-        if (Mutex.getInstance().isAfterTestsExecuted()) return;
+        if (Mutex.getMutex().isAfterTestsExecuted()) return;
+        TestTimer.getTimer().stopTimer();
         System.out.println("Testing is completed");
         printSummary();
-        Mutex.getInstance().markAfterTestsAsExecuted();
+        Mutex.getMutex().markAfterTestsAsExecuted();
     }
 
     /**
-     * Are we running remotely (i.e. Grid/Selenoid etc.) ?
+     * Non-static alias for {@link #shouldRunTestsAtGrid()}.
      *
      * @return true - if we are running tests at remotely, false if not.
      */
@@ -63,6 +66,11 @@ public abstract class YalseeTest {
         return shouldRunTestsAtGrid();
     }
 
+    /**
+     * Are we running remotely (i.e. Grid/Selenoid etc.) ?
+     *
+     * @return true - if we are running tests at remotely, false if not.
+     */
     protected static boolean shouldRunTestsAtGrid() {
         String selenideRemote = System.getProperty(TestApp.Properties.Selenide.REMOTE, "");
         String gridHostname = System.getProperty(TestApp.Properties.GRID_HOSTNAME, "");
@@ -110,27 +118,30 @@ public abstract class YalseeTest {
     }
 
     private static void printSummary() {
-        TestReport testReport = TestReport.getInstance();
+        TestReport testReport = TestReport.getReport();
         System.out.println("here is tests summary...");
         System.out.println();
         System.out.println();
         StringBuilder summary = new StringBuilder("===== Tests Summary =====");
         summary.append(App.NEW_LINE);
 
+        //failed tests
         summary.append("----- ").append(testReport.countFailedTests()).append(" tests failed").append(" -----");
         summary.append(App.NEW_LINE);
-        for (Test test : testReport.getFailedTests()) {
-            summary.append(test.getTestSuite()).append(".").append(test);
-            if (test.getFailCause() != null) {
-                summary.append(" Reason: ").append(test.getFailCause().getMessage());
+        for (TestData testData : testReport.getFailedTests()) {
+            summary.append(testData);
+            if (testData.getFailCause() != null) {
+                summary.append(" Reason: ").append(testData.getFailCause().getMessage());
             }
             summary.append(App.NEW_LINE);
         }
+
+        //passed tests
         summary.append("----- ").append(testReport.countPassedTests()).append(" tests passed").append(" -----");
         summary.append(App.NEW_LINE);
         if (REPORT_PASSED_TESTS) {
-            for (Test test : testReport.getPassedTests()) {
-                summary.append(test.getTestSuite()).append(".").append(test);
+            for (TestData testData : testReport.getPassedTests()) {
+                summary.append(testData);
                 summary.append(App.NEW_LINE);
             }
         } else {
@@ -139,35 +150,43 @@ public abstract class YalseeTest {
             summary.append(App.NEW_LINE);
         }
 
+        //ignored tests
         summary.append("----- ").append(testReport.countIgnoredTests()).append(" tests ignored").append(" -----");
         summary.append(App.NEW_LINE);
-        for (Test test : testReport.getIgnoredTests()) {
-            summary.append(test.getTestSuite()).append(".").append(test);
-            if (StringUtils.isNotBlank(test.getIgnoreReason())) {
-                summary.append(" Reason: ").append(test.getIgnoreReason());
+        for (TestData testData : testReport.getIgnoredTests()) {
+            summary.append(testData);
+            if (StringUtils.isNotBlank(testData.getIgnoreReason())) {
+                summary.append(" Reason: ").append(testData.getIgnoreReason());
             }
             summary.append(App.NEW_LINE);
         }
 
+        //aborted tests
         summary.append("----- ").append(testReport.countAbortedTests()).append(" tests aborted").append(" -----");
         summary.append(App.NEW_LINE);
-        for (Test test : testReport.getAbortedTests()) {
-            summary.append(test.getTestSuite()).append(".").append(test);
-            if (test.getAbortedCause() != null) {
-                summary.append(" Reason: ").append(test.getAbortedCause().getMessage());
+        for (TestData testData : testReport.getAbortedTests()) {
+            summary.append(testData);
+            if (testData.getAbortedCause() != null) {
+                summary.append(" Reason: ").append(testData.getAbortedCause().getMessage());
             }
             summary.append(App.NEW_LINE);
         }
 
+        //time spent
         String totalTimeSpent = testReport.getTotalTimeSpent().toString().substring(2).toLowerCase(Locale.ROOT);
+        String deFactoTimeSpent = TestTimer.getTimer().getDelta().toString().substring(2).toLowerCase(Locale.ROOT);
         summary.append("Total tests run: ").append(testReport.countCompletedTests())
                 .append(" from ").append(testReport.countSuites()).append(" suites completed in ")
-                .append(totalTimeSpent);
+                .append(totalTimeSpent).append(" (de facto in ").append(deFactoTimeSpent).append(")");
 
+        //print me now
         summary.append(String.valueOf(App.NEW_LINE).repeat(2));
         System.out.println(summary);
     }
 
+    /**
+     * Thread-safe execution Mutex to run methods once per application.
+     */
     private static class Mutex {
         private static Mutex instance = null;
         @Getter
@@ -175,19 +194,74 @@ public abstract class YalseeTest {
         @Getter
         private boolean afterTestsExecuted = false;
 
-        public static synchronized Mutex getInstance() {
+        /**
+         * Returns Mutex object.
+         *
+         * @return same {@link Mutex} object for all calls.
+         */
+        public static synchronized Mutex getMutex() {
             if (instance == null) {
                 instance = new Mutex();
             }
             return instance;
         }
 
+        /**
+         * Marks {@link #init()} method as executed.
+         */
         public void markInitAsExecuted() {
             this.initExecuted = true;
         }
 
+        /**
+         * Marks {@link #afterAllTests()} method as executed.
+         */
         public void markAfterTestsAsExecuted() {
             this.afterTestsExecuted = true;
+        }
+    }
+
+    /**
+     * Timer for getting time between testing started and finished.
+     */
+    private static class TestTimer {
+        private static TestTimer instance = null;
+        private long startTimestamp;
+        private long stopTimestamp;
+
+        /**
+         * Method for getting {@link TestTimer} instance.
+         *
+         * @return same {@link TestTimer} object for all calls.
+         */
+        public static synchronized TestTimer getTimer() {
+            if (instance == null) {
+                instance = new TestTimer();
+            }
+            return instance;
+        }
+
+        /**
+         * Starts timer and records time when it started.
+         */
+        public void startTimer() {
+            this.startTimestamp = System.currentTimeMillis();
+        }
+
+        /**
+         * Stops timer and records time when it stopped.
+         */
+        public void stopTimer() {
+            this.stopTimestamp = System.currentTimeMillis();
+        }
+
+        /**
+         * Delta between start and stop. Should call after {@link #stopTimer()}.
+         *
+         * @return delta as {@link Duration} between timer started and stopped.
+         */
+        public Duration getDelta() {
+            return Duration.ofMillis(stopTimestamp - startTimestamp);
         }
     }
 }

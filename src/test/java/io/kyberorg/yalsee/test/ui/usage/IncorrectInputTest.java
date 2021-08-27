@@ -71,7 +71,7 @@ public class IncorrectInputTest extends SelenideTest {
     }
 
     /**
-     * On input with non valid stuff,
+     * On input with non-valid stuff,
      * form should be cleaned, result and QR Code areas are not visible and error box appears.
      */
     @Test

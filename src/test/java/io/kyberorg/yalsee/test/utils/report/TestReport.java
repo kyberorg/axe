@@ -4,13 +4,21 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+/**
+ * Holds info about tests.
+ * Saves all info to {@link HashMap} {@link #reportMap},
+ * has counters to avoid iterating {@link Map} when only counters are needed.
+ *
+ * @since 3.2.1
+ */
 public class TestReport {
     private static TestReport singleInstance;
 
-    private final HashMap<TestSuite, List<Test>> reportMap = new HashMap<>();
+    private final HashMap<TestSuite, List<TestData>> reportMap = new HashMap<>();
 
     private final Counter failedTestsCounter = new Counter();
     private final Counter passedTestsCounter = new Counter();
@@ -18,7 +26,12 @@ public class TestReport {
     private final Counter abortedTestsCounter = new Counter();
     private final Counter suitesCounter = new Counter();
 
-    public static TestReport getInstance() {
+    /**
+     * Provides {@link TestReport} object. One object per application.
+     *
+     * @return same {@link TestReport} object for all.
+     */
+    public static synchronized TestReport getReport() {
         if (singleInstance == null) {
             singleInstance = new TestReport();
         }
@@ -28,55 +41,116 @@ public class TestReport {
     private TestReport() {
     }
 
+    /**
+     * Number of {@link TestResult#FAILED} tests.
+     *
+     * @return number of failed tests.
+     */
     public int countFailedTests() {
         return failedTestsCounter.getValue();
     }
 
+    /**
+     * Number of {@link TestResult#PASSED} tests.
+     *
+     * @return number of passed tests.
+     */
     public int countPassedTests() {
         return passedTestsCounter.getValue();
     }
 
+    /**
+     * Number of {@link TestResult#IGNORED} tests.
+     *
+     * @return number of ignored tests.
+     */
     public int countIgnoredTests() {
         return ignoredTestsCounter.getValue();
     }
 
+    /**
+     * Number of {@link TestResult#ABORTED} tests.
+     *
+     * @return number of aborted tests.
+     */
     public int countAbortedTests() {
         return abortedTestsCounter.getValue();
     }
 
+    /**
+     * Number of Test Suites aka Test classes, where at least one test run.
+     *
+     * @return number of test classes started or completed.
+     */
     public int countSuites() {
         return suitesCounter.getValue();
     }
 
+    /**
+     * Number of completed tests. Result doesn't matter.
+     *
+     * @return number of finished tests with any result.
+     */
     public int countCompletedTests() {
         return countPassedTests() + countFailedTests() + countIgnoredTests() + countAbortedTests();
     }
 
-    public List<Test> getFailedTests() {
+    /**
+     * Gets {@link TestResult#FAILED} tests.
+     *
+     * @return list of {@link TestData} of failed tests.
+     */
+    public List<TestData> getFailedTests() {
         return getTestsByResult(TestResult.FAILED);
     }
 
-    public List<Test> getPassedTests() {
+    /**
+     * Gets {@link TestResult#PASSED} tests.
+     *
+     * @return list of {@link TestData} of passed tests.
+     */
+    public List<TestData> getPassedTests() {
         return getTestsByResult(TestResult.PASSED);
     }
 
-    public List<Test> getIgnoredTests() {
+    /**
+     * Gets {@link TestResult#IGNORED} tests.
+     *
+     * @return list of {@link TestData} of ignored tests.
+     */
+    public List<TestData> getIgnoredTests() {
         return getTestsByResult(TestResult.IGNORED);
     }
 
-    public List<Test> getAbortedTests() {
+    /**
+     * Gets {@link TestResult#ABORTED} tests.
+     *
+     * @return list of {@link TestData} of aborted tests.
+     */
+    public List<TestData> getAbortedTests() {
         return getTestsByResult(TestResult.ABORTED);
     }
 
+    /**
+     * Count time took to run all tests. Sum of each individual test times.
+     *
+     * @return {@link Duration} of time spent to run all tests.
+     */
     public Duration getTotalTimeSpent() {
-        List<Test> allTests = new ArrayList<>();
+        List<TestData> allTests = new ArrayList<>();
         reportMap.values().forEach(allTests::addAll);
-        long totalTimeMillis = allTests.stream().map(Test::getTimeTookMillis).reduce(0L, Long::sum);
+        long totalTimeMillis = allTests.stream().map(TestData::getTimeTookMillis).reduce(0L, Long::sum);
         return Duration.ofMillis(totalTimeMillis);
     }
 
-    public void reportTestFinished(TestSuite testSuite, Test test) {
-        List<Test> testsList;
+    /**
+     * Report that test is completed, its suite, result and other {@link TestData}.
+     *
+     * @param testSuite suite aka test class of completed test.
+     * @param testData  {@link TestData} for completed test.
+     */
+    public void reportTestFinished(TestSuite testSuite, TestData testData) {
+        List<TestData> testsList;
         if (reportMap.containsKey(testSuite)) {
             testsList = reportMap.get(testSuite);
         } else {
@@ -84,26 +158,26 @@ public class TestReport {
             testsList = new ArrayList<>();
             suitesCounter.increment();
         }
-        if (!testsList.isEmpty() && testsList.contains(test)) {
+        if (!testsList.isEmpty() && testsList.contains(testData)) {
             //element already exists - skipping
             return;
         }
         //attaching linked testSuite
-        test.setTestSuite(testSuite);
+        testData.setTestSuite(testSuite);
         //element not exists in list - adding
-        testsList.add(test);
+        testsList.add(testData);
         reportMap.putIfAbsent(testSuite, testsList);
-        updateCounters(test);
+        updateCounters(testData);
     }
 
-    private List<Test> getTestsByResult(final TestResult result) {
-        List<Test> allTests = new ArrayList<>();
+    private List<TestData> getTestsByResult(final TestResult result) {
+        List<TestData> allTests = new ArrayList<>();
         reportMap.values().forEach(allTests::addAll);
-        return allTests.stream().filter(test -> test.getTestResult() == result).collect(Collectors.toList());
+        return allTests.stream().filter(testData -> testData.getTestResult() == result).collect(Collectors.toList());
     }
 
-    private void updateCounters(final Test test) {
-        switch (test.getTestResult()) {
+    private void updateCounters(final TestData testData) {
+        switch (testData.getTestResult()) {
             case PASSED:
                 passedTestsCounter.increment();
                 break;
@@ -119,13 +193,24 @@ public class TestReport {
         }
     }
 
+    /**
+     * Atomic Counter for counting tests.
+     */
     public static class Counter {
         private final AtomicInteger counter = new AtomicInteger(0);
 
+        /**
+         * Gets actual value.
+         *
+         * @return current counter value.
+         */
         public int getValue() {
             return counter.get();
         }
 
+        /**
+         * Increments current counter value.
+         */
         public void increment() {
             while (true) {
                 int existingValue = getValue();

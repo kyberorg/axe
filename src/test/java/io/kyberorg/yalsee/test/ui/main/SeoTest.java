@@ -4,7 +4,7 @@ import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -25,8 +25,8 @@ public class SeoTest extends SelenideTest {
     /**
      * Test Setup.
      */
-    @BeforeEach
-    public void beforeTest() {
+    @BeforeAll
+    public static void beforeTests() {
         open("/");
         VaadinPageObject.waitForVaadin();
     }

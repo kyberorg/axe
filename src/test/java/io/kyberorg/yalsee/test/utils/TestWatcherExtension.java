@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.test.utils;
 
-import io.kyberorg.yalsee.test.utils.report.Test;
+import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import io.kyberorg.yalsee.test.utils.report.TestResult;
 import io.kyberorg.yalsee.test.utils.report.TestSuite;
@@ -19,13 +19,13 @@ import java.util.Optional;
 public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback {
 
     private TestSuite testSuite;
-    private Test test;
+    private TestData testData;
 
     private long testStartTime;
     private long testDurationInMillis;
 
     /**
-     * Very first stage of running test. We use it for getting test name and logging executing startup.
+     * Very first stage of running test. We use it for getting test start time.
      *
      * @param extensionContext JUnit's test {@link ExtensionContext}
      */
@@ -44,9 +44,9 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
 
         testSuite = TestSuite.create(context.getRequiredTestClass());
-        test = Test.create(setTestNameFromContext(context));
+        testData = TestData.create(setTestNameFromContext(context));
 
-        test.setTestResult(TestResult.PASSED);
+        testData.setTestResult(TestResult.PASSED);
 
         afterTest();
     }
@@ -62,36 +62,48 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
 
         testSuite = TestSuite.create(context.getRequiredTestClass());
-        test = Test.create(setTestNameFromContext(context));
+        testData = TestData.create(setTestNameFromContext(context));
 
-        test.setTestResult(TestResult.FAILED);
-        test.setFailCause(cause);
+        testData.setTestResult(TestResult.FAILED);
+        testData.setFailCause(cause);
 
         afterTest();
     }
 
+    /**
+     * Marks test as ignored.
+     *
+     * @param context JUnit's test {@link ExtensionContext}
+     * @param reason  why test was ignored
+     */
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         testDurationInMillis = 0;
 
         testSuite = TestSuite.create(context.getRequiredTestClass());
-        test = Test.create(setTestNameFromContext(context));
+        testData = TestData.create(setTestNameFromContext(context));
 
-        test.setTestResult(TestResult.IGNORED);
-        reason.ifPresent(s -> test.setIgnoreReason(s));
+        testData.setTestResult(TestResult.IGNORED);
+        reason.ifPresent(s -> testData.setIgnoreReason(s));
 
         afterTest();
     }
 
+    /**
+     * Marks test as aborted.
+     *
+     * @param context JUnit's test {@link ExtensionContext}
+     * @param cause   exception led to test been aborted.
+     */
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
         testDurationInMillis = 0;
 
         testSuite = TestSuite.create(context.getRequiredTestClass());
-        test = Test.create(setTestNameFromContext(context));
+        testData = TestData.create(setTestNameFromContext(context));
 
-        test.setTestResult(TestResult.ABORTED);
-        test.setAbortedCause(cause);
+        testData.setTestResult(TestResult.ABORTED);
+        testData.setAbortedCause(cause);
 
         afterTest();
     }
@@ -100,14 +112,14 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      * Very last step of test execution.
      */
     private void afterTest() {
-        test.setTimeTookMillis(testDurationInMillis);
+        testData.setTimeTookMillis(testDurationInMillis);
 
-        TestReport.getInstance().reportTestFinished(testSuite, test);
+        TestReport.getReport().reportTestFinished(testSuite, testData);
         printReport();
     }
 
     private void printReport() {
-        TestReport report = TestReport.getInstance();
+        TestReport report = TestReport.getReport();
 
         StringBuilder sb = new StringBuilder();
         if (report.countFailedTests() > 0) {

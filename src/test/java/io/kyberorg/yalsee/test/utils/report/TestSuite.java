@@ -3,6 +3,11 @@ package io.kyberorg.yalsee.test.utils.report;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Encapsulates test {@link Class}. Main purpose is remove common {@link #TEST_ROOT_PACKAGE} from reports.
+ *
+ * @since 2.3.1
+ */
 @Data(staticConstructor = "create")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TestSuite {
@@ -11,6 +16,11 @@ public class TestSuite {
     @EqualsAndHashCode.Include
     private final Class<?> suiteClazz;
 
+    /**
+     * Creates {@link TestSuite} object from {@link Class}.
+     *
+     * @param clazz test class.
+     */
     public TestSuite(Class<?> clazz) {
         this.suiteClazz = clazz;
     }

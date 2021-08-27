@@ -4,7 +4,7 @@ import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -19,22 +19,14 @@ import static com.codeborne.selenide.Selenide.open;
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class MainViewTest extends SelenideTest {
-    //emulating @BeforeAll behavior
-    // this needed because tuneDriverWithCapabilities(); is not static
-    private static boolean pageOpened = false;
 
     /**
      * Test Setup.
      */
-    @BeforeEach
-    public void beforeTest() {
-        if (pageOpened) {
-            return;
-        }
+    @BeforeAll
+    public static void beforeTests() {
         open("/");
         VaadinPageObject.waitForVaadin();
-
-        pageOpened = true;
     }
 
     /**
