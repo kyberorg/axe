@@ -2,6 +2,8 @@ package io.kyberorg.yalsee.test.utils.report;
 
 /**
  * Test execution result.
+ *
+ * @since 3.2.1
  */
 public enum TestResult {
     /**

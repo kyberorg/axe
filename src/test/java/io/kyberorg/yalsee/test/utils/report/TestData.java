@@ -2,11 +2,12 @@ package io.kyberorg.yalsee.test.utils.report;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
 /**
- * Class that contains data about executed {@link org.junit.jupiter.api.Test}.
+ * Contains data about executed {@link Test}.
  *
  * @since 3.2.1
  */

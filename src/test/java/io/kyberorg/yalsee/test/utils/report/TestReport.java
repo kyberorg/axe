@@ -9,8 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
- * Holds info about tests.
- * Saves all info to {@link HashMap} {@link #reportMap},
+ * Holds info about tests. Saves all info to {@link HashMap} {@link #reportMap},
  * has counters to avoid iterating {@link Map} when only counters are needed.
  *
  * @since 3.2.1

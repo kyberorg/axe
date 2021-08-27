@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 /**
  * Encapsulates test {@link Class}. Main purpose is remove common {@link #TEST_ROOT_PACKAGE} from reports.
  *
- * @since 2.3.1
+ * @since 3.2.1
  */
 @Data(staticConstructor = "create")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
