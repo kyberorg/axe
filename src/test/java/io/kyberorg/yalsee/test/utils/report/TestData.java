@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 @Data(staticConstructor = "create")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class TestData {
+public final class TestData {
     @EqualsAndHashCode.Include
     private final String name;
 

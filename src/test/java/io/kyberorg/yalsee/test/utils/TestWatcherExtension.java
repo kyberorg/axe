@@ -77,7 +77,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      * @param reason  why test was ignored
      */
     @Override
-    public void testDisabled(ExtensionContext context, Optional<String> reason) {
+    public void testDisabled(final ExtensionContext context, final Optional<String> reason) {
         testDurationInMillis = 0;
 
         testSuite = TestSuite.create(context.getRequiredTestClass());
@@ -96,7 +96,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      * @param cause   exception led to test been aborted.
      */
     @Override
-    public void testAborted(ExtensionContext context, Throwable cause) {
+    public void testAborted(final ExtensionContext context, final Throwable cause) {
         testDurationInMillis = 0;
 
         testSuite = TestSuite.create(context.getRequiredTestClass());
@@ -137,8 +137,8 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
 
         String stringWithoutTrailingComma = StringUtils.chop(sb.toString().trim());
 
-        String reportString = stringWithoutTrailingComma + " from " + report.countSuites() + " suites. " +
-                "Total: " + report.countCompletedTests() + " tests.";
+        String reportString = stringWithoutTrailingComma + " from " + report.countSuites() + " suites. "
+                + "Total: " + report.countCompletedTests() + " tests.";
 
         System.out.println(reportString);
     }

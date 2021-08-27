@@ -21,7 +21,7 @@ public class TestSuite {
      *
      * @param clazz test class.
      */
-    public TestSuite(Class<?> clazz) {
+    public TestSuite(final Class<?> clazz) {
         this.suiteClazz = clazz;
     }
 

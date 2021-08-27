@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  *
  * @since 3.2.1
  */
-public class TestReport {
+public final class TestReport {
     private static TestReport singleInstance;
 
     private final HashMap<TestSuite, List<TestData>> reportMap = new HashMap<>();
@@ -148,7 +148,7 @@ public class TestReport {
      * @param testSuite suite aka test class of completed test.
      * @param testData  {@link TestData} for completed test.
      */
-    public void reportTestFinished(TestSuite testSuite, TestData testData) {
+    public void reportTestFinished(final TestSuite testSuite, final TestData testData) {
         List<TestData> testsList;
         if (reportMap.containsKey(testSuite)) {
             testsList = reportMap.get(testSuite);
@@ -187,6 +187,7 @@ public class TestReport {
                 ignoredTestsCounter.increment();
                 break;
             case ABORTED:
+            default:
                 abortedTestsCounter.increment();
                 break;
         }

@@ -24,7 +24,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class RedirectPageVisualStateTest extends SelenideTest {
-    private static final String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
+    private static final String OUR_LONG_LINK = "https://github.com/kyberorg/yalsee/issues/353";
     private static String ourShortLink;
 
     /**
@@ -34,7 +34,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
     public static void beforeTests() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
-            ourShortLink = HomePageObject.storeAndReturnSavedUrl(ourLongLink);
+            ourShortLink = HomePageObject.storeAndReturnSavedUrl(OUR_LONG_LINK);
         }
         open(ourShortLink);
         waitForVaadin();
@@ -65,8 +65,8 @@ public class RedirectPageVisualStateTest extends SelenideTest {
         RedirectPageObject.Links.TARGET_LINK.shouldBe(visible);
         RedirectPageObject.Links.TARGET_LINK.shouldHave(attribute("href"));
 
-        RedirectPageObject.Links.TARGET_LINK.shouldHave(text(ourLongLink));
-        RedirectPageObject.Links.TARGET_LINK.shouldHave(attribute("href", ourLongLink));
+        RedirectPageObject.Links.TARGET_LINK.shouldHave(text(OUR_LONG_LINK));
+        RedirectPageObject.Links.TARGET_LINK.shouldHave(attribute("href", OUR_LONG_LINK));
     }
 
     /**
@@ -78,7 +78,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
         RedirectPageObject.Links.HERE_LINK.shouldHave(attribute("href"));
 
         RedirectPageObject.Links.HERE_LINK.shouldHave(text("here"));
-        RedirectPageObject.Links.HERE_LINK.shouldHave(attribute("href", ourLongLink));
+        RedirectPageObject.Links.HERE_LINK.shouldHave(attribute("href", OUR_LONG_LINK));
     }
 
     /**
