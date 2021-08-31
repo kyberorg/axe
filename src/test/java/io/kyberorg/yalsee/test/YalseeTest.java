@@ -125,13 +125,34 @@ public abstract class YalseeTest {
         StringBuilder summary = new StringBuilder("===== Tests Summary =====");
         summary.append(App.NEW_LINE);
 
+        //tests on fire
+        summary.append("----- ").append(testReport.countOnFireTests()).append(" tests On Fire").append(" -----");
+        summary.append(App.NEW_LINE);
+        for (TestData testData : testReport.getOnFireTests()) {
+            summary.append(testData);
+            if (testData.getOnFireReason() != null) {
+                summary.append(" Reason: ");
+                if (StringUtils.isNotBlank(testData.getOnFireReason().getMessage())) {
+                    summary.append(testData.getOnFireReason().getMessage());
+                } else {
+                    summary.append(testData.getOnFireReason().toString());
+                }
+            }
+            summary.append(App.NEW_LINE);
+        }
+
         //failed tests
         summary.append("----- ").append(testReport.countFailedTests()).append(" tests failed").append(" -----");
         summary.append(App.NEW_LINE);
         for (TestData testData : testReport.getFailedTests()) {
             summary.append(testData);
             if (testData.getFailCause() != null) {
-                summary.append(" Reason: ").append(testData.getFailCause().getMessage());
+                summary.append(" Reason: ");
+                if (StringUtils.isNotBlank(testData.getFailCause().getMessage())) {
+                    summary.append(testData.getFailCause().getMessage());
+                } else {
+                    summary.append(testData.getFailCause().toString());
+                }
             }
             summary.append(App.NEW_LINE);
         }
@@ -171,13 +192,17 @@ public abstract class YalseeTest {
             }
             summary.append(App.NEW_LINE);
         }
+        //number of tests
+        summary.append("Total tests run: ").append(testReport.countCompletedTests())
+                .append(" from ").append(testReport.countSuites()).append(" suites completed ");
+        if (testReport.countBrokenSuites() > 0) {
+            summary.append("(").append(testReport.countBrokenSuites()).append(" broken) ");
+        }
 
         //time spent
         String totalTimeSpent = testReport.getTotalTimeSpent().toString().substring(2).toLowerCase(Locale.ROOT);
         String deFactoTimeSpent = TestTimer.getTimer().getDelta().toString().substring(2).toLowerCase(Locale.ROOT);
-        summary.append("Total tests run: ").append(testReport.countCompletedTests())
-                .append(" from ").append(testReport.countSuites()).append(" suites completed in ")
-                .append(totalTimeSpent).append(" (de facto in ").append(deFactoTimeSpent).append(")");
+        summary.append("in ").append(totalTimeSpent).append(" (de facto in ").append(deFactoTimeSpent).append(")");
 
         //print me now
         summary.append(String.valueOf(App.NEW_LINE).repeat(2));

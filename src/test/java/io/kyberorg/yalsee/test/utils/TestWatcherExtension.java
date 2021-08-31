@@ -1,14 +1,14 @@
 package io.kyberorg.yalsee.test.utils;
 
+import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import io.kyberorg.yalsee.test.utils.report.TestResult;
 import io.kyberorg.yalsee.test.utils.report.TestSuite;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.TestWatcher;
+import org.junit.jupiter.api.extension.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,7 +16,8 @@ import java.util.Optional;
  *
  * @since 2.7.6
  */
-public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback {
+public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback, AfterTestExecutionCallback,
+        TestExecutionExceptionHandler, LifecycleMethodExecutionExceptionHandler {
 
     private TestSuite testSuite;
     private TestData testData;
@@ -27,11 +28,21 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     /**
      * Very first stage of running test. We use it for getting test start time.
      *
-     * @param extensionContext JUnit's test {@link ExtensionContext}
+     * @param context JUnit's test {@link ExtensionContext}
      */
     @Override
-    public void beforeTestExecution(final ExtensionContext extensionContext) {
+    public void beforeTestExecution(final ExtensionContext context) {
         testStartTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Stage that executed after test run. We use it for timing.
+     *
+     * @param context JUnit's test {@link ExtensionContext}
+     */
+    @Override
+    public void afterTestExecution(ExtensionContext context) {
+        testDurationInMillis = System.currentTimeMillis() - testStartTime;
     }
 
     /**
@@ -41,8 +52,6 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     @Override
     public void testSuccessful(final ExtensionContext context) {
-        testDurationInMillis = System.currentTimeMillis() - testStartTime;
-
         testSuite = TestSuite.create(context.getRequiredTestClass());
         testData = TestData.create(setTestNameFromContext(context));
 
@@ -59,8 +68,6 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     @Override
     public void testFailed(final ExtensionContext context, final Throwable cause) {
-        testDurationInMillis = System.currentTimeMillis() - testStartTime;
-
         testSuite = TestSuite.create(context.getRequiredTestClass());
         testData = TestData.create(setTestNameFromContext(context));
 
@@ -78,8 +85,6 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     @Override
     public void testDisabled(final ExtensionContext context, final Optional<String> reason) {
-        testDurationInMillis = 0;
-
         testSuite = TestSuite.create(context.getRequiredTestClass());
         testData = TestData.create(setTestNameFromContext(context));
 
@@ -97,8 +102,6 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     @Override
     public void testAborted(final ExtensionContext context, final Throwable cause) {
-        testDurationInMillis = 0;
-
         testSuite = TestSuite.create(context.getRequiredTestClass());
         testData = TestData.create(setTestNameFromContext(context));
 
@@ -106,6 +109,75 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         testData.setAbortedCause(cause);
 
         afterTest();
+    }
+
+    @Override
+    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        testData = TestData.create(setTestNameFromContext(context));
+
+        testData.setTestResult(TestResult.ON_FIRE);
+        testData.setOnFireReason(new RuntimeException("Exception at @Test"));
+
+        afterTest();
+        throw throwable;
+    }
+
+    @Override
+    public void handleBeforeAllMethodExecutionException(ExtensionContext context, Throwable throwable)
+            throws Throwable {
+        List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        for (String testName : testNames) {
+            testData = TestData.create(testName);
+            testData.setTestResult(TestResult.ON_FIRE);
+            testData.setOnFireReason(new RuntimeException("Exception at @BeforeAll method"));
+
+            afterTest();
+        }
+
+        LifecycleMethodExecutionExceptionHandler.super.handleBeforeAllMethodExecutionException(context, throwable);
+    }
+
+    @Override
+    public void handleBeforeEachMethodExecutionException(ExtensionContext context, Throwable throwable)
+            throws Throwable {
+        List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        for (String testName : testNames) {
+            testData = TestData.create(testName);
+            testData.setTestResult(TestResult.ON_FIRE);
+            testData.setOnFireReason(new RuntimeException("Exception at @Before method"));
+
+            afterTest();
+        }
+
+        LifecycleMethodExecutionExceptionHandler.super.handleBeforeEachMethodExecutionException(context, throwable);
+    }
+
+    @Override
+    public void handleAfterEachMethodExecutionException(ExtensionContext context, Throwable throwable)
+            throws Throwable {
+        List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        for (String testName : testNames) {
+            testData = TestData.create(testName);
+            testData.setTestResult(TestResult.ON_FIRE);
+            testData.setOnFireReason(new RuntimeException("Exception at @AfterEach method"));
+
+            afterTest();
+        }
+        LifecycleMethodExecutionExceptionHandler.super.handleAfterEachMethodExecutionException(context, throwable);
+    }
+
+    @Override
+    public void handleAfterAllMethodExecutionException(ExtensionContext context, Throwable throwable)
+            throws Throwable {
+        TestReport.getReport().markSuiteAsBroken();
+        LifecycleMethodExecutionExceptionHandler.super.handleAfterAllMethodExecutionException(context, throwable);
     }
 
     /**
@@ -122,6 +194,9 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         TestReport report = TestReport.getReport();
 
         StringBuilder sb = new StringBuilder();
+        if (report.countOnFireTests() > 0) {
+            sb.append("On Fire: ").append(report.countOnFireTests()).append(", ");
+        }
         if (report.countFailedTests() > 0) {
             sb.append("Failed: ").append(report.countFailedTests()).append(", ");
         }

@@ -24,5 +24,9 @@ public enum TestResult {
     /**
      * Test was cancelled during its execution.
      */
-    ABORTED
+    ABORTED,
+    /**
+     * Test crashed with error or exception.
+     */
+    ON_FIRE
 }

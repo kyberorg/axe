@@ -10,9 +10,14 @@ import io.kyberorg.yalsee.utils.UrlUtils;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -219,6 +224,48 @@ public final class TestUtils {
      */
     public static boolean isQRCode(final String imageSource) {
         return StringUtils.isNotBlank(imageSource) && imageSource.contains(QR_CODE_MARKER);
+    }
+
+
+    /**
+     * Gets list of test name from given test class.
+     *
+     * @param testClass test class to scan
+     * @return list of test method names
+     */
+    public static List<String> getAllTestNames(Class<?> testClass) {
+        List<Method> testMethods = getMethodsAnnotatedWith(testClass, Test.class);
+        List<String> testNames = new ArrayList<>();
+        for (Method m : testMethods) {
+            testNames.add(m.getName());
+        }
+        return testNames;
+    }
+
+    /**
+     * Get list of Methods what are annotated with given annotation.
+     *
+     * @param type       class to scan
+     * @param annotation annotation to search
+     * @return list of methods.
+     */
+    private static List<Method> getMethodsAnnotatedWith(final Class<?> type,
+                                                        final Class<? extends Annotation> annotation) {
+        final List<Method> methods = new ArrayList<>();
+        Class<?> klass = type;
+        while (klass != Object.class) {
+            // need to iterated thought hierarchy in order to retrieve methods from above the current instance
+            // iterate though the list of methods declared in the class represented by klass variable,
+            // and add those annotated with the specified annotation
+            for (final Method method : klass.getDeclaredMethods()) {
+                if (method.isAnnotationPresent(annotation)) {
+                    methods.add(method);
+                }
+            }
+            // move to the upper class in the hierarchy in search for more methods
+            klass = klass.getSuperclass();
+        }
+        return methods;
     }
 
     /**

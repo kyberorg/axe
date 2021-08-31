@@ -1,7 +1,6 @@
 package io.kyberorg.yalsee.test.utils.report;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * Encapsulates test {@link Class}. Main purpose is remove common {@link #TEST_ROOT_PACKAGE} from reports.
@@ -9,11 +8,9 @@ import lombok.EqualsAndHashCode;
  * @since 3.2.1
  */
 @Data(staticConstructor = "create")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TestSuite {
     private static final String TEST_ROOT_PACKAGE = "io.kyberorg.yalsee.test";
 
-    @EqualsAndHashCode.Include
     private final Class<?> suiteClazz;
 
     /**
@@ -29,6 +26,31 @@ public class TestSuite {
     public String toString() {
         String fullPackage = suiteClazz.getPackageName();
         return fullPackage.replace(TEST_ROOT_PACKAGE + ".", "") + "." + suiteClazz.getSimpleName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof TestSuite)) {
+            return false;
+        }
+        TestSuite other = (TestSuite) o;
+        if (this.getSuiteClazz() != null && other.getSuiteClazz() != null) {
+            return this.getSuiteClazz().getSimpleName().equals(other.getSuiteClazz().getSimpleName());
+        } else {
+            return other.getSuiteClazz() == null;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        if (this.getSuiteClazz() != null) {
+            result = result + this.getSuiteClazz().hashCode();
+        }
+        return result;
     }
 
 }

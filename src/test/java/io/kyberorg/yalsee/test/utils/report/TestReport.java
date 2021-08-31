@@ -23,7 +23,9 @@ public final class TestReport {
     private final Counter passedTestsCounter = new Counter();
     private final Counter ignoredTestsCounter = new Counter();
     private final Counter abortedTestsCounter = new Counter();
+    private final Counter onFireTestsCounter = new Counter();
     private final Counter suitesCounter = new Counter();
+    private final Counter brokenSuitesCounter = new Counter();
 
     /**
      * Provides {@link TestReport} object. One object per application.
@@ -77,6 +79,15 @@ public final class TestReport {
     }
 
     /**
+     * Number of {@link TestResult#ON_FIRE} tests.
+     *
+     * @return number of on fire tests.
+     */
+    public int countOnFireTests() {
+        return onFireTestsCounter.getValue();
+    }
+
+    /**
      * Number of Test Suites aka Test classes, where at least one test run.
      *
      * @return number of test classes started or completed.
@@ -86,12 +97,29 @@ public final class TestReport {
     }
 
     /**
+     * Number of Suites aka Test classes, where at @AfterAll crashed with Exception or Error.
+     *
+     * @return number of test classes where execution was broken
+     */
+    public int countBrokenSuites() {
+        return brokenSuitesCounter.getValue();
+    }
+
+    /**
+     * Add broken suite to its counter.
+     */
+    public void markSuiteAsBroken() {
+        brokenSuitesCounter.increment();
+    }
+
+    /**
      * Number of completed tests. Result doesn't matter.
      *
      * @return number of finished tests with any result.
      */
     public int countCompletedTests() {
-        return countPassedTests() + countFailedTests() + countIgnoredTests() + countAbortedTests();
+        return countPassedTests() + countFailedTests() + countIgnoredTests() + countAbortedTests()
+                + countOnFireTests();
     }
 
     /**
@@ -131,6 +159,15 @@ public final class TestReport {
     }
 
     /**
+     * Gets {@link TestResult#ON_FIRE} tests.
+     *
+     * @return list of {@link TestData} of tests, that on fire.
+     */
+    public List<TestData> getOnFireTests() {
+        return getTestsByResult(TestResult.ON_FIRE);
+    }
+
+    /**
      * Count time took to run all tests. Sum of each individual test times.
      *
      * @return {@link Duration} of time spent to run all tests.
@@ -148,7 +185,10 @@ public final class TestReport {
      * @param testSuite suite aka test class of completed test.
      * @param testData  {@link TestData} for completed test.
      */
-    public void reportTestFinished(final TestSuite testSuite, final TestData testData) {
+    public synchronized void reportTestFinished(final TestSuite testSuite, final TestData testData) {
+        //attaching linked testSuite
+        testData.setTestSuite(testSuite);
+
         List<TestData> testsList;
         if (reportMap.containsKey(testSuite)) {
             testsList = reportMap.get(testSuite);
@@ -161,8 +201,7 @@ public final class TestReport {
             //element already exists - skipping
             return;
         }
-        //attaching linked testSuite
-        testData.setTestSuite(testSuite);
+
         //element not exists in list - adding
         testsList.add(testData);
         reportMap.putIfAbsent(testSuite, testsList);
@@ -176,6 +215,7 @@ public final class TestReport {
     }
 
     private void updateCounters(final TestData testData) {
+        if (testData.getTestResult() == null) return;
         switch (testData.getTestResult()) {
             case PASSED:
                 passedTestsCounter.increment();
@@ -187,8 +227,11 @@ public final class TestReport {
                 ignoredTestsCounter.increment();
                 break;
             case ABORTED:
-            default:
                 abortedTestsCounter.increment();
+                break;
+            case ON_FIRE:
+            default:
+                onFireTestsCounter.increment();
                 break;
         }
     }
