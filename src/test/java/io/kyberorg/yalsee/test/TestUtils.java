@@ -233,7 +233,7 @@ public final class TestUtils {
      * @param testClass test class to scan
      * @return list of test method names
      */
-    public static List<String> getAllTestNames(Class<?> testClass) {
+    public static List<String> getAllTestNames(final Class<?> testClass) {
         List<Method> testMethods = getMethodsAnnotatedWith(testClass, Test.class);
         List<String> testNames = new ArrayList<>();
         for (Method m : testMethods) {
