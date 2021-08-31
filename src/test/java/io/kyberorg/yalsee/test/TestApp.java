@@ -105,6 +105,16 @@ public final class TestApp {
              */
             public static final String BROWSER = "chrome";
         }
+
+        /**
+         * Test Application constants.
+         */
+        public static class Constants {
+            /**
+             * Hash Code initial restart.
+             */
+            public static final int HASH_CODE_INITIAL_RESTART = 17;
+        }
     }
 
     /**

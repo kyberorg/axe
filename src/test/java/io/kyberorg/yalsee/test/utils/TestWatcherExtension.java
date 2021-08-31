@@ -41,7 +41,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      * @param context JUnit's test {@link ExtensionContext}
      */
     @Override
-    public void afterTestExecution(ExtensionContext context) {
+    public void afterTestExecution(final ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
     }
 
@@ -112,7 +112,8 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     }
 
     @Override
-    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+    public void handleTestExecutionException(final ExtensionContext context, final Throwable throwable)
+            throws Throwable {
         testSuite = TestSuite.create(context.getRequiredTestClass());
         testData = TestData.create(setTestNameFromContext(context));
 
@@ -124,7 +125,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     }
 
     @Override
-    public void handleBeforeAllMethodExecutionException(ExtensionContext context, Throwable throwable)
+    public void handleBeforeAllMethodExecutionException(final ExtensionContext context, final Throwable throwable)
             throws Throwable {
         List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
 
@@ -141,7 +142,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     }
 
     @Override
-    public void handleBeforeEachMethodExecutionException(ExtensionContext context, Throwable throwable)
+    public void handleBeforeEachMethodExecutionException(final ExtensionContext context, final Throwable throwable)
             throws Throwable {
         List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
 
@@ -158,7 +159,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     }
 
     @Override
-    public void handleAfterEachMethodExecutionException(ExtensionContext context, Throwable throwable)
+    public void handleAfterEachMethodExecutionException(final ExtensionContext context, final Throwable throwable)
             throws Throwable {
         List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
 
@@ -174,7 +175,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     }
 
     @Override
-    public void handleAfterAllMethodExecutionException(ExtensionContext context, Throwable throwable)
+    public void handleAfterAllMethodExecutionException(final ExtensionContext context, final Throwable throwable)
             throws Throwable {
         TestReport.getReport().markSuiteAsBroken();
         LifecycleMethodExecutionExceptionHandler.super.handleAfterAllMethodExecutionException(context, throwable);

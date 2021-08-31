@@ -2,6 +2,8 @@ package io.kyberorg.yalsee.test.utils.report;
 
 import lombok.Data;
 
+import static io.kyberorg.yalsee.test.TestApp.Defaults.Constants.HASH_CODE_INITIAL_RESTART;
+
 /**
  * Encapsulates test {@link Class}. Main purpose is remove common {@link #TEST_ROOT_PACKAGE} from reports.
  *
@@ -29,7 +31,7 @@ public class TestSuite {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (o == this) {
             return true;
         }
@@ -46,7 +48,7 @@ public class TestSuite {
 
     @Override
     public int hashCode() {
-        int result = 17;
+        int result = HASH_CODE_INITIAL_RESTART;
         if (this.getSuiteClazz() != null) {
             result = result + this.getSuiteClazz().hashCode();
         }

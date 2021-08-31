@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
+import static io.kyberorg.yalsee.test.TestApp.Defaults.Constants.HASH_CODE_INITIAL_RESTART;
+
 /**
  * Contains data about executed {@link Test}.
  *
@@ -43,7 +45,7 @@ public final class TestData {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (o == this) {
             return true;
         }
@@ -67,7 +69,7 @@ public final class TestData {
 
     @Override
     public int hashCode() {
-        int result = 17;
+        int result = HASH_CODE_INITIAL_RESTART;
         if (this.getName() != null) {
             result = result + this.getName().hashCode();
         }
