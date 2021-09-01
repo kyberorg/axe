@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
-import static io.kyberorg.yalsee.test.TestApp.Defaults.Constants.HASH_CODE_INITIAL_RESTART;
+import static io.kyberorg.yalsee.test.TestApp.Constants.HASH_CODE_INITIAL_RESTART;
 
 /**
  * Contains data about executed {@link Test}.
