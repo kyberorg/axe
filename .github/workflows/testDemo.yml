@@ -15,7 +15,7 @@ jobs:
       - name: Test App
         id: runTests
         continue-on-error: true
-        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dsurefire.rerunFailingTestsCount=3 clean test
+        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} clean test
         env:
           JAVA_HOME: /srv/java11
 
