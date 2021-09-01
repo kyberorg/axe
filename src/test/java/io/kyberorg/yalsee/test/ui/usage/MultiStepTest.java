@@ -61,7 +61,7 @@ public class MultiStepTest extends SelenideTest {
 
     /**
      * Submit button hides result area and clear its values.
-     * Currently not working as it should. Bug filed.
+     * Currently, not working as it should. Bug filed.
      */
     //@Test
     //TODO re-enable when #232 is fixed
