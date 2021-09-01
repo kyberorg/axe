@@ -53,3 +53,47 @@ jobs:
           interval: 1.5
           hasActuator: true
           commitSha: ${{ steps.deployed_commit.outputs.sha }}
+  test-demo:
+    name: Test::Demo
+    runs-on: self-hosted
+
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%d%m%y-%H%M')"
+
+      - name: Test App
+        id: runTests
+        continue-on-error: true
+        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} clean test
+        env:
+          JAVA_HOME: /srv/java11
+
+      - name: Publish Screenshots of failing tests (if any)
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: failedTests
+          path: target/reports/**/*.png
+          if-no-files-found: ignore
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.19
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Demo Unit Test Results
+          comment_title: Demo Unit Test Statistics
+          hide_comments: all but latest
+          comment_mode: 'update last'
+          test_changes_limit: 5
+          files: target/surefire-reports/**/*.xml
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
+          check_run_annotations: all tests, skipped tests
+
+      - name: Delete Test Video (No failed tests)
+        if: steps.runTests.outcome == 'success'
+        uses: wei/curl@master
+        with:
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-${{ steps.date.outputs.date }}
