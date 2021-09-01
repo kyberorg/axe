@@ -47,6 +47,11 @@ public final class TestApp {
         public static final String GRID_HOSTNAME = "grid.hostname";
 
         /**
+         * Boolean (true/false) should passed tests be included in tests summary.
+         */
+        public static final String REPORT_PASSED_TESTS = "test.summary.include.passed";
+
+        /**
          * {@link Selenide} related constants.
          */
         public static class Selenide {
@@ -77,6 +82,11 @@ public final class TestApp {
         public static final String BUILD_NAME = TestUtils.hostName() + "-" + TestUtils.timeStamp();
 
         /**
+         * By default, passed tests are not included in summary.
+         */
+        public static final String REPORT_PASSED_TESTS = "false";
+
+        /**
          * {@link Selenide}-related defaults.
          */
         public static class Selenide {
@@ -88,12 +98,22 @@ public final class TestApp {
             /**
              * Timeout in milliseconds.
              */
-            public static final String TIMEOUT = "4000";
+            public static final String TIMEOUT = "10000";
 
             /**
              * Chrome browser.
              */
             public static final String BROWSER = "chrome";
+        }
+
+        /**
+         * Test Application constants.
+         */
+        public static class Constants {
+            /**
+             * Hash Code initial restart.
+             */
+            public static final int HASH_CODE_INITIAL_RESTART = 17;
         }
     }
 

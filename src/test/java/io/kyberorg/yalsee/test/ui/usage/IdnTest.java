@@ -7,7 +7,8 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 2.5
  */
-@SpringBootTest
+@Execution(ExecutionMode.CONCURRENT)
 @SuppressWarnings("SpellCheckingInspection")
 public class IdnTest extends SelenideTest {
 
@@ -29,7 +30,6 @@ public class IdnTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
         open("/");
         waitForVaadin();
     }

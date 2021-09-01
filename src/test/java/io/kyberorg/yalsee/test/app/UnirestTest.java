@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.json.PostLinkResponse;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.YalseeTest;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.*;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Slf4j
-public abstract class UnirestTest {
+public abstract class UnirestTest extends YalseeTest {
     protected static final String TEST_URL = TestUtils.getTestUrl();
 
     protected static final String LINK_NOT_FOUND_STATUS = "LINK_NOT_FOUND";
@@ -77,7 +78,7 @@ public abstract class UnirestTest {
     /**
      * Finds link by its ident.
      *
-     * @param ident non empty string with ident to search
+     * @param ident non-empty string with ident to search
      * @return string with long URL or {@link #LINK_NOT_FOUND_STATUS} if not found
      */
     protected String getStoredLink(final String ident) {

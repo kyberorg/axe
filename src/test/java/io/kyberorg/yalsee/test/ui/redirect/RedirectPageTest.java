@@ -8,7 +8,8 @@ import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
@@ -20,7 +21,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 3.0.5
  */
-@SpringBootTest
+@Execution(ExecutionMode.CONCURRENT)
 public class RedirectPageTest extends SelenideTest {
 
     private String ourShortLink;
@@ -30,7 +31,6 @@ public class RedirectPageTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-        tuneDriverWithCapabilities();
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";

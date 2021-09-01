@@ -6,8 +6,10 @@ import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -21,21 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 3.2
  */
+@Execution(ExecutionMode.CONCURRENT)
 public class GridItemsTest extends SelenideTest {
-    //emulating @BeforeAll behavior
-    // this needed because tuneDriverWithCapabilities(); is not static
-    private static boolean pageOpened = false;
 
     /**
      * Test Setup.
      */
-    @BeforeEach
-    public void beforeTest() {
-        if (pageOpened) {
-            return;
-        }
-        tuneDriverWithCapabilities();
-
+    @BeforeAll
+    public static void beforeTest() {
         //session cleanup
         open("/myLinks");
         waitForVaadin();
@@ -50,8 +45,6 @@ public class GridItemsTest extends SelenideTest {
         //doing to page
         open("/myLinks");
         waitForVaadin();
-
-        pageOpened = true;
     }
 
     /**

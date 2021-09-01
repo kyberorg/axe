@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @since 2.3
  */
-public class MattermostTests {
+public class MattermostTests extends UnitTest {
     private static final int CHANNEL_ID_LENGTH = 6;
     private static final int TEAM_ID_LENGTH = 6;
     private static final int USER_ID_LENGTH = 6;

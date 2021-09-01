@@ -1,38 +1,48 @@
 package io.kyberorg.yalsee.test.utils;
 
-import io.kyberorg.yalsee.test.TestApp;
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.TestWatcher;
+import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.utils.report.TestData;
+import io.kyberorg.yalsee.test.utils.report.TestReport;
+import io.kyberorg.yalsee.test.utils.report.TestResult;
+import io.kyberorg.yalsee.test.utils.report.TestSuite;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.extension.*;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * JUnit's 4 {@link TestWatcher} replacement.
  *
  * @since 2.7.6
  */
-public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback {
+public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCallback, AfterTestExecutionCallback,
+        TestExecutionExceptionHandler, LifecycleMethodExecutionExceptionHandler {
 
-    private static final String BUILD_NAME =
-            System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
-    private static final int MILLISECONDS_IN_SECOND = 1000;
-
-
-    private String testName;
+    private TestSuite testSuite;
+    private TestData testData;
 
     private long testStartTime;
-    private float testDurationInMillis;
-    private boolean testSucceeded;
+    private long testDurationInMillis;
 
     /**
-     * Very first stage of running test. We use it for getting test name and logging executing startup.
+     * Very first stage of running test. We use it for getting test start time.
      *
-     * @param extensionContext JUnit's test {@link ExtensionContext}
+     * @param context JUnit's test {@link ExtensionContext}
      */
     @Override
-    public void beforeTestExecution(final ExtensionContext extensionContext) {
-        testName = setTestNameFromContext(extensionContext);
+    public void beforeTestExecution(final ExtensionContext context) {
         testStartTime = System.currentTimeMillis();
-        System.out.printf("Starting.... build '%s'. Test: '%s%n", BUILD_NAME, testName);
+    }
+
+    /**
+     * Stage that executed after test run. We use it for timing.
+     *
+     * @param context JUnit's test {@link ExtensionContext}
+     */
+    @Override
+    public void afterTestExecution(final ExtensionContext context) {
+        testDurationInMillis = System.currentTimeMillis() - testStartTime;
     }
 
     /**
@@ -42,8 +52,11 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     @Override
     public void testSuccessful(final ExtensionContext context) {
-        testDurationInMillis = System.currentTimeMillis() - testStartTime;
-        testSucceeded = true;
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        testData = TestData.create(setTestNameFromContext(context));
+
+        testData.setTestResult(TestResult.PASSED);
+
         afterTest();
     }
 
@@ -55,34 +68,164 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
      */
     @Override
     public void testFailed(final ExtensionContext context, final Throwable cause) {
-        testDurationInMillis = System.currentTimeMillis() - testStartTime;
-        testSucceeded = false;
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        testData = TestData.create(setTestNameFromContext(context));
+
+        testData.setTestResult(TestResult.FAILED);
+        testData.setFailCause(cause);
+
         afterTest();
+    }
+
+    /**
+     * Marks test as ignored.
+     *
+     * @param context JUnit's test {@link ExtensionContext}
+     * @param reason  why test was ignored
+     */
+    @Override
+    public void testDisabled(final ExtensionContext context, final Optional<String> reason) {
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        testData = TestData.create(setTestNameFromContext(context));
+
+        testData.setTestResult(TestResult.IGNORED);
+        reason.ifPresent(s -> testData.setIgnoreReason(s));
+
+        afterTest();
+    }
+
+    /**
+     * Marks test as aborted.
+     *
+     * @param context JUnit's test {@link ExtensionContext}
+     * @param cause   exception led to test been aborted.
+     */
+    @Override
+    public void testAborted(final ExtensionContext context, final Throwable cause) {
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        testData = TestData.create(setTestNameFromContext(context));
+
+        testData.setTestResult(TestResult.ABORTED);
+        testData.setAbortedCause(cause);
+
+        afterTest();
+    }
+
+    @Override
+    public void handleTestExecutionException(final ExtensionContext context, final Throwable throwable)
+            throws Throwable {
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        testData = TestData.create(setTestNameFromContext(context));
+
+        testData.setTestResult(TestResult.ON_FIRE);
+        testData.setOnFireReason(new RuntimeException("Exception at @Test"));
+
+        afterTest();
+        throw throwable;
+    }
+
+    @Override
+    public void handleBeforeAllMethodExecutionException(final ExtensionContext context, final Throwable throwable)
+            throws Throwable {
+        List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        for (String testName : testNames) {
+            testData = TestData.create(testName);
+            testData.setTestResult(TestResult.ON_FIRE);
+            testData.setOnFireReason(new RuntimeException("Exception at @BeforeAll method"));
+
+            afterTest();
+        }
+
+        LifecycleMethodExecutionExceptionHandler.super.handleBeforeAllMethodExecutionException(context, throwable);
+    }
+
+    @Override
+    public void handleBeforeEachMethodExecutionException(final ExtensionContext context, final Throwable throwable)
+            throws Throwable {
+        List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        for (String testName : testNames) {
+            testData = TestData.create(testName);
+            testData.setTestResult(TestResult.ON_FIRE);
+            testData.setOnFireReason(new RuntimeException("Exception at @Before method"));
+
+            afterTest();
+        }
+
+        LifecycleMethodExecutionExceptionHandler.super.handleBeforeEachMethodExecutionException(context, throwable);
+    }
+
+    @Override
+    public void handleAfterEachMethodExecutionException(final ExtensionContext context, final Throwable throwable)
+            throws Throwable {
+        List<String> testNames = TestUtils.getAllTestNames(context.getRequiredTestClass());
+
+        testSuite = TestSuite.create(context.getRequiredTestClass());
+        for (String testName : testNames) {
+            testData = TestData.create(testName);
+            testData.setTestResult(TestResult.ON_FIRE);
+            testData.setOnFireReason(new RuntimeException("Exception at @AfterEach method"));
+
+            afterTest();
+        }
+        LifecycleMethodExecutionExceptionHandler.super.handleAfterEachMethodExecutionException(context, throwable);
+    }
+
+    @Override
+    public void handleAfterAllMethodExecutionException(final ExtensionContext context, final Throwable throwable)
+            throws Throwable {
+        TestReport.getReport().markSuiteAsBroken();
+        LifecycleMethodExecutionExceptionHandler.super.handleAfterAllMethodExecutionException(context, throwable);
     }
 
     /**
      * Very last step of test execution.
      */
     private void afterTest() {
-        String testResult = testSucceeded ? "OK" : "FAIL";
-        String timeTook = testDurationInMillis / MILLISECONDS_IN_SECOND + " s";
+        testData.setTimeTookMillis(testDurationInMillis);
 
-        System.out.printf("Finished(%s) build '%s'. Test: '%s, Time elapsed: %s%n",
-                testResult,
-                BUILD_NAME,
-                testName,
-                timeTook);
+        TestReport.getReport().reportTestFinished(testSuite, testData);
+        printReport();
+    }
+
+    private void printReport() {
+        TestReport report = TestReport.getReport();
+
+        StringBuilder sb = new StringBuilder();
+        if (report.countOnFireTests() > 0) {
+            sb.append("On Fire: ").append(report.countOnFireTests()).append(", ");
+        }
+        if (report.countFailedTests() > 0) {
+            sb.append("Failed: ").append(report.countFailedTests()).append(", ");
+        }
+        if (report.countPassedTests() > 0) {
+            sb.append("Passed: ").append(report.countPassedTests()).append(", ");
+        }
+        if (report.countIgnoredTests() > 0) {
+            sb.append("Ignored: ").append(report.countIgnoredTests()).append(", ");
+        }
+        if (report.countAbortedTests() > 0) {
+            sb.append("Aborted: ").append(report.countAbortedTests()).append(", ");
+        }
+
+        String stringWithoutTrailingComma = StringUtils.chop(sb.toString().trim());
+
+        String reportString = stringWithoutTrailingComma + " from " + report.countSuites() + " suites. "
+                + "Total: " + report.countCompletedTests() + " tests.";
+
+        System.out.println(reportString);
     }
 
     private String setTestNameFromContext(final ExtensionContext context) {
-        String testClassName = context.getRequiredTestClass().getSimpleName();
         String rawMethodName = context.getRequiredTestMethod().getName();
         String[] methodAndBrowserInfo = rawMethodName.split("\\[");
         if (methodAndBrowserInfo.length > 0) {
-            String method = methodAndBrowserInfo[0];
-            return String.format("%s.%s", testClassName, method);
+            return methodAndBrowserInfo[0];
         } else {
-            return String.format("%s.%s", testClassName, rawMethodName);
+            return rawMethodName;
         }
     }
 }

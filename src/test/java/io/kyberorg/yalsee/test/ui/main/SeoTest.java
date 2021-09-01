@@ -4,8 +4,10 @@ import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -17,14 +19,14 @@ import static io.kyberorg.yalsee.test.pageobjects.MainViewPageObject.GOOGLE_ANAL
  *
  * @since 3.0.2
  */
+@Execution(ExecutionMode.CONCURRENT)
 public class SeoTest extends SelenideTest {
 
     /**
      * Test Setup.
      */
-    @BeforeEach
-    public void beforeTest() {
-        tuneDriverWithCapabilities();
+    @BeforeAll
+    public static void beforeTests() {
         open("/");
         VaadinPageObject.waitForVaadin();
     }

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 2.5
  */
-public class UrlUtilsTest {
+public class UrlUtilsTest extends UnitTest {
 
     /**
      * Tests that decoding works.

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 2.3
  */
-public class MattermostResponseTests {
+public class MattermostResponseTests extends UnitTest {
 
     /**
      * Tests that valid JSON that Mattermost sends in response has icon, text and username.
