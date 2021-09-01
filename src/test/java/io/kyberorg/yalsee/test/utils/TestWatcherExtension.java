@@ -237,7 +237,10 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
 
     private void displayTestNameIfNeeded(ExtensionContext context) {
         Optional<Class<?>> testClass = context.getTestClass();
-        if (testClass.isPresent() && testClass.get().isAssignableFrom(SelenideTest.class)) {
+        if (testClass.isEmpty()) return;
+
+        boolean isUITest = SelenideTest.class.isAssignableFrom(testClass.get());
+        if (isUITest) {
             TestSuite suite = TestSuite.create(context.getRequiredTestClass());
             TestData testData = TestData.create(setTestNameFromContext(context));
             testData.setTestSuite(suite);
