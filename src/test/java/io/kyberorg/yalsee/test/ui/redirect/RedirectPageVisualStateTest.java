@@ -35,6 +35,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(OUR_LONG_LINK);
+            waitForVaadin();
         }
         open(ourShortLink);
         waitForVaadin();
