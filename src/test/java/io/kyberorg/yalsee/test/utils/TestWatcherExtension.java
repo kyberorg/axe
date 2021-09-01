@@ -1,6 +1,8 @@
 package io.kyberorg.yalsee.test.utils;
 
+import com.codeborne.selenide.Selenide;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import io.kyberorg.yalsee.test.utils.report.TestResult;
@@ -10,6 +12,8 @@ import org.junit.jupiter.api.extension.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static io.kyberorg.yalsee.test.TestApp.Defaults.Constants.TEST_NAME_DISPLAY_SERVICE_URL;
 
 /**
  * JUnit's 4 {@link TestWatcher} replacement.
@@ -26,13 +30,15 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     private long testDurationInMillis;
 
     /**
-     * Very first stage of running test. We use it for getting test start time.
+     * Very first stage of running test. We use it for getting test start time and displaying test name.
      *
      * @param context JUnit's test {@link ExtensionContext}
      */
     @Override
     public void beforeTestExecution(final ExtensionContext context) {
         testStartTime = System.currentTimeMillis();
+        //display test name in video for UI tests.
+        displayTestNameIfNeeded(context);
     }
 
     /**
@@ -226,6 +232,17 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
             return methodAndBrowserInfo[0];
         } else {
             return rawMethodName;
+        }
+    }
+
+    private void displayTestNameIfNeeded(ExtensionContext context) {
+        Optional<Class<?>> testClass = context.getTestClass();
+        if (testClass.isPresent() && testClass.get().isAssignableFrom(SelenideTest.class)) {
+            TestSuite suite = TestSuite.create(context.getRequiredTestClass());
+            TestData testData = TestData.create(setTestNameFromContext(context));
+            testData.setTestSuite(suite);
+
+            Selenide.open(TEST_NAME_DISPLAY_SERVICE_URL + testData);
         }
     }
 }
