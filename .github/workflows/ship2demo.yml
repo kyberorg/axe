@@ -55,6 +55,7 @@ jobs:
           commitSha: ${{ steps.deployed_commit.outputs.sha }}
   test-demo:
     name: Test::Demo
+    needs: ship2demo
     runs-on: self-hosted
 
     steps:
