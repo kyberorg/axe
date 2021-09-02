@@ -256,7 +256,10 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
             }
 
             Selenide.executeJavaScript(
-                    String.format("showTestName(\"%s\")", testData)
+                    String.format("if (typeof showTestName === \"function\") { "
+                                    + "showTestName(\"%s\") "
+                                    + "}",
+                            testData)
             );
             $("#testNameDiv").shouldBe(hidden, Duration.ofSeconds(3));
         }
