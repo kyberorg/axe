@@ -52,6 +52,11 @@ public final class TestApp {
         public static final String REPORT_PASSED_TESTS = "test.summary.include.passed";
 
         /**
+         * Timeout waiting for Vaadin Actions.
+         */
+        public static final String VAADIN_TIMEOUT = "vaadin.timeout";
+
+        /**
          * {@link Selenide} related constants.
          */
         public static class Selenide {
@@ -87,6 +92,11 @@ public final class TestApp {
         public static final String REPORT_PASSED_TESTS = "false";
 
         /**
+         * Timeout waiting for Vaadin Actions.
+         */
+        public static final String VAADIN_TIMEOUT = "15000";
+
+        /**
          * {@link Selenide}-related defaults.
          */
         public static class Selenide {
@@ -106,15 +116,16 @@ public final class TestApp {
             public static final String BROWSER = "chrome";
         }
 
+    }
+
+    /**
+     * Test Application constants.
+     */
+    public static class Constants {
         /**
-         * Test Application constants.
+         * Hash Code initial restart.
          */
-        public static class Constants {
-            /**
-             * Hash Code initial restart.
-             */
-            public static final int HASH_CODE_INITIAL_RESTART = 17;
-        }
+        public static final int HASH_CODE_INITIAL_RESTART = 17;
     }
 
     /**

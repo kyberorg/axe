@@ -1,11 +1,6 @@
 name: "Test - Demo"
 
-on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: [ "Ship - Demo" ]
-    types:
-      - completed
+on: [ workflow_dispatch ]
 
 jobs:
   test-demo:

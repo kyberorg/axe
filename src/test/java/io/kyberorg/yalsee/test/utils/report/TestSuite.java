@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.test.utils.report;
 
 import lombok.Data;
 
-import static io.kyberorg.yalsee.test.TestApp.Defaults.Constants.HASH_CODE_INITIAL_RESTART;
+import static io.kyberorg.yalsee.test.TestApp.Constants.HASH_CODE_INITIAL_RESTART;
 
 /**
  * Encapsulates test {@link Class}. Main purpose is remove common {@link #TEST_ROOT_PACKAGE} from reports.

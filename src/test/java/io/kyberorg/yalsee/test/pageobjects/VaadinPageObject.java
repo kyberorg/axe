@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
+import io.kyberorg.yalsee.test.TestApp;
 
 import java.time.Duration;
 
@@ -17,13 +17,16 @@ public final class VaadinPageObject {
     public static final SelenideElement LOADING_BAR = $(".v-loading-indicator");
     public static final SelenideElement SPLASH_SCREEN = $("#splash-screen");
 
+    private static final long VAADIN_TIMEOUT =
+            Long.parseLong(System.getProperty(TestApp.Properties.VAADIN_TIMEOUT, TestApp.Defaults.VAADIN_TIMEOUT));
+
     /**
      * Ensures that site is loaded and Vaadin loading bar already disappear.
      */
     public static void waitForVaadin() {
-        $(SPLASH_SCREEN).shouldHave(cssClass("loaded"), Duration.ofMillis(Configuration.timeout));
-        $(LOADING_BAR).shouldNotBe(visible, Duration.ofMillis(Configuration.timeout));
-        $(LOADING_BAR).shouldBe(hidden, Duration.ofMillis(Configuration.timeout));
+        $(SPLASH_SCREEN).shouldHave(cssClass("loaded"), Duration.ofMillis(VAADIN_TIMEOUT));
+        $(LOADING_BAR).shouldNotBe(visible, Duration.ofMillis(VAADIN_TIMEOUT));
+        $(LOADING_BAR).shouldBe(hidden, Duration.ofMillis(VAADIN_TIMEOUT));
     }
 
     private VaadinPageObject() {
