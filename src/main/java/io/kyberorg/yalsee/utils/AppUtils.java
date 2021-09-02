@@ -25,6 +25,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.net.URI;
+import java.util.Arrays;
 
 /**
  * App-wide tools.
@@ -276,6 +277,15 @@ public class AppUtils {
      */
     public boolean isDevelopmentModeActivated() {
         return Boolean.parseBoolean(env.getProperty(App.Properties.DEV_MODE, "false"));
+    }
+
+    /**
+     * Defines if application works without enabled Production profile.
+     *
+     * @return true if production profile not activated, false if activated.
+     */
+    public boolean isNotProduction() {
+        return !(Arrays.asList(env.getActiveProfiles()).contains("prod"));
     }
 
     /**
