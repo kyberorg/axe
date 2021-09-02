@@ -244,7 +244,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
             testData.setTestSuite(suite);
 
             Selenide.executeJavaScript(
-                    String.format("showTestName(%s)", testData)
+                    String.format("showTestName(\"%s\")", testData)
             );
         }
     }
