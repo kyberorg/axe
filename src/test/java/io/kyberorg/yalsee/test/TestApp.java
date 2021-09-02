@@ -114,11 +114,6 @@ public final class TestApp {
              * Hash Code initial restart.
              */
             public static final int HASH_CODE_INITIAL_RESTART = 17;
-
-            /**
-             * URL of Service, that displays test name.
-             */
-            public static final String TEST_NAME_DISPLAY_SERVICE_URL = "https://large-type.com/#";
         }
     }
 

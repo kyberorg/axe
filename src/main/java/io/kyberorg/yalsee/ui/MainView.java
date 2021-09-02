@@ -174,6 +174,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("twitter:image", previewImage);
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
+
+        //TODO not a production
+        settings.addInlineFromFile("show-test-name.html", InitialPageSettings.WrapMode.NONE);
         if (appUtils.isGoogleAnalyticsEnabled()) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }

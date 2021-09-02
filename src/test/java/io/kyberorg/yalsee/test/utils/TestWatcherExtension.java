@@ -13,8 +13,6 @@ import org.junit.jupiter.api.extension.*;
 import java.util.List;
 import java.util.Optional;
 
-import static io.kyberorg.yalsee.test.TestApp.Defaults.Constants.TEST_NAME_DISPLAY_SERVICE_URL;
-
 /**
  * JUnit's 4 {@link TestWatcher} replacement.
  *
@@ -245,7 +243,9 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
             TestData testData = TestData.create(setTestNameFromContext(context));
             testData.setTestSuite(suite);
 
-            Selenide.open(TEST_NAME_DISPLAY_SERVICE_URL + testData);
+            Selenide.executeJavaScript(
+                    String.format("showTestName(%s)", testData)
+            );
         }
     }
 }
