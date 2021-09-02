@@ -16,6 +16,7 @@ public final class MainViewPageObject {
         throw new UnsupportedOperationException("Utility class");
     }
 
+    public static final SelenideElement VIEW = $("#" + MainView.IDs.VIEW_ID);
     public static final SelenideElement LOGO = $("#" + MainView.IDs.APP_LOGO);
     public static final SelenideElement GOOGLE_ANALYTICS_CONTROL_SPAN = $("#gtag");
 }
