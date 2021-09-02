@@ -2,8 +2,6 @@ package io.kyberorg.yalsee.test.utils;
 
 import com.codeborne.selenide.Selenide;
 import io.kyberorg.yalsee.test.TestUtils;
-import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
-import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
@@ -239,7 +237,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         }
     }
 
-    private void displayTestNameIfNeeded(ExtensionContext context) {
+    private void displayTestNameIfNeeded(final ExtensionContext context) {
         Optional<Class<?>> testClass = context.getTestClass();
         if (testClass.isEmpty()) return;
 
@@ -248,12 +246,6 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
             TestSuite suite = TestSuite.create(context.getRequiredTestClass());
             TestData testData = TestData.create(setTestNameFromContext(context));
             testData.setTestSuite(suite);
-
-            boolean testedPageOpened = MainViewPageObject.VIEW.exists();
-            if (!testedPageOpened) {
-                Selenide.open("/");
-                VaadinPageObject.waitForVaadin();
-            }
 
             Selenide.executeJavaScript(
                     String.format("if (typeof showTestName === \"function\") { "
