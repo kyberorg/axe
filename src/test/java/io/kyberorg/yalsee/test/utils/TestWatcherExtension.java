@@ -10,8 +10,12 @@ import io.kyberorg.yalsee.test.utils.report.TestSuite;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.*;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Selenide.$;
 
 /**
  * JUnit's 4 {@link TestWatcher} replacement.
@@ -246,6 +250,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
             Selenide.executeJavaScript(
                     String.format("showTestName(\"%s\")", testData)
             );
+            $("#testNameDiv").shouldBe(hidden, Duration.ofSeconds(2));
         }
     }
 }
