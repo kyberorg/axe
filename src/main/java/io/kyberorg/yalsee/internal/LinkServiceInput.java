@@ -8,7 +8,7 @@ import lombok.*;
  *
  * @since 3.2.1
  */
-@Builder(builderMethodName = "internalBuilder", access = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "internalBuilder")
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
