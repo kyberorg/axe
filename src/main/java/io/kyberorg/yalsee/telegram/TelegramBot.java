@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.telegram;
 
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
@@ -136,8 +137,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String url = telegramObject.getArguments().getUrl();
 
-
-        OperationResult storeResult = linkService.createLink(url);
+        OperationResult storeResult = linkService.createLink(LinkServiceInput.builder(url).build());
         if (storeResult.ok()) {
             message = telegramService.success(storeResult.getPayload(Link.class));
         } else {
