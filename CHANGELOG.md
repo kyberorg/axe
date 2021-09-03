@@ -33,18 +33,13 @@ Updates and improvements
 
 :package: Dependencies Updates
 
-* [Maven Deps]: Bump `spring-boot-starter-parent` from `2.5.3`
-  to `2.5.4` ([#479](https://github.com/kyberorg/yalsee/pull/479))
-* [Maven Deps]: Bump `unirest-java` from`3.11.12` to `3.11.13` ([#484](https://github.com/kyberorg/yalsee/pull/484))
-* [Maven Deps]: Bump `spring-boot-starter-parent` from `2.5.3`
-  to `2.5.4` ([#479](https://github.com/kyberorg/yalsee/pull/479))
-* [Maven Deps]: Bump `gson` from `2.8.7` to `2.8.8` ([#480](https://github.com/kyberorg/yalsee/pull/480))
-* [Maven Deps]: Bump `git-commit-id-plugin` from `4.0.5`
-  to `4.9.10` ([#448](https://github.com/kyberorg/yalsee/pull/448))
-* [Maven Deps]: Bump `selenide` from `5.23.0` to `5.24.1` ([#454](https://github.com/kyberorg/yalsee/pull/454))
+* [Maven]: Spring Boot 2.5.3 -> 2.5.4 ([#479](https://github.com/kyberorg/yalsee/pull/479))
+* [Maven]: Unirest 3.11.12 -> 3.11.13 ([#484](https://github.com/kyberorg/yalsee/pull/484))
+* [Maven]: Gson 2.8.7 -> 2.8.8 ([#480](https://github.com/kyberorg/yalsee/pull/480))
+* [Maven]: Git Commit Plugin 4.0.5 -> 4.9.10 ([#448](https://github.com/kyberorg/yalsee/pull/448))
+* [Maven]: Selenide 5.23.0 -> 5.24.1 ([#454](https://github.com/kyberorg/yalsee/pull/454))
   , ([#478](https://github.com/kyberorg/yalsee/pull/478)) and ([#488](https://github.com/kyberorg/yalsee/pull/488))
-* [Actions Deps]: Bump `actions/setup-java` from `2.2.0`
-  to `2.3.0` ([#486](https://github.com/kyberorg/yalsee/pull/486))
+* [Actions]: Actions/setup-java 2.2.0 -> 2.3.0 ([#486](https://github.com/kyberorg/yalsee/pull/486))
 
 ### Milestone 3.2 (10/08/2021)
 
