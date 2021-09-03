@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.api.mm;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.json.MattermostResponse;
 import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.mm.Mattermost;
@@ -62,7 +63,7 @@ public class MattermostRestController {
             String mmUrl = mattermost.getArgumentSet().getUrl();
             log.debug("{} Request Parsed. Saving link. mmUrl: {}", TAG, mmUrl);
 
-            OperationResult storeResult = linkService.createLink(mmUrl);
+            OperationResult storeResult = linkService.createLink(LinkServiceInput.builder(mmUrl).build());
             if (storeResult.ok()) {
                 log.info("{} Link saved. Replying back", TAG);
                 return success(storeResult.getPayload(Link.class));
