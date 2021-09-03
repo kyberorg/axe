@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
 
@@ -34,7 +35,7 @@ import java.util.Arrays;
  */
 @Slf4j
 @Component
-public class AppUtils {
+public class AppUtils implements Serializable {
     private static final String TAG = "[" + AppUtils.class.getSimpleName() + "]";
     @Getter
     private final Environment env;

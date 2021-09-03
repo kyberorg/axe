@@ -21,6 +21,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
+import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
@@ -321,7 +322,8 @@ public class HomeView extends HorizontalLayout {
 
     private void saveLink(final String link) {
         String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        OperationResult saveLinkOperation = linkService.createLink(null, link, sessionId);
+        LinkServiceInput linkServiceInput = LinkServiceInput.builder(link).sessionID(sessionId).build();
+        OperationResult saveLinkOperation = linkService.createLink(linkServiceInput);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
         } else {

@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.json.PostLinkResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -79,7 +80,9 @@ public class PostLinkRestController {
         if (tokenCheck.ok()) {
             //accepting ident if any
             if (StringUtils.isNotBlank(requestJson.getIdent())) {
-                storeResult = linkService.createLink(requestJson.getIdent(), requestJson.getLink());
+                storeResult = linkService.createLink(
+                        LinkServiceInput.builder(requestJson.getLink()).customIdent(requestJson.getIdent()).build()
+                );
             } else {
                 return handleMalformedIdent();
             }
@@ -87,7 +90,7 @@ public class PostLinkRestController {
             return ApiUtils.handleTokenFail(tokenCheck);
         } else {
             //used-defined ident discarded
-            storeResult = linkService.createLink(requestJson.getLink());
+            storeResult = linkService.createLink(LinkServiceInput.builder(requestJson.getLink()).build());
         }
 
         switch (storeResult.getResult()) {
