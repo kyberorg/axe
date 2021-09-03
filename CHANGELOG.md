@@ -4,14 +4,10 @@ Updates and improvements
 
 :star: Features
 
----
-
 * Save link by clicking Enter ([#445](https://github.com/kyberorg/yalsee/issue/445))
 * Enable Live Reload for DevMode ([#493](https://github.com/kyberorg/yalsee/issue/493))
 
 :hammer: Improvements
-
----
 
 * Refactoring needed: LinkService contains too many overloaded methods
   internal ([#453](https://github.com/kyberorg/yalsee/issue/453))
@@ -19,13 +15,9 @@ Updates and improvements
 
 :beetle: Bug Fixes
 
----
-
 * Fix build after NPM/Webpack update ([#472](https://github.com/kyberorg/yalsee/issue/472))
 
 :test_tube: Testing
-
----
 
 * Parallel test execution ([#474](https://github.com/kyberorg/yalsee/issue/474))
 * Make tests as idempotent as possible ([#481](https://github.com/kyberorg/yalsee/issue/481))
@@ -36,14 +28,10 @@ Updates and improvements
 
 :computer: Ops
 
----
-
 * Separate ship2env and env testing steps in GitHub Actions ([#465](https://github.com/kyberorg/yalsee/issue/465))
 * Trigger Test right after Deploy at least for Demo ([#483](https://github.com/kyberorg/yalsee/issue/483))
 
 :package: Dependencies Updates
-
----
 
 * [Maven Deps]: Bump `spring-boot-starter-parent` from `2.5.3`
   to `2.5.4` ([#479](https://github.com/kyberorg/yalsee/pull/479))
