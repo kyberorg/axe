@@ -1,3 +1,46 @@
+### Milestone 3.2.1 (03/09/2021)
+
+Updates and improvements
+
+:star: Features
+
+* Save link by clicking Enter ([#445](https://github.com/kyberorg/yalsee/issue/445))
+* Enable Live Reload for DevMode ([#493](https://github.com/kyberorg/yalsee/issue/493))
+
+:hammer: Improvements
+
+* Refactoring needed: LinkService contains too many overloaded methods
+  internal ([#453](https://github.com/kyberorg/yalsee/issue/453))
+* UrlUtils.decodeUrl(String) should throw more concrete exception ([#442](https://github.com/kyberorg/yalsee/issue/442))
+
+:beetle: Bug Fixes
+
+* Fix build after NPM/Webpack update ([#472](https://github.com/kyberorg/yalsee/issue/472))
+
+:test_tube: Testing
+
+* Parallel test execution ([#474](https://github.com/kyberorg/yalsee/issue/474))
+* Make tests as idempotent as possible ([#481](https://github.com/kyberorg/yalsee/issue/481))
+* Speed test run up by removing unnecessary plugins' execution ([#467](https://github.com/kyberorg/yalsee/issue/467))
+* Speedup Tests by avoiding opening page on every test ([#449](https://github.com/kyberorg/yalsee/issue/449))
+* Remove Test Video when all tests succeeded ([#462](https://github.com/kyberorg/yalsee/issue/462))
+* Change Build Name in Grid ([#452](https://github.com/kyberorg/yalsee/issue/452))
+
+:computer: Ops
+
+* Separate ship2env and env testing steps in GitHub Actions ([#465](https://github.com/kyberorg/yalsee/issue/465))
+* Trigger Test right after Deploy at least for Demo ([#483](https://github.com/kyberorg/yalsee/issue/483))
+
+:package: Dependencies Updates
+
+* [Maven]: Spring Boot 2.5.3 -> 2.5.4 ([#479](https://github.com/kyberorg/yalsee/pull/479))
+* [Maven]: Unirest 3.11.12 -> 3.11.13 ([#484](https://github.com/kyberorg/yalsee/pull/484))
+* [Maven]: Gson 2.8.7 -> 2.8.8 ([#480](https://github.com/kyberorg/yalsee/pull/480))
+* [Maven]: Git Commit Plugin 4.0.5 -> 4.9.10 ([#448](https://github.com/kyberorg/yalsee/pull/448))
+* [Maven]: Selenide 5.23.0 -> 5.24.1 ([#454](https://github.com/kyberorg/yalsee/pull/454))
+  , ([#478](https://github.com/kyberorg/yalsee/pull/478)) and ([#488](https://github.com/kyberorg/yalsee/pull/488))
+* [Actions]: Actions/setup-java 2.2.0 -> 2.3.0 ([#486](https://github.com/kyberorg/yalsee/pull/486))
+
 ### Milestone 3.2 (10/08/2021)
 
 Table with links saved in current session
@@ -25,24 +68,22 @@ Service-first approach
 * [Maven Deps]: Bump selenide from 5.22.3 to 5.23.0 ([#429](https://github.com/kyberorg/yalsee/pull/429))
 * Remove version from everywhere ([#431](https://github.com/kyberorg/yalsee/issue/431))
 
-### Milestone 3.1 (20/07/2021)
+0### Milestone 3.1 (20/07/2021)
 
 RESTify API
 
 :warning: there are breaking changes in API.
 
-* API Endpoints were changes in order to fit with REST API
-  template ([#347](https://github.com/kyberorg/yalsee/issue/347)).
+* API Endpoints were changes in order to fit with REST API template ([#347](https://github.com/kyberorg/yalsee/issue/347)).
 
-    * `GET /api/link/{ident}` -> `GET /api/links/{ident}`
-    * `POST/PUT /api/store` -> `POST /api/links`
-    * `GET /qrcode/{ident}` -> `GET /qr/{ident}`
-    * `GET /qrcode/{ident}/{size}` -> `GET /qr/{ident}/{size}`
+  * `GET /api/link/{ident}` -> `GET /api/links/{ident}`
+  * `POST/PUT /api/store` -> `POST /api/links`
+  * `GET /qrcode/{ident}` -> `GET /qr/{ident}`
+  * `GET /qrcode/{ident}/{size}` -> `GET /qr/{ident}/{size}`
 
 
 * Added `GET /qr/{ident}/{width}/{height}` endpoint.
-* Added
-  API [Dokumentation Page](https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.1) ([#347](https://github.com/kyberorg/yalsee/issue/347))
+* Added API [Dokumentation Page](https://app.swaggerhub.com/apis/kyberorg/Yalsee/1.0.1) ([#347](https://github.com/kyberorg/yalsee/issue/347))
 
 ### Milestone 3.0.10 (13/07/2021)
 
@@ -50,8 +91,7 @@ Dependencies Bump
 
 * [Maven Deps] &nbsp;&nbsp; Bump telegrambots from 5.2.0 to 5.3.0 ([#417](https://github.com/kyberorg/yalsee/pull/417))
 * [Maven Deps] &nbsp;&nbsp; Bump selenide from 5.22.2 to 5.22.3 ([#420](https://github.com/kyberorg/yalsee/pull/420))
-* [Actions Deps] &nbsp; Bump EnricoMi/publish-unit-test-result-action from 1.18 to
-  1.19 ([#421](https://github.com/kyberorg/yalsee/pull/421))
+* [Actions Deps] &nbsp; Bump EnricoMi/publish-unit-test-result-action from 1.18 to 1.19 ([#421](https://github.com/kyberorg/yalsee/pull/421))
 * [Ops] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fail fast:
   login to docker hub before compiling JAR ([#422](https://github.com/kyberorg/yalsee/pull/422))
 
