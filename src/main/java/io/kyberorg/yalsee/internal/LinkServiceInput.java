@@ -8,7 +8,7 @@ import lombok.*;
  *
  * @since 3.2.1
  */
-@Builder(builderMethodName = "internalBuilder")
+@Builder(builderMethodName = "internalBuilder", access = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -20,6 +20,12 @@ public class LinkServiceInput {
     private String customIdent;
     private String sessionID;
 
+    /**
+     * Creates builder with required parameter set.
+     *
+     * @param link string with link to save
+     * @return {@link LinkServiceInputBuilder} with {@link #link} set to continue building {@link LinkServiceInput}.
+     */
     public static LinkServiceInputBuilder builder(final String link) {
         return internalBuilder().link(link);
     }
