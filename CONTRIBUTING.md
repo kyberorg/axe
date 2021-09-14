@@ -179,10 +179,10 @@ There following sections:
 
 * `:star: Features` - new stuff in application
 * `:hammer: Improvements` - already existing stuff which got better
+* `:shield: Security`
 * `:lady_beetle: Bug Fixes`
 * `:test_tube: Testing`
 * `:computer: Ops` - Operations and non-coding stuff
 * `:package: Dependencies Updates`
-* `:shield: Security`
 * `:broom: Cleanup/Refactoring`
 * `:notebook_with_decorative_cover: Dokumentation`
