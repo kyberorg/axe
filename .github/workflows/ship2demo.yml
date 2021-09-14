@@ -62,7 +62,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%d%m%y-%H%M')"
+        run: echo "::set-output name=date::$(date +'%y%m%d-%H%M')"
 
       - name: Test App
         id: runTests
