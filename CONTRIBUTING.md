@@ -171,4 +171,18 @@ Volumes:
 * Description: Dev.Yals.ee Link Shortener Bot
 * About: Makes long links short
 * Botpic: to be done
-* Commands: yalsee - https://longLink.tld description 
+* Commands: yalsee - https://longLink.tld description
+
+### Release notes
+
+There following sections:
+
+* `:star: Features` - new stuff in application
+* `:hammer: Improvements` - already existing stuff which got better
+* `:shield: Security`
+* `:lady_beetle: Bug Fixes`
+* `:test_tube: Testing`
+* `:computer: Ops` - Operations and non-coding stuff
+* `:package: Dependencies Updates`
+* `:broom: Cleanup/Refactoring`
+* `:notebook_with_decorative_cover: Dokumentation`
