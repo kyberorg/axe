@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.ui;
 
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -67,6 +68,8 @@ public class HomeView extends HorizontalLayout {
 
     private Span titleLongPart;
     private TextField input;
+    private Accordion descriptionAccordion;
+    private TextField descriptionInput;
     private Button submitButton;
     private Anchor shortLink;
     private Image qrCode;
@@ -118,6 +121,7 @@ public class HomeView extends HorizontalLayout {
         linkCounter.setText(Long.toString(linksStored));
 
         input.setAutofocus(true);
+        descriptionAccordion.close();
         submitButton.setEnabled(true);
 
         mainArea.setVisible(true);
@@ -141,6 +145,13 @@ public class HomeView extends HorizontalLayout {
         input.setPlaceholder("https://mysuperlongurlhere.tld");
         input.setWidthFull();
 
+        descriptionAccordion = new Accordion();
+        descriptionAccordion.setWidthFull();
+
+        descriptionInput = new TextField();
+        descriptionInput.setPlaceholder("what is link about...");
+        descriptionInput.setWidthFull();
+
         Span publicAccessBanner =
                 new Span("Note: all links considered as public and can be used by anyone");
         publicAccessBanner.setId(IDs.BANNER);
@@ -151,8 +162,10 @@ public class HomeView extends HorizontalLayout {
         submitButton.addClickListener(this::onSaveLink);
         submitButton.addClickShortcut(Key.ENTER);
 
+        descriptionAccordion.add("Link Description (optional)", descriptionInput);
+
         VerticalLayout mainArea =
-                new VerticalLayout(title, input, publicAccessBanner, submitButton);
+                new VerticalLayout(title, input, descriptionAccordion, publicAccessBanner, submitButton);
         mainArea.setId(IDs.MAIN_AREA);
         mainArea.addClassNames("main-area", "border");
         return mainArea;
