@@ -302,6 +302,7 @@ public class HomeView extends HorizontalLayout {
 
         boolean isFormValid = true;
         String longUrl = input.getValue();
+        String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
         cleanForm();
 
@@ -322,7 +323,7 @@ public class HomeView extends HorizontalLayout {
 
         if (isFormValid) {
             cleanResults();
-            saveLink(longUrl);
+            saveLink(longUrl, linkDescription);
         } else {
             log.debug("{} Form is not valid", TAG);
         }
@@ -335,13 +336,13 @@ public class HomeView extends HorizontalLayout {
                 "Short link copied", Notification.Position.MIDDLE);
     }
 
-    private void saveLink(final String link) {
+    private void saveLink(final String link, final String linkDescription) {
         String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
         LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
                 LinkServiceInput.builder(link).sessionID(sessionId);
 
-        if (StringUtils.isNotBlank(descriptionInput.getValue())) {
-            linkServiceInputBuilder.description(descriptionInput.getValue());
+        if (StringUtils.isNotBlank(linkDescription)) {
+            linkServiceInputBuilder.description(linkDescription);
         }
 
         LinkServiceInput linkServiceInput = linkServiceInputBuilder.build();
