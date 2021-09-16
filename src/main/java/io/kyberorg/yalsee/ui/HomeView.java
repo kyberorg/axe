@@ -444,6 +444,7 @@ public class HomeView extends HorizontalLayout {
 
     private void cleanForm() {
         input.setValue("");
+        descriptionInput.setValue("");
     }
 
     private void cleanErrors() {
