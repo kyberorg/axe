@@ -146,9 +146,11 @@ public class HomeView extends HorizontalLayout {
         input.setWidthFull();
 
         descriptionAccordion = new Accordion();
+        descriptionAccordion.setId(IDs.DESCRIPTION_ACCORDION);
         descriptionAccordion.setWidthFull();
 
         descriptionInput = new TextField();
+        descriptionInput.setId(IDs.DESCRIPTION_INPUT);
         descriptionInput.setPlaceholder("what is link about...");
         descriptionInput.setWidthFull();
 
@@ -335,7 +337,14 @@ public class HomeView extends HorizontalLayout {
 
     private void saveLink(final String link) {
         String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        LinkServiceInput linkServiceInput = LinkServiceInput.builder(link).sessionID(sessionId).build();
+        LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
+                LinkServiceInput.builder(link).sessionID(sessionId);
+
+        if (StringUtils.isNotBlank(descriptionInput.getValue())) {
+            linkServiceInputBuilder.description(descriptionInput.getValue());
+        }
+
+        LinkServiceInput linkServiceInput = linkServiceInputBuilder.build();
         OperationResult saveLinkOperation = linkService.createLink(linkServiceInput);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
@@ -459,6 +468,8 @@ public class HomeView extends HorizontalLayout {
         public static final String MAIN_AREA = "mainArea";
         public static final String TITLE = "siteTitle";
         public static final String INPUT = "longUrlInput";
+        public static final String DESCRIPTION_ACCORDION = "descriptionAccordion";
+        public static final String DESCRIPTION_INPUT = "descriptionInput";
         public static final String BANNER = "publicAccessBanner";
         public static final String SUBMIT_BUTTON = "submitButton";
 
