@@ -126,6 +126,40 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
+     * Tests that Description Accordion exists and visible.
+     */
+    @Test
+    public void descriptionAccordionExistsAndVisible() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.should(exist);
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldBe(visible);
+    }
+
+    /**
+     * Tests that Description Accordion closed by default.
+     */
+    @Test
+    public void descriptionAccordionClosedByDefault() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION_PANEL.shouldNotHave(attribute("opened"));
+    }
+
+    /**
+     * Tests that Description Accordion has Words Description and Optional.
+     */
+    @Test
+    public void descriptionAccordionHasWordsDescriptionAndOptional() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(text("Description"));
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(text("optional"));
+    }
+
+    /**
+     * Tests that Description Input is hidden by default.
+     */
+    @Test
+    public void descriptionInputIsHiddenByDefault() {
+        HomePageObject.MainArea.DESCRIPTION_INPUT_ELEMENT.shouldBe(hidden);
+    }
+
+    /**
      * Tests page title.
      */
     @Test
