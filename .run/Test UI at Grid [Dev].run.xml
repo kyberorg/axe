@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="Test UI at Grid [Dev]" type="JUnit" factoryName="JUnit">
         <module name="yalsee"/>
-        <option name="PACKAGE_NAME" value="io.kyberorg.yalsee.ui"/>
+        <option name="PACKAGE_NAME" value="io.kyberorg.yalsee.test.ui"/>
         <option name="MAIN_CLASS_NAME" value=""/>
         <option name="METHOD_NAME" value=""/>
         <option name="TEST_OBJECT" value="package"/>
