@@ -110,6 +110,31 @@ public class HomePageTest extends SelenideTest {
         verifyThatPage404Opened();
     }
 
+    /**
+     * Tests that description accordion opens and DescriptionInput becomes visible.
+     */
+    @Test
+    public void accordionOpensAndDescriptionInputBecomesVisible() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(attribute("opened"));
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(enabled);
+    }
+
+    /**
+     * Tests that description accordion opens and DescriptionInput becomes visible.
+     */
+    @Test
+    public void accordionClosesAndDescriptionInputBecomesHidden() {
+        //open it
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
+        //close it
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
+    }
+
+
     private void verifyThatVROpened() {
         Assertions.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
     }

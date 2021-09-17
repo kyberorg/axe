@@ -139,7 +139,7 @@ public class VisibleStateTest extends SelenideTest {
      */
     @Test
     public void descriptionAccordionClosedByDefault() {
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION_PANEL.shouldNotHave(attribute("opened"));
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
     }
 
     /**
@@ -157,6 +157,17 @@ public class VisibleStateTest extends SelenideTest {
     @Test
     public void descriptionInputIsHiddenByDefault() {
         HomePageObject.MainArea.DESCRIPTION_INPUT_ELEMENT.shouldBe(hidden);
+    }
+
+    /**
+     * Tests that description input has placeholder, and it is not empty.
+     */
+    @Test
+    public void descriptionInputHasNotEmptyPlaceholder() {
+        //open it
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldHave(attribute("placeholder"));
     }
 
     /**
