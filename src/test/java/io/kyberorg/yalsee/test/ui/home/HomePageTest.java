@@ -178,6 +178,10 @@ public class HomePageTest extends SelenideTest {
      */
     @Test
     public void whenLinkAndDescriptionInputsAreFilledBothSaved() {
+        //cleaning session first
+        open("/myLinks");
+        MyLinksViewPageObject.cleanSession();
+
         String link = "https://vr.fi";
         String description = "Suomen junat";
 
@@ -193,6 +197,7 @@ public class HomePageTest extends SelenideTest {
         descriptionCell.shouldNotBe(empty);
         String actualDescription = descriptionCell.getText();
 
+        //cleaning session afterwards
         MyLinksViewPageObject.cleanSession();
         Assertions.assertEquals(description, actualDescription);
     }
