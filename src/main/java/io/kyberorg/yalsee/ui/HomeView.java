@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.ui;
 
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -67,6 +68,8 @@ public class HomeView extends HorizontalLayout {
 
     private Span titleLongPart;
     private TextField input;
+    private Accordion descriptionAccordion;
+    private TextField descriptionInput;
     private Button submitButton;
     private Anchor shortLink;
     private Image qrCode;
@@ -118,6 +121,7 @@ public class HomeView extends HorizontalLayout {
         linkCounter.setText(Long.toString(linksStored));
 
         input.setAutofocus(true);
+        descriptionAccordion.close();
         submitButton.setEnabled(true);
 
         mainArea.setVisible(true);
@@ -141,6 +145,15 @@ public class HomeView extends HorizontalLayout {
         input.setPlaceholder("https://mysuperlongurlhere.tld");
         input.setWidthFull();
 
+        descriptionAccordion = new Accordion();
+        descriptionAccordion.setId(IDs.DESCRIPTION_ACCORDION);
+        descriptionAccordion.setWidthFull();
+
+        descriptionInput = new TextField();
+        descriptionInput.setId(IDs.DESCRIPTION_INPUT);
+        descriptionInput.setPlaceholder("what is link about...");
+        descriptionInput.setWidthFull();
+
         Span publicAccessBanner =
                 new Span("Note: all links considered as public and can be used by anyone");
         publicAccessBanner.setId(IDs.BANNER);
@@ -151,8 +164,10 @@ public class HomeView extends HorizontalLayout {
         submitButton.addClickListener(this::onSaveLink);
         submitButton.addClickShortcut(Key.ENTER);
 
+        descriptionAccordion.add("Link Description (optional)", descriptionInput);
+
         VerticalLayout mainArea =
-                new VerticalLayout(title, input, publicAccessBanner, submitButton);
+                new VerticalLayout(title, input, descriptionAccordion, publicAccessBanner, submitButton);
         mainArea.setId(IDs.MAIN_AREA);
         mainArea.addClassNames("main-area", "border");
         return mainArea;
@@ -287,6 +302,7 @@ public class HomeView extends HorizontalLayout {
 
         boolean isFormValid = true;
         String longUrl = input.getValue();
+        String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
         cleanForm();
 
@@ -307,7 +323,7 @@ public class HomeView extends HorizontalLayout {
 
         if (isFormValid) {
             cleanResults();
-            saveLink(longUrl);
+            saveLink(longUrl, linkDescription);
         } else {
             log.debug("{} Form is not valid", TAG);
         }
@@ -320,9 +336,16 @@ public class HomeView extends HorizontalLayout {
                 "Short link copied", Notification.Position.MIDDLE);
     }
 
-    private void saveLink(final String link) {
+    private void saveLink(final String link, final String linkDescription) {
         String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        LinkServiceInput linkServiceInput = LinkServiceInput.builder(link).sessionID(sessionId).build();
+        LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
+                LinkServiceInput.builder(link).sessionID(sessionId);
+
+        if (StringUtils.isNotBlank(linkDescription)) {
+            linkServiceInputBuilder.description(linkDescription);
+        }
+
+        LinkServiceInput linkServiceInput = linkServiceInputBuilder.build();
         OperationResult saveLinkOperation = linkService.createLink(linkServiceInput);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
@@ -422,6 +445,7 @@ public class HomeView extends HorizontalLayout {
 
     private void cleanForm() {
         input.setValue("");
+        descriptionInput.setValue("");
     }
 
     private void cleanErrors() {
@@ -446,6 +470,8 @@ public class HomeView extends HorizontalLayout {
         public static final String MAIN_AREA = "mainArea";
         public static final String TITLE = "siteTitle";
         public static final String INPUT = "longUrlInput";
+        public static final String DESCRIPTION_ACCORDION = "descriptionAccordion";
+        public static final String DESCRIPTION_INPUT = "descriptionInput";
         public static final String BANNER = "publicAccessBanner";
         public static final String SUBMIT_BUTTON = "submitButton";
 

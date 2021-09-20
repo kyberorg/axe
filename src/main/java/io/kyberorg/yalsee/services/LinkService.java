@@ -197,11 +197,12 @@ public class LinkService {
             //action
             Link linkObject = Link.create(ident, decodedLink);
             Link savedLink = repo.save(linkObject);
-            if (input.getSessionID() != null) {
-                linkInfoService.createLinkInfo(ident, input.getSessionID());
-            } else {
-                linkInfoService.createLinkInfo(ident);
-            }
+
+            String sessionId = input.getSessionID();
+            String description = input.getDescription();
+
+            linkInfoService.createLinkInfo(ident, sessionId, description);
+
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedLink);
             EventBus.getDefault().post(LinkSavedEvent.createWith(savedLink));
             return OperationResult.success().addPayload(savedLink);

@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkInfoRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -31,21 +32,13 @@ public class LinkInfoService {
     }
 
     /**
-     * Creates {@link LinkInfo} without session info.
-     *
-     * @param ident string with part that identifies short link
-     */
-    public void createLinkInfo(final String ident) {
-        createLinkInfo(ident, null);
-    }
-
-    /**
      * Creates {@link LinkInfo} with session info.
      *
-     * @param ident   string with part that identifies short link
-     * @param session string with session ID
+     * @param ident       string with part that identifies short link
+     * @param session     string with session ID, omitted if {@code null} or empty
+     * @param description string with link description, omitted if {@code null} or empty
      */
-    public void createLinkInfo(final String ident, final String session) {
+    public void createLinkInfo(final String ident, final String session, final String description) {
         LinkInfo linkInfo;
         if (linkInfoExistsForIdent(ident)) {
             update(repo.findSingleByIdent(ident));
@@ -55,7 +48,10 @@ public class LinkInfoService {
         }
 
         linkInfo.setIdent(ident);
-        if (session != null) {
+        if (StringUtils.isNotBlank(description)) {
+            linkInfo.setDescription(description);
+        }
+        if (StringUtils.isNotBlank(session)) {
             linkInfo.setSession(session);
         }
         linkInfo.setCreated(Timestamp.from(Instant.now()));

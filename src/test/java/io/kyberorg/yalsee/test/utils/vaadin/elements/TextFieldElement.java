@@ -31,7 +31,7 @@ public class TextFieldElement {
      * @return {@link SelenideElement}, which represents input element.
      */
     public SelenideElement getInput() {
-        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container #vaadin-text-field-input-0 slot input");
+        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container div[part=\"input-field\"] slot input");
     }
 
     /**
