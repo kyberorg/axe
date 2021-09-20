@@ -123,19 +123,6 @@ public class HomePageTest extends SelenideTest {
     }
 
     /**
-     * Tests that description accordion opens and DescriptionInput becomes visible.
-     */
-    @Test
-    public void accordionClosesAndDescriptionInputBecomesHidden() {
-        //open it
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
-        //close it
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
-    }
-
-    /**
      * Tests that when Link Input filled and Description Input empty - Link stored and Description is empty.
      */
     @Test
