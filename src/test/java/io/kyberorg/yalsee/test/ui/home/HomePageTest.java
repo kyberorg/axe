@@ -166,6 +166,9 @@ public class HomePageTest extends SelenideTest {
     public void whenLinkInputIsEmptyAndDescriptionInputFilledErrorShown() {
         HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
         HomePageObject.MainArea.DESCRIPTION_INPUT.setValue("Some description");
+
+        HomePageObject.MainArea.SUBMIT_BUTTON.click();
+
         HomePageObject.ErrorModal.ERROR_MODAL.shouldBe(visible);
         closeErrorBoxIfDisplayed();
     }
