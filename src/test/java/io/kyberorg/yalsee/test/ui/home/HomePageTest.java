@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.home;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.VR;
@@ -134,6 +135,87 @@ public class HomePageTest extends SelenideTest {
         HomePageObject.MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
     }
 
+    /**
+     * Tests that when Link Input filled and Description Input empty - Link stored and Description is empty.
+     */
+    @Test
+    public void whenLinkInputFilledAndDescriptionInputEmptyLinkStoredDescriptionEmpty() {
+        HomePageObject.pasteValueInFormAndSubmitIt("https://vr.fi");
+        open("/myLinks");
+        waitForVaadin();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.shouldBe(empty);
+        MyLinksViewPageObject.cleanSession();
+    }
+
+    /**
+     * Tests that when Link and Description Inputs are empty - Error shown.
+     */
+    @Test
+    public void whenLinkAndDescriptionInputsAreEmptyErrorShown() {
+        HomePageObject.pasteValueInFormAndSubmitIt("");
+        HomePageObject.ErrorModal.ERROR_MODAL.shouldBe(visible);
+        closeErrorBoxIfDisplayed();
+    }
+
+    /**
+     * Tests that when Link Input is empty and Description Input is filled - Error shown.
+     */
+    @Test
+    public void whenLinkInputIsEmptyAndDescriptionInputFilledErrorShown() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.MainArea.DESCRIPTION_INPUT.setValue("Some description");
+        HomePageObject.ErrorModal.ERROR_MODAL.shouldBe(visible);
+        closeErrorBoxIfDisplayed();
+    }
+
+    /**
+     * Tests that when Link and Description Inputs are filled - Both Link and Description are saved.
+     */
+    @Test
+    public void whenLinkAndDescriptionInputsAreFilledBothSaved() {
+        String link = "https://vr.fi";
+        String description = "Suomen junat";
+
+        HomePageObject.pasteValueInForm(link);
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.MainArea.DESCRIPTION_INPUT.setValue(description);
+
+        HomePageObject.MainArea.SUBMIT_BUTTON.click();
+
+        open("/myLinks");
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.shouldNotBe(empty);
+        String actualDescription = descriptionCell.getText();
+
+        MyLinksViewPageObject.cleanSession();
+        Assertions.assertEquals(description, actualDescription);
+    }
+
+    /**
+     * Test that when Link and Description Inputs are empty Fields are cleaned up.
+     */
+    @Test
+    public void whenLinkAndDescriptionInputsAreEmptyFieldsAreCleanedUp() {
+        HomePageObject.pasteValueInFormAndSubmitIt("");
+        closeErrorBoxIfDisplayed();
+        HomePageObject.MainArea.LONG_URL_INPUT.shouldBe(empty);
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(empty);
+    }
+
+    /**
+     * Test that when Link is empty and Description Input is filled Fields are cleaned up.
+     */
+    @Test
+    public void whenLinkIsEmptyAndDescriptionInputIsFilledFieldsAreCleanedUp() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.pasteValueInFormAndSubmitIt("");
+        closeErrorBoxIfDisplayed();
+        HomePageObject.MainArea.LONG_URL_INPUT.shouldBe(empty);
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(empty);
+    }
 
     private void verifyThatVROpened() {
         Assertions.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
