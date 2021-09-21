@@ -118,7 +118,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         testData = TestData.create(setTestNameFromContext(context));
 
         testData.setTestResult(TestResult.ON_FIRE);
-        testData.setOnFireReason(new RuntimeException("Exception at @Test"));
+        testData.setOnFireReason(throwable);
 
         afterTest();
         throw throwable;
