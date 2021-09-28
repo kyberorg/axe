@@ -18,4 +18,9 @@ public final class MainViewPageObject {
 
     public static final SelenideElement LOGO = $("#" + MainView.IDs.APP_LOGO);
     public static final SelenideElement GOOGLE_ANALYTICS_CONTROL_SPAN = $("#gtag");
+
+    public static final SelenideElement USER_BUTTON = $("#" + MainView.IDs.USER_BUTTON);
+    public static final SelenideElement USER_MENU = $("vaadin-context-menu-list-box");
+    public static final SelenideElement LOGIN_BUTTON = $("#" + MainView.IDs.LOGIN_BUTTON);
+    public static final SelenideElement REGISTER_BUTTON = $("#" + MainView.IDs.REGISTER_BUTTON);
 }

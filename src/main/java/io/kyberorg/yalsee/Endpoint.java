@@ -1,5 +1,9 @@
 package io.kyberorg.yalsee;
 
+import io.kyberorg.yalsee.controllers.AppOfflineController;
+import io.kyberorg.yalsee.controllers.YalseeErrorController;
+import io.kyberorg.yalsee.ui.err.ServerErrorView;
+
 /**
  * List of application endpoints.
  *
@@ -53,6 +57,16 @@ public final class Endpoint {
          * Page with user's links or current session links.
          */
         public static final String MY_LINKS_PAGE = "myLinks";
+
+        /**
+         * Page with login form.
+         */
+        public static final String LOGIN_PAGE = "login";
+
+        /**
+         * Page with registration form.
+         */
+        public static final String REGISTRATION_PAGE = "register";
     }
 
     /**

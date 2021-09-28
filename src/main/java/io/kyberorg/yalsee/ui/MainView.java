@@ -1,15 +1,24 @@
 package io.kyberorg.yalsee.ui;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
@@ -36,6 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
+import static io.kyberorg.yalsee.ui.MainView.IDs.USER_MENU;
 
 @SpringComponent
 @UIScope
@@ -56,6 +66,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
+    private Button loginButton;
+    private Button registerButton;
+
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
      *
@@ -64,14 +77,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public MainView(final AppUtils appUtils) {
         this.appUtils = appUtils;
 
-        String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
-
-        DrawerToggle toggle = new DrawerToggle();
         setPrimarySection(Section.NAVBAR);
-
-        Span title = new Span(siteTitle);
-        title.addClassName("site-title");
-        addToNavbar(toggle, title);
+        addToNavbar(true, createHeader());
 
         //items
         addLogo();
@@ -97,6 +104,58 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
+    }
+
+    private Component createHeader() {
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setId("header");
+        layout.setWidthFull();
+        layout.setSpacing(false);
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        DrawerToggle toggle = new DrawerToggle();
+
+        String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
+        Span title = new Span(siteTitle);
+        title.addClassName("site-title");
+
+        MenuBar userButton = userMenu();
+        userButton.setId(IDs.USER_BUTTON);
+        userButton.getStyle().set("margin-left", "auto");
+        userButton.getStyle().set("margin-right", "1rem");
+
+        layout.add(toggle, title, userButton);
+        return layout;
+    }
+
+    private MenuBar userMenu() {
+        MenuBar userMenu = new MenuBar();
+        userMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+
+        MenuItem profile = userMenu.addItem(VaadinIcon.USER.create());
+        profile.setId(USER_MENU);
+
+        HorizontalLayout buttons = new HorizontalLayout();
+
+        loginButton = new Button("Log in");
+        loginButton.setId(IDs.LOGIN_BUTTON);
+        loginButton.addClickListener(this::onLoginButtonClicked);
+
+        registerButton = new Button("Register");
+        registerButton.setId(IDs.REGISTER_BUTTON);
+        registerButton.addClickListener(this::onRegisterButtonClicked);
+
+        buttons.add(loginButton, registerButton);
+
+        profile.getSubMenu().addItem(buttons);
+        //line
+        profile.getSubMenu().add(new Hr());
+
+        //why register and terms
+        profile.getSubMenu().addItem("Why register?", this::showWhyRegisterModal);
+        profile.getSubMenu().addItem("Terms of service", this::showTermsOfServiceModal);
+
+        return userMenu;
     }
 
     private void addLogo() {
@@ -125,6 +184,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void addMenuTab(final String label, final String targetUrl, final VaadinIcon icon) {
         Icon iconElement = icon.create();
         Span labelElement = new Span(label);
@@ -179,8 +239,28 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         }
     }
 
+    private void showWhyRegisterModal(ClickEvent<MenuItem> menuItemClickEvent) {
+        Notification.show("Why Register Modal should be here").open();
+    }
+
+    private void showTermsOfServiceModal(ClickEvent<MenuItem> menuItemClickEvent) {
+        Notification.show("Terms of Service Modal should be here").open();
+    }
+
+    private void onLoginButtonClicked(ClickEvent<Button> buttonClickEvent) {
+        loginButton.getUI().ifPresent(ui -> ui.navigate(LoginView.class));
+    }
+
+    private void onRegisterButtonClicked(ClickEvent<Button> buttonClickEvent) {
+        registerButton.getUI().ifPresent(ui -> ui.navigate(RegistrationView.class));
+    }
+
     public static class IDs {
         public static final String VIEW_ID = "mainView";
         public static final String APP_LOGO = "appLogo";
+        public static final String USER_BUTTON = "userButton";
+        public static String USER_MENU = "userMenu";
+        public static final String LOGIN_BUTTON = "loginButton";
+        public static final String REGISTER_BUTTON = "registerButton";
     }
 }
