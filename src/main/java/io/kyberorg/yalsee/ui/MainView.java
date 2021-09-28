@@ -78,7 +78,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         this.appUtils = appUtils;
 
         setPrimarySection(Section.NAVBAR);
-        addToNavbar(true, createHeader());
+        addToNavbar(createHeader());
 
         //items
         addLogo();
