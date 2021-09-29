@@ -78,6 +78,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         this.appUtils = appUtils;
 
         setPrimarySection(Section.NAVBAR);
+        //do not set touch-optimized to true, because it moves navbar down.
         addToNavbar(createHeader());
 
         //items
