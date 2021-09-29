@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.ui;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
@@ -22,6 +23,8 @@ import java.util.stream.Stream;
 
 @SpringComponent
 @UIScope
+@CssImport(value = "./css/registration_view.css")
+@CssImport(value = "./css/registration_view_form.css", themeFor = "vaadin-form-item")
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends YalseeLayout {
@@ -58,6 +61,8 @@ public class RegistrationView extends YalseeLayout {
     }
 
     private void init() {
+        form.setId(IDs.FORM);
+
         formTitle = new H2("Register");
         formTitle.setId(IDs.FORM_TITLE);
 
@@ -108,7 +113,6 @@ public class RegistrationView extends YalseeLayout {
     }
 
     private void applyStyle() {
-        form.getStyle().set("align-self", "center");
         form.getStyle().set("background", "white");
         form.setWidth("auto");
         form.setMaxWidth(761, Unit.PIXELS);
@@ -126,6 +130,7 @@ public class RegistrationView extends YalseeLayout {
 
     public static class IDs {
         public static final String PAGE_ID = "registerPage";
+        public static final String FORM = "form";
         public static final String USERNAME_INPUT = "usernameInput";
         public static final String EMAIL_INPUT = "emailInput";
         public static final String TELEGRAM_INPUT = "telegramInput";
