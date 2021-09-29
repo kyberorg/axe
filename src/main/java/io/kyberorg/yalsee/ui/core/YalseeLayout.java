@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
  *
  * @since 3.0.7
  */
-public class YalseeLayout extends VerticalLayout {
+public class YalseeLayout extends HorizontalLayout {
     private final HorizontalLayout page = new HorizontalLayout();
     private final Div leftDiv = new Div();
     private final VerticalLayout centralLayout = new VerticalLayout();
@@ -25,8 +25,7 @@ public class YalseeLayout extends VerticalLayout {
     }
 
     private void init() {
-        page.add(leftDiv, centralLayout, rightDiv);
-        super.add(page);
+        super.add(leftDiv, centralLayout, rightDiv);
     }
 
     private void applyStyle() {
