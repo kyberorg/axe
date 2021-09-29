@@ -6,7 +6,7 @@
 
 @media (min-width: 361px) and (max-width: 380px) {
     :host {
-        --vaadin-form-item-label-width: 5rem;
+        --vaadin-form-item-label-width: 4.5rem;
     }
 }
 

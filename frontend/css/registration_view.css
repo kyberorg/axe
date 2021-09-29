@@ -3,3 +3,12 @@
         align-self: center;
     }
 }
+
+#formTitle {
+    margin-left: 1rem;
+    margin-bottom: -0.5em;
+}
+
+.compact-section {
+    margin-top: -1rem;
+}

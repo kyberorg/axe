@@ -91,7 +91,7 @@ public class RegistrationView extends YalseeLayout {
 
         confirmationMethodSection = new VerticalLayout(confirmationMethodLabel, confirmationMethodFields);
 
-        Label passwordSectionLabel = new Label("Password");
+        Label passwordSectionLabel = new Label("Password (optional)");
 
         passwordField = new PasswordField();
         passwordField.setId(IDs.PASSWORD_INPUT);
@@ -115,6 +115,9 @@ public class RegistrationView extends YalseeLayout {
     private void applyStyle() {
         form.getStyle().set("background", "white");
         form.setMaxWidth(761, Unit.PIXELS);
+
+        confirmationMethodSection.setClassName("compact-section");
+        passwordSection.setClassName("compact-section");
 
         Stream<FormLayout> forms = Stream.of(usernameFields, confirmationMethodFields.getContent(), passwordFields);
         forms.forEach(form -> form.setResponsiveSteps(
