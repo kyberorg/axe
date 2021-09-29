@@ -10,6 +10,12 @@
         padding-left: 1px;
     }
 
+    /* Fixes bug: responsive-center asymmetric */
+    .yalsee-layout {
+        position: absolute;
+        right: 0;
+    }
+
     #mainArea {
         padding: 0.4em;
     }
