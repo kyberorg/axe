@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.ui;
 
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -28,7 +29,8 @@ public class RegistrationView extends YalseeLayout {
     private final VerticalLayout form = new VerticalLayout();
     private H2 formTitle;
 
-    private FormLayout usernameSection;
+    private VerticalLayout usernameSection;
+    private FormLayout usernameFields;
     private TextField usernameInput;
 
     private VerticalLayout confirmationMethodSection;
@@ -62,8 +64,10 @@ public class RegistrationView extends YalseeLayout {
         usernameInput = new TextField();
         usernameInput.setId(IDs.USERNAME_INPUT);
 
-        usernameSection = new FormLayout();
-        usernameSection.addFormItem(usernameInput, "Username");
+        usernameFields = new FormLayout();
+        usernameFields.addFormItem(usernameInput, "Username");
+
+        usernameSection = new VerticalLayout(usernameFields);
 
         Label confirmationMethodLabel = new Label("Confirmation method");
 
@@ -92,7 +96,7 @@ public class RegistrationView extends YalseeLayout {
 
         passwordFields = new FormLayout();
         passwordFields.addFormItem(passwordField, "Password");
-        passwordFields.addFormItem(repeatPasswordField, "Repeat Password");
+        passwordFields.addFormItem(repeatPasswordField, "Same Password");
 
         passwordSection = new VerticalLayout(passwordSectionLabel, passwordFields);
 
@@ -104,7 +108,12 @@ public class RegistrationView extends YalseeLayout {
     }
 
     private void applyStyle() {
-        Stream<FormLayout> forms = Stream.of(usernameSection, confirmationMethodFields.getContent(), passwordFields);
+        form.getStyle().set("align-self", "center");
+        form.getStyle().set("background", "white");
+        form.setWidth("auto");
+        form.setMaxWidth(761, Unit.PIXELS);
+
+        Stream<FormLayout> forms = Stream.of(usernameFields, confirmationMethodFields.getContent(), passwordFields);
         forms.forEach(form -> form.setResponsiveSteps(
                 new FormLayout.ResponsiveStep(START_POINT, 1),
                 new FormLayout.ResponsiveStep(BREAKPOINT, 2)
