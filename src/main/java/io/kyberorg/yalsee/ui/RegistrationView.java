@@ -148,6 +148,7 @@ public class RegistrationView extends YalseeLayout {
         form.getStyle().set("background", "white");
         form.setMaxWidth(761, Unit.PIXELS);
 
+
         confirmationMethodSection.setClassName("compact-section");
         passwordSection.setClassName("compact-section");
 
