@@ -114,7 +114,6 @@ public class RegistrationView extends YalseeLayout {
 
     private void applyStyle() {
         form.getStyle().set("background", "white");
-        form.setWidth("auto");
         form.setMaxWidth(761, Unit.PIXELS);
 
         Stream<FormLayout> forms = Stream.of(usernameFields, confirmationMethodFields.getContent(), passwordFields);

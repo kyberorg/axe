@@ -1,4 +1,22 @@
-@media (max-width: 407px) {
+@media (max-width: 360px) {
+    :host {
+        --vaadin-form-item-label-width: 4rem;
+    }
+}
+
+@media (min-width: 361px) and (max-width: 380px) {
+    :host {
+        --vaadin-form-item-label-width: 5rem;
+    }
+}
+
+@media (min-width: 381px) and (max-width: 400px) {
+    :host {
+        --vaadin-form-item-label-width: 6rem;
+    }
+}
+
+@media (min-width: 401px) and (max-width: 410px) {
     :host {
         --vaadin-form-item-label-width: 7rem;
     }
