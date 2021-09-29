@@ -73,7 +73,7 @@ public class RegistrationView extends YalseeLayout {
     private void init() {
         form.setId(IDs.FORM);
 
-        formTitle = new H2("Became Yalsee User");
+        formTitle = new H2("Become Yalsee User");
         formTitle.setId(IDs.FORM_TITLE);
 
         usernameInput = new TextField();
