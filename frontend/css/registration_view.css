@@ -12,3 +12,7 @@
 .compact-section {
     margin-top: -1rem;
 }
+
+#sameAsUsernameCheckbox {
+    font-size: initial;
+}

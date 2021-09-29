@@ -2,11 +2,11 @@ package io.kyberorg.yalsee.ui;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -46,7 +46,17 @@ public class RegistrationView extends YalseeLayout {
     private VerticalLayout passwordSection;
     private PasswordField passwordField;
     private PasswordField repeatPasswordField;
-    private Button submitButton;
+
+    private final Span legalInformationSection = new Span();
+    private final Span legalInformationText = new Span();
+    private final Anchor linkToTerms = new Anchor();
+    private final Span legalInformationEnd = new Span(".");
+
+    private final Span additionalInformation = new Span();
+
+    private final Hr separator = new Hr();
+
+    private final Button submitButton = new Button();
 
     private final static String START_POINT = "1px";
     private final static String BREAKPOINT = "508px";
@@ -63,7 +73,7 @@ public class RegistrationView extends YalseeLayout {
     private void init() {
         form.setId(IDs.FORM);
 
-        formTitle = new H2("Register");
+        formTitle = new H2("Became Yalsee User");
         formTitle.setId(IDs.FORM_TITLE);
 
         usernameInput = new TextField();
@@ -78,6 +88,7 @@ public class RegistrationView extends YalseeLayout {
 
         emailInput = new EmailField();
         emailInput.setId(IDs.EMAIL_INPUT);
+        emailInput.setClearButtonVisible(true);
 
         telegramInput = new TextField();
         telegramInput.setId(IDs.TELEGRAM_INPUT);
@@ -105,10 +116,30 @@ public class RegistrationView extends YalseeLayout {
 
         passwordSection = new VerticalLayout(passwordSectionLabel, passwordFields);
 
-        submitButton = new Button("submit");
-        submitButton.setId(IDs.SUBMIT_BUTTON);
+        legalInformationText.setId(IDs.LEGAL_INFO_TEXT);
+        legalInformationText.setText("By registering you accept our ");
+        //TODO correct location when ready
+        linkToTerms.setId(IDs.LEGAL_INFO_TERMS_LINK);
+        linkToTerms.setHref("/appInfo");
+        linkToTerms.setText("Terms of Service");
 
-        form.add(formTitle, usernameSection, confirmationMethodSection, passwordSection, submitButton);
+        legalInformationEnd.setId(IDs.LEGAL_INFO_END);
+
+        legalInformationSection.setId(IDs.LEGAL_INFO_SECTION);
+        legalInformationSection.add(legalInformationText, linkToTerms, legalInformationEnd);
+
+        additionalInformation.setId(IDs.ADDITIONAL_INFORMATION);
+        additionalInformation.setText("Leave passwords empty, if you want to receive one-time codes instead.");
+
+        separator.setId(IDs.SEPARATION_LINE);
+
+        submitButton.setId(IDs.SUBMIT_BUTTON);
+        submitButton.setText("Sign Up");
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        form.add(formTitle, usernameSection, confirmationMethodSection, passwordSection,
+                legalInformationSection, additionalInformation,
+                separator, submitButton);
         add(form);
     }
 
@@ -124,6 +155,8 @@ public class RegistrationView extends YalseeLayout {
                 new FormLayout.ResponsiveStep(START_POINT, 1),
                 new FormLayout.ResponsiveStep(BREAKPOINT, 2)
         ));
+
+        submitButton.setWidthFull();
     }
 
     private void applyLoadState() {
@@ -133,13 +166,19 @@ public class RegistrationView extends YalseeLayout {
     public static class IDs {
         public static final String PAGE_ID = "registerPage";
         public static final String FORM = "form";
+        public static final String FORM_TITLE = "formTitle";
         public static final String USERNAME_INPUT = "usernameInput";
         public static final String EMAIL_INPUT = "emailInput";
         public static final String TELEGRAM_INPUT = "telegramInput";
         public static final String SAME_AS_USERNAME_CHECKBOX = "sameAsUsernameCheckbox";
         public static final String PASSWORD_INPUT = "passwordInput";
         public static final String REPEAT_PASSWORD_INPUT = "repeatPasswordInput";
+        public static final String LEGAL_INFO_SECTION = "legalInfo";
+        public static final String LEGAL_INFO_TEXT = "legalInfoText";
+        public static final String LEGAL_INFO_TERMS_LINK = "termsLink";
+        public static final String LEGAL_INFO_END = "legalInfoEnd";
+        public static final String ADDITIONAL_INFORMATION = "additionInfo";
+        public static final String SEPARATION_LINE = "separator";
         public static final String SUBMIT_BUTTON = "submitButton";
-        public static final String FORM_TITLE = "formTitle";
     }
 }
