@@ -1,11 +1,10 @@
 package io.kyberorg.yalsee.ui;
 
-import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -15,6 +14,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.ui.components.ConfirmationMethodsLayout;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
 import java.util.stream.Stream;
@@ -27,19 +27,24 @@ public class RegistrationView extends YalseeLayout {
 
     private final VerticalLayout form = new VerticalLayout();
     private H2 formTitle;
+
+    private FormLayout usernameSection;
     private TextField usernameInput;
 
-    private HorizontalLayout confirmationMethodFields;
     private VerticalLayout confirmationMethodSection;
+    private ConfirmationMethodsLayout confirmationMethodFields;
     private EmailField emailInput;
     private TextField telegramInput;
     private Checkbox sameAsUsername;
 
-    private HorizontalLayout passwordFields;
+    private FormLayout passwordFields;
     private VerticalLayout passwordSection;
     private PasswordField passwordField;
     private PasswordField repeatPasswordField;
     private Button submitButton;
+
+    private final static String START_POINT = "1px";
+    private final static String BREAKPOINT = "508px";
 
 
     public RegistrationView() {
@@ -54,52 +59,56 @@ public class RegistrationView extends YalseeLayout {
         formTitle = new H2("Register");
         formTitle.setId(IDs.FORM_TITLE);
 
-        usernameInput = new TextField("username");
+        usernameInput = new TextField();
         usernameInput.setId(IDs.USERNAME_INPUT);
+
+        usernameSection = new FormLayout();
+        usernameSection.addFormItem(usernameInput, "Username");
 
         Label confirmationMethodLabel = new Label("Confirmation method");
 
-        emailInput = new EmailField("email");
+        emailInput = new EmailField();
         emailInput.setId(IDs.EMAIL_INPUT);
 
-        telegramInput = new TextField("telegram");
+        telegramInput = new TextField();
         telegramInput.setId(IDs.TELEGRAM_INPUT);
 
-        sameAsUsername = new Checkbox("same as username");
+        sameAsUsername = new Checkbox("Same as username");
         sameAsUsername.setId(IDs.SAME_AS_USERNAME_CHECKBOX);
 
-        VerticalLayout telegramFields = new VerticalLayout(telegramInput, sameAsUsername);
+        confirmationMethodFields = new ConfirmationMethodsLayout();
+        confirmationMethodFields.addItemWithLabel("E-mail", emailInput);
+        confirmationMethodFields.addItemWithLabel("Telegram", telegramInput, sameAsUsername);
 
-        confirmationMethodFields = new HorizontalLayout(emailInput, telegramFields);
         confirmationMethodSection = new VerticalLayout(confirmationMethodLabel, confirmationMethodFields);
 
         Label passwordSectionLabel = new Label("Password");
 
-        passwordField = new PasswordField("password");
+        passwordField = new PasswordField();
         passwordField.setId(IDs.PASSWORD_INPUT);
 
-        repeatPasswordField = new PasswordField("repeat password");
+        repeatPasswordField = new PasswordField();
         repeatPasswordField.setId(IDs.REPEAT_PASSWORD_INPUT);
 
-        passwordFields = new HorizontalLayout(passwordField, repeatPasswordField);
+        passwordFields = new FormLayout();
+        passwordFields.addFormItem(passwordField, "Password");
+        passwordFields.addFormItem(repeatPasswordField, "Repeat Password");
 
         passwordSection = new VerticalLayout(passwordSectionLabel, passwordFields);
 
         submitButton = new Button("submit");
         submitButton.setId(IDs.SUBMIT_BUTTON);
 
-        form.add(formTitle, usernameInput, confirmationMethodSection, passwordSection, submitButton);
+        form.add(formTitle, usernameSection, confirmationMethodSection, passwordSection, submitButton);
         add(form);
     }
 
     private void applyStyle() {
-        Stream<HasSize> inputs = Stream.of(this.usernameInput);
-        inputs.forEach(e -> e.setWidth("50%"));
-
-        Stream<HasSize> fullSizeElements = Stream.of(confirmationMethodSection, confirmationMethodFields,
-                emailInput, telegramInput, passwordField, repeatPasswordField,
-                passwordFields, passwordSection, submitButton);
-        fullSizeElements.forEach(HasSize::setWidthFull);
+        Stream<FormLayout> forms = Stream.of(usernameSection, confirmationMethodFields.getContent(), passwordFields);
+        forms.forEach(form -> form.setResponsiveSteps(
+                new FormLayout.ResponsiveStep(START_POINT, 1),
+                new FormLayout.ResponsiveStep(BREAKPOINT, 2)
+        ));
     }
 
     private void applyLoadState() {
