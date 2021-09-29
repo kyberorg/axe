@@ -144,6 +144,7 @@ public class RegistrationView extends YalseeLayout {
     }
 
     private void applyStyle() {
+        form.setClassName("border");
         form.getStyle().set("background", "white");
         form.setMaxWidth(761, Unit.PIXELS);
 
