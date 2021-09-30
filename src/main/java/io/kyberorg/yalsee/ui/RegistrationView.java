@@ -117,7 +117,7 @@ public class RegistrationView extends YalseeLayout {
         passwordSection = new VerticalLayout(passwordSectionLabel, passwordFields);
 
         legalInformationText.setId(IDs.LEGAL_INFO_TEXT);
-        legalInformationText.setText("By registering you accept our ");
+        legalInformationText.setText("By signing up you accept our ");
         //TODO correct location when ready
         linkToTerms.setId(IDs.LEGAL_INFO_TERMS_LINK);
         linkToTerms.setHref("/appInfo");
@@ -129,7 +129,8 @@ public class RegistrationView extends YalseeLayout {
         legalInformationSection.add(legalInformationText, linkToTerms, legalInformationEnd);
 
         additionalInformation.setId(IDs.ADDITIONAL_INFORMATION);
-        additionalInformation.setText("Leave passwords empty, if you want to receive one-time codes instead.");
+        additionalInformation.setText("Leave both passwords empty, " +
+                "if you want to receive one-time codes every time you log in.");
 
         separator.setId(IDs.SEPARATION_LINE);
 
