@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
@@ -22,7 +23,7 @@ public class YalseeFormLayout extends YalseeLayout {
     private final VerticalLayout form = new VerticalLayout();
     private final H2 formTitle = new H2();
 
-    private final VerticalLayout fields = new VerticalLayout();
+    private final Div fields = new Div();
 
     private final Span legalInformationSection = new Span();
     private final Span additionalInformation = new Span();

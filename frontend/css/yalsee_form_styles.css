@@ -4,19 +4,12 @@
     }
 }
 
-@media (max-width: 575.98px) {
-    .yalsee-fields {
-        padding-left: 0px;
-    }
-}
-
 .form-title {
     margin-bottom: -0.5em;
     align-self: center;
 }
 
 .yalsee-form {
-    word-break: break-word;
     background: white;
     max-width: 761px;
 }
