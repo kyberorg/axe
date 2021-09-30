@@ -1,0 +1,15 @@
+@media (min-width: 1043px) {
+    .yalsee-form {
+        align-self: center;
+    }
+}
+
+.form-title {
+    margin-bottom: -0.5em;
+    align-self: center;
+}
+
+.yalsee-form {
+    background: white;
+    max-width: 761px;
+}

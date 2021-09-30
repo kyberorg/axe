@@ -1,12 +1,12 @@
 package io.kyberorg.yalsee.ui;
 
-import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -17,8 +17,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.ui.components.ConfirmationMethodsLayout;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @SpringComponent
@@ -27,39 +28,29 @@ import java.util.stream.Stream;
 @CssImport(value = "./css/registration_view_form.css", themeFor = "vaadin-form-item")
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Registration Page")
-public class RegistrationView extends YalseeLayout {
+public class RegistrationView extends YalseeFormLayout {
 
-    private final VerticalLayout form = new VerticalLayout();
-    private H2 formTitle;
+    private static final String START_POINT = "1px";
+    private static final String BREAKPOINT = "646px";
 
-    private VerticalLayout usernameSection;
-    private FormLayout usernameFields;
-    private TextField usernameInput;
+    private final VerticalLayout usernameSection = new VerticalLayout();
+    private final FormLayout usernameFields = new FormLayout();
+    private final TextField usernameInput = new TextField();
 
-    private VerticalLayout confirmationMethodSection;
-    private ConfirmationMethodsLayout confirmationMethodFields;
-    private EmailField emailInput;
-    private TextField telegramInput;
-    private Checkbox sameAsUsername;
+    private final VerticalLayout confirmationMethodSection = new VerticalLayout();
+    private final ConfirmationMethodsLayout confirmationMethodFields = new ConfirmationMethodsLayout();
+    private final EmailField emailInput = new EmailField();
+    private final TextField telegramInput = new TextField();
+    private final Checkbox sameAsUsername = new Checkbox();
 
-    private FormLayout passwordFields;
-    private VerticalLayout passwordSection;
-    private PasswordField passwordField;
-    private PasswordField repeatPasswordField;
+    private final FormLayout passwordFields = new FormLayout();
+    private final VerticalLayout passwordSection = new VerticalLayout();
+    private final PasswordField passwordField = new PasswordField();
+    private final PasswordField repeatPasswordField = new PasswordField();
 
-    private final Span legalInformationSection = new Span();
     private final Span legalInformationText = new Span();
     private final Anchor linkToTerms = new Anchor();
     private final Span legalInformationEnd = new Span(".");
-
-    private final Span additionalInformation = new Span();
-
-    private final Hr separator = new Hr();
-
-    private final Button submitButton = new Button();
-
-    private final static String START_POINT = "1px";
-    private final static String BREAKPOINT = "646px";
 
 
     public RegistrationView() {
@@ -71,53 +62,55 @@ public class RegistrationView extends YalseeLayout {
     }
 
     private void init() {
-        form.setId(IDs.FORM);
+        setFormTitle("Become Yalsee User");
 
-        formTitle = new H2("Become Yalsee User");
-        formTitle.setId(IDs.FORM_TITLE);
+        List<Component> formFields = prepareFormFields();
+        formFields.forEach(this::addFormFields);
 
-        usernameInput = new TextField();
+        List<Component> legalInformationFields = createLegalInfo();
+        setLegalInfo(legalInformationFields);
+
+        setAdditionalInfo("Leave both password fields empty, " +
+                "if you want to receive one-time codes every time you login.");
+
+        setSubmitButtonText("Sign up");
+    }
+
+    private List<Component> prepareFormFields() {
         usernameInput.setId(IDs.USERNAME_INPUT);
-
-        usernameFields = new FormLayout();
         usernameFields.addFormItem(usernameInput, "Username");
-
-        usernameSection = new VerticalLayout(usernameFields);
+        usernameSection.add(usernameFields);
 
         Label confirmationMethodLabel = new Label("Confirmation method");
 
-        emailInput = new EmailField();
         emailInput.setId(IDs.EMAIL_INPUT);
         emailInput.setClearButtonVisible(true);
 
-        telegramInput = new TextField();
         telegramInput.setId(IDs.TELEGRAM_INPUT);
 
-        sameAsUsername = new Checkbox("Same as username");
+        sameAsUsername.setLabel("Same as username");
         sameAsUsername.setId(IDs.SAME_AS_USERNAME_CHECKBOX);
 
-        confirmationMethodFields = new ConfirmationMethodsLayout();
         confirmationMethodFields.addItemWithLabel("E-mail", emailInput);
         confirmationMethodFields.addItemWithLabel("Telegram", telegramInput, sameAsUsername);
 
-        confirmationMethodSection = new VerticalLayout(confirmationMethodLabel, confirmationMethodFields);
+        confirmationMethodSection.add(confirmationMethodLabel, confirmationMethodFields);
 
         Label passwordSectionLabel = new Label("Password (optional)");
-
-        passwordField = new PasswordField();
         passwordField.setId(IDs.PASSWORD_INPUT);
-
-        repeatPasswordField = new PasswordField();
         repeatPasswordField.setId(IDs.REPEAT_PASSWORD_INPUT);
 
-        passwordFields = new FormLayout();
         passwordFields.addFormItem(passwordField, "Password");
         passwordFields.addFormItem(repeatPasswordField, "Same Password");
 
-        passwordSection = new VerticalLayout(passwordSectionLabel, passwordFields);
+        passwordSection.add(passwordSectionLabel, passwordFields);
 
+        return List.of(usernameSection, confirmationMethodSection, passwordSection);
+    }
+
+    private List<Component> createLegalInfo() {
         legalInformationText.setId(IDs.LEGAL_INFO_TEXT);
-        legalInformationText.setText("By registering you accept our ");
+        legalInformationText.setText("By signing up, you accept our ");
         //TODO correct location when ready
         linkToTerms.setId(IDs.LEGAL_INFO_TERMS_LINK);
         linkToTerms.setHref("/appInfo");
@@ -125,40 +118,18 @@ public class RegistrationView extends YalseeLayout {
 
         legalInformationEnd.setId(IDs.LEGAL_INFO_END);
 
-        legalInformationSection.setId(IDs.LEGAL_INFO_SECTION);
-        legalInformationSection.add(legalInformationText, linkToTerms, legalInformationEnd);
-
-        additionalInformation.setId(IDs.ADDITIONAL_INFORMATION);
-        additionalInformation.setText("Leave passwords empty, if you want to receive one-time codes instead.");
-
-        separator.setId(IDs.SEPARATION_LINE);
-
-        submitButton.setId(IDs.SUBMIT_BUTTON);
-        submitButton.setText("Sign Up");
-        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        form.add(formTitle, usernameSection, confirmationMethodSection, passwordSection,
-                legalInformationSection, additionalInformation,
-                separator, submitButton);
-        add(form);
+        return List.of(legalInformationText, linkToTerms, legalInformationEnd);
     }
 
     private void applyStyle() {
-        form.setClassName("border");
-        form.getStyle().set("background", "white");
-        form.setMaxWidth(761, Unit.PIXELS);
-
-
-        confirmationMethodSection.setClassName("compact-section");
-        passwordSection.setClassName("compact-section");
-
         Stream<FormLayout> forms = Stream.of(usernameFields, confirmationMethodFields.getContent(), passwordFields);
         forms.forEach(form -> form.setResponsiveSteps(
                 new FormLayout.ResponsiveStep(START_POINT, 1),
                 new FormLayout.ResponsiveStep(BREAKPOINT, 2)
         ));
 
-        submitButton.setWidthFull();
+        confirmationMethodSection.setClassName("compact-section");
+        passwordSection.setClassName("compact-section");
     }
 
     private void applyLoadState() {
@@ -167,7 +138,6 @@ public class RegistrationView extends YalseeLayout {
 
     public static class IDs {
         public static final String PAGE_ID = "registerPage";
-        public static final String FORM = "form";
         public static final String FORM_TITLE = "formTitle";
         public static final String USERNAME_INPUT = "usernameInput";
         public static final String EMAIL_INPUT = "emailInput";
@@ -175,12 +145,9 @@ public class RegistrationView extends YalseeLayout {
         public static final String SAME_AS_USERNAME_CHECKBOX = "sameAsUsernameCheckbox";
         public static final String PASSWORD_INPUT = "passwordInput";
         public static final String REPEAT_PASSWORD_INPUT = "repeatPasswordInput";
-        public static final String LEGAL_INFO_SECTION = "legalInfo";
         public static final String LEGAL_INFO_TEXT = "legalInfoText";
         public static final String LEGAL_INFO_TERMS_LINK = "termsLink";
         public static final String LEGAL_INFO_END = "legalInfoEnd";
-        public static final String ADDITIONAL_INFORMATION = "additionInfo";
-        public static final String SEPARATION_LINE = "separator";
         public static final String SUBMIT_BUTTON = "submitButton";
     }
 }
