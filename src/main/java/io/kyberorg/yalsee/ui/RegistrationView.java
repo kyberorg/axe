@@ -110,7 +110,9 @@ public class RegistrationView extends YalseeFormLayout {
 
     private List<Component> createLegalInfo() {
         legalInformationText.setId(IDs.LEGAL_INFO_TEXT);
+      
         legalInformationText.setText("By signing up, you accept our ");
+      
         //TODO correct location when ready
         linkToTerms.setId(IDs.LEGAL_INFO_TERMS_LINK);
         linkToTerms.setHref("/appInfo");
