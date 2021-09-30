@@ -71,7 +71,7 @@ public class RegistrationView extends YalseeFormLayout {
         setLegalInfo(legalInformationFields);
 
         setAdditionalInfo("Leave both password fields empty, " +
-                "if you want to receive one-time codes every time you login.");
+                "if you want to receive one-time codes every time you log in.");
 
         setSubmitButtonText("Sign up");
     }
