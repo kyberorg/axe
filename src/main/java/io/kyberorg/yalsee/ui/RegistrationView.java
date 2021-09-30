@@ -59,7 +59,7 @@ public class RegistrationView extends YalseeLayout {
     private final Button submitButton = new Button();
 
     private final static String START_POINT = "1px";
-    private final static String BREAKPOINT = "508px";
+    private final static String BREAKPOINT = "646px";
 
 
     public RegistrationView() {

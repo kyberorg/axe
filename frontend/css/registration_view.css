@@ -1,11 +1,10 @@
-@media (min-width: 1332px) {
+@media (min-width: 1043px) {
     #form {
         align-self: center;
     }
 }
 
 #formTitle {
-    margin-left: 1rem;
     margin-bottom: -0.5em;
     align-self: center;
 }
