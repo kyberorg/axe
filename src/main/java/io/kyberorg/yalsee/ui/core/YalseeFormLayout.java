@@ -40,6 +40,26 @@ public class YalseeFormLayout extends YalseeLayout {
         applyStyle();
     }
 
+    protected void setFormTitle(final String title) {
+        formTitle.setText(title);
+    }
+
+    protected void addFormFields(final Component... components) {
+        fields.add(components);
+    }
+
+    protected void setLegalInfo(final List<Component> components) {
+        components.forEach(legalInformationSection::add);
+    }
+
+    protected void setAdditionalInfo(final String additionalInfoText) {
+        additionalInformation.setText(additionalInfoText);
+    }
+
+    protected void setSubmitButtonText(final String submitButtonText) {
+        submitButton.setText(submitButtonText);
+    }
+
     private void init() {
         form.add(formTitle, fields, legalInformationSection, additionalInformation, separator, submitButton);
         super.add(form);
@@ -61,26 +81,6 @@ public class YalseeFormLayout extends YalseeLayout {
         submitButton.addClassName(ClassName.SUBMIT_BUTTON);
         submitButton.setWidthFull();
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    }
-
-    public void setFormTitle(final String title) {
-        formTitle.setText(title);
-    }
-
-    public void addFormFields(final Component... components) {
-        fields.add(components);
-    }
-
-    public void setLegalInfo(final List<Component> components) {
-        components.forEach(legalInformationSection::add);
-    }
-
-    public void setAdditionalInfo(final String additionalInfoText) {
-        additionalInformation.setText(additionalInfoText);
-    }
-
-    public void setSubmitButtonText(final String submitButtonText) {
-        submitButton.setText(submitButtonText);
     }
 
     public static class ClassName {
