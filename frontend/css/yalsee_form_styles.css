@@ -10,6 +10,7 @@
 }
 
 .yalsee-form {
+    word-break: break-word;
     background: white;
     max-width: 761px;
 }
