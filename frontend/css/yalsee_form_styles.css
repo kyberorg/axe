@@ -4,13 +4,6 @@
     }
 }
 
-@media (max-width: 576px) {
-    /* This is needed, because form white itself and additional white space above not needed */
-    .responsive-center {
-        margin-top: 0 !important;
-    }
-}
-
 .form-title {
     margin-bottom: -0.5em;
     align-self: center;
