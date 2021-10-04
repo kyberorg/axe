@@ -22,6 +22,7 @@ public class YalseeFormLayout extends YalseeLayout {
 
     private final VerticalLayout form = new VerticalLayout();
     private final H2 formTitle = new H2();
+    private final Div formSubTitle = new Div();
 
     private final Div fields = new Div();
 
@@ -44,6 +45,10 @@ public class YalseeFormLayout extends YalseeLayout {
         formTitle.setText(title);
     }
 
+    protected void setFormSubTitle(final Component... components) {
+        formSubTitle.add(components);
+    }
+
     protected void addFormFields(final Component... components) {
         fields.add(components);
     }
@@ -61,7 +66,8 @@ public class YalseeFormLayout extends YalseeLayout {
     }
 
     private void init() {
-        form.add(formTitle, fields, legalInformationSection, additionalInformation, separator, submitButton);
+        form.add(formTitle, formSubTitle, fields, legalInformationSection, additionalInformation, separator,
+                submitButton);
         super.add(form);
     }
 
@@ -70,6 +76,7 @@ public class YalseeFormLayout extends YalseeLayout {
         form.addClassName("border");
 
         formTitle.setClassName(ClassName.FORM_TITLE);
+        formSubTitle.setClassName(ClassName.FORM_SUBTITLE);
 
         fields.setClassName(ClassName.FIELDS);
 
@@ -86,6 +93,7 @@ public class YalseeFormLayout extends YalseeLayout {
     public static class ClassName {
         public static final String FORM = "yalsee-form";
         public static final String FORM_TITLE = "form-title";
+        public static final String FORM_SUBTITLE = "form-subtitle";
         public static final String FIELDS = "yalsee-fields";
         public static final String LEGAL_INFO = "legal-info";
         public static final String ADDITIONAL_INFO = "additional-info";

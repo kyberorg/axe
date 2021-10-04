@@ -33,6 +33,9 @@ public class RegistrationView extends YalseeFormLayout {
     private static final String START_POINT = "1px";
     private static final String BREAKPOINT = "646px";
 
+    private final Span subTitleText = new Span();
+    private final Anchor subTitleLink = new Anchor();
+
     private final VerticalLayout usernameSection = new VerticalLayout();
     private final FormLayout usernameFields = new FormLayout();
     private final TextField usernameInput = new TextField();
@@ -64,6 +67,15 @@ public class RegistrationView extends YalseeFormLayout {
     private void init() {
         setFormTitle("Become Yalsee User");
 
+        subTitleText.setId(IDs.SUBTITLE_TEXT);
+        subTitleText.setText("Already have an account? ");
+
+        subTitleLink.setId(IDs.SUBTITLE_LINK);
+        subTitleLink.setText("Log in");
+        subTitleLink.setHref(Endpoint.UI.LOGIN_PAGE);
+
+        setFormSubTitle(subTitleText, subTitleLink);
+
         List<Component> formFields = prepareFormFields();
         formFields.forEach(this::addFormFields);
 
@@ -71,7 +83,7 @@ public class RegistrationView extends YalseeFormLayout {
         setLegalInfo(legalInformationFields);
 
         setAdditionalInfo("Leave both password fields empty, " +
-                "if you want to receive one-time codes every time you log in.");
+                "if you want to receive one time codes every time you log in.");
 
         setSubmitButtonText("Sign up");
     }
@@ -141,6 +153,8 @@ public class RegistrationView extends YalseeFormLayout {
     public static class IDs {
         public static final String PAGE_ID = "registerPage";
         public static final String FORM_TITLE = "formTitle";
+        public static final String SUBTITLE_TEXT = "subtitleText";
+        public static final String SUBTITLE_LINK = "subtitleLink";
         public static final String USERNAME_INPUT = "usernameInput";
         public static final String EMAIL_INPUT = "emailInput";
         public static final String TELEGRAM_INPUT = "telegramInput";
