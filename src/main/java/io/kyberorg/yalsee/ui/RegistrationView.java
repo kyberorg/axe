@@ -29,10 +29,6 @@ import java.util.stream.Stream;
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends YalseeFormLayout {
-
-    private static final String START_POINT = "1px";
-    private static final String BREAKPOINT = "646px";
-
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
 

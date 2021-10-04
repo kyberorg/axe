@@ -20,6 +20,9 @@ import java.util.List;
 @CssImport(value = "./css/yalsee_form_styles.css")
 public class YalseeFormLayout extends YalseeLayout {
 
+    public static final String START_POINT = "1px";
+    public static final String BREAKPOINT = "646px";
+
     private final VerticalLayout form = new VerticalLayout();
     private final H2 formTitle = new H2();
     private final Div formSubTitle = new Div();
@@ -41,27 +44,31 @@ public class YalseeFormLayout extends YalseeLayout {
         applyStyle();
     }
 
-    protected void setFormTitle(final String title) {
+    public void setFormTitle(final String title) {
         formTitle.setText(title);
     }
 
-    protected void setFormSubTitle(final Component... components) {
+    public void setFormSubTitle(final Component... components) {
         formSubTitle.add(components);
     }
 
-    protected void addFormFields(final Component... components) {
+    public void addFormFields(final Component... components) {
         fields.add(components);
     }
 
-    protected void setLegalInfo(final List<Component> components) {
+    public void removeFormFields(final Component... components) {
+        fields.remove(components);
+    }
+
+    public void setLegalInfo(final List<Component> components) {
         components.forEach(legalInformationSection::add);
     }
 
-    protected void setAdditionalInfo(final String additionalInfoText) {
+    public void setAdditionalInfo(final String additionalInfoText) {
         additionalInformation.setText(additionalInfoText);
     }
 
-    protected void setSubmitButtonText(final String submitButtonText) {
+    public void setSubmitButtonText(final String submitButtonText) {
         submitButton.setText(submitButtonText);
     }
 

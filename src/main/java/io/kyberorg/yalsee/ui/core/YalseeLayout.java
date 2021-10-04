@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import lombok.Getter;
 
 /**
  * Core Layout for all pages.
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
  */
 public class YalseeLayout extends HorizontalLayout {
     private final Div leftDiv = new Div();
+    @Getter
     private final VerticalLayout centralLayout = new VerticalLayout();
     private final Div rightDiv = new Div();
 
