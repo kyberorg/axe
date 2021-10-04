@@ -127,7 +127,7 @@ public class RegistrationView extends YalseeFormLayout {
       
         //TODO correct location when ready
         linkToTerms.setId(IDs.LEGAL_INFO_TERMS_LINK);
-        linkToTerms.setHref("/appInfo");
+        linkToTerms.setHref(Endpoint.UI.APP_INFO_PAGE);
         linkToTerms.setText("Terms of Service");
 
         legalInformationEnd.setId(IDs.LEGAL_INFO_END);
