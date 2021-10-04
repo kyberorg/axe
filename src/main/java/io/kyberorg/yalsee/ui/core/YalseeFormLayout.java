@@ -93,7 +93,7 @@ public class YalseeFormLayout extends YalseeLayout {
     public static class ClassName {
         public static final String FORM = "yalsee-form";
         public static final String FORM_TITLE = "form-title";
-        public static final String FORM_SUBTITLE = "form-subtitle";
+        public static final String FORM_SUBTITLE = "yalsee-form-subtitle";
         public static final String FIELDS = "yalsee-fields";
         public static final String LEGAL_INFO = "legal-info";
         public static final String ADDITIONAL_INFO = "additional-info";

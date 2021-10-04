@@ -5,8 +5,11 @@
 }
 
 .form-title {
-    /*margin-bottom: -0.5em;*/
     align-self: center;
+}
+
+.yalsee-form-subtitle {
+    margin-left: 1rem;
 }
 
 .yalsee-form {
