@@ -4,6 +4,14 @@
     }
 }
 
+@media (max-width: 575.98px) {
+    /* Fixes bug: responsive-center asymmetric */
+    .yalsee-layout-for-forms {
+        position: absolute;
+        right: 0;
+    }
+}
+
 .form-title {
     align-self: center;
 }
