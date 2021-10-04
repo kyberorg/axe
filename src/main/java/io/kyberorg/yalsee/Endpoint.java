@@ -67,6 +67,11 @@ public final class Endpoint {
          * Page with registration form.
          */
         public static final String REGISTRATION_PAGE = "register";
+
+        /**
+         * Password Recovery form.
+         */
+        public static final String PASSWORD_RECOVERY_PAGE = "password-recovery";
     }
 
     /**
