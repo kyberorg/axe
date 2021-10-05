@@ -16,7 +16,6 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
-import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.BREAKPOINT;
 import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.START_POINT;
 
 @SpringComponent
@@ -69,8 +68,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         passwordFields.addFormItem(repeatPasswordField, "Confirm Password");
 
         passwordFields.setResponsiveSteps(
-                new FormLayout.ResponsiveStep(START_POINT, 1),
-                new FormLayout.ResponsiveStep(BREAKPOINT, 2)
+                new FormLayout.ResponsiveStep(START_POINT, 1)
         );
 
         //remove previous layout (when you go back to this page)

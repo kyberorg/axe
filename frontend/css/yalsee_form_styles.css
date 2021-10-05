@@ -4,11 +4,18 @@
     }
 }
 
+/* Small Phone Screens */
 @media (max-width: 575.98px) {
     /* Fixes bug: responsive-center asymmetric */
     .yalsee-layout-for-forms {
         position: absolute;
         right: 0;
+    }
+}
+
+@media (min-width: 576px) {
+    .yalsee-form {
+        width: min-content !important;
     }
 }
 
@@ -19,4 +26,5 @@
 .yalsee-form {
     background: white;
     max-width: 761px;
+    align-self: center;
 }
