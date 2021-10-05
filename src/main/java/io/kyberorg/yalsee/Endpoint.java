@@ -77,6 +77,11 @@ public final class Endpoint {
          * Forgot Password Form.
          */
         public static final String FORGOT_PASSWORD_PAGE = "forgot-password";
+
+        /**
+         * Verification Code form.
+         */
+        public static final String VERIFICATION_PAGE = "verify";
     }
 
     /**
