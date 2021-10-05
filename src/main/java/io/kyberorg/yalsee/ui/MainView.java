@@ -6,6 +6,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
@@ -138,11 +139,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         HorizontalLayout buttons = new HorizontalLayout();
 
-        loginButton = new Button("Log in");
+        loginButton = new Button("Log in", VaadinIcon.SIGN_IN.create());
         loginButton.setId(IDs.LOGIN_BUTTON);
         loginButton.addClickListener(this::onLoginButtonClicked);
+        loginButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        registerButton = new Button("Register");
+        registerButton = new Button("Register", VaadinIcon.CLIPBOARD_USER.create());
         registerButton.setId(IDs.REGISTER_BUTTON);
         registerButton.addClickListener(this::onRegisterButtonClicked);
 
