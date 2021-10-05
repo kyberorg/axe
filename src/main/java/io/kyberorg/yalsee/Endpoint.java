@@ -72,6 +72,11 @@ public final class Endpoint {
          * Password Reset form.
          */
         public static final String PASSWORD_RESET_PAGE = "password-reset";
+
+        /**
+         * Forgot Password Form.
+         */
+        public static final String FORGOT_PASSWORD_PAGE = "forgot-password";
     }
 
     /**
