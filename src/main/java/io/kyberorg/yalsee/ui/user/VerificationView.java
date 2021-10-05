@@ -25,6 +25,7 @@ public class VerificationView extends YalseeFormLayout {
     }
 
     private void init() {
+        setCompactMode();
         setFormTitle("Verification Code");
 
         codeInput.setId(IDs.CODE_INPUT);

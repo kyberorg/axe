@@ -55,6 +55,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
     }
 
     private Component getResetPasswordForm() {
+        formLayout.setCompactMode();
         formLayout.setFormTitle("Password Reset");
 
         final FormLayout passwordFields = new FormLayout();

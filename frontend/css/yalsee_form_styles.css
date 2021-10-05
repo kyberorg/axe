@@ -14,7 +14,7 @@
 }
 
 @media (min-width: 576px) {
-    .yalsee-form {
+    .yalsee-compact-form {
         width: min-content !important;
     }
 }

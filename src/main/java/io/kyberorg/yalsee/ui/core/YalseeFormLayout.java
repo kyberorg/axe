@@ -72,6 +72,10 @@ public class YalseeFormLayout extends YalseeLayout {
         submitButton.setText(submitButtonText);
     }
 
+    public void setCompactMode() {
+        form.addClassName("yalsee-compact-form");
+    }
+
     private void init() {
         form.add(formTitle, formSubTitle, fields, legalInformationSection, additionalInformation, separator,
                 submitButton);

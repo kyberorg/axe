@@ -25,6 +25,7 @@ public class ForgotPasswordView extends YalseeFormLayout {
     }
 
     private void init() {
+        setCompactMode();
         setFormTitle("Forgot Password?");
 
         usernameInput.setId(IDs.USERNAME_INPUT);
