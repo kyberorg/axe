@@ -87,6 +87,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         final Span subTitle = new Span("Provided token is expired, not valid or never existed. Really.");
         final Image image = new Image("images/noToken.png", "No Token Image");
 
+        image.addClassName("error-image");
         yalseeLayout.add(title, subTitle, image);
         yalseeLayout.getCentralLayout().setAlignItems(FlexComponent.Alignment.CENTER);
         return yalseeLayout;
