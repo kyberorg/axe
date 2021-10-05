@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.ui.LoginView;
+import io.kyberorg.yalsee.ui.user.LoginView;
 
 import static com.codeborne.selenide.Selenide.$;
 

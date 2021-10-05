@@ -4,7 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
-import io.kyberorg.yalsee.ui.RegistrationView;
+import io.kyberorg.yalsee.ui.user.RegistrationView;
 
 /**
  * Layout for Confirmation Methods section in {@link RegistrationView}.

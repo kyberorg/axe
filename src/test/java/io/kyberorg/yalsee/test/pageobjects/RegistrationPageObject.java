@@ -2,12 +2,12 @@ package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
-import io.kyberorg.yalsee.ui.RegistrationView;
+import io.kyberorg.yalsee.ui.user.RegistrationView;
 
 import static com.codeborne.selenide.Selenide.$;
 
 /**
- * Page Object for {@link io.kyberorg.yalsee.ui.RegistrationView}.
+ * Page Object for {@link RegistrationView}.
  *
  * @since 4.0
  */

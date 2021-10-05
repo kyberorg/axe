@@ -39,6 +39,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.dev.AppInfoView;
+import io.kyberorg.yalsee.ui.user.LoginView;
+import io.kyberorg.yalsee.ui.user.RegistrationView;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
 
