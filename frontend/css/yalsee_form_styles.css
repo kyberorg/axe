@@ -6,8 +6,8 @@
 
 /* Small Phone Screens */
 @media (max-width: 575.98px) {
-    /* Fixes bug: responsive-center asymmetric */
-    .yalsee-layout-for-forms {
+    /* Fixes bug: responsive-center asymmetric by limiting form on right side */
+    .limited-by-right-side {
         position: absolute;
         right: 0;
     }

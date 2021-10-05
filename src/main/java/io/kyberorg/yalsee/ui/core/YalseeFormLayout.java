@@ -79,8 +79,6 @@ public class YalseeFormLayout extends YalseeLayout {
     }
 
     private void applyStyle() {
-        super.addClassName("yalsee-layout-for-forms");
-
         form.setClassName(ClassName.FORM);
         form.addClassName("border");
 

@@ -28,7 +28,7 @@ public class VerificationView extends YalseeFormLayout {
         setFormTitle("Verification Code");
 
         codeInput.setId(IDs.CODE_INPUT);
-        fields.addFormItem(codeInput, "Code");
+        fields.addFormItem(codeInput, "Code (OTP)");
         fields.setResponsiveSteps(new FormLayout.ResponsiveStep(START_POINT, 1));
 
         addFormFields(fields);

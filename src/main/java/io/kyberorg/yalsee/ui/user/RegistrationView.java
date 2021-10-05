@@ -133,6 +133,7 @@ public class RegistrationView extends YalseeFormLayout {
     }
 
     private void applyStyle() {
+        addClassName("limited-by-right-side");
         Stream<FormLayout> forms = Stream.of(usernameFields, confirmationMethodFields.getContent(), passwordFields);
         forms.forEach(form -> form.setResponsiveSteps(
                 new FormLayout.ResponsiveStep(START_POINT, 1),
