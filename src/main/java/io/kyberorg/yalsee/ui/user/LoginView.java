@@ -1,17 +1,15 @@
 package io.kyberorg.yalsee.ui.user;
 
-import com.vaadin.flow.component.login.AbstractLogin;
-import com.vaadin.flow.component.login.LoginI18n;
-import com.vaadin.flow.component.login.LoginOverlay;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
-import io.kyberorg.yalsee.ui.HomeView;
 import io.kyberorg.yalsee.ui.MainView;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
-import org.apache.commons.lang3.StringUtils;
+import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 
 /**
  * Login Page.
@@ -22,37 +20,36 @@ import org.apache.commons.lang3.StringUtils;
 @UIScope
 @Route(value = Endpoint.UI.LOGIN_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Login Page")
-public class LoginView extends YalseeLayout {
+public class LoginView extends YalseeFormLayout {
+
+    private final FormLayout fields = new FormLayout();
+    private final TextField usernameInput = new TextField();
+    private final PasswordField passwordInput = new PasswordField();
 
     public LoginView() {
         setId(IDs.PAGE_ID);
-
-        LoginOverlay loginOverlay = new LoginOverlay();
-        loginOverlay.setTitle("Yalsee");
-        loginOverlay.setDescription("Built with ♥ by Kyberorg");
-
-        LoginI18n i18n = LoginI18n.createDefault();
-        i18n.setAdditionalInformation("To close the login form submit non-empty username and password");
-        loginOverlay.setI18n(i18n);
-
-        loginOverlay.addLoginListener(e -> {
-            boolean isAuthenticated = authenticate(e);
-            if (isAuthenticated) {
-                getUI().ifPresent(ui -> ui.navigate(HomeView.class));
-            } else {
-                loginOverlay.setError(true);
-            }
-        });
-
-        add(loginOverlay);
-        loginOverlay.setOpened(true);
+        init();
     }
 
-    private boolean authenticate(AbstractLogin.LoginEvent e) {
-        return !StringUtils.isAllBlank(e.getUsername(), e.getPassword());
+    private void init() {
+        setCompactMode();
+        setFormTitle("Log in");
+
+        usernameInput.setId(IDs.USERNAME_INPUT);
+        passwordInput.setId(IDs.PASSWORD_INPUT);
+
+        fields.addFormItem(usernameInput, "Username");
+        fields.addFormItem(passwordInput, "Password");
+        fields.setResponsiveSteps(new FormLayout.ResponsiveStep(START_POINT, 1));
+
+        addFormFields(fields);
+        setSubmitButtonText("Log in");
+        enableForgotPasswordLink();
     }
 
-    public class IDs {
+    public static final class IDs {
         public static final String PAGE_ID = "loginPage";
+        public static final String USERNAME_INPUT = "usernameInput";
+        public static final String PASSWORD_INPUT = "passwordInput";
     }
 }

@@ -4,11 +4,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import io.kyberorg.yalsee.Endpoint;
 
 import java.util.List;
 
@@ -36,12 +34,19 @@ public class YalseeFormLayout extends YalseeLayout {
 
     private final Button submitButton = new Button();
 
+    private final Section forgotPasswordSection = new Section();
+    private final Anchor forgotPasswordLink = new Anchor();
+
     /**
      * Initialise Layout elements and styles them.
      */
     public YalseeFormLayout() {
         init();
         applyStyle();
+    }
+
+    public void setCompactMode() {
+        form.addClassName("yalsee-compact-form");
     }
 
     public void setFormTitle(final String title) {
@@ -72,13 +77,17 @@ public class YalseeFormLayout extends YalseeLayout {
         submitButton.setText(submitButtonText);
     }
 
-    public void setCompactMode() {
-        form.addClassName("yalsee-compact-form");
+    public void enableForgotPasswordLink() {
+        forgotPasswordSection.setVisible(true);
     }
 
     private void init() {
+        forgotPasswordLink.setHref(Endpoint.UI.FORGOT_PASSWORD_PAGE);
+        forgotPasswordLink.setText("Forgot your password?");
+        forgotPasswordSection.add(forgotPasswordLink);
+
         form.add(formTitle, formSubTitle, fields, legalInformationSection, additionalInformation, separator,
-                submitButton);
+                submitButton, forgotPasswordSection);
         super.add(form);
     }
 
@@ -99,6 +108,13 @@ public class YalseeFormLayout extends YalseeLayout {
         submitButton.addClassName(ClassName.SUBMIT_BUTTON);
         submitButton.setWidthFull();
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        forgotPasswordLink.setClassName(ClassName.FORGOT_PASSWORD_LINK);
+        forgotPasswordSection.setClassName(ClassName.FORGOT_PASSWORD_SECTION);
+        forgotPasswordSection.setWidthFull();
+        //by default forgot password section is not visible
+        forgotPasswordSection.setVisible(false);
+
     }
 
     public static class ClassName {
@@ -110,5 +126,7 @@ public class YalseeFormLayout extends YalseeLayout {
         public static final String ADDITIONAL_INFO = "additional-info";
         public static final String SEPARATOR = "separator";
         public static final String SUBMIT_BUTTON = "submit-button";
+        public static final String FORGOT_PASSWORD_SECTION = "forgot-password-section";
+        public static final String FORGOT_PASSWORD_LINK = "forgot-password-link";
     }
 }
