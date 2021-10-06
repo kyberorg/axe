@@ -54,7 +54,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="password" type="VARCHAR(255)"/>
-            <column name="role" type="INT">
+            <column name="role" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="locked" type="BOOLEAN"/>
@@ -67,5 +67,39 @@
             </column>
         </createTable>
         <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
+        <createTable tableName="auth_data">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auth_data"/>
+            </column>
+            <column name="user" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="auth_username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="auth_data" constraintName="FK_AUTH_DATA_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="token">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user" type="BIGINT"/>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="token"/>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="token" constraintName="FK_TOKEN_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>
