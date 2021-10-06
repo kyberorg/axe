@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.kyberorg.yalsee.Endpoint;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Layout for forms.
@@ -51,30 +52,38 @@ public class YalseeFormLayout extends YalseeLayout {
 
     public void setFormTitle(final String title) {
         formTitle.setText(title);
+        formTitle.setVisible(true);
     }
 
     public void setFormSubTitle(final Component... components) {
         formSubTitle.add(components);
+        formSubTitle.setVisible(true);
     }
 
     public void addFormFields(final Component... components) {
         fields.add(components);
+        fields.setVisible(true);
     }
 
     public void removeFormFields(final Component... components) {
         fields.remove(components);
+        fields.setVisible(false);
     }
 
     public void setLegalInfo(final List<Component> components) {
         components.forEach(legalInformationSection::add);
+        legalInformationSection.setVisible(true);
     }
 
     public void setAdditionalInfo(final String additionalInfoText) {
         additionalInformation.setText(additionalInfoText);
+        additionalInformation.setVisible(true);
     }
 
     public void setSubmitButtonText(final String submitButtonText) {
+        separator.setVisible(true);
         submitButton.setText(submitButtonText);
+        submitButton.setVisible(true);
     }
 
     public void enableForgotPasswordLink() {
@@ -86,8 +95,17 @@ public class YalseeFormLayout extends YalseeLayout {
         forgotPasswordLink.setText("Forgot your password?");
         forgotPasswordSection.add(forgotPasswordLink);
 
-        form.add(formTitle, formSubTitle, fields, legalInformationSection, additionalInformation, separator,
-                submitButton, forgotPasswordSection);
+        // by default all components are hidden
+        Stream<Component> formComponents =
+                Stream.of(formTitle, formSubTitle, fields,
+                        legalInformationSection, additionalInformation,
+                        separator, submitButton, forgotPasswordSection);
+
+        formComponents.forEach(component -> {
+            component.setVisible(false);
+            form.add(component);
+        });
+
         super.add(form);
     }
 
@@ -112,9 +130,6 @@ public class YalseeFormLayout extends YalseeLayout {
         forgotPasswordLink.setClassName(ClassName.FORGOT_PASSWORD_LINK);
         forgotPasswordSection.setClassName(ClassName.FORGOT_PASSWORD_SECTION);
         forgotPasswordSection.setWidthFull();
-        //by default forgot password section is not visible
-        forgotPasswordSection.setVisible(false);
-
     }
 
     public static class ClassName {
