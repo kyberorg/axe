@@ -36,12 +36,6 @@ public class RegisterPageVisualStateTest extends SelenideTest {
         EMAIL_INPUT.should(exist);
         EMAIL_INPUT.shouldBe(visible);
 
-        TELEGRAM_INPUT.should(exist);
-        TELEGRAM_INPUT.shouldBe(visible);
-
-        SAME_AS_USERNAME_CHECKBOX.should(exist);
-        SAME_AS_USERNAME_CHECKBOX.shouldBe(visible);
-
         PASSWORD_INPUT.should(exist);
         PASSWORD_INPUT.shouldBe(visible);
 

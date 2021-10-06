@@ -19,7 +19,7 @@ import java.util.List;
 public class YalseeFormLayout extends YalseeLayout {
 
     public static final String START_POINT = "1px";
-    public static final String BREAKPOINT = "646px";
+    public static final String BREAKPOINT = "616px";
 
     private final VerticalLayout form = new VerticalLayout();
     private final H2 formTitle = new H2();

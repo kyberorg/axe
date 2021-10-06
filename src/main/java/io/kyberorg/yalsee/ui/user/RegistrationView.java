@@ -1,7 +1,6 @@
 package io.kyberorg.yalsee.ui.user;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
@@ -17,7 +16,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.ui.MainView;
-import io.kyberorg.yalsee.ui.components.ConfirmationMethodsLayout;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 
 import java.util.List;
@@ -38,10 +36,8 @@ public class RegistrationView extends YalseeFormLayout {
     private final TextField usernameInput = new TextField();
 
     private final VerticalLayout confirmationMethodSection = new VerticalLayout();
-    private final ConfirmationMethodsLayout confirmationMethodFields = new ConfirmationMethodsLayout();
+    private final FormLayout confirmationMethodFields = new FormLayout();
     private final EmailField emailInput = new EmailField();
-    private final TextField telegramInput = new TextField();
-    private final Checkbox sameAsUsername = new Checkbox();
 
     private final FormLayout passwordFields = new FormLayout();
     private final VerticalLayout passwordSection = new VerticalLayout();
@@ -95,13 +91,7 @@ public class RegistrationView extends YalseeFormLayout {
         emailInput.setId(IDs.EMAIL_INPUT);
         emailInput.setClearButtonVisible(true);
 
-        telegramInput.setId(IDs.TELEGRAM_INPUT);
-
-        sameAsUsername.setLabel("Same as username");
-        sameAsUsername.setId(IDs.SAME_AS_USERNAME_CHECKBOX);
-
-        confirmationMethodFields.addItemWithLabel("E-mail", emailInput);
-        confirmationMethodFields.addItemWithLabel("Telegram", telegramInput, sameAsUsername);
+        confirmationMethodFields.addFormItem(emailInput, "E-mail");
 
         confirmationMethodSection.add(confirmationMethodLabel, confirmationMethodFields);
 
@@ -134,7 +124,7 @@ public class RegistrationView extends YalseeFormLayout {
 
     private void applyStyle() {
         addClassName("limited-by-right-side");
-        Stream<FormLayout> forms = Stream.of(usernameFields, confirmationMethodFields.getContent(), passwordFields);
+        Stream<FormLayout> forms = Stream.of(usernameFields, confirmationMethodFields, passwordFields);
         forms.forEach(form -> form.setResponsiveSteps(
                 new FormLayout.ResponsiveStep(START_POINT, 1),
                 new FormLayout.ResponsiveStep(BREAKPOINT, 2)
@@ -155,8 +145,6 @@ public class RegistrationView extends YalseeFormLayout {
         public static final String SUBTITLE_LINK = "subtitleLink";
         public static final String USERNAME_INPUT = "usernameInput";
         public static final String EMAIL_INPUT = "emailInput";
-        public static final String TELEGRAM_INPUT = "telegramInput";
-        public static final String SAME_AS_USERNAME_CHECKBOX = "sameAsUsernameCheckbox";
         public static final String PASSWORD_INPUT = "passwordInput";
         public static final String REPEAT_PASSWORD_INPUT = "repeatPasswordInput";
         public static final String LEGAL_INFO_TEXT = "legalInfoText";

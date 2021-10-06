@@ -26,9 +26,6 @@ public final class RegistrationPageObject {
 
 
     public static final SelenideElement EMAIL_INPUT = $("#" + RegistrationView.IDs.EMAIL_INPUT);
-    public static final SelenideElement TELEGRAM_INPUT = $("#" + RegistrationView.IDs.TELEGRAM_INPUT);
-    public static final SelenideElement SAME_AS_USERNAME_CHECKBOX =
-            $("#" + RegistrationView.IDs.SAME_AS_USERNAME_CHECKBOX);
     public static final SelenideElement PASSWORD_INPUT = $("#" + RegistrationView.IDs.PASSWORD_INPUT);
     public static final SelenideElement REPEAT_PASSWORD_INPUT =
             $("#" + RegistrationView.IDs.REPEAT_PASSWORD_INPUT);
