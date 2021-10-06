@@ -4,6 +4,8 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <property name="now" value="UNIX_TIMESTAMP()" dbms="mysql"/>
+    <property name="now" value="CURRENT_TIMESTAMP()" dbms="h2"/>
     <changeSet id="1" author="kyberorg">
         <createTable tableName="links">
             <column name="id" autoIncrement="true" type="bigint">
@@ -45,7 +47,6 @@
             <column name="session"/>
         </createIndex>
     </changeSet>
-    <property name="now" value="UNIX_TIMESTAMP()" dbms="mysql"/>
     <changeSet id="4" author="kyberorg">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
