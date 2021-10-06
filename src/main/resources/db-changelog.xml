@@ -45,4 +45,27 @@
             <column name="session"/>
         </createIndex>
     </changeSet>
+    <changeSet id="4" author="kyberorg">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="role" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locked" type="BOOLEAN"/>
+            <column name="enabled" type="BOOLEAN"/>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
+    </changeSet>
 </databaseChangeLog>
