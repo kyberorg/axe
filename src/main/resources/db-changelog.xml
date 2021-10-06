@@ -45,6 +45,7 @@
             <column name="session"/>
         </createIndex>
     </changeSet>
+    <property name="now" value="UNIX_TIMESTAMP()" dbms="mysql"/>
     <changeSet id="4" author="kyberorg">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -67,22 +68,6 @@
             </column>
         </createTable>
         <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
-        <createTable tableName="auth_data">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auth_data"/>
-            </column>
-            <column name="user" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="provider" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="auth_username" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addForeignKeyConstraint baseColumnNames="user" baseTableName="auth_data" constraintName="FK_AUTH_DATA_ON_USER"
-                                 referencedColumnNames="id" referencedTableName="users"/>
         <createTable tableName="token">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
@@ -101,5 +86,42 @@
         <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="token"/>
         <addForeignKeyConstraint baseColumnNames="user" baseTableName="token" constraintName="FK_TOKEN_ON_USER"
                                  referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="auth_data">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auth_data"/>
+            </column>
+            <column name="user" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="auth_username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmed" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="auth_data" constraintName="FK_AUTH_DATA_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+        <!-- Creating yalsee user -->
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="username" value="yalsee"/>
+            <column name="password" value=""/>
+            <column name="role" value="SUPER_ADMIN"/>
+            <column name="locked" value="false"/>
+            <column name="enabled" value="true"/>
+            <column name="created" valueDate="${now}"/>
+            <column name="updated" valueDate="${now}"/>
+        </insert>
+        <insert tableName="auth_data">
+            <column name="id" value="1"/>
+            <column name="user" value="1"/>
+            <column name="provider" value="LOCAL"/>
+            <column name="auth_username" value="yalsee"/>
+            <column name="confirmed" value="true"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

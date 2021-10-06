@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.users;
 
 public enum TokenType {
-    ACTIVATION_TOKEN,
-    CONFIRMATION_TOKEN,
-    RESET_TOKEN
+    ACCOUNT_ACTIVATION_TOKEN,
+    LOGIN_CONFIRMATION_TOKEN,
+    PASSWORD_RESET_TOKEN
 }

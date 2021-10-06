@@ -33,4 +33,8 @@ public class AuthData {
 
     @Column(name = "auth_username", nullable = false)
     private String authUsername;
+
+    @Column(name = "confirmed", nullable = false)
+    private boolean confirmed = false;
+
 }
