@@ -1,15 +1,23 @@
 package io.kyberorg.yalsee.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Links table mapped Java Object.
  *
  * @since 1.0
  */
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "links")
 public class Link {
@@ -62,13 +70,16 @@ public class Link {
         return linkObject;
     }
 
-    /**
-     * Shows {@link Link} object as string.
-     *
-     * @return string containing object name and object fields with their names
-     */
     @Override
-    public String toString() {
-        return String.format("%s [ ident: %s, shortLink: %s ]", Link.class.getSimpleName(), ident, link);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Link link = (Link) o;
+        return Objects.equals(id, link.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }
