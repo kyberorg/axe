@@ -89,7 +89,10 @@ public class ServerErrorView extends YalseeLayout implements HasErrorParameter<G
     }
 
     private void applyStyle() {
+        image.addClassName("error-image");
         image.addClassName("centered-image");
+
+        techInfo.addClassName("error-image");
         techInfo.addClassName("centered-image");
     }
 

@@ -38,6 +38,7 @@ public class AppDownView extends YalseeLayout implements HasErrorParameter<Canno
         image.setSrc("images/503.png");
         image.setAlt("Error 503 Image");
 
+        image.addClassName("error-image");
         image.setHeight(image.getWidth());
     }
 

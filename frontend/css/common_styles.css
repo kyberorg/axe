@@ -36,7 +36,7 @@
         flex-basis: 80%;
     }
 
-    .main-area {
+    .large-text {
         font-size: large;
     }
 }
@@ -73,7 +73,7 @@
         flex-basis: 70%;
     }
 
-    .main-area {
+    .large-text {
         font-size: large;
     }
 }

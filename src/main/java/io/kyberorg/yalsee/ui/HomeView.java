@@ -169,7 +169,7 @@ public class HomeView extends HorizontalLayout {
         VerticalLayout mainArea =
                 new VerticalLayout(title, input, descriptionAccordion, publicAccessBanner, submitButton);
         mainArea.setId(IDs.MAIN_AREA);
-        mainArea.addClassNames("main-area", "border");
+        mainArea.addClassNames("main-area", "border", "large-text");
         return mainArea;
     }
 
