@@ -1,22 +1,28 @@
 package io.kyberorg.yalsee.ui.user;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -28,12 +34,17 @@ import java.util.stream.Stream;
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends YalseeFormLayout {
+    private final UserService userService;
+
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
 
     private final VerticalLayout usernameSection = new VerticalLayout();
     private final FormLayout usernameFields = new FormLayout();
     private final TextField usernameInput = new TextField();
+    private final Span usernameValidation = new Span();
+    private Icon usernameValidationIcon = new Icon();
+    private final Span usernameValidationText = new Span();
 
     private final VerticalLayout confirmationMethodSection = new VerticalLayout();
     private final FormLayout confirmationMethodFields = new FormLayout();
@@ -49,7 +60,8 @@ public class RegistrationView extends YalseeFormLayout {
     private final Span legalInformationEnd = new Span(".");
 
 
-    public RegistrationView() {
+    public RegistrationView(final UserService userService) {
+        this.userService = userService;
         setId(IDs.PAGE_ID);
 
         init();
@@ -83,7 +95,17 @@ public class RegistrationView extends YalseeFormLayout {
 
     private List<Component> prepareFormFields() {
         usernameInput.setId(IDs.USERNAME_INPUT);
+        usernameInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        usernameInput.addValueChangeListener(this::onUsernameFieldChanged);
+
+        usernameValidationIcon.setId(IDs.USERNAME_VALIDATION_ICON);
+        usernameValidationIcon.setVisible(false); //not visible by default
+        usernameValidationText.setId(IDs.USERNAME_VALIDATION_TEXT);
+
         usernameFields.addFormItem(usernameInput, "Username");
+        usernameFields.add(usernameValidation);
+
+        usernameValidation.add(usernameValidationIcon, usernameValidationText);
         usernameSection.add(usernameFields);
 
         Label confirmationMethodLabel = new Label("Confirmation method");
@@ -138,6 +160,26 @@ public class RegistrationView extends YalseeFormLayout {
         usernameInput.setAutofocus(true);
     }
 
+    private void onUsernameFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        boolean isAccountAlreadyExists = StringUtils.isNotBlank(event.getValue())
+                && userService.isUserExists(event.getValue());
+        if (isAccountAlreadyExists) {
+            usernameValidationIcon = new Icon(VaadinIcon.CLOSE);
+            usernameValidationIcon.setColor("red");
+            usernameValidationText.setText(" Username exist");
+            usernameValidationText.setClassName("red");
+        } else {
+            usernameValidationIcon = new Icon(VaadinIcon.CHECK);
+            usernameValidationIcon.setColor("green");
+            usernameValidationText.setText(" Username not exist");
+            usernameValidationText.setClassName("green");
+        }
+        usernameValidation.removeAll();
+        usernameValidation.add(usernameValidationIcon, usernameValidationText);
+        usernameValidationIcon.setId(IDs.USERNAME_VALIDATION_ICON);
+        usernameValidationIcon.setVisible(true);
+    }
+
     public static class IDs {
         public static final String PAGE_ID = "registerPage";
         public static final String FORM_TITLE = "formTitle";
@@ -151,5 +193,7 @@ public class RegistrationView extends YalseeFormLayout {
         public static final String LEGAL_INFO_TERMS_LINK = "termsLink";
         public static final String LEGAL_INFO_END = "legalInfoEnd";
         public static final String SUBMIT_BUTTON = "submitButton";
+        public static final String USERNAME_VALIDATION_ICON = "usernameValidationIcon";
+        public static final String USERNAME_VALIDATION_TEXT = "usernameValidationText";
     }
 }
