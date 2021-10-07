@@ -4,15 +4,16 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import lombok.Getter;
 
 /**
  * Core Layout for all pages.
  *
  * @since 3.0.7
  */
-public class YalseeLayout extends VerticalLayout {
-    private final HorizontalLayout page = new HorizontalLayout();
+public class YalseeLayout extends HorizontalLayout {
     private final Div leftDiv = new Div();
+    @Getter
     private final VerticalLayout centralLayout = new VerticalLayout();
     private final Div rightDiv = new Div();
 
@@ -25,12 +26,11 @@ public class YalseeLayout extends VerticalLayout {
     }
 
     private void init() {
-        page.add(leftDiv, centralLayout, rightDiv);
-        super.add(page);
+        super.add(leftDiv, centralLayout, rightDiv);
     }
 
     private void applyStyle() {
-        page.setWidthFull();
+        addClassName("yalsee-layout");
 
         leftDiv.addClassName("responsive-div");
         centralLayout.addClassName("responsive-center");
