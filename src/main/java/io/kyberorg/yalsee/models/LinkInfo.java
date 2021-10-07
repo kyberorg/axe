@@ -48,7 +48,7 @@ public class LinkInfo {
     private Timestamp updated;
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         LinkInfo linkInfo = (LinkInfo) o;
@@ -57,6 +57,6 @@ public class LinkInfo {
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(ident, description, session);
     }
 }
