@@ -4,8 +4,6 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
-    <property name="now" value="UNIX_TIMESTAMP()" dbms="mysql"/>
-    <property name="now" value="CURRENT_TIMESTAMP()" dbms="h2"/>
     <changeSet id="1" author="kyberorg">
         <createTable tableName="links">
             <column name="id" autoIncrement="true" type="bigint">
@@ -47,7 +45,7 @@
             <column name="session"/>
         </createIndex>
     </changeSet>
-    <changeSet id="4" author="kyberorg">
+    <changeSet id="4" author="kyberorg" failOnError="true">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
@@ -56,10 +54,10 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="password" type="VARCHAR(255)"/>
-            <column name="role" type="VARCHAR(255)">
+            <column name="user_role" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="locked" type="BOOLEAN"/>
+            <column name="is_locked" type="BOOLEAN"/>
             <column name="enabled" type="BOOLEAN"/>
             <column name="created" type="DATETIME">
                 <constraints nullable="false"/>
@@ -111,18 +109,18 @@
             <column name="id" value="1"/>
             <column name="username" value="yalsee"/>
             <column name="password" value=""/>
-            <column name="role" value="SUPER_ADMIN"/>
-            <column name="locked" value="false"/>
-            <column name="enabled" value="true"/>
-            <column name="created" valueDate="${now}"/>
-            <column name="updated" valueDate="${now}"/>
+            <column name="user_role" value="SUPER_ADMIN"/>
+            <column name="is_locked" valueBoolean="false"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="created" valueDate="now()"/>
+            <column name="updated" valueDate="now()"/>
         </insert>
         <insert tableName="auth_data">
             <column name="id" value="1"/>
             <column name="user" value="1"/>
             <column name="provider" value="LOCAL"/>
             <column name="auth_username" value="yalsee"/>
-            <column name="confirmed" value="true"/>
+            <column name="confirmed" valueBoolean="true"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

@@ -15,20 +15,16 @@ import javax.persistence.*;
 @Entity
 @Table(name = "auth_data")
 public class AuthData {
-    private static final String USER_COLUMN = "user";
-    private static final String PROVIDER_COLUMN = "provider";
-    private static final String AUTH_USERNAME_COLUMN = "auth_username";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
-    @JoinColumn(name = USER_COLUMN, nullable = false)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = PROVIDER_COLUMN, nullable = false)
+    @Column(name = "provider", nullable = false)
     private AuthProvider authProvider;
 
     @Column(name = "auth_username", nullable = false)

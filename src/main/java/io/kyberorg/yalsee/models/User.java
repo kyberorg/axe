@@ -23,38 +23,30 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-    private static final String USERNAME_COLUMN = "username";
-    private static final String PASSWORD_COLUMN = "password";
-    private static final String ROLE_COLUMN = "role";
-    private static final String LOCKED_COLUMN = "locked";
-    private static final String ENABLED_COLUMN = "enabled";
-    private static final String CREATED_COLUMN = "created";
-    private static final String UPDATED_COLUMN = "updated";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = USERNAME_COLUMN, nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = PASSWORD_COLUMN)
+    @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = ROLE_COLUMN, nullable = false)
+    @Column(name = "user_role", nullable = false)
     private UserRole userRole = UserRole.USER;
 
-    @Column(name = LOCKED_COLUMN)
+    @Column(name = "is_locked")
     private boolean locked = false;
 
-    @Column(name = ENABLED_COLUMN)
+    @Column(name = "enabled")
     private boolean enabled = false;
 
-    @Column(name = CREATED_COLUMN, nullable = false)
+    @Column(name = "created", nullable = false)
     private Timestamp created;
 
-    @Column(name = UPDATED_COLUMN, nullable = false)
+    @Column(name = "updated", nullable = false)
     private Timestamp updated;
 
     @Override
