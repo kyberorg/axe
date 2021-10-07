@@ -47,8 +47,8 @@ public class PageNotFoundView extends YalseeLayout implements HasErrorParameter<
     }
 
     private void applyStyle() {
-        image.addClassName("centered-image");
         image.addClassName("error-image");
+        image.addClassName("centered-image");
     }
 
     /**
