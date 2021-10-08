@@ -36,6 +36,8 @@ import java.util.stream.Stream;
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends YalseeFormLayout {
+    public static final int PASSWORD_MIN_LENGTH = 3;
+
     private final UserService userService;
     private final AuthDataService authDataService;
 
@@ -140,7 +142,12 @@ public class RegistrationView extends YalseeFormLayout {
 
         Label passwordSectionLabel = new Label("Password");
         passwordField.setId(IDs.PASSWORD_INPUT);
+        passwordField.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        passwordField.addValueChangeListener(this::onPasswordFieldChanged);
+
         repeatPasswordField.setId(IDs.REPEAT_PASSWORD_INPUT);
+        repeatPasswordField.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        repeatPasswordField.addValueChangeListener(this::onRepeatPasswordFieldChanged);
 
         passwordFields.addFormItem(passwordField, "Password");
         passwordFields.addFormItem(repeatPasswordField, "Same Password");
@@ -242,6 +249,26 @@ public class RegistrationView extends YalseeFormLayout {
             //remove elements from validation if any and hide it
             emailValidation.setVisible(false);
         }
+    }
+
+    private void onPasswordFieldChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
+        boolean meetsLengthRequirements = StringUtils.isNotBlank(event.getSource().getValue()) &&
+                event.getSource().getValue().length() >= PASSWORD_MIN_LENGTH;
+        if (meetsLengthRequirements) {
+            passwordField.setInvalid(false);
+        } else {
+            passwordField.setInvalid(true);
+            passwordField.setErrorMessage("Minimum " + PASSWORD_MIN_LENGTH + " letters");
+        }
+    }
+
+    private void onRepeatPasswordFieldChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
+        String password = passwordField.getValue();
+        String repeatPassword = event.getSource().getValue();
+
+        boolean passwordsAreEquals = StringUtils.isNotBlank(repeatPassword) && repeatPassword.equals(password);
+        repeatPasswordField.setInvalid(!passwordsAreEquals);
+        repeatPasswordField.setErrorMessage("Passwords are different");
     }
 
     public static class IDs {
