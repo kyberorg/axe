@@ -49,6 +49,10 @@ public class RegistrationView extends YalseeFormLayout {
     private final VerticalLayout confirmationMethodSection = new VerticalLayout();
     private final FormLayout confirmationMethodFields = new FormLayout();
     private final EmailField emailInput = new EmailField();
+    private final Span emailValidation = new Span();
+    private final Span emailValidationFirstText = new Span();
+    private final Anchor emailValidationLoginLink = new Anchor();
+    private final Span emailValidationSecondText = new Span();
 
     private final FormLayout passwordFields = new FormLayout();
     private final VerticalLayout passwordSection = new VerticalLayout();
@@ -112,8 +116,17 @@ public class RegistrationView extends YalseeFormLayout {
 
         emailInput.setId(IDs.EMAIL_INPUT);
         emailInput.setClearButtonVisible(true);
+        emailInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        emailInput.addValueChangeListener(this::onEmailFieldChanged);
+
+        emailValidation.setId(IDs.EMAIL_VALIDATION);
+        emailValidationFirstText.setId(IDs.EMAIL_VALIDATION_TEXT_ONE);
+        emailValidationLoginLink.setId(IDs.EMAIL_VALIDATION_LINK);
+        emailValidationSecondText.setId(IDs.EMAIL_VALIDATION_TEXT_TWO);
+        emailValidation.setVisible(false);
 
         confirmationMethodFields.addFormItem(emailInput, "E-mail");
+        confirmationMethodFields.add(emailValidation);
 
         confirmationMethodSection.add(confirmationMethodLabel, confirmationMethodFields);
 
@@ -152,6 +165,7 @@ public class RegistrationView extends YalseeFormLayout {
                 new FormLayout.ResponsiveStep(BREAKPOINT, 2)
         ));
 
+        emailValidationFirstText.setClassName("red");
         confirmationMethodSection.setClassName("compact-section");
         passwordSection.setClassName("compact-section");
     }
@@ -160,7 +174,7 @@ public class RegistrationView extends YalseeFormLayout {
         usernameInput.setAutofocus(true);
     }
 
-    private void onUsernameFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+    private void onUsernameFieldChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
         boolean isAccountAlreadyExists = StringUtils.isNotBlank(event.getValue())
                 && userService.isUserExists(event.getValue());
         if (isAccountAlreadyExists) {
@@ -168,16 +182,50 @@ public class RegistrationView extends YalseeFormLayout {
             usernameValidationIcon.setColor("red");
             usernameValidationText.setText(" Username exist");
             usernameValidationText.setClassName("red");
+            usernameInput.setInvalid(true);
         } else {
             usernameValidationIcon = new Icon(VaadinIcon.CHECK);
             usernameValidationIcon.setColor("green");
             usernameValidationText.setText(" Username not exist");
             usernameValidationText.setClassName("green");
+            usernameInput.setInvalid(false);
         }
         usernameValidation.removeAll();
         usernameValidation.add(usernameValidationIcon, usernameValidationText);
         usernameValidationIcon.setId(IDs.USERNAME_VALIDATION_ICON);
         usernameValidationIcon.setVisible(true);
+    }
+
+    private void onEmailFieldChanged(final AbstractField.ComponentValueChangeEvent<EmailField, String> event) {
+        emailValidation.removeAll();
+        emailValidation.setVisible(true);
+        if (event.getHasValue().isEmpty()) {
+            return;
+        }
+
+        boolean isEmailInvalid = event.getSource().isInvalid();
+        if (isEmailInvalid) {
+            emailValidationFirstText.setText("Please use valid email address.");
+            emailValidationFirstText.setClassName("red");
+            emailValidation.add(emailValidationFirstText);
+            emailValidation.setVisible(true);
+            return;
+        }
+
+        boolean isEmailAlreadyExists = StringUtils.isNotBlank(event.getValue()); //TODO add method from service as well
+        if (isEmailAlreadyExists) {
+            emailValidationFirstText.setText("This e-mail already exists. ");
+            emailValidationFirstText.setClassName("red");
+            emailValidationLoginLink.setHref(Endpoint.UI.LOGIN_PAGE);
+            emailValidationLoginLink.setText("Login");
+            emailValidationSecondText.setText(" here. You can use e-mail as username as well.");
+            emailValidation.add(emailValidationFirstText, emailValidationLoginLink, emailValidationSecondText);
+            emailValidation.setVisible(true);
+            emailInput.setInvalid(true);
+        } else {
+            //remove elements from validation if any and hide it
+            emailValidation.setVisible(false);
+        }
     }
 
     public static class IDs {
@@ -195,5 +243,9 @@ public class RegistrationView extends YalseeFormLayout {
         public static final String SUBMIT_BUTTON = "submitButton";
         public static final String USERNAME_VALIDATION_ICON = "usernameValidationIcon";
         public static final String USERNAME_VALIDATION_TEXT = "usernameValidationText";
+        public static final String EMAIL_VALIDATION = "emailValidation";
+        public static final String EMAIL_VALIDATION_TEXT_ONE = "emailValidationTextOne";
+        public static final String EMAIL_VALIDATION_LINK = "emailValidationLink";
+        public static final String EMAIL_VALIDATION_TEXT_TWO = "emailValidationTextTwo";
     }
 }
