@@ -10,6 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
+/**
+ * Base Model for all models in application. Provides {@link #id} field and base methods.
+ *
+ * @since 3.4
+ */
 @Getter
 @Setter
 @MappedSuperclass
