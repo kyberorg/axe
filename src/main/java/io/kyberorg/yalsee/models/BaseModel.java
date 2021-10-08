@@ -1,7 +1,6 @@
 package io.kyberorg.yalsee.models;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
@@ -13,7 +12,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @MappedSuperclass
 public abstract class BaseModel {
 
