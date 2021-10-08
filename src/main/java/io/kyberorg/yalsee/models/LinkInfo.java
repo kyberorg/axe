@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 
 /**
  * LinkInfo table mapped Java Object.
@@ -21,16 +21,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "link_info")
-public class LinkInfo {
+public class LinkInfo extends TimeModel {
     private static final String IDENT_COLUMN = "ident";
     private static final String DESCRIPTION_COLUMN = "description";
     private static final String SESSION_COLUMN = "session";
-    private static final String CREATED_COLUMN = "created";
-    private static final String UPDATED_COLUMN = "updated";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
     @Column(name = IDENT_COLUMN, nullable = false, unique = true)
     private String ident;
@@ -41,22 +35,4 @@ public class LinkInfo {
     @Column(name = SESSION_COLUMN)
     private String session;
 
-    @Column(name = CREATED_COLUMN, nullable = false)
-    private Timestamp created;
-
-    @Column(name = UPDATED_COLUMN, nullable = false)
-    private Timestamp updated;
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        LinkInfo linkInfo = (LinkInfo) o;
-        return Objects.equals(id, linkInfo.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ident, description, session);
-    }
 }
