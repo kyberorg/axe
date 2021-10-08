@@ -14,10 +14,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "auth_data")
-public class AuthData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class AuthData extends BaseModel {
 
     @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "user", nullable = false)

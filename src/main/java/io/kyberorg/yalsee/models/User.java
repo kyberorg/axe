@@ -5,16 +5,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -22,11 +19,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends TimeModel implements UserDetails {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
@@ -42,12 +35,6 @@ public class User implements UserDetails {
 
     @Column(name = "enabled")
     private boolean enabled = false;
-
-    @Column(name = "created", nullable = false)
-    private Timestamp created;
-
-    @Column(name = "updated", nullable = false)
-    private Timestamp updated;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -75,16 +62,4 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, userRole);
-    }
 }

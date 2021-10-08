@@ -81,6 +81,9 @@
             <column name="created" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="token"/>
         <addForeignKeyConstraint baseColumnNames="user" baseTableName="token" constraintName="FK_TOKEN_ON_USER"
@@ -114,7 +117,7 @@
             <column name="tfa_enabled" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="tfa_provider" type="INT">
+            <column name="tfa_provider" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -138,6 +141,12 @@
             <column name="provider" value="LOCAL"/>
             <column name="auth_username" value="yalsee"/>
             <column name="confirmed" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_preferences">
+            <column name="id" value="1"/>
+            <column name="user_id" value="1"/>
+            <column name="tfa_enabled" valueBoolean="false"/>
+            <column name="tfa_provider" value="LOCAL"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

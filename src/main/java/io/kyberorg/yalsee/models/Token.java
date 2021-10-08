@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -15,12 +14,7 @@ import java.sql.Timestamp;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "token")
-public class Token {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
+public class Token extends TimeModel {
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 
@@ -31,8 +25,4 @@ public class Token {
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user")
     private User user;
-
-    @Column(name = "created", nullable = false)
-    private Timestamp created;
-
 }

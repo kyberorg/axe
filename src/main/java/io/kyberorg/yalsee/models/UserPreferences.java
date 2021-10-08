@@ -14,11 +14,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "user_preferences")
-public class UserPreferences {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class UserPreferences extends BaseModel {
     @OneToOne(cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -26,8 +22,8 @@ public class UserPreferences {
     @Column(name = "tfa_enabled", nullable = false)
     private boolean tfaEnabled = false;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "tfa_provider", nullable = false)
-    private AuthProvider tfaProvider = AuthProvider.EMAIL;
+    private AuthProvider tfaProvider = AuthProvider.LOCAL;
 
 }
