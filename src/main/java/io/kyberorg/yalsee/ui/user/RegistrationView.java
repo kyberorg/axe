@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.ui.user;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
@@ -61,6 +62,9 @@ public class RegistrationView extends YalseeFormLayout {
     private final PasswordField passwordField = new PasswordField();
     private final PasswordField repeatPasswordField = new PasswordField();
 
+    private final VerticalLayout twoFaSection = new VerticalLayout();
+    private final Checkbox twoFaToggle = new Checkbox();
+
     private final Span legalInformationText = new Span();
     private final Anchor linkToTerms = new Anchor();
     private final Span legalInformationEnd = new Span(".");
@@ -94,8 +98,9 @@ public class RegistrationView extends YalseeFormLayout {
         List<Component> legalInformationFields = createLegalInfo();
         setLegalInfo(legalInformationFields);
 
-        setAdditionalInfo("Leave both password fields empty, " +
-                "if you want to receive one time codes every time you log in.");
+        setAdditionalInfo("Enable 2FA protection, " +
+                "if you want to receive one time codes every time you log in. " +
+                "This can be changed later in your profile.");
 
         setSubmitButtonText("Sign up");
     }
@@ -133,7 +138,7 @@ public class RegistrationView extends YalseeFormLayout {
 
         confirmationMethodSection.add(confirmationMethodLabel, confirmationMethodFields);
 
-        Label passwordSectionLabel = new Label("Password (optional)");
+        Label passwordSectionLabel = new Label("Password");
         passwordField.setId(IDs.PASSWORD_INPUT);
         repeatPasswordField.setId(IDs.REPEAT_PASSWORD_INPUT);
 
@@ -142,7 +147,15 @@ public class RegistrationView extends YalseeFormLayout {
 
         passwordSection.add(passwordSectionLabel, passwordFields);
 
-        return List.of(usernameSection, confirmationMethodSection, passwordSection);
+        Label twoFaSectionLabel = new Label("Two-Factor Authentication (2FA)");
+        twoFaSectionLabel.setId(IDs.TWO_FA_SECTION_LABEL);
+        twoFaToggle.setId(IDs.TWO_FA_TOGGLE);
+        twoFaToggle.setLabel("Protect my account with additional one time codes");
+
+        twoFaSection.setId(IDs.TWO_FA_SECTION);
+        twoFaSection.add(twoFaSectionLabel, twoFaToggle);
+
+        return List.of(usernameSection, confirmationMethodSection, passwordSection, twoFaSection);
     }
 
     private List<Component> createLegalInfo() {
@@ -183,13 +196,13 @@ public class RegistrationView extends YalseeFormLayout {
         if (isAccountAlreadyExists) {
             usernameValidationIcon = new Icon(VaadinIcon.CLOSE);
             usernameValidationIcon.setColor("red");
-            usernameValidationText.setText(" Username exist");
+            usernameValidationText.setText(" Username exists");
             usernameValidationText.setClassName("red");
             usernameInput.setInvalid(true);
         } else {
             usernameValidationIcon = new Icon(VaadinIcon.CHECK);
             usernameValidationIcon.setColor("green");
-            usernameValidationText.setText(" Username not exist");
+            usernameValidationText.setText(" Username available");
             usernameValidationText.setClassName("green");
             usernameInput.setInvalid(false);
         }
@@ -250,5 +263,8 @@ public class RegistrationView extends YalseeFormLayout {
         public static final String EMAIL_VALIDATION_TEXT_ONE = "emailValidationTextOne";
         public static final String EMAIL_VALIDATION_LINK = "emailValidationLink";
         public static final String EMAIL_VALIDATION_TEXT_TWO = "emailValidationTextTwo";
+        public static final String TWO_FA_SECTION = "tfaSection";
+        public static final String TWO_FA_SECTION_LABEL = "tfaSectionLabel";
+        public static final String TWO_FA_TOGGLE = "tfaToggle";
     }
 }
