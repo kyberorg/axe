@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface AuthDataDao extends CrudRepository<AuthData, Long> {
     Optional<AuthData> findByUserAndAuthProvider(User user, AuthProvider authProvider);
 
+    boolean existsByAuthProviderAndAuthUsername(final AuthProvider authProvider, final String authUsername);
+
 }

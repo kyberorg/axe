@@ -19,6 +19,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.services.user.AuthDataService;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
@@ -35,6 +36,7 @@ import java.util.stream.Stream;
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends YalseeFormLayout {
     private final UserService userService;
+    private final AuthDataService authDataService;
 
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -64,8 +66,9 @@ public class RegistrationView extends YalseeFormLayout {
     private final Span legalInformationEnd = new Span(".");
 
 
-    public RegistrationView(final UserService userService) {
+    public RegistrationView(final UserService userService, final AuthDataService authDataService) {
         this.userService = userService;
+        this.authDataService = authDataService;
         setId(IDs.PAGE_ID);
 
         init();
@@ -212,7 +215,7 @@ public class RegistrationView extends YalseeFormLayout {
             return;
         }
 
-        boolean isEmailAlreadyExists = StringUtils.isNotBlank(event.getValue()); //TODO add method from service as well
+        boolean isEmailAlreadyExists = authDataService.isEmailAlreadyUsed(event.getValue());
         if (isEmailAlreadyExists) {
             emailValidationFirstText.setText("This e-mail already exists. ");
             emailValidationFirstText.setClassName("red");
