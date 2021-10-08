@@ -1,7 +1,9 @@
 package io.kyberorg.yalsee.ui.user;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -20,10 +22,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.services.user.AuthDataService;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
+import io.kyberorg.yalsee.utils.ErrorUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -105,6 +109,8 @@ public class RegistrationView extends YalseeFormLayout {
                 "This can be changed later in your profile.");
 
         setSubmitButtonText("Sign up");
+
+        getSubmitButton().addClickListener(this::onRegister);
     }
 
     private List<Component> prepareFormFields() {
@@ -269,6 +275,52 @@ public class RegistrationView extends YalseeFormLayout {
         boolean passwordsAreEquals = StringUtils.isNotBlank(repeatPassword) && repeatPassword.equals(password);
         repeatPasswordField.setInvalid(!passwordsAreEquals);
         repeatPasswordField.setErrorMessage("Passwords are different");
+    }
+
+    /**
+     * @param clickEvent event
+     * @see io.kyberorg.yalsee.services.LinkService#createLink(LinkServiceInput)
+     */
+    private void onRegister(ClickEvent<Button> clickEvent) {
+        String username = usernameInput.getValue();
+        if (StringUtils.isBlank(username)) {
+            ErrorUtils.showError("Username cannot be empty");
+            return;
+        }
+        if (userService.isUserExists(username)) {
+            ErrorUtils.showError("Username already exists");
+            return;
+        }
+
+        String email = emailInput.getValue();
+        if (StringUtils.isBlank(email)) {
+            ErrorUtils.showError("Email cannot be empty");
+            return;
+        }
+        if (authDataService.isEmailAlreadyUsed(email)) {
+            ErrorUtils.showError("Email already used");
+            return;
+        }
+
+        String password = passwordField.getValue();
+        String repeatPassword = repeatPasswordField.getValue();
+        if (StringUtils.isBlank(password)) {
+            ErrorUtils.showError("Password cannot be empty");
+            return;
+        }
+        if (password.length() < PASSWORD_MIN_LENGTH) {
+            ErrorUtils.showError("Password is too short");
+            return;
+        }
+        if (StringUtils.isBlank(repeatPassword)) {
+            ErrorUtils.showError("Password confirmation cannot be empty");
+            return;
+        }
+        if (!repeatPassword.equals(password)) {
+            ErrorUtils.showError("Password and confirmation are different");
+            return;
+        }
+        // userService.createUser(username, email, password, tfa);
     }
 
     public static class IDs {

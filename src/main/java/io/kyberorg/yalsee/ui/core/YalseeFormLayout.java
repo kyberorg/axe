@@ -7,6 +7,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.kyberorg.yalsee.Endpoint;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -33,6 +34,7 @@ public class YalseeFormLayout extends YalseeLayout {
 
     private final Hr separator = new Hr();
 
+    @Getter
     private final Button submitButton = new Button();
 
     private final Section forgotPasswordSection = new Section();

@@ -59,6 +59,16 @@ public class ErrorUtils {
     }
 
     /**
+     * Creates and Opens Error Notification.
+     *
+     * @param errorMessage string with error
+     */
+    public static void showError(final String errorMessage) {
+        Notification errorNotification = ErrorUtils.getErrorNotification(errorMessage);
+        errorNotification.open();
+    }
+
+    /**
      * Creates Error Modal in the middle of page.
      *
      * @param text string with error
