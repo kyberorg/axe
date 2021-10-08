@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Links table mapped Java Object.
@@ -20,18 +20,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "links")
-public class Link {
+public class Link extends BaseModel {
 
-    private static final String IDENT_COLUMN = "ident";
-    private static final String LINK_COLUMN = "link";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(name = IDENT_COLUMN, nullable = false)
+    @Column(name = "ident", nullable = false)
     private String ident;
-    @Column(name = LINK_COLUMN, nullable = false)
+    @Column(name = "link", nullable = false)
     private String link;
 
     /**
@@ -68,18 +61,5 @@ public class Link {
         linkObject.ident = ident;
         linkObject.link = link;
         return linkObject;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Link link = (Link) o;
-        return Objects.equals(id, link.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ident, link);
     }
 }
