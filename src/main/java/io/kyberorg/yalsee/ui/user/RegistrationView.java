@@ -203,7 +203,7 @@ public class RegistrationView extends YalseeFormLayout {
         if (isAccountAlreadyExists) {
             usernameValidationIcon = new Icon(VaadinIcon.CLOSE);
             usernameValidationIcon.setColor("red");
-            usernameValidationText.setText(" Username exists");
+            usernameValidationText.setText(" Username already taken");
             usernameValidationText.setClassName("red");
             usernameInput.setInvalid(true);
         } else {
