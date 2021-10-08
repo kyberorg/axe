@@ -2,6 +2,6 @@
     margin-top: -1rem;
 }
 
-#sameAsUsernameCheckbox {
-    font-size: initial;
+#usernameValidationIcon {
+    height: var(--lumo-font-size, var(--lumo-font-size-m));
 }
