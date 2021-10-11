@@ -4,12 +4,12 @@ import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.UserPreferences;
 import io.kyberorg.yalsee.models.dao.UserDao;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
     public static final String OP_SHORT_PASSWORD = "Password is too short";
 
     private final UserDao userDao;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final AppUtils appUtils;
     private final UserPreferencesService userPreferencesService;
 
     public boolean isUserExists(final String username) {
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
     }
 
     private String encryptPassword(final String plainPassword) {
-        return passwordEncoder.encode(plainPassword);
+        return appUtils.getPasswordEncoder().encode(plainPassword);
     }
 
     public OperationResult validateParams(String username, String plainPassword) {

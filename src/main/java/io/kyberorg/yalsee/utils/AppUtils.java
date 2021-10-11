@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
@@ -38,6 +39,9 @@ public class AppUtils implements Serializable {
     private static final String TAG = "[" + AppUtils.class.getSimpleName() + "]";
     @Getter
     private final Environment env;
+
+    @Getter
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
      * This field is dirty hack to access Short URL from static context.
