@@ -10,6 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -35,6 +37,16 @@ public class User extends TimeModel implements UserDetails {
 
     @Column(name = "enabled")
     private boolean enabled = false;
+
+    public static User create(final String username, final String encryptedPassword) {
+        Timestamp now = Timestamp.from(Instant.now());
+        User userObject = new User();
+        userObject.username = username;
+        userObject.password = encryptedPassword;
+        userObject.setCreated(now);
+        userObject.setUpdated(now);
+        return userObject;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

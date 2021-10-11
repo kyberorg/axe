@@ -23,6 +23,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
+import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
@@ -33,6 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static io.kyberorg.yalsee.services.user.UserService.PASSWORD_MIN_LENGTH;
+
 @SpringComponent
 @UIScope
 @CssImport(value = "./css/registration_view.css")
@@ -40,7 +43,6 @@ import java.util.stream.Stream;
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends YalseeFormLayout {
-    public static final int PASSWORD_MIN_LENGTH = 3;
 
     private final UserService userService;
     private final AuthService authService;
@@ -74,7 +76,6 @@ public class RegistrationView extends YalseeFormLayout {
     private final Span legalInformationText = new Span();
     private final Anchor linkToTerms = new Anchor();
     private final Span legalInformationEnd = new Span(".");
-
 
     public RegistrationView(final UserService userService, final AuthService authService) {
         this.userService = userService;
@@ -283,37 +284,12 @@ public class RegistrationView extends YalseeFormLayout {
      * @param clickEvent event
      * @see io.kyberorg.yalsee.services.LinkService#createLink(LinkServiceInput)
      */
-    private void onRegister(ClickEvent<Button> clickEvent) {
+    private void onRegister(final ClickEvent<Button> clickEvent) {
         String username = usernameInput.getValue();
-        if (StringUtils.isBlank(username)) {
-            ErrorUtils.showError("Username cannot be empty");
-            return;
-        }
-        if (userService.isUserExists(username)) {
-            ErrorUtils.showError("Username already exists");
-            return;
-        }
-
         String email = emailInput.getValue();
-        if (StringUtils.isBlank(email)) {
-            ErrorUtils.showError("Email cannot be empty");
-            return;
-        }
-        if (authService.isEmailAlreadyUsed(email)) {
-            ErrorUtils.showError("Email already used");
-            return;
-        }
-
         String password = passwordField.getValue();
         String repeatPassword = repeatPasswordField.getValue();
-        if (StringUtils.isBlank(password)) {
-            ErrorUtils.showError("Password cannot be empty");
-            return;
-        }
-        if (password.length() < PASSWORD_MIN_LENGTH) {
-            ErrorUtils.showError("Password is too short");
-            return;
-        }
+
         if (StringUtils.isBlank(repeatPassword)) {
             ErrorUtils.showError("Password confirmation cannot be empty");
             return;
@@ -322,7 +298,20 @@ public class RegistrationView extends YalseeFormLayout {
             ErrorUtils.showError("Password and confirmation are different");
             return;
         }
-        // userService.createUser(username, email, password, tfa);
+
+        OperationResult userParamsValidationResult = userService.validateParams(username, password);
+        if (userParamsValidationResult.ok()) {
+            OperationResult emailValidationResult = authService.validateEmail(email);
+            if (emailValidationResult.notOk()) {
+                ErrorUtils.showError(emailValidationResult.getMessage());
+                return;
+            }
+        } else {
+            ErrorUtils.showError(userParamsValidationResult.getMessage());
+            return;
+        }
+        //params are clean
+        //OperationResult userCreateResult = userService.createUser(username, password);
     }
 
     public static class IDs {
