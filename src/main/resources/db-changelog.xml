@@ -88,7 +88,7 @@
         <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="token"/>
         <addForeignKeyConstraint baseColumnNames="user" baseTableName="token" constraintName="FK_TOKEN_ON_USER"
                                  referencedColumnNames="id" referencedTableName="users"/>
-        <createTable tableName="auth_data">
+        <createTable tableName="authorizations">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auth_data"/>
             </column>
@@ -105,7 +105,8 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="user" baseTableName="auth_data" constraintName="FK_AUTH_DATA_ON_USER"
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="authorizations"
+                                 constraintName="FK_AUTH_DATA_ON_USER"
                                  referencedColumnNames="id" referencedTableName="users"/>
         <createTable tableName="user_preferences">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -135,7 +136,7 @@
             <column name="created" valueDate="now()"/>
             <column name="updated" valueDate="now()"/>
         </insert>
-        <insert tableName="auth_data">
+        <insert tableName="authorizations">
             <column name="id" value="1"/>
             <column name="user" value="1"/>
             <column name="provider" value="LOCAL"/>

@@ -23,7 +23,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
-import io.kyberorg.yalsee.services.user.AuthDataService;
+import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
@@ -43,7 +43,7 @@ public class RegistrationView extends YalseeFormLayout {
     public static final int PASSWORD_MIN_LENGTH = 3;
 
     private final UserService userService;
-    private final AuthDataService authDataService;
+    private final AuthService authService;
 
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -76,9 +76,9 @@ public class RegistrationView extends YalseeFormLayout {
     private final Span legalInformationEnd = new Span(".");
 
 
-    public RegistrationView(final UserService userService, final AuthDataService authDataService) {
+    public RegistrationView(final UserService userService, final AuthService authService) {
         this.userService = userService;
-        this.authDataService = authDataService;
+        this.authService = authService;
         setId(IDs.PAGE_ID);
 
         init();
@@ -241,7 +241,7 @@ public class RegistrationView extends YalseeFormLayout {
             return;
         }
 
-        boolean isEmailAlreadyExists = authDataService.isEmailAlreadyUsed(event.getValue());
+        boolean isEmailAlreadyExists = authService.isEmailAlreadyUsed(event.getValue());
         if (isEmailAlreadyExists) {
             emailValidationFirstText.setText("This e-mail already exists. ");
             emailValidationFirstText.setClassName("red");
@@ -278,6 +278,8 @@ public class RegistrationView extends YalseeFormLayout {
     }
 
     /**
+     * On Register Button clicked.
+     *
      * @param clickEvent event
      * @see io.kyberorg.yalsee.services.LinkService#createLink(LinkServiceInput)
      */
@@ -297,7 +299,7 @@ public class RegistrationView extends YalseeFormLayout {
             ErrorUtils.showError("Email cannot be empty");
             return;
         }
-        if (authDataService.isEmailAlreadyUsed(email)) {
+        if (authService.isEmailAlreadyUsed(email)) {
             ErrorUtils.showError("Email already used");
             return;
         }

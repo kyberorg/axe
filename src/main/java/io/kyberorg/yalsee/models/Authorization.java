@@ -13,8 +13,8 @@ import javax.persistence.*;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "auth_data")
-public class AuthData extends BaseModel {
+@Table(name = "authorizations")
+public class Authorization extends BaseModel {
 
     @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "user", nullable = false)
@@ -22,7 +22,7 @@ public class AuthData extends BaseModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false)
-    private AuthProvider authProvider;
+    private AuthProvider provider;
 
     @Column(name = "auth_username", nullable = false)
     private String authUsername;
