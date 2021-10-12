@@ -123,7 +123,7 @@ public class RegistrationView extends Div {
 
         yalseeFormLayout.setAdditionalInfo("Enable 2FA protection, " +
                 "if you want to receive one time codes every time you log in. " +
-                "This can be changed later in your profile.");
+                "This can be changed later in your profile. Email and password are stored encrypted.");
 
         yalseeFormLayout.setSubmitButtonText("Sign up");
 
