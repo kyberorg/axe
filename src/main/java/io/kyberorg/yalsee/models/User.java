@@ -22,6 +22,9 @@ import java.util.Collections;
 @Entity
 @Table(name = "users")
 public class User extends TimeModel implements UserDetails {
+
+    public static final int SYMBOLS_FOR_ENCRYPTION = 3;
+
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
@@ -41,8 +44,8 @@ public class User extends TimeModel implements UserDetails {
     public static User create(final String username, final String encryptedPassword) {
         Timestamp now = Timestamp.from(Instant.now());
         User userObject = new User();
-        userObject.username = username;
-        userObject.password = encryptedPassword;
+        userObject.setUsername(username);
+        userObject.setPassword(encryptedPassword);
         userObject.setCreated(now);
         userObject.setUpdated(now);
         return userObject;

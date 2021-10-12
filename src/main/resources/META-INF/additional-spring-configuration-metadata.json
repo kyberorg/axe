@@ -64,5 +64,15 @@
       "name": "app.session.timeout",
       "type": "java.lang.String",
       "description": "Vaadin Session Timeout in seconds."
+    },
+    {
+      "name": "app.security.password-salt",
+      "type": "java.lang.String",
+      "description": "Salt for Password Encryption."
+    },
+    {
+      "name": "app.security.server-key",
+      "type": "java.lang.String",
+      "description": "Server Key for Data Encryption."
     }
   ] }

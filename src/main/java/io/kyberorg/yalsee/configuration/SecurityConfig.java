@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.configuration;
 
 import io.kyberorg.yalsee.services.user.UserService;
-import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.EncryptionUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,12 +20,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
-    private AppUtils appUtils;
+    private EncryptionUtils encryptionUtils;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(userService).passwordEncoder(appUtils.getPasswordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(encryptionUtils.getPasswordEncoder());
     }
 
     @Override

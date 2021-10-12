@@ -4,7 +4,7 @@ import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.UserPreferences;
 import io.kyberorg.yalsee.models.dao.UserDao;
 import io.kyberorg.yalsee.result.OperationResult;
-import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.utils.EncryptionUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -27,9 +27,10 @@ public class UserService implements UserDetailsService {
     public static final String OP_USER_ALREADY_EXISTS = "Username already exists";
     public static final String OP_EMPTY_PASSWORD = "Password cannot be empty";
     public static final String OP_SHORT_PASSWORD = "Password is too short";
+    public static final String ERR_NO_USER = "No such user";
 
     private final UserDao userDao;
-    private final AppUtils appUtils;
+    private final EncryptionUtils encryptionUtils;
     private final UserPreferencesService userPreferencesService;
 
     public boolean isUserExists(final String username) {
@@ -56,7 +57,7 @@ public class UserService implements UserDetailsService {
         }
         //Action
         try {
-            String encryptedPassword = encryptPassword(plainPassword);
+            String encryptedPassword = encryptionUtils.getPasswordEncoder().encode(constructPassword(plainPassword));
             User newUser = User.create(username, encryptedPassword);
             User savedUser = userDao.save(newUser);
             log.info("{} User saved. Username: {}", TAG, newUser.getUsername());
@@ -74,11 +75,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private String encryptPassword(final String plainPassword) {
-        //TODO salt
-        return appUtils.getPasswordEncoder().encode(plainPassword);
-    }
-
     public OperationResult validateParams(String username, String plainPassword) {
         if (StringUtils.isBlank(username)) {
             return OperationResult.malformedInput().withMessage(OP_EMPTY_USERNAME);
@@ -93,5 +89,21 @@ public class UserService implements UserDetailsService {
             return OperationResult.malformedInput().withMessage(OP_SHORT_PASSWORD);
         }
         return OperationResult.success();
+    }
+
+    public OperationResult passwordMatches(final String username, final String passwordCandidate) {
+        Optional<User> user = userDao.findByUsername(username);
+        if (user.isPresent()) {
+            String encryptedPassword = constructPassword(passwordCandidate);
+            boolean passwordMatches = encryptedPassword.equals(user.get().getPassword());
+            return OperationResult.success().addPayload(passwordMatches);
+        } else {
+            return OperationResult.elementNotFound().withMessage(ERR_NO_USER);
+        }
+    }
+
+    private String constructPassword(final String plainPassword) {
+        final String serverSalt = encryptionUtils.getPasswordSalt();
+        return plainPassword + serverSalt;
     }
 }

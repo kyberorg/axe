@@ -48,6 +48,8 @@ public final class App {
         public static final String REDIRECT_PAGE_BYPASS_SYMBOL = "app.redirect-page.bypass-symbol";
         public static final String REDIRECT_PAGE_TIMEOUT = "app.redirect-page.timeout";
         public static final String SESSION_TIMEOUT = "app.session.timeout";
+        public static final String PASSWORD_SALT = "app.security.password-salt";
+        public static final String SERVER_KEY = "app.security.server-key";
     }
 
     public static class Env {
