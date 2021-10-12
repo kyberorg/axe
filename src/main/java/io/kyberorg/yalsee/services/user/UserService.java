@@ -64,6 +64,7 @@ public class UserService implements UserDetailsService {
             //create user prefs
             userPreferencesService.createEmptyPreferences(savedUser);
             log.info("{} created {} for '{}' user", TAG, UserPreferences.class.getSimpleName(), username);
+            return OperationResult.success().addPayload(savedUser);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
@@ -71,11 +72,10 @@ public class UserService implements UserDetailsService {
             log.debug("", e);
             return OperationResult.generalFail();
         }
-
-        return null;
     }
 
     private String encryptPassword(final String plainPassword) {
+        //TODO salt
         return appUtils.getPasswordEncoder().encode(plainPassword);
     }
 
