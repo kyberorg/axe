@@ -6,3 +6,8 @@
     height: var(--lumo-font-size, var(--lumo-font-size-m));
     padding-right: 0.3rem !important;
 }
+
+#emailValidationResult iron-icon {
+    height: var(--lumo-font-size, var(--lumo-font-size-m));
+    padding-right: 0.3rem !important;
+}

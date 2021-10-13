@@ -73,6 +73,8 @@ public class RegistrationView extends Div {
     private final FormLayout confirmationMethodFields = new FormLayout();
     private final EmailField emailInput = new EmailField();
     private final Span emailValidation = new Span();
+    private final Result emailValidationResult = new Result();
+
     private final Span emailValidationFirstText = new Span();
     private final Anchor emailValidationLoginLink = new Anchor();
     private final Span emailValidationSecondText = new Span();
@@ -153,6 +155,7 @@ public class RegistrationView extends Div {
         emailInput.addValueChangeListener(this::onEmailFieldChanged);
 
         emailValidation.setId(IDs.EMAIL_VALIDATION);
+        emailValidationResult.setId(IDs.EMAIL_VALIDATION_RESULT);
         emailValidationFirstText.setId(IDs.EMAIL_VALIDATION_TEXT_ONE);
         emailValidationLoginLink.setId(IDs.EMAIL_VALIDATION_LINK);
         emailValidationSecondText.setId(IDs.EMAIL_VALIDATION_TEXT_TWO);
@@ -211,7 +214,6 @@ public class RegistrationView extends Div {
                 new FormLayout.ResponsiveStep(BREAKPOINT, 2)
         ));
 
-        emailValidationFirstText.setClassName("red");
         confirmationMethodSection.setClassName("compact-section");
         passwordSection.setClassName("compact-section");
     }
@@ -260,8 +262,10 @@ public class RegistrationView extends Div {
     }
 
     private void onEmailFieldChanged(final AbstractField.ComponentValueChangeEvent<EmailField, String> event) {
+        emailValidationResult.removeAll();
         emailValidation.removeAll();
-        emailValidation.setVisible(true);
+        emailValidation.setVisible(false);
+
         if (event.getHasValue().isEmpty()) {
             return;
         }
@@ -269,27 +273,42 @@ public class RegistrationView extends Div {
         String email = event.getValue();
         boolean isEmailValid = EmailValidator.getInstance().isValid(email);
         if (!isEmailValid) {
-            emailValidationFirstText.setText("Please use valid email address.");
-            emailValidationFirstText.setClassName("red");
-            emailValidation.add(emailValidationFirstText);
+            emailInput.setInvalid(true);
+            emailValidationResult.setOperationSuccessful(false);
+            emailValidationResult.setFailureText("Please use valid email address");
+            emailValidation.removeAll();
+            emailValidation.add(emailValidationResult);
             emailValidation.setVisible(true);
             return;
         }
 
         boolean isEmailAlreadyExists = authService.isEmailAlreadyUsed(email);
         if (isEmailAlreadyExists) {
+            emailInput.setInvalid(true);
+            emailValidationResult.setOperationSuccessful(false);
+
             emailValidationFirstText.setText("This e-mail already exists. ");
-            emailValidationFirstText.setClassName("red");
             emailValidationLoginLink.setHref(Endpoint.UI.LOGIN_PAGE);
             emailValidationLoginLink.setText("Login");
             emailValidationSecondText.setText(" here. You can use e-mail as username as well.");
-            emailValidation.add(emailValidationFirstText, emailValidationLoginLink, emailValidationSecondText);
+
+            emailValidationResult.setTextComponents(emailValidationFirstText, emailValidationLoginLink,
+                    emailValidationSecondText);
+            emailValidationResult.hideIcon();
+
+            emailValidation.removeAll();
+            emailValidation.add(emailValidationResult);
             emailValidation.setVisible(true);
-            emailInput.setInvalid(true);
-        } else {
-            //remove elements from validation if any and hide it
-            emailValidation.setVisible(false);
+            return;
         }
+
+        //all check passed - email valid
+        emailInput.setInvalid(false);
+        emailValidationResult.setOperationSuccessful(true);
+        emailValidationResult.setSuccessText("Email is valid");
+        emailValidation.removeAll();
+        emailValidation.add(emailValidationResult);
+        emailValidation.setVisible(true);
     }
 
     private void onPasswordFieldChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
@@ -404,6 +423,7 @@ public class RegistrationView extends Div {
         public static final String SUBMIT_BUTTON = "submitButton";
         public static final String USERNAME_VALIDATION_RESULT = "usernameValidationResult";
         public static final String EMAIL_VALIDATION = "emailValidation";
+        public static final String EMAIL_VALIDATION_RESULT = "emailValidationResult";
         public static final String EMAIL_VALIDATION_TEXT_ONE = "emailValidationTextOne";
         public static final String EMAIL_VALIDATION_LINK = "emailValidationLink";
         public static final String EMAIL_VALIDATION_TEXT_TWO = "emailValidationTextTwo";
