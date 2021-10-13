@@ -1,79 +1,53 @@
 package io.kyberorg.yalsee.ui.core;
 
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.html.Div;
+import io.kyberorg.yalsee.ui.components.Result;
+
+import java.text.MessageFormat;
 
 public class RegistrationResultLayout extends YalseeLayout {
 
-    private final HorizontalLayout accountCreatedLine = new HorizontalLayout();
-    private final Span accountCreatedText = new Span();
+    private final Result accountCreateResult = new Result();
+    private final Div accountCreatedLine = new Div();
 
-    private final HorizontalLayout twoFactorPrefsLine = new HorizontalLayout();
-    private final Span twoFactorPrefsText = new Span();
+    private final Result twoFactorResult = new Result();
+    private final Div twoFactorLine = new Div();
 
-    private final HorizontalLayout confirmationLetterLine = new HorizontalLayout();
-    private final Span confirmationLetterText = new Span();
+    private final Result confirmationLetterResult = new Result();
+    private final Div confirmationLetterLine = new Div();
 
     public RegistrationResultLayout() {
-        init();
-    }
-
-    private void init() {
         this.setId(IDs.RESULT_LAYOUT);
-        add(accountCreatedLine, twoFactorPrefsLine, confirmationLetterLine);
     }
 
     public void showAccountCreatedLine(final boolean accountCreated) {
-        Icon accountCreatedIcon;
-        if (accountCreated) {
-            accountCreatedIcon = VaadinIcon.CHECK.create();
-            accountCreatedIcon.setColor("green");
-            accountCreatedText.setText("Account created");
-            accountCreatedText.setClassName("green");
-        } else {
-            accountCreatedIcon = VaadinIcon.CLOSE.create();
-            accountCreatedIcon.setColor("red");
-            accountCreatedText.setText("Failed to create account");
-            accountCreatedText.setClassName("red");
-        }
+        accountCreateResult.setOperationSuccessful(accountCreated);
+        accountCreateResult.setSuccessText("Account created");
+        accountCreateResult.setFailureText("Failed to create account");
+
         accountCreatedLine.removeAll();
-        accountCreatedLine.add(accountCreatedIcon, accountCreatedText);
+        accountCreatedLine.add(accountCreateResult);
+        add(accountCreatedLine);
     }
 
     public void showTwoFactorPrefsLine(final boolean result) {
-        Icon icon;
-        if (result) {
-            icon = VaadinIcon.CHECK.create();
-            icon.setColor("green");
-            twoFactorPrefsText.setText("Two-factor authentication preferences saved");
-            twoFactorPrefsText.setClassName("green");
-        } else {
-            icon = VaadinIcon.CLOSE.create();
-            icon.setColor("red");
-            twoFactorPrefsText.setText("Failed to save 2fa preferences");
-            twoFactorPrefsText.setClassName("red");
-        }
-        twoFactorPrefsLine.removeAll();
-        twoFactorPrefsLine.add(icon, twoFactorPrefsText);
+        twoFactorResult.setOperationSuccessful(result);
+        twoFactorResult.setSuccessText("Two-factor authentication preferences saved");
+        twoFactorResult.setFailureText("Failed to save two-factor authentication preferences");
+
+        twoFactorLine.removeAll();
+        twoFactorLine.add(twoFactorResult);
+        add(twoFactorLine);
     }
 
     public void showConfirmationLetterLine(final boolean result, final String email) {
-        Icon icon;
-        if (result) {
-            icon = VaadinIcon.CHECK.create();
-            icon.setColor("green");
-            confirmationLetterText.setText("Confirmation letter sent to " + email);
-            confirmationLetterText.setClassName("green");
-        } else {
-            icon = VaadinIcon.CLOSE.create();
-            icon.setColor("red");
-            confirmationLetterText.setText("Failed to save 2fa preferences");
-            confirmationLetterText.setClassName("red");
-        }
+        confirmationLetterResult.setOperationSuccessful(result);
+        confirmationLetterResult.setSuccessText(MessageFormat.format("Confirmation letter sent to {0}", email));
+        confirmationLetterResult.setFailureText("Failed to sent confirmation letter");
+
         confirmationLetterLine.removeAll();
-        confirmationLetterLine.add(icon, confirmationLetterText);
+        confirmationLetterLine.add(confirmationLetterResult);
+        add(confirmationLetterLine);
     }
 
     public static class IDs {
