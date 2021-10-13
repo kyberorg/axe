@@ -21,6 +21,7 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     private static final String TAG = "[" + UserService.class.getSimpleName() + "]";
+    public static final int USERNAME_MAX_LENGTH = 100;
     public static final int PASSWORD_MIN_LENGTH = 3;
 
     public static final String OP_EMPTY_USERNAME = "Username cannot be empty";
@@ -28,6 +29,8 @@ public class UserService implements UserDetailsService {
     public static final String OP_EMPTY_PASSWORD = "Password cannot be empty";
     public static final String OP_SHORT_PASSWORD = "Password is too short";
     public static final String ERR_NO_USER = "No such user";
+    public static final String ERR_NOT_VALID_CHARS_IN_USERNAME = "There are non-unicode chars in username";
+    private static final String ERR_USERNAME_IS_TOO_LONG = "Username is too long";
 
     private final UserDao userDao;
     private final EncryptionUtils encryptionUtils;
@@ -78,6 +81,12 @@ public class UserService implements UserDetailsService {
     public OperationResult validateParams(String username, String plainPassword) {
         if (StringUtils.isBlank(username)) {
             return OperationResult.malformedInput().withMessage(OP_EMPTY_USERNAME);
+        }
+        if (!StringUtils.isAlphanumeric(username)) {
+            return OperationResult.malformedInput().withMessage(ERR_NOT_VALID_CHARS_IN_USERNAME);
+        }
+        if (username.length() > USERNAME_MAX_LENGTH) {
+            return OperationResult.malformedInput().withMessage(ERR_USERNAME_IS_TOO_LONG);
         }
         if (isUserExists(username)) {
             return OperationResult.conflict().withMessage(OP_USER_ALREADY_EXISTS);

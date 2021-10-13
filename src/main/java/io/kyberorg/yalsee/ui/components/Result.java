@@ -7,18 +7,22 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @NoArgsConstructor
 @Tag("yalsee-result")
 public class Result extends Composite<Span> {
-    public static final String SUCCESS_TEXT = "Operation successfully completed";
-    public static final String FAILURE_TEXT = "Operation failed";
+    public static final String DEFAULT_SUCCESS_TEXT = "Operation successfully completed";
+    public static final String DEFAULT_FAILURE_TEXT = "Operation failed";
     @Getter
     private Icon icon;
     @Getter
-    private Span text;
+    private Span textSpan;
     @Getter
     private boolean operationSuccessful;
+
+    private String successText;
+    private String failureText;
 
     public Result(final boolean operationSuccessful) {
         this.operationSuccessful = operationSuccessful;
@@ -31,15 +35,13 @@ public class Result extends Composite<Span> {
     }
 
     public void setSuccessText(final String successText) {
-        if (operationSuccessful) {
-            text.setText(successText);
-        }
+        this.successText = successText;
+        updateElements();
     }
 
     public void setFailureText(final String failureText) {
-        if (!operationSuccessful) {
-            text.setText(failureText);
-        }
+        this.failureText = failureText;
+        updateElements();
     }
 
     private void updateElements() {
@@ -47,16 +49,19 @@ public class Result extends Composite<Span> {
             icon = VaadinIcon.CHECK.create();
             icon.setColor("green");
             icon.addClassName("space-after-icon");
-            text = new Span(SUCCESS_TEXT);
-            text.setClassName("green");
+            textSpan = new Span();
+            textSpan.setClassName("green");
+            String text = StringUtils.isNotBlank(this.successText) ? successText : DEFAULT_SUCCESS_TEXT;
+            textSpan.setText(text);
         } else {
             icon = VaadinIcon.CLOSE.create();
             icon.setColor("red");
-            text = new Span(FAILURE_TEXT);
-            text.setClassName("red");
+            textSpan = new Span();
+            textSpan.setClassName("red");
+            String text = StringUtils.isNotBlank(this.failureText) ? failureText : DEFAULT_FAILURE_TEXT;
+            textSpan.setText(text);
         }
         getContent().removeAll();
-        getContent().add(icon, text);
+        getContent().add(icon, textSpan);
     }
-
 }

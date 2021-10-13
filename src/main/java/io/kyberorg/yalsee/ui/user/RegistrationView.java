@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static io.kyberorg.yalsee.services.user.UserService.PASSWORD_MIN_LENGTH;
+import static io.kyberorg.yalsee.services.user.UserService.USERNAME_MAX_LENGTH;
 import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.BREAKPOINT;
 import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.START_POINT;
 
@@ -225,13 +226,33 @@ public class RegistrationView extends Div {
     }
 
     private void onUsernameFieldChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
-        boolean isAccountAlreadyExists = StringUtils.isNotBlank(event.getValue())
-                && userService.isUserExists(event.getValue());
-        usernameInput.setInvalid(isAccountAlreadyExists);
+        final String username = event.getValue();
+        boolean isUsernameEmpty = StringUtils.isBlank(username);
+        if (isUsernameEmpty) {
+            onInvalidUsername("Username cannot be empty");
+            return;
+        }
+        boolean isUsernameAlphaNumeric = StringUtils.isAlphanumeric(username);
+        if (!isUsernameAlphaNumeric) {
+            onInvalidUsername("Username contains not allowed characters. " +
+                    "Please use letters and numbers only");
+            return;
+        }
+        boolean isUsernameTooLong = username.length() > USERNAME_MAX_LENGTH;
+        if (isUsernameTooLong) {
+            onInvalidUsername("This username is too long. Try something shorter");
+            return;
+        }
+        boolean isAccountAlreadyExists = userService.isUserExists(username);
+        if (isAccountAlreadyExists) {
+            onInvalidUsername("Username already taken");
+            return;
+        }
 
-        userValidationResult.setOperationSuccessful(!isAccountAlreadyExists);
+        //all checks are passed
+        usernameInput.setInvalid(false);
         userValidationResult.setSuccessText("Username available");
-        userValidationResult.setFailureText("Username already taken");
+        userValidationResult.setOperationSuccessful(true);
         usernameValidation.removeAll();
         usernameValidation.add(userValidationResult);
         usernameValidation.setVisible(true);
@@ -355,6 +376,15 @@ public class RegistrationView extends Div {
         } else {
             registrationResult.showConfirmationLetterLine(false, null);
         }
+    }
+
+    private void onInvalidUsername(final String failureText) {
+        usernameInput.setInvalid(true);
+        userValidationResult.setOperationSuccessful(false);
+        userValidationResult.setFailureText(failureText);
+        usernameValidation.removeAll();
+        usernameValidation.add(userValidationResult);
+        usernameValidation.setVisible(true);
     }
 
     public static class IDs {
