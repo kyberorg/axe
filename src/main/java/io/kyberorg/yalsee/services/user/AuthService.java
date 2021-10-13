@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.dao.AuthorizationDao;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.users.AuthProvider;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class AuthService {
     public static final String TAG = "[" + AuthService.class.getSimpleName() + "]";
@@ -29,13 +29,15 @@ public class AuthService {
     public static final String OP_EMAIL_ALREADY_EXISTS = "Email already used";
     public static final String ERR_ENCRYPTION_FAILED = "Failed to encrypt plain text value before saving";
 
+    private String emailToSearch;
+
     public boolean isEmailAlreadyUsed(final String email) {
         if (StringUtils.isBlank(email)) return false;
+        this.emailToSearch = email;
 
         List<Authorization> emailAuthorizations = authorizationDao.findByProvider(AuthProvider.EMAIL);
         Authorization sameEmail = emailAuthorizations.parallelStream()
-                .filter(encryptedEmail ->
-                        cryptTool.decrypt(encryptedEmail.getAuthUsername()).getStringPayload().equals(email))
+                .filter(this::authorizationHasGivenEmailAddress)
                 .findFirst()
                 .orElse(null);
         return Objects.nonNull(sameEmail);
@@ -102,6 +104,20 @@ public class AuthService {
             return OperationResult.databaseDown();
         } catch (Exception e) {
             return OperationResult.generalFail();
+        }
+    }
+
+    private boolean authorizationHasGivenEmailAddress(Authorization authorization) {
+        OperationResult result = cryptTool.decrypt(authorization.getAuthUsername());
+        if (result.ok()) {
+            String valueFromDb = result.getStringPayload();
+            if (StringUtils.isNotBlank(valueFromDb)) {
+                return valueFromDb.equals(emailToSearch);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 }

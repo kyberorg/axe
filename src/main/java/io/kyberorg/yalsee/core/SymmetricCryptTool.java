@@ -3,45 +3,48 @@ package io.kyberorg.yalsee.core;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.EncryptionUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.crypto.cipher.CryptoCipher;
+import org.apache.commons.crypto.utils.Utils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 
-import javax.crypto.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.ShortBufferException;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Base64;
+import java.util.Properties;
 
 @Slf4j
 @Component
 public final class SymmetricCryptTool {
     private static final String TAG = "[" + SymmetricCryptTool.class.getSimpleName() + "]";
-    private static final int ITERATION_COUNT = 65536;
-    private static final int KEY_LENGTH = 256;
+    private static final int IV_BYTES = 16;
 
+    private static final String AES = "AES";
     private static final String algorithm = "AES/CBC/PKCS5Padding";
 
     private final EncryptionUtils encryptionUtils;
 
-    private final SecretKey secretKey;
+    private final SecretKeySpec secretKey;
     private final IvParameterSpec iv;
 
-    public SymmetricCryptTool(EncryptionUtils encryptionUtils)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public SymmetricCryptTool(EncryptionUtils encryptionUtils) {
         this.encryptionUtils = encryptionUtils;
 
         secretKey = generateKey();
         iv = generateIv();
     }
 
-    public OperationResult encrypt(String plainText) {
+    public OperationResult encrypt(final String plainText) {
         try {
-            String encryptedString = encrypt(plainText, secretKey, iv);
+            String encryptedString = doEncrypt(plainText);
             return OperationResult.success().addPayload(encryptedString);
         } catch (Exception e) {
             log.error("{} got exception while encrypting text. Exception message: {}", TAG, e.getMessage());
@@ -50,10 +53,10 @@ public final class SymmetricCryptTool {
         }
     }
 
-    public OperationResult decrypt(String encryptedText) {
+    public OperationResult decrypt(final String encryptedText) {
         try {
-            String plainText = decrypt(encryptedText, secretKey, iv);
-            return OperationResult.success().addPayload(plainText);
+            String decryptedText = doDecrypt(encryptedText);
+            return OperationResult.success().addPayload(decryptedText);
         } catch (Exception e) {
             log.error("{} got exception while decrypting text. Exception message: {}", TAG, e.getMessage());
             log.debug("", e);
@@ -61,37 +64,92 @@ public final class SymmetricCryptTool {
         }
     }
 
-    private SecretKey generateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private SecretKeySpec generateKey() {
         String serverSecretKey = encryptionUtils.getServerKey();
-        String salt = encryptionUtils.getPasswordSalt();
-
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        KeySpec spec = new PBEKeySpec(serverSecretKey.toCharArray(), salt.getBytes(), ITERATION_COUNT, KEY_LENGTH);
-        return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+        return new SecretKeySpec(getUTF8Bytes(serverSecretKey), AES);
     }
 
     private IvParameterSpec generateIv() {
-        byte[] iv = new byte[16];
-        new SecureRandom().nextBytes(iv);
-        return new IvParameterSpec(iv);
+        String serverSecretKey = encryptionUtils.getServerKey();
+        String sixteenChars;
+        if (serverSecretKey.length() < IV_BYTES) {
+            int remaining = IV_BYTES - serverSecretKey.length();
+            sixteenChars = serverSecretKey + "0".repeat(remaining);
+        } else if (serverSecretKey.length() > IV_BYTES) {
+            sixteenChars = serverSecretKey.substring(0, IV_BYTES);
+        } else {
+            sixteenChars = serverSecretKey;
+        }
+
+        return new IvParameterSpec(getUTF8Bytes(sixteenChars));
     }
 
-    private String encrypt(String input, SecretKey key,
-                           IvParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        Cipher cipher = Cipher.getInstance(SymmetricCryptTool.algorithm);
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-        byte[] cipherText = cipher.doFinal(input.getBytes());
-        return Base64.getEncoder().encodeToString(cipherText);
+    private String doEncrypt(String text) throws BadPaddingException, IllegalBlockSizeException,
+            IOException, InvalidAlgorithmParameterException, InvalidKeyException, ShortBufferException {
+
+        Properties properties = new Properties();
+        final ByteBuffer outBuffer;
+        final int bufferSize = 1024;
+        final int updateBytes;
+        final int finalBytes;
+
+        CryptoCipher cipher = Utils.getCipherInstance(algorithm, properties);
+        ByteBuffer inBuffer = ByteBuffer.allocateDirect(bufferSize);
+        outBuffer = ByteBuffer.allocateDirect(bufferSize);
+        inBuffer.put(getUTF8Bytes(text));
+
+        inBuffer.flip(); //ready for the cipher to read it
+        // Show the data is there
+        log.debug("{} inBuffer={}", TAG, asString(inBuffer));
+
+        // Initializes the cipher with ENCRYPT_MODE,key and iv.
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
+
+        // Continues a multiple-part encryption/decryption operation for byte buffer.
+        updateBytes = cipher.update(inBuffer, outBuffer);
+        log.debug("{} updateBytes={}", TAG, updateBytes);
+
+        // We should call do final at the end of encryption/decryption.
+        finalBytes = cipher.doFinal(inBuffer, outBuffer);
+        log.debug("{} finalBytes={}", TAG, finalBytes);
+
+        outBuffer.flip(); // ready for use as decrypt
+        byte[] encoded = new byte[updateBytes + finalBytes];
+        outBuffer.duplicate().get(encoded);
+        String encodedString = Base64Utils.encodeToString(encoded);
+        log.debug("{} encodedString={}", TAG, encodedString);
+        return encodedString;
+
     }
 
-    private String decrypt(String cipherText, SecretKey key, IvParameterSpec iv)
-            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
-            InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(SymmetricCryptTool.algorithm);
-        cipher.init(Cipher.DECRYPT_MODE, key, iv);
-        byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
-        return new String(plainText);
+    private String doDecrypt(String encodedString) throws InvalidAlgorithmParameterException, IllegalBlockSizeException,
+            BadPaddingException, IOException, InvalidKeyException, ShortBufferException {
+        Properties properties = new Properties();
+        final ByteBuffer outBuffer;
+        final int bufferSize = 1024;
+        ByteBuffer decoded = ByteBuffer.allocateDirect(bufferSize);
+        //Creates a CryptoCipher instance with the transformation and properties.
+        CryptoCipher decipher = Utils.getCipherInstance(algorithm, properties);
+        decipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
+        outBuffer = ByteBuffer.allocateDirect(bufferSize);
+        outBuffer.put(Base64Utils.decode(getUTF8Bytes(encodedString)));
+        outBuffer.flip();
+        decipher.update(outBuffer, decoded);
+        decipher.doFinal(outBuffer, decoded);
+        decoded.flip(); // ready for use
+        log.debug("{} decoded={}", TAG, asString(decoded));
+
+        return asString(decoded);
     }
 
+    private byte[] getUTF8Bytes(final String input) {
+        return input.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private String asString(ByteBuffer buffer) {
+        final ByteBuffer copy = buffer.duplicate();
+        final byte[] bytes = new byte[copy.remaining()];
+        copy.get(bytes);
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
 }

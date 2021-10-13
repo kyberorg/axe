@@ -336,8 +336,6 @@ public class RegistrationView extends Div {
         }
 
         replaceFormWithResultLayout();
-        registrationResult.showTwoFactorPrefsLine(false);
-        registrationResult.showConfirmationLetterLine(true, email);
 
         //params are clean
         OperationResult userCreateResult = userService.createUser(username, password);

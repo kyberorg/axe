@@ -73,6 +73,6 @@
     {
       "name": "app.security.server-key",
       "type": "java.lang.String",
-      "description": "Server Key for Data Encryption."
+      "description": "Server Key for Data Encryption. Must be 16, 24 or 32 chars."
     }
   ] }
