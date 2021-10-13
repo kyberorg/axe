@@ -11,8 +11,6 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -31,6 +29,7 @@ import io.kyberorg.yalsee.services.user.UserPreferencesService;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.services.user.confirmators.Confirmators;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.components.Result;
 import io.kyberorg.yalsee.ui.core.RegistrationResultLayout;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.users.AuthProvider;
@@ -66,8 +65,7 @@ public class RegistrationView extends Div {
     private final FormLayout usernameFields = new FormLayout();
     private final TextField usernameInput = new TextField();
     private final Span usernameValidation = new Span();
-    private Icon usernameValidationIcon = new Icon();
-    private final Span usernameValidationText = new Span();
+    private final Result userValidationResult = new Result();
 
     private final VerticalLayout confirmationMethodSection = new VerticalLayout();
     private final FormLayout confirmationMethodFields = new FormLayout();
@@ -136,14 +134,13 @@ public class RegistrationView extends Div {
         usernameInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         usernameInput.addValueChangeListener(this::onUsernameFieldChanged);
 
-        usernameValidationIcon.setId(IDs.USERNAME_VALIDATION_ICON);
-        usernameValidationIcon.setVisible(false); //not visible by default
-        usernameValidationText.setId(IDs.USERNAME_VALIDATION_TEXT);
+        userValidationResult.setId(IDs.USERNAME_VALIDATION_RESULT);
+        usernameValidation.add(userValidationResult);
+        usernameValidation.setVisible(false);
 
         usernameFields.addFormItem(usernameInput, "Username");
         usernameFields.add(usernameValidation);
 
-        usernameValidation.add(usernameValidationIcon, usernameValidationText);
         usernameSection.add(usernameFields);
 
         Label confirmationMethodLabel = new Label("Confirmation method");
@@ -230,23 +227,14 @@ public class RegistrationView extends Div {
     private void onUsernameFieldChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
         boolean isAccountAlreadyExists = StringUtils.isNotBlank(event.getValue())
                 && userService.isUserExists(event.getValue());
-        if (isAccountAlreadyExists) {
-            usernameValidationIcon = new Icon(VaadinIcon.CLOSE);
-            usernameValidationIcon.setColor("red");
-            usernameValidationText.setText(" Username already taken");
-            usernameValidationText.setClassName("red");
-            usernameInput.setInvalid(true);
-        } else {
-            usernameValidationIcon = new Icon(VaadinIcon.CHECK);
-            usernameValidationIcon.setColor("green");
-            usernameValidationText.setText(" Username available");
-            usernameValidationText.setClassName("green");
-            usernameInput.setInvalid(false);
-        }
+        usernameInput.setInvalid(isAccountAlreadyExists);
+
+        userValidationResult.setOperationSuccessful(!isAccountAlreadyExists);
+        userValidationResult.setSuccessText("Username available");
+        userValidationResult.setFailureText("Username already taken");
         usernameValidation.removeAll();
-        usernameValidation.add(usernameValidationIcon, usernameValidationText);
-        usernameValidationIcon.setId(IDs.USERNAME_VALIDATION_ICON);
-        usernameValidationIcon.setVisible(true);
+        usernameValidation.add(userValidationResult);
+        usernameValidation.setVisible(true);
     }
 
     private void onEmailFieldChanged(final AbstractField.ComponentValueChangeEvent<EmailField, String> event) {
@@ -382,8 +370,7 @@ public class RegistrationView extends Div {
         public static final String LEGAL_INFO_TERMS_LINK = "termsLink";
         public static final String LEGAL_INFO_END = "legalInfoEnd";
         public static final String SUBMIT_BUTTON = "submitButton";
-        public static final String USERNAME_VALIDATION_ICON = "usernameValidationIcon";
-        public static final String USERNAME_VALIDATION_TEXT = "usernameValidationText";
+        public static final String USERNAME_VALIDATION_RESULT = "usernameValidationResult";
         public static final String EMAIL_VALIDATION = "emailValidation";
         public static final String EMAIL_VALIDATION_TEXT_ONE = "emailValidationTextOne";
         public static final String EMAIL_VALIDATION_LINK = "emailValidationLink";

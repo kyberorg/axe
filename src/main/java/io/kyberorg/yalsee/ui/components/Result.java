@@ -5,13 +5,12 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Tag("yalsee-result")
-public class Result extends Composite<HorizontalLayout> {
+public class Result extends Composite<Span> {
     public static final String SUCCESS_TEXT = "Operation successfully completed";
     public static final String FAILURE_TEXT = "Operation failed";
     @Getter
@@ -47,6 +46,7 @@ public class Result extends Composite<HorizontalLayout> {
         if (operationSuccessful) {
             icon = VaadinIcon.CHECK.create();
             icon.setColor("green");
+            icon.addClassName("space-after-icon");
             text = new Span(SUCCESS_TEXT);
             text.setClassName("green");
         } else {

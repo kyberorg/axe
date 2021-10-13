@@ -104,3 +104,7 @@
 .green {
     color: green;
 }
+
+.space-after-icon {
+    padding-right: 1rem;
+}
