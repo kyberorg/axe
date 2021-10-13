@@ -22,9 +22,11 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
+import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.AuthService;
+import io.kyberorg.yalsee.services.user.TokenService;
 import io.kyberorg.yalsee.services.user.UserPreferencesService;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.services.user.confirmators.Confirmators;
@@ -58,6 +60,7 @@ public class RegistrationView extends Div {
     private final UserService userService;
     private final UserPreferencesService userPreferencesService;
     private final AuthService authService;
+    private final TokenService tokenService;
     private final Confirmators confirmators;
 
     private final Span subTitleText = new Span();
@@ -92,10 +95,11 @@ public class RegistrationView extends Div {
     private final Span legalInformationEnd = new Span(".");
     private final RegistrationResultLayout registrationResult = new RegistrationResultLayout();
 
-    public RegistrationView(final UserService userService, UserPreferencesService userPreferencesService, final AuthService authService, Confirmators confirmators) {
+    public RegistrationView(final UserService userService, UserPreferencesService userPreferencesService, final AuthService authService, TokenService tokenService, Confirmators confirmators) {
         this.userService = userService;
         this.userPreferencesService = userPreferencesService;
         this.authService = authService;
+        this.tokenService = tokenService;
         this.confirmators = confirmators;
 
         setId(IDs.PAGE_ID);
@@ -390,8 +394,14 @@ public class RegistrationView extends Div {
             OperationResult updatePreferencesResult = userPreferencesService.setTwoFactorProvider(createdUser, AuthProvider.EMAIL, true);
             registrationResult.showTwoFactorPrefsLine(updatePreferencesResult.ok());
         }
-        //TODO add token
-        OperationResult emailConfirmationResult = confirmators.get(AuthProvider.EMAIL).sendConfirmation(email, "");
+        OperationResult getConfirmationTokenResult = tokenService.createConfirmationToken(createdUser);
+        if (getConfirmationTokenResult.notOk()) {
+            registrationResult.showConfirmationLetterLine(false, email);
+            return;
+        }
+        Token confirmationToken = getConfirmationTokenResult.getPayload(Token.class);
+        OperationResult emailConfirmationResult = confirmators.get(AuthProvider.EMAIL)
+                .sendConfirmation(email, confirmationToken.getToken());
         if (emailConfirmationResult.ok()) {
             registrationResult.showConfirmationLetterLine(true, email);
         } else {
