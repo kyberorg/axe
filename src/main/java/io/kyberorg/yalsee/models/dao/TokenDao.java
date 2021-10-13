@@ -10,5 +10,6 @@ public interface TokenDao extends CrudRepository<Token, Long> {
 
     boolean existsByToken(String token);
 
+    boolean existsByTokenAndTokenType(String token, TokenType tokenType);
 
 }

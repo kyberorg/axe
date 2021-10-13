@@ -56,4 +56,8 @@ public class TokenService {
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
+
+    public boolean tokenExists(String token, TokenType tokenType) {
+        return tokenDao.existsByTokenAndTokenType(token, tokenType);
+    }
 }
