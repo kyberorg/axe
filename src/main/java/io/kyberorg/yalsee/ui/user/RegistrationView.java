@@ -35,6 +35,7 @@ import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.users.AuthProvider;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -265,8 +266,9 @@ public class RegistrationView extends Div {
             return;
         }
 
-        boolean isEmailInvalid = event.getSource().isInvalid();
-        if (isEmailInvalid) {
+        String email = event.getValue();
+        boolean isEmailValid = EmailValidator.getInstance().isValid(email);
+        if (!isEmailValid) {
             emailValidationFirstText.setText("Please use valid email address.");
             emailValidationFirstText.setClassName("red");
             emailValidation.add(emailValidationFirstText);
@@ -274,7 +276,7 @@ public class RegistrationView extends Div {
             return;
         }
 
-        boolean isEmailAlreadyExists = authService.isEmailAlreadyUsed(event.getValue());
+        boolean isEmailAlreadyExists = authService.isEmailAlreadyUsed(email);
         if (isEmailAlreadyExists) {
             emailValidationFirstText.setText("This e-mail already exists. ");
             emailValidationFirstText.setClassName("red");
