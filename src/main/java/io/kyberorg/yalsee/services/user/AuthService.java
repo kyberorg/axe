@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.services.user;
 
 import io.kyberorg.yalsee.core.SymmetricCryptTool;
 import io.kyberorg.yalsee.models.Authorization;
+import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.dao.AuthorizationDao;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -15,14 +16,20 @@ import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthService {
     public static final String TAG = "[" + AuthService.class.getSimpleName() + "]";
+    private static final String ERR_NO_SUCH_TOKEN_FOUND = "No such token found";
+    private static final String ERR_TOKEN_HAS_NO_AUTHORIZATION = "Token has no authorization";
+    private static final String ERR_USER_HAS_NO_LOCAL_AUTH = "User has no local authorization";
+
     private final AuthorizationDao authorizationDao;
     private final SymmetricCryptTool cryptTool;
+    private final TokenService tokenService;
 
     public static final String OP_EMPTY_EMAIL = "Email cannot be empty";
     public static final String OP_EMAIL_NOT_VALID = "Please use valid email address";
@@ -99,7 +106,7 @@ public class AuthService {
 
         try {
             authorizationDao.save(emailAuthorization);
-            return OperationResult.success();
+            return OperationResult.success().addPayload(emailAuthorization);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
@@ -118,6 +125,49 @@ public class AuthService {
             }
         } else {
             return false;
+        }
+    }
+
+    public OperationResult confirmAccount(String tokenString) {
+        try {
+            //search token - Op.notFound()
+            Optional<Token> token = tokenService.getToken(tokenString);
+            if (token.isEmpty()) {
+                log.info("{} token {} not found", TAG, tokenString);
+                return OperationResult.elementNotFound().withMessage(ERR_NO_SUCH_TOKEN_FOUND);
+            }
+
+            //search token's authorization
+            Authorization tokenAuthorization = token.get().getConfirmationFor();
+            if (tokenAuthorization == null) {
+                return OperationResult.generalFail().withMessage(ERR_TOKEN_HAS_NO_AUTHORIZATION);
+            }
+
+            // confirming authorization
+            tokenAuthorization.setConfirmed(true);
+            authorizationDao.save(tokenAuthorization);
+
+            User user = token.get().getUser();
+            Optional<Authorization> userLocalAuthorization =
+                    authorizationDao.findByUserAndProvider(user, AuthProvider.LOCAL);
+            if (userLocalAuthorization.isEmpty()) {
+                log.error("{} User {} has no {} authorization. System Bug.",
+                        TAG, user.getUsername(), AuthProvider.LOCAL.name());
+                return OperationResult.generalFail().withMessage(ERR_USER_HAS_NO_LOCAL_AUTH);
+            }
+
+            //check local auth
+            boolean localAccountConfirmed = userLocalAuthorization.get().isConfirmed();
+            if (!localAccountConfirmed) {
+                userLocalAuthorization.get().setConfirmed(true);
+                authorizationDao.save(userLocalAuthorization.get());
+            }
+            return OperationResult.success();
+        } catch (CannotCreateTransactionException c) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} failed to confirm account got exception {}", TAG, e.getMessage());
+            return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
 }

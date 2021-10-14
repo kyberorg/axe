@@ -44,7 +44,7 @@ public class EmailConfirmator implements Confirmator {
             return OperationResult.malformedInput().withMessage(ERR_EMAIL_NOT_VALID);
         }
         boolean confirmationTokenNotExist =
-                !tokenService.tokenExists(confirmationToken, TokenType.ACCOUNT_CONFIRMATION_TOKEN);
+                !tokenService.isTokenExists(confirmationToken, TokenType.ACCOUNT_CONFIRMATION_TOKEN);
 
         if (confirmationTokenNotExist) {
             log.warn("{} {} {}", TAG, ERR_TOKEN_NOT_FOUND, confirmationToken);
@@ -67,8 +67,8 @@ public class EmailConfirmator implements Confirmator {
         mailMessage.setFrom("");
         mailMessage.setTo(email);
         mailMessage.setSubject("Yalsee Confirmation Link");
-        mailMessage.setTo(MessageFormat.format(" Please click below to active your account. {0}/{1}?token={2}",
-                appUtils.getServerUrl(), Endpoint.UI.VERIFICATION_PAGE, token));
+        mailMessage.setText(MessageFormat.format(" Please click below to active your account. {0}/{1}?token={2}",
+                appUtils.getServerUrl(), Endpoint.UI.CONFIRMATION_PAGE, token));
         return mailMessage;
     }
 }

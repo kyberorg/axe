@@ -22,6 +22,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
+import io.kyberorg.yalsee.models.Authorization;
 import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -388,13 +389,14 @@ public class RegistrationView extends Div {
             registrationResult.showAccountCreatedLine(false);
             return;
         }
+        Authorization emailAuthorization = emailAuthorityResult.getPayload(Authorization.class);
         registrationResult.showAccountCreatedLine(true);
 
         if (tfaEnabled) {
             OperationResult updatePreferencesResult = userPreferencesService.setTwoFactorProvider(createdUser, AuthProvider.EMAIL, true);
             registrationResult.showTwoFactorPrefsLine(updatePreferencesResult.ok());
         }
-        OperationResult getConfirmationTokenResult = tokenService.createConfirmationToken(createdUser);
+        OperationResult getConfirmationTokenResult = tokenService.createConfirmationToken(createdUser, emailAuthorization);
         if (getConfirmationTokenResult.notOk()) {
             registrationResult.showConfirmationLetterLine(false, email);
             return;

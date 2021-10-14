@@ -25,4 +25,9 @@ public class Token extends TimeModel {
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user")
     private User user;
+
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "confirmation_for")
+    private Authorization confirmationFor;
+
 }

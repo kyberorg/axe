@@ -67,27 +67,6 @@
             </column>
         </createTable>
         <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
-        <createTable tableName="token">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
-            </column>
-            <column name="token" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="token_type" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="user" type="BIGINT"/>
-            <column name="created" type="DATETIME">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated" type="DATETIME">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="token"/>
-        <addForeignKeyConstraint baseColumnNames="user" baseTableName="token" constraintName="FK_TOKEN_ON_USER"
-                                 referencedColumnNames="id" referencedTableName="users"/>
         <createTable tableName="authorizations">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auth_data"/>
@@ -107,6 +86,31 @@
         </createTable>
         <addForeignKeyConstraint baseColumnNames="user" baseTableName="authorizations"
                                  constraintName="FK_AUTH_DATA_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="token">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
+            </column>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user" type="BIGINT"/>
+            <column name="confirmation_for" type="BIGINT"/>
+        </createTable>
+        <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="token"/>
+        <addForeignKeyConstraint baseColumnNames="confirmation_for" baseTableName="token"
+                                 constraintName="FK_TOKEN_ON_CONFIRMATION_FOR" referencedColumnNames="id"
+                                 referencedTableName="authorizations"/>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="token" constraintName="FK_TOKEN_ON_USER"
                                  referencedColumnNames="id" referencedTableName="users"/>
         <createTable tableName="user_preferences">
             <column autoIncrement="true" name="id" type="BIGINT">

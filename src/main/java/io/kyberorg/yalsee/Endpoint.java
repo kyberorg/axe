@@ -82,6 +82,11 @@ public final class Endpoint {
          * Verification Code form.
          */
         public static final String VERIFICATION_PAGE = "verify";
+
+        /**
+         * Confirmation Page.
+         */
+        public static final String CONFIRMATION_PAGE = "confirmation";
     }
 
     /**

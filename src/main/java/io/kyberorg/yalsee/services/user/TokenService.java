@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services.user;
 
+import io.kyberorg.yalsee.models.Authorization;
 import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.dao.TokenDao;
@@ -12,6 +13,7 @@ import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -24,7 +26,7 @@ public class TokenService {
 
     private TokenDao tokenDao;
 
-    public OperationResult createConfirmationToken(final User user) {
+    public OperationResult createConfirmationToken(final User user, final Authorization authorization) {
         boolean userAlreadyHasConfirmationToken =
                 tokenDao.existsByTokenTypeAndUser(TokenType.ACCOUNT_CONFIRMATION_TOKEN, user);
         if (userAlreadyHasConfirmationToken) {
@@ -42,6 +44,7 @@ public class TokenService {
         confirmationToken.setToken(token);
         confirmationToken.setTokenType(TokenType.ACCOUNT_CONFIRMATION_TOKEN);
         confirmationToken.setUser(user);
+        confirmationToken.setConfirmationFor(authorization);
         confirmationToken.setCreated(Timestamp.from(Instant.now()));
         confirmationToken.setUpdated(Timestamp.from(Instant.now()));
 
@@ -57,7 +60,22 @@ public class TokenService {
         }
     }
 
-    public boolean tokenExists(String token, TokenType tokenType) {
+    public boolean isTokenExists(String token, TokenType tokenType) {
         return tokenDao.existsByTokenAndTokenType(token, tokenType);
+    }
+
+    public Optional<Token> getToken(String tokenString) {
+        return tokenDao.findFirstByToken(tokenString);
+    }
+
+    public boolean isTokenExpired(String tokenString) {
+        Optional<Token> token = getToken(tokenString);
+        if (token.isEmpty()) {
+            return true;
+        } else {
+            long created = token.get().getCreated().getTime();
+            long expirationTime = created + token.get().getTokenType().getTokenAge();
+            return System.currentTimeMillis() > expirationTime;
+        }
     }
 }
