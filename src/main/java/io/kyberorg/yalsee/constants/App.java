@@ -50,6 +50,7 @@ public final class App {
         public static final String SESSION_TIMEOUT = "app.session.timeout";
         public static final String PASSWORD_SALT = "app.security.password-salt";
         public static final String SERVER_KEY = "app.security.server-key";
+        public static final String MAIL_FROM_ADDRESS = "app.mail.from-address";
     }
 
     public static class Env {
@@ -78,6 +79,7 @@ public final class App {
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
         public static final int SESSION_TIMEOUT_SECONDS = 1800;
+        public static final String MAIL_FROM_ADDRESS = "yalsee@yals.ee";
     }
 
     public static class Api {

@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.services.user.confirmators;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.EmailSenderService;
@@ -63,12 +64,15 @@ public class EmailConfirmator implements Confirmator {
 
     private SimpleMailMessage makeLetter(final String email, final String token) {
         final SimpleMailMessage mailMessage = new SimpleMailMessage();
-        //TODO mail from
-        mailMessage.setFrom("");
+        mailMessage.setFrom(getFromAddress());
         mailMessage.setTo(email);
         mailMessage.setSubject("Yalsee Confirmation Link");
         mailMessage.setText(MessageFormat.format(" Please click below to active your account. {0}/{1}?token={2}",
                 appUtils.getServerUrl(), Endpoint.UI.CONFIRMATION_PAGE, token));
         return mailMessage;
+    }
+
+    private String getFromAddress() {
+        return appUtils.getEnv().getProperty(App.Properties.MAIL_FROM_ADDRESS, App.Defaults.MAIL_FROM_ADDRESS);
     }
 }
