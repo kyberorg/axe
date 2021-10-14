@@ -22,11 +22,11 @@ public class Token extends TimeModel {
     @Column(name = "token_type", nullable = false)
     private TokenType tokenType;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "user")
     private User user;
 
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "confirmation_for")
     private Authorization confirmationFor;
 

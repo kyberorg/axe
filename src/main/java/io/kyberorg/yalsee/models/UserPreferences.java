@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_preferences")
 public class UserPreferences extends BaseModel {
-    @OneToOne(cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

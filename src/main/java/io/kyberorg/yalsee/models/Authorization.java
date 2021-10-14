@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Table(name = "authorizations")
 public class Authorization extends BaseModel {
 
-    @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user", nullable = false)
     private User user;
 

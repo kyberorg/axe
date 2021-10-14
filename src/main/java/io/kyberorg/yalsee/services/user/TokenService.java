@@ -74,8 +74,25 @@ public class TokenService {
             return true;
         } else {
             long created = token.get().getCreated().getTime();
-            long expirationTime = created + token.get().getTokenType().getTokenAge();
+            long expirationTime = created + (token.get().getTokenType().getTokenAge() * 1000L);
             return System.currentTimeMillis() > expirationTime;
+        }
+    }
+
+    public OperationResult deleteToken(String token) {
+        try {
+            Optional<Token> tokenRecord = getToken(token);
+            if (tokenRecord.isPresent()) {
+                tokenDao.delete(tokenRecord.get());
+                return OperationResult.success();
+            } else {
+                log.warn("{} unable to delete token {}. Reason: token not found", TAG, token);
+                return OperationResult.elementNotFound();
+            }
+        } catch (CannotCreateTransactionException c) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
 }

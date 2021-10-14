@@ -20,13 +20,17 @@ import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.users.TokenType;
 import io.kyberorg.yalsee.utils.VaadinParamUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.CONFIRMATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Confirmation Page")
 public class ConfirmationView extends Div implements HasUrlParameter<String> {
+    public static final String TAG = "[" + ConfirmationView.class.getSimpleName() + "]";
+
     private static final String DIRECT_MESSAGE = "Not intended for direct use";
     private static final String NO_PARAMS_MESSAGE = "Not intended for use without required parameters";
 
@@ -50,11 +54,17 @@ public class ConfirmationView extends Div implements HasUrlParameter<String> {
                 OperationResult confirmationResult = authService.confirmAccount(token);
                 if (confirmationResult.ok()) {
                     coreLayout = getSuccess();
+                    OperationResult deleteTokenResult = tokenService.deleteToken(token);
+                    if (deleteTokenResult.notOk()) {
+                        log.error("{} failed to delete confirmation token. Result {}", TAG, deleteTokenResult);
+                    }
                 } else {
                     coreLayout = yalseeLayoutWithMessage("Failed to confirm account. Internal system error. " +
                             "Please try again later.");
                 }
             } else {
+                log.debug("{} Showing No such token page: Token: {}, exists: {}, expired: {} "
+                        , TAG, token, confirmationTokenExists, tokenExpired);
                 coreLayout = noSuchTokenLayout();
             }
         } else {
