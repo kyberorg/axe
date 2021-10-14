@@ -22,11 +22,11 @@ public class UserPreferencesService {
         userPreferencesDao.save(userPreferences);
     }
 
-    public OperationResult setTwoFactorProvider(User user, AuthProvider provider, boolean enabled) {
+    public OperationResult setTwoFactorChannel(User user, AuthProvider channel, boolean enabled) {
         Optional<UserPreferences> userPreferences = userPreferencesDao.findByUser(user);
         if (userPreferences.isPresent()) {
             UserPreferences up = userPreferences.get();
-            up.setTfaProvider(provider);
+            up.setTfaChannel(channel);
             up.setTfaEnabled(enabled);
             try {
                 userPreferencesDao.save(up);

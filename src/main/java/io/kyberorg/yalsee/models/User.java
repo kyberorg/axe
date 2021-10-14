@@ -38,9 +38,6 @@ public class User extends TimeModel implements UserDetails {
     @Column(name = "is_locked")
     private boolean locked = false;
 
-    @Column(name = "enabled")
-    private boolean enabled = false;
-
     public static User create(final String username, final String encryptedPassword) {
         Timestamp now = Timestamp.from(Instant.now());
         User userObject = new User();
@@ -74,7 +71,7 @@ public class User extends TimeModel implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 
 }

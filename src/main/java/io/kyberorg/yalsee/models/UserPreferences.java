@@ -23,7 +23,7 @@ public class UserPreferences extends BaseModel {
     private boolean tfaEnabled = false;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tfa_provider", nullable = false)
-    private AuthProvider tfaProvider = AuthProvider.LOCAL;
+    @Column(name = "tfa_channel", nullable = false)
+    private AuthProvider tfaChannel = AuthProvider.LOCAL;
 
 }

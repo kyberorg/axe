@@ -58,7 +58,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="is_locked" type="BOOLEAN"/>
-            <column name="enabled" type="BOOLEAN"/>
             <column name="created" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
@@ -122,7 +121,7 @@
             <column name="tfa_enabled" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="tfa_provider" type="VARCHAR(255)">
+            <column name="tfa_channel" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -136,7 +135,6 @@
             <column name="password" value=""/>
             <column name="user_role" value="SUPER_ADMIN"/>
             <column name="is_locked" valueBoolean="false"/>
-            <column name="enabled" valueBoolean="true"/>
             <column name="created" valueDate="now()"/>
             <column name="updated" valueDate="now()"/>
         </insert>
@@ -151,7 +149,7 @@
             <column name="id" value="1"/>
             <column name="user_id" value="1"/>
             <column name="tfa_enabled" valueBoolean="false"/>
-            <column name="tfa_provider" value="LOCAL"/>
+            <column name="tfa_channel" value="LOCAL"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

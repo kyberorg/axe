@@ -393,10 +393,12 @@ public class RegistrationView extends Div {
         registrationResult.showAccountCreatedLine(true);
 
         if (tfaEnabled) {
-            OperationResult updatePreferencesResult = userPreferencesService.setTwoFactorProvider(createdUser, AuthProvider.EMAIL, true);
+            OperationResult updatePreferencesResult =
+                    userPreferencesService.setTwoFactorChannel(createdUser, AuthProvider.EMAIL, true);
             registrationResult.showTwoFactorPrefsLine(updatePreferencesResult.ok());
         }
-        OperationResult getConfirmationTokenResult = tokenService.createConfirmationToken(createdUser, emailAuthorization);
+        OperationResult getConfirmationTokenResult =
+                tokenService.createConfirmationToken(createdUser, emailAuthorization);
         if (getConfirmationTokenResult.notOk()) {
             registrationResult.showConfirmationLetterLine(false, email);
             return;

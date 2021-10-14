@@ -6,10 +6,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -40,7 +37,7 @@ public class ConfirmationView extends Div implements HasUrlParameter<String> {
     private final AuthService authService;
 
     @Override
-    public void setParameter(final BeforeEvent event, final String parameter) {
+    public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
         Component coreLayout;
         if (VaadinParamUtils.requestHasNoParams(event)) {
             coreLayout = yalseeLayoutWithMessage(DIRECT_MESSAGE);
