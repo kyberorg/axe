@@ -69,8 +69,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
+    private Button userButton;
+
+    private HorizontalLayout userMenuButtons;
     private Button loginButton;
     private Button registerButton;
+    private Button logoutButton;
 
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
@@ -83,6 +87,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         setPrimarySection(Section.NAVBAR);
         //do not set touch-optimized to true, because it moves navbar down.
         addToNavbar(createHeader());
+
 
         //items
         addLogo();
@@ -136,23 +141,17 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         MenuBar userMenu = new MenuBar();
         userMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
 
-        MenuItem profile = userMenu.addItem(VaadinIcon.USER.create());
+        userButton = new Button();
+        userButton.getStyle().set("border-radius", "100%");
+        setUserButtonIcon();
+        MenuItem profile = userMenu.addItem(userButton);
         profile.setId(USER_MENU);
 
-        HorizontalLayout buttons = new HorizontalLayout();
+        userMenuButtons = new HorizontalLayout();
 
-        loginButton = new Button("Log in", VaadinIcon.SIGN_IN.create());
-        loginButton.setId(IDs.LOGIN_BUTTON);
-        loginButton.addClickListener(this::onLoginButtonClicked);
-        loginButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        setUserMenuButtons();
 
-        registerButton = new Button("Register", VaadinIcon.CLIPBOARD_USER.create());
-        registerButton.setId(IDs.REGISTER_BUTTON);
-        registerButton.addClickListener(this::onRegisterButtonClicked);
-
-        buttons.add(loginButton, registerButton);
-
-        profile.getSubMenu().addItem(buttons);
+        profile.getSubMenu().addItem(userMenuButtons);
         //line
         profile.getSubMenu().add(new Hr());
 
@@ -198,9 +197,44 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
+    private void setUserButtonIcon() {
+        boolean sessionHasUser = appUtils.vaadinSessionHasUser(VaadinSession.getCurrent());
+
+        if (sessionHasUser) {
+            userButton.setIcon(VaadinIcon.SPECIALIST.create());
+        } else {
+            userButton.setIcon(VaadinIcon.USER.create());
+        }
+    }
+
+    private void setUserMenuButtons() {
+        userMenuButtons.removeAll();
+        boolean sessionHasUser = appUtils.vaadinSessionHasUser(VaadinSession.getCurrent());
+        if (sessionHasUser) {
+            logoutButton = new Button("Logout", VaadinIcon.SIGN_OUT.create());
+            logoutButton.setId(IDs.LOGOUT_BUTTON);
+            logoutButton.addClickListener(this::onLogoutButtonClicked);
+
+            userMenuButtons.add(logoutButton);
+        } else {
+            loginButton = new Button("Log in", VaadinIcon.SIGN_IN.create());
+            loginButton.setId(IDs.LOGIN_BUTTON);
+            loginButton.addClickListener(this::onLoginButtonClicked);
+            loginButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+            registerButton = new Button("Register", VaadinIcon.CLIPBOARD_USER.create());
+            registerButton.setId(IDs.REGISTER_BUTTON);
+            registerButton.addClickListener(this::onRegisterButtonClicked);
+
+            userMenuButtons.add(loginButton, registerButton);
+        }
+    }
+
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+        setUserButtonIcon();
+        setUserMenuButtons();
     }
 
     @Override
@@ -260,6 +294,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         registerButton.getUI().ifPresent(ui -> ui.navigate(RegistrationView.class));
     }
 
+    private void onLogoutButtonClicked(ClickEvent<Button> buttonClickEvent) {
+        appUtils.endVaadinSession(VaadinSession.getCurrent());
+        logoutButton.getUI().ifPresent(ui -> ui.navigate(Endpoint.UI.HOME_PAGE));
+    }
+
+
     public static class IDs {
         public static final String VIEW_ID = "mainView";
         public static final String APP_LOGO = "appLogo";
@@ -267,5 +307,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         public static String USER_MENU = "userMenu";
         public static final String LOGIN_BUTTON = "loginButton";
         public static final String REGISTER_BUTTON = "registerButton";
+        public static final String LOGOUT_BUTTON = "logoutButton";
     }
 }

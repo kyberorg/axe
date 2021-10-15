@@ -1,5 +1,9 @@
 package io.kyberorg.yalsee.ui.user;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
@@ -8,11 +12,16 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
+import io.kyberorg.yalsee.utils.ErrorUtils;
 
 /**
  * Login Page.
@@ -33,7 +42,10 @@ public class LoginView extends YalseeFormLayout {
     private final PasswordField passwordInput = new PasswordField();
     private final Checkbox rememberMe = new Checkbox();
 
-    public LoginView() {
+    private final UserService userService;
+
+    public LoginView(UserService userService) {
+        this.userService = userService;
         setId(IDs.PAGE_ID);
         init();
     }
@@ -63,7 +75,37 @@ public class LoginView extends YalseeFormLayout {
 
         addFormFields(fields);
         setSubmitButtonText("Jump in");
+        getSubmitButton().addClickShortcut(Key.ENTER);
+        getSubmitButton().addClickListener(this::onLogin);
         enableForgotPasswordLink();
+    }
+
+    private void onLogin(ClickEvent<Button> buttonClickEvent) {
+        String username = usernameInput.getValue();
+        String password = passwordInput.getValue();
+
+        boolean isPasswordCorrect;
+        OperationResult checkPasswordResult = userService.checkPassword(username, password);
+        if (checkPasswordResult.ok()) {
+            isPasswordCorrect = checkPasswordResult.getPayload(Boolean.class);
+        } else {
+            //no user - no password
+            isPasswordCorrect = false;
+        }
+        if (!isPasswordCorrect) {
+            ErrorUtils.showError("Wrong credentials.");
+            return;
+        }
+        boolean isAccountLocked = userService.isAccountLocked(username);
+        if (isAccountLocked) {
+            ErrorUtils.showError("Account locked");
+            return;
+        }
+        //all good - logging user in
+        VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, username);
+        //TODO if user has TFA - show tfa page instead
+        String navigationTarget = Endpoint.UI.HOME_PAGE;
+        UI.getCurrent().navigate(navigationTarget);
     }
 
     public static final class IDs {

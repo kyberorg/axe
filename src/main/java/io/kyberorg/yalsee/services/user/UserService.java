@@ -100,11 +100,12 @@ public class UserService implements UserDetailsService {
         return OperationResult.success();
     }
 
-    public OperationResult passwordMatches(final String username, final String passwordCandidate) {
+    public OperationResult checkPassword(final String username, final String passwordCandidate) {
         Optional<User> user = userDao.findByUsername(username);
         if (user.isPresent()) {
-            String encryptedPassword = constructPassword(passwordCandidate);
-            boolean passwordMatches = encryptedPassword.equals(user.get().getPassword());
+            String rawPassword = constructPassword(passwordCandidate);
+            String storedPassword = user.get().getPassword();
+            boolean passwordMatches = encryptionUtils.getPasswordEncoder().matches(rawPassword, storedPassword);
             return OperationResult.success().addPayload(passwordMatches);
         } else {
             return OperationResult.elementNotFound().withMessage(ERR_NO_USER);
@@ -114,5 +115,10 @@ public class UserService implements UserDetailsService {
     private String constructPassword(final String plainPassword) {
         final String serverSalt = encryptionUtils.getPasswordSalt();
         return plainPassword + serverSalt;
+    }
+
+    public boolean isAccountLocked(final String username) {
+        Optional<User> user = userDao.findByUsername(username);
+        return user.map(User::isLocked).orElse(false);
     }
 }

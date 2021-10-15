@@ -88,5 +88,6 @@ public final class App {
 
     public static class Session {
         public static final int SESSION_WATCHDOG_INTERVAL_MILLIS = 20000; //20 seconds
+        public static final String USER_KEY = "Yalsee-User";
     }
 }

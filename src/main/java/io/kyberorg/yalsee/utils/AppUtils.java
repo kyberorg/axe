@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Objects;
 
 /**
  * App-wide tools.
@@ -423,6 +424,14 @@ public class AppUtils implements Serializable {
             session.getSession().invalidate();
         }
         session.close();
+    }
+
+    public boolean vaadinSessionHasUser(final VaadinSession session) {
+        if (session != null) {
+            return Objects.nonNull(session.getAttribute(App.Session.USER_KEY));
+        } else {
+            return false;
+        }
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {
