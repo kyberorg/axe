@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.services.user;
 
 import io.kyberorg.yalsee.models.Authorization;
+import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.verificationsenders.VerificationSenders;
@@ -27,7 +28,7 @@ public class TfaService {
 
     public OperationResult sendVerificationCode(User user) {
         boolean isTfaEnabled = userPreferencesService.isTfaEnabled(user);
-        if (isTfaEnabled) {
+        if (!isTfaEnabled) {
             return OperationResult.generalFail().withMessage(ERR_TFA_DISABLED);
         }
         AuthProvider tfaChannel = userPreferencesService.getTfaChannel(user);
@@ -51,7 +52,7 @@ public class TfaService {
         if (getCodeResult.notOk()) {
             return OperationResult.generalFail().withMessage(ERR_CODE_GENERATION_FAIL);
         }
-        String verificationCode = getCodeResult.getStringPayload();
+        String verificationCode = getCodeResult.getPayload(Token.class).getToken();
 
         return verificationSenders.get(tfaChannel)
                 .sendVerification(destination.get(), verificationCode);

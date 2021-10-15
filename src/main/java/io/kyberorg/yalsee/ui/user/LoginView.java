@@ -129,6 +129,7 @@ public class LoginView extends YalseeFormLayout {
             if (sendVerificationCodeResult.ok()) {
                 navigationTarget = Endpoint.UI.VERIFICATION_PAGE;
             } else {
+                log.warn("{} 2fa code send failed. Error: {}", TAG, sendVerificationCodeResult.getMessage());
                 ErrorUtils.showError("Failed to send Two-Factor Authentication code. Try again later.");
                 navigationTarget = null;
             }
