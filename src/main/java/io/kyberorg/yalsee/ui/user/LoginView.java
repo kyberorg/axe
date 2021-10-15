@@ -17,11 +17,12 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * Login Page.
@@ -84,26 +85,29 @@ public class LoginView extends YalseeFormLayout {
         String username = usernameInput.getValue();
         String password = passwordInput.getValue();
 
-        boolean isPasswordCorrect;
-        OperationResult checkPasswordResult = userService.checkPassword(username, password);
-        if (checkPasswordResult.ok()) {
-            isPasswordCorrect = checkPasswordResult.getPayload(Boolean.class);
-        } else {
-            //no user - no password
-            isPasswordCorrect = false;
+        User user;
+        try {
+            user = userService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
+            ErrorUtils.showError("Wrong credentials");
+            return;
         }
+
+        boolean isPasswordCorrect = userService.checkPassword(user, password);
+
         if (!isPasswordCorrect) {
             ErrorUtils.showError("Wrong credentials.");
             return;
         }
-        boolean isAccountLocked = userService.isAccountLocked(username);
+        boolean isAccountLocked = user.isLocked();
         if (isAccountLocked) {
             ErrorUtils.showError("Account locked");
             return;
         }
         //all good - logging user in
-        VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, username);
+        VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
         //TODO if user has TFA - show tfa page instead
+
         String navigationTarget = Endpoint.UI.HOME_PAGE;
         UI.getCurrent().navigate(navigationTarget);
     }
