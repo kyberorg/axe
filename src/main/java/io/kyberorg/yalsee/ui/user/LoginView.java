@@ -22,6 +22,7 @@ import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
@@ -29,11 +30,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  *
  * @since 4.0
  */
+@Slf4j
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.LOGIN_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Login Page")
 public class LoginView extends YalseeFormLayout {
+    public static final String TAG = "[" + LoginView.class.getSimpleName() + "]";
 
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -85,10 +88,13 @@ public class LoginView extends YalseeFormLayout {
         String username = usernameInput.getValue();
         String password = passwordInput.getValue();
 
+        log.info("{} new login attempt. Username: {}", TAG, username);
+
         User user;
         try {
             user = userService.loadUserByUsername(username);
         } catch (UsernameNotFoundException e) {
+            log.warn("{} username not found. Username {}", TAG, username);
             ErrorUtils.showError("Wrong credentials");
             return;
         }
@@ -96,15 +102,18 @@ public class LoginView extends YalseeFormLayout {
         boolean isPasswordCorrect = userService.checkPassword(user, password);
 
         if (!isPasswordCorrect) {
-            ErrorUtils.showError("Wrong credentials.");
+            log.warn("{} password incorrect for username {}", TAG, username);
+            ErrorUtils.showError("Wrong credentials");
             return;
         }
         boolean isAccountLocked = user.isLocked();
         if (isAccountLocked) {
+            log.warn("{} Account is locked. Username {}", TAG, username);
             ErrorUtils.showError("Account locked");
             return;
         }
         //all good - logging user in
+        log.info("{} login succeed, username {}", TAG, username);
         VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
         //TODO if user has TFA - show tfa page instead
 
