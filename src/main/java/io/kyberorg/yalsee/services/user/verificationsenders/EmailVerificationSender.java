@@ -1,5 +1,7 @@
 package io.kyberorg.yalsee.services.user.verificationsenders;
 
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.EmailSenderService;
@@ -11,8 +13,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,11 +33,14 @@ public class EmailVerificationSender implements VerificationSender {
     private static final String ERR_EMAIL_NOT_VALID = "Got malformed email";
     private static final String ERR_CODE_NOT_FOUND = "Verification code not found in the system";
     private static final String ERR_EMAIL_NOT_FOUND = "Email not found in the system";
+    private static final String ERR_FAILED_TO_CREATE_EMAIL = "Failed to create email";
 
     private final EmailSenderService emailSenderService;
     private final TokenService tokenService;
     private final AuthService authService;
     private final AppUtils appUtils;
+
+    private final Configuration configuration;
 
     @Override
     public OperationResult sendVerification(String email, String verificationCode) {
@@ -55,17 +68,37 @@ public class EmailVerificationSender implements VerificationSender {
             return OperationResult.elementNotFound().withMessage(ERR_EMAIL_NOT_FOUND);
         }
 
-        SimpleMailMessage letter = makeLetter(email, verificationCode);
+        MimeMessage letter;
+        try {
+            letter = makeLetter(email, verificationCode);
+        } catch (Exception e) {
+            return OperationResult.generalFail().withMessage(ERR_FAILED_TO_CREATE_EMAIL);
+        }
+
         emailSenderService.sendEmail(email, letter);
         return OperationResult.success();
     }
 
-    private SimpleMailMessage makeLetter(final String email, final String code) {
-        final SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(appUtils.getFromAddress());
-        mailMessage.setTo(email);
-        mailMessage.setSubject("Yalsee Verification Code");
-        mailMessage.setText("Your verification code is " + code);
+    private MimeMessage makeLetter(final String email, final String code) throws MessagingException, IOException,
+            TemplateException {
+        final MimeMessage mailMessage = emailSenderService.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.toString());
+
+        String letterHtmlBody = createLetterBody(code);
+
+        helper.setFrom(appUtils.getFromAddress());
+        helper.setTo(email);
+        helper.setSubject("Yalsee Verification Code");
+        helper.setText(letterHtmlBody, true);
         return mailMessage;
+    }
+
+    private String createLetterBody(String code) throws TemplateException, IOException {
+        StringWriter stringWriter = new StringWriter();
+        Map<String, Object> model = new HashMap<>();
+        model.put("code", code);
+        configuration.getTemplate("otpMail.ftlh").process(model, stringWriter);
+
+        return stringWriter.getBuffer().toString();
     }
 }
