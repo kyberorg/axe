@@ -434,6 +434,10 @@ public class AppUtils implements Serializable {
         }
     }
 
+    public String getFromAddress() {
+        return env.getProperty(App.Properties.MAIL_FROM_ADDRESS, App.Defaults.MAIL_FROM_ADDRESS);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

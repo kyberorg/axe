@@ -18,6 +18,9 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.User;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.user.TfaService;
+import io.kyberorg.yalsee.services.user.UserPreferencesService;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
@@ -47,9 +50,13 @@ public class LoginView extends YalseeFormLayout {
     private final Checkbox rememberMe = new Checkbox();
 
     private final UserService userService;
+    private final UserPreferencesService userPreferencesService;
+    private final TfaService tfaService;
 
-    public LoginView(UserService userService) {
+    public LoginView(UserService userService, UserPreferencesService userPreferencesService, TfaService tfaService) {
         this.userService = userService;
+        this.userPreferencesService = userPreferencesService;
+        this.tfaService = tfaService;
         setId(IDs.PAGE_ID);
         init();
     }
@@ -115,10 +122,22 @@ public class LoginView extends YalseeFormLayout {
         //all good - logging user in
         log.info("{} login succeed, username {}", TAG, username);
         VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
-        //TODO if user has TFA - show tfa page instead
-
-        String navigationTarget = Endpoint.UI.HOME_PAGE;
-        UI.getCurrent().navigate(navigationTarget);
+        boolean isTFAEnabled = userPreferencesService.isTfaEnabled(user);
+        String navigationTarget;
+        if (isTFAEnabled) {
+            OperationResult sendVerificationCodeResult = tfaService.sendVerificationCode(user);
+            if (sendVerificationCodeResult.ok()) {
+                navigationTarget = Endpoint.UI.VERIFICATION_PAGE;
+            } else {
+                ErrorUtils.showError("Failed to send Two-Factor Authentication code. Try again later.");
+                navigationTarget = null;
+            }
+        } else {
+            navigationTarget = Endpoint.UI.HOME_PAGE;
+        }
+        if (navigationTarget != null) {
+            UI.getCurrent().navigate(navigationTarget);
+        }
     }
 
     public static final class IDs {

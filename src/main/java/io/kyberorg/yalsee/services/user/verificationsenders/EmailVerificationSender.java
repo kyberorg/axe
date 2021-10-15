@@ -1,29 +1,27 @@
-package io.kyberorg.yalsee.services.user.confirmators;
+package io.kyberorg.yalsee.services.user.verificationsenders;
 
-import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.EmailSenderService;
 import io.kyberorg.yalsee.services.user.TokenService;
+import io.kyberorg.yalsee.services.user.confirmators.EmailConfirmator;
 import io.kyberorg.yalsee.users.TokenType;
 import io.kyberorg.yalsee.utils.AppUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
-import java.text.MessageFormat;
-
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
-public class EmailConfirmator implements Confirmator {
+public class EmailVerificationSender implements VerificationSender {
     private static final String TAG = "[" + EmailConfirmator.class + "]";
-    private static final String ERR_EMPTY_TOKEN = "Got empty confirmation token";
+    private static final String ERR_EMPTY_CODE = "Got empty verification code";
     private static final String ERR_EMAIL_NOT_VALID = "Got malformed email";
-    private static final String ERR_TOKEN_NOT_FOUND = "Confirmation token not found in the system";
+    private static final String ERR_CODE_NOT_FOUND = "Verification code not found in the system";
     private static final String ERR_EMAIL_NOT_FOUND = "Email not found in the system";
 
     private final EmailSenderService emailSenderService;
@@ -32,23 +30,24 @@ public class EmailConfirmator implements Confirmator {
     private final AppUtils appUtils;
 
     @Override
-    public OperationResult sendConfirmation(final String email, final String confirmationToken) {
-        boolean confirmationTokenIsEmpty = StringUtils.isEmpty(confirmationToken);
-        if (confirmationTokenIsEmpty) {
-            log.warn("{} {}", TAG, ERR_EMPTY_TOKEN);
-            return OperationResult.malformedInput().withMessage(ERR_EMPTY_TOKEN);
+    public OperationResult sendVerification(String email, String verificationCode) {
+        boolean verificationCodeIsEmpty = StringUtils.isEmpty(verificationCode);
+
+        if (verificationCodeIsEmpty) {
+            log.warn("{} {}", TAG, ERR_EMPTY_CODE);
+            return OperationResult.malformedInput().withMessage(ERR_EMPTY_CODE);
         }
         boolean isEmailNotValid = !EmailValidator.getInstance().isValid(email);
         if (isEmailNotValid) {
             log.warn("{} {} {}", TAG, ERR_EMAIL_NOT_VALID, email);
             return OperationResult.malformedInput().withMessage(ERR_EMAIL_NOT_VALID);
         }
-        boolean confirmationTokenNotExist =
-                !tokenService.isTokenExists(confirmationToken, TokenType.ACCOUNT_CONFIRMATION_TOKEN);
+        boolean verificationCodeNotExist =
+                !tokenService.isTokenExists(verificationCode, TokenType.LOGIN_VERIFICATION_TOKEN);
 
-        if (confirmationTokenNotExist) {
-            log.warn("{} {} {}", TAG, ERR_TOKEN_NOT_FOUND, confirmationToken);
-            return OperationResult.elementNotFound().withMessage(ERR_TOKEN_NOT_FOUND);
+        if (verificationCodeNotExist) {
+            log.warn("{} {} {}", TAG, ERR_CODE_NOT_FOUND, verificationCode);
+            return OperationResult.elementNotFound().withMessage(ERR_CODE_NOT_FOUND);
         }
         boolean emailNotExist = !authService.isEmailAlreadyUsed(email);
         if (emailNotExist) {
@@ -56,20 +55,17 @@ public class EmailConfirmator implements Confirmator {
             return OperationResult.elementNotFound().withMessage(ERR_EMAIL_NOT_FOUND);
         }
 
-        SimpleMailMessage letter = makeLetter(email, confirmationToken);
+        SimpleMailMessage letter = makeLetter(email, verificationCode);
         emailSenderService.sendEmail(email, letter);
         return OperationResult.success();
     }
 
-    private SimpleMailMessage makeLetter(final String email, final String token) {
+    private SimpleMailMessage makeLetter(final String email, final String code) {
         final SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(appUtils.getFromAddress());
         mailMessage.setTo(email);
-        mailMessage.setSubject("Yalsee Confirmation Link");
-        mailMessage.setText(MessageFormat.format(" Please click below to active your account. {0}/{1}?token={2}",
-                appUtils.getServerUrl(), Endpoint.UI.CONFIRMATION_PAGE, token));
+        mailMessage.setSubject("Yalsee Verification Code");
+        mailMessage.setText("Your verification code is " + code);
         return mailMessage;
     }
-
-
 }

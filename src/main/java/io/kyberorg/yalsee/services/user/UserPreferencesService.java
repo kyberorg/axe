@@ -6,14 +6,18 @@ import io.kyberorg.yalsee.models.dao.UserPreferencesDao;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.users.AuthProvider;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class UserPreferencesService {
+    public static final String TAG = "[" + UserPreferencesService.class.getSimpleName() + "]";
+
     private final UserPreferencesDao userPreferencesDao;
 
     public void createEmptyPreferences(final User user) {
@@ -38,6 +42,26 @@ public class UserPreferencesService {
             }
         } else {
             return OperationResult.elementNotFound();
+        }
+    }
+
+    public boolean isTfaEnabled(final User user) {
+        Optional<UserPreferences> userPreferences = userPreferencesDao.findByUser(user);
+        if (userPreferences.isPresent()) {
+            return userPreferences.get().isTfaEnabled();
+        } else {
+            log.error("{} user {} has no {}", TAG, user, UserPreferences.class.getSimpleName());
+            return false;
+        }
+    }
+
+    public AuthProvider getTfaChannel(final User user) {
+        Optional<UserPreferences> userPreferences = userPreferencesDao.findByUser(user);
+        if (userPreferences.isPresent()) {
+            return userPreferences.get().getTfaChannel();
+        } else {
+            log.error("{} user {} has no {}", TAG, user, UserPreferences.class.getSimpleName());
+            return null;
         }
     }
 }

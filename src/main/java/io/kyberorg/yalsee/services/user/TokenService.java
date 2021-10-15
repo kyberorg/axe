@@ -8,6 +8,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.users.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
@@ -55,6 +56,33 @@ public class TokenService {
             return OperationResult.databaseDown();
         } catch (Exception e) {
             log.error("{} failed to save token {} for user {}", TAG, token, user);
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
+    public OperationResult createVerificationCode(User user) {
+        boolean codeExists;
+        String code;
+        do {
+            code = RandomStringUtils.randomNumeric(6);
+            codeExists = tokenDao.existsByToken(code);
+        } while (codeExists);
+
+        Token verificationCode = new Token();
+        verificationCode.setToken(code);
+        verificationCode.setTokenType(TokenType.LOGIN_VERIFICATION_TOKEN);
+        verificationCode.setUser(user);
+        verificationCode.setCreated(Timestamp.from(Instant.now()));
+        verificationCode.setUpdated(Timestamp.from(Instant.now()));
+
+        try {
+            tokenDao.save(verificationCode);
+            return OperationResult.success().addPayload(verificationCode);
+        } catch (CannotCreateTransactionException c) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} failed to save verification code {} for user {}", TAG, code, user);
             log.debug("", e);
             return OperationResult.generalFail().withMessage(e.getMessage());
         }

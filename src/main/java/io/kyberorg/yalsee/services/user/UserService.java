@@ -28,7 +28,6 @@ public class UserService implements UserDetailsService {
     public static final String OP_USER_ALREADY_EXISTS = "Username already exists";
     public static final String OP_EMPTY_PASSWORD = "Password cannot be empty";
     public static final String OP_SHORT_PASSWORD = "Password is too short";
-    public static final String ERR_NO_USER = "No such user";
     public static final String ERR_NOT_VALID_CHARS_IN_USERNAME = "There are non-unicode chars in username";
     private static final String ERR_USERNAME_IS_TOO_LONG = "Username is too long";
 

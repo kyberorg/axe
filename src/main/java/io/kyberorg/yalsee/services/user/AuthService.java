@@ -170,4 +170,21 @@ public class AuthService {
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
+
+    public Optional<Authorization> getAuthorization(User user, AuthProvider provider) {
+        return authorizationDao.findByUserAndProvider(user, provider);
+    }
+
+    public Optional<String> decryptAuthorizationUser(Authorization authorization) {
+        if (authorization != null && StringUtils.isNotBlank(authorization.getAuthUsername())) {
+            OperationResult result = cryptTool.decrypt(authorization.getAuthUsername());
+            if (result.ok()) {
+                return Optional.of(result.getStringPayload());
+            } else {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
 }
