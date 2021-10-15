@@ -86,6 +86,7 @@ public class EmailVerificationSender implements VerificationSender {
 
         String letterHtmlBody = createLetterBody(code);
 
+        helper.setReplyTo(appUtils.getFromAddress());
         helper.setFrom(appUtils.getFromAddress());
         helper.setTo(email);
         helper.setSubject("Yalsee Verification Code");
