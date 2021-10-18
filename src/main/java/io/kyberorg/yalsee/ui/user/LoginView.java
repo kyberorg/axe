@@ -12,8 +12,6 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -124,7 +122,6 @@ public class LoginView extends YalseeFormLayout {
         }
         //all good - logging user in
         log.info("{} login succeed, username {}", TAG, username);
-        VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
         boolean isTFAEnabled = userPreferencesService.isTfaEnabled(user);
         String navigationTarget;
         if (isTFAEnabled) {
@@ -138,6 +135,7 @@ public class LoginView extends YalseeFormLayout {
             }
         } else {
             navigationTarget = Endpoint.UI.HOME_PAGE;
+            VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
         }
         if (navigationTarget != null) {
             UI.getCurrent().navigate(navigationTarget);
