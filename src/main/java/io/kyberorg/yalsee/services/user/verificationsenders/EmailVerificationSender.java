@@ -98,7 +98,8 @@ public class EmailVerificationSender implements VerificationSender {
         StringWriter stringWriter = new StringWriter();
         Map<String, Object> model = new HashMap<>();
         model.put("code", code);
-        configuration.getTemplate("otpMail.ftlh").process(model, stringWriter);
+
+        configuration.getTemplate("mail.ftlh").process(model, stringWriter);
 
         return stringWriter.getBuffer().toString();
     }
