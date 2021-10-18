@@ -12,6 +12,8 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.InitialPageSettings;
+import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -38,7 +40,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @UIScope
 @Route(value = Endpoint.UI.LOGIN_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Login Page")
-public class LoginView extends YalseeFormLayout {
+public class LoginView extends YalseeFormLayout implements PageConfigurator {
     public static final String TAG = "[" + LoginView.class.getSimpleName() + "]";
 
     private final Span subTitleText = new Span();
@@ -110,6 +112,7 @@ public class LoginView extends YalseeFormLayout {
 
         if (!isPasswordCorrect) {
             log.warn("{} password incorrect for username {}", TAG, username);
+            log.debug("{} password incorrect: username {}, password {}", TAG, username, password);
             ErrorUtils.showError("Wrong credentials");
             return;
         }
@@ -139,6 +142,16 @@ public class LoginView extends YalseeFormLayout {
         if (navigationTarget != null) {
             UI.getCurrent().navigate(navigationTarget);
         }
+    }
+
+    @Override
+    public void configurePage(InitialPageSettings settings) {
+        // Force login page to use Shady DOM to avoid problems with browsers and
+        // password managers not supporting shadow DOM
+        settings.addInlineWithContents(
+                InitialPageSettings.Position.PREPEND, "window.customElements=window.customElements||{};"
+                        + "window.customElements.forcePolyfill=true;" + "window.ShadyDOM={force:true};",
+                InitialPageSettings.WrapMode.JAVASCRIPT);
     }
 
     public static final class IDs {
