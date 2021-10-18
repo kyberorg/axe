@@ -276,6 +276,13 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         if (appUtils.isGoogleAnalyticsEnabled()) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
+
+        // Force login page to use Shady DOM to avoid problems with browsers and
+        // password managers not supporting shadow DOM
+        settings.addInlineWithContents(
+                InitialPageSettings.Position.PREPEND, "window.customElements=window.customElements||{};"
+                        + "window.customElements.forcePolyfill=true;" + "window.ShadyDOM={force:true};",
+                InitialPageSettings.WrapMode.JAVASCRIPT);
     }
 
     private void showWhyRegisterModal(ClickEvent<MenuItem> menuItemClickEvent) {
