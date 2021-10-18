@@ -98,7 +98,7 @@ public class EmailVerificationSender implements VerificationSender {
         StringWriter stringWriter = new StringWriter();
         Map<String, Object> model = new HashMap<>();
         model.put("code", code);
-
+        model.put("template", "otp"); //TODO dynamic from Enum
         configuration.getTemplate("mail.ftlh").process(model, stringWriter);
 
         return stringWriter.getBuffer().toString();
