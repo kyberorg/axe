@@ -1,9 +1,11 @@
 package io.kyberorg.yalsee.services.user.confirmators;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.EmailSenderService;
+import io.kyberorg.yalsee.services.user.EmailSenderService.Letter;
 import io.kyberorg.yalsee.services.user.TokenService;
 import io.kyberorg.yalsee.users.TokenType;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -11,10 +13,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.MimeMessage;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -56,20 +61,33 @@ public class EmailConfirmator implements Confirmator {
             return OperationResult.elementNotFound().withMessage(ERR_EMAIL_NOT_FOUND);
         }
 
-        SimpleMailMessage letter = makeLetter(email, confirmationToken);
+        MimeMessage letter;
+        try {
+            final String subject = "Yalsee Confirmation Link";
+            Map<String, Object> vars = new HashMap<>(1);
+            final String confirmationLink = MessageFormat.format(" Please click below to active your account. {0}/{1}?token={2}",
+                    appUtils.getServerUrl(), Endpoint.UI.CONFIRMATION_PAGE, confirmationToken);
+            vars.put("username", getUsername(confirmationToken));
+            vars.put("link", confirmationLink);
+
+            letter = emailSenderService.createLetter(Letter.ACCOUNT_CONFIRMATION, email, subject, vars);
+        } catch (Exception e) {
+            log.error("{} failed to create email. Reason: {}", TAG, e.getMessage());
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+
         emailSenderService.sendEmail(email, letter);
         return OperationResult.success();
     }
 
-    private SimpleMailMessage makeLetter(final String email, final String token) {
-        final SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(appUtils.getFromAddress());
-        mailMessage.setTo(email);
-        mailMessage.setSubject("Yalsee Confirmation Link");
-        mailMessage.setText(MessageFormat.format(" Please click below to active your account. {0}/{1}?token={2}",
-                appUtils.getServerUrl(), Endpoint.UI.CONFIRMATION_PAGE, token));
-        return mailMessage;
+    private String getUsername(final String tokenString) {
+        Optional<Token> token = tokenService.getToken(tokenString);
+        if (token.isPresent()) {
+            return token.get().getUser().getUsername();
+        } else {
+            //should never happen
+            return "there";
+        }
     }
-
 
 }

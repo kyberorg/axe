@@ -6,7 +6,6 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -31,12 +30,6 @@ public class EmailSenderService {
     private final AppUtils appUtils;
 
     private final Configuration configuration;
-
-    @Async
-    public void sendEmail(final String emailAddress, final SimpleMailMessage letter) {
-        log.info("{} Sending {} to {}", TAG, letter, emailAddress);
-        mailSender.send(letter);
-    }
 
     @Async
     public void sendEmail(final String emailAddress, final MimeMessage letter) {
