@@ -1,26 +1,19 @@
 package io.kyberorg.yalsee.services.user.verificationsenders;
 
-import freemarker.template.Configuration;
-import freemarker.template.TemplateException;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.EmailSenderService;
+import io.kyberorg.yalsee.services.user.EmailSenderService.Letter;
 import io.kyberorg.yalsee.services.user.TokenService;
 import io.kyberorg.yalsee.services.user.confirmators.EmailConfirmator;
 import io.kyberorg.yalsee.users.TokenType;
-import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Component
 public class EmailVerificationSender implements VerificationSender {
-    private static final String TAG = "[" + EmailConfirmator.class + "]";
+    private static final String TAG = "[" + EmailConfirmator.class.getSimpleName() + "]";
     private static final String ERR_EMPTY_CODE = "Got empty verification code";
     private static final String ERR_EMAIL_NOT_VALID = "Got malformed email";
     private static final String ERR_CODE_NOT_FOUND = "Verification code not found in the system";
@@ -38,9 +31,6 @@ public class EmailVerificationSender implements VerificationSender {
     private final EmailSenderService emailSenderService;
     private final TokenService tokenService;
     private final AuthService authService;
-    private final AppUtils appUtils;
-
-    private final Configuration configuration;
 
     @Override
     public OperationResult sendVerification(String email, String verificationCode) {
@@ -70,8 +60,13 @@ public class EmailVerificationSender implements VerificationSender {
 
         MimeMessage letter;
         try {
-            letter = makeLetter(email, verificationCode);
+            final String subject = "Yalsee Verification Code";
+            Map<String, Object> vars = new HashMap<>(1);
+            vars.put("code", verificationCode);
+
+            letter = emailSenderService.createLetter(Letter.OTP, email, subject, vars);
         } catch (Exception e) {
+            log.error("{} failed to create email. Reason: {}", TAG, e.getMessage());
             return OperationResult.generalFail().withMessage(ERR_FAILED_TO_CREATE_EMAIL);
         }
 
@@ -79,28 +74,5 @@ public class EmailVerificationSender implements VerificationSender {
         return OperationResult.success();
     }
 
-    private MimeMessage makeLetter(final String email, final String code) throws MessagingException, IOException,
-            TemplateException {
-        final MimeMessage mailMessage = emailSenderService.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.toString());
 
-        String letterHtmlBody = createLetterBody(code);
-
-        helper.setReplyTo(appUtils.getFromAddress());
-        helper.setFrom(appUtils.getFromAddress());
-        helper.setTo(email);
-        helper.setSubject("Yalsee Verification Code");
-        helper.setText(letterHtmlBody, true);
-        return mailMessage;
-    }
-
-    private String createLetterBody(String code) throws TemplateException, IOException {
-        StringWriter stringWriter = new StringWriter();
-        Map<String, Object> model = new HashMap<>();
-        model.put("code", code);
-        model.put("template", "otp"); //TODO dynamic from Enum
-        configuration.getTemplate("mail.ftlh").process(model, stringWriter);
-
-        return stringWriter.getBuffer().toString();
-    }
 }

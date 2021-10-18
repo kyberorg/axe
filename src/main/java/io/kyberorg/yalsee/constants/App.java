@@ -51,6 +51,7 @@ public final class App {
         public static final String PASSWORD_SALT = "app.security.password-salt";
         public static final String SERVER_KEY = "app.security.server-key";
         public static final String MAIL_FROM_ADDRESS = "app.mail.from-address";
+        public static final String MAIL_INSTANCE_PREFIX = "app.mail.instance-prefix";
     }
 
     public static class Env {

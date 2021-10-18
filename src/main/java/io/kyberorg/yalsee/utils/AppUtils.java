@@ -438,6 +438,10 @@ public class AppUtils implements Serializable {
         return env.getProperty(App.Properties.MAIL_FROM_ADDRESS, App.Defaults.MAIL_FROM_ADDRESS);
     }
 
+    public String getInstancePrefixForMail() {
+        return env.getProperty(App.Properties.MAIL_INSTANCE_PREFIX, "");
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

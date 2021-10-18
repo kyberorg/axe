@@ -89,5 +89,10 @@
       "name": "app.mail.credentials.password",
       "type": "java.lang.String",
       "description": "GMail password."
+    },
+    {
+      "name": "app.mail.instance-prefix",
+      "type": "java.lang.String",
+      "description": "String with instance name, which is added to Letter Subject to identify sending env right away."
     }
   ] }
