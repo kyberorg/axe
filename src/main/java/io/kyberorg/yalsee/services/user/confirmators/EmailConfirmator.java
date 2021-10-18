@@ -65,7 +65,7 @@ public class EmailConfirmator implements Confirmator {
         try {
             final String subject = "Yalsee Confirmation Link";
             Map<String, Object> vars = new HashMap<>(1);
-            final String confirmationLink = MessageFormat.format(" Please click below to active your account. {0}/{1}?token={2}",
+            final String confirmationLink = MessageFormat.format("{0}/{1}?token={2}",
                     appUtils.getServerUrl(), Endpoint.UI.CONFIRMATION_PAGE, confirmationToken);
             vars.put("username", getUsername(confirmationToken));
             vars.put("link", confirmationLink);
