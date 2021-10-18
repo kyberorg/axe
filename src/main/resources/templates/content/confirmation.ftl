@@ -7,7 +7,7 @@
     </tr>
     <tr style="${appCss}">
         <td class="content-block last" style="${appCss} padding: 0;" valign="top">
-            Please confirm your registration by clicking following link ${link}. Thank you!
+            Please confirm your registration by clicking following link <a href="${link}">${link}</a>. Thank you!
         </td>
     </tr>
 </table>
