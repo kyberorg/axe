@@ -1,8 +1,11 @@
 package io.kyberorg.yalsee.services.user.confirmators;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.core.IdentGenerator;
+import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.user.AuthService;
 import io.kyberorg.yalsee.services.user.EmailSenderService;
 import io.kyberorg.yalsee.services.user.EmailSenderService.Letter;
@@ -25,7 +28,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Component
 public class EmailConfirmator implements Confirmator {
-    private static final String TAG = "[" + EmailConfirmator.class + "]";
+    private static final String TAG = "[" + EmailConfirmator.class.getSimpleName() + "]";
     private static final String ERR_EMPTY_TOKEN = "Got empty confirmation token";
     private static final String ERR_EMAIL_NOT_VALID = "Got malformed email";
     private static final String ERR_TOKEN_NOT_FOUND = "Confirmation token not found in the system";
@@ -34,6 +37,7 @@ public class EmailConfirmator implements Confirmator {
     private final EmailSenderService emailSenderService;
     private final TokenService tokenService;
     private final AuthService authService;
+    private final LinkService linkService;
     private final AppUtils appUtils;
 
     @Override
@@ -61,14 +65,23 @@ public class EmailConfirmator implements Confirmator {
             return OperationResult.elementNotFound().withMessage(ERR_EMAIL_NOT_FOUND);
         }
 
+
+        final String longConfirmationLink = MessageFormat.format("{0}/{1}?token={2}",
+                appUtils.getShortUrl(), Endpoint.UI.CONFIRMATION_PAGE, confirmationToken);
+        final OperationResult shortConfirmationLinkResult = makeShortLink(longConfirmationLink);
+
         MimeMessage letter;
         try {
             final String subject = "Yalsee Confirmation Link";
             Map<String, Object> vars = new HashMap<>(1);
-            final String confirmationLink = MessageFormat.format("{0}/{1}?token={2}",
-                    appUtils.getServerUrl(), Endpoint.UI.CONFIRMATION_PAGE, confirmationToken);
+
             vars.put("username", getUsername(confirmationToken));
-            vars.put("link", confirmationLink);
+            if (shortConfirmationLinkResult.ok()) {
+                vars.put("link", shortConfirmationLinkResult.getStringPayload());
+            } else {
+                vars.put("link", longConfirmationLink);
+                log.warn("{} Shortification failed. Using long link instead {}", TAG, shortConfirmationLinkResult);
+            }
 
             letter = emailSenderService.createLetter(Letter.ACCOUNT_CONFIRMATION, email, subject, vars);
         } catch (Exception e) {
@@ -87,6 +100,23 @@ public class EmailConfirmator implements Confirmator {
         } else {
             //should never happen
             return "there";
+        }
+    }
+
+    private OperationResult makeShortLink(final String confirmationLink) {
+        String ident;
+        do {
+            ident = IdentGenerator.generateTokenIdent(TokenType.ACCOUNT_CONFIRMATION_TOKEN);
+        } while (linkService.isLinkWithIdentExist(ident).ok());
+
+        LinkServiceInput input = LinkServiceInput.builder(confirmationLink).customIdent(ident).build();
+        OperationResult createLinkResult = linkService.createLink(input);
+        if (createLinkResult.ok()) {
+            //create short link
+            final String shortLink = appUtils.getShortUrl() + "/" + ident;
+            return OperationResult.success().addPayload(shortLink);
+        } else {
+            return createLinkResult;
         }
     }
 
