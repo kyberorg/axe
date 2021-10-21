@@ -4,3 +4,5 @@
 !target/yalsee.jar
 # And docker-entrypoint
 !docker-entrypoint.sh
+# Go Hellcheck
+!cmd
