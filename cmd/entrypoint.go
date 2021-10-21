@@ -1,22 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"strings"
 )
 
-var javaOptions strings.Builder
+var javaOptions []string
 
 func main() {
 	fileEnv("DB_PASSWORD", "")
 	fileEnv("TELEGRAM_TOKEN", "")
 	fileEnv("BUGSNAG_TOKEN", "")
 	fileEnv("DELETE_TOKEN", "")
-
-	//custom JAVA_OPTS support
-	javaOptions.WriteString(os.Getenv("JAVA_OPTS"))
 
 	//Remote Debug Support
 	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
@@ -37,39 +34,50 @@ func main() {
 	}
 
 	appendJavaOpts("-Djava.security.egd=file:/dev/./urandom")
-	appendJavaOpts("--add-opens java.base/java.lang=ALL-UNNAMED")
+	//appendJavaOpts("--add-opens java.base/java.lang=ALL-UNNAMED")
 	appendJavaOpts("-XX:+UseContainerSupport")
 	appendJavaOpts("-XX:+AlwaysActAsServerClassMachine")
-	appendJavaOpts("-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dumps")
+	appendJavaOpts("-XX:+HeapDumpOnOutOfMemoryError")
+	appendJavaOpts("-XX:HeapDumpPath=/opt/dumps")
 
 	//Issue 264 (OpenJ9 tuning). Based on https://yals.ee/dUxHlC
-	appendJavaOpts("-Xgcpolicy:gencon")
+	/*appendJavaOpts("-Xgcpolicy:gencon")
 	appendJavaOpts("-Xquickstart")
 	appendJavaOpts("-Xtune:virtualized")
 	appendJavaOpts("-XX:+ClassRelationshipVerifier")
 	appendJavaOpts("-XX:+TransparentHugePage")
-
+	*/
 	//Adding J9 Dump Options (#361). Created by https://yls.ee/MVeiwD
-	appendJavaOpts("-Xdump:heap:events=user,request=exclusive+prepwalk+serial")
+	//appendJavaOpts("-Xdump:heap:events=user,request=exclusive+prepwalk+serial")
 
 	//Issue 236 (Vaadin Production Mode)
 	appendJavaOpts("-Dvaadin.production=true")
 
-	versionCmd := "java --version"
-	versionCommand := exec.Command(versionCmd)
-	err := versionCommand.Run()
+	javaCmd := "java"
+	versionArgs := "--version"
+	versionCommand := exec.Command(javaCmd, versionArgs)
+	versionOut, err := versionCommand.CombinedOutput()
+	//err = versionCommand.Run()
+	fmt.Printf("Java Version \n%s\n", string(versionOut))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cmd := makeJavaCommand()
-	command := exec.Command(cmd)
-	err = command.Run()
+	springLauncher := "org.springframework.boot.loader.JarLauncher"
+	javaOptions = append(javaOptions, springLauncher)
+	fmt.Printf("%s %s", javaCmd, javaOptions)
+
+	cmd := exec.Command(javaCmd, javaOptions...)
+	out, err := cmd.CombinedOutput()
 
 	if err != nil {
-		log.Fatal(err)
+		_, _ = fmt.Fprintf(os.Stderr, "Failed to start err=%v\n", err)
+		fmt.Println(string(out))
+		os.Exit(1)
 	}
+
+	fmt.Printf("Output \n%s\n", string(out))
 }
 
 //fileEnv VAR [DEFAULT]
@@ -94,15 +102,5 @@ func fileEnv(envName string, defaultValue string) {
 }
 
 func appendJavaOpts(option string) {
-	javaOptions.WriteString(" " + option)
-}
-
-func makeJavaCommand() string {
-	var cmd strings.Builder
-	cmd.WriteString("java")
-	cmd.WriteString(" ")
-	cmd.WriteString(javaOptions.String())
-	cmd.WriteString(" ")
-	cmd.WriteString("org.springframework.boot.loader.JarLauncher")
-	return cmd.String()
+	javaOptions = append(javaOptions, option)
 }
