@@ -21,7 +21,7 @@ func main() {
 	//Remote Debug Support
 	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
 	if debugPortExists {
-		appendJavaOpts("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0: " + debugPort)
+		appendJavaOpts("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:" + debugPort)
 	}
 
 	//JMX (#361)
@@ -55,10 +55,17 @@ func main() {
 	//Issue 236 (Vaadin Production Mode)
 	appendJavaOpts("-Dvaadin.production=true")
 
+	versionCmd := "java --version"
+	versionCommand := exec.Command(versionCmd)
+	err := versionCommand.Run()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	cmd := makeJavaCommand()
-	log.Printf("Running %s", cmd)
 	command := exec.Command(cmd)
-	err := command.Run()
+	err = command.Run()
 
 	if err != nil {
 		log.Fatal(err)

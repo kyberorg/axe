@@ -11,10 +11,4 @@ COPY --from=builder snapshot-dependencies/ ./
 COPY --from=builder spring-boot-loader/ ./
 COPY --from=builder application/ ./
 
-COPY ./docker-entrypoint.sh ./
-RUN sh -c 'chmod +x ./docker-entrypoint.sh'
-
-USER yalsee
-ENTRYPOINT ["./docker-entrypoint.sh"]
-
 EXPOSE 8080
