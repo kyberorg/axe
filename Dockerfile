@@ -3,12 +3,7 @@ FROM adoptopenjdk:11-jre-openj9 as builder
 COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM adoptopenjdk:11-jdk-openj9 as runner
-
-# Create user and set ownership and permissions as required
-RUN useradd --user-group --create-home --no-log-init --shell /bin/bash yalsee \
-    && mkdir /app \
-    && chown -R yalsee /app
+FROM quay.io/kyberorg/yalsee-base:538-base-image as runner
 
 WORKDIR /app
 COPY --from=builder  dependencies/ ./

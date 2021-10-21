@@ -1,23 +1,30 @@
-FROM golang:1.17.2 as golang-build
+FROM golang:1.17.2 as healthcheck-build
 WORKDIR /go/src/app
 
-COPY cmd cmd
+COPY cmd/healthcheck.go cmd/healthcheck.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
-RUN ls -R /go
 
-# Create user
-RUN useradd --system --home /var/cache/yalsee --no-log-init --shell /sbin/nologin yalsee;
-# Create user and set ownership and permissions as required
-RUN mkdir /app && chown -R yalsee /app
+
+# Set ownership and permissions as required
+# 65532 - is nonroot @ distroless. See: https://github.com/GoogleContainerTools/distroless/issues/235
+RUN mkdir /app && chown -R 65532:65532 /app
+
+RUN cat /etc/passwd
+
+FROM golang:1.17.2 as entrypoint-build
+WORKDIR /go/src/app
+COPY cmd/entrypoint.go cmd/entrypoint.go
+
+RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
 FROM gcr.io/distroless/java:11 as runner
+COPY --from=healthcheck-build /etc/passwd /etc/group /etc/shadow /app/
+COPY --from=healthcheck-build /go/bin/cmd /app/healthcheck
+COPY --from=entrypoint-build /go/bin/cmd /app/entrypoint
 
-COPY docker-entrypoint.sh ./
-
-COPY --from=golang-build /go/bin/cmd /app/healthcheck
 
 HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 CMD ["/app/healthcheck"]
 
-COPY --from=golang-build /etc/passwd /etc/shadow /app/
-
+USER nonroot
+ENTRYPOINT ["/app/entrypoint"]
