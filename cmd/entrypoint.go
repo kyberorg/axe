@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -69,15 +71,20 @@ func main() {
 	fmt.Printf("%s %s", javaCmd, javaOptions)
 
 	cmd := exec.Command(javaCmd, javaOptions...)
-	out, err := cmd.CombinedOutput()
+	var stdBuffer bytes.Buffer
+	mw := io.MultiWriter(os.Stdout, &stdBuffer)
 
+	cmd.Stdout = mw
+	cmd.Stderr = mw
+
+	err = cmd.Run()
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Failed to start err=%v\n", err)
-		fmt.Println(string(out))
+		fmt.Println(stdBuffer.String())
 		os.Exit(1)
 	}
 
-	fmt.Printf("Output \n%s\n", string(out))
+	fmt.Printf("Output \n%s\n", stdBuffer.String())
 }
 
 //fileEnv VAR [DEFAULT]
