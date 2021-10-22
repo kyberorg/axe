@@ -3,7 +3,7 @@ FROM adoptopenjdk:11-jre-openj9 as builder
 COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM quay.io/kyberorg/yalsee-base:distroless-java as runner
+FROM quay.io/kyberorg/yalsee-base:openjdk-slim as runner
 
 WORKDIR /app
 COPY --from=builder  dependencies/ ./

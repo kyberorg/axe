@@ -4,7 +4,7 @@ COPY target/yalsee.jar yalsee.jar
 
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM quay.io/kyberorg/yalsee-base:538-base-image as runner
+FROM quay.io/kyberorg/yalsee-base:openjdk-slim as runner
 
 WORKDIR /app
 COPY --from=builder  dependencies/ ./
