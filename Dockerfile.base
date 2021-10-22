@@ -12,7 +12,8 @@ COPY cmd/entrypoint.go cmd/entrypoint.go
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
 # FROM openjdk:11.0.13-jre-slim-bullseye as runner
-FROM ibmjava:11-jdk as runner
+# FROM ibmjava:11-jdk as runner
+FROM ibmsemeruruntime/open-11-jdk:focal-jre-latest as runner
 COPY --from=healthcheck-build /go/bin/cmd /app/healthcheck
 COPY --from=entrypoint-build /go/bin/cmd /app/entrypoint
 
