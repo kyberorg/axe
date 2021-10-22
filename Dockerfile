@@ -11,4 +11,6 @@ COPY --from=builder snapshot-dependencies/ ./
 COPY --from=builder spring-boot-loader/ ./
 COPY --from=builder application/ ./
 
+HEALTHCHECK CMD ["/app/healthcheck", "/"]
+
 EXPOSE 8080

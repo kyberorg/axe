@@ -42,16 +42,6 @@ func main() {
 	appendJavaOpts("-XX:+HeapDumpOnOutOfMemoryError")
 	appendJavaOpts("-XX:HeapDumpPath=/opt/dumps")
 
-	//Issue 264 (OpenJ9 tuning). Based on https://yals.ee/dUxHlC
-	/*appendJavaOpts("-Xgcpolicy:gencon")
-	appendJavaOpts("-Xquickstart")
-	appendJavaOpts("-Xtune:virtualized")
-	appendJavaOpts("-XX:+ClassRelationshipVerifier")
-	appendJavaOpts("-XX:+TransparentHugePage")
-	*/
-	//Adding J9 Dump Options (#361). Created by https://yls.ee/MVeiwD
-	//appendJavaOpts("-Xdump:heap:events=user,request=exclusive+prepwalk+serial")
-
 	//Issue 236 (Vaadin Production Mode)
 	appendJavaOpts("-Dvaadin.production=true")
 

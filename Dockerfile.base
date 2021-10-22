@@ -5,23 +5,21 @@ COPY cmd/healthcheck.go cmd/healthcheck.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
+# Set ownership and permissions as required
+# 65532 - is nonroot @ distroless. See: https://github.com/GoogleContainerTools/distroless/issues/235
+RUN mkdir /app && chown -R 65532:65532 /app
+
 FROM golang:1.17.2 as entrypoint-build
 WORKDIR /go/src/app
 COPY cmd/entrypoint.go cmd/entrypoint.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
-# FROM openjdk:11.0.13-jre-slim-bullseye as runner
-# FROM ibmjava:11-jdk as runner
-# FROM ibmsemeruruntime/open-11-jdk:focal-jre-latest as runner
-FROM amazoncorretto:11.0.13 as runner
+FROM gcr.io/distroless/java:11 as runner
 COPY --from=healthcheck-build /go/bin/cmd /app/healthcheck
 COPY --from=entrypoint-build /go/bin/cmd /app/entrypoint
 
 HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 CMD ["/app/healthcheck"]
 
-#RUN useradd --user-group --create-home --no-log-init --shell /sbin/nologin yalsee \
-#    && chown -R yalsee /app
-
-#USER yalsee
+USER nonroot
 ENTRYPOINT ["/app/entrypoint"]
