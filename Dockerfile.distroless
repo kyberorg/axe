@@ -9,8 +9,6 @@ RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 # 65532 - is nonroot @ distroless. See: https://github.com/GoogleContainerTools/distroless/issues/235
 RUN mkdir /app && chown -R 65532:65532 /app
 
-RUN cat /etc/passwd
-
 FROM golang:1.17.2 as entrypoint-build
 WORKDIR /go/src/app
 COPY cmd/entrypoint.go cmd/entrypoint.go
