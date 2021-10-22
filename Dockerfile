@@ -3,7 +3,7 @@ FROM adoptopenjdk:11-jre-openj9 as builder
 COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM quay.io/kyberorg/yalsee-base:semeru-focal as runner
+FROM quay.io/kyberorg/yalsee-base:amazoncorretto as runner
 
 WORKDIR /app
 COPY --from=builder  dependencies/ ./
