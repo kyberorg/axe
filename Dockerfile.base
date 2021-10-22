@@ -5,7 +5,6 @@ COPY cmd/healthcheck.go cmd/healthcheck.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
-
 # Set ownership and permissions as required
 # 65532 - is nonroot @ distroless. See: https://github.com/GoogleContainerTools/distroless/issues/235
 RUN mkdir /app && chown -R 65532:65532 /app
@@ -18,19 +17,11 @@ COPY cmd/entrypoint.go cmd/entrypoint.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
-FROM golang:1.17.2 as go-build
-WORKDIR /go/src/app
-COPY cmd/tmp.go cmd/tmp.go
-
-RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
-
 FROM gcr.io/distroless/java:11 as runner
 COPY --from=healthcheck-build /go/bin/cmd /app/healthcheck
 COPY --from=entrypoint-build /go/bin/cmd /app/entrypoint
-COPY --from=go-build /go/bin/cmd /app/tmp
 
 HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 CMD ["/app/healthcheck"]
 
 USER nonroot
 ENTRYPOINT ["/app/entrypoint"]
-# ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "--add-opens java.base/java.lang=ALL-UNNAMED", "-XX:+UseContainerSupport", "-XX:+AlwaysActAsServerClassMachine", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/opt/dumps","-Dvaadin.production=true", "org.springframework.boot.loader.JarLauncherFailed"]
