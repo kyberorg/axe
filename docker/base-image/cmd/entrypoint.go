@@ -46,7 +46,7 @@ func main() {
 	//Issue 236 (Vaadin Production Mode)
 	appendJavaOpts("-Dvaadin.production=true")
 
-	javaCmd := "java"
+	javaCmd := "/usr/jre/bin/java"
 	versionArgs := "--version"
 	versionCommand := exec.Command(javaCmd, versionArgs)
 	versionOut, err := versionCommand.CombinedOutput()
