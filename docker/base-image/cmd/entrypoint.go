@@ -36,7 +36,8 @@ func main() {
 	}
 
 	appendJavaOpts("-Djava.security.egd=file:/dev/./urandom")
-	//appendJavaOpts("--add-opens java.base/java.lang=ALL-UNNAMED")
+	appendJavaOpts("-Dhttps.protocols=TLSv1.2,TLSv1.3")
+	appendJavaOpts("-Djdk.tls.client.protocols=TLSv1.2,TLSv1.3")
 	appendJavaOpts("-XX:+UseContainerSupport")
 	appendJavaOpts("-XX:+AlwaysActAsServerClassMachine")
 	appendJavaOpts("-XX:+HeapDumpOnOutOfMemoryError")
