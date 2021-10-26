@@ -18,10 +18,10 @@ func main() {
 	fileEnv("DELETE_TOKEN", "")
 
 	//Remote Debug Support
-	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
-	if debugPortExists {
-		appendJavaOpts("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:" + debugPort)
-	}
+	/*	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
+		if debugPortExists {
+			appendJavaOpts("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:" + debugPort)
+		}*/
 
 	//JMX (#361)
 	jmxPort, jmxPortExists := os.LookupEnv("JAVA_JMX_PORT")
