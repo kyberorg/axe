@@ -17,13 +17,13 @@ func main() {
 	fileEnv("BUGSNAG_TOKEN", "")
 	fileEnv("DELETE_TOKEN", "")
 
-	//Remote Debug Support
+	// Remote Debug Support
 	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
 	if debugPortExists {
 		appendJavaOpts("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:" + debugPort)
 	}
 
-	//JMX (#361)
+	// JMX (#361)
 	jmxPort, jmxPortExists := os.LookupEnv("JAVA_JMX_PORT")
 	if jmxPortExists {
 		appendJavaOpts("-Dcom.sun.management.jmxremote")
@@ -41,14 +41,20 @@ func main() {
 	appendJavaOpts("-XX:+HeapDumpOnOutOfMemoryError")
 	appendJavaOpts("-XX:HeapDumpPath=/opt/dumps")
 
-	//Issue 236 (Vaadin Production Mode)
+	// Issue 236 (Vaadin Production Mode)
 	appendJavaOpts("-Dvaadin.production=true")
+
+	// Debug
+	appendJavaOpts("-Djavax.net.ssl.trustStore=/cacerts")
+	appendJavaOpts("-Djavax.net.ssl.trustAnchors=/cacerts")
+	appendJavaOpts("-Djavax.net.debug=all")
+	//appendJavaOpts("-Djavax.net.debug=ssl:handshake:verbose")
 
 	javaCmd := "/usr/jre/bin/java"
 	versionArgs := "--version"
 	versionCommand := exec.Command(javaCmd, versionArgs)
 	versionOut, err := versionCommand.CombinedOutput()
-	//err = versionCommand.Run()
+
 	fmt.Printf("Java Version \n%s\n", string(versionOut))
 
 	if err != nil {
