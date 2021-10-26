@@ -27,6 +27,8 @@ RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
 FROM gcr.io/distroless/java-debian11:base as runner
 COPY --from=jreBuilder /jre /usr/jre
+COPY --from=jreBuilder /usr/lib/jvm/java-11-amazon-corretto/lib/libjdwp.so /usr/jre/lib/libjdwp.so
+COPY --from=jreBuilder /usr/lib/jvm/java-11-amazon-corretto/lib/libdt_socket.so /usr/jre/lib/libdt_socket.so
 COPY --from=healthcheckBuilder /go/bin/cmd /app/healthcheck
 COPY --from=entrypointBuilder /go/bin/cmd /app/entrypoint
 

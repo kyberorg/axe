@@ -18,10 +18,10 @@ func main() {
 	fileEnv("DELETE_TOKEN", "")
 
 	//Remote Debug Support
-	/*	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
-		if debugPortExists {
-			appendJavaOpts("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:" + debugPort)
-		}*/
+	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
+	if debugPortExists {
+		appendJavaOpts("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:" + debugPort)
+	}
 
 	//JMX (#361)
 	jmxPort, jmxPortExists := os.LookupEnv("JAVA_JMX_PORT")
@@ -36,8 +36,6 @@ func main() {
 	}
 
 	appendJavaOpts("-Djava.security.egd=file:/dev/./urandom")
-	appendJavaOpts("-Dhttps.protocols=TLSv1.2,TLSv1.3")
-	appendJavaOpts("-Djdk.tls.client.protocols=TLSv1.2,TLSv1.3")
 	appendJavaOpts("-XX:+UseContainerSupport")
 	appendJavaOpts("-XX:+AlwaysActAsServerClassMachine")
 	appendJavaOpts("-XX:+HeapDumpOnOutOfMemoryError")
