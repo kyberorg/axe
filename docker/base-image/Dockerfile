@@ -1,6 +1,6 @@
 FROM amazoncorretto:11 as jreBuilder
 RUN jlink \
-        --add-modules jdk.unsupported,java.sql,java.desktop,java.naming,java.management,java.instrument,java.security.jgss,java.rmi \
+        --add-modules jdk.unsupported,java.sql,java.desktop,java.naming,java.management,java.instrument,java.security.jgss,java.rmi,jdk.management.agent \
         --verbose \
         --strip-debug \
         --compress 2 \

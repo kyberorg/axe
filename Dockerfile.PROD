@@ -1,4 +1,4 @@
-FROM aamazoncorretto:11 as builder
+FROM amazoncorretto:11 as builder
 
 COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
