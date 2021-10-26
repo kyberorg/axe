@@ -2,7 +2,4 @@
 **
 # But JAR should stay
 !target/yalsee.jar
-# And docker-entrypoint
-!docker-entrypoint.sh
-# Go Healthcheck
-!cmd
+

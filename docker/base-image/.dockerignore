@@ -1,0 +1,4 @@
+# Ignore everything
+**
+# But Entrypoint and Healthcheck should stay
+!cmd
