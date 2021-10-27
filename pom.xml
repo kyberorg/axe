@@ -210,7 +210,7 @@
         <dependency>
             <groupId>com.bugsnag</groupId>
             <artifactId>bugsnag-spring</artifactId>
-            <version>3.6.2</version>
+            <version>3.6.3</version>
         </dependency>
         
         <!-- Hibernate URL Validator -->
