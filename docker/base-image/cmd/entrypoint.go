@@ -44,13 +44,7 @@ func main() {
 	// Issue 236 (Vaadin Production Mode)
 	appendJavaOpts("-Dvaadin.production=true")
 
-	// Debug
-	appendJavaOpts("-Djavax.net.ssl.trustStore=/cacerts")
-	appendJavaOpts("-Djavax.net.ssl.trustAnchors=/cacerts")
-	appendJavaOpts("-Djavax.net.debug=all")
-	//appendJavaOpts("-Djavax.net.debug=ssl:handshake:verbose")
-
-	javaCmd := "/usr/jre/bin/java"
+	javaCmd := "java"
 	versionArgs := "--version"
 	versionCommand := exec.Command(javaCmd, versionArgs)
 	versionOut, err := versionCommand.CombinedOutput()
