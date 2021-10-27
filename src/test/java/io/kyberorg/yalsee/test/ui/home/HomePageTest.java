@@ -5,6 +5,7 @@ import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
+import io.kyberorg.yalsee.test.pageobjects.external.QuayIo;
 import io.kyberorg.yalsee.test.pageobjects.external.VR;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
@@ -213,8 +214,28 @@ public class HomePageTest extends SelenideTest {
         HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(empty);
     }
 
+    /**
+     * Tests that link with spaces is trimmed and saved.
+     */
+    @Test
+    public void linkWithSpacesShouldBeTrimmedAndSaved() {
+        HomePageObject.pasteValueInFormAndSubmitIt(" quay.io/kyberorg/yalsee-base");
+
+        SelenideElement shortLink = HomePageObject.ResultArea.RESULT_LINK;
+        $(shortLink).shouldBe(visible);
+        String shortUrl = shortLink.getText();
+
+        open(shortUrl + addRedirectPageBypassSymbol());
+        verifyThatQuayIoOpened();
+    }
+
     private void verifyThatVROpened() {
         Assertions.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
+    }
+
+    private void verifyThatQuayIoOpened() {
+        QuayIo.LOGO.should(exist);
+        QuayIo.LOGO.shouldBe(visible);
     }
 
     private void verifyThatRedirectPageOpened() {
