@@ -214,6 +214,10 @@ public class HomePageTest extends SelenideTest {
         HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(empty);
     }
 
+    /**
+     * Tests that link with spaces is trimmed and saved.
+     */
+    @Test
     public void linkWithSpacesShouldBeTrimmedAndSaved() {
         HomePageObject.pasteValueInFormAndSubmitIt(" quay.io/kyberorg/yalsee-base");
 
