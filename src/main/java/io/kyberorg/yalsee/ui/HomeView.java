@@ -312,7 +312,7 @@ public class HomeView extends HorizontalLayout {
             isFormValid = false;
         } else {
             try {
-                longUrl = UrlUtils.makeFullUri(longUrl).toString();
+                longUrl = UrlUtils.makeFullUri(longUrl.trim()).toString();
             } catch (RuntimeException e) {
                 log.error("{} URL validation failed", TAG);
                 log.debug("", e);

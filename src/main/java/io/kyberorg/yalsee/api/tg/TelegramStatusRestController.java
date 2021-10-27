@@ -47,14 +47,14 @@ public class TelegramStatusRestController {
     public YalseeJson getBotStatus() {
         log.info("{} got request", TAG);
         if (bot == null) {
-            //most likely you want want see it as application startup will fail
+            //most likely you want see it as application startup will fail
             log.error("{} Failed to autowire " + TelegramBot.class.getSimpleName(), TAG);
             return YalseeErrorJson.createWithMessage("Internal error: bot is missing");
         }
 
         if (appUtils.isTelegramDisabled()) {
             log.info("{} Telegram Bot is disabled", TAG);
-            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-");
+            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-disabled");
         }
 
         try {
@@ -63,7 +63,9 @@ public class TelegramStatusRestController {
             log.info("{} telegram bot {} is {}", TAG, botName, botStatus);
             return TelegramStatusResponse.createWithStatus(botStatus).withBotName(botName);
         } catch (TelegramApiException e) {
-            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-");
+            log.warn("{} go Telegram exception {}", TAG, e.getMessage());
+            log.warn("", e);
+            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-broken");
         }
     }
 }
