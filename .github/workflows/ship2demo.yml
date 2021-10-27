@@ -5,13 +5,14 @@ on:
     branches:
       - trunk
     types:
+      - opened
       - ready_for_review
-
 
 jobs:
   ship2demo:
     name: Ship::Demo
     runs-on: self-hosted
+    if: github.event.pull_request.draft == false
 
     steps:
       - name: Checkout repository
@@ -61,6 +62,7 @@ jobs:
     name: Test::Demo
     needs: ship2demo
     runs-on: self-hosted
+    if: github.event.pull_request.draft == false
 
     steps:
       - name: Get current date
