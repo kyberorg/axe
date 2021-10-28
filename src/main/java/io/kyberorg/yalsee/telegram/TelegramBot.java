@@ -136,7 +136,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         String url = telegramObject.getArguments().getUrl();
-
+        log.debug("{} URL received {}", TAG, url);
         OperationResult storeResult = linkService.createLink(LinkServiceInput.builder(url).build());
         if (storeResult.ok()) {
             message = telegramService.success(storeResult.getPayload(Link.class));
