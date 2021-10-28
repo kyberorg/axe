@@ -1,4 +1,4 @@
-FROM golang:1.17.2 as healthcheckBuild
+FROM quay.io/kyberorg/golang:1.17.2 as healthcheckBuild
 WORKDIR /go/src/app
 
 COPY cmd/healthcheck.go cmd/healthcheck.go
@@ -9,13 +9,14 @@ RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 # 65532 - is nonroot @ distroless. See: https://github.com/GoogleContainerTools/distroless/issues/235
 RUN mkdir /app && chown -R 65532:65532 /app
 
-FROM golang:1.17.2 as entrypointBuild
+FROM quay.io/kyberorg/golang:1.17.2 as entrypointBuild
 WORKDIR /go/src/app
 COPY cmd/entrypoint.go cmd/entrypoint.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
 FROM gcr.io/distroless/java-debian11:11-nonroot as runner
+LABEL maintainer="Aleksandr Muravja <alex@kyberorg.io>"
 COPY --from=healthcheckBuild /go/bin/cmd /app/healthcheck
 COPY --from=entrypointBuild /go/bin/cmd /app/entrypoint
 
