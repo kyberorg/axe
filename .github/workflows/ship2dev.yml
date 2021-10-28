@@ -21,7 +21,7 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.DEV -t quay.io/kyberorg/yalsee:dev . || docker build -f Dockerfile.DEV -t quay.io/kyberorg/yalsee:dev .
+        run: docker build -f Dockerfile.DEV -t quay.io/kyberorg/yalsee:dev .
 
       - name: Docker push
         run: docker push quay.io/kyberorg/yalsee:dev
