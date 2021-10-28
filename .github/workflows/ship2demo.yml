@@ -11,6 +11,8 @@ on:
     paths:
       - 'frontend/**'
       - 'src/**'
+      - 'pom.xml'
+      - 'Dockerfile*'
 
 jobs:
   ship2demo:
