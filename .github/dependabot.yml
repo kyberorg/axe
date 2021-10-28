@@ -18,9 +18,9 @@ updates:
       - "PR"
     ignore:
       - dependency-name: "hibernate-validator"
-        versions: ["[7.x.x.Final,)"]
-      - dependency-name: "vaadin.version"
-        versions: ["(14.5.3,)"]
+        versions: [ "[7.x.x.Final,)" ]
+      - dependency-name: "selenide"
+        versions: [ "(6.x.x,)" ]
 
   - package-ecosystem: "github-actions"
     directory: "/"
