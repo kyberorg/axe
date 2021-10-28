@@ -170,6 +170,7 @@ public class HomePageTest extends SelenideTest {
         open("/myLinks");
         MyLinksViewPageObject.cleanSession();
         open("/");
+        waitForVaadin();
 
         String link = "https://vr.fi";
         String description = "Suomen junat";
