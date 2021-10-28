@@ -1,10 +1,11 @@
 package io.kyberorg.yalsee.telegram;
 
 
-import io.kyberorg.yalsee.utils.UrlExtraValidator;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.URI;
 import java.util.Objects;
 
 /**
@@ -118,14 +119,16 @@ public final class TelegramArguments {
          * @return {@link TelegramArguments}
          */
         public TelegramArguments build() {
-            if (UrlExtraValidator.isUrlValid(urlString).equals(UrlExtraValidator.VALID)) {
+            final URI url;
+            try {
+                url = UrlUtils.makeFullUri(urlString);
                 TelegramArguments newArguments = new TelegramArguments();
-                newArguments.url = urlString;
+                newArguments.url = url.toString();
                 if (StringUtils.isNotBlank(descriptionString)) {
                     newArguments.description = descriptionString;
                 }
                 return newArguments;
-            } else {
+            } catch (RuntimeException e) {
                 return BROKEN_ARGS;
             }
         }
