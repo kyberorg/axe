@@ -37,7 +37,7 @@ public class SessionWatchdog implements HttpSessionListener {
     public void endExpiredVaadinSessions() {
         log.debug("{} Starting Session Cleanup", TAG);
         //removing already invalidated sessions from list as reading their attributes leads to exceptions.
-        SessionBox.getSessions().values().parallelStream()
+        SessionBox.getSessions().values().stream()
                 .filter(SessionBoxRecord::hasHttpSession)
                 .filter(SessionBoxRecord::httpSessionAlreadyInvalidated).map(SessionBoxRecord::getSessionId)
                 .forEach(this::removeSessionFromBox);
