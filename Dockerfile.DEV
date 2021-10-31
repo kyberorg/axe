@@ -1,36 +1,18 @@
-FROM adoptopenjdk:11-jre-openj9 as builder
+FROM amazoncorretto:11 as builder
 
 COPY target/yalsee.jar yalsee.jar
-
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM adoptopenjdk:11-jdk-openj9 as runner
-
-# Create user and set ownership and permissions as required
-RUN useradd --user-group --create-home --no-log-init --shell /bin/bash yalsee \
-    && mkdir /app \
-    && chown -R yalsee /app
+FROM quay.io/kyberorg/yalsee-base:distroless-jdk-11 as runner
 
 WORKDIR /app
 COPY --from=builder  dependencies/ ./
 COPY --from=builder snapshot-dependencies/ ./
+
+# see https://github.com/moby/moby/issues/37965
+LABEL maintainer="Aleksandr Muravja <alex@kyberorg.io>"
+
 COPY --from=builder spring-boot-loader/ ./
 COPY --from=builder application/ ./
 
-COPY ./docker-entrypoint.sh ./
-RUN sh -c 'chmod +x ./docker-entrypoint.sh'
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends haveged netcat curl jq \
-    && apt-get -y autoremove \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-USER yalsee
-ENTRYPOINT ["./docker-entrypoint.sh"]
-
 EXPOSE 8080
-
-HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 \
-   CMD curl --silent --request GET http://127.0.0.1:8080/actuator/health \
-                   | jq --exit-status '.status == "UP"' || exit 1

@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.5.3</vaadin.version>
+        <vaadin.version>14.7.3</vaadin.version>
         
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
+        <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     
@@ -192,7 +192,7 @@
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.13.0</version>
+            <version>3.13.2</version>
         </dependency>
 
         <!-- For extra validation of URL  -->
@@ -227,7 +227,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>1.18.22</version>
         </dependency>
         
         <!-- QR Code generation -->
@@ -246,7 +246,7 @@
         <dependency>
             <groupId>com.bugsnag</groupId>
             <artifactId>bugsnag-spring</artifactId>
-            <version>3.6.2</version>
+            <version>3.6.3</version>
         </dependency>
         
         <!-- Hibernate URL Validator -->

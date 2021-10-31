@@ -37,7 +37,7 @@ public class SessionWatchdog implements HttpSessionListener {
     public void endExpiredVaadinSessions() {
         log.debug("{} Starting Session Cleanup", TAG);
         //removing already invalidated sessions from list as reading their attributes leads to exceptions.
-        SessionBox.getSessions().values().parallelStream()
+        SessionBox.getSessions().values().stream()
                 .filter(SessionBoxRecord::hasHttpSession)
                 .filter(SessionBoxRecord::httpSessionAlreadyInvalidated).map(SessionBoxRecord::getSessionId)
                 .forEach(this::removeSessionFromBox);
@@ -69,7 +69,17 @@ public class SessionWatchdog implements HttpSessionListener {
 
     private boolean isSessionExpired(final SessionBoxRecord sessionBoxRecord) {
         int timeoutInSeconds = appUtils.getSessionTimeout();
-        Instant sessionCreatedTime = Instant.ofEpochMilli(sessionBoxRecord.getHttpSession().getCreationTime());
+        if (!sessionBoxRecord.hasHttpSession()) {
+            return true;
+        }
+        final long sessionCreatedAt;
+        try {
+            sessionCreatedAt = sessionBoxRecord.getHttpSession().getCreationTime();
+        } catch (IllegalStateException e) {
+            //this exception is thrown only if this method is called on an invalidated session
+            return true;
+        }
+        Instant sessionCreatedTime = Instant.ofEpochMilli(sessionCreatedAt);
         Instant now = Instant.now();
         Instant sessionExpirationTime = sessionCreatedTime.plusSeconds(timeoutInSeconds);
         return now.isAfter(sessionExpirationTime);
@@ -83,6 +93,11 @@ public class SessionWatchdog implements HttpSessionListener {
     private void removeSessionFromBox(final String sessionId) {
         log.debug("{} removing already gone session from {}. Session ID: {} ",
                 TAG, SessionBox.class.getSimpleName(), sessionId);
-        SessionBox.getSessions().remove(sessionId);
+        try {
+            SessionBox.getSessions().remove(sessionId);
+        } catch (Exception e) {
+            log.warn("{} got error while removing session from {}", TAG, SessionBox.class.getSimpleName());
+        }
+
     }
 }

@@ -4,37 +4,40 @@ on:
   pull_request:
     branches:
       - trunk
+    types:
+      - opened
+      - synchronize
+      - ready_for_review
+    paths:
+      - 'frontend/**'
+      - 'src/**'
+      - 'pom.xml'
+      - 'Dockerfile*'
 
 jobs:
   ship2demo:
     name: Ship::Demo
     runs-on: self-hosted
+    if: github.event.pull_request.draft == false
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Login to quay.io
-        uses: docker/login-action@v1
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_TOKEN }}
+        run: echo "${{ secrets.QUAY_TOKEN }}" | docker login -u "${{ secrets.QUAY_USERNAME }}" --password-stdin quay.io
 
       - name: Complile JAR
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: Dockerfile.PROD
-          push: true
-          tags: quay.io/kyberorg/yalsee:demo
+      - name: Docker build and tag
+        run: docker build -f Dockerfile.PROD -t quay.io/kyberorg/yalsee:demo .
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Docker push
+        run: docker push quay.io/kyberorg/yalsee:demo
+
+      - name: Delete pushed image to prevent mess
+        run: docker rmi quay.io/kyberorg/yalsee:demo
 
       - name: Deploy
         uses: wei/curl@master
@@ -58,6 +61,7 @@ jobs:
     name: Test::Demo
     needs: ship2demo
     runs-on: self-hosted
+    if: github.event.pull_request.draft == false
 
     steps:
       - name: Get current date
@@ -80,7 +84,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.19
+        uses: EnricoMi/publish-unit-test-result-action@v1.23
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
