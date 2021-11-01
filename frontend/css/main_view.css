@@ -34,3 +34,11 @@ vaadin-tab a iron-icon {
 .subtitle-tab {
     color: rgba(24, 39, 57, 0.94);
 }
+
+.cb-dialog {
+    max-width: 100%;
+}
+
+.cb-button {
+    margin-right: 1rem;
+}
