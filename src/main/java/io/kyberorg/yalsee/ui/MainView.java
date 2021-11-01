@@ -28,6 +28,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
@@ -97,6 +98,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
+
+        //Cookie Banner
+        //TODO show only once
+        CookieBanner cookieBanner = new CookieBanner();
+        cookieBanner.getContent().open();
     }
 
     private void addLogo() {
