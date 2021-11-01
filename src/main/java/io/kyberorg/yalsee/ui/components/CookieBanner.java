@@ -94,7 +94,7 @@ public class CookieBanner extends Composite<Dialog> {
 
     private void onAllowAllButtonClicked(ClickEvent<Button> event) {
         analyticsBox.setValue(true);
-        getContent().close();
+        writeValuesToSessionAndClose();
     }
 
     private void writeValuesToSessionAndClose() {

@@ -94,19 +94,20 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         setId(IDs.VIEW_ID);
 
         //session trick
-        SessionBox.storeSession(VaadinSession.getCurrent());
+        VaadinSession session = VaadinSession.getCurrent();
+        SessionBox.storeSession(session);
 
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
 
         //Cookie Banner
-        readAndWriteCookieBannerRelatedSettingsFromSession(VaadinSession.getCurrent());
-        boolean shouldDisplayBanner = !(boolean) VaadinSession.getCurrent().getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
+        readAndWriteCookieBannerRelatedSettingsFromSession(session);
+        boolean shouldDisplayBanner = !(boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
         if (shouldDisplayBanner) {
             CookieBanner cookieBanner = new CookieBanner();
             cookieBanner.getContent().open();
-            VaadinSession.getCurrent().setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
         }
     }
 
@@ -185,7 +186,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("twitter:image", previewImage);
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
-        if (appUtils.isGoogleAnalyticsEnabled()) {
+        if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent())) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
     }
@@ -194,8 +195,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         if (Objects.isNull(session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN))) {
             session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, false);
         }
+
         if (Objects.isNull(session.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED))) {
-            session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, true);
+            session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, false);
         }
     }
 

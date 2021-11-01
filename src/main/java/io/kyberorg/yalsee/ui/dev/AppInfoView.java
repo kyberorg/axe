@@ -2,11 +2,13 @@ package io.kyberorg.yalsee.ui.dev;
 
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -54,7 +56,8 @@ public class AppInfoView extends YalseeLayout {
         setId(IDs.VIEW_ID);
 
         VerticalLayout publicInfoArea = publicInfoArea();
-        add(publicInfoArea);
+        VerticalLayout cookieArea = cookieArea();
+        add(publicInfoArea, cookieArea);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
             VerticalLayout devInfoArea = devInfoArea();
@@ -97,6 +100,39 @@ public class AppInfoView extends YalseeLayout {
         return publicArea;
     }
 
+    private VerticalLayout cookieArea() {
+        VerticalLayout cookieArea = new VerticalLayout();
+        cookieArea.setId(IDs.COOKIE_AREA);
+        H4 title = new H4("About Cookies");
+        Span cookieText = new Span();
+        Span textStart = new Span("Yalsee is using ");
+        Anchor link = new Anchor("https://www.cookiesandyou.com/", "Cookies");
+        Span textEnd = new Span(" to make this site works. ");
+        Span techDetailsText = new Span("There are technical cookies like JSESSION, " +
+                "what keeps session and preferences " +
+                "and analytics cookies (GA etc) used for collecting usage statistics.");
+
+        Span techCookies = new Span();
+        Span techCookiesLabel = new Span("Technical cookies: ");
+        Span techCookiesValue = new Span("allowed");
+        techCookiesValue.addClassName("green");
+
+        Span analyticsCookies = new Span();
+        Span analyticsCookiesLabel = new Span("Analytics cookies: ");
+        Span analyticsCookiesValue = new Span("");
+        if (appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent())) {
+            analyticsCookiesValue.setText("allowed");
+        } else {
+            analyticsCookiesValue.setText("denied");
+        }
+
+        cookieText.add(textStart, link, textEnd, techDetailsText);
+        techCookies.add(techCookiesLabel, techCookiesValue);
+        analyticsCookies.add(analyticsCookiesLabel, analyticsCookiesValue);
+        cookieArea.add(title, cookieText, techCookies, analyticsCookies);
+        return cookieArea;
+    }
+
     private VerticalLayout devInfoArea() {
         VerticalLayout devInfoArea = new VerticalLayout();
         devInfoArea.setId(IDs.DEV_INFO_AREA);
@@ -127,5 +163,6 @@ public class AppInfoView extends YalseeLayout {
         public static final String COMMIT_LINK = "commitLink";
         public static final String DEV_INFO_AREA = "devInfoArea";
         public static final String GOOGLE_ANALYTICS_BANNER = "googleAnalyticsBanner";
+        public static final String COOKIE_AREA = "cookieArea";
     }
 }
