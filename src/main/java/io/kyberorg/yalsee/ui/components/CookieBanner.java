@@ -74,7 +74,7 @@ public class CookieBanner extends Composite<Dialog> {
         onlyNecessaryButton.addClickListener(this::onNecessaryButtonClicked);
         onlyNecessaryButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_CONTRAST);
 
-        mySelectionButton.setId(IDs.CB_MY_SELECTION_BUTTON);
+        mySelectionButton.setId(IDs.CB_SELECTION_BUTTON);
         mySelectionButton.addClickListener(this::onMySelectionButtonClicked);
         mySelectionButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
 
@@ -138,7 +138,7 @@ public class CookieBanner extends Composite<Dialog> {
         public static final String CB_ANALYTICS_BOX = "cbAnalyticsBox";
         public static final String CB_BUTTONS_SECTION = "cbButtons";
         public static final String CB_ONLY_NECESSARY_BUTTON = "cbOnlyNecessaryButton";
-        public static final String CB_MY_SELECTION_BUTTON = "cbMySelectionButton";
+        public static final String CB_SELECTION_BUTTON = "cbSelectionButton";
         public static final String CB_ALLOW_ALL_BUTTON = "cbAllowAllButton";
     }
 

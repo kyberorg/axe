@@ -118,8 +118,8 @@ public class AppInfoView extends YalseeLayout {
                 "and analytics cookies (Google Analytics) used for collecting usage statistics.");
         techDetailsText.setId(IDs.COOKIE_TECH_DETAILS);
 
-        H5 cookieCurrentStateSubTitle = new H5("Current Settings");
-        cookieCurrentStateSubTitle.setId(IDs.COOKIE_CURRENT_STATE_TITLE);
+        H5 cookieCurrentSettingsSubTitle = new H5("Current Settings");
+        cookieCurrentSettingsSubTitle.setId(IDs.COOKIE_CURRENT_SETTINGS_TITLE);
 
         Span techCookies = new Span();
         techCookies.setId(IDs.TECH_COOKIE_SPAN);
@@ -150,7 +150,7 @@ public class AppInfoView extends YalseeLayout {
         cookieText.add(textStart, link, textEnd, techDetailsText);
         techCookies.add(techCookiesLabel, techCookiesValue);
         analyticsCookies.add(analyticsCookiesLabel, analyticsCookiesValue);
-        cookieArea.add(title, cookieText, cookieCurrentStateSubTitle, techCookies, analyticsCookies);
+        cookieArea.add(title, cookieText, cookieCurrentSettingsSubTitle, techCookies, analyticsCookies);
         return cookieArea;
     }
 
@@ -189,7 +189,7 @@ public class AppInfoView extends YalseeLayout {
         public static final String COOKIE_TEXT_SPAN = "cookieTextSpan";
         public static final String COOKIE_LINK = "cookieLink";
         public static final String COOKIE_TECH_DETAILS = "cookieTechDetails";
-        public static final String COOKIE_CURRENT_STATE_TITLE = "cookieCurrentStateTitle";
+        public static final String COOKIE_CURRENT_SETTINGS_TITLE = "cookieCurrentSettingsTitle";
         public static final String TECH_COOKIE_SPAN = "techCookieSpan";
         public static final String TECH_COOKIE_LABEL = "techCookieLabel";
         public static final String TECH_COOKIE_VALUE = "techCookieValue";
