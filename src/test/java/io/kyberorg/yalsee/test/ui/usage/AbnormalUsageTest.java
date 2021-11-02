@@ -39,6 +39,8 @@ public class AbnormalUsageTest extends SelenideTest {
         final String linkToSave = "https://github.com/kyberorg/yalsee/issues/322";
 
         open("/?" + extraArgument);
+        waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
 
         HomePageObject.pasteValueInFormAndSubmitIt(linkToSave);
 

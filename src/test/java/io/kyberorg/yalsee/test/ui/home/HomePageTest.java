@@ -133,6 +133,7 @@ public class HomePageTest extends SelenideTest {
         HomePageObject.pasteValueInFormAndSubmitIt("https://vr.fi");
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         SelenideElement descriptionCell =
                 MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.shouldBe(empty);
@@ -173,6 +174,7 @@ public class HomePageTest extends SelenideTest {
         MyLinksViewPageObject.cleanSession();
         open("/");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
 
         String link = "https://vr.fi";
         String description = "Suomen junat";
