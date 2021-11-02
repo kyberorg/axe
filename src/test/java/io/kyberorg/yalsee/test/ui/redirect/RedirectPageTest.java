@@ -34,6 +34,9 @@ public class RedirectPageTest extends SelenideTest {
     public void beforeTest() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
+            waitForVaadin();
+            CookieBannerPageObject.closeBannerIfAny();
+
             String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(ourLongLink);
             waitForVaadin();
