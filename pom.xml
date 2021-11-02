@@ -220,21 +220,28 @@
             <artifactId>hibernate-validator</artifactId>
             <version>6.2.0.Final</version>
         </dependency>
-        
+
         <!-- Sitemap generator -->
         <dependency>
             <groupId>com.github.dfabulich</groupId>
             <artifactId>sitemapgen4j</artifactId>
             <version>1.1.2</version>
         </dependency>
-        
+
+        <!-- Toggle (On-Off) Button Component -->
+        <dependency>
+            <groupId>com.vaadin.componentfactory</groupId>
+            <artifactId>togglebutton</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
         <!-- Spring Annotation Processor for generating .properties metadata -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        
+
         <!-- Spring Boot Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

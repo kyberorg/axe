@@ -1,9 +1,7 @@
 package io.kyberorg.yalsee.ui.dev;
 
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.componentfactory.ToggleButton;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -112,24 +110,28 @@ public class AppInfoView extends YalseeLayout {
                 "what keeps session and preferences " +
                 "and analytics cookies (GA etc) used for collecting usage statistics.");
 
+        H5 cookieCurrentStateSubTitle = new H5("Current Settings");
+
         Span techCookies = new Span();
         Span techCookiesLabel = new Span("Technical cookies: ");
-        Span techCookiesValue = new Span("allowed");
-        techCookiesValue.addClassName("green");
+        ToggleButton techCookiesValue = new ToggleButton(true);
+        techCookiesValue.setEnabled(false);
 
         Span analyticsCookies = new Span();
         Span analyticsCookiesLabel = new Span("Analytics cookies: ");
-        Span analyticsCookiesValue = new Span("");
-        if (appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent())) {
-            analyticsCookiesValue.setText("allowed");
-        } else {
-            analyticsCookiesValue.setText("denied");
-        }
+        ToggleButton analyticsCookiesValue = new ToggleButton();
+        analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent()));
+        analyticsCookiesValue.addValueChangeListener(event -> {
+            VaadinSession session = VaadinSession.getCurrent();
+            if (session != null) {
+                session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, event.getValue());
+            }
+        });
 
         cookieText.add(textStart, link, textEnd, techDetailsText);
         techCookies.add(techCookiesLabel, techCookiesValue);
         analyticsCookies.add(analyticsCookiesLabel, analyticsCookiesValue);
-        cookieArea.add(title, cookieText, techCookies, analyticsCookies);
+        cookieArea.add(title, cookieText, cookieCurrentStateSubTitle, techCookies, analyticsCookies);
         return cookieArea;
     }
 
