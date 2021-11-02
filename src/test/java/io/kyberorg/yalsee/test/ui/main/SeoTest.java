@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.ui.main;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ public class SeoTest extends SelenideTest {
     public static void beforeTests() {
         open("/");
         VaadinPageObject.waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

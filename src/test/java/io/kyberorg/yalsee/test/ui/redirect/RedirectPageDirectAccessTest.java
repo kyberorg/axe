@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.ui.redirect;
 
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +28,7 @@ public class RedirectPageDirectAccessTest extends SelenideTest {
     public void beforeTest() {
         open("/redirector");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

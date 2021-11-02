@@ -35,4 +35,10 @@ public final class CookieBannerPageObject {
         public static final SelenideElement SELECTION_BUTTON = $("#" + CookieBanner.IDs.CB_SELECTION_BUTTON);
         public static final SelenideElement ALLOW_ALL_BUTTON = $("#" + CookieBanner.IDs.CB_ALLOW_ALL_BUTTON);
     }
+
+    public static void closeBannerIfAny() {
+        if (DIALOG.isDisplayed()) {
+            DIALOG.pressEscape();
+        }
+    }
 }
