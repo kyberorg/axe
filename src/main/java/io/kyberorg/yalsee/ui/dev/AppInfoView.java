@@ -102,24 +102,43 @@ public class AppInfoView extends YalseeLayout {
         VerticalLayout cookieArea = new VerticalLayout();
         cookieArea.setId(IDs.COOKIE_AREA);
         H4 title = new H4("About Cookies");
+        title.setId(IDs.COOKIE_TITLE);
+
         Span cookieText = new Span();
+        cookieText.setId(IDs.COOKIE_TEXT_SPAN);
+
         Span textStart = new Span("Yalsee is using ");
         Anchor link = new Anchor("https://www.cookiesandyou.com/", "Cookies");
+        link.setId(IDs.COOKIE_LINK);
+
         Span textEnd = new Span(" to make this site works. ");
+
         Span techDetailsText = new Span("There are technical cookies like JSESSION, " +
                 "what keeps session and preferences " +
-                "and analytics cookies (GA etc) used for collecting usage statistics.");
+                "and analytics cookies (Google Analytics) used for collecting usage statistics.");
+        techDetailsText.setId(IDs.COOKIE_TECH_DETAILS);
 
         H5 cookieCurrentStateSubTitle = new H5("Current Settings");
+        cookieCurrentStateSubTitle.setId(IDs.COOKIE_CURRENT_STATE_TITLE);
 
         Span techCookies = new Span();
+        techCookies.setId(IDs.TECH_COOKIE_SPAN);
+
         Span techCookiesLabel = new Span("Technical cookies: ");
+        techCookiesLabel.setId(IDs.TECH_COOKIE_LABEL);
+
         ToggleButton techCookiesValue = new ToggleButton(true);
+        techCookiesValue.setId(IDs.TECH_COOKIE_VALUE);
         techCookiesValue.setEnabled(false);
 
         Span analyticsCookies = new Span();
+        analyticsCookies.setId(IDs.ANALYTICS_COOKIE_SPAN);
+
         Span analyticsCookiesLabel = new Span("Analytics cookies: ");
+        analyticsCookiesLabel.setId(IDs.ANALYTICS_COOKIE_LABEL);
+
         ToggleButton analyticsCookiesValue = new ToggleButton();
+        analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
         analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent()));
         analyticsCookiesValue.addValueChangeListener(event -> {
             VaadinSession session = VaadinSession.getCurrent();
@@ -166,5 +185,16 @@ public class AppInfoView extends YalseeLayout {
         public static final String DEV_INFO_AREA = "devInfoArea";
         public static final String GOOGLE_ANALYTICS_BANNER = "googleAnalyticsBanner";
         public static final String COOKIE_AREA = "cookieArea";
+        public static final String COOKIE_TITLE = "cookieTitle";
+        public static final String COOKIE_TEXT_SPAN = "cookieTextSpan";
+        public static final String COOKIE_LINK = "cookieLink";
+        public static final String COOKIE_TECH_DETAILS = "cookieTechDetails";
+        public static final String COOKIE_CURRENT_STATE_TITLE = "cookieCurrentStateTitle";
+        public static final String TECH_COOKIE_SPAN = "techCookieSpan";
+        public static final String TECH_COOKIE_LABEL = "techCookieLabel";
+        public static final String TECH_COOKIE_VALUE = "techCookieValue";
+        public static final String ANALYTICS_COOKIE_SPAN = "analyticsCookieSpan";
+        public static final String ANALYTICS_COOKIE_LABEL = "analyticsCookieLabel";
+        public static final String ANALYTICS_COOKIE_VALUE = "analyticsCookieValue";
     }
 }

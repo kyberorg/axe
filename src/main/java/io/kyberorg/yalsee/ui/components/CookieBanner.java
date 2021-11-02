@@ -50,25 +50,41 @@ public class CookieBanner extends Composite<Dialog> {
     }
 
     private void init() {
-        onlyNecessaryButton.addClickListener(this::onNecessaryButtonClicked);
-        onlyNecessaryButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_CONTRAST);
+        setId(IDs.CB_DIALOG);
 
-        mySelectionButton.addClickListener(this::onMySelectionButtonClicked);
-        mySelectionButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
+        title.setId(IDs.CB_TITLE);
+        textAndLinkSection.setId(IDs.CB_TEXT_AND_LINK_SECTION);
+        text.setId(IDs.CB_TEXT);
+        link.setId(IDs.CB_LINK);
 
-        allowAllButton.addClickListener(this::onAllowAllButtonClicked);
-        allowAllButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
+        checkboxes.setId(IDs.CB_BOXES_SECTION);
 
+        onlyNecessaryBox.setId(IDs.CB_ONLY_NECESSARY_BOX);
         onlyNecessaryBox.setLabel("Technical");
         onlyNecessaryBox.setValue(true);
         onlyNecessaryBox.setEnabled(false);
         onlyNecessaryBox.setReadOnly(true);
 
+        analyticsBox.setId(IDs.CB_ANALYTICS_BOX);
         analyticsBox.setLabel("Analytics");
 
+        buttons.setId(IDs.CB_BUTTONS_SECTION);
+
+        onlyNecessaryButton.setId(IDs.CB_ONLY_NECESSARY_BUTTON);
+        onlyNecessaryButton.addClickListener(this::onNecessaryButtonClicked);
+        onlyNecessaryButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_CONTRAST);
+
+        mySelectionButton.setId(IDs.CB_MY_SELECTION_BUTTON);
+        mySelectionButton.addClickListener(this::onMySelectionButtonClicked);
+        mySelectionButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
+
+        allowAllButton.setId(IDs.CB_ALLOW_ALL_BUTTON);
+        allowAllButton.addClickListener(this::onAllowAllButtonClicked);
+        allowAllButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
+
         textAndLinkSection.add(text, link);
-        buttons.add(onlyNecessaryButton, mySelectionButton, allowAllButton);
         checkboxes.add(onlyNecessaryBox, analyticsBox);
+        buttons.add(onlyNecessaryButton, mySelectionButton, allowAllButton);
 
         coreLayout.add(title, textAndLinkSection, checkboxes, buttons);
 
@@ -76,8 +92,6 @@ public class CookieBanner extends Composite<Dialog> {
     }
 
     private void applyStyle() {
-        setId(Classes.CB_DIALOG);
-
         buttons.setFlexWrap(FlexLayout.FlexWrap.WRAP);
         Stream<Button> buttonStream = Stream.of(onlyNecessaryButton, mySelectionButton, allowAllButton);
         buttonStream.forEach(button -> button.addClassName(Classes.CB_BUTTON));
@@ -113,8 +127,23 @@ public class CookieBanner extends Composite<Dialog> {
         getContent().close();
     }
 
+    public static final class IDs {
+        public static final String CB_DIALOG = "cbDialog";
+        public static final String CB_TITLE = "cbTitle";
+        public static final String CB_TEXT_AND_LINK_SECTION = "cbTextAndLinkSection";
+        public static final String CB_TEXT = "cbText";
+        public static final String CB_LINK = "cbLink";
+        public static final String CB_BOXES_SECTION = "cbBoxes";
+        public static final String CB_ONLY_NECESSARY_BOX = "cbOnlyNecessaryBox";
+        public static final String CB_ANALYTICS_BOX = "cbAnalyticsBox";
+        public static final String CB_BUTTONS_SECTION = "cbButtons";
+        public static final String CB_ONLY_NECESSARY_BUTTON = "cbOnlyNecessaryButton";
+        public static final String CB_MY_SELECTION_BUTTON = "cbMySelectionButton";
+        public static final String CB_ALLOW_ALL_BUTTON = "cbAllowAllButton";
+    }
+
     public static final class Classes {
-        public static final String CB_DIALOG = "cb-dialog";
         public static final String CB_BUTTON = "cb-button";
+
     }
 }
