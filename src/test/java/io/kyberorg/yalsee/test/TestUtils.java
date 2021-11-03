@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.test;
 
+import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
@@ -104,6 +105,20 @@ public final class TestUtils {
             fail(String.format("%s header value is not a number", Header.CONTENT_LENGTH));
         }
         assertTrue(contentLength > 0, "Content is empty");
+    }
+
+    public static void assertHasTheme(final SelenideElement element, final String themeValue) {
+        String attributeValue = element.getAttribute("theme");
+        assert attributeValue != null;
+        String[] allThemes = attributeValue.split(" ");
+        boolean hasTheme = false;
+        for (String theme : allThemes) {
+            if (theme.equals(themeValue)) {
+                hasTheme = true;
+                break;
+            }
+        }
+        assertTrue(hasTheme, "Element has no theme " + themeValue);
     }
 
     /**

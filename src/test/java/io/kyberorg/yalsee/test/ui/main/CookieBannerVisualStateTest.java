@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.test.ui.main;
 
+import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
@@ -110,7 +111,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void moreInfoLinkHrefIsAppInfoPage() {
-        BannerText.LINK.shouldHave(attributeMatching("href", "appInfo"));
+        BannerText.LINK.shouldHave(attributeMatching("href", TestUtils.getTestUrl() + "/appInfo"));
     }
 
     /**
@@ -170,8 +171,9 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void buttonsShouldBeSmall() {
-        Buttons.BUTTONS.filterBy(attributeMatching("theme", ".*small*"))
-                .shouldHave(size(THREE));
+        TestUtils.assertHasTheme(Buttons.ONLY_NECESSARY_BUTTON, "small");
+        TestUtils.assertHasTheme(Buttons.SELECTION_BUTTON, "small");
+        TestUtils.assertHasTheme(Buttons.ALLOW_ALL_BUTTON, "small");
     }
 
     /**
@@ -198,8 +200,8 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void onlyNecessaryButtonShouldBePrimaryAndContrast() {
-        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", ".*primary*"));
-        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", ".*contrast*"));
+        TestUtils.assertHasTheme(Buttons.ONLY_NECESSARY_BUTTON, "primary");
+        TestUtils.assertHasTheme(Buttons.ONLY_NECESSARY_BUTTON, "contrast");
     }
 
     /**
@@ -225,7 +227,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void selectionButtonShouldBePrimary() {
-        Buttons.SELECTION_BUTTON.shouldHave(attributeMatching("theme", ".*primary*"));
+        TestUtils.assertHasTheme(Buttons.SELECTION_BUTTON, "primary");
     }
 
     /**
@@ -251,6 +253,6 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void allowAllButtonShouldBePrimary() {
-        Buttons.ALLOW_ALL_BUTTON.shouldHave(attributeMatching("theme", ".*primary*"));
+        TestUtils.assertHasTheme(Buttons.ALLOW_ALL_BUTTON, "primary");
     }
 }
