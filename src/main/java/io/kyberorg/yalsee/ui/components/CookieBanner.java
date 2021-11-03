@@ -72,7 +72,8 @@ public class CookieBanner extends Composite<Dialog> {
 
         onlyNecessaryButton.setId(IDs.CB_ONLY_NECESSARY_BUTTON);
         onlyNecessaryButton.addClickListener(this::onNecessaryButtonClicked);
-        onlyNecessaryButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_CONTRAST);
+        onlyNecessaryButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY,
+                ButtonVariant.LUMO_CONTRAST);
 
         mySelectionButton.setId(IDs.CB_SELECTION_BUTTON);
         mySelectionButton.addClickListener(this::onMySelectionButtonClicked);
@@ -92,6 +93,9 @@ public class CookieBanner extends Composite<Dialog> {
     }
 
     private void applyStyle() {
+        Stream<Checkbox> boxStream = Stream.of(onlyNecessaryBox, analyticsBox);
+        boxStream.forEach(box -> box.addClassName(Classes.CB_BOX));
+
         buttons.setFlexWrap(FlexLayout.FlexWrap.WRAP);
         Stream<Button> buttonStream = Stream.of(onlyNecessaryButton, mySelectionButton, allowAllButton);
         buttonStream.forEach(button -> button.addClassName(Classes.CB_BUTTON));
@@ -144,6 +148,6 @@ public class CookieBanner extends Composite<Dialog> {
 
     public static final class Classes {
         public static final String CB_BUTTON = "cb-button";
-
+        public static final String CB_BOX = "cb-box";
     }
 }
