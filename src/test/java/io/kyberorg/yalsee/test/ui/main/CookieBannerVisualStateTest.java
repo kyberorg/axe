@@ -170,7 +170,8 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void buttonsShouldBeSmall() {
-        Buttons.BUTTONS.filterBy(attributeMatching("theme", "small")).shouldHave(size(THREE));
+        Buttons.BUTTONS.filterBy(attributeMatching("theme", ".*small*"))
+                .shouldHave(size(THREE));
     }
 
     /**
@@ -197,8 +198,8 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void onlyNecessaryButtonShouldBePrimaryAndContrast() {
-        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", "primary"));
-        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", "contrast"));
+        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", ".*primary*"));
+        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", ".*contrast*"));
     }
 
     /**
@@ -224,7 +225,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void selectionButtonShouldBePrimary() {
-        Buttons.SELECTION_BUTTON.shouldHave(attributeMatching("theme", "primary"));
+        Buttons.SELECTION_BUTTON.shouldHave(attributeMatching("theme", ".*primary*"));
     }
 
     /**
@@ -250,6 +251,6 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void allowAllButtonShouldBePrimary() {
-        Buttons.ALLOW_ALL_BUTTON.shouldHave(attributeMatching("theme", "primary"));
+        Buttons.ALLOW_ALL_BUTTON.shouldHave(attributeMatching("theme", ".*primary*"));
     }
 }
