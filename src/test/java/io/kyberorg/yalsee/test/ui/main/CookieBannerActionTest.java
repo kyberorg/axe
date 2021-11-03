@@ -5,8 +5,6 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Selenide.open;
@@ -17,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Testing {@link CookieBanner} behavior by performing actions.
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class CookieBannerActionTest extends SelenideTest {
 
     /**
@@ -48,6 +45,6 @@ public class CookieBannerActionTest extends SelenideTest {
         closeBannerIfAny();
         open("/");
         waitForVaadin();
-        DIALOG.shouldBe(hidden);
+        TITLE.shouldBe(hidden);
     }
 }

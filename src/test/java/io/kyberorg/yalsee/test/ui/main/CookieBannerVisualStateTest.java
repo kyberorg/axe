@@ -110,7 +110,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void moreInfoLinkHrefIsAppInfoPage() {
-        BannerText.LINK.shouldHave(attribute("href", "appInfo"));
+        BannerText.LINK.shouldHave(attributeMatching("href", "appInfo"));
     }
 
     /**
@@ -128,7 +128,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
     public void technicalBoxShouldBeVisibleButDisabled() {
         Boxes.ONLY_NECESSARY_BOX.should(exist);
         Boxes.ONLY_NECESSARY_BOX.shouldBe(visible);
-        Boxes.ONLY_NECESSARY_BOX.shouldBe(disabled);
+        Boxes.ONLY_NECESSARY_BOX.shouldHave(attribute("disabled"));
     }
 
     /**
@@ -170,7 +170,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void buttonsShouldBeSmall() {
-        Buttons.BUTTONS.filterBy(attribute("theme", "small")).shouldHave(size(THREE));
+        Buttons.BUTTONS.filterBy(attributeMatching("theme", "small")).shouldHave(size(THREE));
     }
 
     /**
@@ -197,8 +197,8 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void onlyNecessaryButtonShouldBePrimaryAndContrast() {
-        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attribute("theme", "primary"));
-        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attribute("theme", "contrast"));
+        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", "primary"));
+        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(attributeMatching("theme", "contrast"));
     }
 
     /**
@@ -216,7 +216,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void selectionButtonShouldHaveCorrectText() {
-        Buttons.ONLY_NECESSARY_BUTTON.shouldHave(text("Allow selection"));
+        Buttons.SELECTION_BUTTON.shouldHave(text("Allow selection"));
     }
 
     /**
@@ -224,7 +224,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void selectionButtonShouldBePrimary() {
-        Buttons.SELECTION_BUTTON.shouldHave(attribute("theme", "primary"));
+        Buttons.SELECTION_BUTTON.shouldHave(attributeMatching("theme", "primary"));
     }
 
     /**
@@ -250,6 +250,6 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void allowAllButtonShouldBePrimary() {
-        Buttons.ALLOW_ALL_BUTTON.shouldHave(attribute("theme", "primary"));
+        Buttons.ALLOW_ALL_BUTTON.shouldHave(attributeMatching("theme", "primary"));
     }
 }

@@ -32,17 +32,16 @@ public class SeoTest extends SelenideTest {
         open("/");
         VaadinPageObject.waitForVaadin();
         // we have to enable analytics first
-        if (CookieBannerPageObject.DIALOG.isDisplayed()) {
+        if (CookieBannerPageObject.isBannerDisplayed()) {
             CookieBannerPageObject.Buttons.ALLOW_ALL_BUTTON.click();
         } else {
             //if banner is gone - more complex logic needed to enable analytics.
             open("/appInfo");
             VaadinPageObject.waitForVaadin();
             AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.click();
-            open("/");
-            VaadinPageObject.waitForVaadin();
         }
-
+        open("/");
+        VaadinPageObject.waitForVaadin();
     }
 
     /**

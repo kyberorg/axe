@@ -13,7 +13,6 @@ import static com.codeborne.selenide.Selenide.$$;
  * @since 3.5
  */
 public final class CookieBannerPageObject {
-    public static final SelenideElement DIALOG = $("#" + CookieBanner.IDs.CB_DIALOG);
     public static final SelenideElement TITLE = $("#" + CookieBanner.IDs.CB_TITLE);
 
     public static final class BannerText {
@@ -35,15 +34,11 @@ public final class CookieBannerPageObject {
     }
 
     public static void closeBannerIfAny() {
-        if (isBannerDisplayed()) {
-            DIALOG.pressEscape();
-        } else {
-            $("body").pressEscape();
-        }
+        $("body").pressEscape();
     }
 
     public static boolean isBannerDisplayed() {
-        return DIALOG.isDisplayed();
+        return TITLE.isDisplayed();
     }
 
     public static boolean isBannerHidden() {
