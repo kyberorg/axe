@@ -37,10 +37,18 @@ public final class CookieBannerPageObject {
     }
 
     public static void closeBannerIfAny() {
-        if (DIALOG.isDisplayed()) {
+        if (isBannerDisplayed()) {
             DIALOG.pressEscape();
         } else {
             $("body").pressEscape();
         }
+    }
+
+    public static boolean isBannerDisplayed() {
+        return DIALOG.isDisplayed();
+    }
+
+    public static boolean isBannerHidden() {
+        return !isBannerDisplayed();
     }
 }
