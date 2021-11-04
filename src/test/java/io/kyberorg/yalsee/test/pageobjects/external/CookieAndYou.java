@@ -5,7 +5,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  *
  * @since 3.5
  */
-public class CookieAndYou {
+public final class CookieAndYou {
     public static final String TITLE_TEXT = "What are cookies? | Cookies & You";
 
     private CookieAndYou() {
