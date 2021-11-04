@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.redirect;
 
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.GitHub;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
@@ -33,12 +34,17 @@ public class RedirectPageTest extends SelenideTest {
     public void beforeTest() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
+            waitForVaadin();
+            CookieBannerPageObject.closeBannerIfAny();
+
             String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(ourLongLink);
             waitForVaadin();
+            CookieBannerPageObject.closeBannerIfAny();
         }
         open(ourShortLink);
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

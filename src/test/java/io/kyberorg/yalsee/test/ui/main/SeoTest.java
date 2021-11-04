@@ -2,7 +2,9 @@ package io.kyberorg.yalsee.test.ui.main;
 
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.TestedEnv;
+import io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,17 @@ public class SeoTest extends SelenideTest {
      */
     @BeforeAll
     public static void beforeTests() {
+        open("/");
+        VaadinPageObject.waitForVaadin();
+        // we have to enable analytics first
+        if (CookieBannerPageObject.isBannerDisplayed()) {
+            CookieBannerPageObject.Buttons.ALLOW_ALL_BUTTON.click();
+        } else {
+            //if banner is gone - more complex logic needed to enable analytics.
+            open("/appInfo");
+            VaadinPageObject.waitForVaadin();
+            AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.click();
+        }
         open("/");
         VaadinPageObject.waitForVaadin();
     }

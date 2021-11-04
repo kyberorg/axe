@@ -1,12 +1,12 @@
 package io.kyberorg.yalsee.ui.dev;
 
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.componentfactory.ToggleButton;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -54,7 +54,8 @@ public class AppInfoView extends YalseeLayout {
         setId(IDs.VIEW_ID);
 
         VerticalLayout publicInfoArea = publicInfoArea();
-        add(publicInfoArea);
+        VerticalLayout cookieArea = cookieArea();
+        add(publicInfoArea, cookieArea);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
             VerticalLayout devInfoArea = devInfoArea();
@@ -97,6 +98,62 @@ public class AppInfoView extends YalseeLayout {
         return publicArea;
     }
 
+    private VerticalLayout cookieArea() {
+        VerticalLayout cookieArea = new VerticalLayout();
+        cookieArea.setId(IDs.COOKIE_AREA);
+        H4 title = new H4("About Cookies");
+        title.setId(IDs.COOKIE_TITLE);
+
+        Span cookieText = new Span();
+        cookieText.setId(IDs.COOKIE_TEXT_SPAN);
+
+        Span textStart = new Span("Yalsee is using ");
+        Anchor link = new Anchor("https://www.cookiesandyou.com/", "Cookies");
+        link.setId(IDs.COOKIE_LINK);
+
+        Span textEnd = new Span(" to make this site works. ");
+
+        Span techDetailsText = new Span("There are technical cookies like JSESSION, "
+                + "what keeps session and preferences "
+                + "and analytics cookies (Google Analytics) used for collecting usage statistics.");
+        techDetailsText.setId(IDs.COOKIE_TECH_DETAILS);
+
+        H5 cookieCurrentSettingsSubTitle = new H5("Current Settings");
+        cookieCurrentSettingsSubTitle.setId(IDs.COOKIE_CURRENT_SETTINGS_TITLE);
+
+        Span techCookies = new Span();
+        techCookies.setId(IDs.TECH_COOKIE_SPAN);
+
+        Span techCookiesLabel = new Span("Technical cookies: ");
+        techCookiesLabel.setId(IDs.TECH_COOKIE_LABEL);
+
+        ToggleButton techCookiesValue = new ToggleButton(true);
+        techCookiesValue.setId(IDs.TECH_COOKIE_VALUE);
+        techCookiesValue.setEnabled(false);
+
+        Span analyticsCookies = new Span();
+        analyticsCookies.setId(IDs.ANALYTICS_COOKIE_SPAN);
+
+        Span analyticsCookiesLabel = new Span("Analytics cookies: ");
+        analyticsCookiesLabel.setId(IDs.ANALYTICS_COOKIE_LABEL);
+
+        ToggleButton analyticsCookiesValue = new ToggleButton();
+        analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
+        analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent()));
+        analyticsCookiesValue.addValueChangeListener(event -> {
+            VaadinSession session = VaadinSession.getCurrent();
+            if (session != null) {
+                session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, event.getValue());
+            }
+        });
+
+        cookieText.add(textStart, link, textEnd, techDetailsText);
+        techCookies.add(techCookiesLabel, techCookiesValue);
+        analyticsCookies.add(analyticsCookiesLabel, analyticsCookiesValue);
+        cookieArea.add(title, cookieText, cookieCurrentSettingsSubTitle, techCookies, analyticsCookies);
+        return cookieArea;
+    }
+
     private VerticalLayout devInfoArea() {
         VerticalLayout devInfoArea = new VerticalLayout();
         devInfoArea.setId(IDs.DEV_INFO_AREA);
@@ -127,5 +184,17 @@ public class AppInfoView extends YalseeLayout {
         public static final String COMMIT_LINK = "commitLink";
         public static final String DEV_INFO_AREA = "devInfoArea";
         public static final String GOOGLE_ANALYTICS_BANNER = "googleAnalyticsBanner";
+        public static final String COOKIE_AREA = "cookieArea";
+        public static final String COOKIE_TITLE = "cookieTitle";
+        public static final String COOKIE_TEXT_SPAN = "cookieTextSpan";
+        public static final String COOKIE_LINK = "cookieLink";
+        public static final String COOKIE_TECH_DETAILS = "cookieTechDetails";
+        public static final String COOKIE_CURRENT_SETTINGS_TITLE = "cookieCurrentSettingsTitle";
+        public static final String TECH_COOKIE_SPAN = "techCookieSpan";
+        public static final String TECH_COOKIE_LABEL = "techCookieLabel";
+        public static final String TECH_COOKIE_VALUE = "techCookieValue";
+        public static final String ANALYTICS_COOKIE_SPAN = "analyticsCookieSpan";
+        public static final String ANALYTICS_COOKIE_LABEL = "analyticsCookieLabel";
+        public static final String ANALYTICS_COOKIE_VALUE = "analyticsCookieValue";
     }
 }

@@ -5,6 +5,7 @@ import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.QuayIo;
 import io.kyberorg.yalsee.test.pageobjects.external.VR;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -36,6 +37,7 @@ public class HomePageTest extends SelenideTest {
     public void beforeTest() {
         open("/");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**
@@ -131,6 +133,7 @@ public class HomePageTest extends SelenideTest {
         HomePageObject.pasteValueInFormAndSubmitIt("https://vr.fi");
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         SelenideElement descriptionCell =
                 MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.shouldBe(empty);
@@ -171,6 +174,7 @@ public class HomePageTest extends SelenideTest {
         MyLinksViewPageObject.cleanSession();
         open("/");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
 
         String link = "https://vr.fi";
         String description = "Suomen junat";

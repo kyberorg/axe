@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.HomeView;
 import io.kyberorg.yalsee.ui.MyLinksView;
@@ -31,8 +32,10 @@ public class DefaultVisualStateTest extends SelenideTest {
     public static void beforeTests() {
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         cleanSession();
         waitForVaadin(); //this is needed to prevent unopened page after reload.
+        CookieBannerPageObject.closeBannerIfAny(); //banner re-appears for new session
     }
 
     /**

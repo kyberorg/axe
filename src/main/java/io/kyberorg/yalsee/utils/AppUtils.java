@@ -425,6 +425,19 @@ public class AppUtils implements Serializable {
         session.close();
     }
 
+    /**
+     * Figures out if analytics cookies are allowed in given session.
+     *
+     * @param vaadinSession session object to read attribute from.
+     * @return true - if analytics cookies are allowed, false - if not.
+     */
+    public boolean isGoogleAnalyticsAllowed(final VaadinSession vaadinSession) {
+        final boolean defaultValue = true;
+        if (vaadinSession == null) return defaultValue;
+        if (vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED) == null) return defaultValue;
+        return (boolean) vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

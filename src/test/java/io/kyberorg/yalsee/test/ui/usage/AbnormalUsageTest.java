@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.ui.usage;
 
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ public class AbnormalUsageTest extends SelenideTest {
     public void beforeTest() {
         open("/");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**
@@ -37,6 +39,8 @@ public class AbnormalUsageTest extends SelenideTest {
         final String linkToSave = "https://github.com/kyberorg/yalsee/issues/322";
 
         open("/?" + extraArgument);
+        waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
 
         HomePageObject.pasteValueInFormAndSubmitIt(linkToSave);
 

@@ -6,7 +6,6 @@ package io.kyberorg.yalsee.constants;
  * @since 2.3
  */
 public final class App {
-
     public static final String EQUAL = "=";
     public static final String AND = "&";
     public static final String AT = "@";
@@ -15,6 +14,7 @@ public final class App {
     public static final String NEW_LINE = System.getProperty("line.separator");
     public static final String WEB_NEW_LINE = "<BR>";
     public static final String URL_SAFE_SEPARATOR = ">>";
+    public static final int THREE = 3;
 
     private App() {
         throw new UnsupportedOperationException("Utility class");
@@ -83,5 +83,7 @@ public final class App {
 
     public static class Session {
         public static final int SESSION_WATCHDOG_INTERVAL_MILLIS = 20000; //20 seconds
+        public static final String COOKIE_BANNER_ALREADY_SHOWN = "COOKIE_BANNER_ALREADY_SHOWN";
+        public static final String COOKIE_BANNER_ANALYTICS_ALLOWED = "COOKIE_BANNER_ANALYTICS_ALLOWED";
     }
 }
