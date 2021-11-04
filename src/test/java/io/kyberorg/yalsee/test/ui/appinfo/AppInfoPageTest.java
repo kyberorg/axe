@@ -205,7 +205,7 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void TechCookiesValueDisabledAndNotClickable() {
-        CookieArea.TECH_COOKIE_VALUE.shouldBe(disabled);
+        CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("disabled"));
     }
 
     /**
