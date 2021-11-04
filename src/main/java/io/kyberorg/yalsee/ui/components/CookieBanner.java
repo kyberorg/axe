@@ -102,7 +102,8 @@ public class CookieBanner extends Composite<Dialog> {
     }
 
     private void onNecessaryButtonClicked(ClickEvent<Button> event) {
-        //this is default - so additional actions needed
+        //disable others
+        analyticsBox.setValue(false);
         writeValuesToSessionAndClose();
     }
 
