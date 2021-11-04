@@ -38,6 +38,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import io.kyberorg.yalsee.ui.user.LoginView;
 import io.kyberorg.yalsee.ui.user.RegistrationView;
@@ -46,6 +47,7 @@ import io.kyberorg.yalsee.utils.session.SessionBox;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 import static io.kyberorg.yalsee.ui.MainView.IDs.USER_MENU;
@@ -107,12 +109,22 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         setId(IDs.VIEW_ID);
 
-        //session tricks
-        SessionBox.storeSession(VaadinSession.getCurrent());
+        //session trick
+        VaadinSession session = VaadinSession.getCurrent();
+        SessionBox.storeSession(session);
 
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
+
+        //Cookie Banner
+        readAndWriteCookieBannerRelatedSettingsFromSession(session);
+        boolean shouldDisplayBanner = !(boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
+        if (shouldDisplayBanner) {
+            CookieBanner cookieBanner = new CookieBanner();
+            cookieBanner.getContent().open();
+            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        }
     }
 
     private Component createHeader() {
@@ -273,7 +285,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("twitter:image", previewImage);
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
-        if (appUtils.isGoogleAnalyticsEnabled()) {
+        if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent())) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
 
@@ -306,6 +318,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         logoutButton.getUI().ifPresent(ui -> ui.navigate(Endpoint.UI.HOME_PAGE));
     }
 
+    private void readAndWriteCookieBannerRelatedSettingsFromSession(final VaadinSession session) {
+        if (Objects.isNull(session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN))) {
+            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, false);
+        }
+
+        if (Objects.isNull(session.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED))) {
+            session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, false);
+        }
+    }
 
     public static class IDs {
         public static final String VIEW_ID = "mainView";

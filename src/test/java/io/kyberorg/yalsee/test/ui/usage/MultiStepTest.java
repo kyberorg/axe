@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.usage;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.Eki;
 import io.kyberorg.yalsee.test.pageobjects.external.Wikipedia;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -45,6 +46,7 @@ public class MultiStepTest extends SelenideTest {
     public void beforeTest() {
         open("/");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

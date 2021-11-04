@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
 import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.apache.logging.log4j.util.Strings;
@@ -39,6 +40,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
         }
         open(ourShortLink);
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

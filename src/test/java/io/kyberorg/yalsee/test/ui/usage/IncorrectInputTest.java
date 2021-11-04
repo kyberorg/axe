@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.ui.usage;
 
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,7 @@ public class IncorrectInputTest extends SelenideTest {
     public void beforeTest() {
         open("/");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import io.kyberorg.yalsee.ui.err.PageNotFoundView;
@@ -35,12 +36,13 @@ public class ActionsTest extends SelenideTest {
      */
     @BeforeEach
     public void beforeTest() {
-
         //cleaning session
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         cleanSession();
         waitForVaadin(); //this is needed to prevent unopened page after reload.
+        CookieBannerPageObject.closeBannerIfAny(); //banner re-appears for new session
     }
 
     /**

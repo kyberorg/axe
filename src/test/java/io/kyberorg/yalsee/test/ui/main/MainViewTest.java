@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.test.pageobjects.LoginPageObject;
 import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.RegistrationPageObject;
 import io.kyberorg.yalsee.test.pageobjects.VaadinPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,6 +31,7 @@ public class MainViewTest extends SelenideTest {
     public static void beforeTests() {
         open("/");
         VaadinPageObject.waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**
