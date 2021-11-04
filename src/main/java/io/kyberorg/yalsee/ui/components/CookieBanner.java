@@ -44,6 +44,9 @@ public class CookieBanner extends Composite<Dialog> {
     private final Checkbox onlyNecessaryBox = new Checkbox();
     private final Checkbox analyticsBox = new Checkbox();
 
+    /**
+     * Creates Cookie Banner.
+     */
     public CookieBanner() {
         init();
         applyStyle();
@@ -101,17 +104,17 @@ public class CookieBanner extends Composite<Dialog> {
         buttonStream.forEach(button -> button.addClassName(Classes.CB_BUTTON));
     }
 
-    private void onNecessaryButtonClicked(ClickEvent<Button> event) {
+    private void onNecessaryButtonClicked(final ClickEvent<Button> event) {
         // disable others options first
         analyticsBox.setValue(false);
         writeValuesToSessionAndClose();
     }
 
-    private void onMySelectionButtonClicked(ClickEvent<Button> event) {
+    private void onMySelectionButtonClicked(final ClickEvent<Button> event) {
         writeValuesToSessionAndClose();
     }
 
-    private void onAllowAllButtonClicked(ClickEvent<Button> event) {
+    private void onAllowAllButtonClicked(final ClickEvent<Button> event) {
         analyticsBox.setValue(true);
         writeValuesToSessionAndClose();
     }

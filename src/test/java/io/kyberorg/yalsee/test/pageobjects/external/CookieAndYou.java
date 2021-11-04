@@ -7,4 +7,8 @@ package io.kyberorg.yalsee.test.pageobjects.external;
  */
 public class CookieAndYou {
     public static final String TITLE_TEXT = "What are cookies? | Cookies & You";
+
+    private CookieAndYou() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 }

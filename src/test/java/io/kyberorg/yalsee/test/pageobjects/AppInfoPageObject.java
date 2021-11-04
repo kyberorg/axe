@@ -25,7 +25,8 @@ public class AppInfoPageObject {
         public static final SelenideElement TEXT_SECTION = $("#" + AppInfoView.IDs.COOKIE_TEXT_SPAN);
         public static final SelenideElement LINK = $("#" + AppInfoView.IDs.COOKIE_LINK);
         public static final SelenideElement TECH_DETAILS_TEXT = $("#" + AppInfoView.IDs.COOKIE_TECH_DETAILS);
-        public static final SelenideElement CURRENT_SETTING_TITLE = $("#" + AppInfoView.IDs.COOKIE_CURRENT_SETTINGS_TITLE);
+        public static final SelenideElement CURRENT_SETTING_TITLE =
+                $("#" + AppInfoView.IDs.COOKIE_CURRENT_SETTINGS_TITLE);
         public static final SelenideElement TECH_COOKIE_SPAN = $("#" + AppInfoView.IDs.TECH_COOKIE_SPAN);
         public static final SelenideElement TECH_COOKIE_LABEL = $("#" + AppInfoView.IDs.TECH_COOKIE_LABEL);
         public static final SelenideElement TECH_COOKIE_VALUE = $("#" + AppInfoView.IDs.TECH_COOKIE_VALUE);

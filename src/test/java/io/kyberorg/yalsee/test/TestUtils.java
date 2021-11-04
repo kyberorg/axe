@@ -107,6 +107,14 @@ public final class TestUtils {
         assertTrue(contentLength > 0, "Content is empty");
     }
 
+    /**
+     * Assert Vaadin Element has given theme.
+     * The reason this method needed is that <b>theme</b> attribute can have
+     * multi values in single string like "primary small".
+     *
+     * @param element    themed element
+     * @param themeValue string with theme to search
+     */
     public static void assertHasTheme(final SelenideElement element, final String themeValue) {
         String attributeValue = element.getAttribute("theme");
         assert attributeValue != null;

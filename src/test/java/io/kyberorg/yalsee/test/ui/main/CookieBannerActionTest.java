@@ -42,6 +42,9 @@ public class CookieBannerActionTest extends SelenideTest {
         }
     }
 
+    /**
+     * Cookie Banner should be shown only once per session.
+     */
     @Test
     public void cookieBannerShownOncePerSession() {
         closeBannerIfAny();

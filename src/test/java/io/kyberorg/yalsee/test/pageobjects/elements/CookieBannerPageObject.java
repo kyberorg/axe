@@ -33,15 +33,32 @@ public final class CookieBannerPageObject {
         public static final SelenideElement ALLOW_ALL_BUTTON = $("#" + CookieBanner.IDs.CB_ALLOW_ALL_BUTTON);
     }
 
+    /**
+     * Closes Cookie Banner by pressing Escape button.
+     */
     public static void closeBannerIfAny() {
         $("body").pressEscape();
     }
 
+    /**
+     * If Cookie Banner is displayed at current screen.
+     *
+     * @return true if Cookie Banner is visible at users screen, false if not.
+     */
     public static boolean isBannerDisplayed() {
         return TITLE.isDisplayed();
     }
 
+    /**
+     * Opposite of {@link #isBannerDisplayed()}. Made for readability.
+     *
+     * @return true if Cookie Banner is not displayed at current screen, false if displayed.
+     */
     public static boolean isBannerHidden() {
         return !isBannerDisplayed();
+    }
+
+    private CookieBannerPageObject() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }

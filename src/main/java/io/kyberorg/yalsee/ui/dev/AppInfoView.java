@@ -113,9 +113,9 @@ public class AppInfoView extends YalseeLayout {
 
         Span textEnd = new Span(" to make this site works. ");
 
-        Span techDetailsText = new Span("There are technical cookies like JSESSION, " +
-                "what keeps session and preferences " +
-                "and analytics cookies (Google Analytics) used for collecting usage statistics.");
+        Span techDetailsText = new Span("There are technical cookies like JSESSION, "
+                + "what keeps session and preferences "
+                + "and analytics cookies (Google Analytics) used for collecting usage statistics.");
         techDetailsText.setId(IDs.COOKIE_TECH_DETAILS);
 
         H5 cookieCurrentSettingsSubTitle = new H5("Current Settings");
