@@ -17,6 +17,9 @@ jobs:
       - name: Login to quay.io
         run: echo "${{ secrets.QUAY_TOKEN }}" | docker login -u "${{ secrets.QUAY_USERNAME }}" --password-stdin quay.io
 
+      - name: Resolve Dependencies
+        run mvn --batch-mode --update-snapshots dependency:resolve
+
       - name: Complile JAR
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
