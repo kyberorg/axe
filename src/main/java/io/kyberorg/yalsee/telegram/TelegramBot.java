@@ -52,7 +52,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(final Update update) {
-        log.trace(TAG + " New Update " + update);
+        if (log.isTraceEnabled()) {
+            log.trace(TAG + " New Update " + update);
+        }
         this.update = update;
 
         String message;
@@ -66,7 +68,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             telegramObject = TelegramObject.createFromUpdate(update);
 
-            log.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + App.NEW_LINE + telegramObject);
+            if (log.isDebugEnabled()) {
+                log.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + App.NEW_LINE + telegramObject);
+            }
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
