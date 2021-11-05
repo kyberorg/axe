@@ -250,7 +250,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- Selenide Test Framework -->
         <dependency>
             <groupId>com.codeborne</groupId>
@@ -258,6 +258,25 @@
             <version>5.24.3</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Snyk deps -->
+        <!-- We don't use those deps but other deps are using old version. So those are here to improve secuirty -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.14.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.21</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
+        <!-- End Snyk deps -->
     </dependencies>
     
     <dependencyManagement>
