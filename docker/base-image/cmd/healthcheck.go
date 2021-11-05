@@ -5,23 +5,24 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"strings"
 )
 
 func main() {
-	var path string
+	var checkPath string
 
 	if len(os.Args) > 1 {
-		path = os.Args[1]
+		checkPath = os.Args[1]
 	} else {
-		path = "/actuator/info"
+		checkPath = "/actuator/info"
 	}
 
-	if !startsWithSlash(path) {
-		path = "/" + path
+	if !startsWithSlash(checkPath) {
+		checkPath = "/" + checkPath
 	}
 
-	u := "http://127.0.0.1:8080" + path
+	u := "http://127.0.0.1:8080" + path.Clean(checkPath)
 	if isUrl(u) {
 		_, err := http.Get(u)
 		if err != nil {

@@ -229,6 +229,7 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
                 ui.access(() -> view.doJSRedirect(view.target));
             } catch (InterruptedException e) {
                 log.error("{} while waiting for redirect", e.getMessage());
+                Thread.currentThread().interrupt();
             }
         }
     }
