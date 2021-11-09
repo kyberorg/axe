@@ -1,5 +1,9 @@
 package io.kyberorg.yalsee;
 
+import io.kyberorg.yalsee.controllers.AppOfflineController;
+import io.kyberorg.yalsee.controllers.YalseeErrorController;
+import io.kyberorg.yalsee.ui.err.ServerErrorView;
+
 /**
  * List of application endpoints.
  *
@@ -30,12 +34,12 @@ public final class Endpoint {
         public static final String IDENT_404 = "errors/404ident";
 
         /**
-         * Page that will shown when application hits server-side error.
+         * Page that will appear when application hits server-side error.
          */
         public static final String ERROR_PAGE_500 = "errors/500";
 
         /**
-         * Page that will shown when application hits fatal error and became inaccessible.
+         * Page that will appear when application hits fatal error and became inaccessible.
          */
         public static final String ERROR_PAGE_503 = "errors/503";
 
@@ -168,7 +172,7 @@ public final class Endpoint {
         /**
          * Endpoint for redirecting to long links. Not intended to be accessed directly
          */
-        public static final String REDIRECTOR = "redirector";
+        public static final String REDIRECT_PAGE = "redirect-page";
 
         /**
          * Catch-all errors endpoint. Served by:

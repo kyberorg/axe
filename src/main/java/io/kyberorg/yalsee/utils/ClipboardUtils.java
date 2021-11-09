@@ -11,12 +11,13 @@ import lombok.extern.slf4j.Slf4j;
  * Utils for operating with Clipboard.
  * <p>
  *
- * @see https://cookbook.vaadin.com/copy-to-clipboard
+ * @see <a href="https://cookbook.vaadin.com/copy-to-clipboard">Vaadin Cookbook</a>
  * @since 3.1.2
  */
+
 @Slf4j
 @UIScope
-@JsModule("./js/copytoclipboard.js")
+@JsModule("./js/copy-to-clipboard.js")
 public final class ClipboardUtils {
 
     private ClipboardUtils() {

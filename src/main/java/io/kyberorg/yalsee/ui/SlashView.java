@@ -53,7 +53,7 @@ public class SlashView extends YalseeLayout implements HasErrorParameter<NotFoun
      * Handles every unmatched route within Application.
      *
      * @param event     Vaadin's event
-     * @param parameter optional params that can be send during redirect. We don't use it here.
+     * @param parameter optional params that can be sent during redirect. We don't use it here.
      * @return int with HTTP Code
      */
     @Override

@@ -3,8 +3,8 @@ package io.kyberorg.yalsee.test.ui.main;
 import io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.ui.AppInfoView;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
-import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

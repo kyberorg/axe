@@ -272,6 +272,7 @@ public final class TestUtils {
      * @param annotation annotation to search
      * @return list of methods.
      */
+    @SuppressWarnings("SameParameterValue") //Currently, used for Test.class only
     private static List<Method> getMethodsAnnotatedWith(final Class<?> type,
                                                         final Class<? extends Annotation> annotation) {
         final List<Method> methods = new ArrayList<>();

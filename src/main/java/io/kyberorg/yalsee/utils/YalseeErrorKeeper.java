@@ -39,7 +39,7 @@ public class YalseeErrorKeeper {
 
         repo.put(errorId, yalseeError);
 
-        logYalsError(yalseeError);
+        logYalseeError(yalseeError);
 
         return errorId;
     }
@@ -54,7 +54,7 @@ public class YalseeErrorKeeper {
         return Optional.ofNullable(repo.get(errorId));
     }
 
-    private void logYalsError(final YalseeError yalseeError) {
+    private void logYalseeError(final YalseeError yalseeError) {
         StringBuilder logMessage = new StringBuilder("=== Error ===").append(App.NEW_LINE);
         logMessage.append("Error ID: ").append(yalseeError.getId()).append(App.NEW_LINE);
         logMessage.append("TimeStamp: ").append(yalseeError.getTimeStamp()).append(App.NEW_LINE);

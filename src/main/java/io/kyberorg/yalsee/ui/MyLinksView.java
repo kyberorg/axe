@@ -85,7 +85,7 @@ public class MyLinksView extends YalseeLayout {
      * Creates {@link MyLinksView}.
      *
      * @param linkInfoService service for operating with LinkInfo.
-     * @param qrCodeService   QR Code Service..
+     * @param qrCodeService   QR Code Service
      * @param linkService     service for operating with Links.
      * @param appUtils        application utilities.
      */

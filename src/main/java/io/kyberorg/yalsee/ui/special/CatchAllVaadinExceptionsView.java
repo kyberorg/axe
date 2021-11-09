@@ -48,7 +48,7 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
                 .addStatus(STATUS_500)
                 .addPath(path)
                 .build();
-        YalseeError yalseeError = errorUtils.convertExceptionToYalsError(args);
+        YalseeError yalseeError = errorUtils.convertExceptionToYalseeError(args);
 
         String errorId = yalseeErrorKeeper.send(yalseeError);
         errorUtils.reportToBugsnag(yalseeError);

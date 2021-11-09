@@ -33,16 +33,16 @@ public class Page404ForApi {
     public void handle(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
 
         boolean hasParams = req.getQueryString() != null;
-        boolean hasYalsMethodParam = false;
-        boolean hasYalsPathParam = false;
+        boolean hasYalseeMethodParam = false;
+        boolean hasYalseePathParam = false;
         if (hasParams) {
-            hasYalsMethodParam = req.getQueryString().contains("method");
-            hasYalsPathParam = req.getQueryString().contains("path");
+            hasYalseeMethodParam = req.getQueryString().contains("method");
+            hasYalseePathParam = req.getQueryString().contains("path");
         }
 
         EndpointNotFoundResponse payload;
 
-        if (hasParams && hasYalsMethodParam && hasYalsPathParam) {
+        if (hasParams && hasYalseeMethodParam && hasYalseePathParam) {
             HttpMethod method = HttpMethod.valueOf(req.getParameter("method"));
             String path = URLDecoder.decode(req.getParameter("path"), StandardCharsets.UTF_8);
             logRequest(method, path);

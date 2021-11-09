@@ -16,7 +16,7 @@ public interface GitInfo {
     boolean isApplicable();
 
     /**
-     * Provides hash of latest commit.
+     * Provides hash of the latest commit.
      *
      * @return string with commit hash or {@link App#NO_VALUE} when not found
      */
@@ -25,7 +25,7 @@ public interface GitInfo {
     /**
      * Provides last tag in git repository.
      *
-     * @return string with name of latest Git tag or {@link App#NO_VALUE} when not found
+     * @return string with name of the latest Git tag or {@link App#NO_VALUE} when not found
      */
     String getLatestTag();
 }

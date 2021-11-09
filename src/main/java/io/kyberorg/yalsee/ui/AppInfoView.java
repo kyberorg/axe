@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.dev;
+package io.kyberorg.yalsee.ui;
 
 import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.html.*;
@@ -13,7 +13,6 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.services.GitService;
-import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;

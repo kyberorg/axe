@@ -127,10 +127,6 @@ public class QRCodeService {
         return OperationResult.success().addPayload(png);
     }
 
-    private byte[] doQRCode(final String text, final int size) throws WriterException, IOException {
-        return doQRCode(text, size, size);
-    }
-
     private byte[] doQRCode(final String text, final int width, final int height) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);

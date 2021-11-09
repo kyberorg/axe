@@ -33,7 +33,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.*;
 @UIScope
 @CssImport("./css/common_styles.css")
 @CssImport("./css/redirect_view.css")
-@Route(value = Endpoint.TNT.REDIRECTOR, layout = MainView.class)
+@Route(value = Endpoint.TNT.REDIRECT_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Redirect Page")
 public class RedirectView extends YalseeLayout implements HasErrorParameter<NeedForRedirectException> {
     private static final String TAG = "[" + RedirectView.class.getSimpleName() + "]";

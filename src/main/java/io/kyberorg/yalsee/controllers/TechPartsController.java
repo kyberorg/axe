@@ -20,7 +20,7 @@ import java.util.Date;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
 /**
- * Handles tech resources. Currently only Fail endpoint for tests.
+ * Handles tech resources. Currently, only Fail endpoint for tests.
  *
  * @since 2.0
  */
@@ -76,7 +76,7 @@ public class TechPartsController {
             sitemapGenerator.addUrl(mainPage).addUrl(appInfo);
         } catch (MalformedURLException e) {
             response.setStatus(STATUS_500);
-            throw new RuntimeException("Server URL is unconfigured - cannot generate Sitemap.xml");
+            throw new RuntimeException("Server URL is not configured - cannot generate Sitemap.xml");
         }
 
         response.setContentType(MimeType.APPLICATION_XML);
