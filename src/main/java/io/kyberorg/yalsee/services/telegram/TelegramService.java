@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.telegram.TelegramObject;
 import io.kyberorg.yalsee.utils.AppUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,13 @@ import org.springframework.stereotype.Service;
  * @since 2.4
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class TelegramService {
     public static final String TAG = "[" + TelegramService.class.getSimpleName() + "]";
     public static final String NO_INIT = "Didn't correctly initialized. Did you run telegramService.init()?";
 
     private final AppUtils appUtils;
-
 
     private boolean isInitDone = false;
     private TelegramObject telegramObject;

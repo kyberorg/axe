@@ -4,7 +4,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ import static io.kyberorg.yalsee.utils.UrlExtraValidator.VALID;
  * @since 2.4
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @ConditionalOnBean(TelegramBot.class)
 @Configuration
 public class TelegramBotAutoConfig {

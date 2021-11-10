@@ -9,7 +9,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.AppUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import java.util.Base64;
  * @since 2.6
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class QRCodeService {
     private static final String TAG = "[" + QRCodeService.class.getSimpleName() + "]";

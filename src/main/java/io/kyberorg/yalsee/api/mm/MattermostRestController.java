@@ -9,7 +9,7 @@ import io.kyberorg.yalsee.mm.Mattermost;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +28,7 @@ import java.util.Objects;
  * @since 2.3
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class MattermostRestController {
     private static final String TAG = "[" + MattermostRestController.class.getSimpleName() + "]";

@@ -12,7 +12,7 @@ import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * @since 2.0
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class LinkService {
     private static final String TAG = "[" + LinkService.class.getSimpleName() + "]";

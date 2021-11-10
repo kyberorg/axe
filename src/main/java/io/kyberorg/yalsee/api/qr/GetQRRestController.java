@@ -8,7 +8,7 @@ import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.utils.ApiUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
  * @since 3.1
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class GetQRRestController {
     private static final String TAG = "[" + GetQRRestController.class.getSimpleName() + "]";

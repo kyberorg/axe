@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.utils.git;
 
 import io.kyberorg.yalsee.constants.App;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @since 2.0
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class MavenGitInfo implements GitInfo {
     private final GitRepoState gitRepoState;

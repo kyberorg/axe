@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.utils;
 
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.result.OperationResult;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @since 3.0.4
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class TokenChecker {
     /**

@@ -8,7 +8,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.utils.AppUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +25,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
  *
  * @since 2.0
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 public class TechPartsController {
 

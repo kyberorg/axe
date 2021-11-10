@@ -7,7 +7,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.telegram.TelegramService;
 import io.kyberorg.yalsee.utils.AppUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -25,7 +25,7 @@ import java.util.Objects;
  * @since 2.4
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
     private static final String TAG = "[" + TelegramBot.class.getSimpleName() + "]";

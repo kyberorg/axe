@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.services.overall;
 
 import io.kyberorg.yalsee.models.dao.LinkRepo;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @since 2.1
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class OverallService {
 

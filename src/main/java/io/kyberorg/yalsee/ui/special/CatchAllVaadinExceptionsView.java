@@ -13,7 +13,7 @@ import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
@@ -21,7 +21,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 /**
  * Catches all unhandled exceptions from Vaadin Servlet.
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErrorParameter<Exception> {

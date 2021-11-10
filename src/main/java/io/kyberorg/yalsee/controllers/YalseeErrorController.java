@@ -10,7 +10,7 @@ import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ import java.io.IOException;
  * @since 2.7
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 public class YalseeErrorController implements ErrorController {
     private final String TAG = "[" + YalseeErrorController.class.getSimpleName() + "]";

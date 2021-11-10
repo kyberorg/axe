@@ -8,7 +8,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.utils.ApiUtils;
 import io.kyberorg.yalsee.utils.TokenChecker;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +25,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
  * @since 3.0.4
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class DeleteLinkRestController {
     private static final String TAG = "[" + DeleteLinkRestController.class.getSimpleName() + "]";
