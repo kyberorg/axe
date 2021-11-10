@@ -15,6 +15,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.constants.App.FOUR;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Banners.*;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
@@ -129,7 +130,7 @@ public class DefaultVisualStateTest extends SelenideTest {
     @Test
     public void gridShouldHave4Columns() {
         ElementsCollection headerCells = Grid.Header.get().getCells();
-        headerCells.shouldHave(size(4));
+        headerCells.shouldHave(size(FOUR));
     }
 
     /**

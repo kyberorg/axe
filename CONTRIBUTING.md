@@ -38,11 +38,7 @@ Docker Stack at Dev Server aka `Koda` has both Remote JVM Debug (`tcp/8000`) and
 to prevent misuse direct access to them is denied.
 
 #### JMX
-
-* Since I use `OpenJ9 JVM`, there are few limitations when using `VisualVM` for monitoring. For example cannot make heap
-  dump and so on.
-
-* JMX interface configured without any security options and therefore cannot be used without SSH tunnel.
+JMX interface configured without any security options and therefore cannot be used without SSH tunnel.
 
 #### SSH Tunnel (unrestricted Internet access)
 
@@ -108,7 +104,7 @@ Can add several browsers like `chrome,firefox`
 
 ### How to Deploy app
 
-* Docker image: `kyberorg/yalsee`
+* Docker image: `quay.io/kyberorg/yalsee`
 * H2 (default profile) or MySQL database (local profile) needed to run.
 * I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs. So token from Bugsnag needed.
 
@@ -149,12 +145,12 @@ Ports:
 
 Secrets:
 
-* yals_db_password: `database password`
-* yals_telegram_token: `telegram bot token`
+* yalsee_db_password: `database password`
+* yalsee_telegram_token: `telegram bot token`
 
 Volumes:
 
-* yals_dumps: should be mounted as `/opt/dumps` (volume to store heap dumps, when app crashed)
+* yalsee_dumps: should be mounted as `/opt/dumps` (volume to store heap dumps, when app crashed)
 
 #### About Telegram Bots
 
@@ -170,7 +166,7 @@ Volumes:
 * Name: Yls Dev Bot
 * Description: Dev.Yals.ee Link Shortener Bot
 * About: Makes long links short
-* Botpic: to be done
+* BotPic: to be done
 * Commands: yalsee - https://longLink.tld description
 
 ### Release notes

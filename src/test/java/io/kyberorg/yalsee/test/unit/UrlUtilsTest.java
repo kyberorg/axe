@@ -25,7 +25,7 @@ public class UrlUtilsTest extends UnitTest {
     }
 
     /**
-     * Tests that decoder doesn't damage link that needs no encoding and it remains as is.
+     * Tests that decoder doesn't damage link that needs no encoding, and it remains as is.
      */
     @Test
     public void decodeFullyLatinUrl() {

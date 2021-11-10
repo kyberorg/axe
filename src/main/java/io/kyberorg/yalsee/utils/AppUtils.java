@@ -101,7 +101,7 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Determines if client wants to receive JSON from us. Vaadin implementation.
+     * Determines if client wants to receive JSON from us. Vaadin's implementation.
      *
      * @param vaadinRequest valid {@link VaadinRequest} from VaadinServlet
      * @return true, if clients {@link Header#ACCEPT} contains {@link MimeType#APPLICATION_JSON} mime type,
@@ -134,7 +134,7 @@ public class AppUtils implements Serializable {
      * Determines if client's request has {@link Header#ACCEPT} header with exact {@link MimeType}.
      *
      * @param req valid {@link HttpServletRequest} request
-     * @return true, if request has {@link Header#ACCEPT} header and it value is not wildcard
+     * @return true, if request has {@link Header#ACCEPT} header and its value is not wildcard
      * (aka accept all) {@link MimeType#ALL}, false - elsewhere
      */
     public static boolean hasAcceptHeader(final HttpServletRequest req) {
@@ -325,7 +325,7 @@ public class AppUtils implements Serializable {
     /**
      * Allow/Disallow crawlers (search engine bots), based on profile settings.
      *
-     * @return true - if crawlers should be allow, false - elsewhere
+     * @return true - if crawlers should be allowed, false - elsewhere
      */
     public boolean areCrawlersAllowed() {
         return Boolean.parseBoolean(getEnv().getProperty(App.Properties.CRAWLERS_ALLOWED));
@@ -360,7 +360,7 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Drops redirect page bypass symbol from provided ident string. It also check if string has this symbol.
+     * Drops redirect page bypass symbol from provided ident string. It also checks if string has this symbol.
      *
      * @param ident string with ident to check on bypass symbol.
      * @return ident string without bypass symbol or same string, if ident hasn't bypass symbol.

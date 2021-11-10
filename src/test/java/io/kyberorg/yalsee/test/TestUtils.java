@@ -293,7 +293,7 @@ public final class TestUtils {
     }
 
     /**
-     * Following needed because in may contain something like 'application/json;encoding=UTF8'.
+     * Following needed because it may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
      * @return string which contains content type without encoding

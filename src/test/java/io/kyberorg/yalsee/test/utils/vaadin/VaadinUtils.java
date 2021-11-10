@@ -24,7 +24,7 @@ public final class VaadinUtils {
     }
 
     /**
-     * Gets element from inside of shadowRoot of Vaadin element.
+     * Gets element from inside shadowRoot of Vaadin element.
      *
      * @param selectorInsideShadowRoot string with CSS JQuery-styled selector.
      * @return found {@link SelenideElement}.

@@ -78,7 +78,7 @@ public class DeleteLinkApiTest extends UnirestTest {
     }
 
     /**
-     * Tests that on request with valid token, but non existing ident 404 (Not Found) given in response.
+     * Tests that on request with valid token, but non-existing ident 404 (Not Found) given in response.
      */
     @Test
     @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",

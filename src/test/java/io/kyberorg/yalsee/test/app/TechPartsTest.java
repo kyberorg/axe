@@ -129,7 +129,7 @@ public class TechPartsTest extends UnirestTest {
     }
 
     /**
-     * By default app replies with {@link MimeType#TEXT_HTML}, when failed.
+     * By default, app replies with {@link MimeType#TEXT_HTML}, when failed.
      */
     @Test
     public void byDefaultAppReturnHtmlWhenFailed() {
