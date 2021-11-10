@@ -8,11 +8,11 @@ import io.kyberorg.yalsee.events.LinkUpdatedEvent;
 import io.kyberorg.yalsee.exception.URLDecodeException;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
-import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -28,6 +28,7 @@ import java.util.Optional;
  * @since 2.0
  */
 @Slf4j
+@AllArgsConstructor
 @Service
 public class LinkService {
     private static final String TAG = "[" + LinkService.class.getSimpleName() + "]";
@@ -38,17 +39,6 @@ public class LinkService {
     public static final String OP_MALFORMED_URL = UrlExtraValidator.URL_NOT_VALID;
     public static final String OP_URL_BANNED = "URL is banned";
     public static final String OP_LOCAL_URL_BANNED = UrlExtraValidator.LOCAL_URL_NOT_ALLOWED;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param repo            object for communicating with DB
-     * @param linkInfoService service to create {@link LinkInfo} record.
-     */
-    public LinkService(final LinkRepo repo, final LinkInfoService linkInfoService) {
-        this.repo = repo;
-        this.linkInfoService = linkInfoService;
-    }
 
     /**
      * Delete link with given ident from DB.

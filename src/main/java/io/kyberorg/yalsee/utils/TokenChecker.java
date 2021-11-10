@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.utils;
 
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.result.OperationResult;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @since 3.0.4
  */
+@AllArgsConstructor
 @Component
 public class TokenChecker {
     /**
@@ -30,15 +32,6 @@ public class TokenChecker {
     public static final String WRONG_TOKEN = "ERR_WRONG_TOKEN";
 
     private final AppUtils appUtils;
-
-    /**
-     * Spring constructor for autowiring.
-     *
-     * @param appUtils for getting correct token
-     */
-    public TokenChecker(final AppUtils appUtils) {
-        this.appUtils = appUtils;
-    }
 
     /**
      * Performs token check.

@@ -12,6 +12,7 @@ import java.util.Optional;
  */
 @org.springframework.stereotype.Repository
 public interface LinkRepo extends Repository<Link, Long> {
+
     /**
      * Find link by its ident.
      *

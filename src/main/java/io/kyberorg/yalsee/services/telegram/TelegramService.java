@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.telegram.TelegramObject;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2.4
  */
 @Slf4j
+@AllArgsConstructor
 @Service
 public class TelegramService {
     public static final String TAG = "[" + TelegramService.class.getSimpleName() + "]";
@@ -26,15 +28,6 @@ public class TelegramService {
 
     private boolean isInitDone = false;
     private TelegramObject telegramObject;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param appUtils application utils
-     */
-    public TelegramService(final AppUtils appUtils) {
-        this.appUtils = appUtils;
-    }
 
     /**
      * Initialize telegram with {@link TelegramObject}.

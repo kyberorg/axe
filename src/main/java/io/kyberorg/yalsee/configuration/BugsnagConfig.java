@@ -4,6 +4,7 @@ import com.bugsnag.Bugsnag;
 import com.bugsnag.BugsnagSpringConfiguration;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.utils.git.MavenGitInfo;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import java.net.Proxy;
  * @since 2.7
  */
 @Slf4j
+@AllArgsConstructor
 @Configuration
 @Import(BugsnagSpringConfiguration.class)
 public class BugsnagConfig {
@@ -32,17 +34,6 @@ public class BugsnagConfig {
     private String proxyHost;
     private String proxyPort;
     private Bugsnag bugsnag;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param environment {@link Environment} for accessing to env vars
-     * @param gitInfo     for getting application version from pom
-     */
-    public BugsnagConfig(final Environment environment, final MavenGitInfo gitInfo) {
-        this.env = environment;
-        this.mavenGitInfo = gitInfo;
-    }
 
     /**
      * Configures connection to Bugsnag services.
