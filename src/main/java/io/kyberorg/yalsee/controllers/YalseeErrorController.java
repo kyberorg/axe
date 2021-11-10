@@ -84,10 +84,10 @@ public class YalseeErrorController implements ErrorController {
                 .addStatus(status)
                 .addPath(path)
                 .build();
-        YalseeError yalseeError = errorUtils.convertExceptionToYalsError(args);
+        YalseeError yalseeError = errorUtils.convertExceptionToYalseeError(args);
 
-        YalseeErrorJson errorJson = YalseeErrorJson.createFromYalsError(yalseeError);
-        String errorId = storeYalsError(yalseeError);
+        YalseeErrorJson errorJson = YalseeErrorJson.createFromYalseeError(yalseeError);
+        String errorId = storeYalseeError(yalseeError);
 
         errorUtils.reportToBugsnag(yalseeError);
 
@@ -157,7 +157,7 @@ public class YalseeErrorController implements ErrorController {
         }
     }
 
-    private String storeYalsError(final YalseeError yalseeError) {
+    private String storeYalseeError(final YalseeError yalseeError) {
         return errorKeeper.send(yalseeError);
     }
 

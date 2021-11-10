@@ -26,7 +26,7 @@ public class TelegramAutoConfigTest extends UnirestTest {
     public static final String TAG = "[" + TelegramAutoConfigTest.class.getSimpleName() + "]";
 
     /**
-     * Tests that /start command to Telegram Bot replied with non empty reply.
+     * Tests that /start command to Telegram Bot replied with non-empty reply.
      */
     @Test
     public void sendStartCommandGivesNonEmptyReply() {

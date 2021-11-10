@@ -65,7 +65,7 @@ public class IdnTest extends SelenideTest {
     public void arabicUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://www.101domain.com/عرب.htm");
 
-        //needed because site site loads way too long
+        //needed because site loads way too long
         SelenideUtils.waitUntilSiteLoads(EXTENDED_LOAD_TIMEOUT_SECONDS);
 
         // verify that opens page of Registation of arabic names
@@ -80,7 +80,7 @@ public class IdnTest extends SelenideTest {
     public void taiwaneseUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://中文.tw/");
 
-        //needed because site site loads way too long
+        //needed because site loads way too long
         SelenideUtils.waitUntilSiteLoads(EXTENDED_LOAD_TIMEOUT_SECONDS);
 
         SelenideElement navTable = $(ZhongwenTw.NAV_TABLE);

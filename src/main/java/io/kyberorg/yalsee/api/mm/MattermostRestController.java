@@ -85,7 +85,7 @@ public class MattermostRestController {
 
     private MattermostResponse success(final Link savedLink) {
         String serverHostname = getServerHostname(request);
-        String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
+        String fullYalseeLink = serverHostname + "/" + savedLink.getIdent();
 
         String linkDescription = mattermost.getArgumentSet().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
@@ -94,9 +94,9 @@ public class MattermostRestController {
                     ? "Okay " + App.AT + mattermost.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
 
-            return MattermostResponse.createWithText(greeting + fullYalsLink);
+            return MattermostResponse.createWithText(greeting + fullYalseeLink);
         } else {
-            return MattermostResponse.createWithText(fullYalsLink + " " + linkDescription);
+            return MattermostResponse.createWithText(fullYalseeLink + " " + linkDescription);
         }
     }
 

@@ -19,6 +19,7 @@ import java.util.List;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.constants.App.THREE;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -141,7 +142,7 @@ public class ActionsTest extends SelenideTest {
 
         openMyLinksPage();
 
-        Grid.GridData.get().getDataRows().shouldHave(size(3));
+        Grid.GridData.get().getDataRows().shouldHave(size(THREE));
     }
 
     /**

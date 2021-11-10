@@ -45,7 +45,7 @@ public class GetLinkRestController {
     }
 
     /**
-     * Wildcard API. Currently not implemented. Reserved to provide user's links.
+     * Wildcard API. Currently, not implemented. Reserved to provide user's links.
      *
      * @return currently {@link ResponseEntity} with {@link YalseeErrorJson} and {@link HttpCode#STATUS_501}
      */

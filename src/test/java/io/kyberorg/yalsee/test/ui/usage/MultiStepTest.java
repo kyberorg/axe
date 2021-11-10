@@ -109,7 +109,7 @@ public class MultiStepTest extends SelenideTest {
         long initialNumber = HomePageObject.getNumberOfSavedLinks();
 
         HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/kyberorg/yalsee");
-        //sometime it takes time to update counter. Waiting 5 seconds to prevent flaky test.
+        //sometimes it takes time to update counter. Waiting 5 seconds to prevent flaky test.
         TimeUnit.SECONDS.sleep(TIMEOUT_TO_PREVENT_FLAKY_TESTS);
 
         long numberAfterLinkSaved = HomePageObject.getNumberOfSavedLinks();

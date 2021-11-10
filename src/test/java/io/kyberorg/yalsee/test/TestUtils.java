@@ -272,6 +272,7 @@ public final class TestUtils {
      * @param annotation annotation to search
      * @return list of methods.
      */
+    @SuppressWarnings("SameParameterValue") //Currently, used for Test.class only
     private static List<Method> getMethodsAnnotatedWith(final Class<?> type,
                                                         final Class<? extends Annotation> annotation) {
         final List<Method> methods = new ArrayList<>();
@@ -292,7 +293,7 @@ public final class TestUtils {
     }
 
     /**
-     * Following needed because in may contain something like 'application/json;encoding=UTF8'.
+     * Following needed because it may contain something like 'application/json;encoding=UTF8'.
      *
      * @param contentType Content-Type header like 'application/json;encoding=UTF8'
      * @return string which contains content type without encoding

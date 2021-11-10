@@ -51,7 +51,7 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that area with inputs/buttons etc is visible.
+     * Tests that area with inputs/buttons etc. is visible.
      */
     @Test
     public void mainAreaIsVisible() {
@@ -197,7 +197,7 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that title has word "long" if screen large or has not if screen is extra small (i.e phone).
+     * Tests that title has word "long" if screen large or has not if screen is extra small (i.e. phone).
      */
     @Test
     public void titleShouldContainWordLong() {

@@ -8,7 +8,7 @@ import javax.persistence.MappedSuperclass;
 import java.sql.Timestamp;
 
 /**
- * Time-related extention for models. Provides {@link #created} and {@link #updated} fields.
+ * Time-related extension for models. Provides {@link #created} and {@link #updated} fields.
  *
  * @since 3.4
  */

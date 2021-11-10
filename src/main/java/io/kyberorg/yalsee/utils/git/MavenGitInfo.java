@@ -37,7 +37,7 @@ public class MavenGitInfo implements GitInfo {
 
     @Override
     public String getLatestTag() {
-        //we use here version from maven, because it is more stable then git tag
+        //we use here version from maven, because it is more stable than git tag
         return StringUtils.isNotBlank(gitRepoState.getBuildVersion()) ? gitRepoState.getBuildVersion() : App.NO_VALUE;
     }
 }

@@ -128,7 +128,7 @@ public class StoreLinkApiTest extends UnirestTest {
     }
 
     /**
-     * Request with JSON Body with non valid link inside = 422.
+     * Request with JSON Body with non-valid link inside = 422.
      */
     @Test
     public void onRequestWithNotALinkStatusIs422() {

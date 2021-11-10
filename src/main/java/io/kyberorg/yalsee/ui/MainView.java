@@ -29,7 +29,6 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
-import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
 
@@ -137,6 +136,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
+    @SuppressWarnings("SameParameterValue") //currently, there is only single use, but more might be in the future.
     private void addMenuTab(final String label, final String targetUrl, final VaadinIcon icon) {
         Icon iconElement = icon.create();
         Span labelElement = new Span(label);

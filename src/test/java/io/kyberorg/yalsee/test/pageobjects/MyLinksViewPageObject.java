@@ -7,6 +7,8 @@ import io.kyberorg.yalsee.ui.MyLinksView;
 import lombok.Data;
 
 import static com.codeborne.selenide.Selenide.$;
+import static io.kyberorg.yalsee.constants.App.FOUR;
+import static io.kyberorg.yalsee.constants.App.THREE;
 
 /**
  * Page Object for {@link MyLinksView}.
@@ -98,7 +100,7 @@ public final class MyLinksViewPageObject {
              * @return {@link SelenideElement} with Action Cell.
              */
             public SelenideElement getActionCell() {
-                return GRID_ELEMENT.getCell(0, 3);
+                return GRID_ELEMENT.getCell(0, THREE);
             }
         }
 
@@ -199,7 +201,7 @@ public final class MyLinksViewPageObject {
                  * @return {@link SelenideElement} with Actions Cell.
                  */
                 public SelenideElement getActionsCell() {
-                    return GRID_ELEMENT.getCell(this.rowNumber, 3);
+                    return GRID_ELEMENT.getCell(this.rowNumber, THREE);
                 }
 
                 /**
@@ -217,7 +219,7 @@ public final class MyLinksViewPageObject {
                  * @return {@link SelenideElement} with Item Details Element.
                  */
                 public SelenideElement getItemDetails() {
-                    SelenideElement itemDetailsCell = GRID_ELEMENT.getCell(this.rowNumber, 4);
+                    SelenideElement itemDetailsCell = GRID_ELEMENT.getCell(this.rowNumber, FOUR);
                     return itemDetailsCell.$("div.item-details");
                 }
             }

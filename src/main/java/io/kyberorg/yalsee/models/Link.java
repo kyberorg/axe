@@ -28,28 +28,6 @@ public class Link extends BaseModel {
     private String link;
 
     /**
-     * Builder-like. Setter for ident.
-     *
-     * @param ident string with part which identifies short link
-     * @return under-constructor {@link Link} object
-     */
-    public Link setIdent(final String ident) {
-        this.ident = ident;
-        return this;
-    }
-
-    /**
-     * Builder-like. Setter for link.
-     *
-     * @param link string with long url
-     * @return under-constructor {@link Link} object
-     */
-    public Link setLink(final String link) {
-        this.link = link;
-        return this;
-    }
-
-    /**
      * Static constructor of {@link Link} object.
      *
      * @param ident string with part which identifies short link

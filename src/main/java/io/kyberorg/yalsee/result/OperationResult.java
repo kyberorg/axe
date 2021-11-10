@@ -191,6 +191,7 @@ public class OperationResult {
      * @return object stored in {@link #payload} converted to requested class.
      * @throws ClassCastException when payload contains something else, but not object of requested class.
      */
+    @SuppressWarnings("JavadocReference") //dynamic class param and example uses exact class to show usage.
     public <T> T getPayload(final Class<T> classOfPayload) {
         return Primitives.wrap(classOfPayload).cast(this.payload);
     }
