@@ -31,7 +31,7 @@ public class GridItemsTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTest() {
+    public static void beforeAllTest() {
         //session cleanup
         open("/myLinks");
         waitForVaadin();

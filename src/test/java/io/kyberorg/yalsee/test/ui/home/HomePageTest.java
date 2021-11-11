@@ -34,7 +34,7 @@ public class HomePageTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();

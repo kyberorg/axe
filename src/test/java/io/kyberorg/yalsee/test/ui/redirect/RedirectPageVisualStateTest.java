@@ -32,7 +32,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(OUR_LONG_LINK);

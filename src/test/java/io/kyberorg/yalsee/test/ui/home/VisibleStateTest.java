@@ -36,7 +36,7 @@ public class VisibleStateTest extends SelenideTest {
      * Test setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();

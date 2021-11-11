@@ -32,11 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class ActionsTest extends SelenideTest {
+
     /**
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         //cleaning session
         open("/myLinks");
         waitForVaadin();

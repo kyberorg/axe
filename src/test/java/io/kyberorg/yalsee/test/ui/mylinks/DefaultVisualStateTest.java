@@ -30,7 +30,7 @@ public class DefaultVisualStateTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/myLinks");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();

@@ -31,7 +31,7 @@ public class RedirectPageTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             waitForVaadin();

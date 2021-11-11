@@ -31,7 +31,7 @@ public class GridCellsTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         //cleaning session
         open("/myLinks");
         waitForVaadin();

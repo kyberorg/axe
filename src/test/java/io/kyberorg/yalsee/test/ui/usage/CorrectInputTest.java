@@ -29,11 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class CorrectInputTest extends SelenideTest {
+
     /**
      * Test setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();

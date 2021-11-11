@@ -29,7 +29,7 @@ public class AppInfoPageTest extends SelenideTest {
      * Test setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/appInfo");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
