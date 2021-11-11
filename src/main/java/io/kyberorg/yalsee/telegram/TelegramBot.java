@@ -7,6 +7,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.telegram.TelegramService;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -24,6 +25,7 @@ import java.util.Objects;
  * @since 2.4
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
     private static final String TAG = "[" + TelegramBot.class.getSimpleName() + "]";
@@ -36,19 +38,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private Update update;
     private TelegramObject telegramObject;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param telegramService service for making responses
-     * @param linkService service for acting with links
-     * @param appUtils        application utils
-     */
-    public TelegramBot(final TelegramService telegramService, final LinkService linkService, final AppUtils appUtils) {
-        this.telegramService = telegramService;
-        this.linkService = linkService;
-        this.appUtils = appUtils;
-    }
 
     @Override
     public void onUpdateReceived(final Update update) {

@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ import static io.kyberorg.yalsee.utils.UrlExtraValidator.VALID;
  * @since 2.4
  */
 @Slf4j
+@RequiredArgsConstructor
 @ConditionalOnBean(TelegramBot.class)
 @Configuration
 public class TelegramBotAutoConfig {
@@ -35,17 +37,6 @@ public class TelegramBotAutoConfig {
 
     private final TelegramBot telegramBot;
     private final AppUtils appUtils;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param bot   Telegram bot, which handles connections
-     * @param utils app utils for getting server url and defining if telegram integration is enabled
-     */
-    public TelegramBotAutoConfig(final TelegramBot bot, final AppUtils utils) {
-        this.telegramBot = bot;
-        this.appUtils = utils;
-    }
 
     /**
      * Starts interaction with Telegram after {@link TelegramBot} component is ready.

@@ -13,6 +13,7 @@ import io.kyberorg.yalsee.exception.error.UserMessageGenerator;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -29,22 +30,12 @@ import static io.kyberorg.yalsee.constants.App.NO_STATUS;
  *
  * @since 2.7
  */
+@RequiredArgsConstructor
 @Component
 public class ErrorUtils {
 
     private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
-
-    /**
-     * Creates {@link ErrorUtils}.
-     *
-     * @param errorKeeper error holder
-     * @param bugsnag     Bugsnag bean
-     */
-    public ErrorUtils(final YalseeErrorKeeper errorKeeper, final Bugsnag bugsnag) {
-        this.errorKeeper = errorKeeper;
-        this.bugsnag = bugsnag;
-    }
 
     /**
      * Converts from stack trace to String with stack trace.

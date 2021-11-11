@@ -11,6 +11,7 @@ import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.utils.ApiUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,23 +27,13 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_501;
  * @since 3.1
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class GetLinkRestController {
     private static final String TAG = "[" + GetLinkRestController.class.getSimpleName() + "]";
 
     private final LinkService linkService;
     private final IdentValidator identValidator;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param linkService service for getting links
-     * @param identValidator for validating ident param
-     */
-    public GetLinkRestController(final LinkService linkService, final IdentValidator identValidator) {
-        this.linkService = linkService;
-        this.identValidator = identValidator;
-    }
 
     /**
      * Wildcard API. Currently, not implemented. Reserved to provide user's links.

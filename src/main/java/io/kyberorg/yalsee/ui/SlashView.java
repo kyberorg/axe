@@ -20,6 +20,7 @@ import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.ui.err.AppDownView;
 import io.kyberorg.yalsee.ui.err.ServerErrorView;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 
@@ -29,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 @UIScope
 public class SlashView extends YalseeLayout implements HasErrorParameter<NotFoundException> {
@@ -36,17 +38,6 @@ public class SlashView extends YalseeLayout implements HasErrorParameter<NotFoun
 
     private final AppUtils appUtils;
     private final LinkService linkService;
-
-    /**
-     * Creates {@link SlashView}.
-     *
-     * @param appUtils application utils
-     * @param linkService service to work with DB
-     */
-    public SlashView(final AppUtils appUtils, final LinkService linkService) {
-        this.appUtils = appUtils;
-        this.linkService = linkService;
-    }
 
 
     /**

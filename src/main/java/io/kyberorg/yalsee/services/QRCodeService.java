@@ -9,6 +9,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Base64;
  * @since 2.6
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class QRCodeService {
     private static final String TAG = "[" + QRCodeService.class.getSimpleName() + "]";
@@ -38,19 +40,6 @@ public class QRCodeService {
     private final AppUtils appUtils;
     private final IdentValidator identValidator;
     private final LinkService linkService;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param appUtils application utils
-     * @param identValidator for validating idents
-     * @param linkService for manipulating with links
-     */
-    public QRCodeService(final AppUtils appUtils, final IdentValidator identValidator, final LinkService linkService) {
-        this.appUtils = appUtils;
-        this.identValidator = identValidator;
-        this.linkService = linkService;
-    }
 
     /**
      * Produces base64 encoded PNG with QR code with encoded short link and {@link App.QR#DEFAULT_QR_CODE_SIZE}.

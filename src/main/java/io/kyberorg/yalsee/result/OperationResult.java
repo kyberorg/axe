@@ -11,6 +11,7 @@ import lombok.ToString;
  */
 @ToString
 public class OperationResult {
+
     /**
      * Status, that indicates operation success.
      */
