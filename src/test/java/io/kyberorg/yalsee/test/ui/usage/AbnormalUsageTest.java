@@ -20,11 +20,12 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class AbnormalUsageTest extends SelenideTest {
+
     /**
      * Test setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();

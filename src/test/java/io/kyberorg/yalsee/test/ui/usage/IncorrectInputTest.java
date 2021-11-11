@@ -32,7 +32,7 @@ public class IncorrectInputTest extends SelenideTest {
      * Test setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();

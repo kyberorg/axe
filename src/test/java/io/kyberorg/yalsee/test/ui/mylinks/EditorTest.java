@@ -30,7 +30,7 @@ public class EditorTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         //session cleanup
         open("/myLinks");
         waitForVaadin();

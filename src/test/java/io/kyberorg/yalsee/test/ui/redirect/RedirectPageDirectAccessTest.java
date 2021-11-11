@@ -25,7 +25,7 @@ public class RedirectPageDirectAccessTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         open("/redirect-page");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
