@@ -109,6 +109,16 @@ public abstract class UnirestTest extends YalseeTest {
         return responseIsNotEmpty && responseIsNotLinkNotFoundStatus;
     }
 
+    /**
+     * Alias for {@link #verifyLinkIsStored(String)}.
+     *
+     * @param ident string with ident to search
+     * @return true - if link exists, false - else.
+     */
+    protected boolean isIdentAlreadyExists(final String ident) {
+        return verifyLinkIsStored(ident);
+    }
+
     private void logRequest(final HttpRequest request) {
         StringBuilder reqLog = new StringBuilder("Request: ").append(App.NEW_LINE);
         reqLog.append(String.format("Request URL: %s", request.getUrl())).append(App.NEW_LINE);
