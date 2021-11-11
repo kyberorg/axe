@@ -18,6 +18,7 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
 import static io.kyberorg.yalsee.constants.Header.X_YALSEE_TOKEN;
 import static io.kyberorg.yalsee.constants.HttpCode.*;
+import static io.kyberorg.yalsee.core.IdentGenerator.IDENT_DEFAULT_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -296,7 +297,7 @@ public class StoreLinkApiTest extends UnirestTest {
         String longUrl = "https://github.com/kyberorg/yalsee/issues/537";
         String customIdentWithNumbers;
         do {
-            customIdentWithNumbers = RandomStringUtils.randomAlphanumeric(6);
+            customIdentWithNumbers = RandomStringUtils.randomAlphanumeric(IDENT_DEFAULT_LENGTH);
         } while (isIdentAlreadyExists(customIdentWithNumbers));
 
         PostLinkRequest req = PostLinkRequest.create().withLink(longUrl);
