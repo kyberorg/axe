@@ -8,10 +8,9 @@ import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.open;
@@ -22,9 +21,12 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 3.7
  */
-@Execution(ExecutionMode.CONCURRENT)
+@Slf4j
 public class RedirectPageForInternalsTest extends SelenideTest {
 
+    /**
+     * Test setup.
+     */
     @BeforeEach
     public void beforeEachTest() {
         open("/");
@@ -36,7 +38,7 @@ public class RedirectPageForInternalsTest extends SelenideTest {
      * Internal Link to AppInfo Page should open without RedirectView.
      */
     @Test
-    public void onStoreLinkToAppInfoPageThisShouldBeOpenedWithoutRedirectView() {
+    public void onInternalTargetNoRedirectPage() {
         String url = TestUtils.getTestUrl() + "/" + Endpoint.UI.APP_INFO_PAGE;
         storeAndOpenLink(url);
         expectAppInfoPageOpened();
@@ -46,7 +48,7 @@ public class RedirectPageForInternalsTest extends SelenideTest {
      * Internal Link with short Domain to AppInfo Page should open without RedirectView.
      */
     @Test
-    public void onStoreShortLinkToAppInfoPageThisShouldBeOpenedWithoutRedirectView() {
+    public void onInternalShortTargetNoRedirectPage() {
         String url = TestUtils.getAppShortUrl() + "/" + Endpoint.UI.APP_INFO_PAGE;
         storeAndOpenLink(url);
         expectAppInfoPageOpened();
@@ -56,7 +58,7 @@ public class RedirectPageForInternalsTest extends SelenideTest {
      * External Link which has our domain in, but not as host - should be opened with Redirect Page.
      */
     @Test
-    public void onStoreExternalLinkWithOurDomainInUrlRedirectPageShouldOpen() {
+    public void onExternalTargetDisplayRedirectPage() {
         //will produce something like https://kyberorg.io/yals.ee
         String url = "https://kyberorg.io/" + TestUtils.getTestedEnv().getTestHost();
 
@@ -68,7 +70,7 @@ public class RedirectPageForInternalsTest extends SelenideTest {
      * External Link which has our short domain in, but not as host - should be opened with Redirect Page
      */
     @Test
-    public void onStoreExternalLinkWithOurShortDomainInUrlRedirectPageShouldOpen() {
+    public void onExternalShortTargetDisplayRedirectPage() {
         //will produce something like https://kyberorg.io/yls.ee
         String url = "https://kyberorg.io/" + TestUtils.getTestedEnv().getShortHost();
 
@@ -77,7 +79,8 @@ public class RedirectPageForInternalsTest extends SelenideTest {
     }
 
     private void storeAndOpenLink(final String longUrl) {
-        HomePageObject.storeAndOpenSavedUrl(longUrl);
+        String shortLink = HomePageObject.storeAndReturnSavedUrl(longUrl);
+        open(shortLink);
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
     }

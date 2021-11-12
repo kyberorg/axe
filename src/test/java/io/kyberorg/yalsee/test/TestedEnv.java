@@ -39,10 +39,21 @@ public enum TestedEnv {
         return LOCAL;
     }
 
+    /**
+     * Gets Host (Domain) name of {@link TestedEnv}. Same as {@link #testUrl}, but only hostname i.e. yals.ee.
+     *
+     * @return string with hostname
+     */
     public String getTestHost() {
         return extractHostFrom(testUrl);
     }
 
+    /**
+     * Gets Short Host (Short Domain) name of {@link TestedEnv}.
+     * Same as {@link #shortUrl}, but only hostname i.e. yls.ee.
+     *
+     * @return string with short domain
+     */
     public String getShortHost() {
         return extractHostFrom(shortUrl);
     }
