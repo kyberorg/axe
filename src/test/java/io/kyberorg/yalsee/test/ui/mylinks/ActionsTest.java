@@ -10,8 +10,6 @@ import io.kyberorg.yalsee.ui.err.PageNotFoundView;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 3.2
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class ActionsTest extends SelenideTest {
 
     /**
