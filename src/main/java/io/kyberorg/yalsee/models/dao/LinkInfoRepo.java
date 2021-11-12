@@ -30,13 +30,6 @@ public interface LinkInfoRepo extends Repository<LinkInfo, Long> {
     LinkInfo save(LinkInfo linkInfoObject);
 
     /**
-     * Number of link info records.
-     *
-     * @return int with number of links stored
-     */
-    int count();
-
-    /**
      * Finds single record by its id.
      *
      * @param id record identifier in database

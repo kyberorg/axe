@@ -7,9 +7,7 @@ import io.kyberorg.yalsee.test.pageobjects.external.*;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junitpioneer.jupiter.RetryingTest;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -22,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 2.5
  */
-@Execution(ExecutionMode.CONCURRENT)
 @SuppressWarnings("SpellCheckingInspection")
 public class IdnTest extends SelenideTest {
 
@@ -30,7 +27,7 @@ public class IdnTest extends SelenideTest {
      * Test setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
@@ -39,7 +36,7 @@ public class IdnTest extends SelenideTest {
     /**
      * Stores russian URL.
      */
-    @Test
+    @RetryingTest(2)
     public void russianUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://кто.рф");
         // verify that KtoRF opened
@@ -50,7 +47,7 @@ public class IdnTest extends SelenideTest {
     /**
      * Stores finnish URL.
      */
-    @Test
+    @RetryingTest(2)
     public void finnishUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://sää.fi");
         SelenideElement logo = $(ForecaFi.LOGO);
@@ -61,11 +58,11 @@ public class IdnTest extends SelenideTest {
     /**
      * Stores arabic URL.
      */
-    @Test
+    @RetryingTest(2)
     public void arabicUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://www.101domain.com/عرب.htm");
 
-        //needed because site site loads way too long
+        //needed because site loads way too long
         SelenideUtils.waitUntilSiteLoads(EXTENDED_LOAD_TIMEOUT_SECONDS);
 
         // verify that opens page of Registation of arabic names
@@ -76,11 +73,11 @@ public class IdnTest extends SelenideTest {
     /**
      * Stores taiwanese URL.
      */
-    @Test
+    @RetryingTest(2)
     public void taiwaneseUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://中文.tw/");
 
-        //needed because site site loads way too long
+        //needed because site loads way too long
         SelenideUtils.waitUntilSiteLoads(EXTENDED_LOAD_TIMEOUT_SECONDS);
 
         SelenideElement navTable = $(ZhongwenTw.NAV_TABLE);
@@ -90,7 +87,7 @@ public class IdnTest extends SelenideTest {
     /**
      * Stores German Url.
      */
-    @Test
+    @RetryingTest(2)
     public void germanUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://www.travemünde.de/");
         assertEquals(TravemundeDe.TITLE_TEXT, SelenideUtils.getPageTitle());
@@ -99,7 +96,7 @@ public class IdnTest extends SelenideTest {
     /**
      * Stores estonian URL.
      */
-    @Test
+    @RetryingTest(2)
     public void estonianUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://sõnaveeb.ee");
         assertEquals(SonaveebEe.TITLE_TEXT, SelenideUtils.getPageTitle());
@@ -108,7 +105,7 @@ public class IdnTest extends SelenideTest {
     /**
      * Multiple languages.
      */
-    @Test
+    @RetryingTest(2)
     public void multiLanguageUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://€.linux.it");
 
@@ -117,5 +114,4 @@ public class IdnTest extends SelenideTest {
         h1.should(exist);
         h1.shouldHave(text(EuroLinuxIt.H1_TEXT));
     }
-
 }

@@ -9,8 +9,6 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -21,14 +19,13 @@ import static io.kyberorg.yalsee.test.pageobjects.MainViewPageObject.*;
  *
  * @since 2.8
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class MainViewTest extends SelenideTest {
 
     /**
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/");
         VaadinPageObject.waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();

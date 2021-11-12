@@ -8,8 +8,6 @@ import io.kyberorg.yalsee.test.pageobjects.external.Wikipedia;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openqa.selenium.Keys;
 
 import java.util.concurrent.TimeUnit;
@@ -31,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 1.0
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class MultiStepTest extends SelenideTest {
 
     /**
@@ -43,7 +40,7 @@ public class MultiStepTest extends SelenideTest {
      * Test setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
@@ -109,7 +106,7 @@ public class MultiStepTest extends SelenideTest {
         long initialNumber = HomePageObject.getNumberOfSavedLinks();
 
         HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/kyberorg/yalsee");
-        //sometime it takes time to update counter. Waiting 5 seconds to prevent flaky test.
+        //sometimes it takes time to update counter. Waiting 5 seconds to prevent flaky test.
         TimeUnit.SECONDS.sleep(TIMEOUT_TO_PREVENT_FLAKY_TESTS);
 
         long numberAfterLinkSaved = HomePageObject.getNumberOfSavedLinks();

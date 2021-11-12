@@ -99,7 +99,7 @@ public class MattermostApiTest extends UnirestTest {
     }
 
     /**
-     * No body in request = 400.
+     * Empty body in request = 400.
      */
     @Test
     public void forPayloadWithoutBodyShouldReplyWith400() {
@@ -259,7 +259,7 @@ public class MattermostApiTest extends UnirestTest {
     }
 
     /**
-     * Request has link and multi word description = Reply with short link and given multi word description.
+     * Request has link and multi-word description = Reply with short link and given multi-word description.
      */
     @Test
     public void whenTextHasMultiWordDescriptionShouldReturnShortLinkAndMultiWordDescription() {

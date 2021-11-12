@@ -8,8 +8,6 @@ import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -21,14 +19,13 @@ import static io.kyberorg.yalsee.test.pageobjects.MainViewPageObject.GOOGLE_ANAL
  *
  * @since 3.0.2
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class SeoTest extends SelenideTest {
 
     /**
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/");
         VaadinPageObject.waitForVaadin();
         // we have to enable analytics first

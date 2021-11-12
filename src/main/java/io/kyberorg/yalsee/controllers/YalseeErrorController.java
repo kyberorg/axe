@@ -10,6 +10,7 @@ import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ import java.io.IOException;
  * @since 2.7
  */
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class YalseeErrorController implements ErrorController {
     private final String TAG = "[" + YalseeErrorController.class.getSimpleName() + "]";
@@ -41,17 +43,6 @@ public class YalseeErrorController implements ErrorController {
     private Throwable cause;
     private int status;
     private String path;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param yalseeErrorKeeper for keeping errors in runtime
-     * @param errUtils        utils for manipulating with errors
-     */
-    public YalseeErrorController(final YalseeErrorKeeper yalseeErrorKeeper, final ErrorUtils errUtils) {
-        this.errorKeeper = yalseeErrorKeeper;
-        this.errorUtils = errUtils;
-    }
 
     /**
      * Error handling endpoint.
@@ -84,10 +75,10 @@ public class YalseeErrorController implements ErrorController {
                 .addStatus(status)
                 .addPath(path)
                 .build();
-        YalseeError yalseeError = errorUtils.convertExceptionToYalsError(args);
+        YalseeError yalseeError = errorUtils.convertExceptionToYalseeError(args);
 
-        YalseeErrorJson errorJson = YalseeErrorJson.createFromYalsError(yalseeError);
-        String errorId = storeYalsError(yalseeError);
+        YalseeErrorJson errorJson = YalseeErrorJson.createFromYalseeError(yalseeError);
+        String errorId = storeYalseeError(yalseeError);
 
         errorUtils.reportToBugsnag(yalseeError);
 
@@ -157,7 +148,7 @@ public class YalseeErrorController implements ErrorController {
         }
     }
 
-    private String storeYalsError(final YalseeError yalseeError) {
+    private String storeYalseeError(final YalseeError yalseeError) {
         return errorKeeper.send(yalseeError);
     }
 

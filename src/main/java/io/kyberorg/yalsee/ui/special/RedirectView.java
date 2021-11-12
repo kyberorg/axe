@@ -33,7 +33,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.*;
 @UIScope
 @CssImport("./css/common_styles.css")
 @CssImport("./css/redirect_view.css")
-@Route(value = Endpoint.TNT.REDIRECTOR, layout = MainView.class)
+@Route(value = Endpoint.TNT.REDIRECT_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Redirect Page")
 public class RedirectView extends YalseeLayout implements HasErrorParameter<NeedForRedirectException> {
     private static final String TAG = "[" + RedirectView.class.getSimpleName() + "]";
@@ -150,7 +150,9 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
 
     private boolean shouldSkipRedirectPage() {
         //TODO add if link has owner -> true
-        return appUtils.hasRedirectPageBypassSymbol(this.origin);
+        boolean isTargetInternal = appUtils.isInternalUrl(this.target);
+        boolean hasBypassSymbol = appUtils.hasRedirectPageBypassSymbol(this.origin);
+        return isTargetInternal || hasBypassSymbol;
     }
 
     private void doJSRedirect(final String target) {
@@ -229,6 +231,7 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
                 ui.access(() -> view.doJSRedirect(view.target));
             } catch (InterruptedException e) {
                 log.error("{} while waiting for redirect", e.getMessage());
+                Thread.currentThread().interrupt();
             }
         }
     }

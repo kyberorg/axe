@@ -68,7 +68,7 @@ public final class HttpCode {
     public static final int STATUS_409 = 409;
 
     /**
-     * 415 - Unsupported Media Type
+     * 415 - Unsupported Media Type.
      */
     public static final int STATUS_415 = 415;
 

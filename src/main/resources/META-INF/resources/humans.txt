@@ -1,6 +1,6 @@
 /* TEAM */
-    Idea and developer: Alexander Muravya (aka Kyberorg)
-    Contact: root [at] kyberorg [dot] io
+    Idea and developer: Aleksandr Muravja (aka Kyberorg)
+    Contact: alex [at] kyberorg [dot] io
     Twitter: @kyberorg
     Facebook: kyberorg
     VK: kyberorg
@@ -15,6 +15,6 @@
 /* SITE */
     Language: English
     Standards: HTML5, CSS3
-    Components: Spring framework, Vaadin, Java, Vaadin TestBench, Selenium
+    Components: Spring framework, Vaadin, Java, Selenide
     Software: IDEA
     Hosted on: Hetzner

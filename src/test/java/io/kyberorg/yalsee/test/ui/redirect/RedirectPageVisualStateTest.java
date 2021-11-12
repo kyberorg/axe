@@ -11,8 +11,6 @@ import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -23,7 +21,6 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 3.0.5
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class RedirectPageVisualStateTest extends SelenideTest {
     private static final String OUR_LONG_LINK = "https://github.com/kyberorg/yalsee/issues/353";
     private static String ourShortLink;
@@ -32,7 +29,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(OUR_LONG_LINK);

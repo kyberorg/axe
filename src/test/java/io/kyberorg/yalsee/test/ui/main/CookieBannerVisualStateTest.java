@@ -3,12 +3,10 @@ package io.kyberorg.yalsee.test.ui.main;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.ui.AppInfoView;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
-import io.kyberorg.yalsee.ui.dev.AppInfoView;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -24,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @since 3.5
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class CookieBannerVisualStateTest extends SelenideTest {
 
     /**

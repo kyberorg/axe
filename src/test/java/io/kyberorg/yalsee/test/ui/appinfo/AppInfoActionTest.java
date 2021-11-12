@@ -4,11 +4,9 @@ import com.codeborne.selenide.Selenide;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.CookieAndYou;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.dev.AppInfoView;
+import io.kyberorg.yalsee.ui.AppInfoView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.open;
@@ -21,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 3.5
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class AppInfoActionTest extends SelenideTest {
 
     /**

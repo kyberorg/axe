@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.services;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkInfoRepo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,10 @@ import java.util.Optional;
  * @since 2.0
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class LinkInfoService {
     private final LinkInfoRepo repo;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param linkInfoRepo object for storing link info to DB
-     */
-    public LinkInfoService(final LinkInfoRepo linkInfoRepo) {
-        this.repo = linkInfoRepo;
-    }
 
     /**
      * Creates {@link LinkInfo} with session info.

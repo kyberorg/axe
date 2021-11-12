@@ -41,7 +41,7 @@ public class MattermostResponseTests extends UnitTest {
     }
 
     /**
-     * Tests than cannot construct {@link MattermostResponse} from text, that is not an URL.
+     * Tests than cannot construct {@link MattermostResponse} from text, that is not a URL.
      */
     @Test
     public void cannotAddTextWhenNotContainUrlOrError() {
@@ -50,7 +50,7 @@ public class MattermostResponseTests extends UnitTest {
     }
 
     /**
-     * Tests than cannot add goto location from text, that is not an URL.
+     * Tests than cannot add goto location from text, that is not a URL.
      */
     @Test
     public void cannotAddGoToLocationWhenItIsNotUrl() {
@@ -60,7 +60,7 @@ public class MattermostResponseTests extends UnitTest {
     }
 
     /**
-     * Tests that Bots username has software name (Yalsee).
+     * Tests that Bot's username has software name (Yalsee).
      */
     @Test
     public void assertUserContainsYalsee() {

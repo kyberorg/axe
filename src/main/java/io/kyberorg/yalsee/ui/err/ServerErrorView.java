@@ -186,7 +186,7 @@ public class ServerErrorView extends YalseeLayout implements HasErrorParameter<G
      */
     @Override
     public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
-        YalseeError yalseeError = errorUtils.getYalsErrorFromEvent(event);
+        YalseeError yalseeError = errorUtils.getYalseeErrorFromEvent(event);
         if (Objects.isNull(yalseeError)) {
             event.rerouteToError(NeedForLoopException.class, Integer.toString(STATUS_500));
             return;

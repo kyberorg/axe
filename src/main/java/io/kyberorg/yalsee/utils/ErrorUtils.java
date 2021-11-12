@@ -13,6 +13,7 @@ import io.kyberorg.yalsee.exception.error.UserMessageGenerator;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -29,22 +30,12 @@ import static io.kyberorg.yalsee.constants.App.NO_STATUS;
  *
  * @since 2.7
  */
+@RequiredArgsConstructor
 @Component
 public class ErrorUtils {
 
     private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
-
-    /**
-     * Creates {@link ErrorUtils}.
-     *
-     * @param errorKeeper error holder
-     * @param bugsnag     Bugsnag bean
-     */
-    public ErrorUtils(final YalseeErrorKeeper errorKeeper, final Bugsnag bugsnag) {
-        this.errorKeeper = errorKeeper;
-        this.bugsnag = bugsnag;
-    }
 
     /**
      * Converts from stack trace to String with stack trace.
@@ -86,7 +77,7 @@ public class ErrorUtils {
      * @param event {@link BeforeEvent} with {@link YalseeError}
      * @return extracted {@link YalseeError}
      */
-    public YalseeError getYalsErrorFromEvent(final BeforeEvent event) {
+    public YalseeError getYalseeErrorFromEvent(final BeforeEvent event) {
         QueryParameters queryParameters = event.getLocation().getQueryParameters();
         if (queryParameters.getParameters().isEmpty()) return null;
         boolean errorIdKeyIsPresent = queryParameters.getParameters().containsKey(App.Params.ERROR_ID);
@@ -97,8 +88,8 @@ public class ErrorUtils {
         if (!errorIdKeyHasSingleValue) return null;
 
         String errorId = errorIdValues.get(0);
-        Optional<YalseeError> yalsErrorOptional = errorKeeper.get(errorId);
-        return yalsErrorOptional.orElse(null);
+        Optional<YalseeError> yalseeErrorOptional = errorKeeper.get(errorId);
+        return yalseeErrorOptional.orElse(null);
     }
 
     /**
@@ -130,7 +121,7 @@ public class ErrorUtils {
      * @param args {@link Args} object
      * @return converted {@link YalseeError} object
      */
-    public YalseeError convertExceptionToYalsError(final ErrorUtils.Args args) {
+    public YalseeError convertExceptionToYalseeError(final ErrorUtils.Args args) {
         Throwable exceptionFromArgs = args.getException();
         boolean hasStatus = args.getStatus() != NO_STATUS;
         YalseeErrorBuilder yalseeErrorBuilder;
@@ -206,7 +197,7 @@ public class ErrorUtils {
     }
 
     /**
-     * Extracts deepest exception, which is root of problem.
+     * Extracts the deepest exception, which is root of problem.
      *
      * @param throwable exception containing chain of exceptions
      * @return deepest exception from the chain

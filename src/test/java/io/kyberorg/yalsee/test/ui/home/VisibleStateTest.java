@@ -12,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.List;
 
@@ -29,14 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 1.0
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class VisibleStateTest extends SelenideTest {
 
     /**
      * Test setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
@@ -51,7 +48,7 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that area with inputs/buttons etc is visible.
+     * Tests that area with inputs/buttons etc. is visible.
      */
     @Test
     public void mainAreaIsVisible() {
@@ -162,17 +159,6 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that description input has placeholder, and it is not empty.
-     */
-    @Test
-    public void descriptionInputHasNotEmptyPlaceholder() {
-        //open it
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldHave(attribute("placeholder"));
-    }
-
-    /**
      * Tests page title.
      */
     @Test
@@ -197,7 +183,7 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that title has word "long" if screen large or has not if screen is extra small (i.e phone).
+     * Tests that title has word "long" if screen large or has not if screen is extra small (i.e. phone).
      */
     @Test
     public void titleShouldContainWordLong() {

@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  * @since 2.5
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class TelegramStatusRestController {
     private static final String TAG = "[" + TelegramStatusRestController.class.getSimpleName() + "]";
@@ -26,17 +28,6 @@ public class TelegramStatusRestController {
 
     private final TelegramBot bot;
     private final AppUtils appUtils;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param telegramBot      telegram bot
-     * @param applicationUtils application utils to find out if telegram API is enabled
-     */
-    public TelegramStatusRestController(final TelegramBot telegramBot, final AppUtils applicationUtils) {
-        this.bot = telegramBot;
-        this.appUtils = applicationUtils;
-    }
 
     /**
      * API Endpoint for getting telegram bot status.

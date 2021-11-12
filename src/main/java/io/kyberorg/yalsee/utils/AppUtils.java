@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Objects;
+import java.net.URISyntaxException;
 
 /**
  * App-wide tools.
@@ -102,7 +103,7 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Determines if client wants to receive JSON from us. Vaadin implementation.
+     * Determines if client wants to receive JSON from us. Vaadin's implementation.
      *
      * @param vaadinRequest valid {@link VaadinRequest} from VaadinServlet
      * @return true, if clients {@link Header#ACCEPT} contains {@link MimeType#APPLICATION_JSON} mime type,
@@ -135,7 +136,7 @@ public class AppUtils implements Serializable {
      * Determines if client's request has {@link Header#ACCEPT} header with exact {@link MimeType}.
      *
      * @param req valid {@link HttpServletRequest} request
-     * @return true, if request has {@link Header#ACCEPT} header and it value is not wildcard
+     * @return true, if request has {@link Header#ACCEPT} header and its value is not wildcard
      * (aka accept all) {@link MimeType#ALL}, false - elsewhere
      */
     public static boolean hasAcceptHeader(final HttpServletRequest req) {
@@ -237,6 +238,15 @@ public class AppUtils implements Serializable {
     }
 
     /**
+     * Provides host of running instance. Runtime value.
+     *
+     * @return string with full domain
+     */
+    public String getServerDomain() {
+        return UrlUtils.removeProtocol(getServerUrl());
+    }
+
+    /**
      * Provides host of short url used for links. Runtime value.
      *
      * @return string with short domain, if found or Server Url from {@link #getServerUrl()}
@@ -246,7 +256,7 @@ public class AppUtils implements Serializable {
         if (shortDomain.equals(DUMMY_HOST)) {
             //no short URL - use server domain
             log.debug("No Short Domain defined - using Server Domain");
-            return UrlUtils.removeProtocol(getServerUrl());
+            return getServerDomain();
         } else {
             return shortDomain;
         }
@@ -326,7 +336,7 @@ public class AppUtils implements Serializable {
     /**
      * Allow/Disallow crawlers (search engine bots), based on profile settings.
      *
-     * @return true - if crawlers should be allow, false - elsewhere
+     * @return true - if crawlers should be allowed, false - elsewhere
      */
     public boolean areCrawlersAllowed() {
         return Boolean.parseBoolean(getEnv().getProperty(App.Properties.CRAWLERS_ALLOWED));
@@ -361,7 +371,7 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Drops redirect page bypass symbol from provided ident string. It also check if string has this symbol.
+     * Drops redirect page bypass symbol from provided ident string. It also checks if string has this symbol.
      *
      * @param ident string with ident to check on bypass symbol.
      * @return ident string without bypass symbol or same string, if ident hasn't bypass symbol.
@@ -453,6 +463,27 @@ public class AppUtils implements Serializable {
         if (vaadinSession == null) return defaultValue;
         if (vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED) == null) return defaultValue;
         return (boolean) vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED);
+    }
+
+    /**
+     * Defines if url is our internal URL aka same host as server runs at.
+     *
+     * @param urlString string with valid URL to check
+     * @return true - if url is from same host as server runs at, false - if external.
+     */
+    public boolean isInternalUrl(final String urlString) {
+        try {
+            final URI uri = new URI(UrlUtils.covertUnicodeUrlToAscii(urlString));
+            final String host = uri.getHost();
+
+            boolean matchesServerDomain = host.equals(getServerDomain());
+            boolean matchesShortDomain = host.equals(getShortDomain());
+            return matchesServerDomain || matchesShortDomain;
+        } catch (URISyntaxException e) {
+            String message = String.format("String '%s': malformed URL or not URL at all", urlString);
+            log.warn("{} {}", TAG, message);
+            throw new RuntimeException(message, e);
+        }
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {

@@ -5,7 +5,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 
 /**
  * Does extra validation of URL to filter out not valid URLs passed
- * thru {@link org.hibernate.validator.constraints.URL} validation.
+ * through {@link org.hibernate.validator.constraints.URL} validation.
  *
  * @since 2.0
  */
