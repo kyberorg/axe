@@ -67,7 +67,7 @@ public class RedirectPageForInternalsTest extends SelenideTest {
     }
 
     /**
-     * External Link which has our short domain in, but not as host - should be opened with Redirect Page
+     * External Link which has our short domain in, but not as host - should be opened with Redirect Page.
      */
     @Test
     public void onExternalShortTargetDisplayRedirectPage() {
