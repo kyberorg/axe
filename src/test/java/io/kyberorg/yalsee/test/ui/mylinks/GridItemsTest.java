@@ -9,8 +9,6 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -24,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 3.2
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class GridItemsTest extends SelenideTest {
 
     /**

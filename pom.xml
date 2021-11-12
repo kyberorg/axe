@@ -255,9 +255,17 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>5.24.3</version>
+            <version>5.25.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- Tests Re-run -->
+        <dependency>
+            <groupId>org.junit-pioneer</groupId>
+            <artifactId>junit-pioneer</artifactId>
+            <version>1.4.2</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <!-- Snyk deps -->
         <!-- We don't use those deps but other deps are using old version. So those are here to improve secuirty -->

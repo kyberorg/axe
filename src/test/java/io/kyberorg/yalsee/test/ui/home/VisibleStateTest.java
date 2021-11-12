@@ -12,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.List;
 
@@ -29,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 1.0
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class VisibleStateTest extends SelenideTest {
 
     /**
@@ -159,17 +156,6 @@ public class VisibleStateTest extends SelenideTest {
     @Test
     public void descriptionInputIsHiddenByDefault() {
         HomePageObject.MainArea.DESCRIPTION_INPUT_ELEMENT.shouldBe(hidden);
-    }
-
-    /**
-     * Tests that description input has placeholder, and it is not empty.
-     */
-    @Test
-    public void descriptionInputHasNotEmptyPlaceholder() {
-        //open it
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldHave(attribute("placeholder"));
     }
 
     /**
