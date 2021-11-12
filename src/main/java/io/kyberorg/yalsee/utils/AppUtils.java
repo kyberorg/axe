@@ -456,7 +456,7 @@ public class AppUtils implements Serializable {
      */
     public boolean isInternalUrl(final String urlString) {
         try {
-            final URI uri = new URI(urlString);
+            final URI uri = new URI(UrlUtils.covertUnicodeUrlToAscii(urlString));
             final String host = uri.getHost();
 
             boolean matchesServerDomain = host.equals(getServerDomain());
