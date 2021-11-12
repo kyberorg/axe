@@ -90,6 +90,6 @@ public class RedirectPageForInternalsTest extends SelenideTest {
     }
 
     private void expectRedirectPageOpened() {
-        RedirectPageObject.REDIRECT_PAGE_CONTAINER.shouldBe(visible);
+        RedirectPageObject.Links.ORIGIN_LINK.shouldBe(visible);
     }
 }
