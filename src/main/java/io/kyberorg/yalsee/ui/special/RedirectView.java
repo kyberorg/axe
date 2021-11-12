@@ -150,7 +150,9 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
 
     private boolean shouldSkipRedirectPage() {
         //TODO add if link has owner -> true
-        return appUtils.hasRedirectPageBypassSymbol(this.origin);
+        boolean isTargetInternal = appUtils.isInternalUrl(this.target);
+        boolean hasBypassSymbol = appUtils.hasRedirectPageBypassSymbol(this.origin);
+        return isTargetInternal || hasBypassSymbol;
     }
 
     private void doJSRedirect(final String target) {

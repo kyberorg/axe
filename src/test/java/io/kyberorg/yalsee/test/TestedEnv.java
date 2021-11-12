@@ -2,6 +2,9 @@ package io.kyberorg.yalsee.test;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
+
+import java.net.URI;
 
 /**
  * Provides information about Environment we test.
@@ -28,12 +31,36 @@ public enum TestedEnv {
      * @return {@link TestedEnv} object for matched env or {@link #LOCAL} if no match found
      */
     public static TestedEnv getByTestUrl(final String envUrl) {
-        for (TestedEnv env: TestedEnv.values()) {
-           if (env.getTestUrl().equals(envUrl)) {
-               return env;
+        for (TestedEnv env : TestedEnv.values()) {
+            if (env.getTestUrl().equals(envUrl)) {
+                return env;
             }
         }
         return LOCAL;
     }
 
+    /**
+     * Gets Host (Domain) name of {@link TestedEnv}. Same as {@link #testUrl}, but only hostname i.e. yals.ee.
+     *
+     * @return string with hostname
+     */
+    public String getTestHost() {
+        return extractHostFrom(testUrl);
+    }
+
+    /**
+     * Gets Short Host (Short Domain) name of {@link TestedEnv}.
+     * Same as {@link #shortUrl}, but only hostname i.e. yls.ee.
+     *
+     * @return string with short domain
+     */
+    public String getShortHost() {
+        return extractHostFrom(shortUrl);
+    }
+
+    @SneakyThrows
+    private String extractHostFrom(final String url) {
+        URI uri = new URI(url);
+        return uri.getHost();
+    }
 }

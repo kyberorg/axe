@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * App-wide tools.
@@ -236,6 +237,15 @@ public class AppUtils implements Serializable {
     }
 
     /**
+     * Provides host of running instance. Runtime value.
+     *
+     * @return string with full domain
+     */
+    public String getServerDomain() {
+        return UrlUtils.removeProtocol(getServerUrl());
+    }
+
+    /**
      * Provides host of short url used for links. Runtime value.
      *
      * @return string with short domain, if found or Server Url from {@link #getServerUrl()}
@@ -245,7 +255,7 @@ public class AppUtils implements Serializable {
         if (shortDomain.equals(DUMMY_HOST)) {
             //no short URL - use server domain
             log.debug("No Short Domain defined - using Server Domain");
-            return UrlUtils.removeProtocol(getServerUrl());
+            return getServerDomain();
         } else {
             return shortDomain;
         }
@@ -436,6 +446,27 @@ public class AppUtils implements Serializable {
         if (vaadinSession == null) return defaultValue;
         if (vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED) == null) return defaultValue;
         return (boolean) vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED);
+    }
+
+    /**
+     * Defines if url is our internal URL aka same host as server runs at.
+     *
+     * @param urlString string with valid URL to check
+     * @return true - if url is from same host as server runs at, false - if external.
+     */
+    public boolean isInternalUrl(final String urlString) {
+        try {
+            final URI uri = new URI(UrlUtils.covertUnicodeUrlToAscii(urlString));
+            final String host = uri.getHost();
+
+            boolean matchesServerDomain = host.equals(getServerDomain());
+            boolean matchesShortDomain = host.equals(getShortDomain());
+            return matchesServerDomain || matchesShortDomain;
+        } catch (URISyntaxException e) {
+            String message = String.format("String '%s': malformed URL or not URL at all", urlString);
+            log.warn("{} {}", TAG, message);
+            throw new RuntimeException(message, e);
+        }
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {
