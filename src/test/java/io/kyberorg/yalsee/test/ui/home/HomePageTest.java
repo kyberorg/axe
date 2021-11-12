@@ -13,8 +13,6 @@ import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -27,7 +25,6 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 1.0
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class HomePageTest extends SelenideTest {
 
     /**
@@ -112,6 +109,17 @@ public class HomePageTest extends SelenideTest {
     public void openSomethingNonExistingDeeperThanSingleLevel() {
         open("/void/something/here");
         verifyThatPage404Opened();
+    }
+
+    /**
+     * Tests that description input has placeholder, and it is not empty.
+     */
+    @Test
+    public void descriptionInputHasNotEmptyPlaceholder() {
+        //open it
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldHave(attribute("placeholder"));
     }
 
     /**
