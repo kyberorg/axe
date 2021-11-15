@@ -110,7 +110,7 @@ public class LoginView extends YalseeFormLayout {
 
         if (!isPasswordCorrect) {
             log.warn("{} password incorrect for username {}", TAG, username);
-            log.debug("{} password incorrect: username {}, password {}", TAG, username, password);
+            log.debug("{} password incorrect: username '{}', password '{}'", TAG, username, password);
             ErrorUtils.showError("Wrong credentials");
             return;
         }
