@@ -38,11 +38,13 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.ui.user.LoginView;
 import io.kyberorg.yalsee.ui.user.RegistrationView;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +53,7 @@ import java.util.Objects;
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 import static io.kyberorg.yalsee.ui.MainView.IDs.USER_MENU;
 
+@Slf4j
 @SpringComponent
 @UIScope
 @Push
@@ -70,6 +73,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
+    private Span title;
     private Button userButton;
 
     private HorizontalLayout userMenuButtons;
@@ -136,7 +140,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         DrawerToggle toggle = new DrawerToggle();
 
         String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
-        Span title = new Span(siteTitle);
+        title = new Span(siteTitle);
         title.addClassName("site-title");
 
         MenuBar userButton = userMenu();
@@ -242,11 +246,27 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         }
     }
 
+    private void updateSiteTitle() {
+        boolean sessionHasUser = appUtils.vaadinSessionHasUser(VaadinSession.getCurrent());
+        if (sessionHasUser) {
+            try {
+                final User user = (User) VaadinSession.getCurrent().getAttribute(App.Session.USER_KEY);
+                title.setText(String.format("%s's Yalsee", user.getUsername()).toUpperCase());
+            } catch (ClassCastException cce) {
+                log.warn("Something strange stored in session under '{}' key", App.Session.USER_KEY);
+                if (log.isDebugEnabled()) {
+                    log.debug("", cce);
+                }
+            }
+        }
+    }
+
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
         setUserButtonIcon();
         setUserMenuButtons();
+        updateSiteTitle();
     }
 
     @Override
