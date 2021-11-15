@@ -99,13 +99,14 @@
 
 @font-face {
     font-family: 'Pebble';
-    src: url('Pebble-Regular.woff2') format('woff2'),
-    url('Pebble-Regular.woff') format('woff');
+    src: url('/Pebble-Regular.woff2') format('woff2'),
+    url('/Pebble-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 
 html {
-    font-family: Pebble, sans-serif;
+    font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --lumo-font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
