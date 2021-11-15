@@ -96,3 +96,16 @@
 .yalsee-layout {
     padding-top: 1em;
 }
+
+@font-face {
+    font-family: 'Pebble';
+    src: url('Pebble-Regular.woff2') format('woff2'),
+    url('Pebble-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+html {
+    font-family: Pebble, sans-serif;
+}
