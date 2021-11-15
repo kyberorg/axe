@@ -46,7 +46,7 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
         name = "Yalsee - the link shortener",
         shortName = "yalsee",
         offlinePath = "offline-page.html",
-        offlineResources = {"images/logo.png"},
+        offlineResources = {"images/logo.png", "Pebble-Regular.woff"},
         description = "Yalsee - the link shortener")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
