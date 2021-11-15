@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.7.3</vaadin.version>
+        <vaadin.version>14.7.5</vaadin.version>
         
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -215,7 +215,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>5.4.0</version>
+            <version>5.4.0.1</version>
         </dependency>
         
         <!-- Emoji Parser -->
@@ -298,7 +298,7 @@
         <dependency>
             <groupId>org.junit-pioneer</groupId>
             <artifactId>junit-pioneer</artifactId>
-            <version>1.4.2</version>
+            <version>1.5.0</version>
             <scope>test</scope>
         </dependency>
 
