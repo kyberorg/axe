@@ -2,6 +2,7 @@
     font-size: large;
     padding-bottom: 15px;
     padding-top: 15px;
+    color: var(--lumo-primary-text-color);
 }
 
 a[highlight] {
@@ -13,6 +14,10 @@ a[highlight] {
     border-radius: 100%;
     width: 56px;
     height: 56px;
+}
+
+vaadin-drawer-toggle {
+    color: black;
 }
 
 vaadin-tab {
