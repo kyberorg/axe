@@ -70,6 +70,10 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
             if (token != null && isTokenExists && !isTokenExpired) {
                 if (tokenService.getToken(token).isPresent()) {
                     coreLayout = getResetPasswordForm(tokenService.getToken(token).get().getUser());
+                    OperationResult tokenDeletionResult = tokenService.deleteToken(token);
+                    if (tokenDeletionResult.notOk()) {
+                        log.warn("{} failed to delete token. Reason: {}", TAG, tokenDeletionResult);
+                    }
                 } else {
                     //should not happen
                     coreLayout = yalseeLayoutWithMessage("Internal System Error");
