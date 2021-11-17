@@ -102,10 +102,19 @@ public class UserService implements UserDetailsService {
         if (isUserExists(username)) {
             return OperationResult.conflict().withMessage(OP_USER_ALREADY_EXISTS);
         }
-        if (StringUtils.isBlank(plainPassword)) {
+        OperationResult passwordValidationResult = validatePassword(plainPassword);
+        if (passwordValidationResult.notOk()) {
+            return passwordValidationResult;
+        }
+
+        return OperationResult.success();
+    }
+
+    public OperationResult validatePassword(String password) {
+        if (StringUtils.isBlank(password)) {
             return OperationResult.malformedInput().withMessage(OP_EMPTY_PASSWORD);
         }
-        if (plainPassword.length() < PASSWORD_MIN_LENGTH) {
+        if (password.length() < PASSWORD_MIN_LENGTH) {
             return OperationResult.malformedInput().withMessage(OP_SHORT_PASSWORD);
         }
         return OperationResult.success();
@@ -158,5 +167,19 @@ public class UserService implements UserDetailsService {
 
     public boolean nowhereToSend(String result) {
         return result.equals(ERR_NO_PASSWORD_RESET_CHANNEL) || result.equals(ERR_PASSWORD_RESET_CHANNEL_UNCONFIRMED);
+    }
+
+    public OperationResult resetPassword(User user, String newPassword) {
+        try {
+            user.setPassword(constructPassword(newPassword));
+            userDao.save(user);
+        } catch (CannotCreateTransactionException e) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} Exception on storing new {}", TAG, User.class.getSimpleName());
+            log.debug("", e);
+            return OperationResult.generalFail();
+        }
+        return null;
     }
 }
