@@ -13,12 +13,16 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.services.user.TokenService;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.users.TokenType;
+import lombok.RequiredArgsConstructor;
 
 import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.START_POINT;
 
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.PASSWORD_RESET_PAGE, layout = MainView.class)
@@ -26,6 +30,8 @@ import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.START_POINT;
 public class PasswordResetView extends Div implements HasUrlParameter<String> {
     private static final String DIRECT_MESSAGE = "Not intended for direct use";
     private static final String NO_PARAMS_MESSAGE = "Not intended for use without required parameters";
+
+    private final TokenService tokenService;
 
     private final YalseeLayout yalseeLayout = new YalseeLayout();
     private final Span banner = new Span();
@@ -38,9 +44,10 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         if (requestHasNoParams(event)) {
             coreLayout = yalseeLayoutWithMessage(DIRECT_MESSAGE);
         } else if (isTokenParamsPresent(event)) {
-            //TODO control token via Server
             String token = getToken(event);
-            if (token != null && token.equals("TmpToken")) {
+            boolean isTokenExists = tokenService.isTokenExists(token, TokenType.PASSWORD_RESET_TOKEN);
+            boolean isTokenExpired = tokenService.isTokenExpired(token);
+            if (token != null && isTokenExists && !isTokenExpired) {
                 coreLayout = getResetPasswordForm();
             } else {
                 //no such token exception

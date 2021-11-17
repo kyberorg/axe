@@ -27,6 +27,9 @@
                                         <#case "account_confirmation">
                                             <#include "content/confirmation.ftl" parse=true>
                                             <#break>
+                                        <#case "password_reset">
+                                            <#include "content/passwordReset.ftl" parse=true>
+                                            <#break>
                                     </#switch>
                                 </td>
                             </tr>

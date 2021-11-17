@@ -4,8 +4,10 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -57,33 +59,47 @@ public class ForgotPasswordView extends YalseeFormLayout {
 
     private void onSubmit(final ClickEvent<Button> event) {
         final String username = usernameInput.getValue();
-        log.info("{} password reset attempt. Username: {}", TAG, username);
+        log.info("{} password reset attempt. Username: '{}'", TAG, username);
 
         User user;
         try {
             user = userService.loadUserByUsername(username);
         } catch (UsernameNotFoundException e) {
-            log.warn("{} username not found. Username {}", TAG, username);
+            log.warn("{} username not found. Username: '{}'", TAG, username);
             showSuccessMessage();
             return;
         }
 
-        final OperationResult sendPasswordResetCode = userService.sendPasswordResetCode(user);
-        if (sendPasswordResetCode.ok()) {
+        final OperationResult sendPasswordResetLinkResult = userService.sendPasswordResetLink(user);
+        if (sendPasswordResetLinkResult.ok()) {
             showSuccessMessage();
         } else {
-            if (sendPasswordResetCode.getResult().equals(OperationResult.SYSTEM_DOWN)) {
-                ErrorUtils.showError("");
-            } else {
+            boolean nowhereToSend = userService.nowhereToSend(sendPasswordResetLinkResult.getResult());
+            if (nowhereToSend) {
+                // Due to security reason attacker should never know about user's problem.
                 showSuccessMessage();
+            } else {
+                ErrorUtils.showError("Unable to send password reset link");
             }
         }
     }
 
     private void showSuccessMessage() {
-        Notification notification = new Notification("Password reset link successfully sent");
+        Notification notification = new Notification();
+
+        Span span = new Span("Password reset link successfully sent");
+        Button okButton = new Button("OK", e -> notification.close());
+
+        HorizontalLayout notificationLayout = new HorizontalLayout();
+        notificationLayout.add(span, okButton);
+
+        notification.add(notificationLayout);
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         notification.setPosition(Notification.Position.MIDDLE);
+
+        span.getStyle().set("margin-right", "0.5rem");
+        okButton.getStyle().set("margin-right", "0.5rem");
+
         notification.open();
     }
 

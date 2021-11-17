@@ -88,6 +88,37 @@ public class TokenService {
         }
     }
 
+    public OperationResult createPasswordResetToken(User user) {
+        boolean tokenAlreadyExists = tokenDao.existsByTokenTypeAndUser(TokenType.PASSWORD_RESET_TOKEN, user);
+        if (tokenAlreadyExists) {
+            return OperationResult.banned().withMessage(ERR_USER_ALREADY_HAS_TOKEN);
+        }
+
+        String token;
+        do {
+            token = UUID.randomUUID().toString();
+            tokenAlreadyExists = tokenDao.existsByToken(token);
+        } while (tokenAlreadyExists);
+
+        Token passwordResetToken = new Token();
+        passwordResetToken.setToken(token);
+        passwordResetToken.setTokenType(TokenType.PASSWORD_RESET_TOKEN);
+        passwordResetToken.setUser(user);
+        passwordResetToken.setCreated(Timestamp.from(Instant.now()));
+        passwordResetToken.setUpdated(Timestamp.from(Instant.now()));
+
+        try {
+            tokenDao.save(passwordResetToken);
+            return OperationResult.success().addPayload(passwordResetToken);
+        } catch (CannotCreateTransactionException c) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} failed to save password reset token {} for user {}", TAG, token, user);
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
     public boolean isTokenExists(String token, TokenType tokenType) {
         return tokenDao.existsByTokenAndTokenType(token, tokenType);
     }

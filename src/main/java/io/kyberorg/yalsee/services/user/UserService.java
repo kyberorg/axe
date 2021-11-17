@@ -1,9 +1,13 @@
 package io.kyberorg.yalsee.services.user;
 
+import io.kyberorg.yalsee.models.Authorization;
+import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.UserPreferences;
 import io.kyberorg.yalsee.models.dao.UserDao;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.user.passresetsenders.PassResetSenders;
+import io.kyberorg.yalsee.users.AuthProvider;
 import io.kyberorg.yalsee.utils.EncryptionUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,10 +34,18 @@ public class UserService implements UserDetailsService {
     public static final String OP_SHORT_PASSWORD = "Password is too short";
     public static final String ERR_NOT_VALID_CHARS_IN_USERNAME = "There are non-unicode chars in username";
     private static final String ERR_USERNAME_IS_TOO_LONG = "Username is too long";
+    private static final String ERR_NO_PASSWORD_RESET_CHANNEL = "User has no password reset channel";
+    private static final String ERR_PASSWORD_RESET_CHANNEL_NOT_FOUND = "Password Reset Channel no longer exists";
+    private static final String ERR_PASSWORD_RESET_CHANNEL_UNCONFIRMED = "Password Reset Channel unconfirmed";
+    private static final String ERR_PASSWORD_RESET_CHANNEL_DECRYPTION_FAIL = "Failed to decrypt Password Reset Channel";
+    private static final String ERR_PASSWORD_RESET_TOKEN_GENERATION_FAIL = "Failed to generate Password Reset Token";
 
     private final UserDao userDao;
     private final EncryptionUtils encryptionUtils;
     private final UserPreferencesService userPreferencesService;
+    private final AuthService authService;
+    private final TokenService tokenService;
+    private final PassResetSenders passResetSenders;
 
     public boolean isUserExists(final String username) {
         return userDao.findByUsername(username).isPresent();
@@ -110,8 +122,41 @@ public class UserService implements UserDetailsService {
         return plainPassword + serverSalt;
     }
 
-    public OperationResult sendPasswordResetCode(final User user) {
-        /// FIXME: 17.11.2021
-        return null;
+    public OperationResult sendPasswordResetLink(final User user) {
+        AuthProvider passwordResetChannel = userPreferencesService.getPasswordResetChannel(user);
+        if (passwordResetChannel == null) {
+            passwordResetChannel = userPreferencesService.getMainChannel(user);
+        }
+
+        if (passwordResetChannel == null || passwordResetChannel == AuthProvider.LOCAL) {
+            return OperationResult.generalFail().withMessage(ERR_NO_PASSWORD_RESET_CHANNEL);
+        }
+
+        Optional<Authorization> authorization = authService.getAuthorization(user, passwordResetChannel);
+        if (authorization.isEmpty()) {
+            return OperationResult.generalFail().withMessage(ERR_PASSWORD_RESET_CHANNEL_NOT_FOUND);
+        }
+
+        if (!authorization.get().isConfirmed()) {
+            return OperationResult.generalFail().withMessage(ERR_PASSWORD_RESET_CHANNEL_UNCONFIRMED);
+        }
+
+        Optional<String> destination = authService.decryptAuthorizationUser(authorization.get());
+        if (destination.isEmpty()) {
+            return OperationResult.generalFail().withMessage(ERR_PASSWORD_RESET_CHANNEL_DECRYPTION_FAIL);
+        }
+
+        OperationResult getTokenResult = tokenService.createPasswordResetToken(user);
+        if (getTokenResult.notOk()) {
+            return OperationResult.generalFail().withMessage(ERR_PASSWORD_RESET_TOKEN_GENERATION_FAIL);
+        }
+
+        String passwordResetToken = getTokenResult.getPayload(Token.class).getToken();
+
+        return passResetSenders.get(passwordResetChannel).sendResetLink(destination.get(), passwordResetToken);
+    }
+
+    public boolean nowhereToSend(String result) {
+        return result.equals(ERR_NO_PASSWORD_RESET_CHANNEL) || result.equals(ERR_PASSWORD_RESET_CHANNEL_UNCONFIRMED);
     }
 }

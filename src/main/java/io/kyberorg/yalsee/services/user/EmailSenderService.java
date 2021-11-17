@@ -82,6 +82,7 @@ public class EmailSenderService {
      */
     public enum Letter {
         ACCOUNT_CONFIRMATION,
-        OTP
+        OTP,
+        PASSWORD_RESET
     }
 }

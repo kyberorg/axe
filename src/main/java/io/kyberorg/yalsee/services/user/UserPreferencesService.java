@@ -82,4 +82,24 @@ public class UserPreferencesService {
             return null;
         }
     }
+
+    public AuthProvider getPasswordResetChannel(User user) {
+        Optional<UserPreferences> userPreferences = userPreferencesDao.findByUser(user);
+        if (userPreferences.isPresent()) {
+            return userPreferences.get().getPasswordResetChannel();
+        } else {
+            log.error("{} user {} has no {}", TAG, user, UserPreferences.class.getSimpleName());
+            return null;
+        }
+    }
+
+    public AuthProvider getMainChannel(User user) {
+        Optional<UserPreferences> userPreferences = userPreferencesDao.findByUser(user);
+        if (userPreferences.isPresent()) {
+            return userPreferences.get().getMainChannel();
+        } else {
+            log.error("{} user {} has no {}", TAG, user, UserPreferences.class.getSimpleName());
+            return null;
+        }
+    }
 }
