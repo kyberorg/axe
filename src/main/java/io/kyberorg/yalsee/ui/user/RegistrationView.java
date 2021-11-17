@@ -37,6 +37,7 @@ import io.kyberorg.yalsee.ui.core.RegistrationResultLayout;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.users.AuthProvider;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -48,6 +49,7 @@ import static io.kyberorg.yalsee.services.user.UserService.USERNAME_MAX_LENGTH;
 import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.BREAKPOINT;
 import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.START_POINT;
 
+@Slf4j
 @SpringComponent
 @UIScope
 @CssImport(value = "./css/registration_view.css")
@@ -55,6 +57,7 @@ import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.START_POINT;
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends Div {
+    private final String TAG = "[" + RegistrationView.class.getSimpleName() + "]";
 
     private final YalseeFormLayout yalseeFormLayout = new YalseeFormLayout();
 
@@ -198,9 +201,9 @@ public class RegistrationView extends Div {
 
     private List<Component> createLegalInfo() {
         legalInformationText.setId(IDs.LEGAL_INFO_TEXT);
-      
+
         legalInformationText.setText("By signing up, you accept our ");
-      
+
         //TODO correct location when ready
         linkToTerms.setId(IDs.LEGAL_INFO_TERMS_LINK);
         linkToTerms.setHref(Endpoint.UI.APP_INFO_PAGE);
@@ -391,6 +394,13 @@ public class RegistrationView extends Div {
         }
         Authorization emailAuthorization = emailAuthorityResult.getPayload(Authorization.class);
         registrationResult.showAccountCreatedLine(true);
+
+        OperationResult setMainCommunicationChannelResult =
+                userPreferencesService.updateMainChannel(createdUser, AuthProvider.EMAIL);
+        if (setMainCommunicationChannelResult.notOk()) {
+            log.error("{} failed to update Main Channel for {}. Reason: {}",
+                    TAG, createdUser.getUsername(), setMainCommunicationChannelResult);
+        }
 
         if (tfaEnabled) {
             OperationResult updatePreferencesResult =

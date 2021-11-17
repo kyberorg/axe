@@ -20,7 +20,7 @@ public class UserPreferencesService {
 
     private final UserPreferencesDao userPreferencesDao;
 
-    public void createEmptyPreferences(final User user) {
+    public void createNewPreferences(final User user) {
         UserPreferences userPreferences = new UserPreferences();
         userPreferences.setUser(user);
         userPreferencesDao.save(userPreferences);
@@ -59,6 +59,24 @@ public class UserPreferencesService {
         Optional<UserPreferences> userPreferences = userPreferencesDao.findByUser(user);
         if (userPreferences.isPresent()) {
             return userPreferences.get().getTfaChannel();
+        } else {
+            log.error("{} user {} has no {}", TAG, user, UserPreferences.class.getSimpleName());
+            return null;
+        }
+    }
+
+    public OperationResult updateMainChannel(User user, AuthProvider mainChannel) {
+        Optional<UserPreferences> userPreferences = userPreferencesDao.findByUser(user);
+        if (userPreferences.isPresent()) {
+            try {
+                userPreferences.get().setMainChannel(mainChannel);
+                userPreferencesDao.save(userPreferences.get());
+                return OperationResult.success();
+            } catch (CannotCreateTransactionException c) {
+                return OperationResult.databaseDown();
+            } catch (Exception e) {
+                return OperationResult.generalFail();
+            }
         } else {
             log.error("{} user {} has no {}", TAG, user, UserPreferences.class.getSimpleName());
             return null;

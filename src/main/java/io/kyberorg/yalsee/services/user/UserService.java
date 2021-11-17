@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
             log.info("{} User saved. Username: {}", TAG, newUser.getUsername());
 
             //create user prefs
-            userPreferencesService.createEmptyPreferences(savedUser);
+            userPreferencesService.createNewPreferences(savedUser);
             log.info("{} created {} for '{}' user", TAG, UserPreferences.class.getSimpleName(), username);
             return OperationResult.success().addPayload(savedUser);
         } catch (CannotCreateTransactionException e) {
@@ -108,5 +108,10 @@ public class UserService implements UserDetailsService {
     private String constructPassword(final String plainPassword) {
         final String serverSalt = encryptionUtils.getPasswordSalt();
         return plainPassword + serverSalt;
+    }
+
+    public OperationResult sendPasswordResetCode(final User user) {
+        /// FIXME: 17.11.2021
+        return null;
     }
 }

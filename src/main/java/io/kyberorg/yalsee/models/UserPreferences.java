@@ -26,4 +26,11 @@ public class UserPreferences extends BaseModel {
     @Column(name = "tfa_channel", nullable = false)
     private AuthProvider tfaChannel = AuthProvider.LOCAL;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "main_channel", nullable = false)
+    private AuthProvider mainChannel = AuthProvider.LOCAL;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "password_reset_channel")
+    private AuthProvider passwordResetChannel;
 }

@@ -124,6 +124,12 @@
             <column name="tfa_channel" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="main_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_reset_channel" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_preferences"
                                  constraintName="FK_USER_PREFERENCES_ON_USER" referencedColumnNames="id"
@@ -150,6 +156,9 @@
             <column name="user_id" value="1"/>
             <column name="tfa_enabled" valueBoolean="false"/>
             <column name="tfa_channel" value="LOCAL"/>
+            <column name="main_channel" value="LOCAL"/>
+            <!-- Next line is here just for dokumentation. Do not uncomment it. -->
+            <!--<column name="password_reset_channel" value="null"/>-->
         </insert>
     </changeSet>
 </databaseChangeLog>
