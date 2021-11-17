@@ -214,7 +214,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void setUserButtonIcon() {
-        boolean sessionHasUser = appUtils.vaadinSessionHasUser(VaadinSession.getCurrent());
+        boolean sessionHasUser = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
 
         if (sessionHasUser) {
             userButton.setIcon(VaadinIcon.SPECIALIST.create());
@@ -225,8 +225,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
     private void setUserMenuButtons() {
         userMenuButtons.removeAll();
-        boolean sessionHasUser = appUtils.vaadinSessionHasUser(VaadinSession.getCurrent());
-        if (sessionHasUser) {
+        boolean userLoggedIn = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
+        if (userLoggedIn) {
             logoutButton = new Button("Logout", VaadinIcon.SIGN_OUT.create());
             logoutButton.setId(IDs.LOGOUT_BUTTON);
             logoutButton.addClickListener(this::onLogoutButtonClicked);
@@ -247,17 +247,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void updateSiteTitle() {
-        boolean sessionHasUser = appUtils.vaadinSessionHasUser(VaadinSession.getCurrent());
-        if (sessionHasUser) {
-            try {
-                final User user = (User) VaadinSession.getCurrent().getAttribute(App.Session.USER_KEY);
-                title.setText(String.format("%s's Yalsee", user.getUsername()).toUpperCase());
-            } catch (ClassCastException cce) {
-                log.warn("Something strange stored in session under '{}' key", App.Session.USER_KEY);
-                if (log.isDebugEnabled()) {
-                    log.debug("", cce);
-                }
-            }
+        boolean userLoggedIn = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
+        if (userLoggedIn) {
+            final User user = appUtils.getUser(VaadinSession.getCurrent());
+            title.setText(String.format("%s's Yalsee", user.getUsername()).toUpperCase());
         }
     }
 

@@ -13,6 +13,7 @@ import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.utils.session.SessionBox;
 import io.kyberorg.yalsee.utils.session.SessionBoxRecord;
 import lombok.Getter;
@@ -26,8 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.net.URI;
-import java.util.Objects;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 /**
  * App-wide tools.
@@ -436,11 +437,27 @@ public class AppUtils implements Serializable {
         session.close();
     }
 
-    public boolean vaadinSessionHasUser(final VaadinSession session) {
+    public boolean isUserLoggedIn(final VaadinSession session) {
         if (session != null) {
             return Objects.nonNull(session.getAttribute(App.Session.USER_KEY));
         } else {
             return false;
+        }
+    }
+
+    public User getUser(final VaadinSession session) {
+        if (session != null) {
+            try {
+                return (User) session.getAttribute(App.Session.USER_KEY);
+            } catch (ClassCastException cce) {
+                log.warn("Something strange stored in session under '{}' key", App.Session.USER_KEY);
+                if (log.isDebugEnabled()) {
+                    log.debug("", cce);
+                }
+                throw cce;
+            }
+        } else {
+            return null;
         }
     }
 
