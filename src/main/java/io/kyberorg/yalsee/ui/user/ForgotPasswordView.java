@@ -79,6 +79,7 @@ public class ForgotPasswordView extends YalseeFormLayout {
                 // Due to security reason attacker should never know about user's problem.
                 showSuccessMessage();
             } else {
+                log.error("{} failed send password reset link {}", TAG, sendPasswordResetLinkResult);
                 ErrorUtils.showError("Unable to send password reset link");
             }
         }
