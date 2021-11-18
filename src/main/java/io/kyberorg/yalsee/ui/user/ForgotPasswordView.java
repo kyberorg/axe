@@ -4,10 +4,6 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -70,7 +66,6 @@ public class ForgotPasswordView extends YalseeFormLayout {
             return;
         }
 
-        usernameInput.clear();
         final OperationResult sendPasswordResetLinkResult = userService.sendPasswordResetLink(user);
         if (sendPasswordResetLinkResult.ok()) {
             showSuccessMessage();
@@ -87,22 +82,7 @@ public class ForgotPasswordView extends YalseeFormLayout {
     }
 
     private void showSuccessMessage() {
-        Notification notification = new Notification();
-
-        Span span = new Span("Password reset link successfully sent");
-        Button okButton = new Button("OK", e -> notification.close());
-
-        HorizontalLayout notificationLayout = new HorizontalLayout();
-        notificationLayout.add(span, okButton);
-
-        notification.add(notificationLayout);
-        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        notification.setPosition(Notification.Position.MIDDLE);
-
-        span.getStyle().set("margin-right", "0.5rem");
-        okButton.getStyle().set("margin-right", "0.5rem");
-
-        notification.open();
+        replaceSubmitButtonWithText("Email sent, please check your inbox and follow the instructions.");
     }
 
     public static final class IDs {

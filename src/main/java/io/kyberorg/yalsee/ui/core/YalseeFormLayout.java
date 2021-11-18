@@ -92,6 +92,11 @@ public class YalseeFormLayout extends YalseeLayout {
         forgotPasswordSection.setVisible(true);
     }
 
+    public void replaceSubmitButtonWithText(final String text) {
+        Span span = new Span(text);
+        form.replace(submitButton, span);
+    }
+
     private void init() {
         forgotPasswordLink.setHref(Endpoint.UI.FORGOT_PASSWORD_PAGE);
         forgotPasswordLink.setText("Forgot your password?");
