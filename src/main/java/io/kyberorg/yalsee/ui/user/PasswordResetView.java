@@ -136,6 +136,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         }
         OperationResult passwordResetResult = userService.resetPassword(user, password);
         if (passwordResetResult.ok()) {
+            cleanFields();
             showSuccessBanner();
         } else {
             log.error("{} failed to update password", TAG);
@@ -143,11 +144,17 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         }
     }
 
+    private void cleanFields() {
+        passwordField.clear();
+        repeatPasswordField.clear();
+    }
+
     private void showSuccessBanner() {
         Notification notification = new Notification();
 
         Span span = new Span("Password successfully updated. Now you can login with new password");
         Button loginPageButton = new Button("To Login Page", e -> {
+            notification.close();
             if (e.getSource().getUI().isPresent()) {
                 final UI ui = e.getSource().getUI().get();
                 ui.navigate(Endpoint.UI.LOGIN_PAGE);
@@ -155,6 +162,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         });
 
         HorizontalLayout notificationLayout = new HorizontalLayout();
+        notificationLayout.setWidthFull();
         notificationLayout.add(span, loginPageButton);
 
         notification.add(notificationLayout);
@@ -162,6 +170,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         notification.setPosition(Notification.Position.MIDDLE);
 
         span.getStyle().set("margin-right", "0.5rem");
+        span.getStyle().set("align-self", "center");
         loginPageButton.getStyle().set("margin-right", "0.5rem");
 
         notification.open();
