@@ -171,7 +171,7 @@ public class UserService implements UserDetailsService {
 
     public OperationResult resetPassword(User user, String newPassword) {
         try {
-            user.setPassword(constructPassword(newPassword));
+            user.setPassword(encryptionUtils.getPasswordEncoder().encode(constructPassword(newPassword)));
             userDao.save(user);
             return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
