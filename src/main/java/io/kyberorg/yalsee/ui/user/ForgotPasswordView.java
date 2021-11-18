@@ -70,6 +70,7 @@ public class ForgotPasswordView extends YalseeFormLayout {
             return;
         }
 
+        usernameInput.clear();
         final OperationResult sendPasswordResetLinkResult = userService.sendPasswordResetLink(user);
         if (sendPasswordResetLinkResult.ok()) {
             showSuccessMessage();

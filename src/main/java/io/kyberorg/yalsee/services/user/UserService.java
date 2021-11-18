@@ -173,6 +173,7 @@ public class UserService implements UserDetailsService {
         try {
             user.setPassword(constructPassword(newPassword));
             userDao.save(user);
+            return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
@@ -180,6 +181,5 @@ public class UserService implements UserDetailsService {
             log.debug("", e);
             return OperationResult.generalFail();
         }
-        return null;
     }
 }
