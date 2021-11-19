@@ -18,6 +18,7 @@ public interface TimeRepository<T extends TimeModel, ID> extends CrudRepository<
      * Saves new or updates current record. Also updates "updated" field and save entity.
      *
      * @param entity not null model to save
+     * @return stored entity
      */
     default T saveOrUpdate(T entity) {
         //noinspection unchecked
