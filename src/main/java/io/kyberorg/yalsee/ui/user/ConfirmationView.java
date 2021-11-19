@@ -1,6 +1,10 @@
 package io.kyberorg.yalsee.ui.user;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
@@ -95,8 +99,26 @@ public class ConfirmationView extends Div implements HasUrlParameter<String> {
     private Component getSuccess() {
         Result result = new Result(true);
         result.setSuccessText("Account Confirmed");
-        yalseeLayout.add(result);
+
+        Button loginPageButton = new Button("Login Page", this::openLoginPage);
+        loginPageButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        yalseeLayout.add(result, loginPageButton);
         return yalseeLayout;
+    }
+
+    private void openLoginPage(ClickEvent<Button> event) {
+        UI ui;
+        if (getUI().isPresent()) {
+            ui = getUI().get();
+        } else if (event.getSource().getUI().isPresent()) {
+            ui = event.getSource().getUI().get();
+        } else {
+            ui = null;
+        }
+        if (ui != null) {
+            ui.navigate(Endpoint.UI.LOGIN_PAGE);
+        }
     }
 
 }

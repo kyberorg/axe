@@ -2,17 +2,10 @@ package io.kyberorg.yalsee.ui.user;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -137,7 +130,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         OperationResult passwordResetResult = userService.resetPassword(user, password);
         if (passwordResetResult.ok()) {
             cleanFields();
-            showSuccessBanner();
+            showSuccessMessage();
         } else {
             log.error("{} failed to update password", TAG);
             ErrorUtils.showError("Failed to update password. System error. Try again later");
@@ -149,31 +142,11 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         repeatPasswordField.clear();
     }
 
-    private void showSuccessBanner() {
-        Notification notification = new Notification();
+    private void showSuccessMessage() {
+        Span span = new Span("Password successfully updated. Now you can login with new password. ");
+        Anchor loginPageLink = new Anchor(Endpoint.UI.LOGIN_PAGE, "Login Page");
 
-        Span span = new Span("Password successfully updated. Now you can login with new password");
-        Button loginPageButton = new Button("To Login Page", e -> {
-            notification.close();
-            if (e.getSource().getUI().isPresent()) {
-                final UI ui = e.getSource().getUI().get();
-                ui.navigate(Endpoint.UI.LOGIN_PAGE);
-            }
-        });
-
-        HorizontalLayout notificationLayout = new HorizontalLayout();
-        notificationLayout.setWidthFull();
-        notificationLayout.add(span, loginPageButton);
-
-        notification.add(notificationLayout);
-        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        notification.setPosition(Notification.Position.MIDDLE);
-
-        span.getStyle().set("margin-right", "0.5rem");
-        span.getStyle().set("align-self", "center");
-        loginPageButton.getStyle().set("margin-right", "0.5rem");
-
-        notification.open();
+        formLayout.replaceSubmitButtonWithComponents(span, loginPageLink);
     }
 
     private YalseeLayout noSuchTokenLayout() {

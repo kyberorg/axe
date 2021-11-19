@@ -97,6 +97,11 @@ public class YalseeFormLayout extends YalseeLayout {
         form.replace(submitButton, span);
     }
 
+    public void replaceSubmitButtonWithComponents(final Component... components) {
+        Div componentsBox = new Div(components);
+        form.replace(submitButton, componentsBox);
+    }
+
     private void init() {
         forgotPasswordLink.setHref(Endpoint.UI.FORGOT_PASSWORD_PAGE);
         forgotPasswordLink.setText("Forgot your password?");
