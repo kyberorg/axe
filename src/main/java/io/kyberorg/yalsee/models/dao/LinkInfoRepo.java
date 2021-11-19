@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.models.dao;
 
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.base.TimeRepository;
-import org.springframework.data.repository.Repository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import java.util.List;
  *
  * @since 3.2
  */
-@org.springframework.stereotype.Repository
-public interface LinkInfoRepo extends Repository<LinkInfo, Long>, TimeRepository<LinkInfo, Long> {
+@Repository
+public interface LinkInfoRepo extends TimeRepository<LinkInfo, Long> {
 
     /**
      * Finds {@link LinkInfo} objects stored within given session.
@@ -45,11 +45,4 @@ public interface LinkInfoRepo extends Repository<LinkInfo, Long>, TimeRepository
      * @return number of found records. Normally it should be only 1 record or 0 records if nothing found.
      */
     long countByIdent(String ident);
-
-    /**
-     * Deletes record.
-     *
-     * @param linkInfoToDelete valid {@link LinkInfo} object to delete.
-     */
-    void delete(LinkInfo linkInfoToDelete);
 }

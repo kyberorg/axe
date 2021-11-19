@@ -1,18 +1,26 @@
 package io.kyberorg.yalsee.models.dao.base;
 
 import io.kyberorg.yalsee.models.TimeModel;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import static io.kyberorg.yalsee.models.TimeModel.now;
+
+/**
+ * Time aware {@link CrudRepository}.
+ *
+ * @param <T>  not null model that implements {@link TimeModel} interface.
+ * @param <ID> type of ID field.
+ */
 @NoRepositoryBean
-public interface TimeRepository<T extends TimeModel, ID> {
+public interface TimeRepository<T extends TimeModel, ID> extends CrudRepository<T, ID> {
     /**
-     * Saves a given entity and updates time fields accordingly.
-     * Use the returned instance for further operations as the save operation might have changed the
-     * entity instance completely.
+     * Updates "updated" field and save entity.
      *
-     * @param entity must not be {@literal null}.
-     * @return the saved entity; will never be {@literal null}.
-     * @throws IllegalArgumentException in case the given {@literal entity} is {@literal null}.
+     * @param entity not null model to save
      */
-    T save(T entity);
+    default void saveAndUpdateTime(T entity) {
+        entity.setUpdated(now());
+        save(entity);
+    }
 }

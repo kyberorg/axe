@@ -99,7 +99,7 @@ public class LinkInfoService {
      * @param updatedLinkInfo {@link LinkInfo} object with updated fields.
      */
     public void update(final LinkInfo updatedLinkInfo) {
-        repo.save(updatedLinkInfo);
+        repo.saveAndUpdateTime(updatedLinkInfo);
     }
 
     private boolean linkInfoExistsForIdent(final String ident) {
