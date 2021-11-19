@@ -46,11 +46,11 @@ public class LinkInfoService {
             linkInfo.setSession(session);
         }
 
-        repo.save(linkInfo);
+        repo.saveOrUpdate(linkInfo);
     }
 
     /**
-     * Deletes {@link LinkInfo}  by its ident.
+     * Deletes {@link LinkInfo} by its ident.
      *
      * @param ident string with part that identifies short link
      */
@@ -99,7 +99,7 @@ public class LinkInfoService {
      * @param updatedLinkInfo {@link LinkInfo} object with updated fields.
      */
     public void update(final LinkInfo updatedLinkInfo) {
-        repo.saveAndUpdateTime(updatedLinkInfo);
+        repo.saveOrUpdate(updatedLinkInfo);
     }
 
     private boolean linkInfoExistsForIdent(final String ident) {
