@@ -23,6 +23,11 @@ public abstract class TimeModel extends BaseModel {
     @Column(name = "updated", nullable = false)
     private Timestamp updated = now();
 
+    /**
+     * Provides current time aka now as {@link Timestamp}.
+     *
+     * @return {@link Timestamp} from {@link Instant#now()}
+     */
     public static Timestamp now() {
         return Timestamp.from(Instant.now());
     }
