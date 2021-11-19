@@ -19,8 +19,11 @@ public interface TimeRepository<T extends TimeModel, ID> extends CrudRepository<
      *
      * @param entity not null model to save
      */
-    default void saveAndUpdateTime(T entity) {
-        entity.setUpdated(now());
-        save(entity);
+    default T saveAndUpdateTime(T entity) {
+        //noinspection unchecked
+        if (entity.getId() != null && existsById((ID) entity.getId())) {
+            entity.setUpdated(now());
+        }
+        return save(entity);
     }
 }
