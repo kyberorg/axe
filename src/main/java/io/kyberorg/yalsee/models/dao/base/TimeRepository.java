@@ -15,12 +15,16 @@ import static io.kyberorg.yalsee.models.TimeModel.now;
 @NoRepositoryBean
 public interface TimeRepository<T extends TimeModel, ID> extends CrudRepository<T, ID> {
     /**
-     * Updates "updated" field and save entity.
+     * Saves new or updates current record. Also updates "updated" field and save entity.
      *
      * @param entity not null model to save
+     * @return stored entity
      */
-    default void saveAndUpdateTime(T entity) {
-        entity.setUpdated(now());
-        save(entity);
+    default T saveOrUpdate(T entity) {
+        //noinspection unchecked
+        if (entity.getId() != null && existsById((ID) entity.getId())) {
+            entity.setUpdated(now());
+        }
+        return save(entity);
     }
 }

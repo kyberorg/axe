@@ -100,7 +100,7 @@ public class TokenService {
         }
 
         try {
-            tokenDao.saveAndUpdateTime(passwordResetToken);
+            tokenDao.saveOrUpdate(passwordResetToken);
             return OperationResult.success().addPayload(passwordResetToken);
         } catch (CannotCreateTransactionException c) {
             return OperationResult.databaseDown();
