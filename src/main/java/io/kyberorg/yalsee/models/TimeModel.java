@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
  * Time-related extension for models. Provides {@link #created} and {@link #updated} fields.
@@ -17,8 +18,12 @@ import java.sql.Timestamp;
 @MappedSuperclass
 public abstract class TimeModel extends BaseModel {
     @Column(name = "created", nullable = false)
-    private Timestamp created;
+    private Timestamp created = now();
 
     @Column(name = "updated", nullable = false)
-    private Timestamp updated;
+    private Timestamp updated = now();
+
+    public static Timestamp now() {
+        return Timestamp.from(Instant.now());
+    }
 }

@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +45,6 @@ public class LinkInfoService {
         if (StringUtils.isNotBlank(session)) {
             linkInfo.setSession(session);
         }
-        linkInfo.setCreated(Timestamp.from(Instant.now()));
-        linkInfo.setUpdated(Timestamp.from(Instant.now()));
 
         repo.save(linkInfo);
     }
@@ -103,7 +99,6 @@ public class LinkInfoService {
      * @param updatedLinkInfo {@link LinkInfo} object with updated fields.
      */
     public void update(final LinkInfo updatedLinkInfo) {
-        updatedLinkInfo.setUpdated(Timestamp.from(Instant.now()));
         repo.save(updatedLinkInfo);
     }
 

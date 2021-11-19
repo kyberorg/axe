@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.models.dao;
 
 import io.kyberorg.yalsee.models.LinkInfo;
+import io.kyberorg.yalsee.models.dao.base.TimeRepository;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @since 3.2
  */
 @org.springframework.stereotype.Repository
-public interface LinkInfoRepo extends Repository<LinkInfo, Long> {
+public interface LinkInfoRepo extends Repository<LinkInfo, Long>, TimeRepository<LinkInfo, Long> {
 
     /**
      * Finds {@link LinkInfo} objects stored within given session.
@@ -20,14 +21,6 @@ public interface LinkInfoRepo extends Repository<LinkInfo, Long> {
      * @return list of {@link LinkInfo} records or empty list if nothing found.
      */
     List<LinkInfo> findBySession(String sessionId);
-
-    /**
-     * Saves  info to DB.
-     *
-     * @param linkInfoObject {@link LinkInfo} object with filled fields
-     * @return same {@link LinkInfo} object, but enriched with ID field
-     */
-    LinkInfo save(LinkInfo linkInfoObject);
 
     /**
      * Finds single record by its id.
