@@ -34,12 +34,7 @@ public class TokenService {
             return OperationResult.banned().withMessage(ERR_USER_ALREADY_HAS_TOKEN);
         }
 
-        boolean tokenExist;
-        String token;
-        do {
-            token = UUID.randomUUID().toString();
-            tokenExist = tokenDao.existsByToken(token);
-        } while (tokenExist);
+        String token = generateNewToken(Type.UUID);
 
         Token confirmationToken = new Token();
         confirmationToken.setToken(token);
@@ -62,12 +57,7 @@ public class TokenService {
     }
 
     public OperationResult createVerificationCode(User user) {
-        boolean codeExists;
-        String code;
-        do {
-            code = RandomStringUtils.randomNumeric(6);
-            codeExists = tokenDao.existsByToken(code);
-        } while (codeExists);
+        String code = generateNewToken(Type.CODE);
 
         Token verificationCode = new Token();
         verificationCode.setToken(code);
@@ -90,21 +80,25 @@ public class TokenService {
 
     public OperationResult createPasswordResetToken(User user) {
         boolean tokenAlreadyExists = tokenDao.existsByTokenTypeAndUser(TokenType.PASSWORD_RESET_TOKEN, user);
+        Token passwordResetToken;
         if (tokenAlreadyExists) {
-            return OperationResult.banned().withMessage(ERR_USER_ALREADY_HAS_TOKEN);
+            //update existing one
+            passwordResetToken = tokenDao.findByTokenTypeAndUser(TokenType.PASSWORD_RESET_TOKEN, user);
+
+            String newToken = generateNewToken(Type.UUID);
+
+            passwordResetToken.setToken(newToken);
+        } else {
+            //creating new one
+            passwordResetToken = new Token();
+
+            String token = generateNewToken(Type.UUID);
+
+            passwordResetToken.setToken(token);
+            passwordResetToken.setTokenType(TokenType.PASSWORD_RESET_TOKEN);
+            passwordResetToken.setUser(user);
+            passwordResetToken.setCreated(Timestamp.from(Instant.now()));
         }
-
-        String token;
-        do {
-            token = UUID.randomUUID().toString();
-            tokenAlreadyExists = tokenDao.existsByToken(token);
-        } while (tokenAlreadyExists);
-
-        Token passwordResetToken = new Token();
-        passwordResetToken.setToken(token);
-        passwordResetToken.setTokenType(TokenType.PASSWORD_RESET_TOKEN);
-        passwordResetToken.setUser(user);
-        passwordResetToken.setCreated(Timestamp.from(Instant.now()));
         passwordResetToken.setUpdated(Timestamp.from(Instant.now()));
 
         try {
@@ -113,7 +107,7 @@ public class TokenService {
         } catch (CannotCreateTransactionException c) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
-            log.error("{} failed to save password reset token {} for user {}", TAG, token, user);
+            log.error("{} failed to save {} for user {}", TAG, TokenType.PASSWORD_RESET_TOKEN.name(), user);
             log.debug("", e);
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
@@ -153,5 +147,29 @@ public class TokenService {
         } catch (Exception e) {
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
+    }
+
+    private String generateNewToken(Type type) {
+        boolean tokenAlreadyExists;
+        String tokenString;
+        do {
+            switch (type) {
+                case CODE:
+                    tokenString = RandomStringUtils.randomNumeric(6);
+                    break;
+                case UUID:
+                default:
+                    tokenString = UUID.randomUUID().toString();
+                    break;
+            }
+
+            tokenAlreadyExists = tokenDao.existsByToken(tokenString);
+        } while (tokenAlreadyExists);
+        return tokenString;
+    }
+
+    public enum Type {
+        UUID,
+        CODE
     }
 }

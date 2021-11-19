@@ -16,4 +16,6 @@ public interface TokenDao extends CrudRepository<Token, Long> {
 
     Optional<Token> findFirstByToken(String token);
 
+    Token findByTokenTypeAndUser(TokenType tokenType, User user);
+
 }
