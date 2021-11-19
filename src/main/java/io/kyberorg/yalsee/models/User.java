@@ -10,8 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -39,12 +37,9 @@ public class User extends TimeModel implements UserDetails {
     private boolean locked = false;
 
     public static User create(final String username, final String encryptedPassword) {
-        Timestamp now = Timestamp.from(Instant.now());
         User userObject = new User();
         userObject.setUsername(username);
         userObject.setPassword(encryptedPassword);
-        userObject.setCreated(now);
-        userObject.setUpdated(now);
         return userObject;
     }
 

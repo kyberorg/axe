@@ -97,12 +97,10 @@ public class TokenService {
             passwordResetToken.setToken(token);
             passwordResetToken.setTokenType(TokenType.PASSWORD_RESET_TOKEN);
             passwordResetToken.setUser(user);
-            passwordResetToken.setCreated(Timestamp.from(Instant.now()));
         }
-        passwordResetToken.setUpdated(Timestamp.from(Instant.now()));
 
         try {
-            tokenDao.save(passwordResetToken);
+            tokenDao.saveAndUpdateTime(passwordResetToken);
             return OperationResult.success().addPayload(passwordResetToken);
         } catch (CannotCreateTransactionException c) {
             return OperationResult.databaseDown();
