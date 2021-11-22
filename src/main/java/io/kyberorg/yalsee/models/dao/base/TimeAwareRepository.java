@@ -15,7 +15,7 @@ import static io.kyberorg.yalsee.models.TimeModel.now;
 @NoRepositoryBean
 public interface TimeAwareRepository<T extends TimeModel, ID> extends CrudRepository<T, ID> {
     /**
-     * Saves new or updates current record. Also updates "updated" field and save entity.
+     * Updates current record. Also updates "updated" field and save entity.
      *
      * @param entity not null model to save
      * @return stored entity
