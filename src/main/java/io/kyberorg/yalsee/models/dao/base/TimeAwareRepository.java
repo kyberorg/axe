@@ -13,14 +13,14 @@ import static io.kyberorg.yalsee.models.TimeModel.now;
  * @param <ID> type of ID field.
  */
 @NoRepositoryBean
-public interface TimeRepository<T extends TimeModel, ID> extends CrudRepository<T, ID> {
+public interface TimeAwareRepository<T extends TimeModel, ID> extends CrudRepository<T, ID> {
     /**
      * Saves new or updates current record. Also updates "updated" field and save entity.
      *
      * @param entity not null model to save
      * @return stored entity
      */
-    default T saveOrUpdate(T entity) {
+    default T update(T entity) {
         //noinspection unchecked
         if (entity.getId() != null && existsById((ID) entity.getId())) {
             entity.setUpdated(now());
