@@ -7,10 +7,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -59,6 +56,7 @@ import static io.kyberorg.yalsee.ui.core.YalseeFormLayout.START_POINT;
 @PageTitle("Yalsee: Registration Page")
 public class RegistrationView extends Div {
     private final String TAG = "[" + RegistrationView.class.getSimpleName() + "]";
+    private static final String USERNAME_NOT_VALID = "Username Not Valid";
 
     private final YalseeFormLayout yalseeFormLayout = new YalseeFormLayout();
 
@@ -246,10 +244,7 @@ public class RegistrationView extends Div {
         }
         boolean isUsernameAlphaNumeric = UsernameValidator.isValid(username);
         if (!isUsernameAlphaNumeric) {
-            onInvalidUsername("Username should be 2-20 chars long and consist of " +
-                    "alphanumeric characters (a-zA-Z0-9), lowercase, or uppercase. " +
-                    "Also allowed of the dot (.), underscore (_), and hyphen (-), " +
-                    "but they should not be first or last character nor appear consecutively.");
+            onInvalidUsername(USERNAME_NOT_VALID);
             return;
         }
         boolean isUsernameTooLong = username.length() > USERNAME_MAX_LENGTH;
@@ -427,9 +422,26 @@ public class RegistrationView extends Div {
     }
 
     private void onInvalidUsername(final String failureText) {
+
         usernameInput.setInvalid(true);
         userValidationResult.setOperationSuccessful(false);
-        userValidationResult.setFailureText(failureText);
+        if (failureText.equals(USERNAME_NOT_VALID)) {
+            Span span = new Span("Username should be");
+
+            UnorderedList ul = new UnorderedList();
+            ul.removeAll();
+            Stream.of("The number of characters must be between 2 and 20.",
+                            "Alphanumeric characters (a-zA-Z0-9), lowercase, or uppercase.",
+                            "Also allowed of the dot (.), underscore (_), and hyphen (-).",
+                            "The dot (.), underscore (_), or hyphen (-) must not be the first or last character.",
+                            "The dot (.), underscore (_), or hyphen (-) does not appear consecutively, e.g., name..surname.")
+                    .forEach(requirement -> ul.add(new ListItem(requirement)));
+
+            userValidationResult.setTextComponents(span, ul);
+        } else {
+            userValidationResult.setFailureText(failureText);
+        }
+
         usernameValidation.removeAll();
         usernameValidation.add(userValidationResult);
         usernameValidation.setVisible(true);
