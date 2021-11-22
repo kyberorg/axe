@@ -12,8 +12,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,8 +39,6 @@ public class TokenService {
         confirmationToken.setTokenType(TokenType.ACCOUNT_CONFIRMATION_TOKEN);
         confirmationToken.setUser(user);
         confirmationToken.setConfirmationFor(authorization);
-        confirmationToken.setCreated(Timestamp.from(Instant.now()));
-        confirmationToken.setUpdated(Timestamp.from(Instant.now()));
 
         try {
             tokenDao.save(confirmationToken);
@@ -63,8 +59,6 @@ public class TokenService {
         verificationCode.setToken(code);
         verificationCode.setTokenType(TokenType.LOGIN_VERIFICATION_TOKEN);
         verificationCode.setUser(user);
-        verificationCode.setCreated(Timestamp.from(Instant.now()));
-        verificationCode.setUpdated(Timestamp.from(Instant.now()));
 
         try {
             tokenDao.save(verificationCode);
@@ -100,7 +94,7 @@ public class TokenService {
         }
 
         try {
-            tokenDao.saveOrUpdate(passwordResetToken);
+            tokenDao.update(passwordResetToken);
             return OperationResult.success().addPayload(passwordResetToken);
         } catch (CannotCreateTransactionException c) {
             return OperationResult.databaseDown();
