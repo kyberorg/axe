@@ -11,9 +11,10 @@ import static io.kyberorg.yalsee.models.TimeModel.now;
  *
  * @param <T>  not null model that implements {@link TimeModel} interface.
  * @param <ID> type of ID field.
+ * @since 3.7
  */
 @NoRepositoryBean
-public interface TimeAwareRepository<T extends TimeModel, ID> extends CrudRepository<T, ID> {
+public interface TimeAwareCrudRepository<T extends TimeModel, ID> extends CrudRepository<T, ID> {
     /**
      * Updates current record. Also updates "updated" field and save entity.
      *
