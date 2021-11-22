@@ -11,6 +11,7 @@ import static io.kyberorg.yalsee.models.TimeModel.now;
  *
  * @param <T>  not null model that implements {@link TimeModel} interface.
  * @param <ID> type of ID field.
+ *
  * @since 3.7
  */
 @NoRepositoryBean
