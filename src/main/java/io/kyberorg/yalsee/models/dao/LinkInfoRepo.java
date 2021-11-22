@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.models.dao;
 
 import io.kyberorg.yalsee.models.LinkInfo;
-import io.kyberorg.yalsee.models.dao.base.TimeRepository;
+import io.kyberorg.yalsee.models.dao.base.TimeAwareCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * @since 3.2
  */
 @Repository
-public interface LinkInfoRepo extends TimeRepository<LinkInfo, Long> {
+public interface LinkInfoRepo extends TimeAwareCrudRepository<LinkInfo, Long> {
 
     /**
      * Finds {@link LinkInfo} objects stored within given session.
