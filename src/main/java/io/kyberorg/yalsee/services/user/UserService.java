@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services.user;
 
+import io.kyberorg.yalsee.core.UsernameValidator;
 import io.kyberorg.yalsee.models.Authorization;
 import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
@@ -32,7 +33,7 @@ public class UserService implements UserDetailsService {
     public static final String OP_USER_ALREADY_EXISTS = "Username already exists";
     public static final String OP_EMPTY_PASSWORD = "Password cannot be empty";
     public static final String OP_SHORT_PASSWORD = "Password is too short";
-    public static final String ERR_NOT_VALID_CHARS_IN_USERNAME = "There are non-unicode chars in username";
+    public static final String ERR_NOT_VALID_CHARS_IN_USERNAME = "There are non-valid chars in username";
     private static final String ERR_USERNAME_IS_TOO_LONG = "Username is too long";
     private static final String ERR_NO_PASSWORD_RESET_CHANNEL = "User has no password reset channel";
     private static final String ERR_PASSWORD_RESET_CHANNEL_NOT_FOUND = "Password Reset Channel no longer exists";
@@ -93,7 +94,7 @@ public class UserService implements UserDetailsService {
         if (StringUtils.isBlank(username)) {
             return OperationResult.malformedInput().withMessage(OP_EMPTY_USERNAME);
         }
-        if (!StringUtils.isAlphanumeric(username)) {
+        if (!UsernameValidator.isValid(username)) {
             return OperationResult.malformedInput().withMessage(ERR_NOT_VALID_CHARS_IN_USERNAME);
         }
         if (username.length() > USERNAME_MAX_LENGTH) {

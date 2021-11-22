@@ -21,6 +21,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.core.UsernameValidator;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Authorization;
 import io.kyberorg.yalsee.models.Token;
@@ -243,10 +244,12 @@ public class RegistrationView extends Div {
             onInvalidUsername("Username cannot be empty");
             return;
         }
-        boolean isUsernameAlphaNumeric = StringUtils.isAlphanumeric(username);
+        boolean isUsernameAlphaNumeric = UsernameValidator.isValid(username);
         if (!isUsernameAlphaNumeric) {
-            onInvalidUsername("Username contains not allowed characters. " +
-                    "Please use letters and numbers only");
+            onInvalidUsername("Username should be 2-20 chars long and consist of " +
+                    "alphanumeric characters (a-zA-Z0-9), lowercase, or uppercase. " +
+                    "Also allowed of the dot (.), underscore (_), and hyphen (-), " +
+                    "but they should not be first or last character nor appear consecutively.");
             return;
         }
         boolean isUsernameTooLong = username.length() > USERNAME_MAX_LENGTH;
