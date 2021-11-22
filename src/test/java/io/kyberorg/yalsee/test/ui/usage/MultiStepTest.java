@@ -1,15 +1,19 @@
 package io.kyberorg.yalsee.test.ui.usage;
 
 import com.codeborne.selenide.SelenideElement;
+import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.Eki;
 import io.kyberorg.yalsee.test.pageobjects.external.Wikipedia;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 import org.openqa.selenium.Keys;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.*;
@@ -147,5 +151,25 @@ public class MultiStepTest extends SelenideTest {
         SelenideElement titleSpan = $(Eki.getTitle());
         titleSpan.should(exist);
         titleSpan.shouldHave(text(Eki.TITLE_TEXT));
+    }
+
+    /**
+     * Page 404 (aka Link Not Found Page) should open if Link used in wrong case.
+     * I.E. https://yls.ee/abcdef and https://yls.ee/ABCDEF should not lead to same URL.
+     */
+    @Issue("https://github.com/kyberorg/yalsee/issues/611")
+    @Test
+    public void page404ShouldOpenIfLinkUsedInWrongCase() {
+        String shortUrl =
+                HomePageObject.storeAndReturnSavedUrl("https://github.com/kyberorg/yalsee/issues/611");
+        String ident = shortUrl.replace(TestUtils.getAppShortUrl() + "/", "");
+        String bigIdent = ident.toUpperCase(Locale.ROOT);
+        open(TestUtils.getAppShortUrl() + "/" + bigIdent + addRedirectPageBypassSymbol());
+        expectPage404();
+    }
+
+    private void expectPage404() {
+        NotFoundViewPageObject.TITLE.shouldBe(visible);
+        NotFoundViewPageObject.TITLE.shouldHave(text("404"));
     }
 }
