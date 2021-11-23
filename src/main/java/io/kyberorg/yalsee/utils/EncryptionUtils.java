@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -12,36 +15,23 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class EncryptionUtils {
-    private static final String NO_PASSWORD_SALT = "NO_PASSWORD_SALT";
     private static final String NO_SERVER_KEY = "NO_SERVER_KEY";
 
-    private String passwordSalt;
-    private String serverKey;
+    private final String passwordSalt;
+    private final String serverKey;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final TextEncryptor symmetricEncryptor;
 
     private final Environment env;
 
     public EncryptionUtils(final Environment env) {
         this.env = env;
-        populateStaticFields();
+        this.serverKey = setServerKey();
+        this.passwordSalt = setPasswordSalt();
+        this.symmetricEncryptor = Encryptors.text(getServerKey(), getPasswordSalt());
     }
 
-    private void populateStaticFields() {
-        passwordSalt = setPasswordSalt();
-        serverKey = setServerKey();
-    }
-
-    public String setPasswordSalt() {
-        String passwordSalt = env.getProperty(App.Properties.PASSWORD_SALT, NO_PASSWORD_SALT);
-        if (passwordSalt.equals(NO_PASSWORD_SALT)) {
-            log.debug("No Password Salt defined - using empty String (with weak security)");
-            return "";
-        } else {
-            return passwordSalt;
-        }
-    }
-
-    public String setServerKey() {
+    private String setServerKey() {
         String serverKey = env.getProperty(App.Properties.SERVER_KEY, NO_SERVER_KEY);
         if (serverKey.equals(NO_SERVER_KEY)) {
             log.debug("No Server Key defined - using empty string instead");
@@ -49,5 +39,9 @@ public class EncryptionUtils {
         } else {
             return serverKey;
         }
+    }
+
+    private String setPasswordSalt() {
+        return KeyGenerators.string().generateKey();
     }
 }
