@@ -1,14 +1,7 @@
 package io.kyberorg.yalsee.ui.user;
 
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -98,27 +91,12 @@ public class ConfirmationView extends Div implements HasUrlParameter<String> {
 
     private Component getSuccess() {
         Result result = new Result(true);
-        result.setSuccessText("Account Confirmed");
+        Span text = new Span("Account Confirmed. Now it is time to ");
+        Anchor loginLink = new Anchor(Endpoint.UI.LOGIN_PAGE, "log in");
 
-        Button loginPageButton = new Button("Login Page", this::openLoginPage);
-        loginPageButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        result.setTextComponents(text, loginLink);
 
-        yalseeLayout.add(result, loginPageButton);
+        yalseeLayout.add(result);
         return yalseeLayout;
     }
-
-    private void openLoginPage(ClickEvent<Button> event) {
-        UI ui;
-        if (getUI().isPresent()) {
-            ui = getUI().get();
-        } else if (event.getSource().getUI().isPresent()) {
-            ui = event.getSource().getUI().get();
-        } else {
-            ui = null;
-        }
-        if (ui != null) {
-            ui.navigate(Endpoint.UI.LOGIN_PAGE);
-        }
-    }
-
 }

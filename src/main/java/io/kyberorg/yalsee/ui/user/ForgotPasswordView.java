@@ -84,12 +84,14 @@ public class ForgotPasswordView extends YalseeFormLayout {
     private void showSuccessMessage() {
         Result result = new Result(true);
         result.setSuccessText("Email sent, please check your inbox and follow the instructions.");
+        result.hideIcon();
         replaceSubmitButtonWithComponents(result);
     }
 
     private void showFailMessage() {
         Result result = new Result(false);
         result.setFailureText("Unable to send password reset link");
+        result.hideIcon();
         replaceSubmitButtonWithComponents(result);
     }
 
