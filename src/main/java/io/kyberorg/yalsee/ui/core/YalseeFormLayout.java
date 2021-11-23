@@ -92,11 +92,6 @@ public class YalseeFormLayout extends YalseeLayout {
         forgotPasswordSection.setVisible(true);
     }
 
-    public void replaceSubmitButtonWithText(final String text) {
-        Span span = new Span(text);
-        form.replace(submitButton, span);
-    }
-
     public void replaceSubmitButtonWithComponents(final Component... components) {
         Div componentsBox = new Div(components);
         form.replace(submitButton, componentsBox);

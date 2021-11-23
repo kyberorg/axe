@@ -14,8 +14,8 @@ import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.components.Result;
 import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
-import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -76,13 +76,21 @@ public class ForgotPasswordView extends YalseeFormLayout {
                 showSuccessMessage();
             } else {
                 log.error("{} failed send password reset link {}", TAG, sendPasswordResetLinkResult);
-                ErrorUtils.showError("Unable to send password reset link");
+                showFailMessage();
             }
         }
     }
 
     private void showSuccessMessage() {
-        replaceSubmitButtonWithText("Email sent, please check your inbox and follow the instructions.");
+        Result result = new Result(true);
+        result.setSuccessText("Email sent, please check your inbox and follow the instructions.");
+        replaceSubmitButtonWithComponents(result);
+    }
+
+    private void showFailMessage() {
+        Result result = new Result(false);
+        result.setFailureText("Unable to send password reset link");
+        replaceSubmitButtonWithComponents(result);
     }
 
     public static final class IDs {
