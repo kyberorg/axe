@@ -12,7 +12,7 @@ public final class SymmetricCryptTool {
 
     private final EncryptionUtils encryptionUtils;
 
-    public SymmetricCryptTool(EncryptionUtils encryptionUtils) {
+    public SymmetricCryptTool(final EncryptionUtils encryptionUtils) {
         this.encryptionUtils = encryptionUtils;
     }
 

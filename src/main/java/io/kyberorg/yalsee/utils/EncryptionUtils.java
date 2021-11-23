@@ -28,7 +28,7 @@ public class EncryptionUtils {
         this.env = env;
         this.serverKey = setServerKey();
         this.passwordSalt = setPasswordSalt();
-        this.symmetricEncryptor = Encryptors.text(getServerKey(), getPasswordSalt());
+        this.symmetricEncryptor = Encryptors.delux(getServerKey(), getPasswordSalt());
     }
 
     private String setServerKey() {
