@@ -14,6 +14,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.Token;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.TokenService;
 import io.kyberorg.yalsee.ui.MainView;
@@ -36,9 +37,11 @@ public class VerificationView extends YalseeFormLayout {
     private final TextField codeInput = new TextField();
 
     private final TokenService tokenService;
+    private final LoginView loginView;
 
-    public VerificationView(TokenService tokenService) {
+    public VerificationView(TokenService tokenService, LoginView loginView) {
         this.tokenService = tokenService;
+        this.loginView = loginView;
         init();
     }
 
@@ -75,7 +78,10 @@ public class VerificationView extends YalseeFormLayout {
             return;
         }
         //all good storing user and deleting token
-        VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, token.get().getUser());
+        boolean isRememberMeSet = (boolean) VaadinSession.getCurrent().getAttribute(App.Session.REMEMBER_ME_KEY);
+        User user = token.get().getUser();
+        loginView.logUserIn(user, isRememberMeSet);
+
         OperationResult deleteResult = tokenService.deleteToken(code);
         if (deleteResult.notOk()) {
             log.warn("{} unable to delete verification code '{}' from database. Error is {}",

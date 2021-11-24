@@ -83,7 +83,7 @@ public class LoginView extends YalseeFormLayout {
         passwordInput.setId(IDs.PASSWORD_INPUT);
 
         rememberMe.setId(IDs.REMEMBER_ME);
-        rememberMe.setLabel("Remember my username");
+        rememberMe.setLabel("Remember me");
 
         fields.addFormItem(usernameInput, "Username");
         fields.addFormItem(passwordInput, "Password");
@@ -133,6 +133,11 @@ public class LoginView extends YalseeFormLayout {
         if (isTFAEnabled) {
             OperationResult sendVerificationCodeResult = tfaService.sendVerificationCode(user);
             if (sendVerificationCodeResult.ok()) {
+                boolean isRememberMeChecked = rememberMe.getValue();
+                if (isRememberMeChecked) {
+                    //sending it to Verification Page
+                    VaadinSession.getCurrent().setAttribute(App.Session.REMEMBER_ME_KEY, true);
+                }
                 navigationTarget = Endpoint.UI.VERIFICATION_PAGE;
             } else {
                 log.warn("{} 2fa code send failed. Error: {}", TAG, sendVerificationCodeResult.getMessage());
@@ -141,7 +146,7 @@ public class LoginView extends YalseeFormLayout {
             }
         } else {
             navigationTarget = Endpoint.UI.HOME_PAGE;
-            logUserIn(user);
+            logUserIn(user, rememberMe.getValue());
             VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
         }
         if (navigationTarget != null) {
@@ -149,8 +154,7 @@ public class LoginView extends YalseeFormLayout {
         }
     }
 
-    public void logUserIn(User user) {
-        boolean isRememberMeChecked = rememberMe.getValue();
+    public void logUserIn(User user, boolean isRememberMeChecked) {
         if (isRememberMeChecked) {
             //save cookie
             //Login loginRecord = loginService.createNewLoginRecord(user);

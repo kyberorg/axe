@@ -92,6 +92,7 @@ public final class App {
         public static final String USER_KEY = "Yalsee-User";
         public static final String COOKIE_BANNER_ALREADY_SHOWN = "COOKIE_BANNER_ALREADY_SHOWN";
         public static final String COOKIE_BANNER_ANALYTICS_ALLOWED = "COOKIE_BANNER_ANALYTICS_ALLOWED";
+        public static final String REMEMBER_ME_KEY = "Yalsee-Remember-Box";
     }
 
     public static class CookieNames {
