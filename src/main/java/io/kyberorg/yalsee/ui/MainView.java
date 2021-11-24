@@ -125,16 +125,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
-
-        //Cookie Banner
-        //TODO no banner for logged in user
-        readAndWriteCookieBannerRelatedSettingsFromSession(session);
-        boolean shouldDisplayBanner = !(boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
-        if (shouldDisplayBanner) {
-            CookieBanner cookieBanner = new CookieBanner();
-            cookieBanner.getContent().open();
-            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
-        }
     }
 
     private Component createHeader() {
@@ -265,6 +255,16 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         setUserButtonIcon();
         setUserMenuButtons();
         updateSiteTitle();
+
+        VaadinSession session = VaadinSession.getCurrent();
+        //Cookie Banner
+        readAndWriteCookieBannerRelatedSettingsFromSession(session);
+        boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
+        if (!bannerAlreadyShown && !this.userLoggedIn) {
+            CookieBanner cookieBanner = new CookieBanner();
+            cookieBanner.getContent().open();
+            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        }
     }
 
     private void gatherLoginInfo() {
