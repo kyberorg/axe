@@ -28,10 +28,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
@@ -39,6 +36,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.User;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.user.LoginService;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.ui.user.LoginView;
 import io.kyberorg.yalsee.ui.user.RegistrationView;
@@ -46,6 +45,7 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -67,8 +67,13 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.USER_MENU;
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
+    private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
+    private final LoginService loginService;
+
+    private boolean userLoggedIn = false;
+    private User user = null;
 
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
@@ -84,15 +89,16 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
      *
-     * @param appUtils application utils for determine dev mode
+     * @param appUtils     application utils for determine dev mode
+     * @param loginService service for checking persistent logins.
      */
-    public MainView(final AppUtils appUtils) {
+    public MainView(final AppUtils appUtils, LoginService loginService) {
         this.appUtils = appUtils;
+        this.loginService = loginService;
 
         setPrimarySection(Section.NAVBAR);
         //do not set touch-optimized to true, because it moves navbar down.
         addToNavbar(createHeader());
-
 
         //items
         addLogo();
@@ -121,6 +127,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
                 "document.querySelector('#splash-screen').classList.add('loaded')");
 
         //Cookie Banner
+        //TODO no banner for logged in user
         readAndWriteCookieBannerRelatedSettingsFromSession(session);
         boolean shouldDisplayBanner = !(boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
         if (shouldDisplayBanner) {
@@ -214,9 +221,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void setUserButtonIcon() {
-        boolean sessionHasUser = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
-
-        if (sessionHasUser) {
+        if (this.userLoggedIn) {
             userButton.setIcon(VaadinIcon.SPECIALIST.create());
         } else {
             userButton.setIcon(VaadinIcon.USER.create());
@@ -225,8 +230,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
     private void setUserMenuButtons() {
         userMenuButtons.removeAll();
-        boolean userLoggedIn = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
-        if (userLoggedIn) {
+        if (this.userLoggedIn) {
             logoutButton = new Button("Logout", VaadinIcon.SIGN_OUT.create());
             logoutButton.setId(IDs.LOGOUT_BUTTON);
             logoutButton.addClickListener(this::onLogoutButtonClicked);
@@ -247,19 +251,47 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void updateSiteTitle() {
-        boolean userLoggedIn = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
-        if (userLoggedIn) {
-            final User user = appUtils.getUser(VaadinSession.getCurrent());
-            title.setText(String.format("%s's Yalsee", user.getUsername()).toUpperCase());
+        if (this.userLoggedIn) {
+            title.setText(String.format("%s's Yalsee", this.user.getUsername()).toUpperCase());
         }
     }
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+
+        gatherLoginInfo();
+
         setUserButtonIcon();
         setUserMenuButtons();
         updateSiteTitle();
+    }
+
+    private void gatherLoginInfo() {
+        if (!this.userLoggedIn && this.user == null) {
+            this.userLoggedIn = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
+            if (this.userLoggedIn) {
+                //session has user
+                this.user = appUtils.getUser(VaadinSession.getCurrent());
+            } else {
+                //no user in session - look up for cookie
+                Cookie loginCookie = appUtils.getCookieByName(App.CookieNames.LOGIN_COOKIE,
+                        VaadinService.getCurrentRequest());
+                if (loginCookie != null) {
+                    OperationResult loginResult = loginService.loginWithCookie(loginCookie);
+                    if (loginResult.ok()) {
+                        User cookieUser = loginResult.getPayload(User.class);
+                        if (cookieUser != null) {
+                            VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, cookieUser);
+                            this.userLoggedIn = true;
+                            this.user = cookieUser;
+                        }
+                    } else {
+                        log.warn("{} failed to login with token. Reason: {}", TAG, loginResult);
+                    }
+                }
+            }
+        }
     }
 
     @Override

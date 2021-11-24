@@ -23,6 +23,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -509,5 +510,20 @@ public class AppUtils implements Serializable {
         } else {
             return acceptHeader.equals(MimeType.APPLICATION_JSON);
         }
+    }
+
+    public Cookie getCookieByName(String cookieName, VaadinRequest vaadinRequest) {
+        if (Objects.isNull(cookieName) || Objects.isNull(vaadinRequest)) {
+            return null;
+        }
+        Cookie[] cookies = vaadinRequest.getCookies();
+        if (cookies == null || cookies.length == 0) return null;
+        for (Cookie cookie : cookies) {
+            boolean cookieHasName = (cookie != null && cookie.getName() != null);
+            if (cookieHasName && cookie.getName().equals(cookieName)) {
+                return cookie;
+            }
+        }
+        return null;
     }
 }

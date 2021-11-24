@@ -3,13 +3,16 @@ package io.kyberorg.yalsee.utils;
 import io.kyberorg.yalsee.constants.App;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 @Slf4j
 @Data
@@ -21,6 +24,7 @@ public class EncryptionUtils {
     private final String serverKey;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final TextEncryptor symmetricEncryptor;
+    private final TextEncryptor easySymmetricEncryptor;
 
     private final Environment env;
 
@@ -29,6 +33,7 @@ public class EncryptionUtils {
         this.serverKey = setServerKey();
         this.passwordSalt = setPasswordSalt();
         this.symmetricEncryptor = Encryptors.delux(getServerKey(), getPasswordSalt());
+        this.easySymmetricEncryptor = Encryptors.text(getServerKey(), getPasswordSalt());
     }
 
     private String setServerKey() {
@@ -42,6 +47,7 @@ public class EncryptionUtils {
     }
 
     private String setPasswordSalt() {
-        return KeyGenerators.string().generateKey();
+        final String password = getServerKey();
+        return Hex.encodeHexString(password.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8));
     }
 }

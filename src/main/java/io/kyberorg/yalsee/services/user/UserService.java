@@ -64,6 +64,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public Optional<User> getById(long id) {
+        return userDao.findById(id);
+    }
+
     public OperationResult createUser(final String username, final String plainPassword) {
         log.info("{} Got create user request: username {}", TAG, username);
         OperationResult validationResult = validateParams(username, plainPassword);

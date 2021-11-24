@@ -93,4 +93,8 @@ public final class App {
         public static final String COOKIE_BANNER_ALREADY_SHOWN = "COOKIE_BANNER_ALREADY_SHOWN";
         public static final String COOKIE_BANNER_ANALYTICS_ALLOWED = "COOKIE_BANNER_ANALYTICS_ALLOWED";
     }
+
+    public static class CookieNames {
+        public static final String LOGIN_COOKIE = "Yalsee-Login-Cookie";
+    }
 }

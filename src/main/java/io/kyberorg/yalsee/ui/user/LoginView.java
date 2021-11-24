@@ -12,6 +12,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -19,6 +20,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.user.LoginService;
 import io.kyberorg.yalsee.services.user.TfaService;
 import io.kyberorg.yalsee.services.user.UserPreferencesService;
 import io.kyberorg.yalsee.services.user.UserService;
@@ -27,6 +29,8 @@ import io.kyberorg.yalsee.ui.core.YalseeFormLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import javax.servlet.http.Cookie;
 
 /**
  * Login Page.
@@ -52,11 +56,13 @@ public class LoginView extends YalseeFormLayout {
     private final UserService userService;
     private final UserPreferencesService userPreferencesService;
     private final TfaService tfaService;
+    private final LoginService loginService;
 
-    public LoginView(UserService userService, UserPreferencesService userPreferencesService, TfaService tfaService) {
+    public LoginView(UserService userService, UserPreferencesService userPreferencesService, TfaService tfaService, LoginService loginService) {
         this.userService = userService;
         this.userPreferencesService = userPreferencesService;
         this.tfaService = tfaService;
+        this.loginService = loginService;
         setId(IDs.PAGE_ID);
         init();
     }
@@ -135,11 +141,25 @@ public class LoginView extends YalseeFormLayout {
             }
         } else {
             navigationTarget = Endpoint.UI.HOME_PAGE;
+            logUserIn(user);
             VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
         }
         if (navigationTarget != null) {
             UI.getCurrent().navigate(navigationTarget);
         }
+    }
+
+    public void logUserIn(User user) {
+        boolean isRememberMeChecked = rememberMe.getValue();
+        if (isRememberMeChecked) {
+            //save cookie
+            //Login loginRecord = loginService.createNewLoginRecord(user);
+            String cookieValue = loginService.constructCookieValue(user); //TODO use loginRecord instead
+            Cookie cookie = new Cookie(App.CookieNames.LOGIN_COOKIE, cookieValue);
+            //TODO cookieParams
+            VaadinService.getCurrentResponse().addCookie(cookie);
+        }
+        VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
     }
 
     public static final class IDs {
