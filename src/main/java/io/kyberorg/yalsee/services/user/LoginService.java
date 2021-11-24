@@ -119,4 +119,9 @@ public class LoginService {
     private void updateToken() {
         //TODO implement once db ready
     }
+
+    public OperationResult invalidateCurrentCookie(Cookie cookie) {
+        //TODO implement once db ready - should delete whole series
+        return OperationResult.success();
+    }
 }

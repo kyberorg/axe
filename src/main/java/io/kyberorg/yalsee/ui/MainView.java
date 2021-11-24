@@ -92,7 +92,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
      * @param appUtils     application utils for determine dev mode
      * @param loginService service for checking persistent logins.
      */
-    public MainView(final AppUtils appUtils, LoginService loginService) {
+    public MainView(final AppUtils appUtils, final LoginService loginService) {
         this.appUtils = appUtils;
         this.loginService = loginService;
 
@@ -360,7 +360,20 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
     private void onLogoutButtonClicked(ClickEvent<Button> buttonClickEvent) {
         appUtils.endVaadinSession(VaadinSession.getCurrent());
+        invalidateLoginCookie();
         logoutButton.getUI().ifPresent(ui -> ui.navigate(Endpoint.UI.HOME_PAGE));
+    }
+
+    private void invalidateLoginCookie() {
+        Cookie loginCookie = appUtils.getCookieByName(App.CookieNames.LOGIN_COOKIE, VaadinService.getCurrentRequest());
+        if (loginCookie != null) {
+            loginCookie.setMaxAge(0);
+            VaadinService.getCurrentResponse().addCookie(loginCookie);
+            OperationResult result = loginService.invalidateCurrentCookie(loginCookie);
+            if (result.notOk()) {
+                log.warn("{} failed to invalidate login cookie. Reason: {}", TAG, result);
+            }
+        }
     }
 
     private void readAndWriteCookieBannerRelatedSettingsFromSession(final VaadinSession session) {
