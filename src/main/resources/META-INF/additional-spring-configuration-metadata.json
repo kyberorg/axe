@@ -94,5 +94,10 @@
       "name": "app.mail.instance-prefix",
       "type": "java.lang.String",
       "description": "String with instance name, which is added to Letter Subject to identify sending env right away."
+    },
+    {
+      "name": "app.login.timeout",
+      "type": "java.lang.String",
+      "description": "Login timeout in seconds."
     }
   ] }

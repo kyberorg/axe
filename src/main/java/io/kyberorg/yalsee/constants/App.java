@@ -14,6 +14,7 @@ public final class App {
     public static final String NEW_LINE = System.getProperty("line.separator");
     public static final String WEB_NEW_LINE = "<BR>";
     public static final String URL_SAFE_SEPARATOR = ">>";
+    public static final String COOKIE_SEPARATOR = "::";
     public static final int THREE = 3;
     public static final int FOUR = 4;
 
@@ -52,6 +53,7 @@ public final class App {
         public static final String SERVER_KEY = "app.security.server-key";
         public static final String MAIL_FROM_ADDRESS = "app.mail.from-address";
         public static final String MAIL_INSTANCE_PREFIX = "app.mail.instance-prefix";
+        public static final String LOGIN_TIMEOUT = "app.login.timeout";
     }
 
     public static class Env {
@@ -80,6 +82,7 @@ public final class App {
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
         public static final int SESSION_TIMEOUT_SECONDS = 1800;
+        public static final int LOGIN_TIMEOUT_SECONDS = 864000; //10 days
         public static final String MAIL_FROM_ADDRESS = "yalsee@yals.ee";
     }
 

@@ -413,6 +413,14 @@ public class AppUtils implements Serializable {
         return Integer.parseInt(timeoutString);
     }
 
+    public int getLoginTimeout() {
+        String loginTimeoutString = getEnv().getProperty(App.Properties.LOGIN_TIMEOUT, App.NO_VALUE);
+        if (loginTimeoutString.equals(App.NO_VALUE)) {
+            return App.Defaults.LOGIN_TIMEOUT_SECONDS;
+        }
+        return Integer.parseInt(loginTimeoutString);
+    }
+
     /**
      * Ends current session.
      * Removes session from {@link SessionBox}, invalidates {@link HttpSession} and closes {@link VaadinSession}.

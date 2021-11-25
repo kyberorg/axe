@@ -13,7 +13,7 @@ import javax.persistence.*;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "token")
+@Table(name = "tokens")
 public class Token extends TimeModel {
     @Column(name = "token", nullable = false, unique = true)
     private String token;

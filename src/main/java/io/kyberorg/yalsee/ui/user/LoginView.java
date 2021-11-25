@@ -18,6 +18,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.models.Login;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.LoginService;
@@ -157,11 +158,18 @@ public class LoginView extends YalseeFormLayout {
     public void logUserIn(User user, boolean isRememberMeChecked) {
         if (isRememberMeChecked) {
             //save cookie
-            //Login loginRecord = loginService.createNewLoginRecord(user);
-            String cookieValue = loginService.constructCookieValue(user); //TODO use loginRecord instead
-            Cookie cookie = new Cookie(App.CookieNames.LOGIN_COOKIE, cookieValue);
-            //TODO cookieParams
-            VaadinService.getCurrentResponse().addCookie(cookie);
+            OperationResult createNewRecordResult =
+                    loginService.createNewLoginRecord(user, VaadinSession.getCurrent().getBrowser());
+            if (createNewRecordResult.ok()) {
+                Login loginRecord = createNewRecordResult.getPayload(Login.class);
+                String cookieValue = loginService.constructCookieValue(loginRecord);
+                Cookie cookie = loginService.createCookie(cookieValue, VaadinSession.getCurrent().getBrowser());
+                VaadinService.getCurrentResponse().addCookie(cookie);
+            } else {
+                log.warn("{} failed to create login cookie record. Reason: {}. Skipping login cookie.",
+                        TAG, createNewRecordResult);
+                return;
+            }
         }
         VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
     }

@@ -86,7 +86,7 @@
         <addForeignKeyConstraint baseColumnNames="user" baseTableName="authorizations"
                                  constraintName="FK_AUTH_DATA_ON_USER"
                                  referencedColumnNames="id" referencedTableName="users"/>
-        <createTable tableName="token">
+        <createTable tableName="tokens">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
             </column>
@@ -105,11 +105,11 @@
             <column name="user" type="BIGINT"/>
             <column name="confirmation_for" type="BIGINT"/>
         </createTable>
-        <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="token"/>
-        <addForeignKeyConstraint baseColumnNames="confirmation_for" baseTableName="token"
+        <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="tokens"/>
+        <addForeignKeyConstraint baseColumnNames="confirmation_for" baseTableName="tokens"
                                  constraintName="FK_TOKEN_ON_CONFIRMATION_FOR" referencedColumnNames="id"
                                  referencedTableName="authorizations"/>
-        <addForeignKeyConstraint baseColumnNames="user" baseTableName="token" constraintName="FK_TOKEN_ON_USER"
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="tokens" constraintName="FK_TOKEN_ON_USER"
                                  referencedColumnNames="id" referencedTableName="users"/>
         <createTable tableName="user_preferences">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -134,6 +134,38 @@
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_preferences"
                                  constraintName="FK_USER_PREFERENCES_ON_USER" referencedColumnNames="id"
                                  referencedTableName="users"/>
+        <createTable tableName="logins">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_logins"/>
+            </column>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sarja" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ua" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="not_valid_after" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="sarja" constraintName="uc_logins_sarja" tableName="logins"/>
+        <addUniqueConstraint columnNames="token" constraintName="uc_logins_token" tableName="logins"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="logins" constraintName="FK_LOGINS_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
         <!-- Creating yalsee user -->
         <insert tableName="users">
             <column name="id" value="1"/>
