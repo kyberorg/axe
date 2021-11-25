@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.services.user;
 
-import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.Login;
@@ -41,13 +40,13 @@ public class LoginService {
     private static final String ERR_EMPTY_OR_CORRUPTED_SARJA = "Got empty or corrupted sarja";
     private static final String ERR_RECORD_NOT_FOUND = "No corresponding record found in DB";
     private static final String ERR_TOKEN_UPDATE_FAILED = "Token update failed";
+    private static final String ERR_LOGIN_EXPIRED = "Login expired";
 
     private static final int SARJA_LENGTH = 15;
     private static final int TOKEN_LENGTH = 12;
 
     private static final String DEFAULT_USER_AGENT = "Unknown Browser";
     private static final String DEFAULT_IP = "0.0.0.0";
-
 
     private final LoginDao loginDao;
     private final AppUtils appUtils;
@@ -101,19 +100,9 @@ public class LoginService {
     }
 
     public OperationResult loginWithCookie(final Cookie cookie, final WebBrowser webBrowser) {
-        // inputs
-        OperationResult extractCookieValueOp = getCookieValue(cookie);
-        if (extractCookieValueOp.notOk()) {
-            return extractCookieValueOp;
-        }
-        String cookieValue = extractCookieValueOp.getStringPayload();
-
-        // splitting
-        OperationResult splitOp = splitCookieValue(cookieValue);
-        if (splitOp.notOk()) {
-            return splitOp;
-        }
-        Parts parts = splitOp.getPayload(Parts.class);
+        OperationResult cookiePartsResult = getCookieParts(cookie);
+        if (cookiePartsResult.notOk()) return cookiePartsResult;
+        Parts parts = cookiePartsResult.getPayload(Parts.class);
 
         //params validation
         if (StringUtils.isBlank(parts.getSarja()) && parts.getSarja().length() == SARJA_LENGTH) {
@@ -123,6 +112,11 @@ public class LoginService {
         Optional<Login> loginRecord = loginDao.findBySarja(parts.getSarja());
         if (loginRecord.isEmpty()) {
             return OperationResult.elementNotFound().withMessage(ERR_RECORD_NOT_FOUND);
+        }
+
+        if (!loginRecord.get().isValid()) {
+            this.invalidateAffectedLogin(loginRecord.get());
+            return OperationResult.banned().withMessage(ERR_LOGIN_EXPIRED);
         }
 
         String hashedTokenFromDatabase = DigestUtils.sha256Hex(loginRecord.get().getToken());
@@ -158,7 +152,6 @@ public class LoginService {
     public Cookie createCookie(final String cookieValue, final WebBrowser webBrowser) {
         Cookie cookie = new Cookie(App.CookieNames.LOGIN_COOKIE, cookieValue);
         cookie.setMaxAge(appUtils.getLoginTimeout());
-        cookie.setDomain(appUtils.getServerDomain());
         cookie.setSecure(webBrowser.isSecureConnection());
         cookie.setHttpOnly(true);
         return cookie;
@@ -189,8 +182,17 @@ public class LoginService {
     }
 
     public OperationResult invalidateCurrentCookie(Cookie cookie) {
-        //TODO implement once db ready - should delete whole series
-        return OperationResult.success();
+        OperationResult cookiePartsResult = getCookieParts(cookie);
+        if (cookiePartsResult.notOk()) return cookiePartsResult;
+        Parts parts = cookiePartsResult.getPayload(Parts.class);
+
+        Optional<Login> loginRecord = loginDao.findBySarja(parts.getSarja());
+        if (loginRecord.isPresent()) {
+            loginDao.delete(loginRecord.get());
+            return OperationResult.success();
+        } else {
+            return OperationResult.elementNotFound().withMessage(ERR_RECORD_NOT_FOUND);
+        }
     }
 
     private OperationResult getCookieValue(final Cookie cookie) {
@@ -212,6 +214,14 @@ public class LoginService {
         }
         final Parts parts = new Parts(partsArr[0], partsArr[1]);
         return OperationResult.success().addPayload(parts);
+    }
+
+    private OperationResult getCookieParts(final Cookie cookie) {
+        OperationResult getCookieValueResult = getCookieValue(cookie);
+        if (getCookieValueResult.notOk()) return getCookieValueResult;
+
+        String cookieValue = getCookieValueResult.getStringPayload();
+        return splitCookieValue(cookieValue);
     }
 
     private DeviceInfo getDeviceInfo(final WebBrowser webBrowser) {

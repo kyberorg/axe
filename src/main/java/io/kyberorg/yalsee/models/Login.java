@@ -40,4 +40,7 @@ public class Login extends TimeModel {
     @Column(name = "not_valid_after", nullable = false)
     private Timestamp notValidAfter;
 
+    public boolean isValid() {
+        return notValidAfter.after(TimeModel.now());
+    }
 }
