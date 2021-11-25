@@ -138,12 +138,6 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_logins"/>
             </column>
-            <column name="created" type="DATETIME">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated" type="DATETIME">
-                <constraints nullable="false"/>
-            </column>
             <column name="sarja" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -160,6 +154,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="not_valid_after" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
         </createTable>
