@@ -23,6 +23,8 @@ public interface LinkInfoRepo extends TimeAwareCrudRepository<LinkInfo, Long> {
      */
     List<LinkInfo> findBySession(String sessionId);
 
+    List<LinkInfo> findByOwner(User owner);
+
     /**
      * Finds single record by its id.
      *

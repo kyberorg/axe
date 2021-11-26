@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services;
 
+import io.kyberorg.yalsee.events.LinkInfoUpdatedEvent;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.User;
@@ -8,6 +9,7 @@ import io.kyberorg.yalsee.models.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -106,10 +108,15 @@ public class LinkInfoService {
      */
     public void update(final LinkInfo updatedLinkInfo) {
         repo.update(updatedLinkInfo);
+        EventBus.getDefault().post(LinkInfoUpdatedEvent.createWith(updatedLinkInfo));
     }
 
     public long countUserLinks(final User user) {
         return repo.countByOwner(user);
+    }
+
+    public List<LinkInfo> getUserLinks(final User linkOwner) {
+        return repo.findByOwner(linkOwner);
     }
 
     private boolean linkInfoExistsForIdent(final String ident) {

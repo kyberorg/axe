@@ -17,6 +17,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -25,10 +27,12 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
+import io.kyberorg.yalsee.events.LinkInfoUpdatedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.events.LinkUpdatedEvent;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkInfoService;
 import io.kyberorg.yalsee.services.LinkService;
@@ -39,6 +43,7 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.DeviceUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -46,18 +51,22 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: My Links")
-public class MyLinksView extends YalseeLayout {
+public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
     private static final String USER_MODE_FLAG = "UserMode";
 
     private final Span sessionBanner = new Span();
+    private final Span sessionBannerText = new Span();
+    private final Anchor sessionBannerLink = new Anchor();
     private final Span noRecordsBanner = new Span();
     private final Span noRecordsBannerText = new Span();
     private final Anchor noRecordsBannerLink = new Anchor();
@@ -81,36 +90,42 @@ public class MyLinksView extends YalseeLayout {
     private DeviceUtils deviceUtils;
     private boolean clientHasSmallScreen;
 
-    /**
-     * Creates {@link MyLinksView}.
-     *
-     * @param linkInfoService service for operating with LinkInfo.
-     * @param qrCodeService   QR Code Service
-     * @param linkService     service for operating with Links.
-     * @param appUtils        application utilities.
-     */
-    public MyLinksView(final LinkInfoService linkInfoService, final QRCodeService qrCodeService,
-                       final LinkService linkService, final AppUtils appUtils) {
-        this.linkInfoService = linkInfoService;
-        this.qrCodeService = qrCodeService;
-        this.linkService = linkService;
-        this.appUtils = appUtils;
+    private boolean isUserLoggedIn;
+    private User user;
 
-        setId(MyLinksView.class.getSimpleName());
-
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        setUserVars();
         init();
         setIds();
         applyLoadState();
     }
 
+    private void setUserVars() {
+        this.isUserLoggedIn = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
+        if (this.isUserLoggedIn) {
+            this.user = appUtils.getUser(VaadinSession.getCurrent());
+        }
+    }
+
     private void init() {
+        setId(MyLinksView.class.getSimpleName());
+
         sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.FALSE);
         deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
         clientHasSmallScreen = isSmallScreen();
 
-        sessionBanner.setText("Those are links stored in current session. "
-                + "Soon you will be able to store them permanently, once we introduce users");
+        if (this.isUserLoggedIn) {
+            sessionBanner.setText("Your links");
+        } else {
+            sessionBannerText.setText("Those are links stored in current session. "
+                    + "You are be able to store them permanently, once your ");
+
+            sessionBannerLink.setText("have an Yalsee account");
+            sessionBannerLink.setHref(Endpoint.UI.REGISTRATION_PAGE);
+
+            sessionBanner.add(sessionBannerText, sessionBannerLink);
+        }
 
         noRecordsBannerText.setText("It looks lonely here. What about saving something at ");
         noRecordsBannerLink.setHref("/");
@@ -154,14 +169,10 @@ public class MyLinksView extends YalseeLayout {
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
         //User-mode activation
-        grid.getElement().addEventListener("keydown", event -> {
-                    VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
-                    activateLinkEditor();
-                })
-                .setFilter("event.key === 'R' && event.shiftKey");
-
+        activateLinkEditor();
         initGridEditor();
 
+        //removeAll();
         add(sessionBanner, noRecordsBanner, endSessionButton, grid);
     }
 
@@ -244,8 +255,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void activateLinkEditor() {
-        boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
-        if (userModeActivated) {
+        if (this.isUserLoggedIn) {
             EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
             // Close the editor in case of backward between components
             editableLink.getElement()
@@ -326,9 +336,28 @@ public class MyLinksView extends YalseeLayout {
         onLinkEvent(event.getLink());
     }
 
+    @Subscribe
+    public void onLinkInfoUpdatedEvent(final LinkInfoUpdatedEvent event) {
+        log.trace("{} {} received: {}", TAG, LinkInfoUpdatedEvent.class.getSimpleName(), event);
+        onLinkInfoEvent(event.getLinkInfo());
+    }
+
     private void onLinkEvent(final Link link) {
         //act only if link deleted was saved within our session
         if (getSessionIdFromLink(link).equals(sessionId)) {
+            updateDataAndState();
+        }
+    }
+
+    private void onLinkInfoEvent(final LinkInfo linkInfo) {
+        //act only if link info within our session or user
+        boolean isApplicable;
+        if (this.isUserLoggedIn) {
+            isApplicable = linkInfo.getOwner().equals(this.user);
+        } else {
+            isApplicable = linkInfo.getSession().equals(sessionId);
+        }
+        if (isApplicable) {
             updateDataAndState();
         }
     }
@@ -349,7 +378,14 @@ public class MyLinksView extends YalseeLayout {
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
             ui.access(() -> {
-                grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
+                List<LinkInfo> items;
+                if (this.isUserLoggedIn) {
+                    items = linkInfoService.getUserLinks(this.user);
+                } else {
+                    items = linkInfoService.getAllRecordWithSession(sessionId);
+                }
+
+                grid.setItems(items);
                 grid.getDataProvider().refreshAll();
                 noRecordsBanner.setVisible(gridIsEmpty());
             });
@@ -365,9 +401,7 @@ public class MyLinksView extends YalseeLayout {
             if (identNotUpdated) {
                 linkInfoService.update(linkInfo);
             } else {
-                //TODO replace with real-user check once users are there
-                boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
-                if (userModeActivated) {
+                if (this.isUserLoggedIn) {
                     OperationResult getLinkResult = linkService.getLinkByIdent(oldLinkInfo.get().getIdent());
                     if (getLinkResult.ok()) {
                         Link link = getLinkResult.getPayload(Link.class);
