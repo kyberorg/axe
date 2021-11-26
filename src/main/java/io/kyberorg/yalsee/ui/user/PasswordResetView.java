@@ -96,7 +96,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
         passwordField.setId(IDs.PASSWORD_INPUT);
         repeatPasswordField.setId(IDs.REPEAT_PASSWORD_INPUT);
 
-        usernameField.setEnabled(false);
+        usernameField.setReadOnly(true);
         usernameField.setValue(this.user.getUsername());
 
         passwordFields.addFormItem(usernameField, "Username");

@@ -116,7 +116,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         clientHasSmallScreen = isSmallScreen();
 
         if (this.isUserLoggedIn) {
-            sessionBanner.setText("Your links");
+            sessionBanner.setText("My Links");
         } else {
             sessionBannerText.setText("Those are links stored in current session. "
                     + "You are be able to store them permanently, once your ");
