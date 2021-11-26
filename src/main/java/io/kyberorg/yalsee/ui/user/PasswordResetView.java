@@ -7,6 +7,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -46,6 +47,7 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
     private final Span banner = new Span();
 
     private final YalseeFormLayout formLayout = new YalseeFormLayout();
+    private final TextField usernameField = new TextField();
     private final PasswordField passwordField = new PasswordField();
     private final PasswordField repeatPasswordField = new PasswordField();
 
@@ -90,9 +92,14 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
 
         final FormLayout passwordFields = new FormLayout();
 
+        usernameField.setId(IDs.USERNAME_FIELD);
         passwordField.setId(IDs.PASSWORD_INPUT);
         repeatPasswordField.setId(IDs.REPEAT_PASSWORD_INPUT);
 
+        usernameField.setEnabled(false);
+        usernameField.setValue(this.user.getUsername());
+
+        passwordFields.addFormItem(usernameField, "Username");
         passwordFields.addFormItem(passwordField, "Password");
         passwordFields.addFormItem(repeatPasswordField, "Confirm Password");
 
@@ -193,5 +200,6 @@ public class PasswordResetView extends Div implements HasUrlParameter<String> {
     public static final class IDs {
         public static final String PASSWORD_INPUT = "passwordInput";
         public static final String REPEAT_PASSWORD_INPUT = "repeatPasswordInput";
+        public static final String USERNAME_FIELD = "usernameField";
     }
 }

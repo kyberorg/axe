@@ -91,7 +91,7 @@ public class ConfirmationView extends Div implements HasUrlParameter<String> {
 
     private Component getSuccess() {
         Result result = new Result(true);
-        Span text = new Span("Account Confirmed. Now it is time to ");
+        Span text = new Span("Account Confirmed. It is time to ");
         Anchor loginLink = new Anchor(Endpoint.UI.LOGIN_PAGE, "log in");
 
         result.setTextComponents(text, loginLink);
