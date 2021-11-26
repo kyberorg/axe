@@ -52,7 +52,7 @@ public class LoginView extends YalseeFormLayout {
     private final FormLayout fields = new FormLayout();
     private final TextField usernameInput = new TextField();
     private final PasswordField passwordInput = new PasswordField();
-    private final Checkbox rememberMe = new Checkbox();
+    private final Checkbox forgotMe = new Checkbox();
 
     private final UserService userService;
     private final UserPreferencesService userPreferencesService;
@@ -83,12 +83,12 @@ public class LoginView extends YalseeFormLayout {
         usernameInput.setId(IDs.USERNAME_INPUT);
         passwordInput.setId(IDs.PASSWORD_INPUT);
 
-        rememberMe.setId(IDs.REMEMBER_ME);
-        rememberMe.setLabel("Remember me");
+        forgotMe.setId(IDs.FOROGT_ME);
+        forgotMe.setLabel("Log me out after");
 
         fields.addFormItem(usernameInput, "Username");
         fields.addFormItem(passwordInput, "Password");
-        fields.add(rememberMe);
+        fields.add(forgotMe);
         fields.setResponsiveSteps(new FormLayout.ResponsiveStep(START_POINT, 1));
 
         addFormFields(fields);
@@ -134,10 +134,10 @@ public class LoginView extends YalseeFormLayout {
         if (isTFAEnabled) {
             OperationResult sendVerificationCodeResult = tfaService.sendVerificationCode(user);
             if (sendVerificationCodeResult.ok()) {
-                boolean isRememberMeChecked = rememberMe.getValue();
-                if (isRememberMeChecked) {
+                boolean isForgotMeChecked = forgotMe.getValue();
+                if (isForgotMeChecked) {
                     //sending it to Verification Page
-                    VaadinSession.getCurrent().setAttribute(App.Session.REMEMBER_ME_KEY, true);
+                    VaadinSession.getCurrent().setAttribute(App.Session.FORGOT_ME_KEY, true);
                 }
                 navigationTarget = Endpoint.UI.VERIFICATION_PAGE;
             } else {
@@ -147,7 +147,7 @@ public class LoginView extends YalseeFormLayout {
             }
         } else {
             navigationTarget = Endpoint.UI.HOME_PAGE;
-            logUserIn(user, rememberMe.getValue());
+            logUserIn(user, forgotMe.getValue());
             VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
         }
         if (navigationTarget != null) {
@@ -155,8 +155,8 @@ public class LoginView extends YalseeFormLayout {
         }
     }
 
-    public void logUserIn(User user, boolean isRememberMeChecked) {
-        if (isRememberMeChecked) {
+    public void logUserIn(User user, boolean isForgotMeChecked) {
+        if (!isForgotMeChecked) {
             //save cookie
             OperationResult createNewRecordResult =
                     loginService.createNewLoginRecord(user, VaadinSession.getCurrent().getBrowser());
@@ -180,6 +180,6 @@ public class LoginView extends YalseeFormLayout {
         public static final String SUBTITLE_LINK = "subtitleLink";
         public static final String USERNAME_INPUT = "usernameInput";
         public static final String PASSWORD_INPUT = "passwordInput";
-        public static final String REMEMBER_ME = "rememberMe";
+        public static final String FOROGT_ME = "rememberMe";
     }
 }

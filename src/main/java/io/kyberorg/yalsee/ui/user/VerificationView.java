@@ -78,9 +78,14 @@ public class VerificationView extends YalseeFormLayout {
             return;
         }
         //all good storing user and deleting token
-        boolean isRememberMeSet = (boolean) VaadinSession.getCurrent().getAttribute(App.Session.REMEMBER_ME_KEY);
+        boolean isForgotMeModeActivated;
+        if (VaadinSession.getCurrent() != null) {
+            isForgotMeModeActivated = (boolean) VaadinSession.getCurrent().getAttribute(App.Session.FORGOT_ME_KEY);
+        } else {
+            isForgotMeModeActivated = false;
+        }
         User user = token.get().getUser();
-        loginView.logUserIn(user, isRememberMeSet);
+        loginView.logUserIn(user, isForgotMeModeActivated);
 
         OperationResult deleteResult = tokenService.deleteToken(code);
         if (deleteResult.notOk()) {
