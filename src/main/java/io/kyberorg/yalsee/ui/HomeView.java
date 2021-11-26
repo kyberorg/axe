@@ -12,6 +12,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -24,6 +26,7 @@ import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
@@ -32,7 +35,9 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,24 +45,25 @@ import org.greenrobot.eventbus.Subscribe;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
 @Slf4j
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @CssImport("./css/common_styles.css")
 @CssImport("./css/home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
 @PageTitle("Yalsee - the link shortener")
-public class HomeView extends HorizontalLayout {
+public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + HomeView.class.getSimpleName() + "]";
 
     private final Div leftDiv = new Div();
     private final VerticalLayout centralLayout = new VerticalLayout();
     private final Div rightDiv = new Div();
 
-    private final Component mainArea = mainArea();
-    private final Component overallArea = overallArea();
-    private final Component resultArea = resultArea();
-    private final Component qrCodeArea = qrCodeArea();
-    private final Component myLinksNoteArea = myLinksNoteArea();
+    private Component mainArea;
+    private Component overallArea;
+    private Component resultArea;
+    private Component qrCodeArea;
+    private Component myLinksNoteArea;
 
     private final OverallService overallService;
     private final LinkService linkService;
@@ -75,34 +81,44 @@ public class HomeView extends HorizontalLayout {
     private Image qrCode;
 
     private Span linkCounter;
+    private long overallLinks;
+    private Span userLinkCounter;
+    private int userLinks;
 
     private Notification errorNotification;
 
-    /**
-     * Create {@link HomeView}.
-     *
-     * @param overallService overall service for getting number of links
-     * @param linkService    service for saving links
-     * @param qrCodeService  service for getting QR Code for saved link
-     * @param appUtils       application utils for getting server location and API location
-     * @param errorUtils     error utils to report to bugsnag
-     */
-    public HomeView(
-            final OverallService overallService, final LinkService linkService, final QRCodeService qrCodeService,
-            final AppUtils appUtils, final ErrorUtils errorUtils) {
-        this.overallService = overallService;
-        this.linkService = linkService;
-        this.qrCodeService = qrCodeService;
-        this.appUtils = appUtils;
-        this.errorUtils = errorUtils;
+    private boolean isUserLoggedIn;
+    private User user;
 
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        setUserVars();
+        initCounters();
         init();
         applyStyle();
         applyLoadState();
     }
 
+    private void setUserVars() {
+        this.isUserLoggedIn = appUtils.isUserLoggedIn(VaadinSession.getCurrent());
+        if (this.isUserLoggedIn) {
+            this.user = appUtils.getUser(VaadinSession.getCurrent());
+        }
+    }
+
+    private void initCounters() {
+        overallLinks = overallService.numberOfStoredLinks();
+        userLinks = RandomUtils.nextInt(0, 3); //FIXME read from service
+    }
+
     private void init() {
         this.setId(IDs.VIEW_ID);
+
+        this.mainArea = mainArea();
+        this.overallArea = overallArea();
+        this.resultArea = resultArea();
+        this.qrCodeArea = qrCodeArea();
+        this.myLinksNoteArea = myLinksNoteArea();
 
         add(leftDiv, centralLayout, rightDiv);
         centralLayout.add(mainArea, overallArea, resultArea, myLinksNoteArea, qrCodeArea);
@@ -117,9 +133,6 @@ public class HomeView extends HorizontalLayout {
     }
 
     private void applyLoadState() {
-        long linksStored = overallService.numberOfStoredLinks();
-        linkCounter.setText(Long.toString(linksStored));
-
         input.setAutofocus(true);
         descriptionAccordion.close();
         submitButton.setEnabled(true);
@@ -174,13 +187,25 @@ public class HomeView extends HorizontalLayout {
     }
 
     private HorizontalLayout overallArea() {
-        Span overallTextStart = new Span("Yalsee already saved ");
+        boolean userHasLinks = this.isUserLoggedIn && userLinks > 0;
+
+        String actor = userHasLinks ? "You" : "Yalsee";
+        Span overallTextStart = new Span(actor + " already saved ");
+
+        userLinkCounter = new Span();
+        Span outOf = new Span(" out of ");
 
         linkCounter = new Span();
         linkCounter.setId(IDs.OVERALL_LINKS_NUMBER);
+        linkCounter.setText(Long.toString(overallLinks));
         Span overallTextEnd = new Span(" links");
 
-        Span overallText = new Span(overallTextStart, linkCounter, overallTextEnd);
+        Span overallText = new Span(overallTextStart);
+        if (userHasLinks) {
+            userLinkCounter.setText(Long.toString(userLinks));
+            overallText.add(userLinkCounter, outOf);
+        }
+        overallText.add(linkCounter, overallTextEnd);
         overallText.setId(IDs.OVERALL_LINKS_TEXT);
 
         HorizontalLayout overallArea = new HorizontalLayout(overallText);
