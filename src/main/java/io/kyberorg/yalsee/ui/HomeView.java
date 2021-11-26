@@ -21,6 +21,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
@@ -43,6 +44,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
+import static io.kyberorg.yalsee.result.OperationResult.ELEMENT_NOT_FOUND;
+import static io.kyberorg.yalsee.result.OperationResult.OK;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -71,12 +74,15 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private final QRCodeService qrCodeService;
     private final AppUtils appUtils;
     private final ErrorUtils errorUtils;
+    private final IdentValidator identValidator;
     private UI ui;
 
     private Span titleLongPart;
     private TextField input;
     private Accordion descriptionAccordion;
     private TextField descriptionInput;
+    private Accordion customIdentAccordion;
+    private TextField customIdentInput;
     private Button submitButton;
     private Anchor shortLink;
     private Image qrCode;
@@ -144,6 +150,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private void applyLoadState() {
         input.setAutofocus(true);
         descriptionAccordion.close();
+        customIdentAccordion.close();
         submitButton.setEnabled(true);
 
         mainArea.setVisible(true);
@@ -176,6 +183,15 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         descriptionInput.setPlaceholder("what is link about...");
         descriptionInput.setWidthFull();
 
+        customIdentAccordion = new Accordion();
+        customIdentAccordion.setId(IDs.CUSTOM_IDENT_ACCORDION);
+        customIdentAccordion.setWidthFull();
+
+        customIdentInput = new TextField();
+        customIdentInput.setId(IDs.CUSTOM_IDENT_INPUT);
+        customIdentInput.setPlaceholder("Your custom Back-Part here...");
+        customIdentInput.setWidthFull();
+
         Span publicAccessBanner =
                 new Span("Note: all links considered as public and can be used by anyone");
         publicAccessBanner.setId(IDs.BANNER);
@@ -188,8 +204,13 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
 
         descriptionAccordion.add("Link Description (optional)", descriptionInput);
 
-        VerticalLayout mainArea =
-                new VerticalLayout(title, input, descriptionAccordion, publicAccessBanner, submitButton);
+        VerticalLayout mainArea = new VerticalLayout(title, input, descriptionAccordion);
+        if (this.isUserLoggedIn) {
+            customIdentAccordion.add("Custom Back-Part (optional)", customIdentInput);
+            mainArea.add(customIdentAccordion);
+        }
+        mainArea.add(publicAccessBanner, submitButton);
+
         mainArea.setId(IDs.MAIN_AREA);
         mainArea.addClassNames("main-area", "border", "large-text");
         return mainArea;
@@ -338,7 +359,6 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         String longUrl = input.getValue();
         String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
-        cleanForm();
 
         if (StringUtils.isBlank(longUrl)) {
             String errorMessage = "Long URL cannot be empty";
@@ -355,11 +375,48 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
             }
         }
 
+        String customIdent = customIdentInput.getValue();
+        if (StringUtils.isNotBlank(customIdent)) {
+            isFormValid = isCustomIdentValid(customIdent);
+        }
+
         if (isFormValid) {
+            cleanForm();
             cleanResults();
-            saveLink(longUrl, linkDescription);
+            saveLink(longUrl, linkDescription, customIdent);
         } else {
             log.debug("{} Form is not valid", TAG);
+        }
+    }
+
+    private boolean isCustomIdentValid(String customIdent) {
+        OperationResult verifyIdent = identValidator.validate(customIdent);
+        if (verifyIdent.notOk()) {
+            log.error("{} Requested custom ident not valid. Ident: {}", TAG, customIdent);
+            customIdentInput.setInvalid(true);
+            customIdentInput.setAutofocus(true);
+            customIdentInput.setErrorMessage("Custom back-part has not-allowed chars");
+            return false;
+        } else {
+            OperationResult identCheck = linkService.isLinkWithIdentExist(customIdent);
+            switch (identCheck.getResult()) {
+                case OK:
+                    log.info("{} custom ident: {} already exists", TAG, customIdent);
+                    customIdentInput.setInvalid(true);
+                    customIdentInput.setAutofocus(true);
+                    customIdentInput.setErrorMessage("Custom back-part is already taken. Please try another.");
+                    return false;
+                case ELEMENT_NOT_FOUND:
+                    return true;
+                default:
+                    log.error("{} Failed to check Custom ident. Ident: {}. Result: {}",
+                            TAG, customIdent, identCheck);
+                    customIdentInput.setInvalid(true);
+                    customIdentInput.setAutofocus(true);
+                    customIdentInput.setErrorMessage("Something went wrong while checking back-part. " +
+                            "Please try another.");
+                    return false;
+            }
         }
     }
 
@@ -370,7 +427,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
                 "Short link copied", Notification.Position.MIDDLE);
     }
 
-    private void saveLink(final String link, final String linkDescription) {
+    private void saveLink(final String link, final String linkDescription, final String customIdent) {
         String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
         LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
                 LinkServiceInput.builder(link).sessionID(sessionId);
@@ -381,6 +438,9 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
 
         if (this.isUserLoggedIn) {
             linkServiceInputBuilder.linkOwner(this.user);
+            if (StringUtils.isNotBlank(customIdent)) {
+                linkServiceInputBuilder.customIdent(customIdent);
+            }
         }
 
         LinkServiceInput linkServiceInput = linkServiceInputBuilder.build();
@@ -487,6 +547,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private void cleanForm() {
         input.setValue("");
         descriptionInput.setValue("");
+        customIdentInput.setValue("");
     }
 
     private void cleanErrors() {
@@ -533,5 +594,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         public static final String MY_LINKS_NOTE_START = "myLinksNoteStart";
         public static final String MY_LINKS_NOTE_LINK = "myLinksNoteLink";
         public static final String MY_LINKS_NOTE_END = "myLinksNoteEnd";
+        public static final String CUSTOM_IDENT_ACCORDION = "customIdentAccordion";
+        public static final String CUSTOM_IDENT_INPUT = "customIdentInput";
     }
 }

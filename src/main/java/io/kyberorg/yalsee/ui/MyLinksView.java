@@ -121,7 +121,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
             sessionBannerText.setText("Those are links stored in current session. "
                     + "You are be able to store them permanently, once your ");
 
-            sessionBannerLink.setText("have an Yalsee account");
+            sessionBannerLink.setText("have an Yalsee account.");
             sessionBannerLink.setHref(Endpoint.UI.REGISTRATION_PAGE);
 
             sessionBanner.add(sessionBannerText, sessionBannerLink);
