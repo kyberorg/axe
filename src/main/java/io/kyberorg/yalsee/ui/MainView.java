@@ -278,9 +278,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
                 Cookie loginCookie = appUtils.getCookieByName(App.CookieNames.LOGIN_COOKIE,
                         VaadinService.getCurrentRequest());
                 if (loginCookie != null) {
+                    VaadinRequest request = VaadinService.getCurrentRequest();
                     WebBrowser browser = VaadinSession.getCurrent().getBrowser();
                     OperationResult loginResult =
-                            loginService.loginWithCookie(loginCookie, browser);
+                            loginService.loginWithCookie(loginCookie, browser, request);
                     if (loginResult.ok()) {
                         String newCookieValue = loginResult.getStringPayload(LoginService.PK_NEW_COOKIE);
                         User cookieUser = loginResult.getPayload(LoginService.PK_COOKIE_USER, User.class);

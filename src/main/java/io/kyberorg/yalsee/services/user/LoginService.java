@@ -1,7 +1,9 @@
 package io.kyberorg.yalsee.services.user;
 
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.models.Login;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.dao.LoginDao;
@@ -51,6 +53,8 @@ public class LoginService {
     private final LoginDao loginDao;
     private final AppUtils appUtils;
 
+    private VaadinRequest request;
+
     public OperationResult createNewLoginRecord(final User user, final WebBrowser webBrowser) {
 
         String sarja;
@@ -99,7 +103,9 @@ public class LoginService {
         return String.join(App.COOKIE_SEPARATOR, sarja, hashedToken);
     }
 
-    public OperationResult loginWithCookie(final Cookie cookie, final WebBrowser webBrowser) {
+    public OperationResult loginWithCookie(final Cookie cookie, final WebBrowser webBrowser,
+                                           final VaadinRequest request) {
+        this.request = request;
         OperationResult cookiePartsResult = getCookieParts(cookie);
         if (cookiePartsResult.notOk()) return cookiePartsResult;
         Parts parts = cookiePartsResult.getPayload(Parts.class);
@@ -232,7 +238,15 @@ public class LoginService {
             deviceInfo = DeviceInfo.withDefaults();
         } else {
             String userAgent = webBrowser.getBrowserApplication();
-            String ip = webBrowser.getAddress();
+
+            String ip = null;
+            if (this.request != null) {
+                ip = this.request.getHeader(Header.X_REAL_IP);
+            }
+
+            if (StringUtils.isBlank(ip)) {
+                ip = webBrowser.getAddress();
+            }
 
             deviceInfo = new DeviceInfo();
             if (StringUtils.isNotBlank(userAgent)) {
