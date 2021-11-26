@@ -193,4 +193,13 @@
             <!--<column name="password_reset_channel" value="null"/>-->
         </insert>
     </changeSet>
+    <changeSet id="6" author="kyberorg">
+        <addColumn tableName="link_info">
+            <column name="owner" type="BIGINT" defaultValue="1">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="link_info" baseColumnNames="owner" referencedTableName="users"
+                                 referencedColumnNames="id" constraintName="FK_LINK_OWNER"/>
+    </changeSet>
 </databaseChangeLog>

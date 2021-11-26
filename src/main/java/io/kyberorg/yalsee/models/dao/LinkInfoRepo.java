@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.models.dao;
 
 import io.kyberorg.yalsee.models.LinkInfo;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.dao.base.TimeAwareCrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -45,4 +46,6 @@ public interface LinkInfoRepo extends TimeAwareCrudRepository<LinkInfo, Long> {
      * @return number of found records. Normally it should be only 1 record or 0 records if nothing found.
      */
     long countByIdent(String ident);
+
+    long countByOwner(User owner);
 }

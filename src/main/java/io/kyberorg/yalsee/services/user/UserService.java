@@ -187,4 +187,14 @@ public class UserService implements UserDetailsService {
             return OperationResult.generalFail();
         }
     }
+
+    public User getDefaultUser() {
+        //returning Yalsee user
+        Optional<User> yalsee = userDao.findById(1L);
+        if (yalsee.isPresent()) {
+            return yalsee.get();
+        } else {
+            throw new UsernameNotFoundException("Suddenly there is no default user in the system");
+        }
+    }
 }

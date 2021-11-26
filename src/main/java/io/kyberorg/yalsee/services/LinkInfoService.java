@@ -2,13 +2,17 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.dao.LinkInfoRepo;
+import io.kyberorg.yalsee.models.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -21,6 +25,7 @@ import java.util.Optional;
 @Service
 public class LinkInfoService {
     private final LinkInfoRepo repo;
+    private final UserDao userDao;
 
     /**
      * Creates {@link LinkInfo} with session info.
@@ -28,8 +33,9 @@ public class LinkInfoService {
      * @param ident       string with part that identifies short link
      * @param session     string with session ID, omitted if {@code null} or empty
      * @param description string with link description, omitted if {@code null} or empty
+     * @param owner       owning {@link User}
      */
-    public void createLinkInfo(final String ident, final String session, final String description) {
+    public void createLinkInfo(final String ident, final String session, final String description, final User owner) {
         LinkInfo linkInfo;
         if (linkInfoExistsForIdent(ident)) {
             update(repo.findSingleByIdent(ident));
@@ -45,7 +51,7 @@ public class LinkInfoService {
         if (StringUtils.isNotBlank(session)) {
             linkInfo.setSession(session);
         }
-
+        linkInfo.setOwner(Objects.requireNonNullElseGet(owner, this::getDefaultUser));
         repo.update(linkInfo);
     }
 
@@ -102,7 +108,22 @@ public class LinkInfoService {
         repo.update(updatedLinkInfo);
     }
 
+    public long countUserLinks(final User user) {
+        return repo.countByOwner(user);
+    }
+
     private boolean linkInfoExistsForIdent(final String ident) {
         return repo.countByIdent(ident) > 0;
+    }
+
+    // this method cannot use UserService method due to cycle deps.
+    private User getDefaultUser() {
+        //returning Yalsee user
+        Optional<User> yalsee = userDao.findById(1L);
+        if (yalsee.isPresent()) {
+            return yalsee.get();
+        } else {
+            throw new UsernameNotFoundException("Suddenly there is no default user in the system");
+        }
     }
 }

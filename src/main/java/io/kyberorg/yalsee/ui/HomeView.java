@@ -28,6 +28,7 @@ import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.LinkInfoService;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
@@ -37,7 +38,6 @@ import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,6 +67,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
 
     private final OverallService overallService;
     private final LinkService linkService;
+    private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
     private final AppUtils appUtils;
     private final ErrorUtils errorUtils;
@@ -83,7 +84,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private Span linkCounter;
     private long overallLinks;
     private Span userLinkCounter;
-    private int userLinks;
+    private long userLinks;
 
     private Notification errorNotification;
 
@@ -108,7 +109,11 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
 
     private void initCounters() {
         overallLinks = overallService.numberOfStoredLinks();
-        userLinks = RandomUtils.nextInt(0, 3); //FIXME read from service
+        if (this.isUserLoggedIn) {
+            userLinks = linkInfoService.countUserLinks(this.user);
+        } else {
+            userLinks = 0;
+        }
     }
 
     private void init() {
@@ -119,6 +124,10 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         this.resultArea = resultArea();
         this.qrCodeArea = qrCodeArea();
         this.myLinksNoteArea = myLinksNoteArea();
+
+        //remove existing - to avoid double elements
+        removeAll();
+        centralLayout.removeAll();
 
         add(leftDiv, centralLayout, rightDiv);
         centralLayout.add(mainArea, overallArea, resultArea, myLinksNoteArea, qrCodeArea);
@@ -287,7 +296,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         EventBus.getDefault().register(this);
 
         //update counter every page load
-        updateCounter();
+        updateCounters();
     }
 
     @Override
@@ -306,7 +315,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     @Subscribe
     public void onLinkSavedEvent(final LinkSavedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkSavedEvent.class.getSimpleName(), event);
-        updateCounter();
+        updateCounters();
     }
 
     /**
@@ -317,7 +326,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     @Subscribe
     public void onLinkDeletedEvent(final LinkDeletedEvent event) {
         log.trace("{} {} received: {}", TAG, LinkDeletedEvent.class.getSimpleName(), event);
-        updateCounter();
+        updateCounters();
     }
 
     private void onSaveLink(final ClickEvent<Button> buttonClickEvent) {
@@ -370,6 +379,10 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
             linkServiceInputBuilder.description(linkDescription);
         }
 
+        if (this.isUserLoggedIn) {
+            linkServiceInputBuilder.linkOwner(this.user);
+        }
+
         LinkServiceInput linkServiceInput = linkServiceInputBuilder.build();
         OperationResult saveLinkOperation = linkService.createLink(linkServiceInput);
         if (saveLinkOperation.ok()) {
@@ -397,9 +410,12 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         showError(opResult.getMessage());
     }
 
-    private void updateCounter() {
+    private void updateCounters() {
         if (ui != null) {
             ui.access(() -> linkCounter.setText(Long.toString(overallService.numberOfStoredLinks())));
+            if (this.isUserLoggedIn) {
+                ui.access(() -> userLinkCounter.setText(Long.toString(linkInfoService.countUserLinks(this.user))));
+            }
         }
     }
 
