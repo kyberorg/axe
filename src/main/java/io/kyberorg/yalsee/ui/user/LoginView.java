@@ -83,7 +83,7 @@ public class LoginView extends YalseeFormLayout {
         usernameInput.setId(IDs.USERNAME_INPUT);
         passwordInput.setId(IDs.PASSWORD_INPUT);
 
-        forgotMe.setId(IDs.FOROGT_ME);
+        forgotMe.setId(IDs.FORGOT_ME);
         forgotMe.setLabel("Log me out after");
 
         fields.addFormItem(usernameInput, "Username");
@@ -135,10 +135,7 @@ public class LoginView extends YalseeFormLayout {
             OperationResult sendVerificationCodeResult = tfaService.sendVerificationCode(user);
             if (sendVerificationCodeResult.ok()) {
                 boolean isForgotMeChecked = forgotMe.getValue();
-                if (isForgotMeChecked) {
-                    //sending it to Verification Page
-                    VaadinSession.getCurrent().setAttribute(App.Session.FORGOT_ME_KEY, true);
-                }
+                VaadinSession.getCurrent().setAttribute(App.Session.FORGOT_ME_KEY, isForgotMeChecked);
                 navigationTarget = Endpoint.UI.VERIFICATION_PAGE;
             } else {
                 log.warn("{} 2fa code send failed. Error: {}", TAG, sendVerificationCodeResult.getMessage());
@@ -162,6 +159,8 @@ public class LoginView extends YalseeFormLayout {
                     loginService.createNewLoginRecord(user, VaadinSession.getCurrent().getBrowser());
             if (createNewRecordResult.ok()) {
                 Login loginRecord = createNewRecordResult.getPayload(Login.class);
+                log.info("{} User Session started. User {}. Session sarja: {}",
+                        TAG, user.getUsername(), loginRecord.getSarja());
                 String cookieValue = loginService.constructCookieValue(loginRecord);
                 Cookie cookie = loginService.createCookie(cookieValue, VaadinSession.getCurrent().getBrowser());
                 VaadinService.getCurrentResponse().addCookie(cookie);
@@ -172,6 +171,7 @@ public class LoginView extends YalseeFormLayout {
             }
         }
         VaadinSession.getCurrent().setAttribute(App.Session.USER_KEY, user);
+        log.info("{} User '{}' logged in", TAG, user.getUsername());
     }
 
     public static final class IDs {
@@ -180,6 +180,6 @@ public class LoginView extends YalseeFormLayout {
         public static final String SUBTITLE_LINK = "subtitleLink";
         public static final String USERNAME_INPUT = "usernameInput";
         public static final String PASSWORD_INPUT = "passwordInput";
-        public static final String FOROGT_ME = "rememberMe";
+        public static final String FORGOT_ME = "forgotMe";
     }
 }

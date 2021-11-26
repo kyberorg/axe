@@ -189,6 +189,8 @@ public class LoginService {
         Optional<Login> loginRecord = loginDao.findBySarja(parts.getSarja());
         if (loginRecord.isPresent()) {
             loginDao.delete(loginRecord.get());
+            log.info("{} User Session destroyed. User: {}. Session sarja: {}",
+                    TAG, loginRecord.get().getUser().getUsername(), loginRecord.get().getSarja());
             return OperationResult.success();
         } else {
             return OperationResult.elementNotFound().withMessage(ERR_RECORD_NOT_FOUND);
