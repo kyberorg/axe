@@ -13,7 +13,10 @@ import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.User;
+import io.kyberorg.yalsee.services.LinkInfoService;
+import io.kyberorg.yalsee.services.user.UserService;
 import io.kyberorg.yalsee.utils.session.SessionBox;
 import io.kyberorg.yalsee.utils.session.SessionBoxRecord;
 import lombok.Getter;
@@ -30,6 +33,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * App-wide tools.
@@ -42,6 +46,8 @@ public class AppUtils implements Serializable {
     private static final String TAG = "[" + AppUtils.class.getSimpleName() + "]";
     @Getter
     private final Environment env;
+
+    private final LinkInfoService linkInfoService;
 
     /**
      * This field is dirty hack to access Short URL from static context.
@@ -57,10 +63,12 @@ public class AppUtils implements Serializable {
     /**
      * Creates {@link AppUtils}.
      *
-     * @param env environment variables
+     * @param env             environment variables
+     * @param linkInfoService for getting information about link.
      */
-    public AppUtils(final Environment env) {
+    public AppUtils(final Environment env, LinkInfoService linkInfoService) {
         this.env = env;
+        this.linkInfoService = linkInfoService;
         populateStaticFields();
     }
 
@@ -510,6 +518,17 @@ public class AppUtils implements Serializable {
             log.warn("{} {}", TAG, message);
             throw new RuntimeException(message, e);
         }
+    }
+
+    /**
+     * Defines if given link has non-default owner.
+     *
+     * @param ident non-empty string with link's ident.
+     * @return true - link has owner, and it is not {@link UserService#getDefaultUser()}, false - if not.
+     */
+    public boolean shortLinkHasOwner(final String ident) {
+        Optional<LinkInfo> linkInfo = linkInfoService.getLinkInfoByIdent(ident);
+        return linkInfo.filter(linkInfoService::linkHasNonDefaultOwner).isPresent();
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {

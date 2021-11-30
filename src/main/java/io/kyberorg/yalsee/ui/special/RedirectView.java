@@ -67,6 +67,7 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
     private final Page page = UI.getCurrent().getPage();
     private FeederThread thread;
 
+    private String ident;
     private String origin;
     private String target = "/"; //this is for redirecting to main page in case someone visits page directly.
 
@@ -125,8 +126,8 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
                     message, parts.length);
             return STATUS_500;
         }
-
-        this.origin = appUtils.getShortUrl() + "/" + parts[0];
+        this.ident = parts[0];
+        this.origin = appUtils.getShortUrl() + "/" + this.ident;
         this.target = parts[1];
 
         if (shouldSkipRedirectPage()) {
@@ -149,10 +150,10 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
     }
 
     private boolean shouldSkipRedirectPage() {
-        //TODO add if link has owner -> true
+        boolean linkHasOwner = appUtils.shortLinkHasOwner(this.ident);
         boolean isTargetInternal = appUtils.isInternalUrl(this.target);
         boolean hasBypassSymbol = appUtils.hasRedirectPageBypassSymbol(this.origin);
-        return isTargetInternal || hasBypassSymbol;
+        return linkHasOwner || isTargetInternal || hasBypassSymbol;
     }
 
     private void doJSRedirect(final String target) {

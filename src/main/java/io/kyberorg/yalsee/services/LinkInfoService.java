@@ -102,6 +102,17 @@ public class LinkInfoService {
     }
 
     /**
+     * Retrieves {@link LinkInfo} for given {@code ident}.
+     *
+     * @param ident non-empty string with ident.
+     * @return {@link Optional} of {@link LinkInfo}.
+     */
+    public Optional<LinkInfo> getLinkInfoByIdent(final String ident) {
+        if (StringUtils.isBlank(ident)) return Optional.empty();
+        return Optional.ofNullable(repo.findSingleByIdent(ident));
+    }
+
+    /**
      * Updates {@link LinkInfo} record.
      *
      * @param updatedLinkInfo {@link LinkInfo} object with updated fields.
@@ -117,6 +128,10 @@ public class LinkInfoService {
 
     public List<LinkInfo> getUserLinks(final User linkOwner) {
         return repo.findByOwner(linkOwner);
+    }
+
+    public boolean linkHasNonDefaultOwner(final LinkInfo linkInfo) {
+        return linkInfo.getOwner() != null && linkInfo.getOwner() != getDefaultUser();
     }
 
     private boolean linkInfoExistsForIdent(final String ident) {
