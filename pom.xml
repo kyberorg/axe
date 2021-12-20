@@ -140,7 +140,7 @@
         <dependency>
             <groupId>org.greenrobot</groupId>
             <artifactId>eventbus</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.1</version>
         </dependency>
         <!-- Working with JSON -->
         <dependency>
@@ -270,7 +270,7 @@
 
 
         <!-- Snyk deps -->
-        <!-- We don't use those deps but other deps are using old version. So those are here to improve secuirty -->
+        <!-- We don't use those deps but other deps are using old version. So those are here to improve security -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
