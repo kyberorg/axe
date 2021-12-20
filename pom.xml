@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.7.5</vaadin.version>
+        <vaadin.version>14.8.0</vaadin.version>
         
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
+        <version>2.6.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     
@@ -150,6 +150,8 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>2.0.202</version>
+            <scope>runtime</scope>
         </dependency>
         
         <!-- Database migration tool -->
@@ -161,8 +163,8 @@
         <!-- EventBus: event-driven changes -->
         <dependency>
             <groupId>org.greenrobot</groupId>
-            <artifactId>eventbus</artifactId>
-            <version>3.2.0</version>
+            <artifactId>eventbus-java</artifactId>
+            <version>3.3.1</version>
         </dependency>
         <!-- Working with JSON -->
         <dependency>
@@ -194,7 +196,7 @@
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.13.3</version>
+            <version>3.13.4</version>
         </dependency>
 
         <!-- For extra validation of URL  -->
@@ -215,7 +217,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>5.4.0.1</version>
+            <version>5.5.0</version>
         </dependency>
         
         <!-- Emoji Parser -->
@@ -291,7 +293,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>5.25.0</version>
+            <version>5.25.1</version>
             <scope>test</scope>
         </dependency>
         <!-- Tests Re-run -->
@@ -304,7 +306,7 @@
 
 
         <!-- Snyk deps -->
-        <!-- We don't use those deps but other deps are using old version. So those are here to improve secuirty -->
+        <!-- We don't use those deps but other deps are using old version. So those are here to improve security -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
