@@ -40,8 +40,8 @@ public class IdnTest extends SelenideTest {
     public void russianUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://кто.рф");
         // verify that KtoRF opened
-        SelenideElement eggs = $(KtoRf.DIV_EGGS);
-        eggs.should(exist);
+        SelenideElement regDiv = $(KtoRf.DIV_REG);
+        regDiv.should(exist);
     }
 
     /**
