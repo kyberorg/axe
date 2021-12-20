@@ -46,7 +46,7 @@ public class LinkInfoService {
             linkInfo.setSession(session);
         }
 
-        repo.saveOrUpdate(linkInfo);
+        repo.update(linkInfo);
     }
 
     /**
@@ -99,7 +99,7 @@ public class LinkInfoService {
      * @param updatedLinkInfo {@link LinkInfo} object with updated fields.
      */
     public void update(final LinkInfo updatedLinkInfo) {
-        repo.saveOrUpdate(updatedLinkInfo);
+        repo.update(updatedLinkInfo);
     }
 
     private boolean linkInfoExistsForIdent(final String ident) {
