@@ -257,7 +257,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>6.1.1</version>
+            <version>5.25.1</version>
             <scope>test</scope>
         </dependency>
         <!-- Tests Re-run -->
