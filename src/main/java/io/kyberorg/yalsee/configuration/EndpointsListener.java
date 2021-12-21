@@ -16,6 +16,11 @@ import java.util.List;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 
+/**
+ * Provides information about registered endpoints and routes.
+ *
+ * @since 3.7
+ */
 @RequiredArgsConstructor
 @Component
 public class EndpointsListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -31,7 +36,17 @@ public class EndpointsListener implements ApplicationListener<ContextRefreshedEv
         );
     }
 
+    /**
+     * Checks if route is already present in application.
+     *
+     * @param routeToCheck non-empty string with route to search against. Should start with leading slash.
+     * @return true - if application has given route, false if not.
+     */
     public boolean isRouteExists(final String routeToCheck) {
+        return routeRegistered(routeToCheck) || routePresentInApplication(routeToCheck);
+    }
+
+    private boolean routeRegistered(final String routeToCheck) {
         for (String route : routes) {
             if (StringUtils.isBlank(route)) {
                 continue;
@@ -40,6 +55,10 @@ public class EndpointsListener implements ApplicationListener<ContextRefreshedEv
                 return true;
             }
         }
+        return false;
+    }
+
+    private boolean routePresentInApplication(final String routeToCheck) {
         //noinspection rawtypes we need only status
         HttpResponse httpResponse = Unirest.get(appUtils.getServerUrl() + routeToCheck).asEmpty();
         return httpResponse.getStatus() != STATUS_404;
