@@ -14,6 +14,7 @@ import kong.unirest.Unirest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junitpioneer.jupiter.Issue;
 
 import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
 import static io.kyberorg.yalsee.constants.Header.X_YALSEE_TOKEN;
@@ -314,6 +315,33 @@ public class StoreLinkApiTest extends UnirestTest {
 
         assertNotNull(result);
         assertEquals(STATUS_201, result.getStatus());
+    }
+
+    /**
+     * Tests that if desired ident conflicts with existing routes - status 409 is send.
+     */
+    @Test
+    @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",
+            disabledReason = "Only works when Token Provided")
+    @Issue("https://github.com/kyberorg/yalsee/issues/633")
+    public void onConflictingIdentStatusIs409() {
+        String longUrl = "https://github.com/kyberorg/yalsee/issues/633";
+        String customIdent = Endpoint.UI.APP_INFO_PAGE;
+
+        PostLinkRequest req = PostLinkRequest.create().withLink(longUrl);
+        req.setIdent(customIdent);
+        String requestJson = req.toString();
+
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(X_YALSEE_TOKEN, TestUtils.getDeleteToken())
+                .body(requestJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_409, result.getStatus());
     }
 
 }
