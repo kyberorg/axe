@@ -13,6 +13,7 @@ public final class IdentGenerator {
     private static final int IDENT_MAX_LENGTH_WITHOUT_FIRST_AND_LAST_CHARS = IDENT_MAX_LENGTH - 2;
 
     /**
+     * Ident pattern.
      * Regexp explanation:
      * ^[a-zA-Z0-9]      # start with an alphanumeric character
      * (                 # start of (group 1)
@@ -27,7 +28,7 @@ public final class IdentGenerator {
      * # {0,IDENT_MAX_LENGTH - 2} plus the first and last alphanumeric characters,
      * # total length became {2, IDENT_MAX_LENGTH}
      */
-    public static final String VALID_IDENT_PATTERN = "[a-zA-Z0-9]"
+    public static final String VALID_IDENT_PATTERN = "^[a-zA-Z0-9]"
             + "([._-](?![._-])|[a-zA-Z0-9]){0," + IDENT_MAX_LENGTH_WITHOUT_FIRST_AND_LAST_CHARS + "} "
             + "[a-zA-Z0-9]$";
 
