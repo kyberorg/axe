@@ -78,6 +78,193 @@ public class GetLinkApiTest extends UnirestTest {
     }
 
     /**
+     * Request with dot inside = 404.
+     */
+    @Test
+    public void onRequestWithDotInsideIdentStatusIs404() {
+        String ident = "a.b";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_200, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with dot at first place = 400.
+     */
+    @Test
+    public void onRequestWithDotAsFirstCharIdentStatusIs400() {
+        String ident = ".b";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_400, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with dot at last place = 400.
+     */
+    @Test
+    public void onRequestWithDotAsLastCharIdentStatusIs400() {
+        String ident = "b.";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_400, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with hyphen inside = 404.
+     */
+    @Test
+    public void onRequestWithHyphenInsideIdentStatusIs200() {
+        String ident = "a-b";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_404, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with dot at hyphen place = 400.
+     */
+    @Test
+    public void onRequestWithHyphenAsFirstCharIdentStatusIs400() {
+        String ident = "-b";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_400, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with hyphen at last place = 400.
+     */
+    @Test
+    public void onRequestWithHyphenAsLastCharIdentStatusIs400() {
+        String ident = "b.";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_400, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with underscore inside = 404.
+     */
+    @Test
+    public void onRequestWithUnderscoreInsideIdentStatusIs404() {
+        String ident = "a_b";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_404, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with underscore at first place = 400.
+     */
+    @Test
+    public void onRequestWithUnderscoreAsFirstCharIdentStatusIs400() {
+        String ident = "_b";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_400, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with underscore at last place = 400.
+     */
+    @Test
+    public void onRequestWithUnderscoreAsLastCharIdentStatusIs400() {
+        String ident = "b.";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_400, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with allowed chars inside = 404.
+     */
+    @Test
+    public void onRequestWithAllowedCharsInsideIdentStatusIs404() {
+        String ident = "a_and-b.are.allowed";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_404, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
+     * Request with allowed and not allowed together in ident = 400.
+     */
+    @Test
+    public void onRequestWithAllowedAndNotAllowedCharsTogetherInIdentStatusIs400() {
+        String ident = "b-#";
+        String url = TEST_URL + Endpoint.Api.LINKS_API + "/" + ident;
+        HttpRequest request = Unirest.get(url);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_400, result.getStatus());
+        TestUtils.assertResultIsYalsErrorJson(result);
+    }
+
+    /**
      * Request something that not exists = 404.
      */
     @Test
