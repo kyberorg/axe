@@ -90,7 +90,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(STATUS_404, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
