@@ -28,9 +28,8 @@ public final class IdentGenerator {
      * # {0,IDENT_MAX_LENGTH - 2} plus the first and last alphanumeric characters,
      * # total length became {2, IDENT_MAX_LENGTH}
      */
-    public static final String VALID_IDENT_PATTERN = "^[a-zA-Z0-9]"
-            + "([._-](?![._-])|[a-zA-Z0-9]){0," + IDENT_MAX_LENGTH_WITHOUT_FIRST_AND_LAST_CHARS + "} "
-            + "[a-zA-Z0-9]$";
+    public static final String VALID_IDENT_PATTERN = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){0,"
+            + IDENT_MAX_LENGTH_WITHOUT_FIRST_AND_LAST_CHARS + "}[a-zA-Z0-9]$";
 
     private IdentGenerator() {
         throw new UnsupportedOperationException("Utility class");
