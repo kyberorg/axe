@@ -31,6 +31,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,7 @@ import java.util.Objects;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Push
@@ -57,14 +59,18 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
-    /**
-     * Creates Main Application (NavBar, Menu and Content) View.
-     *
-     * @param appUtils application utils for determine dev mode
-     */
-    public MainView(final AppUtils appUtils) {
-        this.appUtils = appUtils;
+    private boolean initNeeded = true;
 
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        if (initNeeded) {
+            init();
+        }
+
+        tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+    }
+
+    private void init() {
         String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
 
         DrawerToggle toggle = new DrawerToggle();
@@ -108,6 +114,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             cookieBanner.getContent().open();
             session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
         }
+        initNeeded = false;
     }
 
     private void addLogo() {
@@ -145,10 +152,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
-    @Override
-    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
-    }
 
     @Override
     public void configurePage(final InitialPageSettings settings) {
