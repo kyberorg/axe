@@ -12,6 +12,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -32,6 +34,7 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -39,6 +42,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
+@RequiredArgsConstructor
 @Slf4j
 @SpringComponent
 @UIScope
@@ -46,7 +50,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 @CssImport("./css/home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
 @PageTitle("Yalsee - the link shortener")
-public class HomeView extends HorizontalLayout {
+public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + HomeView.class.getSimpleName() + "]";
 
     private final Div leftDiv = new Div();
@@ -78,24 +82,8 @@ public class HomeView extends HorizontalLayout {
 
     private Notification errorNotification;
 
-    /**
-     * Create {@link HomeView}.
-     *
-     * @param overallService overall service for getting number of links
-     * @param linkService    service for saving links
-     * @param qrCodeService  service for getting QR Code for saved link
-     * @param appUtils       application utils for getting server location and API location
-     * @param errorUtils     error utils to report to bugsnag
-     */
-    public HomeView(
-            final OverallService overallService, final LinkService linkService, final QRCodeService qrCodeService,
-            final AppUtils appUtils, final ErrorUtils errorUtils) {
-        this.overallService = overallService;
-        this.linkService = linkService;
-        this.qrCodeService = qrCodeService;
-        this.appUtils = appUtils;
-        this.errorUtils = errorUtils;
-
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         init();
         applyStyle();
         applyLoadState();
@@ -104,8 +92,11 @@ public class HomeView extends HorizontalLayout {
     private void init() {
         this.setId(IDs.VIEW_ID);
 
-        add(leftDiv, centralLayout, rightDiv);
+        centralLayout.removeAll();
         centralLayout.add(mainArea, overallArea, resultArea, myLinksNoteArea, qrCodeArea);
+
+        removeAll();
+        add(leftDiv, centralLayout, rightDiv);
     }
 
     private void applyStyle() {

@@ -17,6 +17,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -39,6 +41,7 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.DeviceUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -48,12 +51,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Slf4j
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: My Links")
-public class MyLinksView extends YalseeLayout {
+public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
     private static final String USER_MODE_FLAG = "UserMode";
 
@@ -81,23 +85,8 @@ public class MyLinksView extends YalseeLayout {
     private DeviceUtils deviceUtils;
     private boolean clientHasSmallScreen;
 
-    /**
-     * Creates {@link MyLinksView}.
-     *
-     * @param linkInfoService service for operating with LinkInfo.
-     * @param qrCodeService   QR Code Service
-     * @param linkService     service for operating with Links.
-     * @param appUtils        application utilities.
-     */
-    public MyLinksView(final LinkInfoService linkInfoService, final QRCodeService qrCodeService,
-                       final LinkService linkService, final AppUtils appUtils) {
-        this.linkInfoService = linkInfoService;
-        this.qrCodeService = qrCodeService;
-        this.linkService = linkService;
-        this.appUtils = appUtils;
-
-        setId(MyLinksView.class.getSimpleName());
-
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         init();
         setIds();
         applyLoadState();
@@ -162,7 +151,26 @@ public class MyLinksView extends YalseeLayout {
 
         initGridEditor();
 
+        removeAll();
         add(sessionBanner, noRecordsBanner, endSessionButton, grid);
+    }
+
+    private void setIds() {
+        setId(MyLinksView.class.getSimpleName());
+        sessionBanner.setId(IDs.SESSION_BANNER);
+        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
+        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
+        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
+        endSessionButton.setId(IDs.END_SESSION_BUTTON);
+        grid.setId(IDs.GRID);
+        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
+        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
+        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
+        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
+    }
+
+    private void applyLoadState() {
+        noRecordsBanner.setVisible(gridIsEmpty());
     }
 
     private Span link(final LinkInfo linkInfo) {
@@ -259,22 +267,6 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private void setIds() {
-        sessionBanner.setId(IDs.SESSION_BANNER);
-        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
-        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
-        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
-        endSessionButton.setId(IDs.END_SESSION_BUTTON);
-        grid.setId(IDs.GRID);
-        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
-        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
-        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
-        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
-    }
-
-    private void applyLoadState() {
-        noRecordsBanner.setVisible(gridIsEmpty());
-    }
 
     @Override
     protected void onAttach(final AttachEvent attachEvent) {
