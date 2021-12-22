@@ -59,9 +59,14 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
+    private boolean initNeeded = true;
+
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        init();
+        if (initNeeded) {
+            init();
+        }
+
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
     }
 
@@ -109,6 +114,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             cookieBanner.getContent().open();
             session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
         }
+        initNeeded = false;
     }
 
     private void addLogo() {
