@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services;
 
+import io.kyberorg.yalsee.configuration.EndpointsListener;
 import io.kyberorg.yalsee.core.BanHammer;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
@@ -35,6 +36,7 @@ public class LinkService {
     private static final String TAG = "[" + LinkService.class.getSimpleName() + "]";
     private final LinkRepo repo;
     private final LinkInfoService linkInfoService;
+    private final EndpointsListener endpointsListener;
 
     public static final String OP_MALFORMED_IDENT = "Ident is not valid";
     public static final String OP_MALFORMED_URL = UrlExtraValidator.URL_NOT_VALID;
@@ -308,7 +310,8 @@ public class LinkService {
 
     private boolean isIdentAlreadyExists(final String ident) {
         OperationResult result = isLinkWithIdentExist(ident);
-        return result.ok();
+        boolean isRouteExists = endpointsListener.isRouteExists("/" + ident);
+        return result.ok() || isRouteExists;
     }
 
     private String generateIdent() {
