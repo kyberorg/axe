@@ -36,7 +36,7 @@ public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
     private final AppUtils appUtils;
 
     @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
     }
 

@@ -18,7 +18,7 @@ import io.kyberorg.yalsee.ui.core.YalseeLayout;
 public class DebugView extends YalseeLayout implements BeforeEnterObserver {
 
     @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         setId(DebugView.class.getSimpleName());
         removeAll();
         add(new H2("Debug Page"));

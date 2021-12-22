@@ -83,7 +83,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private Notification errorNotification;
 
     @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
         applyStyle();
         applyLoadState();

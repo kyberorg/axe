@@ -86,7 +86,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private boolean clientHasSmallScreen;
 
     @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
         setIds();
         applyLoadState();
