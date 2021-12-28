@@ -95,6 +95,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public MainView(final AppUtils appUtils, final LoginService loginService) {
         this.appUtils = appUtils;
         this.loginService = loginService;
+
+        init();
     }
 
     @Override
