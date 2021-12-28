@@ -10,6 +10,8 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
@@ -31,7 +33,6 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
-import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +40,6 @@ import java.util.Objects;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 
-@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Push
@@ -53,32 +53,41 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
-
     private final AppUtils appUtils;
 
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
-    private boolean initNeeded = true;
+    /**
+     * Creates Main Application (NavBar, Menu and Content) View.
+     *
+     * @param appUtils application utils for determine dev mode
+     */
+    public MainView(final AppUtils appUtils) {
+        this.appUtils = appUtils;
+        init();
+    }
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        if (initNeeded) {
-            init();
-        }
-
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+
+        VaadinSession session = VaadinSession.getCurrent();
+        //Cookie Banner
+        readAndWriteCookieBannerRelatedSettingsFromSession(session);
+        boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
+        if (!bannerAlreadyShown) {
+            CookieBanner cookieBanner = new CookieBanner();
+            cookieBanner.getContent().open();
+            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        }
     }
 
     private void init() {
-        String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
-
-        DrawerToggle toggle = new DrawerToggle();
         setPrimarySection(Section.NAVBAR);
 
-        Span title = new Span(siteTitle);
-        title.addClassName("site-title");
-        addToNavbar(toggle, title);
+        //do not set touch-optimized to true, because it moves navbar down.
+        addToNavbar(createHeader());
 
         //items
         addLogo();
@@ -105,16 +114,23 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
+    }
 
-        //Cookie Banner
-        readAndWriteCookieBannerRelatedSettingsFromSession(session);
-        boolean shouldDisplayBanner = !(boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
-        if (shouldDisplayBanner) {
-            CookieBanner cookieBanner = new CookieBanner();
-            cookieBanner.getContent().open();
-            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
-        }
-        initNeeded = false;
+    private Component createHeader() {
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setId("header");
+        layout.setWidthFull();
+        layout.setSpacing(false);
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        DrawerToggle toggle = new DrawerToggle();
+
+        String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
+        Span title = new Span(siteTitle);
+        title.addClassName("site-title");
+
+        layout.add(toggle, title);
+        return layout;
     }
 
     private void addLogo() {
