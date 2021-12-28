@@ -20,7 +20,9 @@ updates:
       - dependency-name: "hibernate-validator"
         versions: [ "[7.x.x.Final,)" ]
       - dependency-name: "selenide"
-        versions: [ "(6.x.x,)" ]
+        versions: [ "[6.x.x,)" ]
+      - dependency-name: "vaadin.version"
+        versions: [ "[15.x.x,)" ]
 
   - package-ecosystem: "github-actions"
     directory: "/"
