@@ -176,6 +176,24 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         add(sessionBanner, noRecordsBanner, endSessionButton, grid);
     }
 
+    private void setIds() {
+        setId(MyLinksView.class.getSimpleName());
+        sessionBanner.setId(IDs.SESSION_BANNER);
+        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
+        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
+        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
+        endSessionButton.setId(IDs.END_SESSION_BUTTON);
+        grid.setId(IDs.GRID);
+        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
+        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
+        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
+        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
+    }
+
+    private void applyLoadState() {
+        noRecordsBanner.setVisible(gridIsEmpty());
+    }
+
     private Span link(final LinkInfo linkInfo) {
         Span link = new Span();
         String shortDomain = appUtils.getShortDomain();
@@ -269,22 +287,6 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         }
     }
 
-    private void setIds() {
-        sessionBanner.setId(IDs.SESSION_BANNER);
-        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
-        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
-        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
-        endSessionButton.setId(IDs.END_SESSION_BUTTON);
-        grid.setId(IDs.GRID);
-        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
-        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
-        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
-        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
-    }
-
-    private void applyLoadState() {
-        noRecordsBanner.setVisible(gridIsEmpty());
-    }
 
     @Override
     protected void onAttach(final AttachEvent attachEvent) {

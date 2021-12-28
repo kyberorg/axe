@@ -98,7 +98,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private User user;
 
     @Override
-    public void beforeEnter(BeforeEnterEvent event) {
+    public void beforeEnter(final BeforeEnterEvent event) {
         setUserVars();
         initCounters();
         init();
@@ -136,7 +136,11 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         centralLayout.removeAll();
 
         add(leftDiv, centralLayout, rightDiv);
+
         centralLayout.add(mainArea, overallArea, resultArea, myLinksNoteArea, qrCodeArea);
+
+        removeAll();
+        add(leftDiv, centralLayout, rightDiv);
     }
 
     private void applyStyle() {

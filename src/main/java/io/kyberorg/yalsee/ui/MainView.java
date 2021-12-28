@@ -95,7 +95,33 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public MainView(final AppUtils appUtils, final LoginService loginService) {
         this.appUtils = appUtils;
         this.loginService = loginService;
+    }
 
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+
+        gatherLoginInfo();
+
+        setUserButtonIcon();
+        setUserMenuButtons();
+        updateSiteTitle();
+
+        VaadinSession session = VaadinSession.getCurrent();
+        //Cookie Banner
+        readAndWriteCookieBannerRelatedSettingsFromSession(session);
+        boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
+        if (!bannerAlreadyShown && !this.userLoggedIn) {
+            CookieBanner cookieBanner = new CookieBanner();
+            cookieBanner.getContent().open();
+            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        }
+    }
+
+    private void init() {
+        String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "yalsee").toUpperCase();
+
+        DrawerToggle toggle = new DrawerToggle();
         setPrimarySection(Section.NAVBAR);
         //do not set touch-optimized to true, because it moves navbar down.
         addToNavbar(createHeader());
@@ -243,27 +269,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private void updateSiteTitle() {
         if (this.userLoggedIn) {
             title.setText(String.format("%s's Yalsee", this.user.getUsername()).toUpperCase());
-        }
-    }
-
-    @Override
-    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
-
-        gatherLoginInfo();
-
-        setUserButtonIcon();
-        setUserMenuButtons();
-        updateSiteTitle();
-
-        VaadinSession session = VaadinSession.getCurrent();
-        //Cookie Banner
-        readAndWriteCookieBannerRelatedSettingsFromSession(session);
-        boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
-        if (!bannerAlreadyShown && !this.userLoggedIn) {
-            CookieBanner cookieBanner = new CookieBanner();
-            cookieBanner.getContent().open();
-            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
         }
     }
 

@@ -4,6 +4,8 @@ import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -17,12 +19,14 @@ import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
 import io.kyberorg.yalsee.utils.maven.MavenInfo;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: App Info")
-public class AppInfoView extends YalseeLayout {
+public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
     private static final String UNDEFINED = "UNDEFINED";
     private static final int COMMIT_HASH_LENGTH = 7;
 
@@ -31,33 +35,22 @@ public class AppInfoView extends YalseeLayout {
     private final MavenInfo mavenInfo;
     private final AppUtils appUtils;
 
-    /**
-     * Creates {@link AppInfoView} object.
-     *
-     * @param gitService   information from git
-     * @param gitRepoState information from build time
-     * @param mavenInfo    info from maven
-     * @param appUtils     application utils
-     */
-    public AppInfoView(final GitService gitService, final GitRepoState gitRepoState,
-                       final MavenInfo mavenInfo, final AppUtils appUtils) {
-        this.gitService = gitService;
-        this.gitRepoState = gitRepoState;
-        this.mavenInfo = mavenInfo;
-        this.appUtils = appUtils;
-
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
     }
 
     private void init() {
         setId(IDs.VIEW_ID);
 
-        VerticalLayout publicInfoArea = publicInfoArea();
-        VerticalLayout cookieArea = cookieArea();
+        final VerticalLayout publicInfoArea = publicInfoArea();
+        final VerticalLayout cookieArea = cookieArea();
+
+        removeAll();
         add(publicInfoArea, cookieArea);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
-            VerticalLayout devInfoArea = devInfoArea();
+            final VerticalLayout devInfoArea = devInfoArea();
             add(devInfoArea);
         }
     }

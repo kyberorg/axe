@@ -1,14 +1,13 @@
-name: "Ship - Dev"
+name: "Ship - PoC"
 
 on:
   push:
-    branches-ignore:
-      - trunk
+    branches:
       - 511-users
 
 jobs:
   ship2dev:
-    name: Ship::Dev
+    name: Ship::PoC
     runs-on: self-hosted
 
     steps:
@@ -25,18 +24,18 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.DEV -t quay.io/kyberorg/yalsee:dev .
+        run: docker build -f Dockerfile.DEV -t quay.io/kyberorg/yalsee:poc .
 
       - name: Docker push
-        run: docker push quay.io/kyberorg/yalsee:dev
+        run: docker push quay.io/kyberorg/yalsee:poc
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi quay.io/kyberorg/yalsee:dev
+        run: docker rmi quay.io/kyberorg/yalsee:poc
 
       - name: Deploy
         uses: wei/curl@master
         with:
-          args: -X POST ${{ secrets.DEV_DEPLOY_HOOK }}
+          args: -X POST ${{ secrets.POC_DEPLOY_HOOK }}
 
       - name: Get deployed commit SHA
         id: deployed_commit
@@ -45,7 +44,7 @@ jobs:
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v2
         with:
-          url: https://dev.yals.ee
+          url: https://poc.yals.ee
           responseCode: 200
           timeout: 120
           interval: 1.5

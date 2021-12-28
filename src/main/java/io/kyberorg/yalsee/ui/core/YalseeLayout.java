@@ -43,4 +43,9 @@ public class YalseeLayout extends HorizontalLayout {
     public void add(final Component... components) {
         centralLayout.add(components);
     }
+
+    @Override
+    public void removeAll() {
+        centralLayout.removeAll();
+    }
 }
