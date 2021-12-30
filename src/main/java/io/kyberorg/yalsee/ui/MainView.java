@@ -29,6 +29,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.models.redis.YalseeSession;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.YalseeSessionCookieService;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
@@ -60,7 +61,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
-    private final YalseeSessionService yalseeSessionService;
+    private final YalseeSessionService sessionService;
+    private final YalseeSessionCookieService cookieService;
 
     private YalseeSession yalseeSession;
 
@@ -70,14 +72,20 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
      *
-     * @param appUtils             application utils for determine dev mode
-     * @param yalseeSessionService service for manipulating with {@link YalseeSession}.
+     * @param appUtils       application utils for determine dev mode
+     * @param sessionService service for manipulating with {@link YalseeSession}.
+     * @param cookieService  service for actions with {@link YalseeSession} {@link Cookie}.
      */
-    public MainView(final AppUtils appUtils, YalseeSessionService yalseeSessionService) {
+    public MainView(final AppUtils appUtils,
+                    final YalseeSessionService sessionService, final YalseeSessionCookieService cookieService) {
         this.appUtils = appUtils;
-        this.yalseeSessionService = yalseeSessionService;
+        this.sessionService = sessionService;
+        this.cookieService = cookieService;
 
         init();
+        //Yalsee Session usage demo - remove after switching from VaadinSession.
+        sessionDemo();
+        //End Yalsee Session usage demo - remove after switching from VaadinSession.
     }
 
     @Override
@@ -87,10 +95,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         VaadinSession session = VaadinSession.getCurrent();
         //Cookie Banner
         readAndWriteCookieBannerRelatedSettingsFromSession(session);
-
-        //TODO write it to UserSession
-        yalseeSession.setValue(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
-        //TODO replace it
 
         boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
         if (!bannerAlreadyShown) {
@@ -198,7 +202,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             //read from cookie
             Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.USER_SESSION_COOKIE,
                     VaadinService.getCurrentRequest());
-            OperationResult checkResult = yalseeSessionService.checkCookie(sessionCookie, currentDevice);
+            OperationResult checkResult = cookieService.checkCookie(sessionCookie, currentDevice);
             if (checkResult.ok()) {
                 yalseeSession = checkResult.getPayload(YalseeSession.class);
             } else {
@@ -218,12 +222,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private YalseeSession createNewSession(final Device device) {
-        return yalseeSessionService.createNew(device);
+        return sessionService.createNew(device);
     }
 
     private void sendSessionCookie(final YalseeSession yalseeSession) {
         //create cookie + remove current if any + send new to browser
-        Cookie sessionCookie = yalseeSessionService.createCookie(yalseeSession);
+        Cookie sessionCookie = cookieService.createCookie(yalseeSession);
         //resetting current if any
         Cookie resetCookie = new Cookie(sessionCookie.getName(), "-");
         resetCookie.setMaxAge(0);
@@ -236,6 +240,17 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         VaadinRequest request = VaadinService.getCurrentRequest();
         WebBrowser browser = VaadinSession.getCurrent().getBrowser();
         return Device.from(request, browser);
+    }
+
+    private void sessionDemo() {
+        final String somethingUseful = "somethingUseful";
+        yalseeSession.setValue("theKey", somethingUseful);
+        final String valueFromSession = yalseeSession.getValue(somethingUseful, String.class);
+        if (valueFromSession.equals(somethingUseful)) {
+            log.debug("{} {} works!", TAG, YalseeSession.class.getSimpleName());
+        } else {
+            log.debug("{} {} not working as expected", TAG, YalseeSession.class.getSimpleName());
+        }
     }
 
     @Override

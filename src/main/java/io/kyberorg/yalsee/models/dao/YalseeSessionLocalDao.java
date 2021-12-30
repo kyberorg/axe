@@ -37,6 +37,12 @@ public class YalseeSessionLocalDao {
         return Optional.ofNullable(storage.get(sessionId));
     }
 
+    /**
+     * Deletes object if it exists.
+     *
+     * @param sessionId string with session id used as key.
+     * @see HashMap#remove(Object)
+     */
     public void delete(final String sessionId) {
         storage.remove(sessionId);
     }

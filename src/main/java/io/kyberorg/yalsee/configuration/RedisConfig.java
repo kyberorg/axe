@@ -16,10 +16,14 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
+/**
+ * Redis configuration.
+ *
+ * @since 3.8
+ */
 @Slf4j
 @Configuration
 public class RedisConfig {
-
     private static final String TAG = "[" + RedisConfig.class.getSimpleName() + "]";
 
     @Value("${spring.redis.host}")
@@ -37,6 +41,11 @@ public class RedisConfig {
     @Value("${spring.redis.database}")
     private int database;
 
+    /**
+     * Redis Server Connection configuration.
+     *
+     * @return {@link JedisConnectionFactory} with set params.
+     */
     @Bean
     JedisConnectionFactory redisConnectionFactory() {
         log.info("{} Connecting Redis at {}:{}. Database: {}", TAG, host, port, database);
@@ -57,6 +66,11 @@ public class RedisConfig {
         return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfigurationBuilder.build());
     }
 
+    /**
+     * Redis Template for working with {@link YalseeSession} objects.
+     *
+     * @return {@link RedisTemplate} configured to work with {@link YalseeSession}.
+     */
     @Bean
     RedisTemplate<String, YalseeSession> yalseeSessionRedisTemplate() {
         RedisTemplate<String, YalseeSession> redisTemplate = new RedisTemplate<>();
@@ -69,5 +83,4 @@ public class RedisConfig {
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
-
 }

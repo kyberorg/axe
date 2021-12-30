@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.session;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.Header;
@@ -9,17 +8,34 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
+/**
+ * Information about Device (most often Browser).
+ *
+ * @since 3.8
+ */
 @Data
 public class Device implements Serializable {
+    /**
+     * Placeholder for UserAgent. Used when UA is unknown or undefined.
+     */
     public static final String DEFAULT_USER_AGENT = "Unknown Browser";
+
+    /**
+     * Placeholder for IP address. Used when IP is unknown or undefined.
+     */
     public static final String DEFAULT_IP = "0.0.0.0";
 
     private String userAgent = DEFAULT_USER_AGENT;
     private String ip = DEFAULT_IP;
+    private boolean secureConnection = false;
 
-    @JsonIgnore
-    private WebBrowser webBrowser = null;
-
+    /**
+     * Creates {@link Device} based information from {@link VaadinRequest} and {@link WebBrowser}.
+     *
+     * @param request non-empty current {@link VaadinRequest}.
+     * @param browser non-empty {@link WebBrowser} object.
+     * @return created {@link Device} object.
+     */
     public static Device from(final VaadinRequest request, final WebBrowser browser) {
         if (browser == null) {
             return Device.withDefaults();
@@ -35,8 +51,7 @@ public class Device implements Serializable {
             }
 
             Device device = new Device();
-            device.setWebBrowser(browser);
-
+            device.setSecureConnection(browser.isSecureConnection());
             if (StringUtils.isNotBlank(userAgent)) {
                 device.setUserAgent(userAgent);
             }
@@ -47,11 +62,17 @@ public class Device implements Serializable {
         }
     }
 
-    private static Device withDefaults() {
-        return new Device();
+    /**
+     * Compares Devices.
+     *
+     * @param other other {@link Device}.
+     * @return true - if both {@link #userAgent} and {@link #ip} are equal, false if not.
+     */
+    public boolean isSameDevice(final Device other) {
+        return userAgent.equals(other.getUserAgent()) && ip.equals(other.ip);
     }
 
-    public boolean isSameDevice(Device other) {
-        return userAgent.equals(other.getUserAgent()) && ip.equals(other.ip);
+    private static Device withDefaults() {
+        return new Device();
     }
 }

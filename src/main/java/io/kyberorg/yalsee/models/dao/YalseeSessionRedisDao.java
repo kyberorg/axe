@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
- * DAO for {@link YalseeSession}.
+ * Redis DAO for {@link YalseeSession}.
  *
  * @since 3.8
  */
@@ -49,6 +49,12 @@ public class YalseeSessionRedisDao extends RedisDao {
         return Optional.ofNullable(valueOps.get(appendApplicationPrefix() + sessionId));
     }
 
+    /**
+     * Deletes object if it exists.
+     *
+     * @param sessionId string with session id used as key.
+     * @see ValueOperations#getAndDelete(Object)
+     */
     public void delete(final String sessionId) {
         valueOps.getAndDelete(appendApplicationPrefix() + sessionId);
     }

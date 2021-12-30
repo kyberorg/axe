@@ -16,7 +16,6 @@ public final class App {
     public static final String URL_SAFE_SEPARATOR = ">>";
     public static final int THREE = 3;
     public static final int FOUR = 4;
-    public static final int ONE_DAY_IN_SECONDS = 86400;
 
     private App() {
         throw new UnsupportedOperationException("Utility class");
@@ -77,7 +76,6 @@ public final class App {
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
         public static final int SESSION_TIMEOUT_SECONDS = 1800;
-        public static final long USER_SESSION_TTL_SECONDS = ONE_DAY_IN_SECONDS;
     }
 
     public static class Api {
