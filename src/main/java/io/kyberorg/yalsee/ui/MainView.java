@@ -20,26 +20,30 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.models.redis.UserSession;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.UserSessionService;
+import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
+import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 
+@Slf4j
 @SpringComponent
 @UIScope
 @Push
@@ -53,7 +57,12 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
+    private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
+
     private final AppUtils appUtils;
+    private final UserSessionService userSessionService;
+
+    private UserSession userSession;
 
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
@@ -61,10 +70,13 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
      *
-     * @param appUtils application utils for determine dev mode
+     * @param appUtils           application utils for determine dev mode
+     * @param userSessionService service for manipulating with {@link UserSession}.
      */
-    public MainView(final AppUtils appUtils) {
+    public MainView(final AppUtils appUtils, UserSessionService userSessionService) {
         this.appUtils = appUtils;
+        this.userSessionService = userSessionService;
+
         init();
     }
 
@@ -75,6 +87,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         VaadinSession session = VaadinSession.getCurrent();
         //Cookie Banner
         readAndWriteCookieBannerRelatedSettingsFromSession(session);
+
+        //TODO write it to UserSession
+        userSession.setValue(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        //TODO replace it
+
         boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
         if (!bannerAlreadyShown) {
             CookieBanner cookieBanner = new CookieBanner();
@@ -84,6 +101,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void init() {
+        userSession = getUserSession();
+
         setPrimarySection(Section.NAVBAR);
 
         //do not set touch-optimized to true, because it moves navbar down.
@@ -168,6 +187,56 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
+    private UserSession getUserSession() {
+        UserSession userSession;
+        Device currentDevice = getCurrentDevice();
+        if (isFirstVisit()) {
+            //create UserSession + save it to redis
+            userSession = createNewSession(currentDevice);
+            sendSessionCookie(userSession);
+        } else {
+            //read from cookie
+            Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.USER_SESSION_COOKIE,
+                    VaadinService.getCurrentRequest());
+            OperationResult checkResult = userSessionService.checkCookie(sessionCookie, currentDevice);
+            if (checkResult.ok()) {
+                userSession = checkResult.getPayload(UserSession.class);
+            } else {
+                //something wrong with current session - override it
+                log.warn("{} Session cookie check failed. Reason: {}", TAG, checkResult);
+                userSession = createNewSession(currentDevice);
+                sendSessionCookie(userSession);
+            }
+        }
+        return userSession;
+    }
+
+    private boolean isFirstVisit() {
+        Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.USER_SESSION_COOKIE,
+                VaadinService.getCurrentRequest());
+        return Objects.isNull(sessionCookie);
+    }
+
+    private UserSession createNewSession(final Device device) {
+        return userSessionService.createNew(device);
+    }
+
+    private void sendSessionCookie(final UserSession userSession) {
+        //create cookie + remove current if any + send new to browser
+        Cookie sessionCookie = userSessionService.createCookie(userSession);
+        //resetting current if any
+        Cookie resetCookie = new Cookie(sessionCookie.getName(), "-");
+        resetCookie.setMaxAge(0);
+        VaadinService.getCurrentResponse().addCookie(resetCookie);
+        //sending normal one
+        VaadinService.getCurrentResponse().addCookie(sessionCookie);
+    }
+
+    private Device getCurrentDevice() {
+        VaadinRequest request = VaadinService.getCurrentRequest();
+        WebBrowser browser = VaadinSession.getCurrent().getBrowser();
+        return Device.from(request, browser);
+    }
 
     @Override
     public void configurePage(final InitialPageSettings settings) {

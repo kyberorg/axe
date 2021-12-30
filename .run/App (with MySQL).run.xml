@@ -2,6 +2,9 @@
     <configuration default="false" name="App (with MySQL)" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot">
         <module name="yalsee"/>
+        <selectedOptions>
+            <option name="environmentVariables"/>
+        </selectedOptions>
         <option name="SPRING_BOOT_MAIN_CLASS" value="io.kyberorg.yalsee.Application"/>
         <option name="DEBUG_MODE" value="true"/>
         <option name="ENABLE_JMX_AGENT" value="false"/>
