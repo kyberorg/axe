@@ -89,7 +89,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         readAndWriteCookieBannerRelatedSettingsFromSession(session);
 
         //TODO write it to UserSession
-        //yalseeSession.setValue(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        yalseeSession.setValue(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
         //TODO replace it
 
         boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
@@ -101,7 +101,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void init() {
-        //yalseeSession = getUserSession();
+        yalseeSession = getUserSession();
 
         setPrimarySection(Section.NAVBAR);
 
