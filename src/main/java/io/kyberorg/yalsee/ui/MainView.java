@@ -27,9 +27,9 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.models.redis.UserSession;
+import io.kyberorg.yalsee.models.redis.YalseeSession;
 import io.kyberorg.yalsee.result.OperationResult;
-import io.kyberorg.yalsee.services.UserSessionService;
+import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -60,9 +60,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
-    private final UserSessionService userSessionService;
+    private final YalseeSessionService yalseeSessionService;
 
-    private UserSession userSession;
+    private YalseeSession yalseeSession;
 
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
@@ -70,12 +70,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
      *
-     * @param appUtils           application utils for determine dev mode
-     * @param userSessionService service for manipulating with {@link UserSession}.
+     * @param appUtils             application utils for determine dev mode
+     * @param yalseeSessionService service for manipulating with {@link YalseeSession}.
      */
-    public MainView(final AppUtils appUtils, UserSessionService userSessionService) {
+    public MainView(final AppUtils appUtils, YalseeSessionService yalseeSessionService) {
         this.appUtils = appUtils;
-        this.userSessionService = userSessionService;
+        this.yalseeSessionService = yalseeSessionService;
 
         init();
     }
@@ -89,7 +89,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         readAndWriteCookieBannerRelatedSettingsFromSession(session);
 
         //TODO write it to UserSession
-        userSession.setValue(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        //yalseeSession.setValue(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
         //TODO replace it
 
         boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
@@ -101,7 +101,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void init() {
-        userSession = getUserSession();
+        //yalseeSession = getUserSession();
 
         setPrimarySection(Section.NAVBAR);
 
@@ -187,28 +187,28 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
-    private UserSession getUserSession() {
-        UserSession userSession;
+    private YalseeSession getUserSession() {
+        YalseeSession yalseeSession;
         Device currentDevice = getCurrentDevice();
         if (isFirstVisit()) {
             //create UserSession + save it to redis
-            userSession = createNewSession(currentDevice);
-            sendSessionCookie(userSession);
+            yalseeSession = createNewSession(currentDevice);
+            sendSessionCookie(yalseeSession);
         } else {
             //read from cookie
             Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.USER_SESSION_COOKIE,
                     VaadinService.getCurrentRequest());
-            OperationResult checkResult = userSessionService.checkCookie(sessionCookie, currentDevice);
+            OperationResult checkResult = yalseeSessionService.checkCookie(sessionCookie, currentDevice);
             if (checkResult.ok()) {
-                userSession = checkResult.getPayload(UserSession.class);
+                yalseeSession = checkResult.getPayload(YalseeSession.class);
             } else {
                 //something wrong with current session - override it
                 log.warn("{} Session cookie check failed. Reason: {}", TAG, checkResult);
-                userSession = createNewSession(currentDevice);
-                sendSessionCookie(userSession);
+                yalseeSession = createNewSession(currentDevice);
+                sendSessionCookie(yalseeSession);
             }
         }
-        return userSession;
+        return yalseeSession;
     }
 
     private boolean isFirstVisit() {
@@ -217,13 +217,13 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         return Objects.isNull(sessionCookie);
     }
 
-    private UserSession createNewSession(final Device device) {
-        return userSessionService.createNew(device);
+    private YalseeSession createNewSession(final Device device) {
+        return yalseeSessionService.createNew(device);
     }
 
-    private void sendSessionCookie(final UserSession userSession) {
+    private void sendSessionCookie(final YalseeSession yalseeSession) {
         //create cookie + remove current if any + send new to browser
-        Cookie sessionCookie = userSessionService.createCookie(userSession);
+        Cookie sessionCookie = yalseeSessionService.createCookie(yalseeSession);
         //resetting current if any
         Cookie resetCookie = new Cookie(sessionCookie.getName(), "-");
         resetCookie.setMaxAge(0);

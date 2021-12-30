@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.session;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.Header;
@@ -16,6 +17,7 @@ public class Device implements Serializable {
     private String userAgent = DEFAULT_USER_AGENT;
     private String ip = DEFAULT_IP;
 
+    @JsonIgnore
     private WebBrowser webBrowser = null;
 
     public static Device from(final VaadinRequest request, final WebBrowser browser) {

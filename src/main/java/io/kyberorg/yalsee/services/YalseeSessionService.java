@@ -1,10 +1,10 @@
 package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.events.UserSessionUpdatedEvent;
-import io.kyberorg.yalsee.models.dao.UserSessionLocalDao;
-import io.kyberorg.yalsee.models.dao.UserSessionRedisDao;
-import io.kyberorg.yalsee.models.redis.UserSession;
+import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
+import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
+import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
+import io.kyberorg.yalsee.models.redis.YalseeSession;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -24,8 +24,8 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserSessionService {
-    private static final String TAG = "[" + UserSessionService.class.getSimpleName() + "]";
+public class YalseeSessionService {
+    private static final String TAG = "[" + YalseeSessionService.class.getSimpleName() + "]";
     private static final String ERR_DEVICE_OBJECT_IS_NULL = "Device object is null";
     private static final String ERR_COOKIE_OBJECT_IS_NULL = "Cookie object is null";
     private static final String ERR_COOKIE_VALUE_IS_EMPTY = "Cookie Value is empty";
@@ -34,8 +34,8 @@ public class UserSessionService {
     private static final String ERR_HACK_ATTEMPT = "Record with ID exists, but info not match. Got Stolen Cookie.";
     private static final String ERR_SESSION_EXPIRED = "Session expired";
 
-    private final UserSessionRedisDao userSessionDao;
-    private final UserSessionLocalDao fallbackLocalDao;
+    private final YalseeSessionRedisDao userSessionDao;
+    private final YalseeSessionLocalDao fallbackLocalDao;
     private final AppUtils appUtils;
 
 
@@ -44,24 +44,24 @@ public class UserSessionService {
         EventBus.getDefault().register(this);
     }
 
-    public UserSession createNew(final Device device) {
+    public YalseeSession createNew(final Device device) {
         if (device == null) throw new IllegalArgumentException("Device cannot be null");
-        UserSession newSession = new UserSession();
+        YalseeSession newSession = new YalseeSession();
         newSession.setDevice(device);
         this.save(newSession);
 
         log.info("{} Created new {} {} for {} at {}",
-                TAG, UserSession.class.getSimpleName(), newSession.getSessionId(),
+                TAG, YalseeSession.class.getSimpleName(), newSession.getSessionId(),
                 device.getUserAgent(), device.getIp());
         return newSession;
     }
 
     /**
-     * Stores {@link UserSession} to Redis.
+     * Stores {@link YalseeSession} to Redis.
      *
      * @param session object to save
      */
-    public void save(final UserSession session) {
+    public void save(final YalseeSession session) {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
         try {
             fallbackLocalDao.save(session);
@@ -72,26 +72,27 @@ public class UserSessionService {
     }
 
     /**
-     * Gets {@link UserSession} by Session ID.
+     * Gets {@link YalseeSession} by Session ID.
      *
      * @param sessionId string with session id to search against.
-     * @return {@link UserSession} linked to given session if found or {@code null}.
+     * @return {@link YalseeSession} linked to given session if found or {@code null}.
      */
-    public Optional<UserSession> getSession(final String sessionId) {
-        Optional<UserSession> userSession;
+    public Optional<YalseeSession> getSession(final String sessionId) {
+        Optional<YalseeSession> yalseeSession;
         try {
-            userSession = userSessionDao.get(sessionId);
+            yalseeSession = userSessionDao.get(sessionId);
         } catch (Exception e) {
             log.error("{} unable to get session from Redis. Got exception: {}", TAG, e.getMessage());
-            userSession = fallbackLocalDao.get(sessionId);
+            yalseeSession = fallbackLocalDao.get(sessionId);
         }
-        return userSession;
+        return yalseeSession;
     }
 
-    public void destroySession(final UserSession session) {
+    public void destroySession(final YalseeSession session) {
         try {
             userSessionDao.delete(session.getSessionId());
             fallbackLocalDao.delete(session.getSessionId());
+            log.info("{} {} {} destroyed", TAG, YalseeSession.class.getSimpleName(), session.getSessionId());
         } catch (Exception e) {
             log.error("{} failed to delete user session. Session ID: {}. Reason: {}",
                     TAG, session.getSessionId(), e.getMessage());
@@ -99,8 +100,8 @@ public class UserSessionService {
     }
 
     @Subscribe
-    public void onUserSessionUpdate(final UserSessionUpdatedEvent event) {
-        log.debug("{} {} received. Updating Session", TAG, UserSessionUpdatedEvent.class.getSimpleName());
+    public void onUserSessionUpdate(final YalseeSessionUpdatedEvent event) {
+        log.debug("{} {} received. Updating Session", TAG, YalseeSessionUpdatedEvent.class.getSimpleName());
         if (event.getSession() != null) {
             event.getSession().setUpdated(AppUtils.now());
             save(event.getSession());
@@ -108,7 +109,7 @@ public class UserSessionService {
         }
     }
 
-    public Cookie createCookie(final UserSession us) {
+    public Cookie createCookie(final YalseeSession us) {
         Cookie cookie = new Cookie(App.CookieNames.USER_SESSION_COOKIE, us.getSessionId());
         cookie.setMaxAge(appUtils.getSessionTimeout());
         cookie.setSecure(us.getDevice().getWebBrowser().isSecureConnection());
@@ -129,16 +130,16 @@ public class UserSessionService {
         if (StringUtils.isBlank(cookieValue)) {
             return OperationResult.malformedInput().withMessage(ERR_COOKIE_VALUE_IS_EMPTY);
         }
-        if (cookieValue.length() != UserSession.SESSION_ID_LEN) {
+        if (cookieValue.length() != YalseeSession.SESSION_ID_LEN) {
             return OperationResult.malformedInput().withMessage(ERR_MALFORMED_COOKIE_VALUE);
         }
 
         //lookup by sessionId
-        Optional<UserSession> sessionRecord = this.getSession(cookieValue);
+        Optional<YalseeSession> sessionRecord = this.getSession(cookieValue);
         if (sessionRecord.isEmpty()) {
             return OperationResult.elementNotFound().withMessage(ERR_RECORD_NOT_FOUND);
         }
-        UserSession session = sessionRecord.get();
+        YalseeSession session = sessionRecord.get();
         //valid (not expired)
         if (session.expired()) {
             invalidateAffectedSession(session);
@@ -156,7 +157,7 @@ public class UserSessionService {
         return OperationResult.success().addPayload(session);
     }
 
-    public void invalidateAffectedSession(final UserSession session) {
+    public void invalidateAffectedSession(final YalseeSession session) {
         log.info("{} deleting affected session {}", TAG, session.getSessionId());
         this.destroySession(session);
     }

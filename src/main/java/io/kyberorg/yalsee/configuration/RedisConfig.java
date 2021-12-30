@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.configuration;
 
-import io.kyberorg.yalsee.models.redis.UserSession;
+import io.kyberorg.yalsee.models.redis.YalseeSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,8 +58,8 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisTemplate<String, UserSession> userSessionRedisTemplate() {
-        RedisTemplate<String, UserSession> redisTemplate = new RedisTemplate<>();
+    RedisTemplate<String, YalseeSession> yalseeSessionRedisTemplate() {
+        RedisTemplate<String, YalseeSession> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
         redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());

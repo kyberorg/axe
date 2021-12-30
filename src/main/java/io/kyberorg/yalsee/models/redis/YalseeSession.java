@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.models.redis;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.internal.Primitives;
-import io.kyberorg.yalsee.events.UserSessionUpdatedEvent;
+import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
-import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -20,9 +19,7 @@ import java.util.Map;
 
 @Data
 @NoArgsConstructor
-//@RedisHash(value = "UserSession", timeToLive = App.Defaults.USER_SESSION_TTL_SECONDS)
-@RedisHash(value = "UserSession", timeToLive = 5 * 60) //tmp to test
-public class UserSession implements Serializable {
+public class YalseeSession implements Serializable {
     public static final int SESSION_ID_LEN = 40;
     private static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ssZ";
 
@@ -64,7 +61,7 @@ public class UserSession implements Serializable {
             throw new IllegalArgumentException("Key cannot be empty");
         }
         this.values.put(key, payload);
-        EventBus.getDefault().post(UserSessionUpdatedEvent.createWith(this));
+        EventBus.getDefault().post(YalseeSessionUpdatedEvent.createWith(this));
     }
 
     public boolean expired() {
