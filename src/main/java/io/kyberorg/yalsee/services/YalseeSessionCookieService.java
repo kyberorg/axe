@@ -70,7 +70,7 @@ public class YalseeSessionCookieService {
      * when Session is accessed from another Device aka stolen cookie.
      * @throws IllegalArgumentException if {@link Cookie} or {@link Device} is {@code null}.
      */
-    public OperationResult checkCookie(Cookie cookie, Device currentDevice) {
+    public OperationResult checkCookie(final Cookie cookie, final Device currentDevice) {
         //Device null check
         if (Objects.isNull(currentDevice)) {
             throw new IllegalArgumentException(ERR_DEVICE_OBJECT_IS_NULL);

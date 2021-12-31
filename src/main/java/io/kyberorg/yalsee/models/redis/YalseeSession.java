@@ -90,6 +90,11 @@ public class YalseeSession implements Serializable {
         EventBus.getDefault().post(YalseeSessionUpdatedEvent.createWith(this));
     }
 
+    /**
+     * Is current session no longer valid.
+     *
+     * @return true - when session not valid anymore, false if it is still valid.
+     */
     public boolean expired() {
         return notValidAfter.before(Date.from(Instant.now()));
     }

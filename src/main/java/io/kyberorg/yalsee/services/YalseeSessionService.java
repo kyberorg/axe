@@ -25,6 +25,9 @@ public class YalseeSessionService {
     private final YalseeSessionRedisDao userSessionDao;
     private final YalseeSessionLocalDao fallbackLocalDao;
 
+    /**
+     * {@link EventBus} {@link Subscribe}r registration.
+     */
     @PostConstruct
     public void init() {
         EventBus.getDefault().register(this);
@@ -100,6 +103,11 @@ public class YalseeSessionService {
         }
     }
 
+    /**
+     * Method which persist updated {@link YalseeSession}.
+     *
+     * @param event update event with {@link YalseeSession} inside.
+     */
     @Subscribe
     public void onUserSessionUpdate(final YalseeSessionUpdatedEvent event) {
         log.debug("{} {} received. Updating Session", TAG, YalseeSessionUpdatedEvent.class.getSimpleName());
@@ -110,6 +118,9 @@ public class YalseeSessionService {
         }
     }
 
+    /**
+     * Unregistering {@link EventBus} {@link Subscribe}r.
+     */
     @PreDestroy
     public void destroyBean() {
         EventBus.getDefault().unregister(this);

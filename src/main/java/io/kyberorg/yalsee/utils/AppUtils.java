@@ -228,6 +228,11 @@ public class AppUtils implements Serializable {
         return notification;
     }
 
+    /**
+     * Current {@link Date}.
+     *
+     * @return {@link Date} object of now.
+     */
     public static Date now() {
         return Date.from(Instant.now());
     }
@@ -493,6 +498,13 @@ public class AppUtils implements Serializable {
         }
     }
 
+    /**
+     * Searches Cookie by its name from {@link VaadinRequest}.
+     *
+     * @param cookieName    non-empty string with cookie name.
+     * @param vaadinRequest request to search in.
+     * @return found {@link Cookie} object or {@code null}
+     */
     public Cookie getCookieByName(final String cookieName, final VaadinRequest vaadinRequest) {
         if (Objects.isNull(cookieName) || Objects.isNull(vaadinRequest)) {
             return null;
