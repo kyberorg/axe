@@ -88,22 +88,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         //End Yalsee Session usage demo - remove after switching from VaadinSession.
     }
 
-    @Override
-    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
-
-        VaadinSession session = VaadinSession.getCurrent();
-        //Cookie Banner
-        readAndWriteCookieBannerRelatedSettingsFromSession(session);
-
-        boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
-        if (!bannerAlreadyShown) {
-            CookieBanner cookieBanner = new CookieBanner();
-            cookieBanner.getContent().open();
-            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
-        }
-    }
-
     private void init() {
         yalseeSession = getUserSession();
 
@@ -137,6 +121,22 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
+    }
+
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+
+        VaadinSession session = VaadinSession.getCurrent();
+        //Cookie Banner
+        readAndWriteCookieBannerRelatedSettingsFromSession(session);
+
+        boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
+        if (!bannerAlreadyShown) {
+            CookieBanner cookieBanner = new CookieBanner();
+            cookieBanner.getContent().open();
+            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
+        }
     }
 
     private Component createHeader() {
