@@ -8,6 +8,9 @@
         <option name="ACTIVE_PROFILES" value="local"/>
         <option name="ALTERNATIVE_JRE_PATH"/>
         <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
+        <envs>
+            <env name="LOG_LEVEL_APP" value="debug"/>
+        </envs>
         <method v="2">
             <option name="Make" enabled="true"/>
         </method>

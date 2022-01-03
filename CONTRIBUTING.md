@@ -106,6 +106,7 @@ Can add several browsers like `chrome,firefox`
 
 * Docker image: `quay.io/kyberorg/yalsee`
 * H2 (default profile) or MySQL database (local profile) needed to run.
+* Redis for storing sessions and stuff like this.
 * I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs. So token from Bugsnag needed.
 
 #### Docker Swarm
@@ -120,6 +121,8 @@ EnvVars:
 * TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
 * BUGSNAG_TOKEN or BUGSNAG_TOKEN_FILE: `token for BugSnag`
 * DELETE_TOKEN or DELETE_TOKEN_FILE: `temporary master token for deleting links` (needed until auth story introduced)
+* REDIS_HOST: `redis hostname/ip or container name`
+* REDIS_PASSWORD or REDIS_PASSWORD_FILE: `password for connecting to redis`
 
 Optional EnvVars:
 
@@ -136,6 +139,10 @@ Optional EnvVars:
 * REDIRECT_PAGE_TIMEOUT: `Timeouts in second after which redirect page makes actual redirect` (most likely don't needed
   as regulated by Spring profile)
 * SESSION_TIMEOUT `Timeout in seconds after which current session ends` (most likely don't needed as regulated by Spring
+  profile)
+* REDIS_PORT: `redis port` (needed if redis runs on port other than 6379)
+* REDIS_DB: `0-15` (custom database, redis supports numeric db from 0 to 15, default 0)
+* REDIS_TIMEOUT_MILLIS: `Redis connection timeout in milliseconds` (most likely don't needed as regulated by Spring
   profile)
 
 Ports:

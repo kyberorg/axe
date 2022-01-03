@@ -20,26 +20,31 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.models.redis.YalseeSession;
+import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.YalseeSessionCookieService;
+import io.kyberorg.yalsee.services.YalseeSessionService;
+import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.session.SessionBox;
+import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 
+@Slf4j
 @SpringComponent
 @UIScope
 @Push
@@ -53,7 +58,13 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
+    private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
+
     private final AppUtils appUtils;
+    private final YalseeSessionService sessionService;
+    private final YalseeSessionCookieService cookieService;
+
+    private YalseeSession yalseeSession;
 
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
@@ -61,11 +72,20 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
      *
-     * @param appUtils application utils for determine dev mode
+     * @param appUtils       application utils for determine dev mode
+     * @param sessionService service for manipulating with {@link YalseeSession}.
+     * @param cookieService  service for actions with {@link YalseeSession} {@link Cookie}.
      */
-    public MainView(final AppUtils appUtils) {
+    public MainView(final AppUtils appUtils,
+                    final YalseeSessionService sessionService, final YalseeSessionCookieService cookieService) {
         this.appUtils = appUtils;
+        this.sessionService = sessionService;
+        this.cookieService = cookieService;
+
         init();
+        //Yalsee Session usage demo - remove after switching from VaadinSession.
+        sessionDemo();
+        //End Yalsee Session usage demo - remove after switching from VaadinSession.
     }
 
     @Override
@@ -75,6 +95,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         VaadinSession session = VaadinSession.getCurrent();
         //Cookie Banner
         readAndWriteCookieBannerRelatedSettingsFromSession(session);
+
         boolean bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
         if (!bannerAlreadyShown) {
             CookieBanner cookieBanner = new CookieBanner();
@@ -84,6 +105,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void init() {
+        yalseeSession = getUserSession();
+
         setPrimarySection(Section.NAVBAR);
 
         //do not set touch-optimized to true, because it moves navbar down.
@@ -168,6 +191,68 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
+    private YalseeSession getUserSession() {
+        YalseeSession yalseeSession;
+        Device currentDevice = getCurrentDevice();
+        if (isFirstVisit()) {
+            //create UserSession + save it to redis
+            yalseeSession = createNewSession(currentDevice);
+            sendSessionCookie(yalseeSession);
+        } else {
+            //read from cookie
+            Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.YALSEE_SESSION,
+                    VaadinService.getCurrentRequest());
+            OperationResult checkResult = cookieService.checkCookie(sessionCookie, currentDevice);
+            if (checkResult.ok()) {
+                yalseeSession = checkResult.getPayload(YalseeSession.class);
+            } else {
+                //something wrong with current session - override it
+                log.warn("{} Session cookie check failed. Reason: {}", TAG, checkResult);
+                yalseeSession = createNewSession(currentDevice);
+                sendSessionCookie(yalseeSession);
+            }
+        }
+        return yalseeSession;
+    }
+
+    private boolean isFirstVisit() {
+        Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.YALSEE_SESSION,
+                VaadinService.getCurrentRequest());
+        return Objects.isNull(sessionCookie);
+    }
+
+    private YalseeSession createNewSession(final Device device) {
+        return sessionService.createNew(device);
+    }
+
+    private void sendSessionCookie(final YalseeSession yalseeSession) {
+        //create cookie + remove current if any + send new to browser
+        Cookie sessionCookie = cookieService.createCookie(yalseeSession);
+        //resetting current if any
+        Cookie resetCookie = new Cookie(sessionCookie.getName(), "-");
+        resetCookie.setMaxAge(0);
+        VaadinService.getCurrentResponse().addCookie(resetCookie);
+        //sending normal one
+        VaadinService.getCurrentResponse().addCookie(sessionCookie);
+    }
+
+    private Device getCurrentDevice() {
+        VaadinRequest request = VaadinService.getCurrentRequest();
+        WebBrowser browser = VaadinSession.getCurrent().getBrowser();
+        return Device.from(request, browser);
+    }
+
+    private void sessionDemo() {
+        final String key = "theKey";
+        final String somethingUseful = "somethingUseful";
+        yalseeSession.setValue(key, somethingUseful);
+        final String valueFromSession = yalseeSession.getValue(key, String.class);
+        if (valueFromSession != null && valueFromSession.equals(somethingUseful)) {
+            log.debug("{} {} works!", TAG, YalseeSession.class.getSimpleName());
+        } else {
+            log.debug("{} {} not working as expected", TAG, YalseeSession.class.getSimpleName());
+        }
+    }
 
     @Override
     public void configurePage(final InitialPageSettings settings) {

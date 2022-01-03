@@ -22,11 +22,15 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * App-wide tools.
@@ -45,6 +49,12 @@ public class AppUtils implements Serializable {
      * To be populated with {@link #populateStaticFields()}
      */
     private static String shortUrl;
+
+    /**
+     * This field is dirty hack to access Session Timeout from static context.
+     * To be populated with {@link #populateStaticFields()}
+     */
+    private static int sessionTimeout;
 
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     public static final String HTML_MODE = "innerHTML";
@@ -78,6 +88,7 @@ public class AppUtils implements Serializable {
 
     private void populateStaticFields() {
         shortUrl = getShortUrl();
+        sessionTimeout = getSessionTimeout();
     }
 
     /**
@@ -87,6 +98,15 @@ public class AppUtils implements Serializable {
      */
     public static String getShortUrlFromStaticContext() {
         return shortUrl;
+    }
+
+    /**
+     * Dirty hack to obtain Session Timeout from non-Spring objects.
+     *
+     * @return int with session timeout.
+     */
+    public static int getSessionTimeoutFromStaticContext() {
+        return sessionTimeout;
     }
 
     /**
@@ -206,6 +226,15 @@ public class AppUtils implements Serializable {
         layout.add(label, closeButton);
         notification.add(layout);
         return notification;
+    }
+
+    /**
+     * Current {@link Date}.
+     *
+     * @return {@link Date} object of now.
+     */
+    public static Date now() {
+        return Date.from(Instant.now());
     }
 
     /**
@@ -467,6 +496,28 @@ public class AppUtils implements Serializable {
             log.warn("{} {}", TAG, message);
             throw new RuntimeException(message, e);
         }
+    }
+
+    /**
+     * Searches Cookie by its name from {@link VaadinRequest}.
+     *
+     * @param cookieName    non-empty string with cookie name.
+     * @param vaadinRequest request to search in.
+     * @return found {@link Cookie} object or {@code null}
+     */
+    public Cookie getCookieByName(final String cookieName, final VaadinRequest vaadinRequest) {
+        if (Objects.isNull(cookieName) || Objects.isNull(vaadinRequest)) {
+            return null;
+        }
+        Cookie[] cookies = vaadinRequest.getCookies();
+        if (cookies == null || cookies.length == 0) return null;
+        for (Cookie cookie : cookies) {
+            boolean cookieHasName = (cookie != null && cookie.getName() != null);
+            if (cookieHasName && cookie.getName().equals(cookieName)) {
+                return cookie;
+            }
+        }
+        return null;
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {

@@ -16,6 +16,7 @@ func main() {
 	fileEnv("TELEGRAM_TOKEN", "")
 	fileEnv("BUGSNAG_TOKEN", "")
 	fileEnv("DELETE_TOKEN", "")
+	fileEnv("REDIS_PASSWORD", "")
 
 	// Remote Debug Support
 	debugPort, debugPortExists := os.LookupEnv("JAVA_DEBUG_PORT")
