@@ -67,3 +67,16 @@ services:
       ADMIN_PASS: redis-pass
     networks:
       - net
+  # redis-commander
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis-password
+    networks:
+      - net
