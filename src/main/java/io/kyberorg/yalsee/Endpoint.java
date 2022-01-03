@@ -39,6 +39,11 @@ public final class Endpoint {
         public static final String ERROR_PAGE_500 = "errors/500";
 
         /**
+         * Page that will appear when application hits server-side error several times aka loop detected.
+         */
+        public static final String RAW_ERROR_PAGE_500 = "errors/500raw";
+
+        /**
          * Page that will appear when application hits fatal error and became inaccessible.
          */
         public static final String ERROR_PAGE_503 = "errors/503";

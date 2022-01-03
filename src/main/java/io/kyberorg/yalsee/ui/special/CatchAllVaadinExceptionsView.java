@@ -12,6 +12,7 @@ import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import io.kyberorg.yalsee.utils.RedirectLoopDetector;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 @UIScope
 public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErrorParameter<Exception> {
 
+    private final RedirectLoopDetector loopDetector;
     private final YalseeErrorKeeper yalseeErrorKeeper;
     private final ErrorUtils errorUtils;
 
@@ -44,8 +46,12 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
         String errorId = yalseeErrorKeeper.send(yalseeError);
         errorUtils.reportToBugsnag(yalseeError);
 
+        loopDetector.updateCounter();
+        final String errorPageRoute = loopDetector.isLoopDetected()
+                ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
+
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
-                "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
+                "/" + errorPageRoute + "?" + App.Params.ERROR_ID + "=" + errorId);
 
         return STATUS_302;
     }
