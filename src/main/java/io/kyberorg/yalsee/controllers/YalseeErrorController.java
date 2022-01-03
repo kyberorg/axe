@@ -9,6 +9,7 @@ import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import io.kyberorg.yalsee.utils.RedirectLoopDetector;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class YalseeErrorController implements ErrorController {
     private final String TAG = "[" + YalseeErrorController.class.getSimpleName() + "]";
 
     private final YalseeErrorKeeper errorKeeper;
+    private final RedirectLoopDetector loopDetector;
     private final ErrorUtils errorUtils;
 
     private HttpServletRequest request;
@@ -163,8 +165,12 @@ public class YalseeErrorController implements ErrorController {
             redirectToAppDownAnalogPage();
             return;
         }
+        loopDetector.updateCounter();
+        final String errorPageRoute = loopDetector.isLoopDetected()
+                ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
+
         response.setStatus(HttpCode.STATUS_301);
-        response.setHeader(Header.LOCATION, "/" + Endpoint.UI.ERROR_PAGE_500 + "?"
+        response.setHeader(Header.LOCATION, "/" + errorPageRoute + "?"
                 + App.Params.ERROR_ID + "=" + errorId);
     }
 
