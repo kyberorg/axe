@@ -51,19 +51,18 @@ services:
       REDIS_AUTH: redis-password
     networks:
       - net
-  # phpRedisAdmin
-  phpredisadmin:
-    depends_on:
-      - redis
-    image: erikdubbelboer/phpredisadmin:v1.13.2
+  # redis-commander
+  redis-commander:
+    image: rediscommander/redis-commander:latest
     restart: always
     ports:
-      - '9091:80'
+      - "8081:8081"
+    volumes:
+      - ./redis.connections.json:/redis-commander/config/local-production.json:rw
     environment:
-      REDIS_1_HOST: redis
-      REDIS_1_PORT: 6379
-      REDIS_1_AUTH: redis-password
-      ADMIN_USER: admin
-      ADMIN_PASS: redis-pass
+      - REDIS_HOSTS=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis-password
     networks:
       - net
