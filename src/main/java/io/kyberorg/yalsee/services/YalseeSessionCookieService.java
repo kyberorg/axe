@@ -44,7 +44,7 @@ public class YalseeSessionCookieService {
      */
     public Cookie createCookie(final YalseeSession ys) {
         if (ys == null) throw new IllegalArgumentException("YalseeSession cannot be null");
-        Cookie cookie = new Cookie(App.CookieNames.USER_SESSION_COOKIE, ys.getSessionId());
+        Cookie cookie = new Cookie(App.CookieNames.YALSEE_SESSION, ys.getSessionId());
         cookie.setMaxAge(appUtils.getSessionTimeout());
         cookie.setSecure(ys.getDevice().isSecureConnection());
         cookie.setHttpOnly(true);

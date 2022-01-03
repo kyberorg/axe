@@ -200,7 +200,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             sendSessionCookie(yalseeSession);
         } else {
             //read from cookie
-            Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.USER_SESSION_COOKIE,
+            Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.YALSEE_SESSION,
                     VaadinService.getCurrentRequest());
             OperationResult checkResult = cookieService.checkCookie(sessionCookie, currentDevice);
             if (checkResult.ok()) {
@@ -216,7 +216,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private boolean isFirstVisit() {
-        Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.USER_SESSION_COOKIE,
+        Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.YALSEE_SESSION,
                 VaadinService.getCurrentRequest());
         return Objects.isNull(sessionCookie);
     }

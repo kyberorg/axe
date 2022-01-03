@@ -89,6 +89,6 @@ public final class App {
     }
 
     public static class CookieNames {
-        public static final String USER_SESSION_COOKIE = "YalseeSession";
+        public static final String YALSEE_SESSION = "YalseeSession";
     }
 }
