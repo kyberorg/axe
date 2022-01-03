@@ -47,8 +47,8 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
         errorUtils.reportToBugsnag(yalseeError);
 
         loopDetector.updateCounter();
-        final String errorPageRoute = loopDetector.isLoopDetected() ?
-                Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
+        final String errorPageRoute = loopDetector.isLoopDetected()
+                ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
 
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
                 "/" + errorPageRoute + "?" + App.Params.ERROR_ID + "=" + errorId);

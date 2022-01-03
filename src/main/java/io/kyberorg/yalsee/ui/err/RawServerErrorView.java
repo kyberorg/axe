@@ -14,7 +14,6 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.controllers.YalseeErrorController;
-import io.kyberorg.yalsee.exception.RepeatableServerException;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -26,16 +25,13 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
-
 @Slf4j
 @SpringComponent
 @UIScope
 @PageTitle("Yalsee: Error 500")
 @Route(value = Endpoint.UI.RAW_ERROR_PAGE_500)
 @CssImport("./css/error_views.css")
-public class RawServerErrorView extends YalseeLayout implements HasErrorParameter<RepeatableServerException>,
-        HasUrlParameter<String> {
+public class RawServerErrorView extends YalseeLayout implements HasUrlParameter<String> {
     public static final String TAG = "[" + RawServerErrorView.class.getSimpleName() + "]";
 
     private final ErrorUtils errorUtils;
@@ -187,18 +183,5 @@ public class RawServerErrorView extends YalseeLayout implements HasErrorParamete
         if (!Objects.isNull(yalseeError)) {
             fillUIWithValuesFromError(yalseeError);
         }
-    }
-
-    /**
-     * This method sets HTTP Code, based on payload, if no payload - status is 500.
-     *
-     * @param event     same event as {@link #setParameter(BeforeEvent, String)}
-     * @param parameter payload with status as String
-     * @return http status
-     */
-    @Override
-    public int setErrorParameter(final BeforeEnterEvent event,
-                                 final ErrorParameter<RepeatableServerException> parameter) {
-        return errorUtils.parseStatusFromErrorParameter(parameter, STATUS_500);
     }
 }
