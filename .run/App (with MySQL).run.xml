@@ -2,15 +2,15 @@
     <configuration default="false" name="App (with MySQL)" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot">
         <module name="yalsee"/>
-        <selectedOptions>
-            <option name="environmentVariables"/>
-        </selectedOptions>
         <option name="SPRING_BOOT_MAIN_CLASS" value="io.kyberorg.yalsee.Application"/>
         <option name="DEBUG_MODE" value="true"/>
         <option name="ENABLE_JMX_AGENT" value="false"/>
         <option name="ACTIVE_PROFILES" value="local"/>
         <option name="ALTERNATIVE_JRE_PATH"/>
         <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
+        <envs>
+            <env name="LOG_LEVEL_APP" value="debug"/>
+        </envs>
         <method v="2">
             <option name="Make" enabled="true"/>
         </method>

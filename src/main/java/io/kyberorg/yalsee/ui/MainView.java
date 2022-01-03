@@ -243,10 +243,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void sessionDemo() {
+        final String key = "theKey";
         final String somethingUseful = "somethingUseful";
-        yalseeSession.setValue("theKey", somethingUseful);
-        final String valueFromSession = yalseeSession.getValue(somethingUseful, String.class);
-        if (valueFromSession.equals(somethingUseful)) {
+        yalseeSession.setValue(key, somethingUseful);
+        final String valueFromSession = yalseeSession.getValue(key, String.class);
+        if (valueFromSession != null && valueFromSession.equals(somethingUseful)) {
             log.debug("{} {} works!", TAG, YalseeSession.class.getSimpleName());
         } else {
             log.debug("{} {} not working as expected", TAG, YalseeSession.class.getSimpleName());
