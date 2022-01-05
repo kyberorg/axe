@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,9 @@ public class SessionWatchdog implements HttpSessionListener {
     private final YalseeSessionLocalDao sessionLocalDao;
     private final YalseeSessionRedisDao sessionRedisDao;
 
+    @Value("${redis.enabled}")
+    private boolean isRedisEnabled;
+
     /**
      * {@link EventBus} {@link Subscribe}r registration.
      */
@@ -53,7 +57,9 @@ public class SessionWatchdog implements HttpSessionListener {
     public void syncSession(final YalseeSessionUpdatedEvent sessionUpdatedEvent) {
         if (sessionUpdatedEvent == null || sessionUpdatedEvent.getYalseeSession() == null) return;
         sessionLocalDao.update(sessionUpdatedEvent.getYalseeSession());
-        sessionRedisDao.save(sessionUpdatedEvent.getYalseeSession());
+        if (isRedisEnabled) {
+            sessionRedisDao.save(sessionUpdatedEvent.getYalseeSession());
+        }
     }
 
     @Subscribe
@@ -149,11 +155,13 @@ public class SessionWatchdog implements HttpSessionListener {
     private void removeExpiredSession(final YalseeSession yalseeSession) {
         if (yalseeSession == null) return;
         sessionLocalDao.delete(yalseeSession);
-        try {
-            sessionRedisDao.delete(yalseeSession.getSessionId());
-        } catch (Exception e) {
-            log.warn("{} Failed to remove expired {} {} from Redis. Reason: {}",
-                    TAG, YalseeSession.class.getSimpleName(), yalseeSession.getSessionId(), e.getMessage());
+        if (isRedisEnabled) {
+            try {
+                sessionRedisDao.delete(yalseeSession.getSessionId());
+            } catch (Exception e) {
+                log.warn("{} Failed to remove expired {} {} from Redis. Reason: {}",
+                        TAG, YalseeSession.class.getSimpleName(), yalseeSession.getSessionId(), e.getMessage());
+            }
         }
     }
 

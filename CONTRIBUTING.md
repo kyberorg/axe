@@ -144,6 +144,7 @@ Optional EnvVars:
 * REDIS_DB: `0-15` (custom database, redis supports numeric db from 0 to 15, default 0)
 * REDIS_TIMEOUT_MILLIS: `Redis connection timeout in milliseconds` (most likely don't needed as regulated by Spring
   profile)
+* REDIS_ENABLED: `true/false` (most likely don't needed as regulated by Spring profile)
 
 Ports:
 

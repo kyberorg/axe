@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +20,9 @@ public class YalseeSessionService {
     private final YalseeSessionRedisDao redisDao;
     private final YalseeSessionLocalDao localDao;
 
+    @Value("${redis.enabled}")
+    private boolean isRedisEnabled;
+
     /**
      * Creates new {@link YalseeSession}.
      *
@@ -31,7 +35,9 @@ public class YalseeSessionService {
         YalseeSession newSession = new YalseeSession();
         newSession.setDevice(device);
         localDao.create(newSession);
-        redisDao.save(newSession);
+        if (isRedisEnabled) {
+            redisDao.save(newSession);
+        }
 
         log.info("{} Created new {} {} for {} at {}",
                 TAG, YalseeSession.class.getSimpleName(), newSession.getSessionId(),
@@ -49,7 +55,9 @@ public class YalseeSessionService {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
         try {
             localDao.update(session);
-            redisDao.save(session);
+            if (isRedisEnabled) {
+                redisDao.save(session);
+            }
         } catch (Exception e) {
             log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
         }
@@ -63,7 +71,7 @@ public class YalseeSessionService {
      */
     public Optional<YalseeSession> getSession(final String sessionId) {
         Optional<YalseeSession> yalseeSession = localDao.get(sessionId);
-        if (yalseeSession.isEmpty()) {
+        if (isRedisEnabled && yalseeSession.isEmpty()) {
             try {
                 yalseeSession = redisDao.get(sessionId);
                 if (yalseeSession.isPresent()) {
@@ -93,7 +101,9 @@ public class YalseeSessionService {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
         try {
             localDao.delete(session);
-            redisDao.delete(session.getSessionId());
+            if (isRedisEnabled) {
+                redisDao.delete(session.getSessionId());
+            }
             log.info("{} {} {} destroyed", TAG, YalseeSession.class.getSimpleName(), session.getSessionId());
         } catch (Exception e) {
             log.error("{} failed to delete user session. Session ID: {}. Reason: {}",

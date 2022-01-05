@@ -58,7 +58,7 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - ./redis.connections.json:/redis-commander/config/local-production.json:rw
+      - ./redis.connections.json:/redis-commander/config/local-production.json:ro
     environment:
       - REDIS_HOSTS=redis
       - REDIS_HOST=redis
