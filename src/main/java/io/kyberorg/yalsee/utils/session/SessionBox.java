@@ -1,7 +1,13 @@
 package io.kyberorg.yalsee.utils.session;
 
 import com.vaadin.flow.server.VaadinSession;
+import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
+import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.session.YalseeSession;
+import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +18,7 @@ import java.util.Map;
  */
 public final class SessionBox {
     private static final Map<String, SessionBoxRecord> SESSIONS = new HashMap<>();
+    private static final Map<String, YalseeSession> sessionStorage = new HashMap<>();
 
     private SessionBox() {
         throw new UnsupportedOperationException("Utility class");
@@ -28,6 +35,22 @@ public final class SessionBox {
         SESSIONS.putIfAbsent(sessionId, SessionBoxRecord.of(vaadinSession));
     }
 
+    public static void storeSession(final YalseeSession yalseeSession) {
+        if (yalseeSession == null) return;
+        sessionStorage.putIfAbsent(yalseeSession.getSessionId(), yalseeSession);
+        EventBus.getDefault().post(YalseeSessionCreatedEvent.createWith(yalseeSession));
+    }
+
+    public static void updateSession(final YalseeSession yalseeSession) {
+        if (yalseeSession == null) return;
+        sessionStorage.put(yalseeSession.getSessionId(), yalseeSession);
+    }
+
+    public static YalseeSession getSession(final String sessionId) {
+        if (StringUtils.isBlank(sessionId)) return null;
+        return sessionStorage.get(sessionId);
+    }
+
     /**
      * Removes {@link VaadinSession} from {@link SessionBox}.
      *
@@ -35,6 +58,12 @@ public final class SessionBox {
      */
     public static void removeVaadinSession(final VaadinSession vaadinSession) {
         SESSIONS.remove(vaadinSession.getSession().getId());
+    }
+
+    public static void removeSession(final YalseeSession session) {
+        if (session == null) return;
+        sessionStorage.remove(session.getSessionId());
+        EventBus.getDefault().post(YalseeSessionDestroyedEvent.createWith(session));
     }
 
     /**
@@ -50,4 +79,7 @@ public final class SessionBox {
         return SESSIONS;
     }
 
+    public static Collection<YalseeSession> getAllSessions() {
+        return sessionStorage.values();
+    }
 }

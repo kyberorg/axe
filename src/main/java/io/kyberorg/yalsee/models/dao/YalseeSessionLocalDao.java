@@ -1,11 +1,11 @@
 package io.kyberorg.yalsee.models.dao;
 
-import io.kyberorg.yalsee.models.redis.YalseeSession;
+import io.kyberorg.yalsee.session.YalseeSession;
+import io.kyberorg.yalsee.utils.session.SessionBox;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -16,15 +16,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
 public class YalseeSessionLocalDao {
-    private final Map<String, YalseeSession> storage = new HashMap<>();
+
+    public void create(final YalseeSession session) {
+        SessionBox.storeSession(session);
+    }
 
     /**
-     * Create or update {@link YalseeSession}.
+     * Update {@link YalseeSession}.
      *
      * @param session object to store.
      */
-    public void save(final YalseeSession session) {
-        storage.put(session.getSessionId(), session);
+    public void update(final YalseeSession session) {
+        SessionBox.updateSession(session);
     }
 
     /**
@@ -34,16 +37,19 @@ public class YalseeSessionLocalDao {
      * @return {@link Optional} which contains {@link YalseeSession} or not.
      */
     public Optional<YalseeSession> get(final String sessionId) {
-        return Optional.ofNullable(storage.get(sessionId));
+        return Optional.ofNullable(SessionBox.getSession(sessionId));
+    }
+
+    public Collection<YalseeSession> getAllSessions() {
+        return SessionBox.getAllSessions();
     }
 
     /**
      * Deletes object if it exists.
      *
-     * @param sessionId string with session id used as key.
-     * @see HashMap#remove(Object)
+     * @param session session object to delete.
      */
-    public void delete(final String sessionId) {
-        storage.remove(sessionId);
+    public void delete(final YalseeSession session) {
+        SessionBox.removeSession(session);
     }
 }

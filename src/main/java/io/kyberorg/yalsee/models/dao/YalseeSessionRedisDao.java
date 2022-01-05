@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.models.dao;
 
 import io.kyberorg.yalsee.models.dao.base.RedisDao;
-import io.kyberorg.yalsee.models.redis.YalseeSession;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

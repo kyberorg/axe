@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.configuration;
 
-import io.kyberorg.yalsee.models.redis.YalseeSession;
+import io.kyberorg.yalsee.internal.YalseeSessionGsonRedisSerializer;
+import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
@@ -73,14 +73,23 @@ public class RedisConfig {
      */
     @Bean
     RedisTemplate<String, YalseeSession> yalseeSessionRedisTemplate() {
+
+        final YalseeSessionGsonRedisSerializer jsonSerializer = yalseeSessionGsonRedisSerializer();
+
         RedisTemplate<String, YalseeSession> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
-        redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setDefaultSerializer(jsonSerializer);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new GenericJackson2JsonRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashKeySerializer(jsonSerializer);
+        redisTemplate.setValueSerializer(jsonSerializer);
         redisTemplate.afterPropertiesSet();
+        redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
+    }
+
+    @Bean
+    YalseeSessionGsonRedisSerializer yalseeSessionGsonRedisSerializer() {
+        return new YalseeSessionGsonRedisSerializer();
     }
 }

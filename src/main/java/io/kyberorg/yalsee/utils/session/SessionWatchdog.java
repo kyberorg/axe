@@ -1,10 +1,21 @@
 package io.kyberorg.yalsee.utils.session;
 
+import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
+import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
+import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
+import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
@@ -14,20 +25,48 @@ import java.util.stream.Collectors;
 
 import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL_MILLIS;
 
+@RequiredArgsConstructor
 @Slf4j
 @Component
 public class SessionWatchdog implements HttpSessionListener {
     private static final String TAG = "[" + SessionWatchdog.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
+    private final YalseeSessionLocalDao sessionLocalDao;
+    private final YalseeSessionRedisDao sessionRedisDao;
 
     /**
-     * Spring constructor for autowiring.
-     *
-     * @param appUtils application utils for reading session timeout from and ending session.
+     * {@link EventBus} {@link Subscribe}r registration.
      */
-    public SessionWatchdog(final AppUtils appUtils) {
-        this.appUtils = appUtils;
+    @PostConstruct
+    public void init() {
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void sessionCreated(final YalseeSessionCreatedEvent sessionCreatedEvent) {
+        log.debug("{} {} session created {}",
+                TAG, YalseeSession.class.getSimpleName(), sessionCreatedEvent.getYalseeSession().getSessionId());
+    }
+
+    @Subscribe
+    public void syncSession(final YalseeSessionUpdatedEvent sessionUpdatedEvent) {
+        if (sessionUpdatedEvent == null || sessionUpdatedEvent.getYalseeSession() == null) return;
+        sessionLocalDao.update(sessionUpdatedEvent.getYalseeSession());
+        sessionRedisDao.save(sessionUpdatedEvent.getYalseeSession());
+    }
+
+    @Subscribe
+    public void sessionDestroyed(final YalseeSessionDestroyedEvent sessionDestroyedEvent) {
+        YalseeSession destroyedSession = sessionDestroyedEvent.getYalseeSession();
+        if (destroyedSession == null) {
+            log.debug("{} {} session destroyed", TAG, YalseeSession.class.getSimpleName());
+        } else {
+            log.debug("{} {} session destroyed {}. Session Age: {}",
+                    TAG, YalseeSession.class.getSimpleName(), destroyedSession.getSessionId(),
+                    Duration.ofMillis(System.currentTimeMillis() - destroyedSession.getCreated().getTime())
+            );
+        }
     }
 
     /**
@@ -54,6 +93,13 @@ public class SessionWatchdog implements HttpSessionListener {
         }
 
         expiredSessions.forEach(this::endSession);
+    }
+
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL_MILLIS)
+    public void endExpiredYalseeSessions() {
+        SessionBox.getAllSessions().stream()
+                .filter(YalseeSession::expired)
+                .forEach(this::removeExpiredSession);
     }
 
     @Override
@@ -98,6 +144,24 @@ public class SessionWatchdog implements HttpSessionListener {
         } catch (Exception e) {
             log.warn("{} got error while removing session from {}", TAG, SessionBox.class.getSimpleName());
         }
+    }
 
+    private void removeExpiredSession(final YalseeSession yalseeSession) {
+        if (yalseeSession == null) return;
+        sessionLocalDao.delete(yalseeSession);
+        try {
+            sessionRedisDao.delete(yalseeSession.getSessionId());
+        } catch (Exception e) {
+            log.warn("{} Failed to remove expired {} {} from Redis. Reason: {}",
+                    TAG, YalseeSession.class.getSimpleName(), yalseeSession.getSessionId(), e.getMessage());
+        }
+    }
+
+    /**
+     * Unregistering {@link EventBus} {@link Subscribe}r.
+     */
+    @PreDestroy
+    public void destroyBean() {
+        EventBus.getDefault().unregister(this);
     }
 }
