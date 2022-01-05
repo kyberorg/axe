@@ -42,8 +42,10 @@ public class Device implements Serializable {
         } else {
             String userAgent = browser.getBrowserApplication();
             String ip = null;
+            String forwardedProtoHeader = null;
             if (request != null) {
                 ip = request.getHeader(Header.X_REAL_IP);
+                forwardedProtoHeader = request.getHeader(Header.X_FORWARDED_PROTO);
             }
 
             if (StringUtils.isBlank(ip)) {
@@ -51,7 +53,13 @@ public class Device implements Serializable {
             }
 
             Device device = new Device();
-            device.setSecureConnection(browser.isSecureConnection());
+            boolean hasForwardedProtoHeader = StringUtils.isNotBlank(forwardedProtoHeader);
+            if (hasForwardedProtoHeader) {
+                device.setSecureConnection(forwardedProtoHeader.equalsIgnoreCase("https"));
+            } else {
+                device.setSecureConnection(browser.isSecureConnection());
+            }
+
             if (StringUtils.isNotBlank(userAgent)) {
                 device.setUserAgent(userAgent);
             }
