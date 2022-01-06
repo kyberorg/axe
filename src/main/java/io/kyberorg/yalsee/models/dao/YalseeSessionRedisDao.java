@@ -56,7 +56,9 @@ public class YalseeSessionRedisDao extends RedisDao {
      * @see ValueOperations#getAndDelete(Object)
      */
     public void delete(final String sessionId) {
-        valueOps.getAndDelete(appendApplicationPrefix() + sessionId);
+        if (valueOps.get(appendApplicationPrefix() + sessionId) != null) {
+            valueOps.getAndDelete(appendApplicationPrefix() + sessionId);
+        }
     }
 
     @Override

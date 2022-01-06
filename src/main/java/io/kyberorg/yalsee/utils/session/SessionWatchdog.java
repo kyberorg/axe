@@ -3,15 +3,13 @@ package io.kyberorg.yalsee.utils.session;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
-import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
-import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
+import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -33,11 +31,7 @@ public class SessionWatchdog implements HttpSessionListener {
     private static final String TAG = "[" + SessionWatchdog.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
-    private final YalseeSessionLocalDao sessionLocalDao;
-    private final YalseeSessionRedisDao sessionRedisDao;
-
-    @Value("${redis.enabled}")
-    private boolean isRedisEnabled;
+    private final YalseeSessionService sessionService;
 
     /**
      * {@link EventBus} {@link Subscribe}r registration.
@@ -49,26 +43,28 @@ public class SessionWatchdog implements HttpSessionListener {
 
     @Subscribe
     public void sessionCreated(final YalseeSessionCreatedEvent sessionCreatedEvent) {
-        log.debug("{} {} session created {}",
-                TAG, YalseeSession.class.getSimpleName(), sessionCreatedEvent.getYalseeSession().getSessionId());
+        if (sessionCreatedEvent == null || sessionCreatedEvent.getYalseeSession() == null) return;
+        final YalseeSession session = sessionCreatedEvent.getYalseeSession();
+        log.info("{} {} created {} (UA: {}, IP: {})",
+                TAG, YalseeSession.class.getSimpleName(), session.getSessionId(),
+                session.getDevice().getUserAgent(), session.getDevice().getIp());
     }
 
     @Subscribe
     public void syncSession(final YalseeSessionUpdatedEvent sessionUpdatedEvent) {
         if (sessionUpdatedEvent == null || sessionUpdatedEvent.getYalseeSession() == null) return;
-        sessionLocalDao.update(sessionUpdatedEvent.getYalseeSession());
-        if (isRedisEnabled) {
-            sessionRedisDao.save(sessionUpdatedEvent.getYalseeSession());
-        }
+        sessionService.updateSession(sessionUpdatedEvent.getYalseeSession());
+        log.trace("{} {} updated {}",
+                TAG, YalseeSession.class.getSimpleName(), sessionUpdatedEvent.getYalseeSession().getSessionId());
     }
 
     @Subscribe
     public void sessionDestroyed(final YalseeSessionDestroyedEvent sessionDestroyedEvent) {
         YalseeSession destroyedSession = sessionDestroyedEvent.getYalseeSession();
         if (destroyedSession == null) {
-            log.debug("{} {} session destroyed", TAG, YalseeSession.class.getSimpleName());
+            log.debug("{} {} destroyed", TAG, YalseeSession.class.getSimpleName());
         } else {
-            log.debug("{} {} session destroyed {}. Session Age: {}",
+            log.debug("{} {} destroyed {}. Session Age: {}",
                     TAG, YalseeSession.class.getSimpleName(), destroyedSession.getSessionId(),
                     Duration.ofMillis(System.currentTimeMillis() - destroyedSession.getCreated().getTime())
             );
@@ -154,15 +150,7 @@ public class SessionWatchdog implements HttpSessionListener {
 
     private void removeExpiredSession(final YalseeSession yalseeSession) {
         if (yalseeSession == null) return;
-        sessionLocalDao.delete(yalseeSession);
-        if (isRedisEnabled) {
-            try {
-                sessionRedisDao.delete(yalseeSession.getSessionId());
-            } catch (Exception e) {
-                log.warn("{} Failed to remove expired {} {} from Redis. Reason: {}",
-                        TAG, YalseeSession.class.getSimpleName(), yalseeSession.getSessionId(), e.getMessage());
-            }
-        }
+        sessionService.destroySession(yalseeSession);
     }
 
     /**
