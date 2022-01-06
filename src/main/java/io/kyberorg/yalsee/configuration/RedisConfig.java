@@ -26,6 +26,9 @@ import java.time.Duration;
 public class RedisConfig {
     private static final String TAG = "[" + RedisConfig.class.getSimpleName() + "]";
 
+    @Value("${redis.enabled}")
+    private boolean isRedisEnabled;
+
     @Value("${spring.redis.host}")
     private String host;
 
@@ -48,6 +51,7 @@ public class RedisConfig {
      */
     @Bean
     JedisConnectionFactory redisConnectionFactory() {
+        if (!isRedisEnabled) return null;
         log.info("{} Connecting Redis at {}:{}. Database: {}", TAG, host, port, database);
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(host);
@@ -73,7 +77,7 @@ public class RedisConfig {
      */
     @Bean
     RedisTemplate<String, YalseeSession> yalseeSessionRedisTemplate() {
-
+        if (!isRedisEnabled) return null;
         final YalseeSessionGsonRedisSerializer jsonSerializer = yalseeSessionGsonRedisSerializer();
 
         RedisTemplate<String, YalseeSession> redisTemplate = new RedisTemplate<>();

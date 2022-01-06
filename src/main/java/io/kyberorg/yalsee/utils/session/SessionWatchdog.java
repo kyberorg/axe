@@ -41,6 +41,12 @@ public class SessionWatchdog implements HttpSessionListener {
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * Receiver for {@link YalseeSessionCreatedEvent}. Logs session information.
+     *
+     * @param sessionCreatedEvent event, that indicates that new session was created.
+     *                            Should have created {@link YalseeSession} inside.
+     */
     @Subscribe
     public void sessionCreated(final YalseeSessionCreatedEvent sessionCreatedEvent) {
         if (sessionCreatedEvent == null || sessionCreatedEvent.getYalseeSession() == null) return;
@@ -50,6 +56,13 @@ public class SessionWatchdog implements HttpSessionListener {
                 session.getDevice().getUserAgent(), session.getDevice().getIp());
     }
 
+    /**
+     * Launches Session syncronization aka updates stored session object.
+     *
+     * @param sessionUpdatedEvent event, that indicates that session values were modified, and
+     *                            it is time to update storages with new values.
+     *                            Should have affected {@link YalseeSession} inside.
+     */
     @Subscribe
     public void syncSession(final YalseeSessionUpdatedEvent sessionUpdatedEvent) {
         if (sessionUpdatedEvent == null || sessionUpdatedEvent.getYalseeSession() == null) return;
@@ -58,6 +71,12 @@ public class SessionWatchdog implements HttpSessionListener {
                 TAG, YalseeSession.class.getSimpleName(), sessionUpdatedEvent.getYalseeSession().getSessionId());
     }
 
+    /**
+     * Receiver for {@link YalseeSessionDestroyedEvent}. Logs session information.
+     *
+     * @param sessionDestroyedEvent event, that indicates that  session was destroyed.
+     *                              Should have destroyed {@link YalseeSession} inside.
+     */
     @Subscribe
     public void sessionDestroyed(final YalseeSessionDestroyedEvent sessionDestroyedEvent) {
         YalseeSession destroyedSession = sessionDestroyedEvent.getYalseeSession();
@@ -97,6 +116,9 @@ public class SessionWatchdog implements HttpSessionListener {
         expiredSessions.forEach(this::endSession);
     }
 
+    /**
+     * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
+     */
     @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL_MILLIS)
     public void endExpiredYalseeSessions() {
         SessionBox.getAllSessions().stream()

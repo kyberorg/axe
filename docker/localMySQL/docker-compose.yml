@@ -64,5 +64,6 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=redis-password
+      - VIEW_JSON_DEFAULT=all
     networks:
       - net

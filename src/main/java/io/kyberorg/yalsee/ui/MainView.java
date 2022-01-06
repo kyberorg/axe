@@ -128,13 +128,18 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         VaadinSession session = VaadinSession.getCurrent();
         //Cookie Banner
         boolean bannerAlreadyShown;
-        if (yalseeSession != null) {
+
+        //TODO enable after updating Banner tests.
+        /*if (yalseeSession != null) {
             bannerAlreadyShown = yalseeSession.getFlags().isCookieBannerAlreadyShown();
         } else {
             //temporary fallback to VaadinSession
             readAndWriteCookieBannerRelatedSettingsFromSession(session);
             bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
-        }
+        }*/
+
+        readAndWriteCookieBannerRelatedSettingsFromSession(session);
+        bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
 
         if (!bannerAlreadyShown) {
             CookieBanner cookieBanner = new CookieBanner();

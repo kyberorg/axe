@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public final class SessionBox {
     private static final Map<String, SessionBoxRecord> SESSIONS = new HashMap<>();
-    private static final Map<String, YalseeSession> sessionStorage = new HashMap<>();
+    private static final Map<String, YalseeSession> SESSION_STORAGE = new HashMap<>();
 
     private SessionBox() {
         throw new UnsupportedOperationException("Utility class");
@@ -35,20 +35,57 @@ public final class SessionBox {
         SESSIONS.putIfAbsent(sessionId, SessionBoxRecord.of(vaadinSession));
     }
 
+    /**
+     * Stores new session. It will be stored only if not existed previously.
+     * Also fires {@link YalseeSessionCreatedEvent}.
+     *
+     * @param yalseeSession non null session to store.
+     */
     public static void storeSession(final YalseeSession yalseeSession) {
         if (yalseeSession == null) return;
-        sessionStorage.putIfAbsent(yalseeSession.getSessionId(), yalseeSession);
+        SESSION_STORAGE.putIfAbsent(yalseeSession.getSessionId(), yalseeSession);
         EventBus.getDefault().post(YalseeSessionCreatedEvent.createWith(yalseeSession));
     }
 
-    public static void updateSession(final YalseeSession yalseeSession) {
-        if (yalseeSession == null) return;
-        sessionStorage.put(yalseeSession.getSessionId(), yalseeSession);
-    }
-
+    /**
+     * Gets Stored session by its ID.
+     *
+     * @param sessionId non-empty string with Session identifier.
+     * @return {@link YalseeSession} stored or {@code null} if not found or provided sessionId is blank.
+     */
     public static YalseeSession getSession(final String sessionId) {
         if (StringUtils.isBlank(sessionId)) return null;
-        return sessionStorage.get(sessionId);
+        return SESSION_STORAGE.get(sessionId);
+    }
+
+    /**
+     * Get all stored sessions.
+     *
+     * @return collection of currently stored {@link YalseeSession}.
+     */
+    public static Collection<YalseeSession> getAllSessions() {
+        return SESSION_STORAGE.values();
+    }
+
+    /**
+     * Updates stored session.
+     *
+     * @param yalseeSession session to update.
+     */
+    public static void updateSession(final YalseeSession yalseeSession) {
+        if (yalseeSession == null) return;
+        SESSION_STORAGE.put(yalseeSession.getSessionId(), yalseeSession);
+    }
+
+    /**
+     * Removes provided {@link YalseeSession} from {@link SessionBox}.
+     *
+     * @param session stored {@link YalseeSession} to remove.
+     */
+    public static void removeSession(final YalseeSession session) {
+        if (session == null) return;
+        SESSION_STORAGE.remove(session.getSessionId());
+        EventBus.getDefault().post(YalseeSessionDestroyedEvent.createWith(session));
     }
 
     /**
@@ -58,12 +95,6 @@ public final class SessionBox {
      */
     public static void removeVaadinSession(final VaadinSession vaadinSession) {
         SESSIONS.remove(vaadinSession.getSession().getId());
-    }
-
-    public static void removeSession(final YalseeSession session) {
-        if (session == null) return;
-        sessionStorage.remove(session.getSessionId());
-        EventBus.getDefault().post(YalseeSessionDestroyedEvent.createWith(session));
     }
 
     /**
@@ -79,7 +110,5 @@ public final class SessionBox {
         return SESSIONS;
     }
 
-    public static Collection<YalseeSession> getAllSessions() {
-        return sessionStorage.values();
-    }
+
 }
