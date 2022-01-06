@@ -46,6 +46,7 @@ public class YalseeSessionRedisDao extends RedisDao {
      * @return {@link Optional} which contains {@link YalseeSession} or not.
      */
     public Optional<YalseeSession> get(final String sessionId) {
+        if (!exists(sessionId)) return Optional.empty();
         return Optional.ofNullable(valueOps.get(appendApplicationPrefix() + sessionId));
     }
 
@@ -56,7 +57,7 @@ public class YalseeSessionRedisDao extends RedisDao {
      * @see ValueOperations#getAndDelete(Object)
      */
     public void delete(final String sessionId) {
-        if (valueOps.get(appendApplicationPrefix() + sessionId) != null) {
+        if (exists(sessionId)) {
             valueOps.getAndDelete(appendApplicationPrefix() + sessionId);
         }
     }
@@ -64,5 +65,9 @@ public class YalseeSessionRedisDao extends RedisDao {
     @Override
     protected long getRecordTtl() {
         return appUtils.getSessionTimeout();
+    }
+
+    private boolean exists(final String sessionId) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(appendApplicationPrefix() + sessionId));
     }
 }
