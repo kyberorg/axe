@@ -16,6 +16,9 @@ public class YalseeSessionGsonRedisSerializer implements RedisSerializer<YalseeS
     private final Gson gson;
     private static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ssZ";
 
+    /**
+     * Created {@link YalseeSessionGsonRedisSerializer} with customised {@link Gson} instance.
+     */
     public YalseeSessionGsonRedisSerializer() {
         this.gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
     }
