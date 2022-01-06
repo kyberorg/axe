@@ -100,7 +100,7 @@ public class YalseeSession {
          * Defines is banner is already displayed and should not appear once again.
          * Should never be private.
          */
-        boolean cookieBannerAlreadyShown = false;
+        private boolean cookieBannerAlreadyShown = false;
 
         /**
          * Setter for {@link #cookieBannerAlreadyShown} property, which fires {@link YalseeSessionUpdatedEvent}.
@@ -124,7 +124,7 @@ public class YalseeSession {
         /**
          * Allow analytics cookies or not. Should never be private.
          */
-        boolean analyticsCookiesAllowed = false;
+        private boolean analyticsCookiesAllowed = false;
 
         /**
          * Setter for {@link #analyticsCookiesAllowed} property, which fires {@link YalseeSessionUpdatedEvent}.
