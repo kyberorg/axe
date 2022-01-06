@@ -1,9 +1,9 @@
 package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.models.redis.YalseeSession;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.session.Device;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

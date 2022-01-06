@@ -14,6 +14,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.stream.Stream;
@@ -120,10 +121,15 @@ public class CookieBanner extends Composite<Dialog> {
     }
 
     private void writeValuesToSessionAndClose() {
+        final boolean isAnalyticsAllowed = analyticsBox.getValue();
+        final boolean hasYalseeSession = YalseeSession.getCurrent() != null;
+        if (hasYalseeSession) {
+            YalseeSession.getCurrent().getSettings().setAnalyticsCookiesAllowed(isAnalyticsAllowed);
+        }
+
         if (getContent().getUI().isPresent()) {
             final boolean uiHasSession = getContent().getUI().get().getSession() != null;
             if (uiHasSession) {
-                final boolean isAnalyticsAllowed = analyticsBox.getValue();
                 getContent().getUI().get().getSession()
                         .setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, isAnalyticsAllowed);
             } else {
