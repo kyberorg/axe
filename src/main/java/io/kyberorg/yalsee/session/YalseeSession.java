@@ -1,14 +1,17 @@
 package io.kyberorg.yalsee.session;
 
+import com.google.gson.Gson;
 import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
+import io.kyberorg.yalsee.internal.YalseeSessionGsonRedisSerializer;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.Date;
 
@@ -19,7 +22,7 @@ import java.util.Date;
  */
 @Data
 @NoArgsConstructor
-public class YalseeSession implements Serializable {
+public class YalseeSession {
     /**
      * Default length of session id.
      */
@@ -78,12 +81,21 @@ public class YalseeSession implements Serializable {
         return notValidAfter.before(Date.from(Instant.now()));
     }
 
+    /**
+     * This method recovers references to this$0 in nested classes, which happens after {@link Gson} deserialize object.
+     * Only {@link YalseeSessionGsonRedisSerializer#deserialize(byte[])} should use it.
+     */
+    public void fixObjectLinksAfterDeserialization() {
+        flags.fixLink(this);
+        settings.fixLink(this);
+    }
+
     private void fireUpdateEvent() {
         EventBus.getDefault().post(YalseeSessionUpdatedEvent.createWith(this));
     }
 
     @Data
-    public class Flags implements Serializable {
+    public class Flags {
         /**
          * Defines is banner is already displayed and should not appear once again.
          * Should never be private.
@@ -99,9 +111,16 @@ public class YalseeSession implements Serializable {
             this.cookieBannerAlreadyShown = cookieBannerAlreadyShown;
             YalseeSession.this.fireUpdateEvent();
         }
+
+        @SneakyThrows
+        private void fixLink(final YalseeSession parent) {
+            Field field = Flags.class.getDeclaredField("this$0");
+            field.setAccessible(true);
+            field.set(this, parent);
+        }
     }
 
-    public class Settings implements Serializable {
+    public class Settings {
         /**
          * Allow analytics cookies or not. Should never be private.
          */
@@ -115,6 +134,13 @@ public class YalseeSession implements Serializable {
         public void setAnalyticsCookiesAllowed(final boolean analyticsCookiesAllowed) {
             this.analyticsCookiesAllowed = analyticsCookiesAllowed;
             YalseeSession.this.fireUpdateEvent();
+        }
+
+        @SneakyThrows
+        private void fixLink(final YalseeSession parent) {
+            Field field = Settings.class.getDeclaredField("this$0");
+            field.setAccessible(true);
+            field.set(this, parent);
         }
     }
 }
