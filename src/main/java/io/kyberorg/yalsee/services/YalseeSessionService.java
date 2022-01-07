@@ -33,8 +33,7 @@ public class YalseeSessionService {
      */
     public YalseeSession createNew(final Device device) {
         if (device == null) throw new IllegalArgumentException("Device cannot be null");
-        YalseeSession newSession = new YalseeSession();
-        newSession.setDevice(device);
+        YalseeSession newSession = new YalseeSession(device);
         if (isRedisEnabled) {
             redisDao.save(newSession);
         }
