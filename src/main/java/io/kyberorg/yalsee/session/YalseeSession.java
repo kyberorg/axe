@@ -70,10 +70,18 @@ public class YalseeSession {
         return vaadinSession.getAttribute(YalseeSession.class);
     }
 
+    /**
+     * Creating empty {@link YalseeSession}. Constructor for {@link Gson}.
+     */
     public YalseeSession() {
         this.notValidAfter = Date.from(Instant.now().plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
     }
 
+    /**
+     * Creates session for given {@link Device}.
+     *
+     * @param device device linked with {@link YalseeSession}.
+     */
     public YalseeSession(final Device device) {
         this.device = device;
         if (this.device.isRobot()) {

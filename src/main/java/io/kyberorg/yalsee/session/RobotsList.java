@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @since 3.8
  */
-public class RobotsList {
+public final class RobotsList {
     private static final List<String> ROBOTS = new ArrayList<>();
 
     static {
