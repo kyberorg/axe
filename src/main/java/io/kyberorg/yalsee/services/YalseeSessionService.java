@@ -1,19 +1,15 @@
 package io.kyberorg.yalsee.services;
 
-import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
 import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
 import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
-import io.kyberorg.yalsee.models.redis.YalseeSession;
 import io.kyberorg.yalsee.session.Device;
-import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.Optional;
 
 @Slf4j
@@ -22,16 +18,11 @@ import java.util.Optional;
 public class YalseeSessionService {
     private static final String TAG = "[" + YalseeSessionService.class.getSimpleName() + "]";
 
-    private final YalseeSessionRedisDao userSessionDao;
-    private final YalseeSessionLocalDao fallbackLocalDao;
+    private final YalseeSessionRedisDao redisDao;
+    private final YalseeSessionLocalDao localDao;
 
-    /**
-     * {@link EventBus} {@link Subscribe}r registration.
-     */
-    @PostConstruct
-    public void init() {
-        EventBus.getDefault().register(this);
-    }
+    @Value("${redis.enabled}")
+    private boolean isRedisEnabled;
 
     /**
      * Creates new {@link YalseeSession}.
@@ -44,28 +35,12 @@ public class YalseeSessionService {
         if (device == null) throw new IllegalArgumentException("Device cannot be null");
         YalseeSession newSession = new YalseeSession();
         newSession.setDevice(device);
-        this.save(newSession);
-
-        log.info("{} Created new {} {} for {} at {}",
-                TAG, YalseeSession.class.getSimpleName(), newSession.getSessionId(),
-                device.getUserAgent(), device.getIp());
-        return newSession;
-    }
-
-    /**
-     * Stores {@link YalseeSession} to Redis.
-     *
-     * @param session object to save
-     * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
-     */
-    public void save(final YalseeSession session) {
-        if (session == null) throw new IllegalArgumentException("Session cannot be null");
-        try {
-            fallbackLocalDao.save(session);
-            userSessionDao.save(session);
-        } catch (Exception e) {
-            log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
+        if (isRedisEnabled) {
+            redisDao.save(newSession);
         }
+        localDao.create(newSession);
+
+        return newSession;
     }
 
     /**
@@ -75,14 +50,50 @@ public class YalseeSessionService {
      * @return {@link YalseeSession} linked to given session if found or {@code null}.
      */
     public Optional<YalseeSession> getSession(final String sessionId) {
+        if (StringUtils.isBlank(sessionId)) return Optional.empty();
+
         Optional<YalseeSession> yalseeSession;
-        try {
-            yalseeSession = userSessionDao.get(sessionId);
-        } catch (Exception e) {
-            log.error("{} unable to get session from Redis. Got exception: {}", TAG, e.getMessage());
-            yalseeSession = fallbackLocalDao.get(sessionId);
+        boolean sessionFromRedis = false;
+
+        if (isRedisEnabled) {
+            yalseeSession = redisDao.get(sessionId);
+            sessionFromRedis = true;
+        } else {
+            yalseeSession = localDao.get(sessionId);
         }
+
+        if (yalseeSession.isEmpty()) {
+            return yalseeSession;
+        }
+
+        if (yalseeSession.get().expired()) {
+            //got expired session
+            this.destroySession(yalseeSession.get());
+            return Optional.empty();
+        } else if (sessionFromRedis) {
+            //got active session from Redis
+            this.doBackSync(yalseeSession.get());
+        }
+
         return yalseeSession;
+    }
+
+    /**
+     * Stores {@link YalseeSession} to Redis.
+     *
+     * @param session object to save
+     * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
+     */
+    public void updateSession(final YalseeSession session) {
+        if (session == null) throw new IllegalArgumentException("Session cannot be null");
+        if (isRedisEnabled) {
+            try {
+                redisDao.save(session);
+            } catch (Exception e) {
+                log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
+            }
+        }
+        localDao.update(session);
     }
 
     /**
@@ -93,36 +104,27 @@ public class YalseeSessionService {
      */
     public void destroySession(final YalseeSession session) {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
-        try {
-            fallbackLocalDao.delete(session.getSessionId());
-            userSessionDao.delete(session.getSessionId());
-            log.info("{} {} {} destroyed", TAG, YalseeSession.class.getSimpleName(), session.getSessionId());
-        } catch (Exception e) {
-            log.error("{} failed to delete user session. Session ID: {}. Reason: {}",
-                    TAG, session.getSessionId(), e.getMessage());
+        if (isRedisEnabled) {
+            try {
+                redisDao.delete(session.getSessionId());
+            } catch (Exception e) {
+                log.error("{} failed to delete user session from Redis. Session ID: {}. Reason: {}",
+                        TAG, session.getSessionId(), e.getMessage());
+                log.debug("{} exception: {}", TAG, e);
+            }
+        }
+        localDao.delete(session);
+    }
+
+    private void doBackSync(final YalseeSession session) {
+        if (sessionExistsInLocalStorage(session)) {
+            localDao.update(session);
+        } else {
+            localDao.create(session);
         }
     }
 
-    /**
-     * Method which persist updated {@link YalseeSession}.
-     *
-     * @param event update event with {@link YalseeSession} inside.
-     */
-    @Subscribe
-    public void onUserSessionUpdate(final YalseeSessionUpdatedEvent event) {
-        log.debug("{} {} received. Updating Session", TAG, YalseeSessionUpdatedEvent.class.getSimpleName());
-        if (event.getSession() != null) {
-            event.getSession().setUpdated(AppUtils.now());
-            save(event.getSession());
-            log.debug("{} Session '{}' updated", TAG, event.getSession().getSessionId());
-        }
-    }
-
-    /**
-     * Unregistering {@link EventBus} {@link Subscribe}r.
-     */
-    @PreDestroy
-    public void destroyBean() {
-        EventBus.getDefault().unregister(this);
+    private boolean sessionExistsInLocalStorage(final YalseeSession session) {
+        return localDao.get(session.getSessionId()).isPresent();
     }
 }

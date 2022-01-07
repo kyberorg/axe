@@ -15,6 +15,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.services.GitService;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
@@ -133,6 +134,11 @@ public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
         analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
         analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent()));
         analyticsCookiesValue.addValueChangeListener(event -> {
+            YalseeSession yalseeSession = YalseeSession.getCurrent();
+            if (yalseeSession != null) {
+                yalseeSession.getSettings().setAnalyticsCookiesAllowed(event.getValue());
+            }
+
             VaadinSession session = VaadinSession.getCurrent();
             if (session != null) {
                 session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, event.getValue());

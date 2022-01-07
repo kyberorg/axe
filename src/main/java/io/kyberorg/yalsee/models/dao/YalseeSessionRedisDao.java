@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.models.dao;
 
 import io.kyberorg.yalsee.models.dao.base.RedisDao;
-import io.kyberorg.yalsee.models.redis.YalseeSession;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,6 +46,7 @@ public class YalseeSessionRedisDao extends RedisDao {
      * @return {@link Optional} which contains {@link YalseeSession} or not.
      */
     public Optional<YalseeSession> get(final String sessionId) {
+        if (!exists(sessionId)) return Optional.empty();
         return Optional.ofNullable(valueOps.get(appendApplicationPrefix() + sessionId));
     }
 
@@ -56,11 +57,17 @@ public class YalseeSessionRedisDao extends RedisDao {
      * @see ValueOperations#getAndDelete(Object)
      */
     public void delete(final String sessionId) {
-        valueOps.getAndDelete(appendApplicationPrefix() + sessionId);
+        if (exists(sessionId)) {
+            valueOps.getAndDelete(appendApplicationPrefix() + sessionId);
+        }
     }
 
     @Override
     protected long getRecordTtl() {
         return appUtils.getSessionTimeout();
+    }
+
+    private boolean exists(final String sessionId) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(appendApplicationPrefix() + sessionId));
     }
 }

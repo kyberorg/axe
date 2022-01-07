@@ -4,11 +4,11 @@ import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.Data;
 
 /**
- * Event indicates that {@link YalseeSession} values where updated, and it is time to sync with storage.
+ * Event indicates that {@link YalseeSession} destroyed aka ended and removed from session storage.
  *
  * @since 3.8
  */
 @Data(staticConstructor = "createWith")
-public class YalseeSessionUpdatedEvent {
+public class YalseeSessionDestroyedEvent {
     private final YalseeSession yalseeSession;
 }

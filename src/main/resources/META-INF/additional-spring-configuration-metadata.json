@@ -69,5 +69,10 @@
       "name": "redis.app.prefix",
       "type": "java.lang.String",
       "description": "Application-specific prefix in Redis Keys. Needed to distinguish application's session if they stored within same Redis DB."
+    },
+    {
+      "name": "redis.enabled",
+      "type": "java.lang.String",
+      "description": "Flag to Enable/Disable Redis operations, so application can run with or without having Redis."
     }
   ] }

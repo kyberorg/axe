@@ -1,10 +1,20 @@
 package io.kyberorg.yalsee.utils.session;
 
+import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
+import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
+import io.kyberorg.yalsee.services.YalseeSessionService;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
@@ -14,20 +24,70 @@ import java.util.stream.Collectors;
 
 import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL_MILLIS;
 
+@RequiredArgsConstructor
 @Slf4j
 @Component
 public class SessionWatchdog implements HttpSessionListener {
     private static final String TAG = "[" + SessionWatchdog.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
+    private final YalseeSessionService sessionService;
 
     /**
-     * Spring constructor for autowiring.
-     *
-     * @param appUtils application utils for reading session timeout from and ending session.
+     * {@link EventBus} {@link Subscribe}r registration.
      */
-    public SessionWatchdog(final AppUtils appUtils) {
-        this.appUtils = appUtils;
+    @PostConstruct
+    public void init() {
+        EventBus.getDefault().register(this);
+    }
+
+    /**
+     * Receiver for {@link YalseeSessionCreatedEvent}. Logs session information.
+     *
+     * @param sessionCreatedEvent event, that indicates that new session was created.
+     *                            Should have created {@link YalseeSession} inside.
+     */
+    @Subscribe
+    public void sessionCreated(final YalseeSessionCreatedEvent sessionCreatedEvent) {
+        if (sessionCreatedEvent == null || sessionCreatedEvent.getYalseeSession() == null) return;
+        final YalseeSession session = sessionCreatedEvent.getYalseeSession();
+        log.info("{} {} created {} (UA: {}, IP: {})",
+                TAG, YalseeSession.class.getSimpleName(), session.getSessionId(),
+                session.getDevice().getUserAgent(), session.getDevice().getIp());
+    }
+
+    /**
+     * Launches Session syncronization aka updates stored session object.
+     *
+     * @param sessionUpdatedEvent event, that indicates that session values were modified, and
+     *                            it is time to update storages with new values.
+     *                            Should have affected {@link YalseeSession} inside.
+     */
+    @Subscribe
+    public void syncSession(final YalseeSessionUpdatedEvent sessionUpdatedEvent) {
+        if (sessionUpdatedEvent == null || sessionUpdatedEvent.getYalseeSession() == null) return;
+        sessionService.updateSession(sessionUpdatedEvent.getYalseeSession());
+        log.trace("{} {} updated {}",
+                TAG, YalseeSession.class.getSimpleName(), sessionUpdatedEvent.getYalseeSession().getSessionId());
+    }
+
+    /**
+     * Receiver for {@link YalseeSessionDestroyedEvent}. Logs session information.
+     *
+     * @param sessionDestroyedEvent event, that indicates that  session was destroyed.
+     *                              Should have destroyed {@link YalseeSession} inside.
+     */
+    @Subscribe
+    public void sessionDestroyed(final YalseeSessionDestroyedEvent sessionDestroyedEvent) {
+        YalseeSession destroyedSession = sessionDestroyedEvent.getYalseeSession();
+        if (destroyedSession == null) {
+            log.debug("{} {} destroyed", TAG, YalseeSession.class.getSimpleName());
+        } else {
+            log.debug("{} {} destroyed {}. Session Age: {}",
+                    TAG, YalseeSession.class.getSimpleName(), destroyedSession.getSessionId(),
+                    Duration.ofMillis(System.currentTimeMillis() - destroyedSession.getCreated().getTime())
+            );
+        }
     }
 
     /**
@@ -54,6 +114,16 @@ public class SessionWatchdog implements HttpSessionListener {
         }
 
         expiredSessions.forEach(this::endSession);
+    }
+
+    /**
+     * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
+     */
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL_MILLIS)
+    public void endExpiredYalseeSessions() {
+        SessionBox.getAllSessions().stream()
+                .filter(YalseeSession::expired)
+                .forEach(this::removeExpiredSession);
     }
 
     @Override
@@ -98,6 +168,18 @@ public class SessionWatchdog implements HttpSessionListener {
         } catch (Exception e) {
             log.warn("{} got error while removing session from {}", TAG, SessionBox.class.getSimpleName());
         }
+    }
 
+    private void removeExpiredSession(final YalseeSession yalseeSession) {
+        if (yalseeSession == null) return;
+        sessionService.destroySession(yalseeSession);
+    }
+
+    /**
+     * Unregistering {@link EventBus} {@link Subscribe}r.
+     */
+    @PreDestroy
+    public void destroyBean() {
+        EventBus.getDefault().unregister(this);
     }
 }
