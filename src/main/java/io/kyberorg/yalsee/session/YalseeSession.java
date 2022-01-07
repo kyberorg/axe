@@ -6,7 +6,6 @@ import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
 import io.kyberorg.yalsee.internal.YalseeSessionGsonRedisSerializer;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -21,12 +20,12 @@ import java.util.Date;
  * @since 3.8
  */
 @Data
-@NoArgsConstructor
 public class YalseeSession {
     /**
      * Default length of session id.
      */
     public static final int SESSION_ID_LEN = 40;
+    private static final int SESSION_TIMEOUT_FOR_BOTS = 30; //in seconds
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
     private Device device;
@@ -34,8 +33,7 @@ public class YalseeSession {
     private final Settings settings = new Settings();
 
     private final Date created = AppUtils.now();
-    private final Date notValidAfter = Date.from(Instant.now()
-            .plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
+    private final Date notValidAfter;
 
     /**
      * Stores given session to current {@link VaadinSession#getCurrent()} if it is available.
@@ -70,6 +68,19 @@ public class YalseeSession {
             return null;
         }
         return vaadinSession.getAttribute(YalseeSession.class);
+    }
+
+    public YalseeSession() {
+        this.notValidAfter = Date.from(Instant.now().plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
+    }
+
+    public YalseeSession(final Device device) {
+        this.device = device;
+        if (this.device.isRobot()) {
+            this.notValidAfter = Date.from(Instant.now().plusSeconds(SESSION_TIMEOUT_FOR_BOTS));
+        } else {
+            this.notValidAfter = Date.from(Instant.now().plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
+        }
     }
 
     /**
