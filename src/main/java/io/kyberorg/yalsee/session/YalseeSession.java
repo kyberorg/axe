@@ -3,16 +3,19 @@ package io.kyberorg.yalsee.session;
 import com.google.gson.Gson;
 import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
-import io.kyberorg.yalsee.internal.YalseeSessionGsonRedisSerializer;
+import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
+import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Application Session object.
@@ -52,7 +55,7 @@ public class YalseeSession {
             throw new IllegalStateException("No VaadinSession at this scope");
         }
 
-        vaadinSession.setAttribute(YalseeSession.class, session);
+        vaadinSession.setAttribute(YalseeSession.class.getSimpleName(), session.getSessionId());
     }
 
     /**
@@ -60,14 +63,22 @@ public class YalseeSession {
      * The current session is automatically defined where {@link VaadinSession#getCurrent()} is available.
      * In other cases, (e.g. from background threads), the current session is not automatically defined.
      *
-     * @return the current session instance if available, otherwise {@code null}.
+     * @return the current session instance if available, otherwise {@link Optional#empty()}.
      */
-    public static YalseeSession getCurrent() {
+    public static Optional<YalseeSession> getCurrent() {
         final VaadinSession vaadinSession = VaadinSession.getCurrent();
         if (vaadinSession == null) {
-            return null;
+            return Optional.empty();
         }
-        return vaadinSession.getAttribute(YalseeSession.class);
+        String sessionId = (String) VaadinSession.getCurrent().getAttribute(YalseeSession.class.getSimpleName());
+        if (StringUtils.isBlank(sessionId)) {
+            return Optional.empty();
+        }
+        if (YalseeSessionService.getInstance() != null) {
+            return YalseeSessionService.getInstance().getSession(sessionId);
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**

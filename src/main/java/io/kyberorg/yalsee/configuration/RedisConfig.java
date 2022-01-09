@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.configuration;
 
-import io.kyberorg.yalsee.internal.YalseeSessionGsonRedisSerializer;
+import io.kyberorg.yalsee.redis.pubsub.RedisMessageSubscriber;
+import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,9 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
@@ -25,6 +29,8 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
     private static final String TAG = "[" + RedisConfig.class.getSimpleName() + "]";
+
+    private static final String DEFAULT_REDIS_CHANNEL_NAME = "Yalsee";
 
     @Value("${redis.enabled}")
     private boolean isRedisEnabled;
@@ -43,6 +49,9 @@ public class RedisConfig {
 
     @Value("${spring.redis.database}")
     private int database;
+
+    @Value("${spring.application.name}")
+    private String appName;
 
     /**
      * Redis Server Connection configuration.
@@ -96,4 +105,32 @@ public class RedisConfig {
     YalseeSessionGsonRedisSerializer yalseeSessionGsonRedisSerializer() {
         return new YalseeSessionGsonRedisSerializer();
     }
+
+/*    @Bean
+    RedisTemplate<String, String> messageRedisTemplate() {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+
+        return redisTemplate;
+    }*/
+
+    @Bean
+    MessageListenerAdapter messageListener() {
+        return new MessageListenerAdapter(new RedisMessageSubscriber());
+    }
+
+    @Bean
+    ChannelTopic topic() {
+        final String channelName = StringUtils.isNotBlank(appName) ? appName : DEFAULT_REDIS_CHANNEL_NAME;
+        return new ChannelTopic(channelName);
+    }
+
+    @Bean
+    RedisMessageListenerContainer redisMessageListenerContainer() {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory());
+        container.addMessageListener(messageListener(), topic());
+        return container;
+    }
+
 }

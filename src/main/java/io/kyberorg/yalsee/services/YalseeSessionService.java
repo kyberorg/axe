@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
 import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
+import io.kyberorg.yalsee.redis.pubsub.RedisMessageSender;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @Slf4j
@@ -17,12 +19,28 @@ import java.util.Optional;
 @Service
 public class YalseeSessionService {
     private static final String TAG = "[" + YalseeSessionService.class.getSimpleName() + "]";
+    private static YalseeSessionService instance;
 
     private final YalseeSessionRedisDao redisDao;
     private final YalseeSessionLocalDao localDao;
+    private final RedisMessageSender redisMessageSender;
 
     @Value("${redis.enabled}")
     private boolean isRedisEnabled;
+
+    /**
+     * Makes {@link YalseeSessionService} be accessible from static context aka POJO.
+     *
+     * @return {@link YalseeSessionService} object stored by {@link #init()}.
+     */
+    public static YalseeSessionService getInstance() {
+        return instance;
+    }
+
+    @PostConstruct
+    private void init() {
+        YalseeSessionService.instance = this;
+    }
 
     /**
      * Creates new {@link YalseeSession}.
@@ -52,29 +70,37 @@ public class YalseeSessionService {
         if (StringUtils.isBlank(sessionId)) return Optional.empty();
 
         Optional<YalseeSession> yalseeSession;
-        boolean sessionFromRedis = false;
+        yalseeSession = localDao.get(sessionId);
+        if (yalseeSession.isPresent()) {
+            //hit
+            if (!yalseeSession.get().expired()) {
+                return yalseeSession;
+            } else {
+                //got expired session
+                this.destroySession(yalseeSession.get());
+                return Optional.empty();
+            }
+        } else if (isRedisEnabled) {
+            //miss - redis enabled
+            try {
+                yalseeSession = redisDao.get(sessionId);
+            } catch (Exception e) {
+                log.warn("{} failed to get {} from Redis. Reason: {}",
+                        TAG, YalseeSession.class.getSimpleName(), e);
+                return Optional.empty();
+            }
 
-        if (isRedisEnabled) {
-            yalseeSession = redisDao.get(sessionId);
-            sessionFromRedis = true;
+            if (yalseeSession.isPresent()) {
+                //got session from Redis - catching to local
+                localDao.create(yalseeSession.get());
+                return yalseeSession;
+            } else {
+                return Optional.empty();
+            }
         } else {
-            yalseeSession = localDao.get(sessionId);
-        }
-
-        if (yalseeSession.isEmpty()) {
-            return yalseeSession;
-        }
-
-        if (yalseeSession.get().expired()) {
-            //got expired session
-            this.destroySession(yalseeSession.get());
+            //miss - redis disabled
             return Optional.empty();
-        } else if (sessionFromRedis) {
-            //got active session from Redis
-            this.doBackSync(yalseeSession.get());
         }
-
-        return yalseeSession;
     }
 
     /**
@@ -85,14 +111,16 @@ public class YalseeSessionService {
      */
     public void updateSession(final YalseeSession session) {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
+        localDao.update(session);
         if (isRedisEnabled) {
             try {
                 redisDao.save(session);
+                //TODO pub - session updated event
+                redisMessageSender.sendMessage(String.format("Session %s updated", session.getSessionId()));
             } catch (Exception e) {
                 log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
             }
         }
-        localDao.update(session);
     }
 
     /**
@@ -113,17 +141,5 @@ public class YalseeSessionService {
             }
         }
         localDao.delete(session);
-    }
-
-    private void doBackSync(final YalseeSession session) {
-        if (sessionExistsInLocalStorage(session)) {
-            localDao.update(session);
-        } else {
-            localDao.create(session);
-        }
-    }
-
-    private boolean sessionExistsInLocalStorage(final YalseeSession session) {
-        return localDao.get(session.getSessionId()).isPresent();
     }
 }
