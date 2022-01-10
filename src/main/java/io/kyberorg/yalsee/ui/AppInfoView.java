@@ -22,6 +22,8 @@ import io.kyberorg.yalsee.utils.git.GitRepoState;
 import io.kyberorg.yalsee.utils.maven.MavenInfo;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @SpringComponent
 @UIScope
@@ -134,10 +136,8 @@ public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
         analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
         analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent()));
         analyticsCookiesValue.addValueChangeListener(event -> {
-            YalseeSession yalseeSession = YalseeSession.getCurrent();
-            if (yalseeSession != null) {
-                yalseeSession.getSettings().setAnalyticsCookiesAllowed(event.getValue());
-            }
+            Optional<YalseeSession> yalseeSession = YalseeSession.getCurrent();
+            yalseeSession.ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue()));
 
             VaadinSession session = VaadinSession.getCurrent();
             if (session != null) {

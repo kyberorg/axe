@@ -40,6 +40,16 @@ public class YalseeSessionRedisDao extends RedisDao {
     }
 
     /**
+     * Checks if {@link YalseeSession} with given ID exists in Redis or not.
+     *
+     * @param sessionId non-empty string with session id to check.
+     * @return true if {@link YalseeSession} found, false - if not.
+     */
+    public boolean has(final String sessionId) {
+        return exists(sessionId);
+    }
+
+    /**
      * Retrieve {@link YalseeSession} by its ID.
      *
      * @param sessionId string with session id used as key.

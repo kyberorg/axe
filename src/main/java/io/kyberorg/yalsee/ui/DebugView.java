@@ -29,11 +29,10 @@ public class DebugView extends YalseeLayout implements BeforeEnterObserver {
         removeAll();
         add(new H2("Debug Page"));
 
-        final boolean hasYalseeSession = YalseeSession.getCurrent() != null;
-        if (hasYalseeSession) {
-            yalseeSessionSpan.setText("Yalsee Session ID: " + YalseeSession.getCurrent().getSessionId());
+        YalseeSession.getCurrent().ifPresent(session -> {
+            yalseeSessionSpan.setText("Yalsee Session ID: " + session.getSessionId());
             add(yalseeSessionSpan);
-        }
+        });
 
         final boolean hasVaadinSession = VaadinSession.getCurrent() != null
                 && VaadinSession.getCurrent().getSession() != null

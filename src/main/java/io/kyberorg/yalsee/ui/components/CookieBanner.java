@@ -122,10 +122,9 @@ public class CookieBanner extends Composite<Dialog> {
 
     private void writeValuesToSessionAndClose() {
         final boolean isAnalyticsAllowed = analyticsBox.getValue();
-        final boolean hasYalseeSession = YalseeSession.getCurrent() != null;
-        if (hasYalseeSession) {
-            YalseeSession.getCurrent().getSettings().setAnalyticsCookiesAllowed(isAnalyticsAllowed);
-        }
+        YalseeSession.getCurrent().ifPresent(session ->
+                session.getSettings().setAnalyticsCookiesAllowed(isAnalyticsAllowed));
+
 
         if (getContent().getUI().isPresent()) {
             final boolean uiHasSession = getContent().getUI().get().getSession() != null;

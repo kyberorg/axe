@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.internal;
+package io.kyberorg.yalsee.redis.serializers;
 
 
 import com.google.gson.Gson;

@@ -3,16 +3,20 @@ package io.kyberorg.yalsee.session;
 import com.google.gson.Gson;
 import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
-import io.kyberorg.yalsee.internal.YalseeSessionGsonRedisSerializer;
+import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
+import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Application Session object.
@@ -26,6 +30,7 @@ public class YalseeSession {
      */
     public static final int SESSION_ID_LEN = 40;
     private static final int SESSION_TIMEOUT_FOR_BOTS = 30; //in seconds
+    private static final String VERSION_FORMAT = "yyMMddHHmmssSSS";
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
     private Device device;
@@ -34,6 +39,7 @@ public class YalseeSession {
 
     private final Date created = AppUtils.now();
     private final Date notValidAfter;
+    private long version;
 
     /**
      * Stores given session to current {@link VaadinSession#getCurrent()} if it is available.
@@ -52,7 +58,7 @@ public class YalseeSession {
             throw new IllegalStateException("No VaadinSession at this scope");
         }
 
-        vaadinSession.setAttribute(YalseeSession.class, session);
+        vaadinSession.setAttribute(YalseeSession.class.getSimpleName(), session.getSessionId());
     }
 
     /**
@@ -60,14 +66,22 @@ public class YalseeSession {
      * The current session is automatically defined where {@link VaadinSession#getCurrent()} is available.
      * In other cases, (e.g. from background threads), the current session is not automatically defined.
      *
-     * @return the current session instance if available, otherwise {@code null}.
+     * @return the current session instance if available, otherwise {@link Optional#empty()}.
      */
-    public static YalseeSession getCurrent() {
+    public static Optional<YalseeSession> getCurrent() {
         final VaadinSession vaadinSession = VaadinSession.getCurrent();
         if (vaadinSession == null) {
-            return null;
+            return Optional.empty();
         }
-        return vaadinSession.getAttribute(YalseeSession.class);
+        String sessionId = (String) VaadinSession.getCurrent().getAttribute(YalseeSession.class.getSimpleName());
+        if (StringUtils.isBlank(sessionId)) {
+            return Optional.empty();
+        }
+        if (YalseeSessionService.getInstance() != null) {
+            return YalseeSessionService.getInstance().getSession(sessionId);
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**
@@ -75,6 +89,7 @@ public class YalseeSession {
      */
     public YalseeSession() {
         this.notValidAfter = Date.from(Instant.now().plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
+        this.updateVersion();
     }
 
     /**
@@ -84,6 +99,7 @@ public class YalseeSession {
      */
     public YalseeSession(final Device device) {
         this.device = device;
+        this.updateVersion();
         if (this.device.isRobot()) {
             this.notValidAfter = Date.from(Instant.now().plusSeconds(SESSION_TIMEOUT_FOR_BOTS));
         } else {
@@ -107,6 +123,36 @@ public class YalseeSession {
     public void fixObjectLinksAfterDeserialization() {
         flags.fixLink(this);
         settings.fixLink(this);
+    }
+
+    /**
+     * Updates current Session Version.
+     */
+    public void updateVersion() {
+        final String versionString = new SimpleDateFormat(VERSION_FORMAT).format(AppUtils.now());
+        version = Long.parseLong(versionString);
+    }
+
+    /**
+     * Compares versions and calculates if current session is newer (has bigger version) then another.
+     *
+     * @param anotherSession another {@link YalseeSession} to compare with.
+     * @return true if current session is newer than compared one, false if not.
+     */
+    public boolean isNewer(final YalseeSession anotherSession) {
+        if (anotherSession == null || anotherSession.getVersion() == 0) return false;
+        return this.getVersion() > anotherSession.getVersion();
+    }
+
+    /**
+     * Compares versions and calculates if current session is older (has smaller version) then another.
+     *
+     * @param anotherSession another {@link YalseeSession} to compare with.
+     * @return true if current session is older than compared one, false if not.
+     */
+    public boolean isOlder(final YalseeSession anotherSession) {
+        if (anotherSession == null || anotherSession.getVersion() == 0) return false;
+        return this.getVersion() < anotherSession.getVersion();
     }
 
     private void fireUpdateEvent() {

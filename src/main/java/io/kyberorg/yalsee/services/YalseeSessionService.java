@@ -2,6 +2,9 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
 import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
+import io.kyberorg.yalsee.redis.pubsub.MessageEvent;
+import io.kyberorg.yalsee.redis.pubsub.RedisMessageSender;
+import io.kyberorg.yalsee.redis.pubsub.YalseeMessage;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @Slf4j
@@ -17,12 +21,28 @@ import java.util.Optional;
 @Service
 public class YalseeSessionService {
     private static final String TAG = "[" + YalseeSessionService.class.getSimpleName() + "]";
+    private static YalseeSessionService instance;
 
     private final YalseeSessionRedisDao redisDao;
     private final YalseeSessionLocalDao localDao;
+    private final RedisMessageSender redisMessageSender;
 
     @Value("${redis.enabled}")
     private boolean isRedisEnabled;
+
+    /**
+     * Makes {@link YalseeSessionService} be accessible from static context aka POJO.
+     *
+     * @return {@link YalseeSessionService} object stored by {@link #init()}.
+     */
+    public static YalseeSessionService getInstance() {
+        return instance;
+    }
+
+    @PostConstruct
+    private void init() {
+        YalseeSessionService.instance = this;
+    }
 
     /**
      * Creates new {@link YalseeSession}.
@@ -52,29 +72,37 @@ public class YalseeSessionService {
         if (StringUtils.isBlank(sessionId)) return Optional.empty();
 
         Optional<YalseeSession> yalseeSession;
-        boolean sessionFromRedis = false;
+        yalseeSession = localDao.get(sessionId);
+        if (yalseeSession.isPresent()) {
+            //hit
+            if (!yalseeSession.get().expired()) {
+                return yalseeSession;
+            } else {
+                //got expired session
+                this.destroySession(yalseeSession.get());
+                return Optional.empty();
+            }
+        } else if (isRedisEnabled) {
+            //miss - redis enabled
+            try {
+                yalseeSession = redisDao.get(sessionId);
+            } catch (Exception e) {
+                log.warn("{} failed to get {} from Redis. Reason: {}",
+                        TAG, YalseeSession.class.getSimpleName(), e);
+                return Optional.empty();
+            }
 
-        if (isRedisEnabled) {
-            yalseeSession = redisDao.get(sessionId);
-            sessionFromRedis = true;
+            if (yalseeSession.isPresent()) {
+                //got session from Redis - catching to local
+                localDao.create(yalseeSession.get());
+                return yalseeSession;
+            } else {
+                return Optional.empty();
+            }
         } else {
-            yalseeSession = localDao.get(sessionId);
-        }
-
-        if (yalseeSession.isEmpty()) {
-            return yalseeSession;
-        }
-
-        if (yalseeSession.get().expired()) {
-            //got expired session
-            this.destroySession(yalseeSession.get());
+            //miss - redis disabled
             return Optional.empty();
-        } else if (sessionFromRedis) {
-            //got active session from Redis
-            this.doBackSync(yalseeSession.get());
         }
-
-        return yalseeSession;
     }
 
     /**
@@ -87,12 +115,35 @@ public class YalseeSessionService {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
         if (isRedisEnabled) {
             try {
-                redisDao.save(session);
+                if (redisDao.has(session.getSessionId())) {
+                    Optional<YalseeSession> redisSession = redisDao.get(session.getSessionId());
+                    if (redisSession.isEmpty()) return;
+                    syncSessions(session, redisSession.get());
+                }
             } catch (Exception e) {
                 log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
             }
         }
-        localDao.update(session);
+    }
+
+    /**
+     * Handles session update that was done by another instances.
+     *
+     * @param sessionId string with affected session id
+     */
+    public void onRemoteUpdate(final String sessionId) {
+        log.debug("{} Got Remote Update.", TAG);
+        Optional<YalseeSession> localSession = localDao.get(sessionId);
+        Optional<YalseeSession> redisSession = redisDao.get(sessionId);
+
+        if (localSession.isPresent() && redisSession.isPresent()) {
+            syncSessions(localSession.get(), redisSession.get());
+        } else if (redisSession.isPresent()) {
+            log.debug("{} we don't have session '{}' locally. Ignoring Remote Update.", TAG, sessionId);
+        } else {
+            //should never happen
+            log.debug("{} there is no session '{}' in Redis. No Reason to sync it", TAG, sessionId);
+        }
     }
 
     /**
@@ -102,28 +153,58 @@ public class YalseeSessionService {
      * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
      */
     public void destroySession(final YalseeSession session) {
+        localDao.delete(session);
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
         if (isRedisEnabled) {
             try {
                 redisDao.delete(session.getSessionId());
+                YalseeMessage deleteMessage = createDeleteMessage(session.getSessionId());
+                redisMessageSender.sendMessage(deleteMessage);
             } catch (Exception e) {
                 log.error("{} failed to delete user session from Redis. Session ID: {}. Reason: {}",
                         TAG, session.getSessionId(), e.getMessage());
                 log.debug("{} exception: {}", TAG, e);
             }
         }
-        localDao.delete(session);
     }
 
-    private void doBackSync(final YalseeSession session) {
-        if (sessionExistsInLocalStorage(session)) {
-            localDao.update(session);
+    /**
+     * Handles session deletion that was done by another instances.
+     *
+     * @param sessionId string with affected session id
+     */
+    public void onRemoteDeletion(final String sessionId) {
+        log.debug("{} Remote Session deleted", TAG);
+        Optional<YalseeSession> localSession = localDao.get(sessionId);
+        if (localSession.isPresent()) {
+            log.debug("{} deleting session '{}' locally as well", TAG, sessionId);
+            localDao.delete(localSession.get());
         } else {
-            localDao.create(session);
+            log.debug("{} we don't have session '{}' locally. Ignoring Remote Deletion event.", TAG, sessionId);
         }
     }
 
-    private boolean sessionExistsInLocalStorage(final YalseeSession session) {
-        return localDao.get(session.getSessionId()).isPresent();
+    private void syncSessions(final YalseeSession localSession, final YalseeSession remoteSession) {
+        if (localSession.isNewer(remoteSession)) {
+            log.debug("{} syncing session '{}'. Local -> Redis", TAG, localSession.getSessionId());
+            redisDao.save(localSession);
+            YalseeMessage updateMessage = createUpdateMessage(localSession.getSessionId());
+            redisMessageSender.sendMessage(updateMessage);
+        } else if (localSession.isOlder(remoteSession)) {
+            log.debug("{} syncing session '{}'. Redis -> Local", TAG, localSession.getSessionId());
+            localDao.update(remoteSession);
+        }
+    }
+
+    private YalseeMessage createUpdateMessage(final String sessionId) {
+        YalseeMessage message = YalseeMessage.create(MessageEvent.YALSEE_SESSION_UPDATED);
+        message.setPayload(sessionId);
+        return message;
+    }
+
+    private YalseeMessage createDeleteMessage(final String sessionId) {
+        YalseeMessage message = YalseeMessage.create(MessageEvent.YALSEE_SESSION_DELETED);
+        message.setPayload(sessionId);
+        return message;
     }
 }

@@ -18,6 +18,7 @@ import io.kyberorg.yalsee.utils.session.SessionBoxRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +26,17 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * App-wide tools.
@@ -84,6 +90,53 @@ public class AppUtils implements Serializable {
             return vaadinSession.getSession().getId();
         }
         return null;
+    }
+
+    /**
+     * Figures out hostname of host/container where application runs.
+     *
+     * @return string with hostname or {@code Unknown}.
+     */
+    public static String getHostname() {
+        // Ideally, we'd use InetAddress.getLocalHost, but this does a reverse DNS lookup. On Windows
+        // and Linux this is apparently pretty fast, so we don't get random hangs. On OS X it's
+        // amazingly slow. That's less than ideal. Figure things out and cache.
+        String host = System.getenv("HOSTNAME");  // Most OSs
+        if (host == null) {
+            host = System.getenv("COMPUTERNAME");  // Windows
+        }
+        if (host == null && SystemUtils.IS_OS_MAC) {
+            try {
+                Process process = Runtime.getRuntime().exec("hostname");
+
+                if (!process.waitFor(2, TimeUnit.SECONDS)) {
+                    process.destroyForcibly();
+                    // According to the docs for `destroyForcibly` this is a good idea.
+                    process.waitFor(2, TimeUnit.SECONDS);
+                }
+                if (process.exitValue() == 0) {
+                    try (InputStreamReader isr =
+                                 new InputStreamReader(process.getInputStream(), Charset.defaultCharset());
+                         BufferedReader reader = new BufferedReader(isr)) {
+                        host = reader.readLine();
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                // fall through
+            }
+        }
+        if (host == null) {
+            // Give up.
+            try {
+                host = InetAddress.getLocalHost().getHostName();
+            } catch (Exception e) {
+                host = "Unknown";  // At least we tried.
+            }
+        }
+        return host;
     }
 
     private void populateStaticFields() {
