@@ -202,6 +202,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         YalseeSession yalseeSession;
         Device currentDevice = getCurrentDevice();
         if (isFirstVisit()) {
+            if (currentDevice.isRobot()) return null;
             //create UserSession + save it to redis
             yalseeSession = createNewSession(currentDevice);
             sendSessionCookie(yalseeSession);
