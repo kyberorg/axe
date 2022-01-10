@@ -38,6 +38,16 @@ public class YalseeSessionLocalDao {
     }
 
     /**
+     * Checks if {@link SessionBox} has {@link YalseeSession} with given ID or not.
+     *
+     * @param sessionId non-empty string with session id to check.
+     * @return true if {@link YalseeSession} found, false - if not.
+     */
+    public boolean has(final String sessionId) {
+        return SessionBox.hasSession(sessionId);
+    }
+
+    /**
      * Retrieves {@link YalseeSession} by its Id.
      *
      * @param sessionId string with session id used as key.
@@ -65,7 +75,4 @@ public class YalseeSessionLocalDao {
         SessionBox.removeSession(session);
     }
 
-    public boolean has(final String sessionId) {
-        return SessionBox.hasSession(sessionId);
-    }
 }

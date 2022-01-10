@@ -108,17 +108,17 @@ public class YalseeSessionService {
     /**
      * Stores {@link YalseeSession} to Redis.
      *
-     * @param localSession object to save
+     * @param session object to save
      * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
      */
-    public void updateSession(final YalseeSession localSession) {
-        if (localSession == null) throw new IllegalArgumentException("Session cannot be null");
+    public void updateSession(final YalseeSession session) {
+        if (session == null) throw new IllegalArgumentException("Session cannot be null");
         if (isRedisEnabled) {
             try {
-                if (redisDao.has(localSession.getSessionId())) {
-                    Optional<YalseeSession> redisSession = redisDao.get(localSession.getSessionId());
+                if (redisDao.has(session.getSessionId())) {
+                    Optional<YalseeSession> redisSession = redisDao.get(session.getSessionId());
                     if (redisSession.isEmpty()) return;
-                    syncSessions(localSession, redisSession.get());
+                    syncSessions(session, redisSession.get());
                 }
             } catch (Exception e) {
                 log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
@@ -126,6 +126,11 @@ public class YalseeSessionService {
         }
     }
 
+    /**
+     * Handles session update that was done by another instances.
+     *
+     * @param sessionId string with affected session id
+     */
     public void onRemoteUpdate(final String sessionId) {
         log.debug("{} Got Remote Update.", TAG);
         Optional<YalseeSession> localSession = localDao.get(sessionId);
@@ -163,6 +168,11 @@ public class YalseeSessionService {
         }
     }
 
+    /**
+     * Handles session deletion that was done by another instances.
+     *
+     * @param sessionId string with affected session id
+     */
     public void onRemoteDeletion(final String sessionId) {
         log.debug("{} Remote Session deleted", TAG);
         Optional<YalseeSession> localSession = localDao.get(sessionId);

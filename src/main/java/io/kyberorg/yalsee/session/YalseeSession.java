@@ -133,11 +133,23 @@ public class YalseeSession {
         version = Long.parseLong(versionString);
     }
 
+    /**
+     * Compares versions and calculates if current session is newer (has bigger version) then another.
+     *
+     * @param anotherSession another {@link YalseeSession} to compare with.
+     * @return true if current session is newer than compared one, false if not.
+     */
     public boolean isNewer(final YalseeSession anotherSession) {
         if (anotherSession == null || anotherSession.getVersion() == 0) return false;
         return this.getVersion() > anotherSession.getVersion();
     }
 
+    /**
+     * Compares versions and calculates if current session is older (has smaller version) then another.
+     *
+     * @param anotherSession another {@link YalseeSession} to compare with.
+     * @return true if current session is older than compared one, false if not.
+     */
     public boolean isOlder(final YalseeSession anotherSession) {
         if (anotherSession == null || anotherSession.getVersion() == 0) return false;
         return this.getVersion() < anotherSession.getVersion();

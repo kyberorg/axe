@@ -108,6 +108,11 @@ public class RedisConfig {
         return new YalseeSessionGsonRedisSerializer();
     }
 
+    /**
+     * Redis Template for working with {@link YalseeMessage} objects.
+     *
+     * @return {@link RedisTemplate} configured to work with {@link YalseeMessage}.
+     */
     @Bean
     RedisTemplate<String, YalseeMessage> messageRedisTemplate() {
         final YalseeMessageGsonRedisSerializer jsonSerializer = new YalseeMessageGsonRedisSerializer();
@@ -124,17 +129,34 @@ public class RedisConfig {
         return redisTemplate;
     }
 
+    /**
+     * Bean that listens {@link #topic()} channel and receives messages from there.
+     *
+     * @return {@link RedisMessageReceiver} wrapped with {@link MessageListenerAdapter} to hide threads internals.
+     */
     @Bean
     MessageListenerAdapter messageListener() {
         return new MessageListenerAdapter(new RedisMessageReceiver());
     }
 
+    /**
+     * Bean that represents channel. We use one channel per application.
+     *
+     * @return Redis's {@link ChannelTopic} named after application name from properties
+     * or {@link #DEFAULT_REDIS_CHANNEL_NAME}.
+     */
     @Bean
     ChannelTopic topic() {
         final String channelName = StringUtils.isNotBlank(appName) ? appName : DEFAULT_REDIS_CHANNEL_NAME;
         return new ChannelTopic(channelName);
     }
 
+    /**
+     * Bean that links {@link #messageListener()} with {@link #topic()}.
+     *
+     * @return {@link RedisMessageListenerContainer} that configured to connect Redis
+     * and linked both {@link #messageListener()} and {@link #topic()}.
+     */
     @Bean
     RedisMessageListenerContainer redisMessageListenerContainer() {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
@@ -142,5 +164,4 @@ public class RedisConfig {
         container.addMessageListener(messageListener(), topic());
         return container;
     }
-
 }

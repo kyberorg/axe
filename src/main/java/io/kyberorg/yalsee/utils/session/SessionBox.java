@@ -47,6 +47,12 @@ public final class SessionBox {
         EventBus.getDefault().post(YalseeSessionCreatedEvent.createWith(yalseeSession));
     }
 
+    /**
+     * Checks if {@link SessionBox} has {@link YalseeSession} with given ID or not.
+     *
+     * @param sessionId non-empty string with session id to check.
+     * @return true if {@link YalseeSession} with given ID is found, false - if not.
+     */
     public static boolean hasSession(final String sessionId) {
         if (StringUtils.isBlank(sessionId)) return false;
         return SESSION_STORAGE.containsKey(sessionId);

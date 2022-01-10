@@ -39,6 +39,12 @@ public class YalseeSessionRedisDao extends RedisDao {
         valueOps.set(appendApplicationPrefix() + session.getSessionId(), session, getRecordTtl(), TimeUnit.SECONDS);
     }
 
+    /**
+     * Checks if {@link YalseeSession} with given ID exists in Redis or not.
+     *
+     * @param sessionId non-empty string with session id to check.
+     * @return true if {@link YalseeSession} found, false - if not.
+     */
     public boolean has(final String sessionId) {
         return exists(sessionId);
     }

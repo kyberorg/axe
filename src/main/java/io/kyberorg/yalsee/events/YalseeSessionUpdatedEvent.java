@@ -12,6 +12,12 @@ import lombok.Data;
 public class YalseeSessionUpdatedEvent {
     private final YalseeSession yalseeSession;
 
+    /**
+     * Constructs event and updates version of updated {@link YalseeSession}.
+     *
+     * @param yalseeSession updated {@link YalseeSession}.
+     * @return {@link YalseeSessionUpdatedEvent} with {@link YalseeSession} inside.
+     */
     public static YalseeSessionUpdatedEvent createWith(final YalseeSession yalseeSession) {
         YalseeSessionUpdatedEvent event = new YalseeSessionUpdatedEvent(yalseeSession);
         event.yalseeSession.updateVersion();

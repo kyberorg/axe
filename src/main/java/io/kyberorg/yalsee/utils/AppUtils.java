@@ -92,6 +92,11 @@ public class AppUtils implements Serializable {
         return null;
     }
 
+    /**
+     * Figures out hostname of host/container where application runs.
+     *
+     * @return string with hostname or {@code Unknown}.
+     */
     public static String getHostname() {
         // Ideally, we'd use InetAddress.getLocalHost, but this does a reverse DNS lookup. On Windows
         // and Linux this is apparently pretty fast, so we don't get random hangs. On OS X it's

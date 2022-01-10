@@ -64,8 +64,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     private final YalseeSessionService sessionService;
     private final YalseeSessionCookieService cookieService;
 
-    private YalseeSession yalseeSession;
-
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
@@ -86,8 +84,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void init() {
-        yalseeSession = getUserSession();
-        YalseeSession.setCurrent(yalseeSession);
+        YalseeSession.setCurrent(getUserSession());
 
         setPrimarySection(Section.NAVBAR);
 
@@ -145,7 +142,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             CookieBanner cookieBanner = new CookieBanner();
             cookieBanner.getContent().open();
             session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
-            yalseeSession.getFlags().setCookieBannerAlreadyShown(true);
+            YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setCookieBannerAlreadyShown(true));
         }
     }
 
