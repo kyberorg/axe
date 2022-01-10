@@ -150,7 +150,7 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>3.8.0</version>
+            <version>4.0.1</version>
         </dependency>
 
         <!-- EventBus: event-driven changes -->
