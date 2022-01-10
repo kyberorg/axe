@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class YalseeSession {
      */
     public static final int SESSION_ID_LEN = 40;
     private static final int SESSION_TIMEOUT_FOR_BOTS = 30; //in seconds
+    private static final String VERSION_FORMAT = "yyMMddHHmmssSSS";
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
     private Device device;
@@ -37,6 +39,7 @@ public class YalseeSession {
 
     private final Date created = AppUtils.now();
     private final Date notValidAfter;
+    private long version;
 
     /**
      * Stores given session to current {@link VaadinSession#getCurrent()} if it is available.
@@ -86,6 +89,7 @@ public class YalseeSession {
      */
     public YalseeSession() {
         this.notValidAfter = Date.from(Instant.now().plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
+        this.updateVersion();
     }
 
     /**
@@ -95,6 +99,7 @@ public class YalseeSession {
      */
     public YalseeSession(final Device device) {
         this.device = device;
+        this.updateVersion();
         if (this.device.isRobot()) {
             this.notValidAfter = Date.from(Instant.now().plusSeconds(SESSION_TIMEOUT_FOR_BOTS));
         } else {
@@ -118,6 +123,24 @@ public class YalseeSession {
     public void fixObjectLinksAfterDeserialization() {
         flags.fixLink(this);
         settings.fixLink(this);
+    }
+
+    /**
+     * Updates current Session Version.
+     */
+    public void updateVersion() {
+        final String versionString = new SimpleDateFormat(VERSION_FORMAT).format(AppUtils.now());
+        version = Long.parseLong(versionString);
+    }
+
+    public boolean isNewer(final YalseeSession anotherSession) {
+        if (anotherSession == null || anotherSession.getVersion() == 0) return false;
+        return this.getVersion() > anotherSession.getVersion();
+    }
+
+    public boolean isOlder(final YalseeSession anotherSession) {
+        if (anotherSession == null || anotherSession.getVersion() == 0) return false;
+        return this.getVersion() < anotherSession.getVersion();
     }
 
     private void fireUpdateEvent() {

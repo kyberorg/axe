@@ -8,7 +8,13 @@ import lombok.Data;
  *
  * @since 3.8
  */
-@Data(staticConstructor = "createWith")
+@Data
 public class YalseeSessionUpdatedEvent {
     private final YalseeSession yalseeSession;
+
+    public static YalseeSessionUpdatedEvent createWith(final YalseeSession yalseeSession) {
+        YalseeSessionUpdatedEvent event = new YalseeSessionUpdatedEvent(yalseeSession);
+        event.yalseeSession.updateVersion();
+        return event;
+    }
 }

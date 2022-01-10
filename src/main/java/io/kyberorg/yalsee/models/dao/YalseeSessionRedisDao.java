@@ -39,6 +39,10 @@ public class YalseeSessionRedisDao extends RedisDao {
         valueOps.set(appendApplicationPrefix() + session.getSessionId(), session, getRecordTtl(), TimeUnit.SECONDS);
     }
 
+    public boolean has(final String sessionId) {
+        return exists(sessionId);
+    }
+
     /**
      * Retrieve {@link YalseeSession} by its ID.
      *

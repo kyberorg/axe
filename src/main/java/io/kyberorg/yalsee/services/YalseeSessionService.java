@@ -108,18 +108,18 @@ public class YalseeSessionService {
     /**
      * Stores {@link YalseeSession} to Redis.
      *
-     * @param session object to save
+     * @param localSession object to save
      * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
      */
-    public void updateSession(final YalseeSession session) {
-        if (session == null) throw new IllegalArgumentException("Session cannot be null");
+    public void updateSession(final YalseeSession localSession) {
+        if (localSession == null) throw new IllegalArgumentException("Session cannot be null");
         if (isRedisEnabled) {
             try {
-                //TODO versioning
-                redisDao.save(session);
-                //TODO pub - session updated event
-                YalseeMessage updateMessage = createUpdateMessage(session.getSessionId());
-                redisMessageSender.sendMessage(updateMessage);
+                if (redisDao.has(localSession.getSessionId())) {
+                    Optional<YalseeSession> redisSession = redisDao.get(localSession.getSessionId());
+                    if (redisSession.isEmpty()) return;
+                    syncSessions(localSession, redisSession.get());
+                }
             } catch (Exception e) {
                 log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
             }
@@ -128,12 +128,16 @@ public class YalseeSessionService {
 
     public void onRemoteUpdate(final String sessionId) {
         log.debug("{} Got Remote Update.", TAG);
-        if (localDao.has(sessionId)) {
-            //TODO versioning
-            log.debug("{} syncing session '{}'. Redis -> Local", TAG, sessionId);
-            redisDao.get(sessionId).ifPresent(localDao::update);
+        Optional<YalseeSession> localSession = localDao.get(sessionId);
+        Optional<YalseeSession> redisSession = redisDao.get(sessionId);
+
+        if (localSession.isPresent() && redisSession.isPresent()) {
+            syncSessions(localSession.get(), redisSession.get());
+        } else if (redisSession.isPresent()) {
+            log.debug("{} we don't have session '{}' locally. Ignoring Remote Update.", TAG, sessionId);
         } else {
-            log.debug("{} we don't have session '{}'. Ignoring Remote Update.", TAG, sessionId);
+            //should never happen
+            log.debug("{} there is no session '{}' in Redis. No Reason to sync it", TAG, sessionId);
         }
     }
 
@@ -155,6 +159,18 @@ public class YalseeSessionService {
             }
         }
         localDao.delete(session);
+    }
+
+    private void syncSessions(final YalseeSession localSession, final YalseeSession remoteSession) {
+        if (localSession.isNewer(remoteSession)) {
+            log.debug("{} syncing session '{}'. Local -> Redis", TAG, localSession.getSessionId());
+            redisDao.save(localSession);
+            YalseeMessage updateMessage = createUpdateMessage(localSession.getSessionId());
+            redisMessageSender.sendMessage(updateMessage);
+        } else if (localSession.isOlder(remoteSession)) {
+            log.debug("{} syncing session '{}'. Redis -> Local", TAG, localSession.getSessionId());
+            localDao.update(remoteSession);
+        }
     }
 
     private YalseeMessage createUpdateMessage(final String sessionId) {
