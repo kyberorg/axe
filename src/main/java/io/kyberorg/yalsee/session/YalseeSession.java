@@ -32,6 +32,8 @@ public class YalseeSession {
     private static final int SESSION_TIMEOUT_FOR_BOTS = 30; //in seconds
     private static final String VERSION_FORMAT = "yyMMddHHmmssSSS";
 
+    private static final String NO_SESSION_STORED_MARKER = "DummySessionId";
+
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
     private Device device;
     private final Flags flags = new Flags();
@@ -45,20 +47,19 @@ public class YalseeSession {
      * Stores given session to current {@link VaadinSession#getCurrent()} if it is available.
      *
      * @param session {@link YalseeSession} to store.
-     * @throws IllegalArgumentException when session is null
      * @throws IllegalStateException    when no {@link VaadinSession} available.
      */
     public static void setCurrent(final YalseeSession session) {
-        if (session == null) {
-            throw new IllegalArgumentException("Session cannot be null");
-        }
-
         VaadinSession vaadinSession = VaadinSession.getCurrent();
         if (vaadinSession == null) {
             throw new IllegalStateException("No VaadinSession at this scope");
         }
 
-        vaadinSession.setAttribute(YalseeSession.class.getSimpleName(), session.getSessionId());
+        if (session == null) {
+            vaadinSession.setAttribute(YalseeSession.class.getSimpleName(), NO_SESSION_STORED_MARKER);
+        } else {
+            vaadinSession.setAttribute(YalseeSession.class.getSimpleName(), session.getSessionId());
+        }
     }
 
     /**
@@ -74,7 +75,7 @@ public class YalseeSession {
             return Optional.empty();
         }
         String sessionId = (String) VaadinSession.getCurrent().getAttribute(YalseeSession.class.getSimpleName());
-        if (StringUtils.isBlank(sessionId)) {
+        if (StringUtils.isBlank(sessionId) || sessionId.equals(NO_SESSION_STORED_MARKER)) {
             return Optional.empty();
         }
         if (YalseeSessionService.getInstance() != null) {
