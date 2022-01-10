@@ -32,7 +32,7 @@ public class YalseeSession {
     private static final int SESSION_TIMEOUT_FOR_BOTS = 30; //in seconds
     private static final String VERSION_FORMAT = "yyMMddHHmmssSSS";
 
-    public static final String NO_SESSION_STORED_MARKER = "DummySessionId";
+    private static final String NO_SESSION_STORED_MARKER = "DummySessionId";
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
     private Device device;
