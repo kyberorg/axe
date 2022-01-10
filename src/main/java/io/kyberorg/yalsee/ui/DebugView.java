@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.ui;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -42,6 +41,6 @@ public class DebugView extends YalseeLayout implements BeforeEnterObserver {
             add(vaadinSessionSpan);
         }
 
-        add(new Text("Ready to debug something..."));
+        add(new Span("Ready to debug something..."));
     }
 }
