@@ -46,7 +46,8 @@ public class RedisMessageReceiver implements MessageListener {
                 if (sessionService != null) sessionService.onRemoteUpdate(yalseeMessage.getPayload());
                 break;
             case YALSEE_SESSION_DELETED:
-                //no-op yet
+                if (sessionService != null) sessionService.onRemoteDeletion(yalseeMessage.getPayload());
+                break;
         }
     }
 }

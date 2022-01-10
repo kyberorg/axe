@@ -10,6 +10,7 @@ import lombok.ToString;
 public class YalseeMessage {
     @Getter
     private final String actor = AppUtils.getHostname();
-    private MessageEvent event;
+    @Getter
+    private final MessageEvent event;
     private String payload;
 }

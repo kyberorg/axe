@@ -148,17 +148,30 @@ public class YalseeSessionService {
      * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
      */
     public void destroySession(final YalseeSession session) {
+        localDao.delete(session);
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
         if (isRedisEnabled) {
             try {
                 redisDao.delete(session.getSessionId());
+                YalseeMessage deleteMessage = createDeleteMessage(session.getSessionId());
+                redisMessageSender.sendMessage(deleteMessage);
             } catch (Exception e) {
                 log.error("{} failed to delete user session from Redis. Session ID: {}. Reason: {}",
                         TAG, session.getSessionId(), e.getMessage());
                 log.debug("{} exception: {}", TAG, e);
             }
         }
-        localDao.delete(session);
+    }
+
+    public void onRemoteDeletion(final String sessionId) {
+        log.debug("{} Remote Session deleted", TAG);
+        Optional<YalseeSession> localSession = localDao.get(sessionId);
+        if (localSession.isPresent()) {
+            log.debug("{} deleting session '{}' locally as well", TAG, sessionId);
+            localDao.delete(localSession.get());
+        } else {
+            log.debug("{} we don't have session '{}' locally. Ignoring Remote Deletion event.", TAG, sessionId);
+        }
     }
 
     private void syncSessions(final YalseeSession localSession, final YalseeSession remoteSession) {
@@ -174,8 +187,13 @@ public class YalseeSessionService {
     }
 
     private YalseeMessage createUpdateMessage(final String sessionId) {
-        YalseeMessage message = YalseeMessage.create();
-        message.setEvent(MessageEvent.YALSEE_SESSION_UPDATED);
+        YalseeMessage message = YalseeMessage.create(MessageEvent.YALSEE_SESSION_UPDATED);
+        message.setPayload(sessionId);
+        return message;
+    }
+
+    private YalseeMessage createDeleteMessage(final String sessionId) {
+        YalseeMessage message = YalseeMessage.create(MessageEvent.YALSEE_SESSION_DELETED);
         message.setPayload(sessionId);
         return message;
     }
