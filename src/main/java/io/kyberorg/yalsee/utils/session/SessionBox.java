@@ -47,6 +47,11 @@ public final class SessionBox {
         EventBus.getDefault().post(YalseeSessionCreatedEvent.createWith(yalseeSession));
     }
 
+    public static boolean hasSession(final String sessionId) {
+        if (StringUtils.isBlank(sessionId)) return false;
+        return SESSION_STORAGE.containsKey(sessionId);
+    }
+
     /**
      * Gets Stored session by its ID.
      *

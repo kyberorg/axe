@@ -7,13 +7,12 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class RedisMessageSender implements MessageSender {
+public class RedisMessageSender {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, YalseeMessage> redisTemplate;
     private final ChannelTopic topic;
 
-    @Override
-    public void sendMessage(String message) {
+    public void sendMessage(YalseeMessage message) {
         redisTemplate.convertAndSend(topic.getTopic(), message);
     }
 }

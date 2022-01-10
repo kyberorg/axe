@@ -1,6 +1,8 @@
 package io.kyberorg.yalsee.configuration;
 
-import io.kyberorg.yalsee.redis.pubsub.RedisMessageSubscriber;
+import io.kyberorg.yalsee.redis.pubsub.RedisMessageReceiver;
+import io.kyberorg.yalsee.redis.pubsub.YalseeMessage;
+import io.kyberorg.yalsee.redis.serializers.YalseeMessageGsonRedisSerializer;
 import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.extern.slf4j.Slf4j;
@@ -106,17 +108,25 @@ public class RedisConfig {
         return new YalseeSessionGsonRedisSerializer();
     }
 
-/*    @Bean
-    RedisTemplate<String, String> messageRedisTemplate() {
-        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+    @Bean
+    RedisTemplate<String, YalseeMessage> messageRedisTemplate() {
+        final YalseeMessageGsonRedisSerializer jsonSerializer = new YalseeMessageGsonRedisSerializer();
+
+        RedisTemplate<String, YalseeMessage> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
+        redisTemplate.setDefaultSerializer(jsonSerializer);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(jsonSerializer);
+        redisTemplate.setValueSerializer(jsonSerializer);
+        redisTemplate.afterPropertiesSet();
+
         return redisTemplate;
-    }*/
+    }
 
     @Bean
     MessageListenerAdapter messageListener() {
-        return new MessageListenerAdapter(new RedisMessageSubscriber());
+        return new MessageListenerAdapter(new RedisMessageReceiver());
     }
 
     @Bean

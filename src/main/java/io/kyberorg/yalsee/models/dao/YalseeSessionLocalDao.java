@@ -64,4 +64,8 @@ public class YalseeSessionLocalDao {
     public void delete(final YalseeSession session) {
         SessionBox.removeSession(session);
     }
+
+    public boolean has(final String sessionId) {
+        return SessionBox.hasSession(sessionId);
+    }
 }

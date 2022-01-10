@@ -2,7 +2,9 @@ package io.kyberorg.yalsee.services;
 
 import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
 import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
+import io.kyberorg.yalsee.redis.pubsub.MessageEvent;
 import io.kyberorg.yalsee.redis.pubsub.RedisMessageSender;
+import io.kyberorg.yalsee.redis.pubsub.YalseeMessage;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.RequiredArgsConstructor;
@@ -111,15 +113,27 @@ public class YalseeSessionService {
      */
     public void updateSession(final YalseeSession session) {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
-        localDao.update(session);
         if (isRedisEnabled) {
             try {
+                //TODO versioning
                 redisDao.save(session);
                 //TODO pub - session updated event
-                redisMessageSender.sendMessage(String.format("Session %s updated", session.getSessionId()));
+                YalseeMessage updateMessage = createUpdateMessage(session.getSessionId());
+                redisMessageSender.sendMessage(updateMessage);
             } catch (Exception e) {
                 log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
             }
+        }
+    }
+
+    public void onRemoteUpdate(final String sessionId) {
+        log.debug("{} Got Remote Update.", TAG);
+        if (localDao.has(sessionId)) {
+            //TODO versioning
+            log.debug("{} syncing session '{}'. Redis -> Local", TAG, sessionId);
+            redisDao.get(sessionId).ifPresent(localDao::update);
+        } else {
+            log.debug("{} we don't have session '{}'. Ignoring Remote Update.", TAG, sessionId);
         }
     }
 
@@ -141,5 +155,12 @@ public class YalseeSessionService {
             }
         }
         localDao.delete(session);
+    }
+
+    private YalseeMessage createUpdateMessage(final String sessionId) {
+        YalseeMessage message = YalseeMessage.create();
+        message.setEvent(MessageEvent.YALSEE_SESSION_UPDATED);
+        message.setPayload(sessionId);
+        return message;
     }
 }
