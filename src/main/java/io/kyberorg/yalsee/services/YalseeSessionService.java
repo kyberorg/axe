@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -54,12 +55,26 @@ public class YalseeSessionService {
     public YalseeSession createNew(final Device device) {
         if (device == null) throw new IllegalArgumentException("Device cannot be null");
         YalseeSession newSession = new YalseeSession(device);
-        if (isRedisEnabled) {
-            redisDao.save(newSession);
-        }
         localDao.create(newSession);
-
+        if (isRedisEnabled) {
+            saveNewSessionInRedis(newSession);
+        }
         return newSession;
+    }
+
+    /**
+     * Creates new session in Redis. Dedicates to make Redis-related operation async.
+     * Needs to be overridable (not private).
+     *
+     * @param session valid Yalsee Session to create.
+     */
+    @Async
+    void saveNewSessionInRedis(final YalseeSession session) {
+        try {
+            redisDao.save(session);
+        } catch (Exception e) {
+            log.error("{} unable to persist session to Redis. Got exception: {}", TAG, e.getMessage());
+        }
     }
 
     /**
@@ -111,6 +126,7 @@ public class YalseeSessionService {
      * @param session object to save
      * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
      */
+    @Async
     public void updateSession(final YalseeSession session) {
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
         if (isRedisEnabled) {
@@ -131,6 +147,7 @@ public class YalseeSessionService {
      *
      * @param sessionId string with affected session id
      */
+    @Async
     public void onRemoteUpdate(final String sessionId) {
         log.debug("{} Got Remote Update.", TAG);
         Optional<YalseeSession> localSession = localDao.get(sessionId);
@@ -152,6 +169,7 @@ public class YalseeSessionService {
      * @param session {@link YalseeSession} object to delete.
      * @throws IllegalArgumentException if {@link YalseeSession} is {@code null}.
      */
+    @Async
     public void destroySession(final YalseeSession session) {
         localDao.delete(session);
         if (session == null) throw new IllegalArgumentException("Session cannot be null");
@@ -173,6 +191,7 @@ public class YalseeSessionService {
      *
      * @param sessionId string with affected session id
      */
+    @Async
     public void onRemoteDeletion(final String sessionId) {
         log.debug("{} Remote Session deleted", TAG);
         Optional<YalseeSession> localSession = localDao.get(sessionId);
