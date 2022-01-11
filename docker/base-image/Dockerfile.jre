@@ -15,7 +15,7 @@ COPY cmd/entrypoint.go cmd/entrypoint.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
-FROM gcr.io/distroless/java-debian11:11-nonroot as runner
+FROM gcr.io/distroless/java17-debian11:nonroot as runner
 LABEL maintainer="Aleksandr Muravja <alex@kyberorg.io>"
 COPY --from=healthcheckBuild /go/bin/cmd /app/healthcheck
 COPY --from=entrypointBuild /go/bin/cmd /app/entrypoint

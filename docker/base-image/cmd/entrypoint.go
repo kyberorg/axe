@@ -45,6 +45,10 @@ func main() {
 	// Issue 236 (Vaadin Production Mode)
 	appendJavaOpts("-Dvaadin.production=true")
 
+	// For GSON to work with Java 17
+	appendJavaOpts("--add-opens")
+	appendJavaOpts("java.base/java.lang=ALL-UNNAMED")
+
 	javaCmd := "java"
 	versionArgs := "--version"
 	versionCommand := exec.Command(javaCmd, versionArgs)
