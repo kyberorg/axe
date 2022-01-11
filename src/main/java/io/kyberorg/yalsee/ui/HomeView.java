@@ -16,7 +16,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -30,6 +29,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
@@ -328,7 +328,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     }
 
     private void saveLink(final String link, final String linkDescription) {
-        String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
+        String sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse("");
         LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
                 LinkServiceInput.builder(link).sessionID(sessionId);
 

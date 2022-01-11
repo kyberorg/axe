@@ -8,7 +8,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -21,8 +20,6 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
 import io.kyberorg.yalsee.utils.maven.MavenInfo;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @SpringComponent
@@ -134,16 +131,10 @@ public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
 
         ToggleButton analyticsCookiesValue = new ToggleButton();
         analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
-        analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent()));
-        analyticsCookiesValue.addValueChangeListener(event -> {
-            Optional<YalseeSession> yalseeSession = YalseeSession.getCurrent();
-            yalseeSession.ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue()));
-
-            VaadinSession session = VaadinSession.getCurrent();
-            if (session != null) {
-                session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, event.getValue());
-            }
-        });
+        analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(YalseeSession.getCurrent()));
+        analyticsCookiesValue.addValueChangeListener(event ->
+                YalseeSession.getCurrent()
+                        .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue())));
 
         cookieText.add(textStart, link, textEnd, techDetailsText);
         techCookies.add(techCookiesLabel, techCookiesValue);
