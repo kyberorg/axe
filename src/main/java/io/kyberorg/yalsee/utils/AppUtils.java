@@ -13,8 +13,8 @@ import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.utils.session.SessionBox;
-import io.kyberorg.yalsee.utils.session.SessionBoxRecord;
+import io.kyberorg.yalsee.services.YalseeSessionService;
+import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,24 +73,9 @@ public class AppUtils implements Serializable {
      *
      * @param env environment variables
      */
-    public AppUtils(final Environment env) {
+    public AppUtils(final Environment env, YalseeSessionService sessionService) {
         this.env = env;
         populateStaticFields();
-    }
-
-    /**
-     * Retrieve Session ID from given {@link VaadinSession}.
-     * Note: parameter here is really needed,
-     * because {@link VaadinSession#getCurrent()} may not exist outside UI scope/objects.
-     *
-     * @param vaadinSession current {@link VaadinSession} object from UI.
-     * @return string with ID or null
-     */
-    public static String getSessionId(final VaadinSession vaadinSession) {
-        if (vaadinSession != null && vaadinSession.getSession() != null) {
-            return vaadinSession.getSession().getId();
-        }
-        return null;
     }
 
     /**
@@ -493,25 +479,12 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Ends current session.
-     * Removes session from {@link SessionBox}, invalidates {@link HttpSession} and closes {@link VaadinSession}.
-     *
-     * @param sessionBoxRecord {@link SessionBoxRecord} object to end.
-     */
-    public void endSession(final SessionBoxRecord sessionBoxRecord) {
-        SessionBox.removeRecord(sessionBoxRecord);
-        sessionBoxRecord.getHttpSession().invalidate();
-        sessionBoxRecord.getVaadinSession().close();
-    }
-
-    /**
      * Ends Vaadin Session. Invalidates bound {@link HttpSession} if any and closes {@link VaadinSession}.
      *
      * @param session {@link VaadinSession} to remove.
      */
     public void endVaadinSession(final VaadinSession session) {
         if (session.getSession() != null) {
-            SessionBox.removeVaadinSession(session);
             session.getSession().invalidate();
         }
         session.close();
@@ -520,14 +493,11 @@ public class AppUtils implements Serializable {
     /**
      * Figures out if analytics cookies are allowed in given session.
      *
-     * @param vaadinSession session object to read attribute from.
+     * @param yalseeSession session object to read attribute from.
      * @return true - if analytics cookies are allowed, false - if not.
      */
-    public boolean isGoogleAnalyticsAllowed(final VaadinSession vaadinSession) {
-        final boolean defaultValue = true;
-        if (vaadinSession == null) return defaultValue;
-        if (vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED) == null) return defaultValue;
-        return (boolean) vaadinSession.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED);
+    public boolean isGoogleAnalyticsAllowed(final Optional<YalseeSession> yalseeSession) {
+        return yalseeSession.map(session -> session.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
     }
 
     /**

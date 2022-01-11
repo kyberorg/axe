@@ -169,12 +169,27 @@ public class YalseeSession {
         private boolean cookieBannerAlreadyShown = false;
 
         /**
+         * Temporary flag to simulate User mode until this will released.
+         */
+        private boolean userModeEnabled = false;
+
+        /**
          * Setter for {@link #cookieBannerAlreadyShown} property, which fires {@link YalseeSessionUpdatedEvent}.
          *
          * @param cookieBannerAlreadyShown flag to set.
          */
         public void setCookieBannerAlreadyShown(final boolean cookieBannerAlreadyShown) {
             this.cookieBannerAlreadyShown = cookieBannerAlreadyShown;
+            YalseeSession.this.fireUpdateEvent();
+        }
+
+        /**
+         * Setter for {@link #userModeEnabled} property, which fires {@link YalseeSessionUpdatedEvent}.
+         *
+         * @param userModeEnabled flag to set.
+         */
+        public void setUserModeEnabled(final boolean userModeEnabled) {
+            this.userModeEnabled = userModeEnabled;
             YalseeSession.this.fireUpdateEvent();
         }
 
@@ -186,6 +201,7 @@ public class YalseeSession {
         }
     }
 
+    @Data
     public class Settings {
         /**
          * Allow analytics cookies or not. Should never be private.

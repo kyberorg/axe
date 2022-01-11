@@ -34,13 +34,13 @@ import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.utils.AppUtils;
-import io.kyberorg.yalsee.utils.session.SessionBox;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 
@@ -109,10 +109,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
         setId(IDs.VIEW_ID);
 
-        //session trick
-        VaadinSession session = VaadinSession.getCurrent();
-        SessionBox.storeSession(session);
-
         // hide the splash screen after the main view is loaded
         UI.getCurrent().getPage().executeJs(
                 "document.querySelector('#splash-screen').classList.add('loaded')");
@@ -122,27 +118,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
 
-        VaadinSession session = VaadinSession.getCurrent();
+        Optional<YalseeSession> session = YalseeSession.getCurrent();
         //Cookie Banner
         boolean bannerAlreadyShown;
-
-        //TODO enable after updating Banner tests.
-        /*if (yalseeSession != null) {
-            bannerAlreadyShown = yalseeSession.getFlags().isCookieBannerAlreadyShown();
-        } else {
-            //temporary fallback to VaadinSession
-            readAndWriteCookieBannerRelatedSettingsFromSession(session);
-            bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
-        }*/
-
-        readAndWriteCookieBannerRelatedSettingsFromSession(session);
-        bannerAlreadyShown = (boolean) session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN);
+        bannerAlreadyShown = session.map(ys -> ys.getFlags().isCookieBannerAlreadyShown()).orElse(true);
 
         if (!bannerAlreadyShown) {
             CookieBanner cookieBanner = new CookieBanner();
             cookieBanner.getContent().open();
-            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, true);
-            YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setCookieBannerAlreadyShown(true));
+            session.ifPresent(ys -> ys.getFlags().setCookieBannerAlreadyShown(true));
         }
     }
 
@@ -286,18 +270,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         settings.addMetaTag("twitter:image", previewImage);
 
         settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
-        if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(VaadinSession.getCurrent())) {
+        if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(YalseeSession.getCurrent())) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
-        }
-    }
-
-    private void readAndWriteCookieBannerRelatedSettingsFromSession(final VaadinSession session) {
-        if (Objects.isNull(session.getAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN))) {
-            session.setAttribute(App.Session.COOKIE_BANNER_ALREADY_SHOWN, false);
-        }
-
-        if (Objects.isNull(session.getAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED))) {
-            session.setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, false);
         }
     }
 

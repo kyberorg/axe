@@ -35,6 +35,8 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkInfoService;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
+import io.kyberorg.yalsee.services.YalseeSessionService;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -77,6 +79,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
     private final LinkService linkService;
+    private final YalseeSessionService sessionService;
     private final AppUtils appUtils;
 
     private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
@@ -93,8 +96,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private void init() {
-        sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.FALSE);
+        sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse(null);
         deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
         clientHasSmallScreen = isSmallScreen();
 
@@ -144,7 +146,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
         //User-mode activation
         grid.getElement().addEventListener("keydown", event -> {
-                    VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
+                    YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(true));
                     activateLinkEditor();
                 })
                 .setFilter("event.key === 'R' && event.shiftKey");
@@ -252,7 +254,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private void activateLinkEditor() {
-        boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
+        boolean userModeActivated = YalseeSession.getCurrent().map(ys -> ys.getFlags().isUserModeEnabled())
+                .orElse(false);
         if (userModeActivated) {
             EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
             // Close the editor in case of backward between components
@@ -334,6 +337,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private void onCleanButtonClick(final ClickEvent<Button> buttonClickEvent) {
+        YalseeSession.getCurrent().ifPresent(sessionService::destroySession);
         appUtils.endVaadinSession(VaadinSession.getCurrent());
     }
 
@@ -358,7 +362,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                 linkInfoService.update(linkInfo);
             } else {
                 //TODO replace with real-user check once users are there
-                boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
+                boolean userModeActivated = YalseeSession.getCurrent().map(ys -> ys.getFlags().isUserModeEnabled())
+                        .orElse(false);
                 if (userModeActivated) {
                     OperationResult getLinkResult = linkService.getLinkByIdent(oldLinkInfo.get().getIdent());
                     if (getLinkResult.ok()) {
