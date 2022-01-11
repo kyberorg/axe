@@ -13,7 +13,6 @@ import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +72,7 @@ public class AppUtils implements Serializable {
      *
      * @param env environment variables
      */
-    public AppUtils(final Environment env, YalseeSessionService sessionService) {
+    public AppUtils(final Environment env) {
         this.env = env;
         populateStaticFields();
     }
