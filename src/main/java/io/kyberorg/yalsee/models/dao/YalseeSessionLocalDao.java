@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.models.dao;
 
+import io.kyberorg.yalsee.session.SessionBox;
 import io.kyberorg.yalsee.session.YalseeSession;
-import io.kyberorg.yalsee.utils.session.SessionBox;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

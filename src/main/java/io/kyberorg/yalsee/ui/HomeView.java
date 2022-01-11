@@ -328,7 +328,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     }
 
     private void saveLink(final String link, final String linkDescription) {
-        String sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse(null);
+        String sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse("");
         LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
                 LinkServiceInput.builder(link).sessionID(sessionId);
 
