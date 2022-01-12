@@ -177,7 +177,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         previousSessions.put(this.currentDevice, session);
 
         if (session.isAlmostExpired() && !session.getFlags().isExpirationWarningShown()) {
-            showSessionExpiryWarning();
+            showSessionExpiryWarning(session);
             session.getFlags().setExpirationWarningShown(true);
         }
     }
@@ -297,8 +297,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         return Device.from(request, browser);
     }
 
-    private void showSessionExpiryWarning() {
-        this.ui.access(() -> AppUtils.getSessionExpiredNotification(this.ui).open());
+    private void showSessionExpiryWarning(final YalseeSession session) {
+        this.ui.access(() -> AppUtils.getSessionExpiredNotification(this.ui, session.getDevice().getBrowser()).open());
     }
 
     private void refreshPage() {

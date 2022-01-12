@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
@@ -280,31 +281,27 @@ public class AppUtils implements Serializable {
      * @param ui non-empty {@link UI} to refresh page.
      * @return created {@link Notification}.
      */
-    public static Notification getSessionExpiredNotification(final UI ui) {
+    public static Notification getSessionExpiredNotification(final UI ui, final WebBrowser webBrowser) {
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
         notification.setPosition(Notification.Position.TOP_STRETCH);
 
-        boolean hasSmallScreen = false;
-        if (ui != null) {
-            DeviceUtils deviceUtils = DeviceUtils.createWithUI(ui);
-            if (deviceUtils != null) {
-                hasSmallScreen = deviceUtils.isExtraSmallDevice();
-            }
+        boolean isMobileDevice = false;
+        if (webBrowser != null) {
+            isMobileDevice = DeviceUtils.isMobileDevice(webBrowser);
         }
 
         String messagePartOne;
         String messagePartTwo;
-        if (hasSmallScreen) {
+        if (isMobileDevice) {
             messagePartOne = "Session expires soon. Any unsaved data lost. Click on";
             messagePartTwo = "or press OK";
         } else {
             messagePartOne = String.format("Your session expires in %d seconds. Take note of any unsaved data and",
                     YalseeSession.TIMEOUT_FOR_WARNING);
             messagePartTwo = "or press ESC key to continue";
+            Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
         }
-
-        Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
 
         Div textStart = new Div(new Text(messagePartOne));
 
@@ -323,9 +320,9 @@ public class AppUtils implements Serializable {
 
         HorizontalLayout layout = new HorizontalLayout(textStart, pageRefreshLink, textEnd, closeButton);
         layout.setAlignItems(FlexComponent.Alignment.AUTO);
+        layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 
         notification.add(layout);
-
         return notification;
     }
 
