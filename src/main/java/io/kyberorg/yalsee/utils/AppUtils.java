@@ -292,19 +292,16 @@ public class AppUtils implements Serializable {
             isMobileDevice = DeviceUtils.isMobileDevice(webBrowser);
         }
 
-        String messagePartOne;
-        String messagePartTwo;
+        String message;
         if (isMobileDevice) {
-            messagePartOne = "Session expires soon. Any unsaved data lost. Click on";
-            messagePartTwo = "or press OK";
+            message = "Session expires soon. Any unsaved data will be lost.";
         } else {
-            messagePartOne = String.format("Your session expires in %d seconds. Take note of any unsaved data and",
+            message = String.format("Your session expires in %d seconds. Take note of any unsaved data.",
                     YalseeSession.TIMEOUT_FOR_WARNING);
-            messagePartTwo = "or press ESC key to continue";
             Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
         }
 
-        Div textStart = new Div(new Text(messagePartOne));
+        Div text = new Div(new Text(message));
 
         Anchor pageRefreshLink = new Anchor();
         pageRefreshLink.setText("refresh page");
@@ -314,18 +311,20 @@ public class AppUtils implements Serializable {
             }
         });
 
-        Div textEnd = new Div(new Text(messagePartTwo));
+        Button pageRefreshButton = new Button("Refresh Page", event -> ui.getPage().reload());
+        pageRefreshButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
 
-        Button closeButton = new Button("OK", event -> notification.close());
+        Button closeButton = new Button("Dismiss", event -> notification.close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
 
         if (isMobileDevice) {
-            VerticalLayout layout = new VerticalLayout(textStart, pageRefreshLink, textEnd, closeButton);
+            VerticalLayout layout = new VerticalLayout(text, closeButton);
             layout.setAlignItems(FlexComponent.Alignment.AUTO);
+            closeButton.setText("OK");
 
             notification.add(layout);
         } else {
-            HorizontalLayout layout = new HorizontalLayout(textStart, pageRefreshLink, textEnd, closeButton);
+            HorizontalLayout layout = new HorizontalLayout(text, pageRefreshButton, closeButton);
             layout.setAlignItems(FlexComponent.Alignment.AUTO);
             layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 

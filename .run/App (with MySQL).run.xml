@@ -9,6 +9,7 @@
         <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
         <envs>
             <env name="LOG_LEVEL_APP" value="debug"/>
+            <env name="SESSION_TIMEOUT" value="70"/>
         </envs>
         <method v="2">
             <option name="Make" enabled="true"/>
