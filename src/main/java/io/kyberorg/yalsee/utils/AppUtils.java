@@ -16,7 +16,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
@@ -317,20 +316,19 @@ public class AppUtils implements Serializable {
         Button closeButton = new Button("Dismiss", event -> notification.close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
 
+        HorizontalLayout layout;
         if (isMobileDevice) {
-            VerticalLayout layout = new VerticalLayout(text, closeButton);
+            layout = new HorizontalLayout(text, closeButton);
             layout.setAlignItems(FlexComponent.Alignment.AUTO);
             closeButton.setText("OK");
 
-            notification.add(layout);
         } else {
-            HorizontalLayout layout = new HorizontalLayout(text, pageRefreshButton, closeButton);
+            layout = new HorizontalLayout(text, pageRefreshButton, closeButton);
             layout.setAlignItems(FlexComponent.Alignment.AUTO);
             layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 
-            notification.add(layout);
         }
-
+        notification.add(layout);
         return notification;
     }
 
