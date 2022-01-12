@@ -15,8 +15,8 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
@@ -320,10 +320,10 @@ public class AppUtils implements Serializable {
         closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
 
         if (isMobileDevice) {
-            FlexLayout flexLayout = new FlexLayout(textStart, pageRefreshLink, textEnd, closeButton);
-            flexLayout.setAlignItems(FlexComponent.Alignment.AUTO);
+            VerticalLayout layout = new VerticalLayout(textStart, pageRefreshLink, textEnd, closeButton);
+            layout.setAlignItems(FlexComponent.Alignment.AUTO);
 
-            notification.add(flexLayout);
+            notification.add(layout);
         } else {
             HorizontalLayout layout = new HorizontalLayout(textStart, pageRefreshLink, textEnd, closeButton);
             layout.setAlignItems(FlexComponent.Alignment.AUTO);
