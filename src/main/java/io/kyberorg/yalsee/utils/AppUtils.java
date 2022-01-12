@@ -285,11 +285,28 @@ public class AppUtils implements Serializable {
         notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
         notification.setPosition(Notification.Position.TOP_STRETCH);
 
+        boolean hasSmallScreen = false;
+        if (ui != null) {
+            DeviceUtils deviceUtils = DeviceUtils.createWithUI(ui);
+            if (deviceUtils != null) {
+                hasSmallScreen = deviceUtils.isExtraSmallDevice();
+            }
+        }
+
+        String messagePartOne;
+        String messagePartTwo;
+        if (hasSmallScreen) {
+            messagePartOne = "Session expires soon. Any unsaved data lost. Click on";
+            messagePartTwo = "or press OK";
+        } else {
+            messagePartOne = String.format("Your session expires in %d seconds. Take note of any unsaved data and",
+                    YalseeSession.TIMEOUT_FOR_WARNING);
+            messagePartTwo = "or press ESC key to continue";
+        }
+
         Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
 
-        Div textStart = new Div(new Text(String.format("Your session expires in %d seconds. " +
-                        "Take note of any unsaved data and",
-                YalseeSession.TIMEOUT_FOR_WARNING)));
+        Div textStart = new Div(new Text(messagePartOne));
 
         Anchor pageRefreshLink = new Anchor();
         pageRefreshLink.setText("refresh page");
@@ -299,7 +316,7 @@ public class AppUtils implements Serializable {
             }
         });
 
-        Div textEnd = new Div(new Text("or press ESC key to continue"));
+        Div textEnd = new Div(new Text(messagePartTwo));
 
         Button closeButton = new Button("OK", event -> notification.close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
