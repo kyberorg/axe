@@ -7,6 +7,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Information about Device (most often Browser).
@@ -82,6 +83,19 @@ public class Device implements Serializable {
      */
     public boolean isSameDevice(final Device other) {
         return userAgent.equals(other.getUserAgent()) && ip.equals(other.ip);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Device device = (Device) o;
+        return isSameDevice(device);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userAgent, ip, secureConnection, robot);
     }
 
     private static Device withDefaults() {

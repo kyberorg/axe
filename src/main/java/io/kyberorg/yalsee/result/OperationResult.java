@@ -51,6 +51,11 @@ public class OperationResult {
      */
     public static final String BANNED = "OP_NO_ACCESS";
 
+    /**
+     * Status, that indicated that referenced object is no longer exists.
+     */
+    public static final String GONE = "OP_GONE";
+
     private static final String DEFAULT_PAYLOAD_KEY = "DEFAULT_PAYLOAD_KEY";
 
     @Getter
@@ -137,6 +142,15 @@ public class OperationResult {
      */
     public static OperationResult banned() {
         return new OperationResult(BANNED);
+    }
+
+    /**
+     * Create object with {@link #GONE} status.
+     *
+     * @return new object.
+     */
+    public static OperationResult gone() {
+        return new OperationResult(GONE);
     }
 
     /**

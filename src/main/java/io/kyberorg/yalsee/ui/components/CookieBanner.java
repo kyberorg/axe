@@ -13,7 +13,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.kyberorg.yalsee.Endpoint;
-import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -125,18 +124,6 @@ public class CookieBanner extends Composite<Dialog> {
         YalseeSession.getCurrent().ifPresent(session ->
                 session.getSettings().setAnalyticsCookiesAllowed(isAnalyticsAllowed));
 
-
-        if (getContent().getUI().isPresent()) {
-            final boolean uiHasSession = getContent().getUI().get().getSession() != null;
-            if (uiHasSession) {
-                getContent().getUI().get().getSession()
-                        .setAttribute(App.Session.COOKIE_BANNER_ANALYTICS_ALLOWED, isAnalyticsAllowed);
-            } else {
-                log.warn("{} UI has no session inside. Skipping further actions...", TAG);
-            }
-        } else {
-            log.warn("{} UI is missing. Skipping further actions...", TAG);
-        }
         getContent().close();
     }
 

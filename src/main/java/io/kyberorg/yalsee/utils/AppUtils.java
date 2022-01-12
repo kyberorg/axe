@@ -3,10 +3,18 @@ package io.kyberorg.yalsee.utils;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Shortcuts;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
@@ -263,6 +271,44 @@ public class AppUtils implements Serializable {
 
         layout.add(label, closeButton);
         notification.add(layout);
+        return notification;
+    }
+
+    /**
+     * Creates Session Expired Notification.
+     *
+     * @param ui non-empty {@link UI} to refresh page.
+     * @return created {@link Notification}.
+     */
+    public static Notification getSessionExpiredNotification(final UI ui) {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
+        notification.setPosition(Notification.Position.TOP_STRETCH);
+
+        Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
+
+        Div textStart = new Div(new Text(String.format("Your session expires in %d seconds. " +
+                        "Take note of any unsaved data and",
+                YalseeSession.TIMEOUT_FOR_WARNING)));
+
+        Anchor pageRefreshLink = new Anchor();
+        pageRefreshLink.setText("refresh page");
+        pageRefreshLink.getElement().addEventListener("click", e -> {
+            if (ui != null && ui.getPage() != null) {
+                ui.getPage().reload();
+            }
+        });
+
+        Div textEnd = new Div(new Text("or press ESC key to continue"));
+
+        Button closeButton = new Button("OK", event -> notification.close());
+        closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
+
+        HorizontalLayout layout = new HorizontalLayout(textStart, pageRefreshLink, textEnd, closeButton);
+        layout.setAlignItems(FlexComponent.Alignment.AUTO);
+
+        notification.add(layout);
+
         return notification;
     }
 

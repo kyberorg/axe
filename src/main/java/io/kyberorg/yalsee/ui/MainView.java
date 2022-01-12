@@ -27,6 +27,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.YalseeSessionCookieService;
 import io.kyberorg.yalsee.services.YalseeSessionService;
@@ -35,7 +36,12 @@ import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +49,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
-
 @Slf4j
 @SpringComponent
 @UIScope
@@ -59,6 +64,7 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
+    private static final Map<Device, YalseeSession> previousSessions = new HashMap<>();
 
     private final AppUtils appUtils;
     private final YalseeSessionService sessionService;
@@ -66,6 +72,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
+
+    private final UI ui = UI.getCurrent();
+    private final Device currentDevice;
+    private String currentSessionId;
 
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
@@ -80,11 +90,24 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         this.sessionService = sessionService;
         this.cookieService = cookieService;
 
+        this.currentDevice = getCurrentDevice();
         init();
     }
 
+    @PostConstruct
+    private void registerForEvents() {
+        EventBus.getDefault().register(this);
+    }
+
     private void init() {
-        YalseeSession.setCurrent(getUserSession());
+
+        //session init
+        YalseeSession session = getYalseeSession();
+        YalseeSession.setCurrent(session);
+        previousSessions.put(this.currentDevice, session);
+
+        this.currentSessionId = Objects.nonNull(session)
+                ? session.getSessionId() : YalseeSession.NO_SESSION_STORED_MARKER;
 
         setPrimarySection(Section.NAVBAR);
 
@@ -127,6 +150,35 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             CookieBanner cookieBanner = new CookieBanner();
             cookieBanner.getContent().open();
             session.ifPresent(ys -> ys.getFlags().setCookieBannerAlreadyShown(true));
+        }
+    }
+
+    @Subscribe
+    public void onSessionDeleted(final YalseeSessionDestroyedEvent event) {
+        YalseeSession destroyedSession = event.getYalseeSession();
+        if (currentSessionId.equals(destroyedSession.getSessionId())) {
+            refreshPage();
+        }
+    }
+
+    @Scheduled(fixedRate = App.Session.SESSION_EXPIRATION_CHECK_INTERVAL_MILLIS)
+    public void checkSessionAge() {
+        YalseeSession session;
+        if (YalseeSession.getCurrent().isPresent()) {
+            session = YalseeSession.getCurrent().get();
+        } else if (sessionService.getSession(currentSessionId).isPresent()) {
+            session = sessionService.getSession(currentSessionId).get();
+        } else {
+            //no session - no action
+            return;
+        }
+
+        //we also update our version
+        previousSessions.put(this.currentDevice, session);
+
+        if (session.isAlmostExpired() && !session.getFlags().isExpirationWarningShown()) {
+            showSessionExpiryWarning();
+            session.getFlags().setExpirationWarningShown(true);
         }
     }
 
@@ -182,9 +234,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         tabs.add(tab);
     }
 
-    private YalseeSession getUserSession() {
+    private YalseeSession getYalseeSession() {
         YalseeSession yalseeSession;
-        Device currentDevice = getCurrentDevice();
         if (isFirstVisit()) {
             if (currentDevice.isRobot()) return null;
             //create UserSession + save it to redis
@@ -195,13 +246,25 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.YALSEE_SESSION,
                     VaadinService.getCurrentRequest());
             OperationResult checkResult = cookieService.checkCookie(sessionCookie, currentDevice);
-            if (checkResult.ok()) {
-                yalseeSession = checkResult.getPayload(YalseeSession.class);
-            } else {
-                //something wrong with current session - override it
-                log.warn("{} Session cookie check failed. Reason: {}", TAG, checkResult);
-                yalseeSession = createNewSession(currentDevice);
-                sendSessionCookie(yalseeSession);
+            switch (checkResult.getResult()) {
+                case OperationResult.OK:
+                    yalseeSession = checkResult.getPayload(YalseeSession.class);
+                    break;
+                case OperationResult.GONE:
+                case OperationResult.ELEMENT_NOT_FOUND:
+                    log.debug("{} Session cookie is too old or already expired. Recreating.", TAG);
+                    if (previousSessions.containsKey(this.currentDevice)) {
+                        yalseeSession = new YalseeSession(previousSessions.get(this.currentDevice));
+                        sessionService.storeSession(yalseeSession);
+                    } else {
+                        yalseeSession = createNewSession(currentDevice);
+                    }
+                    sendSessionCookie(yalseeSession);
+                    break;
+                default:
+                    log.warn("{} Session cookie check failed. Reason: {}", TAG, checkResult);
+                    yalseeSession = createNewSession(currentDevice);
+                    sendSessionCookie(yalseeSession);
             }
         }
         return yalseeSession;
@@ -232,6 +295,14 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         VaadinRequest request = VaadinService.getCurrentRequest();
         WebBrowser browser = VaadinSession.getCurrent().getBrowser();
         return Device.from(request, browser);
+    }
+
+    private void showSessionExpiryWarning() {
+        this.ui.access(() -> AppUtils.getSessionExpiredNotification(this.ui).open());
+    }
+
+    private void refreshPage() {
+        this.ui.access(() -> this.ui.getPage().reload());
     }
 
     @Override
@@ -273,6 +344,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(YalseeSession.getCurrent())) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
+    }
+
+    @PreDestroy
+    private void unregister() {
+        EventBus.getDefault().unregister(this);
     }
 
     public static class IDs {
