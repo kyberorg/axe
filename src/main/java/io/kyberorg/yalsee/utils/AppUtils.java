@@ -9,7 +9,6 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
@@ -298,19 +297,11 @@ public class AppUtils implements Serializable {
             message = "Session expires soon. Any unsaved data will be lost.";
         } else {
             message = String.format("Your session expires in %d minutes. Take note of any unsaved data.",
-                    YalseeSession.TIMEOUT_FOR_WARNING);
+                    YalseeSession.TIMEOUT_FOR_WARNING_MINUTES);
             Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
         }
 
         Div text = new Div(new Text(message));
-
-        Anchor pageRefreshLink = new Anchor();
-        pageRefreshLink.setText("refresh page");
-        pageRefreshLink.getElement().addEventListener("click", e -> {
-            if (ui != null && ui.getPage() != null) {
-                ui.getPage().reload();
-            }
-        });
 
         Button pageRefreshButton = new Button("Refresh Page", event -> ui.getPage().reload());
         pageRefreshButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);

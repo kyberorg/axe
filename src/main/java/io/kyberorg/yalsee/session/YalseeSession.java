@@ -6,9 +6,7 @@ import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
 import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.utils.AppUtils;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,16 +31,13 @@ public class YalseeSession {
      */
     public static final int SESSION_ID_LEN = 40;
     public static final String NO_SESSION_STORED_MARKER = "DummySessionId";
-    public static final int TIMEOUT_FOR_WARNING = 5; //in minutes
+    public static final int TIMEOUT_FOR_WARNING_MINUTES = 5;
     private static final String VERSION_FORMAT = "yyMMddHHmmssSSS";
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
-    @Setter(AccessLevel.PRIVATE)
-    private Device device;
-    @Setter(AccessLevel.PRIVATE)
-    private Flags flags = new Flags();
-    @Setter(AccessLevel.PRIVATE)
-    private Settings settings = new Settings();
+    private final Device device;
+    private final Flags flags = new Flags();
+    private final Settings settings = new Settings();
 
     private final Date created = AppUtils.now();
     private final Date notValidAfter = Date.from(Instant.now().plusSeconds(sessionTimeout()));
@@ -175,6 +170,7 @@ public class YalseeSession {
      * Creating empty {@link YalseeSession}. Constructor for {@link Gson}.
      */
     public YalseeSession() {
+        this.device = null;
         this.updateVersion();
     }
 
@@ -189,21 +185,6 @@ public class YalseeSession {
     }
 
     /**
-     * Creates session from another by copying data from this another session.
-     *
-     * @param anotherSession non-empty {@link YalseeSession} to copy data from.
-     */
-    public YalseeSession(final YalseeSession anotherSession) {
-        if (anotherSession == null) return;
-        this.device = anotherSession.device;
-        this.flags = anotherSession.flags;
-        this.settings = anotherSession.settings;
-        this.updateVersion();
-        //reset expiration warning flag
-        this.flags.expirationWarningShown = false;
-    }
-
-    /**
      * Is current session no longer valid.
      *
      * @return true - when session not valid anymore, false if it is still valid.
@@ -213,14 +194,14 @@ public class YalseeSession {
     }
 
     /**
-     * Indicates that session expires in less than {@link #TIMEOUT_FOR_WARNING} seconds,
+     * Indicates that session expires in less than {@link #TIMEOUT_FOR_WARNING_MINUTES},
      * and it is time to show the warning.
      *
-     * @return true if session ttl more than {@link #TIMEOUT_FOR_WARNING}, false if not.
+     * @return true if session ttl more than {@link #TIMEOUT_FOR_WARNING_MINUTES}, false if not.
      */
     public boolean isAlmostExpired() {
         long sessionTTL = ChronoUnit.MINUTES.between(AppUtils.now().toInstant(), this.notValidAfter.toInstant());
-        return sessionTTL <= TIMEOUT_FOR_WARNING;
+        return sessionTTL <= TIMEOUT_FOR_WARNING_MINUTES;
     }
 
     /**

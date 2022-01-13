@@ -152,7 +152,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     /**
-     * Refresh page when {@link #currentSessionId} is destroyed. After refresh client should get nbew session.
+     * Refreshes page when {@link #currentSessionId} is destroyed. After refresh client should get new session.
      *
      * @param event event, which indicates that session is destroyed.
      */
@@ -165,7 +165,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     /**
-     * Shows warning when {@link #currentSessionId} expires soon.
+     * Shows warning when {@link #currentSessionId} expires within or less then
+     * {@link YalseeSession#TIMEOUT_FOR_WARNING_MINUTES}.
      *
      * @param event event, which informs about session expiry.
      */
