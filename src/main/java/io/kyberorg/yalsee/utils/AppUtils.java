@@ -278,7 +278,9 @@ public class AppUtils implements Serializable {
     /**
      * Creates Session Expired Notification.
      *
-     * @param ui non-empty {@link UI} to refresh page.
+     * @param ui         non-empty {@link UI} to refresh page.
+     * @param webBrowser {@link WebBrowser} from given {@link YalseeSession}
+     *                   to detect mobile devices and adjust notification.
      * @return created {@link Notification}.
      */
     public static Notification getSessionExpiredNotification(final UI ui, final WebBrowser webBrowser) {

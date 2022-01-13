@@ -91,7 +91,7 @@ public class YalseeSession {
          *
          * @param expirationWarningShown flag to set.
          */
-        public void setExpirationWarningShown(boolean expirationWarningShown) {
+        public void setExpirationWarningShown(final boolean expirationWarningShown) {
             this.expirationWarningShown = expirationWarningShown;
             YalseeSession.this.fireUpdateEvent();
         }
