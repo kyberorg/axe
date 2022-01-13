@@ -295,7 +295,7 @@ public class AppUtils implements Serializable {
         if (isMobileDevice) {
             message = "Session expires soon. Any unsaved data will be lost.";
         } else {
-            message = String.format("Your session expires in %d seconds. Take note of any unsaved data.",
+            message = String.format("Your session expires in %d minutes. Take note of any unsaved data.",
                     YalseeSession.TIMEOUT_FOR_WARNING);
             Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
         }
