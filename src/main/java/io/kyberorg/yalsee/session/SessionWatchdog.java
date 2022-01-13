@@ -17,8 +17,9 @@ import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
-import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL_MILLIS;
+import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -89,7 +90,7 @@ public class SessionWatchdog implements HttpSessionListener {
     /**
      * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
      */
-    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL_MILLIS)
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void endExpiredYalseeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(YalseeSession::expired)

@@ -83,8 +83,8 @@ public final class App {
     }
 
     public static class Session {
-        public static final int SESSION_WATCHDOG_INTERVAL_MILLIS = 20000; //20 seconds
-        public static final int SESSION_EXPIRATION_CHECK_INTERVAL_MILLIS = 5000; //5 seconds
+        public static final int SESSION_WATCHDOG_INTERVAL = 20; //20 seconds
+        public static final int SESSION_EXPIRATION_CHECK_INTERVAL = 5; //5 minutes
     }
 
     public static class CookieNames {

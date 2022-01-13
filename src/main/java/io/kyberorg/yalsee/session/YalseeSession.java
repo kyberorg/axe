@@ -33,7 +33,7 @@ public class YalseeSession {
      */
     public static final int SESSION_ID_LEN = 40;
     public static final String NO_SESSION_STORED_MARKER = "DummySessionId";
-    public static final int TIMEOUT_FOR_WARNING = 30; //in seconds
+    public static final int TIMEOUT_FOR_WARNING = 5; //in minutes
     private static final String VERSION_FORMAT = "yyMMddHHmmssSSS";
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
@@ -219,7 +219,7 @@ public class YalseeSession {
      * @return true if session ttl more than {@link #TIMEOUT_FOR_WARNING}, false if not.
      */
     public boolean isAlmostExpired() {
-        long sessionTTL = ChronoUnit.SECONDS.between(AppUtils.now().toInstant(), this.notValidAfter.toInstant());
+        long sessionTTL = ChronoUnit.MINUTES.between(AppUtils.now().toInstant(), this.notValidAfter.toInstant());
         return sessionTTL <= TIMEOUT_FOR_WARNING;
     }
 

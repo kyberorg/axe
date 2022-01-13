@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @Slf4j
@@ -159,7 +160,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         }
     }
 
-    @Scheduled(fixedRate = App.Session.SESSION_EXPIRATION_CHECK_INTERVAL_MILLIS)
+    @Scheduled(fixedRate = App.Session.SESSION_EXPIRATION_CHECK_INTERVAL, timeUnit = TimeUnit.MINUTES)
     public void checkSessionAge() {
         YalseeSession session;
         if (YalseeSession.getCurrent().isPresent()) {
