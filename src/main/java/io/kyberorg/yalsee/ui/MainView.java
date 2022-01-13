@@ -64,7 +64,6 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @CssImport("./css/main_view.css")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
-    private static final Map<Device, YalseeSession> previousSessions = new HashMap<>();
 
     private final AppUtils appUtils;
     private final YalseeSessionService sessionService;
@@ -104,7 +103,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         //session init
         YalseeSession session = getYalseeSession();
         YalseeSession.setCurrent(session);
-        previousSessions.put(this.currentDevice, session);
 
         this.currentSessionId = Objects.nonNull(session)
                 ? session.getSessionId() : YalseeSession.NO_SESSION_STORED_MARKER;
@@ -172,9 +170,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             //no session - no action
             return;
         }
-
-        //we also update our version
-        previousSessions.put(this.currentDevice, session);
 
         if (session.isAlmostExpired() && !session.getFlags().isExpirationWarningShown()) {
             showSessionExpiryWarning(session);
@@ -246,25 +241,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.YALSEE_SESSION,
                     VaadinService.getCurrentRequest());
             OperationResult checkResult = cookieService.checkCookie(sessionCookie, currentDevice);
-            switch (checkResult.getResult()) {
-                case OperationResult.OK:
-                    yalseeSession = checkResult.getPayload(YalseeSession.class);
-                    break;
-                case OperationResult.GONE:
-                case OperationResult.ELEMENT_NOT_FOUND:
-                    log.debug("{} Session cookie is too old or already expired. Recreating.", TAG);
-                    if (previousSessions.containsKey(this.currentDevice)) {
-                        yalseeSession = new YalseeSession(previousSessions.get(this.currentDevice));
-                        sessionService.storeSession(yalseeSession);
-                    } else {
-                        yalseeSession = createNewSession(currentDevice);
-                    }
-                    sendSessionCookie(yalseeSession);
-                    break;
-                default:
-                    log.warn("{} Session cookie check failed. Reason: {}", TAG, checkResult);
-                    yalseeSession = createNewSession(currentDevice);
-                    sendSessionCookie(yalseeSession);
+            if (checkResult.ok()) {
+                yalseeSession = checkResult.getPayload(YalseeSession.class);
+            } else {
+                log.warn("{} Session cookie check failed. Reason: {}", TAG, checkResult);
+                yalseeSession = createNewSession(currentDevice);
+                sendSessionCookie(yalseeSession);
             }
         }
         return yalseeSession;
