@@ -3,13 +3,21 @@ package io.kyberorg.yalsee.utils;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Shortcuts;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
@@ -262,6 +270,57 @@ public class AppUtils implements Serializable {
         closeButton.getStyle().set("margin-right", "0.5rem");
 
         layout.add(label, closeButton);
+        notification.add(layout);
+        return notification;
+    }
+
+    /**
+     * Creates Session Expired Notification.
+     *
+     * @param ui         non-empty {@link UI} to refresh page.
+     * @param webBrowser {@link WebBrowser} from given {@link YalseeSession}
+     *                   to detect mobile devices and adjust notification.
+     * @return created {@link Notification}.
+     */
+    public static Notification getSessionExpiredNotification(final UI ui, final WebBrowser webBrowser) {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
+        notification.setPosition(Notification.Position.TOP_STRETCH);
+
+        boolean isMobileDevice = false;
+        if (webBrowser != null) {
+            isMobileDevice = DeviceUtils.isMobileDevice(webBrowser);
+        }
+
+        String message;
+        if (isMobileDevice) {
+            message = "Session expires soon. Any unsaved data will be lost.";
+        } else {
+            message = String.format("Your session expires in %d minutes. Take note of any unsaved data.",
+                    YalseeSession.TIMEOUT_FOR_WARNING_MINUTES);
+            Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
+        }
+
+        Div text = new Div(new Text(message));
+
+        Button pageRefreshButton = new Button("Refresh Page", event -> ui.getPage().reload());
+        pageRefreshButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+
+        Button closeButton = new Button("Dismiss", event -> notification.close());
+        closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
+
+        HorizontalLayout layout;
+        if (isMobileDevice) {
+            layout = new HorizontalLayout(text, closeButton);
+            layout.setAlignItems(FlexComponent.Alignment.AUTO);
+            closeButton.setText("OK");
+
+        } else {
+            layout = new HorizontalLayout(text, pageRefreshButton, closeButton);
+            layout.setAlignItems(FlexComponent.Alignment.AUTO);
+            layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+        }
         notification.add(layout);
         return notification;
     }

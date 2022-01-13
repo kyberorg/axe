@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.session;
 
+import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
@@ -17,8 +18,9 @@ import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
-import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL_MILLIS;
+import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -87,9 +89,21 @@ public class SessionWatchdog implements HttpSessionListener {
     }
 
     /**
+     * Detects sessions that are about to expire. This method through to show session expiration warning,
+     * so it also filters out those sessions where given warning already shown.
+     */
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    public void detectAlmostExpiredYalseeSessions() {
+        SessionBox.getAllSessions().stream()
+                .filter(YalseeSession::isAlmostExpired)
+                .filter(ys -> !ys.getFlags().isExpirationWarningShown())
+                .forEach(this::fireAlmostExpiredEvent);
+    }
+
+    /**
      * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
      */
-    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL_MILLIS)
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void endExpiredYalseeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(YalseeSession::expired)
@@ -110,6 +124,10 @@ public class SessionWatchdog implements HttpSessionListener {
     private void removeExpiredSession(final YalseeSession yalseeSession) {
         if (yalseeSession == null) return;
         sessionService.destroySession(yalseeSession);
+    }
+
+    private void fireAlmostExpiredEvent(final YalseeSession session) {
+        EventBus.getDefault().post(YalseeSessionAlmostExpiredEvent.createWith(session));
     }
 
     /**

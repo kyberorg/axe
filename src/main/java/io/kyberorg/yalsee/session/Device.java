@@ -7,6 +7,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Information about Device (most often Browser).
@@ -29,6 +30,7 @@ public class Device implements Serializable {
     private String ip = DEFAULT_IP;
     private boolean secureConnection = false;
     private boolean robot = false;
+    private WebBrowser browser;
 
     /**
      * Creates {@link Device} based information from {@link VaadinRequest} and {@link WebBrowser}.
@@ -68,6 +70,7 @@ public class Device implements Serializable {
                 device.setIp(ip);
             }
 
+            device.browser = browser;
             device.setRobot(RobotsList.isRobot(device.getUserAgent()));
 
             return device;
@@ -82,6 +85,19 @@ public class Device implements Serializable {
      */
     public boolean isSameDevice(final Device other) {
         return userAgent.equals(other.getUserAgent()) && ip.equals(other.ip);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Device device = (Device) o;
+        return isSameDevice(device);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userAgent, ip, secureConnection, robot);
     }
 
     private static Device withDefaults() {

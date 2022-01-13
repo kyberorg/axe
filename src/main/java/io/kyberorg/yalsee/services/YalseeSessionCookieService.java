@@ -31,6 +31,7 @@ public class YalseeSessionCookieService {
     private static final String ERR_RECORD_NOT_FOUND = "No corresponding record found in Redis";
     private static final String ERR_HACK_ATTEMPT = "Record with ID exists, but info not match. Got Stolen Cookie.";
     private static final String ERR_SESSION_EXPIRED = "Session expired";
+    private static final String ERR_SESSION_ALMOST_EXPIRED = "Session almost expired";
 
     private final YalseeSessionService yalseeSessionService;
     private final AppUtils appUtils;
@@ -48,6 +49,7 @@ public class YalseeSessionCookieService {
         cookie.setMaxAge(appUtils.getSessionTimeout());
         cookie.setSecure(ys.getDevice().isSecureConnection());
         cookie.setHttpOnly(true);
+        cookie.setPath("/");
         return cookie;
     }
 
@@ -96,8 +98,13 @@ public class YalseeSessionCookieService {
         //valid (not expired)
         if (session.expired()) {
             invalidateAffectedSession(session);
-            return OperationResult.banned().withMessage(ERR_SESSION_EXPIRED);
+            return OperationResult.gone().withMessage(ERR_SESSION_EXPIRED);
         }
+        //almost dead aka too old
+        if (session.isAlmostExpired()) {
+            return OperationResult.gone().withMessage(ERR_SESSION_ALMOST_EXPIRED);
+        }
+
         //compare devices
         Device savedDevice = session.getDevice();
         if (!currentDevice.isSameDevice(savedDevice)) {

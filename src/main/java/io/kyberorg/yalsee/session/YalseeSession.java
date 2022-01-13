@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
 
@@ -29,25 +30,105 @@ public class YalseeSession {
      * Default length of session id.
      */
     public static final int SESSION_ID_LEN = 40;
-    private static final int SESSION_TIMEOUT_FOR_BOTS = 30; //in seconds
+    public static final String NO_SESSION_STORED_MARKER = "DummySessionId";
+    public static final int TIMEOUT_FOR_WARNING_MINUTES = 5;
     private static final String VERSION_FORMAT = "yyMMddHHmmssSSS";
 
-    private static final String NO_SESSION_STORED_MARKER = "DummySessionId";
-
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
-    private Device device;
+    private final Device device;
     private final Flags flags = new Flags();
     private final Settings settings = new Settings();
 
     private final Date created = AppUtils.now();
-    private final Date notValidAfter;
+    private final Date notValidAfter = Date.from(Instant.now().plusSeconds(sessionTimeout()));
     private long version;
+
+    @Data
+    public class Flags {
+        /**
+         * Defines is banner is already displayed and should not appear once again.
+         * Should never be private.
+         */
+        private boolean cookieBannerAlreadyShown = false;
+
+        /**
+         * Temporary flag to simulate User mode until this will be released.
+         */
+        private boolean userModeEnabled = false;
+
+        /**
+         * Did we already warn user about session expiry ?
+         */
+        private boolean expirationWarningShown = false;
+
+        /**
+         * Setter for {@link #cookieBannerAlreadyShown} property, which fires {@link YalseeSessionUpdatedEvent}.
+         *
+         * @param cookieBannerAlreadyShown flag to set.
+         */
+        public void setCookieBannerAlreadyShown(final boolean cookieBannerAlreadyShown) {
+            this.cookieBannerAlreadyShown = cookieBannerAlreadyShown;
+            YalseeSession.this.fireUpdateEvent();
+        }
+
+        /**
+         * Setter for {@link #userModeEnabled} property, which fires {@link YalseeSessionUpdatedEvent}.
+         *
+         * @param userModeEnabled flag to set.
+         */
+        public void setUserModeEnabled(final boolean userModeEnabled) {
+            this.userModeEnabled = userModeEnabled;
+            YalseeSession.this.fireUpdateEvent();
+        }
+
+        /**
+         * Setter for {@link #expirationWarningShown} property, which fires {@link YalseeSessionUpdatedEvent}.
+         *
+         * @param expirationWarningShown flag to set.
+         */
+        public void setExpirationWarningShown(final boolean expirationWarningShown) {
+            this.expirationWarningShown = expirationWarningShown;
+            YalseeSession.this.fireUpdateEvent();
+        }
+
+        @SneakyThrows
+        private void fixLink(final YalseeSession parent) {
+            Field field = Flags.class.getDeclaredField("this$0");
+            field.setAccessible(true);
+            field.set(this, parent);
+        }
+    }
+
+    @Data
+    public class Settings {
+        /**
+         * Allow analytics cookies or not. Should never be private.
+         */
+        private boolean analyticsCookiesAllowed = false;
+
+        /**
+         * Setter for {@link #analyticsCookiesAllowed} property, which fires {@link YalseeSessionUpdatedEvent}.
+         *
+         * @param analyticsCookiesAllowed flag to set.
+         */
+        public void setAnalyticsCookiesAllowed(final boolean analyticsCookiesAllowed) {
+            this.analyticsCookiesAllowed = analyticsCookiesAllowed;
+            YalseeSession.this.fireUpdateEvent();
+        }
+
+        @SneakyThrows
+        private void fixLink(final YalseeSession parent) {
+            Field field = Settings.class.getDeclaredField("this$0");
+            field.setAccessible(true);
+            field.set(this, parent);
+        }
+    }
 
     /**
      * Stores given session to current {@link VaadinSession#getCurrent()} if it is available.
      *
      * @param session {@link YalseeSession} to store.
-     * @throws IllegalStateException    when no {@link VaadinSession} available.
+     * @throws IllegalStateException when no {@link VaadinSession} available.
      */
     public static void setCurrent(final YalseeSession session) {
         VaadinSession vaadinSession = VaadinSession.getCurrent();
@@ -89,7 +170,7 @@ public class YalseeSession {
      * Creating empty {@link YalseeSession}. Constructor for {@link Gson}.
      */
     public YalseeSession() {
-        this.notValidAfter = Date.from(Instant.now().plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
+        this.device = null;
         this.updateVersion();
     }
 
@@ -101,11 +182,6 @@ public class YalseeSession {
     public YalseeSession(final Device device) {
         this.device = device;
         this.updateVersion();
-        if (this.device.isRobot()) {
-            this.notValidAfter = Date.from(Instant.now().plusSeconds(SESSION_TIMEOUT_FOR_BOTS));
-        } else {
-            this.notValidAfter = Date.from(Instant.now().plusSeconds(AppUtils.getSessionTimeoutFromStaticContext()));
-        }
     }
 
     /**
@@ -115,6 +191,17 @@ public class YalseeSession {
      */
     public boolean expired() {
         return notValidAfter.before(Date.from(Instant.now()));
+    }
+
+    /**
+     * Indicates that session expires in less than {@link #TIMEOUT_FOR_WARNING_MINUTES},
+     * and it is time to show the warning.
+     *
+     * @return true if session ttl more than {@link #TIMEOUT_FOR_WARNING_MINUTES}, false if not.
+     */
+    public boolean isAlmostExpired() {
+        long sessionTTL = ChronoUnit.MINUTES.between(AppUtils.now().toInstant(), this.notValidAfter.toInstant());
+        return sessionTTL <= TIMEOUT_FOR_WARNING_MINUTES;
     }
 
     /**
@@ -160,69 +247,8 @@ public class YalseeSession {
         EventBus.getDefault().post(YalseeSessionUpdatedEvent.createWith(this));
     }
 
-    @Data
-    public class Flags {
-        /**
-         * Defines is banner is already displayed and should not appear once again.
-         * Should never be private.
-         */
-        private boolean cookieBannerAlreadyShown = false;
-
-        /**
-         * Temporary flag to simulate User mode until this will released.
-         */
-        private boolean userModeEnabled = false;
-
-        /**
-         * Setter for {@link #cookieBannerAlreadyShown} property, which fires {@link YalseeSessionUpdatedEvent}.
-         *
-         * @param cookieBannerAlreadyShown flag to set.
-         */
-        public void setCookieBannerAlreadyShown(final boolean cookieBannerAlreadyShown) {
-            this.cookieBannerAlreadyShown = cookieBannerAlreadyShown;
-            YalseeSession.this.fireUpdateEvent();
-        }
-
-        /**
-         * Setter for {@link #userModeEnabled} property, which fires {@link YalseeSessionUpdatedEvent}.
-         *
-         * @param userModeEnabled flag to set.
-         */
-        public void setUserModeEnabled(final boolean userModeEnabled) {
-            this.userModeEnabled = userModeEnabled;
-            YalseeSession.this.fireUpdateEvent();
-        }
-
-        @SneakyThrows
-        private void fixLink(final YalseeSession parent) {
-            Field field = Flags.class.getDeclaredField("this$0");
-            field.setAccessible(true);
-            field.set(this, parent);
-        }
+    private int sessionTimeout() {
+        return AppUtils.getSessionTimeoutFromStaticContext();
     }
 
-    @Data
-    public class Settings {
-        /**
-         * Allow analytics cookies or not. Should never be private.
-         */
-        private boolean analyticsCookiesAllowed = false;
-
-        /**
-         * Setter for {@link #analyticsCookiesAllowed} property, which fires {@link YalseeSessionUpdatedEvent}.
-         *
-         * @param analyticsCookiesAllowed flag to set.
-         */
-        public void setAnalyticsCookiesAllowed(final boolean analyticsCookiesAllowed) {
-            this.analyticsCookiesAllowed = analyticsCookiesAllowed;
-            YalseeSession.this.fireUpdateEvent();
-        }
-
-        @SneakyThrows
-        private void fixLink(final YalseeSession parent) {
-            Field field = Settings.class.getDeclaredField("this$0");
-            field.setAccessible(true);
-            field.set(this, parent);
-        }
-    }
 }

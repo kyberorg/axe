@@ -55,11 +55,20 @@ public class YalseeSessionService {
     public YalseeSession createNew(final Device device) {
         if (device == null) throw new IllegalArgumentException("Device cannot be null");
         YalseeSession newSession = new YalseeSession(device);
-        localDao.create(newSession);
-        if (isRedisEnabled) {
-            saveNewSessionInRedis(newSession);
-        }
+        storeSession(newSession);
         return newSession;
+    }
+
+    /**
+     * Stores already created session.
+     *
+     * @param yalseeSession session to store
+     */
+    public void storeSession(final YalseeSession yalseeSession) {
+        localDao.create(yalseeSession);
+        if (isRedisEnabled) {
+            saveNewSessionInRedis(yalseeSession);
+        }
     }
 
     /**

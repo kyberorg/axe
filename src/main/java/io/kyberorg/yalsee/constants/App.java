@@ -83,9 +83,7 @@ public final class App {
     }
 
     public static class Session {
-        public static final int SESSION_WATCHDOG_INTERVAL_MILLIS = 20000; //20 seconds
-        public static final String COOKIE_BANNER_ALREADY_SHOWN = "COOKIE_BANNER_ALREADY_SHOWN";
-        public static final String COOKIE_BANNER_ANALYTICS_ALLOWED = "COOKIE_BANNER_ANALYTICS_ALLOWED";
+        public static final int SESSION_WATCHDOG_INTERVAL = 20; //20 seconds
     }
 
     public static class CookieNames {
