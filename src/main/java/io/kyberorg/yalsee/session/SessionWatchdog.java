@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.session;
 
+import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
@@ -87,6 +88,14 @@ public class SessionWatchdog implements HttpSessionListener {
         }
     }
 
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    public void detectAlmostExpiredYalseeSessions() {
+        SessionBox.getAllSessions().stream()
+                .filter(YalseeSession::isAlmostExpired)
+                .filter(ys -> !ys.getFlags().isExpirationWarningShown())
+                .forEach(this::fireAlmostExpiredEvent);
+    }
+
     /**
      * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
      */
@@ -111,6 +120,10 @@ public class SessionWatchdog implements HttpSessionListener {
     private void removeExpiredSession(final YalseeSession yalseeSession) {
         if (yalseeSession == null) return;
         sessionService.destroySession(yalseeSession);
+    }
+
+    private void fireAlmostExpiredEvent(final YalseeSession session) {
+        EventBus.getDefault().post(YalseeSessionAlmostExpiredEvent.createWith(session));
     }
 
     /**

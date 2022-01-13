@@ -27,6 +27,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.YalseeSessionCookieService;
@@ -38,7 +39,6 @@ import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -47,7 +47,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @Slf4j
@@ -152,6 +151,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         }
     }
 
+    /**
+     * Refresh page when {@link #currentSessionId} is destroyed. After refresh client should get nbew session.
+     *
+     * @param event event, which indicates that session is destroyed.
+     */
     @Subscribe
     public void onSessionDeleted(final YalseeSessionDestroyedEvent event) {
         YalseeSession destroyedSession = event.getYalseeSession();
@@ -160,19 +164,16 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         }
     }
 
-    @Scheduled(fixedRate = App.Session.SESSION_EXPIRATION_CHECK_INTERVAL, timeUnit = TimeUnit.MINUTES)
-    public void checkSessionAge() {
-        YalseeSession session;
-        if (YalseeSession.getCurrent().isPresent()) {
-            session = YalseeSession.getCurrent().get();
-        } else if (sessionService.getSession(currentSessionId).isPresent()) {
-            session = sessionService.getSession(currentSessionId).get();
-        } else {
-            //no session - no action
-            return;
-        }
-
-        if (session.isAlmostExpired() && !session.getFlags().isExpirationWarningShown()) {
+    /**
+     * Shows warning when {@link #currentSessionId} expires soon.
+     *
+     * @param event event, which informs about session expiry.
+     */
+    @Subscribe
+    public void showWarningOnAlmostExpiredSession(final YalseeSessionAlmostExpiredEvent event) {
+        YalseeSession session = event.getYalseeSession();
+        if (session == null) return;
+        if (currentSessionId.equals(session.getSessionId())) {
             showSessionExpiryWarning(session);
             session.getFlags().setExpirationWarningShown(true);
         }
