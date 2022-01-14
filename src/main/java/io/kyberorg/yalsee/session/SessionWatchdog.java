@@ -92,8 +92,8 @@ public class SessionWatchdog implements HttpSessionListener {
         //new (un-synced) considered changed as nothing to compare with
         sessionsToSync.addAll(
                 SessionBox.getAllSessions().stream()
-                        .filter(not(SessionBox::hasPreviousVersion)) //filter new sessions (without known previous state)
-                        .map(YalseeSession::updateVersion) //since they considered as changed - we have to update their versions
+                        .filter(not(SessionBox::hasPreviousVersion)) //filter new sessions (without previous state)
+                        .map(YalseeSession::updateVersion) //they are considered as changed - updating their versions
                         .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
                         .collect(Collectors.toList())); //and finally add them list for syncing
 

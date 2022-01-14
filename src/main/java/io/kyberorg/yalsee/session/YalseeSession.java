@@ -57,7 +57,7 @@ public class YalseeSession {
         private boolean expirationWarningShown = false;
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Flags flags = (Flags) o;
@@ -80,7 +80,7 @@ public class YalseeSession {
         private boolean analyticsCookiesAllowed = false;
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Settings settings = (Settings) o;
