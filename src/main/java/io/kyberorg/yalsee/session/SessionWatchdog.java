@@ -81,6 +81,9 @@ public class SessionWatchdog implements HttpSessionListener {
      */
     @Scheduled(fixedDelay = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void syncSessions() {
+        long existingSessionsCount = 0;
+        long newSessionsCount = 0;
+
         //sync only if session changed (differs from previous)
         List<YalseeSession> sessionsToSync = SessionBox.getAllSessions().stream()
                 .filter(SessionBox::hasPreviousVersion) //filter sessions with known previous state only
@@ -88,6 +91,8 @@ public class SessionWatchdog implements HttpSessionListener {
                 .map(YalseeSession::updateVersion) //since they change - we have to update their versions
                 .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
                 .collect(Collectors.toList()); //and finally add them list for syncing
+
+        existingSessionsCount = sessionsToSync.size();
 
         //new (un-synced) considered changed as nothing to compare with
         sessionsToSync.addAll(
@@ -97,6 +102,12 @@ public class SessionWatchdog implements HttpSessionListener {
                         .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
                         .collect(Collectors.toList())); //and finally add them list for syncing
 
+        newSessionsCount = sessionsToSync.size() - existingSessionsCount;
+
+        if (sessionsToSync.size() > 0) {
+            log.info("{} Sync Summary: {} sessions to be synced ({} new, {} existing)",
+                    TAG, sessionsToSync.size(), newSessionsCount, existingSessionsCount);
+        }
 
         sessionService.syncSessions(sessionsToSync);
     }

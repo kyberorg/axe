@@ -238,7 +238,7 @@ public class YalseeSessionService {
         boolean sessionChanged = localSession.differsFrom(remoteSession);
         if (sessionChanged) {
             if (localSession.isNewer(remoteSession)) {
-                log.debug("{} syncing session '{}'. Local -> Redis", TAG, localSession.getSessionId());
+                log.info("{} syncing session '{}'. Local -> Redis", TAG, localSession.getSessionId());
                 redisDao.update(localSession);
                 YalseeMessage updateMessage = createUpdateMessage(localSession.getSessionId());
                 redisMessageSender.sendMessage(updateMessage);
@@ -253,7 +253,7 @@ public class YalseeSessionService {
         if (localSession == null || remoteSession == null) throw new IllegalArgumentException("both should be present");
         if (localDao.has(localSession.getSessionId())) {
             if (remoteSession.isNewer(localSession)) {
-                log.debug("{} syncing session '{}'. Redis -> Local", TAG, localSession.getSessionId());
+                log.info("{} syncing session '{}'. Redis -> Local", TAG, localSession.getSessionId());
                 localDao.update(remoteSession);
             }
         }
