@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import static io.kyberorg.yalsee.constants.App.Session.SESSION_SYNC_INTERVAL;
+import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -84,7 +85,7 @@ public class SessionWatchdog implements HttpSessionListener {
      * Detects sessions that are about to expire. This method through to show session expiration warning,
      * so it also filters out those sessions where given warning already shown.
      */
-    @Scheduled(fixedRate = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void detectAlmostExpiredYalseeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(YalseeSession::isAlmostExpired)
@@ -95,7 +96,7 @@ public class SessionWatchdog implements HttpSessionListener {
     /**
      * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
      */
-    @Scheduled(fixedDelay = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void endExpiredYalseeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(YalseeSession::expired)

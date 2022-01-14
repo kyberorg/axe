@@ -27,7 +27,7 @@ public class YalseeSessionRedisDao extends RedisDao {
     private final RedisTemplate<String, String> lockTemplate;
     private final AppUtils appUtils;
 
-    private static String LOCK_NAME = RedisDao.APPLICATION_PREFIX + "SessionUpdateLock";
+    private static String lockName = RedisDao.getApplicationPrefix() + "SessionUpdateLock";
 
     private ValueOperations<String, YalseeSession> valueOps;
     private ValueOperations<String, String> lockOps;
@@ -36,7 +36,7 @@ public class YalseeSessionRedisDao extends RedisDao {
     private void init() {
         this.valueOps = redisTemplate.opsForValue();
         this.lockOps = lockTemplate.opsForValue();
-        LOCK_NAME = updateLockNameAtRuntime();
+        lockName = updateLockNameAtRuntime();
     }
 
     /**
@@ -57,8 +57,10 @@ public class YalseeSessionRedisDao extends RedisDao {
      *
      * @param sessionId non-empty string with session id to check.
      * @return true if {@link YalseeSession} found, false - if not.
+     * @throws IllegalArgumentException when session id is empty or null.
      */
     public boolean has(final String sessionId) {
+        if (StringUtils.isBlank(sessionId)) throw new IllegalArgumentException("Session to search is null");
         return exists(sessionId);
     }
 
@@ -67,6 +69,7 @@ public class YalseeSessionRedisDao extends RedisDao {
      *
      * @param sessionId string with session id used as key.
      * @return {@link Optional} which contains {@link YalseeSession} or not.
+     * @throws IllegalArgumentException when session io is empty or null.
      */
     public Optional<YalseeSession> get(final String sessionId) {
         if (StringUtils.isBlank(sessionId)) throw new IllegalArgumentException("Session to retrieve is null");
@@ -75,14 +78,14 @@ public class YalseeSessionRedisDao extends RedisDao {
     }
 
     /**
-     * Updates {@link YalseeSession}.
+     * Updates {@link YalseeSession} and preserves TTL.
      *
      * @param session object to store.
+     * @throws IllegalArgumentException when session is null.
+     * @see #getRecordTtl()
      */
     public void update(final YalseeSession session) {
-        if (session == null) {
-            throw new IllegalArgumentException("Session to update is null");
-        }
+        if (session == null) throw new IllegalArgumentException("Session to update is null");
         final String keyName = appendApplicationPrefix() + session.getSessionId();
         final Long currentTTL = redisTemplate.getExpire(keyName, TimeUnit.SECONDS);
         final long ttl = currentTTL != null ? currentTTL : getRecordTtl();
@@ -93,6 +96,7 @@ public class YalseeSessionRedisDao extends RedisDao {
      * Deletes object if it exists.
      *
      * @param sessionId string with session id used as key.
+     * @throws IllegalArgumentException when session is null.
      * @see ValueOperations#getAndDelete(Object)
      */
     public void delete(final String sessionId) {
@@ -102,22 +106,43 @@ public class YalseeSessionRedisDao extends RedisDao {
         }
     }
 
+    /**
+     * Checks if Session update lock is already exists.
+     *
+     * @return true if lock found, false if not.
+     */
     public boolean hasLock() {
-        return Boolean.TRUE.equals(lockTemplate.hasKey(LOCK_NAME));
+        return Boolean.TRUE.equals(lockTemplate.hasKey(lockName));
     }
 
+    /**
+     * Sets new Session update lock.
+     *
+     * @param lockOwner owner of lock. Normally system hostname.
+     * @throws IllegalAccessException   when lock is already set.
+     * @throws IllegalArgumentException when lock owner is not set (empty or null string).
+     * @see AppUtils#getHostname()
+     */
     public void acquireLock(final String lockOwner) throws IllegalAccessException {
         if (StringUtils.isBlank(lockOwner)) throw new IllegalArgumentException("Lock owner is empty");
         if (hasLock()) throw new IllegalAccessException("Lock is already set");
-        lockOps.setIfAbsent(LOCK_NAME, lockOwner, LOCK_TTL_SECONDS, TimeUnit.SECONDS);
+        lockOps.setIfAbsent(lockName, lockOwner, LOCK_TTL_SECONDS, TimeUnit.SECONDS);
     }
 
+    /**
+     * Deletes Session update lock.
+     *
+     * @param lockOwner owner of lock. Normally system hostname.
+     * @throws IllegalAccessException   when attempted to delete not-owned lock.
+     * @throws IllegalArgumentException when lock owner is not set (empty or null string).
+     * @see AppUtils#getHostname()
+     */
     public void releaseLock(final String lockOwner) throws IllegalAccessException {
         if (StringUtils.isBlank(lockOwner)) throw new IllegalArgumentException("Lock owner is empty");
         if (hasLock()) {
             String lock = getLock();
             if (lockOwner.equals(lock)) {
-                lockOps.getAndDelete(LOCK_NAME);
+                lockOps.getAndDelete(lockName);
             } else {
                 throw new IllegalAccessException("Cannot delete lock. Wrong owner.");
             }
@@ -125,7 +150,7 @@ public class YalseeSessionRedisDao extends RedisDao {
     }
 
     private String getLock() {
-        return lockOps.get(LOCK_NAME);
+        return lockOps.get(lockName);
     }
 
     @Override
@@ -138,6 +163,6 @@ public class YalseeSessionRedisDao extends RedisDao {
     }
 
     private String updateLockNameAtRuntime() {
-        return RedisDao.APPLICATION_PREFIX + "SessionUpdateLock";
+        return RedisDao.getApplicationPrefix() + "SessionUpdateLock";
     }
 }

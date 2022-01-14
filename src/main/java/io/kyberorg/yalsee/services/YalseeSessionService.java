@@ -131,15 +131,20 @@ public class YalseeSessionService {
         }
     }
 
+    /**
+     * Launches Sessions synchronization between local storage and Redis.
+     */
     @SneakyThrows
     public void syncSessions() {
-        if (redisDao.hasLock()) {
-            log.warn("{} skipping sync. Sync is locked.", TAG);
-            return;
+        if (isRedisEnabled) {
+            if (redisDao.hasLock()) {
+                log.warn("{} skipping sync. Sync is locked.", TAG);
+                return;
+            }
+            redisDao.acquireLock(AppUtils.getHostname());
+            localDao.getAllSessions().forEach(this::updateSession);
+            redisDao.releaseLock(AppUtils.getHostname());
         }
-        redisDao.acquireLock(AppUtils.getHostname());
-        localDao.getAllSessions().forEach(this::updateSession);
-        redisDao.releaseLock(AppUtils.getHostname());
     }
 
     /**

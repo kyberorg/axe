@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.models.dao.base;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -14,14 +15,15 @@ import java.util.concurrent.TimeUnit;
 @NoRepositoryBean
 public abstract class RedisDao {
 
-    protected static String APPLICATION_PREFIX = "Yalsee-";
+    @Getter
+    private static String applicationPrefix = "Yalsee-";
 
     @Value("${redis.app.prefix}")
-    private String applicationPrefix;
+    private String applicationName;
 
     @PostConstruct
     private void init() {
-        APPLICATION_PREFIX = appendApplicationPrefix();
+        applicationPrefix = appendApplicationPrefix();
     }
 
     /**
