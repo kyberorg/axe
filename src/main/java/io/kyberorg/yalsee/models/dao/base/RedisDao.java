@@ -1,8 +1,10 @@
 package io.kyberorg.yalsee.models.dao.base;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,8 +15,16 @@ import java.util.concurrent.TimeUnit;
 @NoRepositoryBean
 public abstract class RedisDao {
 
+    @Getter
+    private static String applicationPrefix = "Yalsee-";
+
     @Value("${redis.app.prefix}")
-    private String applicationPrefix;
+    private String applicationName;
+
+    @PostConstruct
+    private void init() {
+        applicationPrefix = appendApplicationPrefix();
+    }
 
     /**
      * Sets record TTL aka Time-to-live aka expiration in {@link TimeUnit#SECONDS} after which record is deleted.

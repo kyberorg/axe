@@ -148,6 +148,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         grid.getElement().addEventListener("keydown", event -> {
                     YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(true));
                     activateLinkEditor();
+                    log.info("{} User mode activated.", TAG);
                 })
                 .setFilter("event.key === 'R' && event.shiftKey");
 
