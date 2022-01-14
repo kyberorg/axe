@@ -139,7 +139,7 @@ public class YalseeSessionService {
      */
     @SneakyThrows
     public void syncSessions(final Collection<YalseeSession> sessionsToSync) {
-        if (isRedisEnabled) {
+        if (isRedisEnabled && sessionsToSync.size() > 0) {
             if (redisDao.hasLock()) {
                 log.warn("{} skipping sync. Sync is locked.", TAG);
                 return;

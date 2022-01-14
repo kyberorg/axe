@@ -176,7 +176,7 @@ public class YalseeSession {
     /**
      * Updates current Session Version.
      *
-     * @return same session.
+     * @return same session to be able to use it in Streams.
      */
     public YalseeSession updateVersion() {
         final String versionString = new SimpleDateFormat(VERSION_FORMAT).format(AppUtils.now());
