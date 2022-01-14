@@ -2,6 +2,8 @@ package io.kyberorg.yalsee.session;
 
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
@@ -16,6 +18,7 @@ import java.util.Map;
  */
 public final class SessionBox {
     private static final Map<String, YalseeSession> SESSION_STORAGE = new HashMap<>();
+    private static final Map<String, YalseeSession> PREVIOUS_VERSIONS = new HashMap<>();
 
     private SessionBox() {
         throw new UnsupportedOperationException("Utility class");
@@ -83,5 +86,44 @@ public final class SessionBox {
         if (session == null) return;
         SESSION_STORAGE.remove(session.getSessionId());
         EventBus.getDefault().post(YalseeSessionDestroyedEvent.createWith(session));
+    }
+
+    /**
+     * Checks if {@link #PREVIOUS_VERSIONS} has given session.
+     *
+     * @param session session to search for.
+     * @return true if {@link #PREVIOUS_VERSIONS} has given session, false if not.
+     */
+    static boolean hasPreviousVersion(final YalseeSession session) {
+        if (session == null) return false;
+        return PREVIOUS_VERSIONS.containsKey(session.getSessionId());
+    }
+
+    /**
+     * Gets previous version of {@link YalseeSession} from {@link #PREVIOUS_VERSIONS} map.
+     * It is good to use {@link #hasPreviousVersion(YalseeSession)} before to avoid {@code null}
+     *
+     * @param session session, previous version of which we retrieve.
+     * @return previous version of {@link YalseeSession} or {@code null}
+     * @throws IllegalArgumentException when session is null.
+     * @see HashMap#get(Object)
+     */
+    static YalseeSession getPreviousVersion(final YalseeSession session) {
+        if (session == null) throw new IllegalArgumentException("Session is null");
+        return PREVIOUS_VERSIONS.get(session.getSessionId());
+    }
+
+    /**
+     * Sets given session as previous, so next check can get it using {@link #getPreviousVersion(YalseeSession)}.
+     *
+     * @param session valid {@link YalseeSession}.
+     * @return same session as it param to make it work with Stream API.
+     */
+    @SneakyThrows
+    static YalseeSession setAsPreviousVersion(final YalseeSession session) {
+        String json = AppUtils.GSON.toJson(session);
+        YalseeSession prevSession = AppUtils.GSON.fromJson(json, YalseeSession.class);
+        PREVIOUS_VERSIONS.put(prevSession.getSessionId(), prevSession);
+        return session;
     }
 }

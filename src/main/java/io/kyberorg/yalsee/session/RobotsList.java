@@ -31,6 +31,9 @@ public final class RobotsList {
         ROBOTS.add("SemrushBot");
         ROBOTS.add("Googlebot");
         ROBOTS.add("LightspeedSystemsCrawler");
+        ROBOTS.add("swcd");
+        ROBOTS.add("AhrefsBot");
+        ROBOTS.add("TelegramBot");
     }
 
     private RobotsList() {

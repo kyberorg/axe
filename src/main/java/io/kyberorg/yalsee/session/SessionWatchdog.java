@@ -17,10 +17,13 @@ import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static io.kyberorg.yalsee.constants.App.Session.SESSION_SYNC_INTERVAL;
 import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL;
+import static java.util.function.Predicate.not;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -78,7 +81,24 @@ public class SessionWatchdog implements HttpSessionListener {
      */
     @Scheduled(fixedDelay = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void syncSessions() {
-        sessionService.syncSessions();
+        //sync only if session changed (differs from previous)
+        List<YalseeSession> sessionsToSync = SessionBox.getAllSessions().stream()
+                .filter(SessionBox::hasPreviousVersion) //filter sessions with known previous state only
+                .filter(session -> session.differsFrom(SessionBox.getPreviousVersion(session))) //only if changed
+                .map(YalseeSession::updateVersion) //since they change - we have to update their versions
+                .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
+                .collect(Collectors.toList()); //and finally add them list for syncing
+
+        //new (un-synced) considered changed as nothing to compare with
+        sessionsToSync.addAll(
+                SessionBox.getAllSessions().stream()
+                        .filter(not(SessionBox::hasPreviousVersion)) //filter new sessions (without known previous state)
+                        .map(YalseeSession::updateVersion) //since they considered as changed - we have to update their versions
+                        .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
+                        .collect(Collectors.toList())); //and finally add them list for syncing
+
+
+        sessionService.syncSessions(sessionsToSync);
     }
 
     /**
