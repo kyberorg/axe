@@ -3,7 +3,6 @@ package io.kyberorg.yalsee.session;
 import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
-import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL;
+import static io.kyberorg.yalsee.constants.App.Session.SESSION_SYNC_INTERVAL;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -55,21 +54,6 @@ public class SessionWatchdog implements HttpSessionListener {
     }
 
     /**
-     * Launches Session synchronization aka updates stored session object.
-     *
-     * @param sessionUpdatedEvent event, that indicates that session values were modified, and
-     *                            it is time to update storages with new values.
-     *                            Should have affected {@link YalseeSession} inside.
-     */
-    @Subscribe
-    public void syncSession(final YalseeSessionUpdatedEvent sessionUpdatedEvent) {
-        if (sessionUpdatedEvent == null || sessionUpdatedEvent.getYalseeSession() == null) return;
-        sessionService.updateSession(sessionUpdatedEvent.getYalseeSession());
-        log.trace("{} {} updated {}",
-                TAG, YalseeSession.class.getSimpleName(), sessionUpdatedEvent.getYalseeSession().getSessionId());
-    }
-
-    /**
      * Receiver for {@link YalseeSessionDestroyedEvent}. Logs session information.
      *
      * @param sessionDestroyedEvent event, that indicates that  session was destroyed.
@@ -89,10 +73,18 @@ public class SessionWatchdog implements HttpSessionListener {
     }
 
     /**
+     * Launches Sessions synchronization.
+     */
+    @Scheduled(fixedDelay = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    public void syncSessions() {
+        sessionService.syncSessions();
+    }
+
+    /**
      * Detects sessions that are about to expire. This method through to show session expiration warning,
      * so it also filters out those sessions where given warning already shown.
      */
-    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void detectAlmostExpiredYalseeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(YalseeSession::isAlmostExpired)
@@ -103,7 +95,7 @@ public class SessionWatchdog implements HttpSessionListener {
     /**
      * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
      */
-    @Scheduled(fixedRate = SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void endExpiredYalseeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(YalseeSession::expired)

@@ -32,8 +32,6 @@ public class YalseeSessionGsonRedisSerializer implements RedisSerializer<YalseeS
     @Override
     public YalseeSession deserialize(final byte[] bytes) throws SerializationException {
         String jsonString = new String(bytes);
-        YalseeSession session = gson.fromJson(jsonString, YalseeSession.class);
-        session.fixObjectLinksAfterDeserialization();
-        return session;
+        return gson.fromJson(jsonString, YalseeSession.class);
     }
 }

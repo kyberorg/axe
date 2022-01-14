@@ -2,17 +2,13 @@ package io.kyberorg.yalsee.session;
 
 import com.google.gson.Gson;
 import com.vaadin.flow.server.VaadinSession;
-import io.kyberorg.yalsee.events.YalseeSessionUpdatedEvent;
-import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
-import lombok.SneakyThrows;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.greenrobot.eventbus.EventBus;
 
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -25,6 +21,7 @@ import java.util.Optional;
  * @since 3.8
  */
 @Data
+@EqualsAndHashCode
 public class YalseeSession {
     /**
      * Default length of session id.
@@ -44,10 +41,10 @@ public class YalseeSession {
     private long version;
 
     @Data
+    @EqualsAndHashCode
     public class Flags {
         /**
          * Defines is banner is already displayed and should not appear once again.
-         * Should never be private.
          */
         private boolean cookieBannerAlreadyShown = false;
 
@@ -60,68 +57,15 @@ public class YalseeSession {
          * Did we already warn user about session expiry ?
          */
         private boolean expirationWarningShown = false;
-
-        /**
-         * Setter for {@link #cookieBannerAlreadyShown} property, which fires {@link YalseeSessionUpdatedEvent}.
-         *
-         * @param cookieBannerAlreadyShown flag to set.
-         */
-        public void setCookieBannerAlreadyShown(final boolean cookieBannerAlreadyShown) {
-            this.cookieBannerAlreadyShown = cookieBannerAlreadyShown;
-            YalseeSession.this.fireUpdateEvent();
-        }
-
-        /**
-         * Setter for {@link #userModeEnabled} property, which fires {@link YalseeSessionUpdatedEvent}.
-         *
-         * @param userModeEnabled flag to set.
-         */
-        public void setUserModeEnabled(final boolean userModeEnabled) {
-            this.userModeEnabled = userModeEnabled;
-            YalseeSession.this.fireUpdateEvent();
-        }
-
-        /**
-         * Setter for {@link #expirationWarningShown} property, which fires {@link YalseeSessionUpdatedEvent}.
-         *
-         * @param expirationWarningShown flag to set.
-         */
-        public void setExpirationWarningShown(final boolean expirationWarningShown) {
-            this.expirationWarningShown = expirationWarningShown;
-            YalseeSession.this.fireUpdateEvent();
-        }
-
-        @SneakyThrows
-        private void fixLink(final YalseeSession parent) {
-            Field field = Flags.class.getDeclaredField("this$0");
-            field.setAccessible(true);
-            field.set(this, parent);
-        }
     }
 
     @Data
+    @EqualsAndHashCode
     public class Settings {
         /**
          * Allow analytics cookies or not. Should never be private.
          */
         private boolean analyticsCookiesAllowed = false;
-
-        /**
-         * Setter for {@link #analyticsCookiesAllowed} property, which fires {@link YalseeSessionUpdatedEvent}.
-         *
-         * @param analyticsCookiesAllowed flag to set.
-         */
-        public void setAnalyticsCookiesAllowed(final boolean analyticsCookiesAllowed) {
-            this.analyticsCookiesAllowed = analyticsCookiesAllowed;
-            YalseeSession.this.fireUpdateEvent();
-        }
-
-        @SneakyThrows
-        private void fixLink(final YalseeSession parent) {
-            Field field = Settings.class.getDeclaredField("this$0");
-            field.setAccessible(true);
-            field.set(this, parent);
-        }
     }
 
     /**
@@ -205,15 +149,6 @@ public class YalseeSession {
     }
 
     /**
-     * This method recovers references to this$0 in nested classes, which happens after {@link Gson} deserialize object.
-     * Only {@link YalseeSessionGsonRedisSerializer#deserialize(byte[])} should use it.
-     */
-    public void fixObjectLinksAfterDeserialization() {
-        flags.fixLink(this);
-        settings.fixLink(this);
-    }
-
-    /**
      * Updates current Session Version.
      */
     public void updateVersion() {
@@ -241,10 +176,6 @@ public class YalseeSession {
     public boolean isOlder(final YalseeSession anotherSession) {
         if (anotherSession == null || anotherSession.getVersion() == 0) return false;
         return this.getVersion() < anotherSession.getVersion();
-    }
-
-    private void fireUpdateEvent() {
-        EventBus.getDefault().post(YalseeSessionUpdatedEvent.createWith(this));
     }
 
     private int sessionTimeout() {
