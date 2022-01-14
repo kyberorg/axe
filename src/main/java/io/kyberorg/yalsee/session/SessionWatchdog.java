@@ -4,7 +4,6 @@ import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.services.YalseeSessionService;
-import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
@@ -31,7 +30,6 @@ import static java.util.function.Predicate.not;
 public class SessionWatchdog implements HttpSessionListener {
     private static final String TAG = "[" + SessionWatchdog.class.getSimpleName() + "]";
 
-    private final AppUtils appUtils;
     private final YalseeSessionService sessionService;
 
     /**
@@ -81,8 +79,8 @@ public class SessionWatchdog implements HttpSessionListener {
      */
     @Scheduled(fixedDelay = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void syncSessions() {
-        long existingSessionsCount = 0;
-        long newSessionsCount = 0;
+        long existingSessionsCount;
+        long newSessionsCount;
 
         //sync only if session changed (differs from previous)
         List<YalseeSession> sessionsToSync = SessionBox.getAllSessions().stream()
