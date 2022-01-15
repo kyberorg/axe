@@ -126,4 +126,14 @@ public final class SessionBox {
         PREVIOUS_VERSIONS.put(prevSession.getSessionId(), prevSession);
         return session;
     }
+
+    /**
+     * Deletes session from {@link #PREVIOUS_VERSIONS} map.
+     *
+     * @param session session to delete.
+     */
+    static void deletePreviousVersion(final YalseeSession session) {
+        if (session == null) throw new IllegalArgumentException("Session is null");
+        PREVIOUS_VERSIONS.remove(session.getSessionId());
+    }
 }

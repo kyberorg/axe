@@ -146,6 +146,7 @@ public class SessionWatchdog implements HttpSessionListener {
     private void removeExpiredSession(final YalseeSession yalseeSession) {
         if (yalseeSession == null) return;
         sessionService.destroySession(yalseeSession);
+        SessionBox.deletePreviousVersion(yalseeSession);
     }
 
     private void fireAlmostExpiredEvent(final YalseeSession session) {
