@@ -221,7 +221,7 @@ public class YalseeSession {
         if (this == o) return true;
         if (!(o instanceof YalseeSession)) return false;
         YalseeSession session = (YalseeSession) o;
-        return getVersion() == session.getVersion() && getSessionId().equals(session.getSessionId())
+        return getSessionId().equals(session.getSessionId())
                 && Objects.equals(getDevice(), session.getDevice())
                 && getFlags().equals(session.getFlags())
                 && getSettings().equals(session.getSettings())
