@@ -228,9 +228,9 @@ public class YalseeSession {
         return getSessionId().equals(session.getSessionId())
                 && Objects.equals(getDevice(), session.getDevice())
                 && getFlags().equals(session.getFlags())
-                && getSettings().equals(session.getSettings())
-                && getCreated().equals(session.getCreated())
-                && getNotValidAfter().equals(session.getNotValidAfter());
+                && getSettings().equals(session.getSettings());
+/*                && getCreated().equals(session.getCreated())
+                && getNotValidAfter().equals(session.getNotValidAfter());*/
     }
 
     @Override
