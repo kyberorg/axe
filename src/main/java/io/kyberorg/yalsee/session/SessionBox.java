@@ -1,9 +1,8 @@
 package io.kyberorg.yalsee.session;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -11,8 +10,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import static io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer.DATE_FORMAT;
 
 /**
  * In-memory session storage.
@@ -22,6 +19,8 @@ import static io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSeriali
 public final class SessionBox {
     private static final Map<String, YalseeSession> SESSION_STORAGE = new HashMap<>();
     private static final Map<String, YalseeSession> PREVIOUS_VERSIONS = new HashMap<>();
+
+    private static final YalseeSessionGsonRedisSerializer serializer = new YalseeSessionGsonRedisSerializer();
 
     private SessionBox() {
         throw new UnsupportedOperationException("Utility class");
@@ -124,10 +123,11 @@ public final class SessionBox {
      */
     @SneakyThrows
     static YalseeSession setAsPreviousVersion(final YalseeSession session) {
-        Gson gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
-        String json = gson.toJson(session);
-        YalseeSession prevSession = gson.fromJson(json, YalseeSession.class);
-        PREVIOUS_VERSIONS.put(prevSession.getSessionId(), prevSession);
+        byte[] json = serializer.serialize(session);
+        YalseeSession prevSession = serializer.deserialize(json);
+        if (prevSession != null) {
+            PREVIOUS_VERSIONS.put(prevSession.getSessionId(), prevSession);
+        }
         return session;
     }
 

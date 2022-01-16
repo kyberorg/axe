@@ -283,7 +283,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void showSessionExpiryWarning(final YalseeSession session) {
-        this.ui.access(() -> AppUtils.getSessionExpiredNotification(this.ui, session.getDevice().getBrowser()).open());
+        this.ui.access(() -> AppUtils.getSessionExpiredNotification(this.ui, session).open());
     }
 
     private void refreshPage() {

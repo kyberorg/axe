@@ -34,6 +34,9 @@ public final class RobotsList {
         ROBOTS.add("swcd");
         ROBOTS.add("AhrefsBot");
         ROBOTS.add("TelegramBot");
+        ROBOTS.add("zgrab");
+        ROBOTS.add("TwitterBot");
+
     }
 
     private RobotsList() {
