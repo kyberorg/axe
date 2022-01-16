@@ -20,7 +20,7 @@ public final class SessionBox {
     private static final Map<String, YalseeSession> SESSION_STORAGE = new HashMap<>();
     private static final Map<String, YalseeSession> PREVIOUS_VERSIONS = new HashMap<>();
 
-    private static final YalseeSessionGsonRedisSerializer serializer = new YalseeSessionGsonRedisSerializer();
+    private static final YalseeSessionGsonRedisSerializer SERIALIZER = new YalseeSessionGsonRedisSerializer();
 
     private SessionBox() {
         throw new UnsupportedOperationException("Utility class");
@@ -123,8 +123,8 @@ public final class SessionBox {
      */
     @SneakyThrows
     static YalseeSession setAsPreviousVersion(final YalseeSession session) {
-        byte[] json = serializer.serialize(session);
-        YalseeSession prevSession = serializer.deserialize(json);
+        byte[] json = SERIALIZER.serialize(session);
+        YalseeSession prevSession = SERIALIZER.deserialize(json);
         if (prevSession != null) {
             PREVIOUS_VERSIONS.put(prevSession.getSessionId(), prevSession);
         }

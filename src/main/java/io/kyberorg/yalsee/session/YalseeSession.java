@@ -213,7 +213,11 @@ public class YalseeSession {
      * @return true if sessions differ from each other, false if same.
      */
     public boolean differsFrom(final YalseeSession o) {
-        return !equals(o);
+        final boolean differs = !equals(o);
+        if (differs) {
+            AppUtils.debugYalseeSessions(this, o);
+        }
+        return differs;
     }
 
     @Override

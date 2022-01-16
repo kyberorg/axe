@@ -276,7 +276,8 @@ public class AppUtils implements Serializable {
     /**
      * Creates Session Expired Notification.
      *
-     * @param ui non-empty {@link UI} to refresh page.
+     * @param ui      non-empty {@link UI} to refresh page.
+     * @param session session to get bound device information and if it is mobile - adjust notification accordingly.
      * @return created {@link Notification}.
      */
     public static Notification getSessionExpiredNotification(final UI ui, final YalseeSession session) {
@@ -323,6 +324,10 @@ public class AppUtils implements Serializable {
         }
         notification.add(layout);
         return notification;
+    }
+
+    public static void debugYalseeSessions(final YalseeSession yalseeSession, final YalseeSession second) {
+        log.debug("{} \n First: {} \n, Second: {}", TAG, yalseeSession, second);
     }
 
     /**
