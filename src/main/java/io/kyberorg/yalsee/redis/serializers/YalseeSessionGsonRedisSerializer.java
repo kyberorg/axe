@@ -14,7 +14,7 @@ import org.springframework.data.redis.serializer.SerializationException;
  */
 public class YalseeSessionGsonRedisSerializer implements RedisSerializer<YalseeSession> {
     private final Gson gson;
-    public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ssZ";
+    private static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ssZ";
 
     /**
      * Created {@link YalseeSessionGsonRedisSerializer} with customised {@link Gson} instance.

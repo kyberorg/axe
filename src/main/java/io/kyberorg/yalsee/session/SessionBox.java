@@ -188,8 +188,8 @@ public final class SessionBox {
                                 flag.setAccessible(true);
                                 Object prevFlagValue = flag.get(previous.getFlags());
                                 Object currentFlagValue = flag.get(current.getFlags());
-                                boolean flagValuesAreDifferent = currentFlagValue != null &&
-                                        !currentFlagValue.equals(prevFlagValue);
+                                boolean flagValuesAreDifferent = currentFlagValue != null
+                                        && !currentFlagValue.equals(prevFlagValue);
                                 if (flagValuesAreDifferent) {
                                     sb.append("Flags.").append(flag.getName()).append(": ")
                                             .append(prevFlagValue).append(" -> ")
