@@ -146,6 +146,13 @@ public final class SessionBox {
         PREVIOUS_VERSIONS.remove(session.getSessionId());
     }
 
+    /**
+     * Prints Session diff.
+     *
+     * @param previous previous version of {@link YalseeSession}.
+     * @param current  current version of {@link YalseeSession}.
+     * @return current version of {@link YalseeSession}.
+     */
     static YalseeSession logSessionsDiff(final YalseeSession previous, final YalseeSession current) {
         StringBuilder sb = new StringBuilder("Session difference detected");
         sb.append(App.NEW_LINE);
