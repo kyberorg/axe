@@ -177,7 +177,7 @@ public final class SessionBox {
                         }
                         valuesAreDifferent = false;
                     } else if (currentValue instanceof Date) {
-                        valuesAreDifferent = ((Date) currentValue).compareTo((Date) prevValue) != 0;
+                        valuesAreDifferent = false; //ignore this shit
                     } else {
                         valuesAreDifferent = !currentValue.equals(prevValue);
                     }
@@ -185,6 +185,7 @@ public final class SessionBox {
                         if (currentValue instanceof YalseeSession.Flags) {
                             Field[] flags = YalseeSession.Flags.class.getDeclaredFields();
                             for (Field flag : flags) {
+                                if (flag.getName().equals("this$0")) break;
                                 flag.setAccessible(true);
                                 Object prevFlagValue = flag.get(previous.getFlags());
                                 Object currentFlagValue = flag.get(current.getFlags());
@@ -199,6 +200,7 @@ public final class SessionBox {
                         } else if (currentValue instanceof YalseeSession.Settings) {
                             Field[] settings = YalseeSession.Settings.class.getDeclaredFields();
                             for (Field setting : settings) {
+                                if (setting.getName().equals("this$0")) break;
                                 setting.setAccessible(true);
                                 Object prevSetting = setting.get(previous.getSettings());
                                 Object currentSetting = setting.get(current.getSettings());
