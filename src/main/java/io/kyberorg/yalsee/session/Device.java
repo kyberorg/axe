@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.session;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.services.RobotsService;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -69,7 +70,11 @@ public class Device implements Serializable {
                 device.setIp(ip);
             }
 
-            device.setRobot(RobotsList.isRobot(device.getUserAgent()));
+            if (RobotsService.getInstance() != null) {
+                device.setRobot(RobotsService.getInstance().isRobot(device.getUserAgent()));
+            } else {
+                device.setRobot(false);
+            }
 
             return device;
         }
