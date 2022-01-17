@@ -30,7 +30,6 @@ public class Device implements Serializable {
     private String ip = DEFAULT_IP;
     private boolean secureConnection = false;
     private boolean robot = false;
-    private WebBrowser browser;
 
     /**
      * Creates {@link Device} based information from {@link VaadinRequest} and {@link WebBrowser}.
@@ -70,7 +69,6 @@ public class Device implements Serializable {
                 device.setIp(ip);
             }
 
-            device.browser = browser;
             device.setRobot(RobotsList.isRobot(device.getUserAgent()));
 
             return device;

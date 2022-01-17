@@ -17,7 +17,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
@@ -277,20 +276,22 @@ public class AppUtils implements Serializable {
     /**
      * Creates Session Expired Notification.
      *
-     * @param ui         non-empty {@link UI} to refresh page.
-     * @param webBrowser {@link WebBrowser} from given {@link YalseeSession}
-     *                   to detect mobile devices and adjust notification.
+     * @param ui      non-empty {@link UI} to refresh page.
+     * @param session session to get bound device information and if it is mobile - adjust notification accordingly.
      * @return created {@link Notification}.
      */
-    public static Notification getSessionExpiredNotification(final UI ui, final WebBrowser webBrowser) {
+    public static Notification getSessionExpiredNotification(final UI ui, final YalseeSession session) {
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
         notification.setPosition(Notification.Position.TOP_STRETCH);
 
         boolean isMobileDevice = false;
-        if (webBrowser != null) {
-            isMobileDevice = DeviceUtils.isMobileDevice(webBrowser);
+        if (session != null && session.getDevice() != null
+                && StringUtils.isNotBlank(session.getDevice().getUserAgent())) {
+            String ua = session.getDevice().getUserAgent();
+            isMobileDevice = ua.contains("iPhone") || ua.contains("Android") || ua.contains("WindowsMobile");
         }
+        //TODO check UA, when UA parser is ready
 
         String message;
         if (isMobileDevice) {

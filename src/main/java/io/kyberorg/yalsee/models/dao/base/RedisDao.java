@@ -1,6 +1,8 @@
 package io.kyberorg.yalsee.models.dao.base;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -15,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @NoRepositoryBean
 public abstract class RedisDao {
 
-    @Getter
+    @Getter(AccessLevel.PROTECTED)
     private static String applicationPrefix = "Yalsee-";
 
     @Value("${redis.app.prefix}")
@@ -23,7 +25,7 @@ public abstract class RedisDao {
 
     @PostConstruct
     private void init() {
-        applicationPrefix = appendApplicationPrefix();
+        applicationPrefix = setApplicationPrefix();
     }
 
     /**
@@ -40,8 +42,13 @@ public abstract class RedisDao {
      *
      * @return string with application prefix taken from properties and prefix-value separator. Example: "MyApp-"
      */
-    protected String appendApplicationPrefix() {
+    private String setApplicationPrefix() {
         String prefixValueSeparator = "-";
-        return applicationPrefix + prefixValueSeparator;
+        if (StringUtils.isNotBlank(applicationName)) {
+            return applicationName + prefixValueSeparator;
+        } else {
+            return applicationPrefix;
+        }
+
     }
 }

@@ -17,6 +17,7 @@ public final class RobotsList {
         ROBOTS.add("updown.io");
         ROBOTS.add("unirest-java");
         ROBOTS.add("Go-http-client");
+        ROBOTS.add("go-http-client");
         ROBOTS.add("curl");
         ROBOTS.add("Linux Gnu (cow)");
         ROBOTS.add("python-requests");
@@ -31,6 +32,14 @@ public final class RobotsList {
         ROBOTS.add("SemrushBot");
         ROBOTS.add("Googlebot");
         ROBOTS.add("LightspeedSystemsCrawler");
+        ROBOTS.add("swcd");
+        ROBOTS.add("AhrefsBot");
+        ROBOTS.add("TelegramBot");
+        ROBOTS.add("zgrab");
+        ROBOTS.add("TwitterBot");
+        ROBOTS.add("facebookexternalhit");
+        ROBOTS.add("Facebot");
+
     }
 
     private RobotsList() {
