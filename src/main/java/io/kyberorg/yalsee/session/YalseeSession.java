@@ -213,11 +213,7 @@ public class YalseeSession {
      * @return true if sessions differ from each other, false if same.
      */
     public boolean differsFrom(final YalseeSession o) {
-        final boolean differs = !equals(o);
-        if (differs) {
-            AppUtils.debugYalseeSessions(this, o);
-        }
-        return differs;
+        return !equals(o);
     }
 
     @Override
@@ -229,8 +225,6 @@ public class YalseeSession {
                 && Objects.equals(getDevice(), session.getDevice())
                 && getFlags().equals(session.getFlags())
                 && getSettings().equals(session.getSettings());
-/*                && getCreated().equals(session.getCreated())
-                && getNotValidAfter().equals(session.getNotValidAfter());*/
     }
 
     @Override

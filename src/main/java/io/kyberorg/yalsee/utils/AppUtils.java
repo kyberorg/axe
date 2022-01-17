@@ -326,10 +326,6 @@ public class AppUtils implements Serializable {
         return notification;
     }
 
-    public static void debugYalseeSessions(final YalseeSession yalseeSession, final YalseeSession second) {
-        log.debug("{} \n First: {} \n, Second: {}", TAG, yalseeSession, second);
-    }
-
     /**
      * Current {@link Date}.
      *

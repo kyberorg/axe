@@ -1,22 +1,27 @@
 package io.kyberorg.yalsee.session;
 
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * In-memory session storage.
  *
  * @since 3.2
  */
+@Slf4j
 public final class SessionBox {
+    private static final String TAG = "[" + SessionBox.class.getSimpleName() + "]";
+
     private static final Map<String, YalseeSession> SESSION_STORAGE = new HashMap<>();
     private static final Map<String, YalseeSession> PREVIOUS_VERSIONS = new HashMap<>();
 
@@ -139,5 +144,81 @@ public final class SessionBox {
     static void deletePreviousVersion(final YalseeSession session) {
         if (session == null) throw new IllegalArgumentException("Session is null");
         PREVIOUS_VERSIONS.remove(session.getSessionId());
+    }
+
+    static YalseeSession logSessionsDiff(final YalseeSession previous, final YalseeSession current) {
+        StringBuilder sb = new StringBuilder("Session difference detected");
+        sb.append(App.NEW_LINE);
+        sb.append("Session ").append("'").append(current.getSessionId()).append("' changed").append(App.NEW_LINE);
+        sb.append("-----").append(App.NEW_LINE);
+
+        Field[] fields = YalseeSession.class.getDeclaredFields();
+        Arrays.stream(fields).forEach(field -> {
+            if (!Modifier.isStatic(field.getModifiers())) {
+                try {
+                    field.setAccessible(true);
+                    Object prevValue = field.get(previous);
+                    Object currentValue = field.get(current);
+
+                    boolean valuesAreDifferent;
+                    if (currentValue == null) {
+                        if (prevValue != null) {
+                            sb.append(field.getName()).append(": ")
+                                    .append(prevValue).append(" -> ")
+                                    .append("null")
+                                    .append(App.NEW_LINE);
+                        }
+                        valuesAreDifferent = false;
+                    } else if (currentValue instanceof Date) {
+                        valuesAreDifferent = ((Date) currentValue).compareTo((Date) prevValue) != 0;
+                    } else {
+                        valuesAreDifferent = !currentValue.equals(prevValue);
+                    }
+                    if (valuesAreDifferent) {
+                        if (currentValue instanceof YalseeSession.Flags) {
+                            Field[] flags = YalseeSession.Flags.class.getDeclaredFields();
+                            for (Field flag : flags) {
+                                flag.setAccessible(true);
+                                Object prevFlagValue = flag.get(previous.getFlags());
+                                Object currentFlagValue = flag.get(current.getFlags());
+                                boolean flagValuesAreDifferent = currentFlagValue != null &&
+                                        !currentFlagValue.equals(prevFlagValue);
+                                if (flagValuesAreDifferent) {
+                                    sb.append("Flags.").append(flag.getName()).append(": ")
+                                            .append(prevFlagValue).append(" -> ")
+                                            .append(currentFlagValue).append(App.NEW_LINE);
+                                }
+                            }
+                        } else if (currentValue instanceof YalseeSession.Settings) {
+                            Field[] settings = YalseeSession.Settings.class.getDeclaredFields();
+                            for (Field setting : settings) {
+                                setting.setAccessible(true);
+                                Object prevSetting = setting.get(previous.getSettings());
+                                Object currentSetting = setting.get(current.getSettings());
+
+                                boolean settingsAreDifferent = currentSetting != null
+                                        && !currentSetting.equals(prevSetting);
+                                if (settingsAreDifferent) {
+                                    sb.append("Settings.").append(setting.getName()).append(": ")
+                                            .append(prevSetting).append(" -> ")
+                                            .append(currentSetting).append(App.NEW_LINE);
+                                }
+                            }
+                        } else {
+                            sb.append(field.getName()).append(": ")
+                                    .append(prevValue).append(" -> ")
+                                    .append(currentValue)
+                                    .append(App.NEW_LINE);
+                        }
+                    }
+                } catch (IllegalAccessException e) {
+                    sb.append(field.getName()).append("No access").append(App.NEW_LINE);
+                } catch (Exception e) {
+                    log.warn("{} got exception while logging Sessions diff. {}", TAG, e);
+                }
+            }
+        });
+        log.info("{} {}", TAG, sb);
+        return current;
     }
 }

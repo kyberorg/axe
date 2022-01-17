@@ -86,6 +86,7 @@ public class SessionWatchdog implements HttpSessionListener {
         List<YalseeSession> sessionsToSync = SessionBox.getAllSessions().stream()
                 .filter(SessionBox::hasPreviousVersion) //filter sessions with known previous state only
                 .filter(session -> session.differsFrom(SessionBox.getPreviousVersion(session))) //only if changed
+                .map(session -> SessionBox.logSessionsDiff(SessionBox.getPreviousVersion(session), session)) //log diff
                 .map(YalseeSession::updateVersion) //since they change - we have to update their versions
                 .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
                 .collect(Collectors.toList()); //and finally add them list for syncing
