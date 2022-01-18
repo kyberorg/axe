@@ -4,6 +4,7 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.WebBrowser;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.services.RobotsService;
+import io.kyberorg.yalsee.utils.DeviceUtils;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,14 +31,15 @@ public class Device implements Serializable {
     private String userAgent = DEFAULT_USER_AGENT;
     private String ip = DEFAULT_IP;
     private boolean secureConnection = false;
-    private boolean robot = false;
+    private boolean mobile = false;
+    private transient boolean robot = false;
 
     /**
-     * Creates {@link Device} based information from {@link VaadinRequest} and {@link WebBrowser}.
+     * Creates Device based information from {@link VaadinRequest} and {@link WebBrowser}.
      *
      * @param request non-empty current {@link VaadinRequest}.
      * @param browser non-empty {@link WebBrowser} object.
-     * @return created {@link Device} object.
+     * @return created Device object.
      */
     public static Device from(final VaadinRequest request, final WebBrowser browser) {
         if (browser == null) {
@@ -76,6 +78,8 @@ public class Device implements Serializable {
                 device.setRobot(false);
             }
 
+            device.setMobile(DeviceUtils.isMobileDevice(browser));
+
             return device;
         }
     }
@@ -83,7 +87,7 @@ public class Device implements Serializable {
     /**
      * Compares Devices.
      *
-     * @param other other {@link Device}.
+     * @param other other Device to compare with.
      * @return true - if both {@link #userAgent} and {@link #ip} are equal, false if not.
      */
     public boolean isSameDevice(final Device other) {

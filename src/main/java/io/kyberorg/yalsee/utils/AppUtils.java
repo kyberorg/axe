@@ -281,17 +281,13 @@ public class AppUtils implements Serializable {
      * @return created {@link Notification}.
      */
     public static Notification getSessionExpiredNotification(final UI ui, final YalseeSession session) {
+        if (ui == null) throw new IllegalArgumentException("UI cannot be null");
+        if (session == null) throw new IllegalArgumentException("session cannot be null");
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
         notification.setPosition(Notification.Position.TOP_STRETCH);
 
-        boolean isMobileDevice = false;
-        if (session != null && session.getDevice() != null
-                && StringUtils.isNotBlank(session.getDevice().getUserAgent())) {
-            String ua = session.getDevice().getUserAgent();
-            isMobileDevice = ua.contains("iPhone") || ua.contains("Android") || ua.contains("WindowsMobile");
-        }
-        //TODO check UA, when UA parser is ready
+        boolean isMobileDevice = session.hasDevice() && session.getDevice().isMobile();
 
         String message;
         if (isMobileDevice) {
