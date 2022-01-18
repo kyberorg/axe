@@ -216,6 +216,15 @@ public class YalseeSession {
         return !equals(o);
     }
 
+    /**
+     * Report is session has {@link Device} object bound.
+     *
+     * @return true if {@link Device} is not {@code null}, false if it is.
+     */
+    public boolean hasDevice() {
+        return device != null;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
