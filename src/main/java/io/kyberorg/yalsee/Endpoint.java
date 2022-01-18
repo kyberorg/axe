@@ -62,6 +62,11 @@ public final class Endpoint {
          * Page with user's links or current session links.
          */
         public static final String MY_LINKS_PAGE = "myLinks";
+
+        /**
+         * Settings Page.
+         */
+        public static final String SETTINGS_PAGE = "settings";
     }
 
     /**
