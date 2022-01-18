@@ -2,6 +2,8 @@ package io.kyberorg.yalsee.ui;
 
 import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
@@ -72,7 +74,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
 
     private void setPageStructure() {
         techCookiesSpan.add(techCookiesLabel, techCookiesValue);
-        analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue);
+        analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue, postfix());
         add(pageTitle, cookieSettingsTitle, techCookiesSpan, analyticsCookiesSpan);
     }
 
@@ -99,13 +101,23 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         Notification notification = new Notification("Saved");
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         notification.setPosition(Notification.Position.MIDDLE);
-        notification.setDuration(500); //0.5 second
+        notification.setDuration(1000); //1 second
         return notification;
     }
 
     private void adjustNotificationPosition(final boolean isMobile) {
         Notification.Position position = isMobile ? Notification.Position.BOTTOM_CENTER : Notification.Position.MIDDLE;
         this.savedNotification.setPosition(position);
+    }
+
+    private Span postfix() {
+        Span layout = new Span();
+        Span start = new Span(" ( required ");
+        Button pageReload = new Button("Page reload");
+        pageReload.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        Span end = new Span(" )");
+        layout.add(start, pageReload, end);
+        return layout;
     }
 
     public static class IDs {
