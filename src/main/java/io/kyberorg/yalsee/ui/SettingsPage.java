@@ -112,10 +112,10 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
 
     private Span postfix() {
         Span layout = new Span();
-        Span start = new Span(" ( required ");
-        Button pageReload = new Button("Page reload");
+        Span start = new Span(" (required ");
+        Button pageReload = new Button("Page Reload");
         pageReload.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        Span end = new Span(" )");
+        Span end = new Span(")");
         layout.add(start, pageReload, end);
         return layout;
     }
