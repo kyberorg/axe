@@ -110,3 +110,7 @@ html {
     font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --lumo-font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
+
+vcf-toggle-button {
+    display: inline;
+}

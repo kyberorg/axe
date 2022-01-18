@@ -2,8 +2,10 @@ package io.kyberorg.yalsee.ui;
 
 import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
@@ -21,6 +23,7 @@ import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
 @SpringComponent
 @UIScope
+@CssImport("./css/common_styles.css")
 @Route(value = Endpoint.UI.SETTINGS_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: Settings Page")
 public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
@@ -36,6 +39,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
     private final Notification savedNotification = makeSavedNotification();
 
     private boolean isClientChange;
+    private UI currentUI;
 
     public SettingsPage() {
         pageInit();
@@ -45,6 +49,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         setIds();
         setPageStructure();
         setInitialState();
+        currentUI = UI.getCurrent();
     }
 
     @Override
@@ -74,7 +79,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
 
     private void setPageStructure() {
         techCookiesSpan.add(techCookiesLabel, techCookiesValue);
-        analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue, postfix());
+        analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue, pageReloadPostfix());
         add(pageTitle, cookieSettingsTitle, techCookiesSpan, analyticsCookiesSpan);
     }
 
@@ -110,14 +115,21 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         this.savedNotification.setPosition(position);
     }
 
-    private Span postfix() {
-        Span layout = new Span();
-        Span start = new Span(" (required ");
-        Button pageReload = new Button("Page Reload");
-        pageReload.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+    private Span pageReloadPostfix() {
+        Span postfixSpan = new Span();
+        postfixSpan.setClassName(Classes.POSTFIX);
+
+        Span start = new Span(" (requires ");
+
+        Button pageReloadButton = new Button("Page Reload");
+        pageReloadButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        pageReloadButton.setClassName(Classes.PAGE_RELOAD_BUTTON);
+        pageReloadButton.addClickListener(e -> this.currentUI.getPage().reload());
+
         Span end = new Span(")");
-        layout.add(start, pageReload, end);
-        return layout;
+
+        postfixSpan.add(start, pageReloadButton, end);
+        return postfixSpan;
     }
 
     public static class IDs {
@@ -130,5 +142,10 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         public static final String ANALYTICS_COOKIE_SPAN = "analyticsCookieSpan";
         public static final String ANALYTICS_COOKIE_LABEL = "analyticsCookieLabel";
         public static final String ANALYTICS_COOKIE_VALUE = "analyticsCookieValue";
+    }
+
+    public static class Classes {
+        public static final String POSTFIX = "postfix-span";
+        public static final String PAGE_RELOAD_BUTTON = "page-reload-button";
     }
 }
