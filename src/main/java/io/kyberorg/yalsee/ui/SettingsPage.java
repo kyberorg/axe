@@ -50,7 +50,10 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         //automatic starts changing values - disabling notifications
         isClientChange = false;
         YalseeSession.getCurrent()
-                .ifPresent(ys -> analyticsCookiesValue.setValue(ys.getSettings().isAnalyticsCookiesAllowed()));
+                .ifPresent(ys -> {
+                    analyticsCookiesValue.setValue(ys.getSettings().isAnalyticsCookiesAllowed());
+                    if (ys.hasDevice()) adjustNotificationPosition(ys.getDevice().isMobile());
+                });
         //automatic set all values, all other actions are from client.
         isClientChange = true;
     }
@@ -98,6 +101,11 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         notification.setPosition(Notification.Position.MIDDLE);
         notification.setDuration(500); //0.5 second
         return notification;
+    }
+
+    private void adjustNotificationPosition(final boolean isMobile) {
+        Notification.Position position = isMobile ? Notification.Position.BOTTOM_CENTER : Notification.Position.MIDDLE;
+        this.savedNotification.setPosition(position);
     }
 
     public static class IDs {
