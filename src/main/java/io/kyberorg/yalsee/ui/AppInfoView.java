@@ -1,7 +1,9 @@
 package io.kyberorg.yalsee.ui;
 
-import com.vaadin.componentfactory.ToggleButton;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -14,7 +16,6 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.services.GitService;
-import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
@@ -110,36 +111,22 @@ public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
                 + "and analytics cookies (Google Analytics) used for collecting usage statistics.");
         techDetailsText.setId(IDs.COOKIE_TECH_DETAILS);
 
-        H5 cookieCurrentSettingsSubTitle = new H5("Current Settings");
-        cookieCurrentSettingsSubTitle.setId(IDs.COOKIE_CURRENT_SETTINGS_TITLE);
+        Span cookieSettingsSpan = new Span();
+        cookieSettingsSpan.setId(IDs.COOKIE_SETTINGS_SPAN);
 
-        Span techCookies = new Span();
-        techCookies.setId(IDs.TECH_COOKIE_SPAN);
+        Span cookieSettingsText = new Span("You can find and adjust current cookie settings at ");
+        cookieSettingsText.setId(IDs.COOKIE_SETTINGS_TEXT);
 
-        Span techCookiesLabel = new Span("Technical cookies: ");
-        techCookiesLabel.setId(IDs.TECH_COOKIE_LABEL);
+        Anchor cookieSettingsLink = new Anchor(Endpoint.UI.SETTINGS_PAGE, "Settings Page");
+        cookieSettingsLink.setId(IDs.COOKIE_SETTINGS_LINK);
 
-        ToggleButton techCookiesValue = new ToggleButton(true);
-        techCookiesValue.setId(IDs.TECH_COOKIE_VALUE);
-        techCookiesValue.setEnabled(false);
+        Span point = new Span(".");
+        point.setId(IDs.COOKIE_SETTINGS_POINT);
 
-        Span analyticsCookies = new Span();
-        analyticsCookies.setId(IDs.ANALYTICS_COOKIE_SPAN);
-
-        Span analyticsCookiesLabel = new Span("Analytics cookies: ");
-        analyticsCookiesLabel.setId(IDs.ANALYTICS_COOKIE_LABEL);
-
-        ToggleButton analyticsCookiesValue = new ToggleButton();
-        analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
-        analyticsCookiesValue.setValue(appUtils.isGoogleAnalyticsAllowed(YalseeSession.getCurrent()));
-        analyticsCookiesValue.addValueChangeListener(event ->
-                YalseeSession.getCurrent()
-                        .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue())));
-
+        cookieSettingsSpan.add(cookieSettingsText, cookieSettingsLink, point);
         cookieText.add(textStart, link, textEnd, techDetailsText);
-        techCookies.add(techCookiesLabel, techCookiesValue);
-        analyticsCookies.add(analyticsCookiesLabel, analyticsCookiesValue);
-        cookieArea.add(title, cookieText, cookieCurrentSettingsSubTitle, techCookies, analyticsCookies);
+
+        cookieArea.add(title, cookieText, cookieSettingsSpan);
         return cookieArea;
     }
 
@@ -178,6 +165,12 @@ public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
         public static final String COOKIE_TEXT_SPAN = "cookieTextSpan";
         public static final String COOKIE_LINK = "cookieLink";
         public static final String COOKIE_TECH_DETAILS = "cookieTechDetails";
+        public static final String COOKIE_SETTINGS_SPAN = "cookieSettingsSpan";
+        public static final String COOKIE_SETTINGS_TEXT = "cookieSettingsText";
+        public static final String COOKIE_SETTINGS_LINK = "cookieSettingsLink";
+        public static final String COOKIE_SETTINGS_POINT = "cookieSettingsPoint";
+
+        //TODO remove from here
         public static final String COOKIE_CURRENT_SETTINGS_TITLE = "cookieCurrentSettingsTitle";
         public static final String TECH_COOKIE_SPAN = "techCookieSpan";
         public static final String TECH_COOKIE_LABEL = "techCookieLabel";
