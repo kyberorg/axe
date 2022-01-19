@@ -2,7 +2,10 @@ package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.ui.SettingsPage;
+import org.junit.jupiter.api.Assertions;
+import org.junit.platform.commons.util.StringUtils;
 
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
@@ -31,9 +34,31 @@ public final class SettingsPageObject {
                 $("#" + SettingsPage.IDs.ANALYTICS_COOKIE_SPAN + " " + PageReloadPostfix.BUTTON);
     }
 
+    public static final class BetaSettings {
+        public static final SelenideElement TITLE = $("#" + SettingsPage.IDs.BETA_SETTINGS_TITLE);
+        public static final SelenideElement DARK_MODE_SPAN = $("#" + SettingsPage.IDs.DARK_MODE_SPAN);
+        public static final SelenideElement DARK_MODE_LABEL = $("#" + SettingsPage.IDs.DARK_MODE_LABEL);
+        public static final SelenideElement DARK_MODE_VALUE = $("#" + SettingsPage.IDs.DARK_MODE_VALUE);
+    }
+
     public static final class PageReloadPostfix {
         public static final String SPAN = "." + SettingsPage.Classes.POSTFIX;
         public static final String BUTTON = "." + SettingsPage.Classes.PAGE_RELOAD_BUTTON;
+    }
+
+    public static void darkModeShouldBeEnabled() {
+        $("html").shouldHave(attribute("theme", "dark"));
+    }
+
+    public static void defaultModeShouldBeEnabled() {
+        final String theme = $("html").getAttribute("theme");
+        final boolean isDefaultModeEnabled = StringUtils.isBlank(theme) || theme.equals("light");
+        Assertions.assertTrue(isDefaultModeEnabled);
+    }
+
+    public static boolean isDarkModeActive() {
+        final String theme = $("html").getAttribute("theme");
+        return StringUtils.isNotBlank(theme) && theme.equals("dark");
     }
 
     private SettingsPageObject() {

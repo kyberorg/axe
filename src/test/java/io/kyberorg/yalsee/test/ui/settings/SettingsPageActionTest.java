@@ -1,9 +1,11 @@
 package io.kyberorg.yalsee.test.ui.settings;
 
 import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject;
+import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.BetaSettings;
 import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.CookieSettings;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.ui.SettingsPage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,5 +49,54 @@ public class SettingsPageActionTest {
         CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.click();
         waitForVaadin();
         SettingsPageObject.PAGE_ID.should(exist);
+    }
+
+    /**
+     * Dark Mode Toggle enables Dark Mode.
+     */
+    @Test
+    public void darkModeToggleEnablesDarkMode() {
+        BetaSettings.DARK_MODE_VALUE.click();
+        SettingsPageObject.darkModeShouldBeEnabled();
+    }
+
+    /**
+     * Dark Mode Toggle returns original (light) Theme when Dark Mode enabled.
+     */
+    @Test
+    public void darkModeToggleReturnsOriginalThemeWhenDarkModeEnabled() {
+        if (SettingsPageObject.isDarkModeActive()) {
+            BetaSettings.DARK_MODE_VALUE.click(); //dark -> original
+            SettingsPageObject.defaultModeShouldBeEnabled();
+        } else {
+            BetaSettings.DARK_MODE_VALUE.click(); //original -> dark
+            BetaSettings.DARK_MODE_VALUE.click(); //dark -> original
+            SettingsPageObject.defaultModeShouldBeEnabled();
+        }
+    }
+
+    /**
+     * Dark Mode is applied globally and present after Page Reload.
+     */
+    @Test
+    public void darkModeIsAppliedGloballyAndPresentAfterPageReload() {
+        if (!SettingsPageObject.isDarkModeActive()) {
+            BetaSettings.DARK_MODE_VALUE.click(); //original -> dark
+        }
+        open("/");
+        waitForVaadin();
+        SettingsPageObject.darkModeShouldBeEnabled();
+    }
+
+    @AfterEach
+    public void cleanupAfterEachTest() {
+        final boolean settingsPageOpen = SettingsPageObject.PAGE_ID.exists();
+        if (!settingsPageOpen) {
+            open("/settings");
+            waitForVaadin();
+        }
+        if (SettingsPageObject.isDarkModeActive()) {
+            BetaSettings.DARK_MODE_VALUE.click(); //dark -> original
+        }
     }
 }
