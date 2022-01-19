@@ -21,6 +21,8 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 
+import static io.kyberorg.yalsee.constants.App.ONE_SECOND_IN_MILLIS;
+
 @SpringComponent
 @UIScope
 @CssImport("./css/common_styles.css")
@@ -41,6 +43,9 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
     private boolean isClientChange;
     private UI currentUI;
 
+    /**
+     * Creates {@link SettingsPage}.
+     */
     public SettingsPage() {
         pageInit();
     }
@@ -53,7 +58,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
     }
 
     @Override
-    public void beforeEnter(BeforeEnterEvent event) {
+    public void beforeEnter(final BeforeEnterEvent event) {
         //automatic starts changing values - disabling notifications
         isClientChange = false;
         YalseeSession.getCurrent()
@@ -90,9 +95,9 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         analyticsCookiesValue.addValueChangeListener(this::onAnalyticCookiesChanged);
     }
 
-    private void onAnalyticCookiesChanged(AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> changeEvent) {
+    private void onAnalyticCookiesChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
         YalseeSession.getCurrent()
-                .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(changeEvent.getValue()));
+                .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue()));
         notifyClient();
     }
 
@@ -106,7 +111,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         Notification notification = new Notification("Saved");
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         notification.setPosition(Notification.Position.MIDDLE);
-        notification.setDuration(1000); //1 second
+        notification.setDuration(ONE_SECOND_IN_MILLIS); //1 second
         return notification;
     }
 

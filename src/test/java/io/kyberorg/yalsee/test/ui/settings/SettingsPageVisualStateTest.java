@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.PAGE_ID;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
@@ -19,6 +20,9 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  */
 public class SettingsPageVisualStateTest extends SelenideTest {
 
+    /**
+     * Actions before all tests started.
+     */
     @BeforeAll
     public static void beforeAllTests() {
         open("/settings");
@@ -32,6 +36,23 @@ public class SettingsPageVisualStateTest extends SelenideTest {
     @Test
     public void pageHasCommonLayout() {
         YalseeCommonsPageObject.verifyThatPageHasYalseeLayout();
+    }
+
+    /**
+     * Page Title should exist and visible.
+     */
+    @Test
+    public void pageTitleShouldExistAndBeVisible() {
+        PAGE_ID.should(exist);
+        PAGE_ID.shouldBe(visible);
+    }
+
+    /**
+     * Page Title should have text "Application Settings".
+     */
+    @Test
+    public void pageTitleShouldHaveTextApplicationSettings() {
+        PAGE_ID.shouldHave(text("Application Settings"));
     }
 
     /**

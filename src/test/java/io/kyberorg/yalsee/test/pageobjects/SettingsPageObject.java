@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selenide.$;
  *
  * @since 3.8
  */
-public class SettingsPageObject {
+public final class SettingsPageObject {
     public static final SelenideElement PAGE_ID = $("#" + SettingsPage.IDs.PAGE_ID);
     public static final SelenideElement PAGE_TITLE = $("#" + SettingsPage.IDs.PAGE_TITLE);
 
@@ -34,5 +34,9 @@ public class SettingsPageObject {
     public static final class PageReloadPostfix {
         public static final String SPAN = "." + SettingsPage.Classes.POSTFIX;
         public static final String BUTTON = "." + SettingsPage.Classes.PAGE_RELOAD_BUTTON;
+    }
+
+    private SettingsPageObject() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }
