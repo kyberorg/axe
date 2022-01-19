@@ -6,6 +6,8 @@
 
     .responsive-center {
         flex-basis: 100%;
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
     }
 
     .responsive-home-page-center {
