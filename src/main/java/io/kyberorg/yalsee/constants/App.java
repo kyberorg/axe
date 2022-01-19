@@ -16,6 +16,7 @@ public final class App {
     public static final String URL_SAFE_SEPARATOR = ">>";
     public static final int THREE = 3;
     public static final int FOUR = 4;
+    public static final int ONE_SECOND_IN_MILLIS = 1000;
 
     private App() {
         throw new UnsupportedOperationException("Utility class");

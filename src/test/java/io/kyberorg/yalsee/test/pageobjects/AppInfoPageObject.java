@@ -25,14 +25,9 @@ public class AppInfoPageObject {
         public static final SelenideElement TEXT_SECTION = $("#" + AppInfoView.IDs.COOKIE_TEXT_SPAN);
         public static final SelenideElement LINK = $("#" + AppInfoView.IDs.COOKIE_LINK);
         public static final SelenideElement TECH_DETAILS_TEXT = $("#" + AppInfoView.IDs.COOKIE_TECH_DETAILS);
-        public static final SelenideElement CURRENT_SETTING_TITLE =
-                $("#" + AppInfoView.IDs.COOKIE_CURRENT_SETTINGS_TITLE);
-        public static final SelenideElement TECH_COOKIE_SPAN = $("#" + AppInfoView.IDs.TECH_COOKIE_SPAN);
-        public static final SelenideElement TECH_COOKIE_LABEL = $("#" + AppInfoView.IDs.TECH_COOKIE_LABEL);
-        public static final SelenideElement TECH_COOKIE_VALUE = $("#" + AppInfoView.IDs.TECH_COOKIE_VALUE);
-        public static final SelenideElement ANALYTICS_COOKIE_SPAN = $("#" + AppInfoView.IDs.ANALYTICS_COOKIE_SPAN);
-        public static final SelenideElement ANALYTICS_COOKIE_LABEL = $("#" + AppInfoView.IDs.ANALYTICS_COOKIE_LABEL);
-        public static final SelenideElement ANALYTICS_COOKIE_VALUE = $("#" + AppInfoView.IDs.ANALYTICS_COOKIE_VALUE);
-
+        public static final SelenideElement COOKIE_SETTING_SPAN = $("#" + AppInfoView.IDs.COOKIE_SETTINGS_SPAN);
+        public static final SelenideElement COOKIE_SETTINGS_TEXT = $("#" + AppInfoView.IDs.COOKIE_SETTINGS_TEXT);
+        public static final SelenideElement COOKIE_SETTINGS_LINK = $("#" + AppInfoView.IDs.COOKIE_SETTINGS_LINK);
+        public static final SelenideElement COOKIE_SETTINGS_POINT = $("#" + AppInfoView.IDs.COOKIE_SETTINGS_POINT);
     }
 }
