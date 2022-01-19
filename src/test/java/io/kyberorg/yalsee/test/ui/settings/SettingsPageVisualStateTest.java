@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.test.ui.settings;
 
+import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.BetaSettings;
 import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.CookieSettings;
 import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.PAGE_ID;
+import static io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.PAGE_TITLE;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
@@ -43,8 +45,8 @@ public class SettingsPageVisualStateTest extends SelenideTest {
      */
     @Test
     public void pageTitleShouldExistAndBeVisible() {
-        PAGE_ID.should(exist);
-        PAGE_ID.shouldBe(visible);
+        PAGE_TITLE.should(exist);
+        PAGE_TITLE.shouldBe(visible);
     }
 
     /**
@@ -177,6 +179,69 @@ public class SettingsPageVisualStateTest extends SelenideTest {
         CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.should(exist);
         CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.shouldBe(visible);
         CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.shouldHave(text("Page Reload"));
+    }
+
+    /**
+     * Beta Settings Title exist and visible.
+     */
+    @Test
+    public void betaSettingsTitleExistAndVisible() {
+        BetaSettings.TITLE.should(exist);
+        BetaSettings.TITLE.shouldBe(visible);
+    }
+
+    /**
+     * Beta Settings Title has Words "Beta" and "Feature preview".
+     */
+    @Test
+    public void betaSettingsTitleHasNeededWords() {
+        BetaSettings.TITLE.shouldHave(text("Beta"));
+        BetaSettings.TITLE.shouldHave(text("Feature preview"));
+    }
+
+    /**
+     * Dark Mode Span exist and visible.
+     */
+    @Test
+    public void darkModeSpanExistAndVisible() {
+        BetaSettings.DARK_MODE_SPAN.should(exist);
+        BetaSettings.DARK_MODE_SPAN.shouldBe(visible);
+    }
+
+    /**
+     * Dark Mode Label exist and visible.
+     */
+    @Test
+    public void darkModeLabelExistAndVisible() {
+        BetaSettings.DARK_MODE_LABEL.should(exist);
+        BetaSettings.DARK_MODE_LABEL.shouldBe(visible);
+    }
+
+    /**
+     * Dark Mode Label has Words "Dark Mode".
+     */
+    @Test
+    public void darkModeLabelHasWordsDarkMode() {
+        BetaSettings.DARK_MODE_LABEL.shouldHave(text("Dark Mode"));
+    }
+
+    /**
+     * Dark Mode Value exist and visible.
+     */
+    @Test
+    public void darkModeValueExistAndVisible() {
+        BetaSettings.DARK_MODE_VALUE.should(exist);
+        BetaSettings.DARK_MODE_VALUE.shouldBe(visible);
+    }
+
+    /**
+     * Dark Mode Value enabled and clickable.
+     */
+    @Test
+    public void darkModeValueEnabledAndClickable() {
+        BetaSettings.DARK_MODE_VALUE.shouldBe(enabled);
+        BetaSettings.DARK_MODE_VALUE.click();
+        BetaSettings.DARK_MODE_VALUE.click();
     }
 
 }

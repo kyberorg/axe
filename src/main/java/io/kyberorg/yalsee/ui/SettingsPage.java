@@ -38,15 +38,24 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
     private final Span analyticsCookiesSpan = new Span();
     private final Span analyticsCookiesLabel = new Span("Analytics cookies: ");
     private final ToggleButton analyticsCookiesValue = new ToggleButton();
+    private final H4 betaSettingsTitle = new H4("Beta (Feature preview)");
+    private final Span darkModeSpan = new Span();
+    private final Span darkModeLabel = new Span("Dark Mode: ");
+    private final ToggleButton darkModeValue = new ToggleButton();
     private final Notification savedNotification = makeSavedNotification();
+
+    private final MainView mainView;
 
     private boolean isClientChange;
     private UI currentUI;
 
     /**
      * Creates {@link SettingsPage}.
+     *
+     * @param mainView main view bean to switch theme.
      */
-    public SettingsPage() {
+    public SettingsPage(final MainView mainView) {
+        this.mainView = mainView;
         pageInit();
     }
 
@@ -64,6 +73,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         YalseeSession.getCurrent()
                 .ifPresent(ys -> {
                     analyticsCookiesValue.setValue(ys.getSettings().isAnalyticsCookiesAllowed());
+                    darkModeValue.setValue(ys.getSettings().isDarkMode());
                     if (ys.hasDevice()) adjustNotificationPosition(ys.getDevice().isMobile());
                 });
         //automatic set all values, all other actions are from client.
@@ -80,12 +90,20 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         analyticsCookiesSpan.setId(IDs.ANALYTICS_COOKIE_SPAN);
         analyticsCookiesLabel.setId(IDs.ANALYTICS_COOKIE_LABEL);
         analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
+
+        betaSettingsTitle.setId(IDs.BETA_SETTINGS_TITLE);
+        darkModeSpan.setId(IDs.DARK_MODE_SPAN);
+        darkModeLabel.setId(IDs.DARK_MODE_LABEL);
+        darkModeValue.setId(IDs.DARK_MODE_VALUE);
     }
 
     private void setPageStructure() {
         techCookiesSpan.add(techCookiesLabel, techCookiesValue);
         analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue, pageReloadPostfix());
-        add(pageTitle, cookieSettingsTitle, techCookiesSpan, analyticsCookiesSpan);
+
+        darkModeSpan.add(darkModeLabel, darkModeValue);
+
+        add(pageTitle, cookieSettingsTitle, techCookiesSpan, analyticsCookiesSpan, betaSettingsTitle, darkModeSpan);
     }
 
     private void setInitialState() {
@@ -93,12 +111,20 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         techCookiesValue.setEnabled(false);
         analyticsCookiesValue.setValue(true);
         analyticsCookiesValue.addValueChangeListener(this::onAnalyticCookiesChanged);
+        darkModeValue.setValue(false);
+        darkModeValue.addValueChangeListener(this::onDarkModeChanged);
     }
 
     private void onAnalyticCookiesChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
         YalseeSession.getCurrent()
                 .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue()));
         notifyClient();
+    }
+
+    private void onDarkModeChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
+        final boolean isDarkTheme = event.getValue();
+        mainView.applyTheme(isDarkTheme);
+        YalseeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
     }
 
     private void notifyClient() {
@@ -147,6 +173,10 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         public static final String ANALYTICS_COOKIE_SPAN = "analyticsCookieSpan";
         public static final String ANALYTICS_COOKIE_LABEL = "analyticsCookieLabel";
         public static final String ANALYTICS_COOKIE_VALUE = "analyticsCookieValue";
+        public static final String BETA_SETTINGS_TITLE = "betaSettingsTitle";
+        public static final String DARK_MODE_SPAN = "darkModeSpan";
+        public static final String DARK_MODE_LABEL = "darkModeLabel";
+        public static final String DARK_MODE_VALUE = "darkModeValue";
     }
 
     public static class Classes {
