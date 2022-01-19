@@ -101,7 +101,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
 
     private void applyStyle() {
         leftDiv.addClassName("responsive-div");
-        centralLayout.addClassName("responsive-center");
+        centralLayout.addClassName("responsive-home-page-center");
         rightDiv.addClassName("responsive-div");
 
         titleLongPart.addClassName("title-long-text");
