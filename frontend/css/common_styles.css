@@ -6,12 +6,18 @@
 
     .responsive-center {
         flex-basis: 100%;
-        padding-right: 1px;
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+    }
+
+    .responsive-home-page-center {
+        flex-basis: 100%;
         padding-left: 1px;
+        padding-right: 1px;
     }
 
     #mainArea {
-        padding: 0.4em;
+        padding: 0.4em !important;
     }
 }
 
@@ -24,6 +30,10 @@
     .responsive-center {
         flex-basis: 90%;
     }
+
+    .responsive-home-page-center {
+        flex-basis: 90%;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -33,6 +43,10 @@
     }
 
     .responsive-center {
+        flex-basis: 80%;
+    }
+
+    .responsive-home-page-center {
         flex-basis: 80%;
     }
 
@@ -50,6 +64,10 @@
     .responsive-center {
         flex-basis: 80%;
     }
+
+    .responsive-home-page-center {
+        flex-basis: 80%;
+    }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -61,6 +79,10 @@
     .responsive-center {
         flex-basis: 80%;
     }
+
+    .responsive-home-page-center {
+        flex-basis: 80%;
+    }
 }
 
 /* Super large devices (large desktops, TVs, 1441px and up) */
@@ -70,6 +92,10 @@
     }
 
     .responsive-center {
+        flex-basis: 70%;
+    }
+
+    .responsive-home-page-center {
         flex-basis: 70%;
     }
 
