@@ -6,8 +6,6 @@
 
     .responsive-center {
         flex-basis: 100%;
-        padding-right: 1px;
-        padding-left: 1px;
     }
 
     #mainArea {
