@@ -79,12 +79,18 @@ public class YalseeSession {
          */
         private boolean analyticsCookiesAllowed = false;
 
+        /**
+         * Is Dark Mode enabled or default one.
+         */
+        private boolean darkMode = false;
+
         @Override
         public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Settings settings = (Settings) o;
-            return analyticsCookiesAllowed == settings.analyticsCookiesAllowed;
+            return analyticsCookiesAllowed == settings.analyticsCookiesAllowed
+                    && darkMode == settings.darkMode;
         }
 
         @Override

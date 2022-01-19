@@ -107,6 +107,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         this.currentSessionId = Objects.nonNull(session)
                 ? session.getSessionId() : YalseeSession.NO_SESSION_STORED_MARKER;
 
+        if (session != null) {
+            applyTheme(session.getSettings().isDarkMode());
+        }
+
         setPrimarySection(Section.NAVBAR);
 
         //do not set touch-optimized to true, because it moves navbar down.
@@ -289,6 +293,16 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
 
     private void refreshPage() {
         this.ui.access(() -> this.ui.getPage().reload());
+    }
+
+    /**
+     * Applies theme.
+     *
+     * @param isDarkTheme shall Dark theme be applied instead of default one.
+     */
+    public void applyTheme(final boolean isDarkTheme) {
+        final String theme = isDarkTheme ? "dark" : "light";
+        this.ui.getPage().executeJs("document.documentElement.setAttribute(\"theme\",\"" + theme + "\")");
     }
 
     @Override
