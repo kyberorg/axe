@@ -170,13 +170,5 @@ public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
         public static final String COOKIE_SETTINGS_LINK = "cookieSettingsLink";
         public static final String COOKIE_SETTINGS_POINT = "cookieSettingsPoint";
 
-        //TODO remove from here
-        public static final String COOKIE_CURRENT_SETTINGS_TITLE = "cookieCurrentSettingsTitle";
-        public static final String TECH_COOKIE_SPAN = "techCookieSpan";
-        public static final String TECH_COOKIE_LABEL = "techCookieLabel";
-        public static final String TECH_COOKIE_VALUE = "techCookieValue";
-        public static final String ANALYTICS_COOKIE_SPAN = "analyticsCookieSpan";
-        public static final String ANALYTICS_COOKIE_LABEL = "analyticsCookieLabel";
-        public static final String ANALYTICS_COOKIE_VALUE = "analyticsCookieValue";
     }
 }
