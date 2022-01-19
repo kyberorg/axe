@@ -46,16 +46,27 @@ public final class SettingsPageObject {
         public static final String BUTTON = "." + SettingsPage.Classes.PAGE_RELOAD_BUTTON;
     }
 
+    /**
+     * Checks if dark mode is enabled.
+     */
     public static void darkModeShouldBeEnabled() {
         $("html").shouldHave(attribute("theme", "dark"));
     }
 
+    /**
+     * Checks if light (original) mode is enabled.
+     */
     public static void defaultModeShouldBeEnabled() {
         final String theme = $("html").getAttribute("theme");
         final boolean isDefaultModeEnabled = StringUtils.isBlank(theme) || theme.equals("light");
         Assertions.assertTrue(isDefaultModeEnabled);
     }
 
+    /**
+     * Is Site working with dark mode on.
+     *
+     * @return true if site is dark, false if not.
+     */
     public static boolean isDarkModeActive() {
         final String theme = $("html").getAttribute("theme");
         return StringUtils.isNotBlank(theme) && theme.equals("dark");

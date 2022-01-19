@@ -88,6 +88,9 @@ public class SettingsPageActionTest {
         SettingsPageObject.darkModeShouldBeEnabled();
     }
 
+    /**
+     * Cleanup: resets site theme to original.
+     */
     @AfterEach
     public void cleanupAfterEachTest() {
         final boolean settingsPageOpen = SettingsPageObject.PAGE_ID.exists();
