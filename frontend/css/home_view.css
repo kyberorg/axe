@@ -7,12 +7,12 @@ body {
 /* Main Area moved to Common Styles */
 
 .overall-area {
-    background: #f0f0f0;
+    background: var(--yalsee-main-area-color);
     padding-left: 1em;
 }
 
 .result-area {
-    background: #dff0d8;
+    background: var(--yalsee-result-area-color);
     font-size: large;
     text-align: center;
     margin-top: 15px;
@@ -22,8 +22,12 @@ body {
     text-align: center;
 }
 
+#qrCode {
+    border-radius: var(--yalsee-qr-code-border-radius);
+}
+
 .my-links-note-area {
-    background: #dff0d8;
+    background: var(--yalsee-result-area-color);
     padding-left: 1em;
 }
 
