@@ -87,11 +87,11 @@ public class Device implements Serializable {
     /**
      * Compares Devices.
      *
-     * @param other other Device to compare with.
-     * @return true - if both {@link #userAgent} and {@link #ip} are equal, false if not.
+     * @param another another Device to compare with.
+     * @return true - if {@link #userAgent} equals another, false if not.
      */
-    public boolean isSameDevice(final Device other) {
-        return userAgent.equals(other.getUserAgent()) && ip.equals(other.ip);
+    public boolean isSameDevice(final Device another) {
+        return userAgent.equals(another.getUserAgent());
     }
 
     @Override
