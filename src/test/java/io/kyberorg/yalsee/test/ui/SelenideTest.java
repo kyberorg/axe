@@ -34,7 +34,7 @@ public abstract class SelenideTest extends YalseeTest {
         Configuration.reportsFolder = REPORT_DIRECTORY;
         Configuration.timeout = SELENIDE_TIMEOUT;
         Configuration.browser = SELENIDE_BROWSER;
-        Configuration.startMaximized = true;
+        Configuration.browserSize = "1366x768";
         //critical for Vaadin input
         Configuration.fastSetValue = true;
 
