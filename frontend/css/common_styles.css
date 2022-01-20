@@ -136,16 +136,20 @@ html {
     font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --lumo-font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --yalsee-main-area-color: rgb(240, 240, 240);
-    --yalsee-result-area-color: rgb(32, 15, 39);
+    --yalsee-result-area-color: rgb(223, 240, 216);
     --yalsee-border-color: rgb(227, 227, 227);
+    --yalsee-text-color: rgb(25, 36, 52);
     --yalsee-drawer-toggle-color: rgb(24, 39, 57);
+    --yalsee-qr-code-border-radius: 0%;
 }
 
 html[theme="dark"] {
-    --yalsee-main-area-color: rgb(24, 36, 51);
-    --yalsee-result-area-color: rgb(32, 15, 39);
-    --yalsee-border-color: rgb(235, 243, 254);
+    --yalsee-main-area-color: rgba(24, 27, 31, 0.3);
+    --yalsee-result-area-color: rgb(43, 61, 81);
+    --yalsee-border-color: rgb(204, 204, 220, 0.07);
+    --yalsee-text-color: rgb(245, 249, 255);
     --yalsee-drawer-toggle-color: rgb(235, 243, 254);
+    --yalsee-qr-code-border-radius: 5%;
 
 }
 
