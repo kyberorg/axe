@@ -6,12 +6,18 @@
 
     .responsive-center {
         flex-basis: 100%;
-        padding-right: 1px;
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+    }
+
+    .responsive-home-page-center {
+        flex-basis: 100%;
         padding-left: 1px;
+        padding-right: 1px;
     }
 
     #mainArea {
-        padding: 0.4em;
+        padding: 0.4em !important;
     }
 }
 
@@ -24,6 +30,10 @@
     .responsive-center {
         flex-basis: 90%;
     }
+
+    .responsive-home-page-center {
+        flex-basis: 90%;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -33,6 +43,10 @@
     }
 
     .responsive-center {
+        flex-basis: 80%;
+    }
+
+    .responsive-home-page-center {
         flex-basis: 80%;
     }
 
@@ -50,6 +64,10 @@
     .responsive-center {
         flex-basis: 80%;
     }
+
+    .responsive-home-page-center {
+        flex-basis: 80%;
+    }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -59,6 +77,10 @@
     }
 
     .responsive-center {
+        flex-basis: 80%;
+    }
+
+    .responsive-home-page-center {
         flex-basis: 80%;
     }
 }
@@ -73,6 +95,10 @@
         flex-basis: 70%;
     }
 
+    .responsive-home-page-center {
+        flex-basis: 70%;
+    }
+
     .large-text {
         font-size: large;
     }
@@ -80,12 +106,12 @@
 
 /* Areas */
 .main-area {
-    background: #f0f0f0;
+    background: var(--yalsee-main-area-color);
 }
 
 /* Styles */
 .border {
-    border: 1px solid #e3e3e3;
+    border: 1px solid var(--yalsee-border-color);
     border-radius: 4px;
 }
 
@@ -109,4 +135,28 @@
 html {
     font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --lumo-font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --yalsee-main-area-color: rgb(240, 240, 240);
+    --yalsee-result-area-color: rgb(223, 240, 216);
+    --yalsee-border-color: rgb(227, 227, 227);
+    --yalsee-text-color: rgb(25, 36, 52);
+    --yalsee-drawer-toggle-color: rgb(24, 39, 57);
+    --yalsee-qr-code-border-radius: 0%;
+}
+
+html[theme="dark"] {
+    --yalsee-main-area-color: rgba(24, 27, 31, 0.3);
+    --yalsee-result-area-color: rgb(43, 61, 81);
+    --yalsee-border-color: rgb(204, 204, 220, 0.07);
+    --yalsee-text-color: rgb(245, 249, 255);
+    --yalsee-drawer-toggle-color: rgb(235, 243, 254);
+    --yalsee-qr-code-border-radius: 5%;
+
+}
+
+vcf-toggle-button {
+    display: inline;
+}
+
+vaadin-drawer-toggle {
+    color: var(--yalsee-drawer-toggle-color);
 }

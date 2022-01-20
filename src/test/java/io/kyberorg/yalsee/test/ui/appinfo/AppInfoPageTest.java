@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.test.ui.appinfo;
 
+import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
@@ -13,7 +14,6 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.CookieArea;
 import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.PublicInfoArea.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Checking elements of public info area with information about version.
@@ -144,109 +144,65 @@ public class AppInfoPageTest extends SelenideTest {
     }
 
     /**
-     * Subtitle exists and its tag is H5.
+     * Tests that Cookie Settings Span exists and visible.
      */
     @Test
-    public void subtitleExistsAndH5() {
-        CookieArea.CURRENT_SETTING_TITLE.should(exist);
-        CookieArea.CURRENT_SETTING_TITLE.shouldBe(visible);
-        String subtitleTag = CookieArea.CURRENT_SETTING_TITLE.getTagName();
-        assertEquals("h5", subtitleTag);
+    public void cookieSettingsSpanExistsAndVisible() {
+        CookieArea.COOKIE_SETTING_SPAN.should(exist);
+        CookieArea.COOKIE_SETTING_SPAN.shouldBe(visible);
     }
 
     /**
-     * Subtitle has Words "Current Settings".
+     * Test that Cookie Settings Text exists and visible.
      */
     @Test
-    public void subtitleShouldHaveWordsCurrentSettings() {
-        CookieArea.CURRENT_SETTING_TITLE.shouldHave(text("Current Settings"));
+    public void cookieSettingsTextExistsAndVisible() {
+        CookieArea.COOKIE_SETTINGS_TEXT.should(exist);
+        CookieArea.COOKIE_SETTINGS_TEXT.shouldBe(visible);
     }
 
     /**
-     * Tech Cookie Span exists and visible.
+     * Test that Cookie Settings Text has Words "cookie settings".
      */
     @Test
-    public void techCookieSpanExistsAndVisible() {
-        CookieArea.TECH_COOKIE_SPAN.should(exist);
-        CookieArea.TECH_COOKIE_SPAN.shouldBe(visible);
+    public void cookieSettingsTextHasWordsCookieSettings() {
+        CookieArea.COOKIE_SETTINGS_TEXT.shouldHave(text("cookie settings"));
     }
 
     /**
-     * Tech cookies label exists and visible.
+     * Tests that Cookie Settings Link exists and visible.
      */
     @Test
-    public void techCookiesLabelExistsAndVisible() {
-        CookieArea.TECH_COOKIE_LABEL.should(exist);
-        CookieArea.TECH_COOKIE_LABEL.shouldBe(visible);
+    public void cookieSettingsLinkExistsAndVisible() {
+        CookieArea.COOKIE_SETTINGS_LINK.should(exist);
+        CookieArea.COOKIE_SETTINGS_LINK.shouldBe(visible);
     }
 
     /**
-     * Tech Cookies Label has Words "Technical Cookies".
+     * Tests that Cookie Settings Link is active.
      */
     @Test
-    public void techCookiesLabelHasWordsTechnicalCookies() {
-        CookieArea.TECH_COOKIE_LABEL.shouldHave(text("Technical Cookies"));
+    public void cookieSettingsLinkIsActive() {
+        CookieArea.COOKIE_SETTINGS_LINK.shouldBe(enabled);
     }
 
     /**
-     * Tech Cookies Value exists and visible.
+     * Tests that Cookie Settings Link should have text "Settings Page" and should lead to it.
      */
     @Test
-    public void techCookiesValueExistsAndVisible() {
-        CookieArea.TECH_COOKIE_VALUE.should(exist);
-        CookieArea.TECH_COOKIE_VALUE.shouldBe(visible);
+    public void cookieSettingsLinkShouldHaveTextAndLeadsToSettingsPage() {
+        CookieArea.COOKIE_SETTINGS_LINK.shouldHave(text("Settings Page"));
+        CookieArea.COOKIE_SETTINGS_LINK.shouldHave(attribute("href",
+                TestUtils.getTestUrl() + "/" + Endpoint.UI.SETTINGS_PAGE));
     }
 
     /**
-     * Tech Cookies Value disabled and not clickable.
+     * Tests that Cookie Settings Sentence ends with dot (.).
      */
     @Test
-    public void techCookiesValueDisabledAndNotClickable() {
-        CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("disabled"));
-    }
-
-    /**
-     * Analytics Cookie Span exists and visible.
-     */
-    @Test
-    public void analyticsCookieSpanExistsAndVisible() {
-        CookieArea.ANALYTICS_COOKIE_SPAN.should(exist);
-        CookieArea.ANALYTICS_COOKIE_SPAN.shouldBe(visible);
-    }
-
-    /**
-     * Analytics Cookies Label exists and visible.
-     */
-    @Test
-    public void analyticsCookiesLabelExistsAndVisible() {
-        CookieArea.ANALYTICS_COOKIE_LABEL.should(exist);
-        CookieArea.ANALYTICS_COOKIE_LABEL.shouldBe(visible);
-    }
-
-    /**
-     * Analytics Cookies Label has Words "Analytics Cookies".
-     */
-    @Test
-    public void analyticsCookiesLabelHasWordsAnalyticsCookies() {
-        CookieArea.ANALYTICS_COOKIE_LABEL.shouldHave(text("Analytics Cookies"));
-    }
-
-    /**
-     * Analytics Cookies Value exists and visible.
-     */
-    @Test
-    public void analyticsCookiesValueExistsAndVisible() {
-        CookieArea.ANALYTICS_COOKIE_VALUE.should(exist);
-        CookieArea.ANALYTICS_COOKIE_VALUE.shouldBe(visible);
-    }
-
-    /**
-     * Analytics Cookies Value enabled and clickable.
-     */
-    @Test
-    public void analyticsCookiesValueEnabledAndClickable() {
-        CookieArea.ANALYTICS_COOKIE_VALUE.shouldBe(enabled);
-        CookieArea.ANALYTICS_COOKIE_VALUE.click();
-        CookieArea.ANALYTICS_COOKIE_VALUE.click();
+    public void cookieSettingsSentenceEndsWithDot() {
+        CookieArea.COOKIE_SETTINGS_POINT.should(exist);
+        CookieArea.COOKIE_SETTINGS_POINT.shouldBe(visible);
+        CookieArea.COOKIE_SETTINGS_POINT.shouldHave(text("."));
     }
 }

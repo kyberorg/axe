@@ -5,7 +5,6 @@ import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -21,7 +21,6 @@ import java.util.Optional;
  * @since 3.8
  */
 @Data
-@EqualsAndHashCode
 public class YalseeSession {
     /**
      * Default length of session id.
@@ -41,7 +40,6 @@ public class YalseeSession {
     private long version;
 
     @Data
-    @EqualsAndHashCode
     public class Flags {
         /**
          * Defines is banner is already displayed and should not appear once again.
@@ -57,15 +55,48 @@ public class YalseeSession {
          * Did we already warn user about session expiry ?
          */
         private boolean expirationWarningShown = false;
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Flags flags = (Flags) o;
+            return cookieBannerAlreadyShown == flags.cookieBannerAlreadyShown
+                    && userModeEnabled == flags.userModeEnabled
+                    && expirationWarningShown == flags.expirationWarningShown;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(cookieBannerAlreadyShown, userModeEnabled, expirationWarningShown);
+        }
     }
 
     @Data
-    @EqualsAndHashCode
     public class Settings {
         /**
          * Allow analytics cookies or not. Should never be private.
          */
         private boolean analyticsCookiesAllowed = false;
+
+        /**
+         * Is Dark Mode enabled or default one.
+         */
+        private boolean darkMode = false;
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Settings settings = (Settings) o;
+            return analyticsCookiesAllowed == settings.analyticsCookiesAllowed
+                    && darkMode == settings.darkMode;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(analyticsCookiesAllowed);
+        }
     }
 
     /**
@@ -150,10 +181,13 @@ public class YalseeSession {
 
     /**
      * Updates current Session Version.
+     *
+     * @return same session to be able to use it in Streams.
      */
-    public void updateVersion() {
+    public YalseeSession updateVersion() {
         final String versionString = new SimpleDateFormat(VERSION_FORMAT).format(AppUtils.now());
         version = Long.parseLong(versionString);
+        return this;
     }
 
     /**
@@ -176,6 +210,42 @@ public class YalseeSession {
     public boolean isOlder(final YalseeSession anotherSession) {
         if (anotherSession == null || anotherSession.getVersion() == 0) return false;
         return this.getVersion() < anotherSession.getVersion();
+    }
+
+    /**
+     * Opposite of {@link #equals(Object)} to improve readability.
+     *
+     * @param o another {@link YalseeSession} to compare with.
+     * @return true if sessions differ from each other, false if same.
+     */
+    public boolean differsFrom(final YalseeSession o) {
+        return !equals(o);
+    }
+
+    /**
+     * Report is session has {@link Device} object bound.
+     *
+     * @return true if {@link Device} is not {@code null}, false if it is.
+     */
+    public boolean hasDevice() {
+        return device != null;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof YalseeSession)) return false;
+        YalseeSession session = (YalseeSession) o;
+        return getSessionId().equals(session.getSessionId())
+                && Objects.equals(getDevice(), session.getDevice())
+                && getFlags().equals(session.getFlags())
+                && getSettings().equals(session.getSettings());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSessionId(), getDevice(), getFlags(), getSettings(),
+                getCreated(), getNotValidAfter(), getVersion());
     }
 
     private int sessionTimeout() {

@@ -4,7 +4,6 @@ import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
 import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
 import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.services.YalseeSessionService;
-import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
@@ -17,10 +16,13 @@ import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static io.kyberorg.yalsee.constants.App.Session.SESSION_SYNC_INTERVAL;
 import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL;
+import static java.util.function.Predicate.not;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +30,6 @@ import static io.kyberorg.yalsee.constants.App.Session.SESSION_WATCHDOG_INTERVAL
 public class SessionWatchdog implements HttpSessionListener {
     private static final String TAG = "[" + SessionWatchdog.class.getSimpleName() + "]";
 
-    private final AppUtils appUtils;
     private final YalseeSessionService sessionService;
 
     /**
@@ -78,7 +79,36 @@ public class SessionWatchdog implements HttpSessionListener {
      */
     @Scheduled(fixedDelay = SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void syncSessions() {
-        sessionService.syncSessions();
+        long existingSessionsCount;
+        long newSessionsCount;
+
+        //sync only if session changed (differs from previous)
+        List<YalseeSession> sessionsToSync = SessionBox.getAllSessions().stream()
+                .filter(SessionBox::hasPreviousVersion) //filter sessions with known previous state only
+                .filter(session -> session.differsFrom(SessionBox.getPreviousVersion(session))) //only if changed
+                .map(session -> SessionBox.logSessionsDiff(SessionBox.getPreviousVersion(session), session)) //log diff
+                .map(YalseeSession::updateVersion) //since they change - we have to update their versions
+                .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
+                .collect(Collectors.toList()); //and finally add them list for syncing
+
+        existingSessionsCount = sessionsToSync.size();
+
+        //new (un-synced) considered changed as nothing to compare with
+        sessionsToSync.addAll(
+                SessionBox.getAllSessions().stream()
+                        .filter(not(SessionBox::hasPreviousVersion)) //filter new sessions (without previous state)
+                        .map(YalseeSession::updateVersion) //they are considered as changed - updating their versions
+                        .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
+                        .collect(Collectors.toList())); //and finally add them list for syncing
+
+        newSessionsCount = sessionsToSync.size() - existingSessionsCount;
+
+        if (sessionsToSync.size() > 0) {
+            log.info("{} Sync Summary: {} sessions to be synced ({} new, {} existing)",
+                    TAG, sessionsToSync.size(), newSessionsCount, existingSessionsCount);
+        }
+
+        sessionService.syncSessions(sessionsToSync);
     }
 
     /**
@@ -117,6 +147,7 @@ public class SessionWatchdog implements HttpSessionListener {
     private void removeExpiredSession(final YalseeSession yalseeSession) {
         if (yalseeSession == null) return;
         sessionService.destroySession(yalseeSession);
+        SessionBox.deletePreviousVersion(yalseeSession);
     }
 
     private void fireAlmostExpiredEvent(final YalseeSession session) {

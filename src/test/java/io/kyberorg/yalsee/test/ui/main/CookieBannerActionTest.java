@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.main;
 
 import io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
+import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.AppInfoView;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
@@ -79,9 +80,9 @@ public class CookieBannerActionTest extends SelenideTest {
     @Test
     public void onlyNecessaryCookiesButtonSelectsOnlyTechnicalCookies() {
         Buttons.ONLY_NECESSARY_BUTTON.click();
-        open("/appInfo");
-        AppInfoPageObject.CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
-        AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.shouldNotHave(attribute("checked"));
+        open("/settings");
+        SettingsPageObject.CookieSettings.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
+        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldNotHave(attribute("checked"));
     }
 
     /**
@@ -91,9 +92,9 @@ public class CookieBannerActionTest extends SelenideTest {
     public void onlyNecessaryCookieButtonSelectsOnlyTechnicalCookiesEvenIfOtherSelected() {
         Boxes.ANALYTICS_BOX.click();
         Buttons.ONLY_NECESSARY_BUTTON.click();
-        open("/appInfo");
-        AppInfoPageObject.CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
-        AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.shouldNotHave(attribute("checked"));
+        open("/settings");
+        SettingsPageObject.CookieSettings.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
+        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldNotHave(attribute("checked"));
     }
 
     /**
@@ -102,9 +103,9 @@ public class CookieBannerActionTest extends SelenideTest {
     @Test
     public void allowSelectionButtonEnablesSelectionOne() {
         Buttons.SELECTION_BUTTON.click();
-        open("/appInfo");
-        AppInfoPageObject.CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
-        AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.shouldNotHave(attribute("checked"));
+        open("/settings");
+        SettingsPageObject.CookieSettings.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
+        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldNotHave(attribute("checked"));
     }
 
     /**
@@ -114,9 +115,9 @@ public class CookieBannerActionTest extends SelenideTest {
     public void allowSelectionButtonEnablesSelectionTwo() {
         Boxes.ANALYTICS_BOX.click();
         Buttons.SELECTION_BUTTON.click();
-        open("/appInfo");
-        AppInfoPageObject.CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
-        AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
+        open("/settings");
+        SettingsPageObject.CookieSettings.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
+        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
     }
 
     /**
@@ -126,9 +127,9 @@ public class CookieBannerActionTest extends SelenideTest {
     public void allowAllButtonEnablesAll() {
         Boxes.ANALYTICS_BOX.click();
         Buttons.ALLOW_ALL_BUTTON.click();
-        open("/appInfo");
-        AppInfoPageObject.CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
-        AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
+        open("/settings");
+        SettingsPageObject.CookieSettings.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
+        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
     }
 
     /**
@@ -137,8 +138,8 @@ public class CookieBannerActionTest extends SelenideTest {
     @Test
     public void allowAllButtonEnablesAllEvenWhenNoSelected() {
         Buttons.ALLOW_ALL_BUTTON.click();
-        open("/appInfo");
-        AppInfoPageObject.CookieArea.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
-        AppInfoPageObject.CookieArea.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
+        open("/settings");
+        SettingsPageObject.CookieSettings.TECH_COOKIE_VALUE.shouldHave(attribute("checked"));
+        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
     }
 }

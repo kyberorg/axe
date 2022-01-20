@@ -4,8 +4,7 @@ import com.helger.commons.exception.InitializationException;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.page.ExtendedClientDetails;
 import com.vaadin.flow.component.page.Page;
-import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.WebBrowser;
+import com.vaadin.flow.shared.BrowserDetails;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 /**
@@ -39,12 +38,12 @@ public final class DeviceUtils {
     /**
      * Defines if client device is mobile device. User-Agent header is used to define device.
      *
-     * @param webBrowser valid {@link WebBrowser} object with Browser info.
-     *                   Can be retrieved from {@link VaadinSession} by {@link VaadinSession#getCurrent()#getBrowser() }
+     * @param userAgent string with UserAgent aka client's browser. Can be retrieved from current session.
      * @return true if client device is Android, iPhone or Windows Phone and false is not.
      */
-    public static boolean isMobileDevice(final WebBrowser webBrowser) {
-        return webBrowser.isAndroid() || webBrowser.isIPhone() || webBrowser.isWindowsPhone();
+    public static boolean isMobileDevice(final String userAgent) {
+        BrowserDetails browserDetails = new BrowserDetails(userAgent);
+        return browserDetails.isAndroid() || browserDetails.isIPhone() || browserDetails.isWindowsPhone();
     }
 
     private DeviceUtils(final UI ui) throws InitializationException {

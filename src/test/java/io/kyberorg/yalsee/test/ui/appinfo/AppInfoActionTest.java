@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.ui.appinfo;
 
 import com.codeborne.selenide.Selenide;
+import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.CookieAndYou;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -8,7 +9,7 @@ import io.kyberorg.yalsee.ui.AppInfoView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.CookieArea;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
@@ -41,12 +42,12 @@ public class AppInfoActionTest extends SelenideTest {
     }
 
     /**
-     * Set Value keeps after Page refresh.
+     * Settings Page link opens Settings Page.
      */
     @Test
-    public void setValueKeepsAfterPageRefresh() {
-        CookieArea.ANALYTICS_COOKIE_VALUE.click();
-        open("/appInfo");
-        CookieArea.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
+    public void cookieSettingsLinkOpensSettingsPage() {
+        CookieArea.COOKIE_SETTINGS_LINK.click();
+        waitForVaadin();
+        SettingsPageObject.PAGE_ID.should(exist);
     }
 }

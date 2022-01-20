@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
@@ -133,16 +134,18 @@ public class YalseeSessionService {
 
     /**
      * Launches Sessions synchronization between local storage and Redis.
+     *
+     * @param sessionsToSync sessions to synchronize.
      */
     @SneakyThrows
-    public void syncSessions() {
-        if (isRedisEnabled) {
+    public void syncSessions(final Collection<YalseeSession> sessionsToSync) {
+        if (isRedisEnabled && sessionsToSync.size() > 0) {
             if (redisDao.hasLock()) {
                 log.warn("{} skipping sync. Sync is locked.", TAG);
                 return;
             }
             redisDao.acquireLock(AppUtils.getHostname());
-            localDao.getAllSessions().forEach(this::updateSession);
+            sessionsToSync.forEach(this::updateSession);
             redisDao.releaseLock(AppUtils.getHostname());
         }
     }
@@ -231,9 +234,9 @@ public class YalseeSessionService {
     }
 
     private void syncSessionToRedis(final YalseeSession localSession, final YalseeSession remoteSession) {
-        boolean sessionChanges = localSession.hashCode() != remoteSession.hashCode();
-        if (sessionChanges) {
-            localSession.updateVersion();
+        if (localSession == null || remoteSession == null) throw new IllegalArgumentException("both should be present");
+        boolean sessionChanged = localSession.differsFrom(remoteSession);
+        if (sessionChanged) {
             if (localSession.isNewer(remoteSession)) {
                 log.debug("{} syncing session '{}'. Local -> Redis", TAG, localSession.getSessionId());
                 redisDao.update(localSession);
@@ -247,6 +250,7 @@ public class YalseeSessionService {
     }
 
     private void syncSessionFromRedis(final YalseeSession localSession, final YalseeSession remoteSession) {
+        if (localSession == null || remoteSession == null) throw new IllegalArgumentException("both should be present");
         if (localDao.has(localSession.getSessionId())) {
             if (remoteSession.isNewer(localSession)) {
                 log.debug("{} syncing session '{}'. Redis -> Local", TAG, localSession.getSessionId());

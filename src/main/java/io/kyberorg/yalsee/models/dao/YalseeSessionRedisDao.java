@@ -49,7 +49,7 @@ public class YalseeSessionRedisDao extends RedisDao {
         if (session == null) {
             throw new IllegalArgumentException("Session to create is null");
         }
-        valueOps.set(appendApplicationPrefix() + session.getSessionId(), session, getRecordTtl(), TimeUnit.SECONDS);
+        valueOps.set(getApplicationPrefix() + session.getSessionId(), session, getRecordTtl(), TimeUnit.SECONDS);
     }
 
     /**
@@ -74,7 +74,7 @@ public class YalseeSessionRedisDao extends RedisDao {
     public Optional<YalseeSession> get(final String sessionId) {
         if (StringUtils.isBlank(sessionId)) throw new IllegalArgumentException("Session to retrieve is null");
         if (!exists(sessionId)) return Optional.empty();
-        return Optional.ofNullable(valueOps.get(appendApplicationPrefix() + sessionId));
+        return Optional.ofNullable(valueOps.get(getApplicationPrefix() + sessionId));
     }
 
     /**
@@ -86,10 +86,10 @@ public class YalseeSessionRedisDao extends RedisDao {
      */
     public void update(final YalseeSession session) {
         if (session == null) throw new IllegalArgumentException("Session to update is null");
-        final String keyName = appendApplicationPrefix() + session.getSessionId();
+        final String keyName = getApplicationPrefix() + session.getSessionId();
         final Long currentTTL = redisTemplate.getExpire(keyName, TimeUnit.SECONDS);
         final long ttl = currentTTL != null ? currentTTL : getRecordTtl();
-        valueOps.setIfPresent(appendApplicationPrefix() + session.getSessionId(), session, ttl, TimeUnit.SECONDS);
+        valueOps.setIfPresent(getApplicationPrefix() + session.getSessionId(), session, ttl, TimeUnit.SECONDS);
     }
 
     /**
@@ -102,7 +102,7 @@ public class YalseeSessionRedisDao extends RedisDao {
     public void delete(final String sessionId) {
         if (StringUtils.isBlank(sessionId)) throw new IllegalArgumentException("Session to delete is null");
         if (exists(sessionId)) {
-            valueOps.getAndDelete(appendApplicationPrefix() + sessionId);
+            valueOps.getAndDelete(getApplicationPrefix() + sessionId);
         }
     }
 
@@ -159,7 +159,7 @@ public class YalseeSessionRedisDao extends RedisDao {
     }
 
     private boolean exists(final String sessionId) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(appendApplicationPrefix() + sessionId));
+        return Boolean.TRUE.equals(redisTemplate.hasKey(getApplicationPrefix() + sessionId));
     }
 
     private String updateLockNameAtRuntime() {

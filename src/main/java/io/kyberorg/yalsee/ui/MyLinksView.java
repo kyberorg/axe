@@ -498,11 +498,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
             }
         } else {
             //fallback to user agent detection
-            boolean hasBrowserInfo = VaadinSession.getCurrent() != null
-                    && VaadinSession.getCurrent().getBrowser() != null;
-            if (hasBrowserInfo && DeviceUtils.isMobileDevice(VaadinSession.getCurrent().getBrowser())) {
-                isSmallScreen = true;
-            }
+            isSmallScreen = YalseeSession.getCurrent().map(session -> session.getDevice().isMobile()).orElse(false);
         }
         return isSmallScreen;
     }

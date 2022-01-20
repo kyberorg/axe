@@ -107,6 +107,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         this.currentSessionId = Objects.nonNull(session)
                 ? session.getSessionId() : YalseeSession.NO_SESSION_STORED_MARKER;
 
+        if (session != null) {
+            applyTheme(session.getSettings().isDarkMode());
+        }
+
         setPrimarySection(Section.NAVBAR);
 
         //do not set touch-optimized to true, because it moves navbar down.
@@ -118,6 +122,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         addMenuTab("Main", HomeView.class, VaadinIcon.HOME);
         addMenuTab("My Links", MyLinksView.class, VaadinIcon.TABLE);
         addMenuTab("App Info", AppInfoView.class, VaadinIcon.INFO);
+        addMenuTab("Settings", SettingsPage.class, VaadinIcon.COG);
         addMenuTab("API Doks", App.Api.API_DOKS_URL, VaadinIcon.CURLY_BRACKETS);
 
         // dev-only items
@@ -283,11 +288,21 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void showSessionExpiryWarning(final YalseeSession session) {
-        this.ui.access(() -> AppUtils.getSessionExpiredNotification(this.ui, session.getDevice().getBrowser()).open());
+        this.ui.access(() -> AppUtils.getSessionExpiredNotification(this.ui, session).open());
     }
 
     private void refreshPage() {
         this.ui.access(() -> this.ui.getPage().reload());
+    }
+
+    /**
+     * Applies theme.
+     *
+     * @param isDarkTheme shall Dark theme be applied instead of default one.
+     */
+    public void applyTheme(final boolean isDarkTheme) {
+        final String theme = isDarkTheme ? "dark" : "light";
+        this.ui.getPage().executeJs("document.documentElement.setAttribute(\"theme\",\"" + theme + "\")");
     }
 
     @Override
