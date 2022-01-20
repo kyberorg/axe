@@ -78,7 +78,7 @@ public class Device implements Serializable {
                 device.setRobot(false);
             }
 
-            device.setMobile(DeviceUtils.isMobileDevice(browser));
+            device.setMobile(DeviceUtils.isMobileDevice(userAgent));
 
             return device;
         }
