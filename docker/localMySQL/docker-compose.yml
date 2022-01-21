@@ -36,4 +36,34 @@ services:
       MYSQL_ROOT_PASSWORD: password
     networks:
       - net
-
+  # redis
+  redis:
+    image: library/redis:6.2.6
+    command: [ "redis-server","--requirepass", "redis-password" ]
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      # Adjust me (redis - is folder on host)
+      - ./redis:/data
+    environment:
+      MASTER: true
+      REDIS_AUTH: redis-password
+    networks:
+      - net
+  # redis-commander
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./redis.connections.json:/redis-commander/config/local-production.json:ro
+    environment:
+      - REDIS_HOSTS=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis-password
+      - VIEW_JSON_DEFAULT=all
+    networks:
+      - net

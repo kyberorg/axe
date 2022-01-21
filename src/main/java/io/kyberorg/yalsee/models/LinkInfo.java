@@ -1,30 +1,30 @@
 package io.kyberorg.yalsee.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 
 /**
  * LinkInfo table mapped Java Object.
  *
  * @since 3.2
  */
-@Data
-@EqualsAndHashCode(of = "id")
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "link_info")
-public class LinkInfo {
+public class LinkInfo extends TimeModel {
     private static final String IDENT_COLUMN = "ident";
     private static final String DESCRIPTION_COLUMN = "description";
     private static final String SESSION_COLUMN = "session";
-    private static final String CREATED_COLUMN = "created";
-    private static final String UPDATED_COLUMN = "updated";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
     @Column(name = IDENT_COLUMN, nullable = false, unique = true)
     private String ident;
@@ -35,9 +35,4 @@ public class LinkInfo {
     @Column(name = SESSION_COLUMN)
     private String session;
 
-    @Column(name = CREATED_COLUMN, nullable = false)
-    private Timestamp created;
-
-    @Column(name = UPDATED_COLUMN, nullable = false)
-    private Timestamp updated;
 }

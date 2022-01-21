@@ -69,7 +69,7 @@ public final class ApiUtils {
      * @return ready to pass {@link ResponseEntity} with {@link YalseeErrorJson}
      */
     public static ResponseEntity<YalseeErrorJson> handleIdentFail(final OperationResult validateResult) {
-        String errorReason = validateResult.getResult();
+        String errorReason = validateResult.getMessage();
         YalseeErrorJson errorJson;
         switch (errorReason) {
             case IdentValidator.EMPTY_IDENT:

@@ -4,13 +4,15 @@ Simple link shortener [yals.ee](https://yals.ee), which produce links like [http
 Docker image: [`kyberorg/yalsee`](https://hub.docker.com/repository/docker/kyberorg/yalsee)
 
 ### Note on Anti-scam redirect page
-Since version `3.0.5` by default when user opens short link instead of redirect appears redirect page with destination link.
-This was done intentionally to prevent scam, phishing and malware activities. 
+Since release `3.0.5` by default when user opens short link instead of redirect appears redirect page with destination
+link. This was done intentionally to prevent scam, phishing and malware activities.
 
-To bypass this page just add manually `+` symbol to end of your short link. For example: [https://yls.ee/Cxwycs+](https://yls.ee/Cxwycs+)
+To bypass this page just add manually `+` symbol to end of your short link. For
+example: [https://yls.ee/Cxwycs+](https://yls.ee/Cxwycs+)
 
 ## Release Notes
-Moved to [CHANGELOG](CHANGELOG.md).
+
+Please see [Release Page](https://github.com/kyberorg/yalsee/releases)
 
 ## Development and Tech info
 See [CONTRIBUTING.md](CONTRIBUTING.md)

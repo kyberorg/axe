@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.json.YalseeJson;
 import io.kyberorg.yalsee.telegram.TelegramBot;
 import io.kyberorg.yalsee.utils.AppUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  * @since 2.5
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class TelegramStatusRestController {
     private static final String TAG = "[" + TelegramStatusRestController.class.getSimpleName() + "]";
@@ -28,17 +30,6 @@ public class TelegramStatusRestController {
     private final AppUtils appUtils;
 
     /**
-     * Constructor for Spring autowiring.
-     *
-     * @param telegramBot      telegram bot
-     * @param applicationUtils application utils to find out if telegram API is enabled
-     */
-    public TelegramStatusRestController(final TelegramBot telegramBot, final AppUtils applicationUtils) {
-        this.bot = telegramBot;
-        this.appUtils = applicationUtils;
-    }
-
-    /**
      * API Endpoint for getting telegram bot status.
      *
      * @return json with bot status
@@ -47,14 +38,14 @@ public class TelegramStatusRestController {
     public YalseeJson getBotStatus() {
         log.info("{} got request", TAG);
         if (bot == null) {
-            //most likely you want want see it as application startup will fail
+            //most likely you want see it as application startup will fail
             log.error("{} Failed to autowire " + TelegramBot.class.getSimpleName(), TAG);
             return YalseeErrorJson.createWithMessage("Internal error: bot is missing");
         }
 
         if (appUtils.isTelegramDisabled()) {
             log.info("{} Telegram Bot is disabled", TAG);
-            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-");
+            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-disabled");
         }
 
         try {
@@ -63,7 +54,9 @@ public class TelegramStatusRestController {
             log.info("{} telegram bot {} is {}", TAG, botName, botStatus);
             return TelegramStatusResponse.createWithStatus(botStatus).withBotName(botName);
         } catch (TelegramApiException e) {
-            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-");
+            log.warn("{} go Telegram exception {}", TAG, e.getMessage());
+            log.warn("", e);
+            return TelegramStatusResponse.createWithStatus(OFFLINE).withBotName("-broken");
         }
     }
 }

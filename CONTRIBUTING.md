@@ -38,11 +38,7 @@ Docker Stack at Dev Server aka `Koda` has both Remote JVM Debug (`tcp/8000`) and
 to prevent misuse direct access to them is denied.
 
 #### JMX
-
-* Since I use `OpenJ9 JVM`, there are few limitations when using `VisualVM` for monitoring. For example cannot make heap
-  dump and so on.
-
-* JMX interface configured without any security options and therefore cannot be used without SSH tunnel.
+JMX interface configured without any security options and therefore cannot be used without SSH tunnel.
 
 #### SSH Tunnel (unrestricted Internet access)
 
@@ -108,8 +104,9 @@ Can add several browsers like `chrome,firefox`
 
 ### How to Deploy app
 
-* Docker image: `kyberorg/yalsee`
+* Docker image: `quay.io/kyberorg/yalsee`
 * H2 (default profile) or MySQL database (local profile) needed to run.
+* Redis for storing sessions and stuff like this.
 * I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs. So token from Bugsnag needed.
 
 #### Docker Swarm
@@ -124,6 +121,8 @@ EnvVars:
 * TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
 * BUGSNAG_TOKEN or BUGSNAG_TOKEN_FILE: `token for BugSnag`
 * DELETE_TOKEN or DELETE_TOKEN_FILE: `temporary master token for deleting links` (needed until auth story introduced)
+* REDIS_HOST: `redis hostname/ip or container name`
+* REDIS_PASSWORD or REDIS_PASSWORD_FILE: `password for connecting to redis`
 
 Optional EnvVars:
 
@@ -141,6 +140,11 @@ Optional EnvVars:
   as regulated by Spring profile)
 * SESSION_TIMEOUT `Timeout in seconds after which current session ends` (most likely don't needed as regulated by Spring
   profile)
+* REDIS_PORT: `redis port` (needed if redis runs on port other than 6379)
+* REDIS_DB: `0-15` (custom database, redis supports numeric db from 0 to 15, default 0)
+* REDIS_TIMEOUT_MILLIS: `Redis connection timeout in milliseconds` (most likely don't needed as regulated by Spring
+  profile)
+* REDIS_ENABLED: `true/false` (most likely don't needed as regulated by Spring profile)
 
 Ports:
 
@@ -149,12 +153,12 @@ Ports:
 
 Secrets:
 
-* yals_db_password: `database password`
-* yals_telegram_token: `telegram bot token`
+* yalsee_db_password: `database password`
+* yalsee_telegram_token: `telegram bot token`
 
 Volumes:
 
-* yals_dumps: should be mounted as `/opt/dumps` (volume to store heap dumps, when app crashed)
+* yalsee_dumps: should be mounted as `/opt/dumps` (volume to store heap dumps, when app crashed)
 
 #### About Telegram Bots
 
@@ -170,5 +174,19 @@ Volumes:
 * Name: Yls Dev Bot
 * Description: Dev.Yals.ee Link Shortener Bot
 * About: Makes long links short
-* Botpic: to be done
-* Commands: yalsee - https://longLink.tld description 
+* BotPic: to be done
+* Commands: yalsee - https://longLink.tld description
+
+### Release notes
+
+There following sections:
+
+* `:star: Features` - new stuff in application
+* `:hammer: Improvements` - already existing stuff which got better
+* `:shield: Security`
+* `:lady_beetle: Bug Fixes`
+* `:test_tube: Testing`
+* `:computer: Ops` - Operations and non-coding stuff
+* `:package: Dependencies Updates`
+* `:broom: Cleanup/Refactoring`
+* `:notebook_with_decorative_cover: Dokumentation`

@@ -1,7 +1,8 @@
 package io.kyberorg.yalsee.models.dao;
 
 import io.kyberorg.yalsee.models.LinkInfo;
-import org.springframework.data.repository.Repository;
+import io.kyberorg.yalsee.models.dao.base.TimeAwareCrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,8 +11,8 @@ import java.util.List;
  *
  * @since 3.2
  */
-@org.springframework.stereotype.Repository
-public interface LinkInfoRepo extends Repository<LinkInfo, Long> {
+@Repository
+public interface LinkInfoRepo extends TimeAwareCrudRepository<LinkInfo, Long> {
 
     /**
      * Finds {@link LinkInfo} objects stored within given session.
@@ -20,21 +21,6 @@ public interface LinkInfoRepo extends Repository<LinkInfo, Long> {
      * @return list of {@link LinkInfo} records or empty list if nothing found.
      */
     List<LinkInfo> findBySession(String sessionId);
-
-    /**
-     * Saves  info to DB.
-     *
-     * @param linkInfoObject {@link LinkInfo} object with filled fields
-     * @return same {@link LinkInfo} object, but enriched with ID field
-     */
-    LinkInfo save(LinkInfo linkInfoObject);
-
-    /**
-     * Number of link info records.
-     *
-     * @return int with number of links stored
-     */
-    int count();
 
     /**
      * Finds single record by its id.
@@ -59,11 +45,4 @@ public interface LinkInfoRepo extends Repository<LinkInfo, Long> {
      * @return number of found records. Normally it should be only 1 record or 0 records if nothing found.
      */
     long countByIdent(String ident);
-
-    /**
-     * Deletes record.
-     *
-     * @param linkInfoToDelete valid {@link LinkInfo} object to delete.
-     */
-    void delete(LinkInfo linkInfoToDelete);
 }

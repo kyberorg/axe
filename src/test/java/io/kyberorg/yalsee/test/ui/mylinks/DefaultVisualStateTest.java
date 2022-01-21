@@ -3,17 +3,17 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.HomeView;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.constants.App.FOUR;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Banners.*;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
@@ -21,18 +21,19 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 /**
  * Test default visual state of {@link MyLinksView}. This state, when user just opens page without doing something else.
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class DefaultVisualStateTest extends SelenideTest {
 
     /**
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         cleanSession();
         waitForVaadin(); //this is needed to prevent unopened page after reload.
+        CookieBannerPageObject.closeBannerIfAny(); //banner re-appears for new session
     }
 
     /**
@@ -126,7 +127,7 @@ public class DefaultVisualStateTest extends SelenideTest {
     @Test
     public void gridShouldHave4Columns() {
         ElementsCollection headerCells = Grid.Header.get().getCells();
-        headerCells.shouldHave(size(4));
+        headerCells.shouldHave(size(FOUR));
     }
 
     /**

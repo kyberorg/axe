@@ -8,6 +8,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.utils.ApiUtils;
 import io.kyberorg.yalsee.utils.TokenChecker;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +25,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
  * @since 3.0.4
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class DeleteLinkRestController {
     private static final String TAG = "[" + DeleteLinkRestController.class.getSimpleName() + "]";
@@ -31,20 +33,6 @@ public class DeleteLinkRestController {
     private final LinkService linkService;
     private final TokenChecker tokenChecker;
     private final IdentValidator identValidator;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param linkService service for deleting links
-     * @param tokenChecker for checking token
-     * @param identValidator for validating ident param
-     */
-    public DeleteLinkRestController(final LinkService linkService, final TokenChecker tokenChecker,
-                                    final IdentValidator identValidator) {
-        this.linkService = linkService;
-        this.tokenChecker = tokenChecker;
-        this.identValidator = identValidator;
-    }
 
     /**
      * Delete Link API Endpoint.

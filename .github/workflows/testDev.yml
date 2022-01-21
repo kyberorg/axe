@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%d%m%y-%H%M')"
+        run: echo "::set-output name=date::$(date +'%y%m%d-%H%M')"
 
       - name: Test App
         id: runTests
@@ -28,7 +28,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.19
+        uses: EnricoMi/publish-unit-test-result-action@v1.27
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

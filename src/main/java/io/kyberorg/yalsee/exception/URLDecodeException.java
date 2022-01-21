@@ -6,6 +6,7 @@ package io.kyberorg.yalsee.exception;
  * @since 3.2.1
  */
 public class URLDecodeException extends RuntimeException {
+
     /**
      * Exception Constructor.
      *

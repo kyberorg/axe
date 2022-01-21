@@ -73,7 +73,7 @@ public final class UrlUtils {
     }
 
     /**
-     * Code taken from {@link https://nealvs.wordpress.com/2016/01/18/how-to-convert-unicode-url-to-ascii-in-java/}.
+     * Code taken from {@link <a href="https://yls.ee/bfDfFN">How to convert Unicode to ASCII in Java</a>}.
      *
      * @param url string with valid URL to convert
      * @return is URL contains only ASCII chars - same URL, otherwise punycoded URL,

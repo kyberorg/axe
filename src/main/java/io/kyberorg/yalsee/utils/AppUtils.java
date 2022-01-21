@@ -3,30 +3,48 @@ package io.kyberorg.yalsee.utils;
 import com.google.common.base.CharMatcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Shortcuts;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
-import io.kyberorg.yalsee.utils.session.SessionBox;
-import io.kyberorg.yalsee.utils.session.SessionBoxRecord;
+import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.URI;
 import java.util.Arrays;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * App-wide tools.
@@ -46,6 +64,12 @@ public class AppUtils implements Serializable {
      */
     private static String shortUrl;
 
+    /**
+     * This field is dirty hack to access Session Timeout from static context.
+     * To be populated with {@link #populateStaticFields()}
+     */
+    private static int sessionTimeout;
+
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     public static final String HTML_MODE = "innerHTML";
     private static final String DUMMY_HOST = "DummyHost";
@@ -62,22 +86,55 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Retrieve Session ID from given {@link VaadinSession}.
-     * Note: parameter here is really needed,
-     * because {@link VaadinSession#getCurrent()} may not exist outside UI scope/objects.
+     * Figures out hostname of host/container where application runs.
      *
-     * @param vaadinSession current {@link VaadinSession} object from UI.
-     * @return string with ID or null
+     * @return string with hostname or {@code Unknown}.
      */
-    public static String getSessionId(final VaadinSession vaadinSession) {
-        if (vaadinSession != null && vaadinSession.getSession() != null) {
-            return vaadinSession.getSession().getId();
+    public static String getHostname() {
+        // Ideally, we'd use InetAddress.getLocalHost, but this does a reverse DNS lookup. On Windows
+        // and Linux this is apparently pretty fast, so we don't get random hangs. On OS X it's
+        // amazingly slow. That's less than ideal. Figure things out and cache.
+        String host = System.getenv("HOSTNAME");  // Most OSs
+        if (host == null) {
+            host = System.getenv("COMPUTERNAME");  // Windows
         }
-        return null;
+        if (host == null && SystemUtils.IS_OS_MAC) {
+            try {
+                Process process = Runtime.getRuntime().exec("hostname");
+
+                if (!process.waitFor(2, TimeUnit.SECONDS)) {
+                    process.destroyForcibly();
+                    // According to the docs for `destroyForcibly` this is a good idea.
+                    process.waitFor(2, TimeUnit.SECONDS);
+                }
+                if (process.exitValue() == 0) {
+                    try (InputStreamReader isr =
+                                 new InputStreamReader(process.getInputStream(), Charset.defaultCharset());
+                         BufferedReader reader = new BufferedReader(isr)) {
+                        host = reader.readLine();
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                // fall through
+            }
+        }
+        if (host == null) {
+            // Give up.
+            try {
+                host = InetAddress.getLocalHost().getHostName();
+            } catch (Exception e) {
+                host = "Unknown";  // At least we tried.
+            }
+        }
+        return host;
     }
 
     private void populateStaticFields() {
         shortUrl = getShortUrl();
+        sessionTimeout = getSessionTimeout();
     }
 
     /**
@@ -87,6 +144,15 @@ public class AppUtils implements Serializable {
      */
     public static String getShortUrlFromStaticContext() {
         return shortUrl;
+    }
+
+    /**
+     * Dirty hack to obtain Session Timeout from non-Spring objects.
+     *
+     * @return int with session timeout.
+     */
+    public static int getSessionTimeoutFromStaticContext() {
+        return sessionTimeout;
     }
 
     /**
@@ -102,7 +168,7 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Determines if client wants to receive JSON from us. Vaadin implementation.
+     * Determines if client wants to receive JSON from us. Vaadin's implementation.
      *
      * @param vaadinRequest valid {@link VaadinRequest} from VaadinServlet
      * @return true, if clients {@link Header#ACCEPT} contains {@link MimeType#APPLICATION_JSON} mime type,
@@ -135,7 +201,7 @@ public class AppUtils implements Serializable {
      * Determines if client's request has {@link Header#ACCEPT} header with exact {@link MimeType}.
      *
      * @param req valid {@link HttpServletRequest} request
-     * @return true, if request has {@link Header#ACCEPT} header and it value is not wildcard
+     * @return true, if request has {@link Header#ACCEPT} header and its value is not wildcard
      * (aka accept all) {@link MimeType#ALL}, false - elsewhere
      */
     public static boolean hasAcceptHeader(final HttpServletRequest req) {
@@ -209,6 +275,64 @@ public class AppUtils implements Serializable {
     }
 
     /**
+     * Creates Session Expired Notification.
+     *
+     * @param ui      non-empty {@link UI} to refresh page.
+     * @param session session to get bound device information and if it is mobile - adjust notification accordingly.
+     * @return created {@link Notification}.
+     */
+    public static Notification getSessionExpiredNotification(final UI ui, final YalseeSession session) {
+        if (ui == null) throw new IllegalArgumentException("UI cannot be null");
+        if (session == null) throw new IllegalArgumentException("session cannot be null");
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
+        notification.setPosition(Notification.Position.TOP_STRETCH);
+
+        boolean isMobileDevice = session.hasDevice() && session.getDevice().isMobile();
+
+        String message;
+        if (isMobileDevice) {
+            message = "Session expires soon. Any unsaved data will be lost.";
+        } else {
+            message = String.format("Your session expires in %d minutes. Take note of any unsaved data.",
+                    YalseeSession.TIMEOUT_FOR_WARNING_MINUTES);
+            Shortcuts.addShortcutListener(notification, notification::close, Key.ESCAPE);
+        }
+
+        Div text = new Div(new Text(message));
+
+        Button pageRefreshButton = new Button("Refresh Page", event -> ui.getPage().reload());
+        pageRefreshButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+
+        Button closeButton = new Button("Dismiss", event -> notification.close());
+        closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
+
+        HorizontalLayout layout;
+        if (isMobileDevice) {
+            layout = new HorizontalLayout(text, closeButton);
+            layout.setAlignItems(FlexComponent.Alignment.AUTO);
+            closeButton.setText("OK");
+
+        } else {
+            layout = new HorizontalLayout(text, pageRefreshButton, closeButton);
+            layout.setAlignItems(FlexComponent.Alignment.AUTO);
+            layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+        }
+        notification.add(layout);
+        return notification;
+    }
+
+    /**
+     * Current {@link Date}.
+     *
+     * @return {@link Date} object of now.
+     */
+    public static Date now() {
+        return Date.from(Instant.now());
+    }
+
+    /**
      * Provides url of server. Runtime value.
      *
      * @return server url from env if found or {@link #DUMMY_HOST}
@@ -237,6 +361,15 @@ public class AppUtils implements Serializable {
     }
 
     /**
+     * Provides host of running instance. Runtime value.
+     *
+     * @return string with full domain
+     */
+    public String getServerDomain() {
+        return UrlUtils.removeProtocol(getServerUrl());
+    }
+
+    /**
      * Provides host of short url used for links. Runtime value.
      *
      * @return string with short domain, if found or Server Url from {@link #getServerUrl()}
@@ -246,7 +379,7 @@ public class AppUtils implements Serializable {
         if (shortDomain.equals(DUMMY_HOST)) {
             //no short URL - use server domain
             log.debug("No Short Domain defined - using Server Domain");
-            return UrlUtils.removeProtocol(getServerUrl());
+            return getServerDomain();
         } else {
             return shortDomain;
         }
@@ -335,7 +468,7 @@ public class AppUtils implements Serializable {
     /**
      * Allow/Disallow crawlers (search engine bots), based on profile settings.
      *
-     * @return true - if crawlers should be allow, false - elsewhere
+     * @return true - if crawlers should be allowed, false - elsewhere
      */
     public boolean areCrawlersAllowed() {
         return Boolean.parseBoolean(getEnv().getProperty(App.Properties.CRAWLERS_ALLOWED));
@@ -370,7 +503,7 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Drops redirect page bypass symbol from provided ident string. It also check if string has this symbol.
+     * Drops redirect page bypass symbol from provided ident string. It also checks if string has this symbol.
      *
      * @param ident string with ident to check on bypass symbol.
      * @return ident string without bypass symbol or same string, if ident hasn't bypass symbol.
@@ -411,28 +544,68 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Ends current session.
-     * Removes session from {@link SessionBox}, invalidates {@link HttpSession} and closes {@link VaadinSession}.
-     *
-     * @param sessionBoxRecord {@link SessionBoxRecord} object to end.
-     */
-    public void endSession(final SessionBoxRecord sessionBoxRecord) {
-        SessionBox.removeRecord(sessionBoxRecord);
-        sessionBoxRecord.getHttpSession().invalidate();
-        sessionBoxRecord.getVaadinSession().close();
-    }
-
-    /**
      * Ends Vaadin Session. Invalidates bound {@link HttpSession} if any and closes {@link VaadinSession}.
      *
      * @param session {@link VaadinSession} to remove.
      */
     public void endVaadinSession(final VaadinSession session) {
         if (session.getSession() != null) {
-            SessionBox.removeVaadinSession(session);
             session.getSession().invalidate();
         }
         session.close();
+    }
+
+    /**
+     * Figures out if analytics cookies are allowed in given session.
+     *
+     * @param yalseeSession session object to read attribute from.
+     * @return true - if analytics cookies are allowed, false - if not.
+     */
+    public boolean isGoogleAnalyticsAllowed(final Optional<YalseeSession> yalseeSession) {
+        return yalseeSession.map(session -> session.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
+    }
+
+    /**
+     * Defines if url is our internal URL aka same host as server runs at.
+     *
+     * @param urlString string with valid URL to check
+     * @return true - if url is from same host as server runs at, false - if external.
+     */
+    public boolean isInternalUrl(final String urlString) {
+        try {
+            final URI uri = new URI(UrlUtils.covertUnicodeUrlToAscii(urlString));
+            final String host = uri.getHost();
+
+            boolean matchesServerDomain = host.equals(getServerDomain());
+            boolean matchesShortDomain = host.equals(getShortDomain());
+            return matchesServerDomain || matchesShortDomain;
+        } catch (URISyntaxException e) {
+            String message = String.format("String '%s': malformed URL or not URL at all", urlString);
+            log.warn("{} {}", TAG, message);
+            throw new RuntimeException(message, e);
+        }
+    }
+
+    /**
+     * Searches Cookie by its name from {@link VaadinRequest}.
+     *
+     * @param cookieName    non-empty string with cookie name.
+     * @param vaadinRequest request to search in.
+     * @return found {@link Cookie} object or {@code null}
+     */
+    public Cookie getCookieByName(final String cookieName, final VaadinRequest vaadinRequest) {
+        if (Objects.isNull(cookieName) || Objects.isNull(vaadinRequest)) {
+            return null;
+        }
+        Cookie[] cookies = vaadinRequest.getCookies();
+        if (cookies == null || cookies.length == 0) return null;
+        for (Cookie cookie : cookies) {
+            boolean cookieHasName = (cookie != null && cookie.getName() != null);
+            if (cookieHasName && cookie.getName().equals(cookieName)) {
+                return cookie;
+            }
+        }
+        return null;
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {

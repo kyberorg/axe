@@ -1,0 +1,26 @@
+FROM quay.io/kyberorg/golang:1.17.5 as healthcheckBuild
+WORKDIR /go/src/app
+
+COPY cmd/healthcheck.go cmd/healthcheck.go
+
+RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
+
+# Set ownership and permissions as required
+# 65532 - is nonroot @ distroless. See: https://github.com/GoogleContainerTools/distroless/issues/235
+RUN mkdir /app && chown -R 65532:65532 /app
+
+FROM quay.io/kyberorg/golang:1.17.5 as entrypointBuild
+WORKDIR /go/src/app
+COPY cmd/entrypoint.go cmd/entrypoint.go
+
+RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
+
+FROM gcr.io/distroless/java17-debian11:debug-nonroot as runner
+LABEL maintainer="Aleksandr Muravja <alex@kyberorg.io>"
+COPY --from=healthcheckBuild /go/bin/cmd /app/healthcheck
+COPY --from=entrypointBuild /go/bin/cmd /app/entrypoint
+
+HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 CMD ["/app/healthcheck"]
+
+USER nonroot
+ENTRYPOINT ["/app/entrypoint"]

@@ -27,6 +27,14 @@ public final class HomePageObject {
                 TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getLabel();
         public static final SelenideElement LONG_URL_INPUT =
                 TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getInput();
+        public static final SelenideElement DESCRIPTION_ACCORDION =
+                $("#" + HomeView.IDs.DESCRIPTION_ACCORDION);
+        public static final SelenideElement DESCRIPTION_ACCORDION_PANEL =
+                DESCRIPTION_ACCORDION.$("vaadin-accordion-panel");
+        public static final SelenideElement DESCRIPTION_INPUT_ELEMENT =
+                $("#" + HomeView.IDs.DESCRIPTION_INPUT);
+        public static final SelenideElement DESCRIPTION_INPUT =
+                TextFieldElement.byCss("#" + HomeView.IDs.DESCRIPTION_INPUT).getInput();
         public static final SelenideElement BANNER = $("#" + HomeView.IDs.BANNER);
         public static final SelenideElement SUBMIT_BUTTON = $("#" + HomeView.IDs.SUBMIT_BUTTON);
     }

@@ -1,12 +1,11 @@
 package io.kyberorg.yalsee.test.ui.redirect;
 
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
@@ -18,15 +17,15 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 3.0.5
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class RedirectPageDirectAccessTest extends SelenideTest {
     /**
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
-        open("/redirector");
+    public void beforeEachTest() {
+        open("/redirect-page");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

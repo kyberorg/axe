@@ -2,14 +2,13 @@ package io.kyberorg.yalsee.test.ui.redirect;
 
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.GitHub;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.special.RedirectView;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
@@ -21,7 +20,6 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 3.0.5
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class RedirectPageTest extends SelenideTest {
 
     private String ourShortLink;
@@ -30,15 +28,20 @@ public class RedirectPageTest extends SelenideTest {
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         if (Strings.isBlank(ourShortLink)) {
             open("/");
+            waitForVaadin();
+            CookieBannerPageObject.closeBannerIfAny();
+
             String ourLongLink = "https://github.com/kyberorg/yalsee/issues/353";
             ourShortLink = HomePageObject.storeAndReturnSavedUrl(ourLongLink);
             waitForVaadin();
+            CookieBannerPageObject.closeBannerIfAny();
         }
         open(ourShortLink);
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**

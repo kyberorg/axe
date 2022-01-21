@@ -2,12 +2,11 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -22,19 +21,20 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  *
  * @since 3.2
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class EditorTest extends SelenideTest {
 
     /**
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
+    public void beforeEachTest() {
         //session cleanup
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         cleanSession();
         waitForVaadin(); //this is needed to prevent unopened page after reload.
+        CookieBannerPageObject.closeBannerIfAny(); //banner re-appears for new session
 
         //saving one link
         open("/");

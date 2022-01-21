@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.ui;
 
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -11,9 +12,10 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
@@ -27,10 +29,12 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +42,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
+@RequiredArgsConstructor
 @Slf4j
 @SpringComponent
 @UIScope
@@ -45,7 +50,7 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 @CssImport("./css/home_view.css")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
 @PageTitle("Yalsee - the link shortener")
-public class HomeView extends HorizontalLayout {
+public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + HomeView.class.getSimpleName() + "]";
 
     private final Div leftDiv = new Div();
@@ -67,6 +72,8 @@ public class HomeView extends HorizontalLayout {
 
     private Span titleLongPart;
     private TextField input;
+    private Accordion descriptionAccordion;
+    private TextField descriptionInput;
     private Button submitButton;
     private Anchor shortLink;
     private Image qrCode;
@@ -75,24 +82,8 @@ public class HomeView extends HorizontalLayout {
 
     private Notification errorNotification;
 
-    /**
-     * Create {@link HomeView}.
-     *
-     * @param overallService overall service for getting number of links
-     * @param linkService    service for saving links
-     * @param qrCodeService  service for getting QR Code for saved link
-     * @param appUtils       application utils for getting server location and API location
-     * @param errorUtils     error utils to report to bugsnag
-     */
-    public HomeView(
-            final OverallService overallService, final LinkService linkService, final QRCodeService qrCodeService,
-            final AppUtils appUtils, final ErrorUtils errorUtils) {
-        this.overallService = overallService;
-        this.linkService = linkService;
-        this.qrCodeService = qrCodeService;
-        this.appUtils = appUtils;
-        this.errorUtils = errorUtils;
-
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
         applyStyle();
         applyLoadState();
@@ -101,13 +92,16 @@ public class HomeView extends HorizontalLayout {
     private void init() {
         this.setId(IDs.VIEW_ID);
 
-        add(leftDiv, centralLayout, rightDiv);
+        centralLayout.removeAll();
         centralLayout.add(mainArea, overallArea, resultArea, myLinksNoteArea, qrCodeArea);
+
+        removeAll();
+        add(leftDiv, centralLayout, rightDiv);
     }
 
     private void applyStyle() {
         leftDiv.addClassName("responsive-div");
-        centralLayout.addClassName("responsive-center");
+        centralLayout.addClassName("responsive-home-page-center");
         rightDiv.addClassName("responsive-div");
 
         titleLongPart.addClassName("title-long-text");
@@ -118,6 +112,7 @@ public class HomeView extends HorizontalLayout {
         linkCounter.setText(Long.toString(linksStored));
 
         input.setAutofocus(true);
+        descriptionAccordion.close();
         submitButton.setEnabled(true);
 
         mainArea.setVisible(true);
@@ -141,6 +136,15 @@ public class HomeView extends HorizontalLayout {
         input.setPlaceholder("https://mysuperlongurlhere.tld");
         input.setWidthFull();
 
+        descriptionAccordion = new Accordion();
+        descriptionAccordion.setId(IDs.DESCRIPTION_ACCORDION);
+        descriptionAccordion.setWidthFull();
+
+        descriptionInput = new TextField();
+        descriptionInput.setId(IDs.DESCRIPTION_INPUT);
+        descriptionInput.setPlaceholder("what is link about...");
+        descriptionInput.setWidthFull();
+
         Span publicAccessBanner =
                 new Span("Note: all links considered as public and can be used by anyone");
         publicAccessBanner.setId(IDs.BANNER);
@@ -151,10 +155,12 @@ public class HomeView extends HorizontalLayout {
         submitButton.addClickListener(this::onSaveLink);
         submitButton.addClickShortcut(Key.ENTER);
 
+        descriptionAccordion.add("Link Description (optional)", descriptionInput);
+
         VerticalLayout mainArea =
-                new VerticalLayout(title, input, publicAccessBanner, submitButton);
+                new VerticalLayout(title, input, descriptionAccordion, publicAccessBanner, submitButton);
         mainArea.setId(IDs.MAIN_AREA);
-        mainArea.addClassNames("main-area", "border");
+        mainArea.addClassNames("main-area", "border", "large-text");
         return mainArea;
     }
 
@@ -287,6 +293,7 @@ public class HomeView extends HorizontalLayout {
 
         boolean isFormValid = true;
         String longUrl = input.getValue();
+        String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
         cleanForm();
 
@@ -296,7 +303,7 @@ public class HomeView extends HorizontalLayout {
             isFormValid = false;
         } else {
             try {
-                longUrl = UrlUtils.makeFullUri(longUrl).toString();
+                longUrl = UrlUtils.makeFullUri(longUrl.trim()).toString();
             } catch (RuntimeException e) {
                 log.error("{} URL validation failed", TAG);
                 log.debug("", e);
@@ -307,7 +314,7 @@ public class HomeView extends HorizontalLayout {
 
         if (isFormValid) {
             cleanResults();
-            saveLink(longUrl);
+            saveLink(longUrl, linkDescription);
         } else {
             log.debug("{} Form is not valid", TAG);
         }
@@ -320,9 +327,16 @@ public class HomeView extends HorizontalLayout {
                 "Short link copied", Notification.Position.MIDDLE);
     }
 
-    private void saveLink(final String link) {
-        String sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        LinkServiceInput linkServiceInput = LinkServiceInput.builder(link).sessionID(sessionId).build();
+    private void saveLink(final String link, final String linkDescription) {
+        String sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse("");
+        LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
+                LinkServiceInput.builder(link).sessionID(sessionId);
+
+        if (StringUtils.isNotBlank(linkDescription)) {
+            linkServiceInputBuilder.description(linkDescription);
+        }
+
+        LinkServiceInput linkServiceInput = linkServiceInputBuilder.build();
         OperationResult saveLinkOperation = linkService.createLink(linkServiceInput);
         if (saveLinkOperation.ok()) {
             onSuccessStoreLink(saveLinkOperation);
@@ -422,6 +436,7 @@ public class HomeView extends HorizontalLayout {
 
     private void cleanForm() {
         input.setValue("");
+        descriptionInput.setValue("");
     }
 
     private void cleanErrors() {
@@ -446,6 +461,8 @@ public class HomeView extends HorizontalLayout {
         public static final String MAIN_AREA = "mainArea";
         public static final String TITLE = "siteTitle";
         public static final String INPUT = "longUrlInput";
+        public static final String DESCRIPTION_ACCORDION = "descriptionAccordion";
+        public static final String DESCRIPTION_INPUT = "descriptionInput";
         public static final String BANNER = "publicAccessBanner";
         public static final String SUBMIT_BUTTON = "submitButton";
 

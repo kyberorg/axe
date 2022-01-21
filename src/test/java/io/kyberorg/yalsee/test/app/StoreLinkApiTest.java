@@ -5,15 +5,21 @@ import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.EmptyJson;
 import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.json.PostLinkResponse;
+import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junitpioneer.jupiter.Issue;
 
 import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
+import static io.kyberorg.yalsee.constants.Header.X_YALSEE_TOKEN;
 import static io.kyberorg.yalsee.constants.HttpCode.*;
+import static io.kyberorg.yalsee.core.IdentGenerator.IDENT_DEFAULT_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -128,7 +134,7 @@ public class StoreLinkApiTest extends UnirestTest {
     }
 
     /**
-     * Request with JSON Body with non valid link inside = 422.
+     * Request with JSON Body with non-valid link inside = 422.
      */
     @Test
     public void onRequestWithNotALinkStatusIs422() {
@@ -281,4 +287,61 @@ public class StoreLinkApiTest extends UnirestTest {
 
         TestUtils.assertResultIsJson(result);
     }
+
+    /**
+     * Tests that API can create Link if custom Ident contains numbers.
+     */
+    @Test
+    @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",
+            disabledReason = "Only works when Token Provided")
+    public void apiCanCreateLinkIfCustomIdentContainsNumber() {
+        String longUrl = "https://github.com/kyberorg/yalsee/issues/537";
+        String customIdentWithNumbers;
+        do {
+            customIdentWithNumbers = RandomStringUtils.randomAlphanumeric(IDENT_DEFAULT_LENGTH);
+        } while (isIdentAlreadyExists(customIdentWithNumbers));
+
+        PostLinkRequest req = PostLinkRequest.create().withLink(longUrl);
+        req.setIdent(customIdentWithNumbers);
+        String requestJson = req.toString();
+
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(X_YALSEE_TOKEN, TestUtils.getDeleteToken())
+                .body(requestJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_201, result.getStatus());
+    }
+
+    /**
+     * Tests that if desired ident conflicts with existing routes - status 409 is send.
+     */
+    @Test
+    @EnabledIfSystemProperty(named = TestApp.Properties.TEST_DELETE_TOKEN, matches = ".*.*",
+            disabledReason = "Only works when Token Provided")
+    @Issue("https://github.com/kyberorg/yalsee/issues/633")
+    public void onConflictingIdentStatusIs409() {
+        String longUrl = "https://github.com/kyberorg/yalsee/issues/633";
+        String customIdent = Endpoint.UI.APP_INFO_PAGE;
+
+        PostLinkRequest req = PostLinkRequest.create().withLink(longUrl);
+        req.setIdent(customIdent);
+        String requestJson = req.toString();
+
+        HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
+                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(X_YALSEE_TOKEN, TestUtils.getDeleteToken())
+                .body(requestJson);
+        HttpResponse<String> result = request.asString();
+
+        logRequestAndResponse(request, result, TAG);
+
+        assertNotNull(result);
+        assertEquals(STATUS_409, result.getStatus());
+    }
+
 }

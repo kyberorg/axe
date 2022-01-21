@@ -3,11 +3,11 @@ package io.kyberorg.yalsee.services;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkInfoRepo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,35 +17,19 @@ import java.util.Optional;
  * @since 2.0
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class LinkInfoService {
     private final LinkInfoRepo repo;
 
     /**
-     * Constructor for Spring autowiring.
-     *
-     * @param linkInfoRepo object for storing link info to DB
-     */
-    public LinkInfoService(final LinkInfoRepo linkInfoRepo) {
-        this.repo = linkInfoRepo;
-    }
-
-    /**
-     * Creates {@link LinkInfo} without session info.
-     *
-     * @param ident string with part that identifies short link
-     */
-    public void createLinkInfo(final String ident) {
-        createLinkInfo(ident, null);
-    }
-
-    /**
      * Creates {@link LinkInfo} with session info.
      *
-     * @param ident   string with part that identifies short link
-     * @param session string with session ID
+     * @param ident       string with part that identifies short link
+     * @param session     string with session ID, omitted if {@code null} or empty
+     * @param description string with link description, omitted if {@code null} or empty
      */
-    public void createLinkInfo(final String ident, final String session) {
+    public void createLinkInfo(final String ident, final String session, final String description) {
         LinkInfo linkInfo;
         if (linkInfoExistsForIdent(ident)) {
             update(repo.findSingleByIdent(ident));
@@ -55,17 +39,18 @@ public class LinkInfoService {
         }
 
         linkInfo.setIdent(ident);
-        if (session != null) {
+        if (StringUtils.isNotBlank(description)) {
+            linkInfo.setDescription(description);
+        }
+        if (StringUtils.isNotBlank(session)) {
             linkInfo.setSession(session);
         }
-        linkInfo.setCreated(Timestamp.from(Instant.now()));
-        linkInfo.setUpdated(Timestamp.from(Instant.now()));
 
-        repo.save(linkInfo);
+        repo.update(linkInfo);
     }
 
     /**
-     * Deletes {@link LinkInfo}  by its ident.
+     * Deletes {@link LinkInfo} by its ident.
      *
      * @param ident string with part that identifies short link
      */
@@ -114,8 +99,7 @@ public class LinkInfoService {
      * @param updatedLinkInfo {@link LinkInfo} object with updated fields.
      */
     public void update(final LinkInfo updatedLinkInfo) {
-        updatedLinkInfo.setUpdated(Timestamp.from(Instant.now()));
-        repo.save(updatedLinkInfo);
+        repo.update(updatedLinkInfo);
     }
 
     private boolean linkInfoExistsForIdent(final String ident) {

@@ -19,6 +19,7 @@ public class LinkServiceInput {
     private String link;
     private String customIdent;
     private String sessionID;
+    private String description;
 
     /**
      * Creates builder with required parameter set.

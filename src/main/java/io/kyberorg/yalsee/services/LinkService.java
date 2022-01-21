@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services;
 
+import io.kyberorg.yalsee.configuration.EndpointsListener;
 import io.kyberorg.yalsee.core.BanHammer;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
@@ -8,11 +9,11 @@ import io.kyberorg.yalsee.events.LinkUpdatedEvent;
 import io.kyberorg.yalsee.exception.URLDecodeException;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
-import io.kyberorg.yalsee.models.LinkInfo;
 import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -28,27 +29,18 @@ import java.util.Optional;
  * @since 2.0
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class LinkService {
     private static final String TAG = "[" + LinkService.class.getSimpleName() + "]";
     private final LinkRepo repo;
     private final LinkInfoService linkInfoService;
+    private final EndpointsListener endpointsListener;
 
     public static final String OP_MALFORMED_IDENT = "Ident is not valid";
     public static final String OP_MALFORMED_URL = UrlExtraValidator.URL_NOT_VALID;
     public static final String OP_URL_BANNED = "URL is banned";
     public static final String OP_LOCAL_URL_BANNED = UrlExtraValidator.LOCAL_URL_NOT_ALLOWED;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param repo            object for communicating with DB
-     * @param linkInfoService service to create {@link LinkInfo} record.
-     */
-    public LinkService(final LinkRepo repo, final LinkInfoService linkInfoService) {
-        this.repo = repo;
-        this.linkInfoService = linkInfoService;
-    }
 
     /**
      * Delete link with given ident from DB.
@@ -197,11 +189,12 @@ public class LinkService {
             //action
             Link linkObject = Link.create(ident, decodedLink);
             Link savedLink = repo.save(linkObject);
-            if (input.getSessionID() != null) {
-                linkInfoService.createLinkInfo(ident, input.getSessionID());
-            } else {
-                linkInfoService.createLinkInfo(ident);
-            }
+
+            String sessionId = input.getSessionID();
+            String description = input.getDescription();
+
+            linkInfoService.createLinkInfo(ident, sessionId, description);
+
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedLink);
             EventBus.getDefault().post(LinkSavedEvent.createWith(savedLink));
             return OperationResult.success().addPayload(savedLink);
@@ -314,7 +307,8 @@ public class LinkService {
 
     private boolean isIdentAlreadyExists(final String ident) {
         OperationResult result = isLinkWithIdentExist(ident);
-        return result.ok();
+        boolean isRouteExists = endpointsListener.isRouteExists("/" + ident);
+        return result.ok() || isRouteExists;
     }
 
     private String generateIdent() {

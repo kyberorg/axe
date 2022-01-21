@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.Endpoint;
 import kong.unirest.GetRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -18,20 +19,12 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_200;
  *
  * @since 2.7
  */
+@RequiredArgsConstructor
 @Component
 public class YalseeHealthIndicator implements HealthIndicator {
 
     private final AppUtils appUtils;
     private boolean appStarted = false;
-
-    /**
-     * Creates {@link YalseeHealthIndicator}.
-     *
-     * @param appUtils application utils
-     */
-    public YalseeHealthIndicator(final AppUtils appUtils) {
-        this.appUtils = appUtils;
-    }
 
     /**
      * Detects if application started or not.

@@ -4,12 +4,11 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -23,19 +22,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 3.2
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class GridItemsTest extends SelenideTest {
 
     /**
      * Test Setup.
      */
     @BeforeAll
-    public static void beforeTest() {
+    public static void beforeAllTest() {
         //session cleanup
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         cleanSession();
         waitForVaadin(); //this is needed to prevent unopened page after reload.
+        CookieBannerPageObject.closeBannerIfAny(); //banner re-appears for new session
 
         //saving one link
         open("/");

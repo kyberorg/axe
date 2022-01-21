@@ -31,7 +31,7 @@ public final class UserMessageGenerator {
     }
 
     /**
-     * Provides user friendly message based on http code.
+     * Provides user-friendly message based on http code.
      *
      * @param status int with http code
      * @return string with matched error message or {@link #DEFAULT_MESSAGE} is match not found.

@@ -3,6 +3,10 @@ package io.kyberorg.yalsee.result;
 import com.google.gson.internal.Primitives;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class that defines result of operation. Operation can be any action: validation, query from database and so on.
@@ -11,6 +15,7 @@ import lombok.ToString;
  */
 @ToString
 public class OperationResult {
+
     /**
      * Status, that indicates operation success.
      */
@@ -46,11 +51,18 @@ public class OperationResult {
      */
     public static final String BANNED = "OP_NO_ACCESS";
 
+    /**
+     * Status, that indicated that referenced object is no longer exists.
+     */
+    public static final String GONE = "OP_GONE";
+
+    private static final String DEFAULT_PAYLOAD_KEY = "DEFAULT_PAYLOAD_KEY";
+
     @Getter
     private String result;
     @Getter
     private String message;
-    private Object payload;
+    private final Map<String, Object> payload = new HashMap<>(1);
 
     /**
      * Default constructor.
@@ -133,6 +145,15 @@ public class OperationResult {
     }
 
     /**
+     * Create object with {@link #GONE} status.
+     *
+     * @return new object.
+     */
+    public static OperationResult gone() {
+        return new OperationResult(GONE);
+    }
+
+    /**
      * Checks if operation executed successfully.
      *
      * @return true - if all good, false if not
@@ -168,18 +189,49 @@ public class OperationResult {
      * @return same object, but with added {@link #payload}
      */
     public OperationResult addPayload(final Object payload) {
-        this.payload = payload;
+        this.payload.put(DEFAULT_PAYLOAD_KEY, payload);
+        return this;
+    }
+
+    /**
+     * Stores payload under given key.
+     *
+     * @param key     key to store payload under.
+     * @param payload operation output object
+     * @return same object, but with added {@link #payload}
+     * @throws IllegalArgumentException if key is {@code null} or empty.
+     */
+    public OperationResult addPayload(final String key, final Object payload) {
+        if (StringUtils.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be empty");
+        }
+        this.payload.put(key, payload);
         return this;
     }
 
     /**
      * Returns payload as a {@link String}.
      *
-     * @return string store in payload.
+     * @return string stored in payload.
      * @throws ClassCastException when payload contains something else but not {@link String}.
      */
     public String getStringPayload() {
         return getPayload(String.class);
+    }
+
+    /**
+     * Returns payload value, stored under given key as a {@link String}.
+     *
+     * @param key string with key payload stored under.
+     * @return string store in payload.
+     * @throws ClassCastException       when payload contains something else but not {@link String}.
+     * @throws IllegalArgumentException if key is {@code null} or empty.
+     */
+    public String getStringPayload(final String key) {
+        if (StringUtils.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be empty");
+        }
+        return getPayload(key, String.class);
     }
 
     /**
@@ -191,7 +243,27 @@ public class OperationResult {
      * @return object stored in {@link #payload} converted to requested class.
      * @throws ClassCastException when payload contains something else, but not object of requested class.
      */
+    @SuppressWarnings("JavadocReference") //dynamic class param and example uses exact class to show usage.
     public <T> T getPayload(final Class<T> classOfPayload) {
-        return Primitives.wrap(classOfPayload).cast(this.payload);
+        return Primitives.wrap(classOfPayload).cast(this.payload.get(DEFAULT_PAYLOAD_KEY));
+    }
+
+    /**
+     * Returns payload value, stored under given key, cast to requested class.
+     * For example: {@link #getPayload(String, Long)} will return {@link Long} object.
+     *
+     * @param key            string with key payload stored under.
+     * @param classOfPayload class of object stored in {@link #payload}
+     * @param <T>            Java generics param.
+     * @return object stored in {@link #payload} converted to requested class.
+     * @throws ClassCastException       when payload contains something else, but not object of requested class.
+     * @throws IllegalArgumentException if key is {@code null} or empty.
+     */
+    @SuppressWarnings("JavadocReference") //dynamic class param and example uses exact class to show usage.
+    public <T> T getPayload(final String key, final Class<T> classOfPayload) {
+        if (StringUtils.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be empty");
+        }
+        return Primitives.wrap(classOfPayload).cast(this.payload.get(key));
     }
 }

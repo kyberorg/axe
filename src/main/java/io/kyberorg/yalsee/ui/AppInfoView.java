@@ -1,10 +1,13 @@
-package io.kyberorg.yalsee.ui.dev;
+package io.kyberorg.yalsee.ui;
 
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.Version;
@@ -13,17 +16,18 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.services.GitService;
-import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
 import io.kyberorg.yalsee.utils.maven.MavenInfo;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: App Info")
-public class AppInfoView extends YalseeLayout {
+public class AppInfoView extends YalseeLayout implements BeforeEnterObserver {
     private static final String UNDEFINED = "UNDEFINED";
     private static final int COMMIT_HASH_LENGTH = 7;
 
@@ -32,32 +36,22 @@ public class AppInfoView extends YalseeLayout {
     private final MavenInfo mavenInfo;
     private final AppUtils appUtils;
 
-    /**
-     * Creates {@link AppInfoView} object.
-     *
-     * @param gitService   information from git
-     * @param gitRepoState information from build time
-     * @param mavenInfo    info from maven
-     * @param appUtils     application utils
-     */
-    public AppInfoView(final GitService gitService, final GitRepoState gitRepoState,
-                       final MavenInfo mavenInfo, final AppUtils appUtils) {
-        this.gitService = gitService;
-        this.gitRepoState = gitRepoState;
-        this.mavenInfo = mavenInfo;
-        this.appUtils = appUtils;
-
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
     }
 
     private void init() {
         setId(IDs.VIEW_ID);
 
-        VerticalLayout publicInfoArea = publicInfoArea();
-        add(publicInfoArea);
+        final VerticalLayout publicInfoArea = publicInfoArea();
+        final VerticalLayout cookieArea = cookieArea();
+
+        removeAll();
+        add(publicInfoArea, cookieArea);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
-            VerticalLayout devInfoArea = devInfoArea();
+            final VerticalLayout devInfoArea = devInfoArea();
             add(devInfoArea);
         }
     }
@@ -97,6 +91,45 @@ public class AppInfoView extends YalseeLayout {
         return publicArea;
     }
 
+    private VerticalLayout cookieArea() {
+        VerticalLayout cookieArea = new VerticalLayout();
+        cookieArea.setId(IDs.COOKIE_AREA);
+        H4 title = new H4("About Cookies");
+        title.setId(IDs.COOKIE_TITLE);
+
+        Span cookieText = new Span();
+        cookieText.setId(IDs.COOKIE_TEXT_SPAN);
+
+        Span textStart = new Span("Yalsee is using ");
+        Anchor link = new Anchor("https://www.cookiesandyou.com/", "Cookies");
+        link.setId(IDs.COOKIE_LINK);
+
+        Span textEnd = new Span(" to make this site works. ");
+
+        Span techDetailsText = new Span("There are technical cookies like JSESSION, "
+                + "what keeps session and preferences "
+                + "and analytics cookies (Google Analytics) used for collecting usage statistics.");
+        techDetailsText.setId(IDs.COOKIE_TECH_DETAILS);
+
+        Span cookieSettingsSpan = new Span();
+        cookieSettingsSpan.setId(IDs.COOKIE_SETTINGS_SPAN);
+
+        Span cookieSettingsText = new Span("You can find and adjust current cookie settings at ");
+        cookieSettingsText.setId(IDs.COOKIE_SETTINGS_TEXT);
+
+        Anchor cookieSettingsLink = new Anchor(Endpoint.UI.SETTINGS_PAGE, "Settings Page");
+        cookieSettingsLink.setId(IDs.COOKIE_SETTINGS_LINK);
+
+        Span point = new Span(".");
+        point.setId(IDs.COOKIE_SETTINGS_POINT);
+
+        cookieSettingsSpan.add(cookieSettingsText, cookieSettingsLink, point);
+        cookieText.add(textStart, link, textEnd, techDetailsText);
+
+        cookieArea.add(title, cookieText, cookieSettingsSpan);
+        return cookieArea;
+    }
+
     private VerticalLayout devInfoArea() {
         VerticalLayout devInfoArea = new VerticalLayout();
         devInfoArea.setId(IDs.DEV_INFO_AREA);
@@ -127,5 +160,15 @@ public class AppInfoView extends YalseeLayout {
         public static final String COMMIT_LINK = "commitLink";
         public static final String DEV_INFO_AREA = "devInfoArea";
         public static final String GOOGLE_ANALYTICS_BANNER = "googleAnalyticsBanner";
+        public static final String COOKIE_AREA = "cookieArea";
+        public static final String COOKIE_TITLE = "cookieTitle";
+        public static final String COOKIE_TEXT_SPAN = "cookieTextSpan";
+        public static final String COOKIE_LINK = "cookieLink";
+        public static final String COOKIE_TECH_DETAILS = "cookieTechDetails";
+        public static final String COOKIE_SETTINGS_SPAN = "cookieSettingsSpan";
+        public static final String COOKIE_SETTINGS_TEXT = "cookieSettingsText";
+        public static final String COOKIE_SETTINGS_LINK = "cookieSettingsLink";
+        public static final String COOKIE_SETTINGS_POINT = "cookieSettingsPoint";
+
     }
 }

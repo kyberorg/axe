@@ -9,6 +9,7 @@ import io.kyberorg.yalsee.mm.Mattermost;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import java.util.Objects;
  * @since 2.3
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class MattermostRestController {
     private static final String TAG = "[" + MattermostRestController.class.getSimpleName() + "]";
@@ -36,15 +38,6 @@ public class MattermostRestController {
     private Mattermost mattermost;
 
     private HttpServletRequest request;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param linkService service for saving links
-     */
-    public MattermostRestController(final LinkService linkService) {
-        this.linkService = linkService;
-    }
 
     /**
      * Mattermost API endpoint.
@@ -85,7 +78,7 @@ public class MattermostRestController {
 
     private MattermostResponse success(final Link savedLink) {
         String serverHostname = getServerHostname(request);
-        String fullYalsLink = serverHostname + "/" + savedLink.getIdent();
+        String fullYalseeLink = serverHostname + "/" + savedLink.getIdent();
 
         String linkDescription = mattermost.getArgumentSet().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
@@ -94,9 +87,9 @@ public class MattermostRestController {
                     ? "Okay " + App.AT + mattermost.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
 
-            return MattermostResponse.createWithText(greeting + fullYalsLink);
+            return MattermostResponse.createWithText(greeting + fullYalseeLink);
         } else {
-            return MattermostResponse.createWithText(fullYalsLink + " " + linkDescription);
+            return MattermostResponse.createWithText(fullYalseeLink + " " + linkDescription);
         }
     }
 

@@ -3,14 +3,13 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import io.kyberorg.yalsee.ui.err.PageNotFoundView;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ import java.util.List;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.constants.App.THREE;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,19 +28,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @since 3.2
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class ActionsTest extends SelenideTest {
+
     /**
      * Test Setup.
      */
     @BeforeEach
-    public void beforeTest() {
-
+    public void beforeEachTest() {
         //cleaning session
         open("/myLinks");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
         cleanSession();
         waitForVaadin(); //this is needed to prevent unopened page after reload.
+        CookieBannerPageObject.closeBannerIfAny(); //banner re-appears for new session
     }
 
     /**
@@ -139,7 +140,7 @@ public class ActionsTest extends SelenideTest {
 
         openMyLinksPage();
 
-        Grid.GridData.get().getDataRows().shouldHave(size(3));
+        Grid.GridData.get().getDataRows().shouldHave(size(THREE));
     }
 
     /**

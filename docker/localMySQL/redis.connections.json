@@ -1,0 +1,14 @@
+{
+  "connections": [
+    {
+      "label": "local",
+      "dbIndex": 0,
+      "password": "redis-password",
+      "connectionName": "redis-commander",
+      "optional": false,
+      "host": "redis",
+      "port": 6379,
+      "sentinelPassword": ""
+    }
+  ]
+}

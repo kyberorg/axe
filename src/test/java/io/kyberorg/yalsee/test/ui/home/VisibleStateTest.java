@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.home;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import io.kyberorg.yalsee.test.utils.browser.BrowserSize;
@@ -11,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.List;
 
@@ -28,16 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 1.0
  */
-@Execution(ExecutionMode.CONCURRENT)
 public class VisibleStateTest extends SelenideTest {
 
     /**
      * Test setup.
      */
     @BeforeAll
-    public static void beforeTests() {
+    public static void beforeAllTests() {
         open("/");
         waitForVaadin();
+        CookieBannerPageObject.closeBannerIfAny();
     }
 
     /**
@@ -49,7 +48,7 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that area with inputs/buttons etc is visible.
+     * Tests that area with inputs/buttons etc. is visible.
      */
     @Test
     public void mainAreaIsVisible() {
@@ -126,6 +125,40 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
+     * Tests that Description Accordion exists and visible.
+     */
+    @Test
+    public void descriptionAccordionExistsAndVisible() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.should(exist);
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldBe(visible);
+    }
+
+    /**
+     * Tests that Description Accordion closed by default.
+     */
+    @Test
+    public void descriptionAccordionClosedByDefault() {
+        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
+    }
+
+    /**
+     * Tests that Description Accordion has Words Description and Optional.
+     */
+    @Test
+    public void descriptionAccordionHasWordsDescriptionAndOptional() {
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(text("Description"));
+        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(text("optional"));
+    }
+
+    /**
+     * Tests that Description Input is hidden by default.
+     */
+    @Test
+    public void descriptionInputIsHiddenByDefault() {
+        HomePageObject.MainArea.DESCRIPTION_INPUT_ELEMENT.shouldBe(hidden);
+    }
+
+    /**
      * Tests page title.
      */
     @Test
@@ -150,7 +183,7 @@ public class VisibleStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that title has word "long" if screen large or has not if screen is extra small (i.e phone).
+     * Tests that title has word "long" if screen large or has not if screen is extra small (i.e. phone).
      */
     @Test
     public void titleShouldContainWordLong() {

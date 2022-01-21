@@ -17,6 +17,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -33,12 +35,15 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkInfoService;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
+import io.kyberorg.yalsee.services.YalseeSessionService;
+import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.DeviceUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -48,12 +53,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Slf4j
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: My Links")
-public class MyLinksView extends YalseeLayout {
+public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
     private static final String USER_MODE_FLAG = "UserMode";
 
@@ -73,6 +79,7 @@ public class MyLinksView extends YalseeLayout {
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
     private final LinkService linkService;
+    private final YalseeSessionService sessionService;
     private final AppUtils appUtils;
 
     private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
@@ -81,31 +88,15 @@ public class MyLinksView extends YalseeLayout {
     private DeviceUtils deviceUtils;
     private boolean clientHasSmallScreen;
 
-    /**
-     * Creates {@link MyLinksView}.
-     *
-     * @param linkInfoService service for operating with LinkInfo.
-     * @param qrCodeService   QR Code Service..
-     * @param linkService     service for operating with Links.
-     * @param appUtils        application utilities.
-     */
-    public MyLinksView(final LinkInfoService linkInfoService, final QRCodeService qrCodeService,
-                       final LinkService linkService, final AppUtils appUtils) {
-        this.linkInfoService = linkInfoService;
-        this.qrCodeService = qrCodeService;
-        this.linkService = linkService;
-        this.appUtils = appUtils;
-
-        setId(MyLinksView.class.getSimpleName());
-
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
         setIds();
         applyLoadState();
     }
 
     private void init() {
-        sessionId = AppUtils.getSessionId(VaadinSession.getCurrent());
-        VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.FALSE);
+        sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse(null);
         deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
         clientHasSmallScreen = isSmallScreen();
 
@@ -155,14 +146,34 @@ public class MyLinksView extends YalseeLayout {
 
         //User-mode activation
         grid.getElement().addEventListener("keydown", event -> {
-                    VaadinSession.getCurrent().setAttribute(USER_MODE_FLAG, Boolean.TRUE);
+                    YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(true));
                     activateLinkEditor();
+                    log.info("{} User mode activated.", TAG);
                 })
                 .setFilter("event.key === 'R' && event.shiftKey");
 
         initGridEditor();
 
+        removeAll();
         add(sessionBanner, noRecordsBanner, endSessionButton, grid);
+    }
+
+    private void setIds() {
+        setId(MyLinksView.class.getSimpleName());
+        sessionBanner.setId(IDs.SESSION_BANNER);
+        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
+        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
+        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
+        endSessionButton.setId(IDs.END_SESSION_BUTTON);
+        grid.setId(IDs.GRID);
+        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
+        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
+        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
+        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
+    }
+
+    private void applyLoadState() {
+        noRecordsBanner.setVisible(gridIsEmpty());
     }
 
     private Span link(final LinkInfo linkInfo) {
@@ -244,7 +255,8 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void activateLinkEditor() {
-        boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
+        boolean userModeActivated = YalseeSession.getCurrent().map(ys -> ys.getFlags().isUserModeEnabled())
+                .orElse(false);
         if (userModeActivated) {
             EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
             // Close the editor in case of backward between components
@@ -259,22 +271,6 @@ public class MyLinksView extends YalseeLayout {
         }
     }
 
-    private void setIds() {
-        sessionBanner.setId(IDs.SESSION_BANNER);
-        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
-        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
-        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
-        endSessionButton.setId(IDs.END_SESSION_BUTTON);
-        grid.setId(IDs.GRID);
-        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
-        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
-        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
-        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
-    }
-
-    private void applyLoadState() {
-        noRecordsBanner.setVisible(gridIsEmpty());
-    }
 
     @Override
     protected void onAttach(final AttachEvent attachEvent) {
@@ -342,6 +338,7 @@ public class MyLinksView extends YalseeLayout {
     }
 
     private void onCleanButtonClick(final ClickEvent<Button> buttonClickEvent) {
+        YalseeSession.getCurrent().ifPresent(sessionService::destroySession);
         appUtils.endVaadinSession(VaadinSession.getCurrent());
     }
 
@@ -366,7 +363,8 @@ public class MyLinksView extends YalseeLayout {
                 linkInfoService.update(linkInfo);
             } else {
                 //TODO replace with real-user check once users are there
-                boolean userModeActivated = (Boolean) VaadinSession.getCurrent().getAttribute(USER_MODE_FLAG);
+                boolean userModeActivated = YalseeSession.getCurrent().map(ys -> ys.getFlags().isUserModeEnabled())
+                        .orElse(false);
                 if (userModeActivated) {
                     OperationResult getLinkResult = linkService.getLinkByIdent(oldLinkInfo.get().getIdent());
                     if (getLinkResult.ok()) {
@@ -500,11 +498,7 @@ public class MyLinksView extends YalseeLayout {
             }
         } else {
             //fallback to user agent detection
-            boolean hasBrowserInfo = VaadinSession.getCurrent() != null
-                    && VaadinSession.getCurrent().getBrowser() != null;
-            if (hasBrowserInfo && DeviceUtils.isMobileDevice(VaadinSession.getCurrent().getBrowser())) {
-                isSmallScreen = true;
-            }
+            isSmallScreen = YalseeSession.getCurrent().map(session -> session.getDevice().isMobile()).orElse(false);
         }
         return isSmallScreen;
     }

@@ -1,0 +1,52 @@
+name: "Ship - PoC"
+
+on:
+  push:
+    branches:
+      - 511-users
+
+jobs:
+  ship2dev:
+    name: Ship::PoC
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to quay.io
+        run: echo "${{ secrets.QUAY_TOKEN }}" | docker login -u "${{ secrets.QUAY_USERNAME }}" --password-stdin quay.io
+
+      - name: Resolve Dependencies
+        run: mvn --batch-mode --update-snapshots dependency:tree
+
+      - name: Complile JAR
+        run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
+
+      - name: Docker build and tag
+        run: docker build -f Dockerfile.DEV -t quay.io/kyberorg/yalsee:poc .
+
+      - name: Docker push
+        run: docker push quay.io/kyberorg/yalsee:poc
+
+      - name: Delete pushed image to prevent mess
+        run: docker rmi quay.io/kyberorg/yalsee:poc
+
+      - name: Deploy
+        uses: wei/curl@master
+        with:
+          args: -X POST ${{ secrets.POC_DEPLOY_HOOK }}
+
+      - name: Get deployed commit SHA
+        id: deployed_commit
+        run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-7)"
+
+      - name: Wait for site appears online
+        uses: kyberorg/wait_for_new_version@v2
+        with:
+          url: https://poc.yals.ee
+          responseCode: 200
+          timeout: 120
+          interval: 1.5
+          hasActuator: true
+          commitSha: ${{ steps.deployed_commit.outputs.sha }}

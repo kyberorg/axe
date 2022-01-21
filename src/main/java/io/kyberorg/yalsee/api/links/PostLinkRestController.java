@@ -13,6 +13,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.utils.ApiUtils;
 import io.kyberorg.yalsee.utils.TokenChecker;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
@@ -32,23 +33,13 @@ import static io.kyberorg.yalsee.constants.HttpCode.*;
  * @since 3.1
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class PostLinkRestController {
     private static final String TAG = "[" + PostLinkRestController.class.getSimpleName() + "]";
 
     private final LinkService linkService;
     private final TokenChecker tokenChecker;
-
-    /**
-     * Constructor for Spring autowiring.
-     *
-     * @param linkService service for storing links
-     * @param tokenChecker for checking token
-     */
-    public PostLinkRestController(final LinkService linkService, final TokenChecker tokenChecker) {
-        this.linkService = linkService;
-        this.tokenChecker = tokenChecker;
-    }
 
     /**
      * API that stores new links.

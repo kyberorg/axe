@@ -12,7 +12,9 @@ import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import io.kyberorg.yalsee.utils.RedirectLoopDetector;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
+import lombok.RequiredArgsConstructor;
 
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
@@ -20,23 +22,14 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 /**
  * Catches all unhandled exceptions from Vaadin Servlet.
  */
+@RequiredArgsConstructor
 @SpringComponent
 @UIScope
 public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErrorParameter<Exception> {
 
+    private final RedirectLoopDetector loopDetector;
     private final YalseeErrorKeeper yalseeErrorKeeper;
     private final ErrorUtils errorUtils;
-
-    /**
-     * Creates {@link CatchAllVaadinExceptionsView}.
-     *
-     * @param errorKeeper holder for errors
-     * @param errorUtils  utils for handling with errors
-     */
-    public CatchAllVaadinExceptionsView(final YalseeErrorKeeper errorKeeper, final ErrorUtils errorUtils) {
-        this.yalseeErrorKeeper = errorKeeper;
-        this.errorUtils = errorUtils;
-    }
 
     @Override
     public int setErrorParameter(final BeforeEnterEvent beforeEnterEvent,
@@ -48,13 +41,17 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
                 .addStatus(STATUS_500)
                 .addPath(path)
                 .build();
-        YalseeError yalseeError = errorUtils.convertExceptionToYalsError(args);
+        YalseeError yalseeError = errorUtils.convertExceptionToYalseeError(args);
 
         String errorId = yalseeErrorKeeper.send(yalseeError);
         errorUtils.reportToBugsnag(yalseeError);
 
+        loopDetector.updateCounter();
+        final String errorPageRoute = loopDetector.isLoopDetected()
+                ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
+
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
-                "/" + Endpoint.UI.ERROR_PAGE_500 + "?" + App.Params.ERROR_ID + "=" + errorId);
+                "/" + errorPageRoute + "?" + App.Params.ERROR_ID + "=" + errorId);
 
         return STATUS_302;
     }
