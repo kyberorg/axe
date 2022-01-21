@@ -42,6 +42,7 @@
         <!-- Plugins version: used 2+ times -->
         <git.plugin.version>4.9.10</git.plugin.version>
         <properties.plugin.version>1.0.0</properties.plugin.version>
+        <selenium.version>4.1.1</selenium.version>
     </properties>
     
     <parent>
@@ -268,15 +269,52 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-server</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Selenide Test Framework -->
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>5.25.1</version>
+            <version>6.2.1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Selenium 4 -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Tests Re-run -->
         <dependency>
             <groupId>org.junit-pioneer</groupId>
@@ -284,7 +322,6 @@
             <version>1.5.0</version>
             <scope>test</scope>
         </dependency>
-
 
         <!-- Snyk deps -->
         <!-- We don't use those deps but other deps are using old version. So those are here to improve security -->
