@@ -42,6 +42,7 @@
         <!-- Plugins version: used 2+ times -->
         <git.plugin.version>4.9.10</git.plugin.version>
         <properties.plugin.version>1.0.0</properties.plugin.version>
+        <selenium.version>4.1.1</selenium.version>
     </properties>
     
     <parent>
@@ -273,6 +274,10 @@
                     <groupId>org.seleniumhq.selenium</groupId>
                     <artifactId>selenium-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-server</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -283,10 +288,30 @@
             <version>6.2.1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Selenium 4 -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.1.1</version>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>${selenium.version}</version>
             <scope>test</scope>
         </dependency>
 
