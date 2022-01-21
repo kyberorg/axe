@@ -57,7 +57,8 @@ public abstract class SelenideTest extends YalseeTest {
         capabilities.setCapability("enableLog", true);
         capabilities.setCapability("logName", BUILD_NAME + ".log");
 
-        Configuration.browserCapabilities.merge(capabilities);
+        Configuration.browserCapabilities = capabilities;
+        System.out.println("Running with following" + Configuration.browserCapabilities);
     }
 
     private static String getGridFullUrl() {
