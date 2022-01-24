@@ -21,6 +21,10 @@ import java.util.Locale;
  */
 @ExtendWith(TestWatcherExtension.class) // catching test results and logging results to TestReport.
 public abstract class YalseeTest {
+    public static final boolean SHOW_TEST_NAMES_IN_VIDEO =
+            Boolean.parseBoolean(System.getProperty(TestApp.Properties.SHOW_TEST_NAMES_IN_VIDEO,
+                    TestApp.Defaults.SHOW_TEST_NAMES_IN_VIDEO)
+            );
 
     protected static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
@@ -31,6 +35,7 @@ public abstract class YalseeTest {
     private static final boolean REPORT_PASSED_TESTS =
             Boolean.parseBoolean(
                     System.getProperty(TestApp.Properties.REPORT_PASSED_TESTS, TestApp.Defaults.REPORT_PASSED_TESTS));
+
 
     /**
      * Global init (before all tests).

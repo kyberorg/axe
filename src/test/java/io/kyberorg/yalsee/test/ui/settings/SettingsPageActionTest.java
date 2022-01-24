@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.BetaSettings;
 import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.CookieSettings;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
+import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.SettingsPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
  *
  * @since 3.8
  */
-public class SettingsPageActionTest {
+public class SettingsPageActionTest extends SelenideTest {
 
     /**
      * Test setup.

@@ -57,6 +57,11 @@ public final class TestApp {
         public static final String VAADIN_TIMEOUT = "vaadin.timeout";
 
         /**
+         * Boolean (true/false) should we show test names in test video.
+         */
+        public static final String SHOW_TEST_NAMES_IN_VIDEO = "test.show-test-names-in-video";
+
+        /**
          * {@link Selenide} related constants.
          */
         public static class Selenide {
@@ -95,6 +100,11 @@ public final class TestApp {
          * Timeout waiting for Vaadin Actions.
          */
         public static final String VAADIN_TIMEOUT = "15000";
+
+        /**
+         * By default, we don't show test names in video.
+         */
+        public static final String SHOW_TEST_NAMES_IN_VIDEO = "false";
 
         /**
          * {@link Selenide}-related defaults.

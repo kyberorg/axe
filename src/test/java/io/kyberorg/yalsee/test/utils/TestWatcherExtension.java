@@ -1,7 +1,9 @@
 package io.kyberorg.yalsee.test.utils;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.YalseeTest;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
@@ -35,12 +37,13 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     @Override
     public void beforeTestExecution(final ExtensionContext context) {
         testStartTime = System.currentTimeMillis();
-        if (isUITest(context)) {
+        if (YalseeTest.SHOW_TEST_NAMES_IN_VIDEO && isUITest(context)) {
             String testName = getTestName(context);
             Selenide.executeJavaScript("if (typeof showTestName === \"function\") {"
                     + "showTestName(\"" + testName + "\") "
                     + "}"
             );
+            Selenide.$("#testName").shouldBe(Condition.visible);
         }
     }
 
@@ -52,7 +55,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     @Override
     public void afterTestExecution(final ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
-        if (isUITest(context)) {
+        if (YalseeTest.SHOW_TEST_NAMES_IN_VIDEO && isUITest(context)) {
             //clean test name
             Selenide.executeJavaScript("if (typeof removeTestName === \"function\") {"
                     + "removeTestName()"
