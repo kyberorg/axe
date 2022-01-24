@@ -350,8 +350,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
 
-        /*settings.addInlineFromFile(InitialPageSettings.Position.PREPEND,
-                "frontend/js/show-test-name.js", InitialPageSettings.WrapMode.JAVASCRIPT);*/
+        settings.addInlineFromFile(InitialPageSettings.Position.PREPEND,
+                "frontend/js/show-test-name.js", InitialPageSettings.WrapMode.JAVASCRIPT);
     }
 
     @PreDestroy
