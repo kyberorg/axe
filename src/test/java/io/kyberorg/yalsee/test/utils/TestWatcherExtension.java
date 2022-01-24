@@ -1,6 +1,10 @@
 package io.kyberorg.yalsee.test.utils;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.YalseeTest;
+import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import io.kyberorg.yalsee.test.utils.report.TestResult;
@@ -26,13 +30,21 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     private long testDurationInMillis;
 
     /**
-     * Very first stage of running test. We use it for getting test start time.
+     * Very first stage of running test. We use it for getting test start time and displaying test name (if applicable).
      *
      * @param context JUnit's test {@link ExtensionContext}
      */
     @Override
     public void beforeTestExecution(final ExtensionContext context) {
         testStartTime = System.currentTimeMillis();
+        if (YalseeTest.SHOW_TEST_NAMES_IN_VIDEO && isUITest(context)) {
+            String testName = getTestName(context);
+            Selenide.executeJavaScript("if (typeof showTestName === \"function\") {"
+                    + "showTestName(\"" + testName + "\") "
+                    + "}"
+            );
+            Selenide.$("#testName").shouldBe(Condition.visible);
+        }
     }
 
     /**
@@ -43,6 +55,13 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     @Override
     public void afterTestExecution(final ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
+        if (YalseeTest.SHOW_TEST_NAMES_IN_VIDEO && isUITest(context)) {
+            //clean test name
+            Selenide.executeJavaScript("if (typeof removeTestName === \"function\") {"
+                    + "removeTestName()"
+                    + "}"
+            );
+        }
     }
 
     /**
@@ -227,5 +246,17 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         } else {
             return rawMethodName;
         }
+    }
+
+    private boolean isUITest(final ExtensionContext context) {
+        final Optional<Class<?>> testClass = context.getTestClass();
+        return testClass.map(SelenideTest.class::isAssignableFrom).orElse(false);
+    }
+
+    private String getTestName(final ExtensionContext context) {
+        TestSuite suite = TestSuite.create(context.getRequiredTestClass());
+        TestData testData = TestData.create(setTestNameFromContext(context));
+        testData.setTestSuite(suite);
+        return testData.toString();
     }
 }
