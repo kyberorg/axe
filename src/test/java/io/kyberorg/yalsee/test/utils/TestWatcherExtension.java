@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.utils;
 
+import com.codeborne.selenide.Selenide;
 import io.kyberorg.yalsee.test.TestUtils;
-import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
@@ -37,7 +37,10 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         testStartTime = System.currentTimeMillis();
         if (isUITest(context)) {
             String testName = getTestName(context);
-            MainViewPageObject.TEST_NAME_DIV.setValue(testName);
+            Selenide.executeJavaScript("if (typeof showTestName === \"function\") {"
+                    + "showTestName(" + testName + ") "
+                    + "}"
+            );
         }
     }
 
@@ -51,7 +54,10 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
         if (isUITest(context)) {
             //clean test name
-            MainViewPageObject.TEST_NAME_DIV.setValue("");
+            Selenide.executeJavaScript("if (typeof removeTestName === \"function\") {"
+                    + "removeTestName()"
+                    + "}"
+            );
         }
     }
 

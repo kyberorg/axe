@@ -47,3 +47,7 @@ vaadin-tab a iron-icon {
 .cb-button {
     margin-right: 1rem;
 }
+
+#testName {
+    margin-left: 1rem;
+}
