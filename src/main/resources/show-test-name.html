@@ -5,10 +5,16 @@
         const testNameDiv = document.querySelector("#testNameDiv");
         testNameDiv.classList.toggle('active');
 
-        setTimeout(function () {
+        /*setTimeout(function () {
             testNameDiv.classList.remove('active');
-        }, 1500);
+        }, 1500);*/
         return testNameSpan;
+    }
+
+    function removeTestName() {
+        const testNameDiv = document.querySelector("#testNameDiv");
+        testNameDiv.classList.remove('active');
+        return testNameDiv;
     }
 </script>
 

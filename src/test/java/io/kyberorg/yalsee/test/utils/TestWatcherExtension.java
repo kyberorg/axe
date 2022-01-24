@@ -50,6 +50,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     @Override
     public void afterTestExecution(final ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
+        removeTestName(context);
     }
 
     /**
@@ -253,6 +254,19 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
                             testData)
             );
             $("#testNameDiv").shouldBe(hidden);
+        }
+    }
+
+    private void removeTestName(final ExtensionContext context) {
+        Optional<Class<?>> testClass = context.getTestClass();
+        if (testClass.isEmpty()) return;
+
+        boolean isUITest = SelenideTest.class.isAssignableFrom(testClass.get());
+        if (isUITest) {
+            Selenide.executeJavaScript("if (typeof removeTestName === \"function\") { "
+                    + "removeTestName() "
+                    + "}"
+            );
         }
     }
 }
