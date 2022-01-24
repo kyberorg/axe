@@ -1,6 +1,8 @@
 package io.kyberorg.yalsee.test.utils;
 
 import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
+import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import io.kyberorg.yalsee.test.utils.report.TestResult;
@@ -26,13 +28,17 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     private long testDurationInMillis;
 
     /**
-     * Very first stage of running test. We use it for getting test start time.
+     * Very first stage of running test. We use it for getting test start time and displaying test name (if applicable).
      *
      * @param context JUnit's test {@link ExtensionContext}
      */
     @Override
     public void beforeTestExecution(final ExtensionContext context) {
         testStartTime = System.currentTimeMillis();
+        if (isUITest(context)) {
+            String testName = getTestName(context);
+            MainViewPageObject.TEST_NAME_DIV.setValue(testName);
+        }
     }
 
     /**
@@ -43,6 +49,10 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
     @Override
     public void afterTestExecution(final ExtensionContext context) {
         testDurationInMillis = System.currentTimeMillis() - testStartTime;
+        if (isUITest(context)) {
+            //clean test name
+            MainViewPageObject.TEST_NAME_DIV.setValue("");
+        }
     }
 
     /**
@@ -227,5 +237,17 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         } else {
             return rawMethodName;
         }
+    }
+
+    private boolean isUITest(final ExtensionContext context) {
+        final Optional<Class<?>> testClass = context.getTestClass();
+        return testClass.map(SelenideTest.class::isAssignableFrom).orElse(false);
+    }
+
+    private String getTestName(final ExtensionContext context) {
+        TestSuite suite = TestSuite.create(context.getRequiredTestClass());
+        TestData testData = TestData.create(setTestNameFromContext(context));
+        testData.setTestSuite(suite);
+        return testData.toString();
     }
 }

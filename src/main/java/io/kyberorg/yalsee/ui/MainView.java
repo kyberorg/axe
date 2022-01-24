@@ -198,7 +198,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         Span title = new Span(siteTitle);
         title.addClassName("site-title");
 
-        layout.add(toggle, title);
+        Span testName = new Span();
+        testName.setId(IDs.TEST_NAME_SPAN);
+
+        layout.add(toggle, title, testName);
         return layout;
     }
 
@@ -354,5 +357,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public static class IDs {
         public static final String VIEW_ID = "mainView";
         public static final String APP_LOGO = "appLogo";
+        public static final String TEST_NAME_SPAN = "testName";
     }
 }
