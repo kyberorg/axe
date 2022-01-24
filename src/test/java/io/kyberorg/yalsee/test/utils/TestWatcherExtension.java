@@ -38,7 +38,7 @@ public class TestWatcherExtension implements TestWatcher, BeforeTestExecutionCal
         if (isUITest(context)) {
             String testName = getTestName(context);
             Selenide.executeJavaScript("if (typeof showTestName === \"function\") {"
-                    + "showTestName(" + testName + ") "
+                    + "showTestName(\"" + testName + "\") "
                     + "}"
             );
         }

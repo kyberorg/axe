@@ -17,6 +17,5 @@ public final class MainViewPageObject {
     }
 
     public static final SelenideElement LOGO = $("#" + MainView.IDs.APP_LOGO);
-    public static final SelenideElement TEST_NAME_DIV = $("#" + MainView.IDs.TEST_NAME_SPAN);
     public static final SelenideElement GOOGLE_ANALYTICS_CONTROL_SPAN = $("#gtag");
 }
