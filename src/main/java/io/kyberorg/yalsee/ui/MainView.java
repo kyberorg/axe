@@ -5,6 +5,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -62,6 +63,7 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
         description = "Yalsee - the link shortener")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
+@JsModule("./js/show-test-name.js")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
@@ -347,7 +349,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(YalseeSession.getCurrent())) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
-        settings.addInlineFromFile("show-test-name.html", InitialPageSettings.WrapMode.NONE);
+
+        settings.addInlineFromFile(InitialPageSettings.Position.PREPEND,
+                "show-test-name.js", InitialPageSettings.WrapMode.JAVASCRIPT);
     }
 
     @PreDestroy
