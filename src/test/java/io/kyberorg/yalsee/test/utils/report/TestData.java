@@ -35,6 +35,19 @@ public final class TestData {
         this.name = testName;
     }
 
+    /**
+     * Generate test name for ReRun (-Dtest param).
+     *
+     * @return String with TestSuite#testName.
+     */
+    public String toTestName() {
+        if (Objects.nonNull(testSuite)) {
+            return this.testSuite + "#" + this.name;
+        } else {
+            return this.name;
+        }
+    }
+
     @Override
     public String toString() {
         if (Objects.nonNull(testSuite)) {

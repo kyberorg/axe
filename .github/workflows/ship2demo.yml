@@ -114,6 +114,7 @@ jobs:
       - name: Delete Test Video (No failed tests)
         if: steps.runTests.outcome == 'success'
         uses: wei/curl@master
+        continue-on-error: true
         with:
           args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-${{ steps.date.outputs.date }}
 
