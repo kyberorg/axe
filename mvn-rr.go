@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"log"
 	"os"
@@ -22,5 +23,11 @@ func main() {
 	}
 	defer file.Close()
 
-	log.Printf("Got file: %s, Got extra args: %s", *failedTestsList, *mvnExtraParams)
+	var failedTests string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		failedTests += scanner.Text() + " "
+	}
+
+	log.Printf("Got extra args: %s, Got tests: %s", *mvnExtraParams, failedTests)
 }
