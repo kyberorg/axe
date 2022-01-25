@@ -14,6 +14,8 @@ func main() {
 	failedTestsList := flag.String("ff", EmptyFile, "File with failed test")
 	mvnExtraParams := flag.String("mavenOpts", EmptyOpts, "Maven params aka -D flags")
 
+	flag.Parse()
+
 	if *failedTestsList == EmptyFile {
 		log.Fatal("No file with failed test defined. Please use '--ff /path/to/file' flag")
 	}
