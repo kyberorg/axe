@@ -132,4 +132,4 @@ jobs:
       - name: cat it
         run: cat test-fails.txt
       - name: run mvn-rr
-        run: ./mvn-rr --ff="test-fails.txt" --mvnOpts="-Done=valOne -Dtwo=valTwo"
+        run: ./mvn-rr -mvnOpts="-Done=valOne -Dtwo=valTwo" -file="test-fails.txt"
