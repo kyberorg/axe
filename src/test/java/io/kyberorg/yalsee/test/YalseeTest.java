@@ -231,7 +231,8 @@ public abstract class YalseeTest {
         //on fire tests
         for (TestData testData : testReport.getOnFireTests()) {
             try {
-                FileUtils.writeStringToFile(file, testData.toTestName(), StandardCharsets.UTF_8, true);
+                FileUtils.writeStringToFile(file, testData.toTestName() + App.NEW_LINE,
+                        StandardCharsets.UTF_8, true);
             } catch (IOException e) {
                 System.err.println("Failed to write failed test to file " + FILE_WITH_FAILED_TESTS);
             }
@@ -240,7 +241,8 @@ public abstract class YalseeTest {
         //failed tests
         for (TestData testData : testReport.getFailedTests()) {
             try {
-                FileUtils.writeStringToFile(file, testData.toTestName(), StandardCharsets.UTF_8, true);
+                FileUtils.writeStringToFile(file, testData.toTestName() + App.NEW_LINE,
+                        StandardCharsets.UTF_8, true);
             } catch (IOException e) {
                 System.err.println("Failed to write failed test to file " + FILE_WITH_FAILED_TESTS);
             }

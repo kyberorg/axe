@@ -31,7 +31,7 @@ nbdist/
 .directory
 
 #Project specific files
-bin/
+mvn-rr/
 /db
 .eclipse
 /lib/

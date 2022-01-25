@@ -125,12 +125,13 @@ jobs:
     if: needs.test-demo.outputs.rerunFlag == 'failure'
 
     steps:
-      - name: debug
-        run: echo ${{ needs.test-demo.outputs.rerunFlag }}
       - name: download file
         uses: actions/download-artifact@v2
         with:
           name: test-fails
       - name: cat it
         run: cat test-fails.txt
+      - name: run mvn-rr
+        run: mvn-rr/mvn-rr
+
 
