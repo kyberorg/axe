@@ -126,7 +126,7 @@ jobs:
     name: Test::ReRun::Demo
     needs: test-demo
     runs-on: self-hosted
-    if: ${{needs.test-demo.outputs.rerunFlag}} == 'true'
+    if: ${{ needs.test-demo.outputs.rerunFlag }} == 'true'
 
     steps:
       - name: download file
