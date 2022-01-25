@@ -62,6 +62,11 @@ public final class TestApp {
         public static final String SHOW_TEST_NAMES_IN_VIDEO = "test.show-test-names-in-video";
 
         /**
+         * File, where we record failed test.
+         */
+        public static final String FAILED_TESTS_FILE = "test.report.failed-tests-filename";
+
+        /**
          * {@link Selenide} related constants.
          */
         public static class Selenide {
