@@ -112,6 +112,11 @@ public final class TestApp {
         public static final String SHOW_TEST_NAMES_IN_VIDEO = "false";
 
         /**
+         * This is default value for {@link TestApp.Properties#FAILED_TESTS_FILE} indicates that no value set.
+         */
+        public static final String EMPTY_FILENAME = "EMPTY_FILE";
+
+        /**
          * {@link Selenide}-related defaults.
          */
         public static class Selenide {
