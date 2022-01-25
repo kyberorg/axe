@@ -26,6 +26,7 @@ func main() {
 	var failedTests string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
+		//TODO check if testName valid
 		failedTests += scanner.Text() + " "
 	}
 
