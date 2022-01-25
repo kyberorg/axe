@@ -18,7 +18,7 @@ func main() {
 	flag.Parse()
 
 	if *failedTestsList == EmptyFile {
-		log.Fatal("No file with failed test defined. Please use '--ff /path/to/file' flag")
+		log.Fatal("No file with failed test defined. Please use '-file /path/to/file' flag")
 	}
 	file, err := os.Open(*failedTestsList)
 	if err != nil {
