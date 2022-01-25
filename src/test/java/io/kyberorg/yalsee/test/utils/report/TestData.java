@@ -42,7 +42,7 @@ public final class TestData {
      */
     public String toTestName() {
         if (Objects.nonNull(testSuite)) {
-            return this.testSuite + "#" + this.name;
+            return this.testSuite.getClassName() + "#" + this.name;
         } else {
             return this.name;
         }

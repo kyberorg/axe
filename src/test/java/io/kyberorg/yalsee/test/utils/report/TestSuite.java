@@ -24,6 +24,15 @@ public class TestSuite {
         this.suiteClazz = clazz;
     }
 
+    /**
+     * Get test suite class name without any packages.
+     *
+     * @return string with test suite class name.
+     */
+    public String getClassName() {
+        return suiteClazz.getSimpleName();
+    }
+
     @Override
     public String toString() {
         String fullPackage = suiteClazz.getPackageName();
