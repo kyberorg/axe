@@ -224,8 +224,9 @@ public abstract class YalseeTest {
 
     private static void addFailedTestsToFile() {
         if (FILE_WITH_FAILED_TESTS.equals(TestApp.Defaults.EMPTY_FILENAME)) return;
-        File file = new File(FILE_WITH_FAILED_TESTS);
         TestReport testReport = TestReport.getReport();
+        if (testReport.countOnFireTests() == 0 && testReport.countFailedTests() == 0) return;
+        File file = new File(FILE_WITH_FAILED_TESTS);
         //on fire tests
         for (TestData testData : testReport.getOnFireTests()) {
             try {

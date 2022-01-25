@@ -125,6 +125,8 @@ jobs:
     if: ${{ needs.test-demo.outputs.rerunFlag }} == 'failure'
 
     steps:
+      - name: debug
+        run: echo ${{ needs.test-demo.outputs.rerunFlag }}
       - name: download file
         uses: actions/download-artifact@v2
         with:
