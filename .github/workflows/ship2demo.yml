@@ -65,8 +65,6 @@ jobs:
     needs: ship2demo
     runs-on: self-hosted
     if: github.event.pull_request.draft == false
-    outputs:
-      rerunFlag: ${{ steps.rerunFlag.rerun }}
 
     steps:
       - name: Get current date
@@ -117,8 +115,5 @@ jobs:
         with:
           args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-${{ steps.date.outputs.date }}
 
-      - name: Set re-run flag
-        if: steps.runTests.outcome == 'failure'
-        id: rerunFlag
-        run: echo "::set-output name=rerun::true"
+
 
