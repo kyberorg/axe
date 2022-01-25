@@ -35,6 +35,7 @@ public class HomePageTest extends SelenideTest {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
+        Assertions.fail();
     }
 
     /**
@@ -72,7 +73,6 @@ public class HomePageTest extends SelenideTest {
 
         open(shortUrl + addRedirectPageBypassSymbol());
         verifyThatVROpened();
-        Assertions.fail();
     }
 
     /**
