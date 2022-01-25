@@ -227,6 +227,7 @@ public abstract class YalseeTest {
         TestReport testReport = TestReport.getReport();
         if (testReport.countOnFireTests() == 0 && testReport.countFailedTests() == 0) return;
         File file = new File(FILE_WITH_FAILED_TESTS);
+
         //on fire tests
         for (TestData testData : testReport.getOnFireTests()) {
             try {
@@ -235,6 +236,7 @@ public abstract class YalseeTest {
                 System.err.println("Failed to write failed test to file " + FILE_WITH_FAILED_TESTS);
             }
         }
+
         //failed tests
         for (TestData testData : testReport.getFailedTests()) {
             try {

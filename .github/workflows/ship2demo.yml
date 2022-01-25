@@ -122,7 +122,7 @@ jobs:
     name: Test::ReRun::Demo
     needs: test-demo
     runs-on: self-hosted
-    if: ${{ needs.test-demo.outputs.rerunFlag }} == 'failure'
+    if: needs.test-demo.outputs.rerunFlag == 'failure'
 
     steps:
       - name: debug
