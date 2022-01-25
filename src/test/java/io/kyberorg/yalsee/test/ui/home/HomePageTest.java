@@ -72,6 +72,7 @@ public class HomePageTest extends SelenideTest {
 
         open(shortUrl + addRedirectPageBypassSymbol());
         verifyThatVROpened();
+        Assertions.fail();
     }
 
     /**
