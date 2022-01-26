@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -69,7 +71,7 @@ func main() {
 	fmt.Printf("Running with \n%s\n", string(versionOut))
 
 	if profiles != EmptyString {
-		appendCommandArgs("-P=" + profiles)
+		appendCommandArgs("-P" + profiles)
 	}
 	if params != EmptyString {
 		appendCommandArgs(params)
@@ -83,6 +85,21 @@ func main() {
 	appendCommandArgs(targets)
 
 	fmt.Printf("%s %s", mvnCmd, rerunCommandArgs)
+
+	rrCmd := exec.Command(mvnCmd, rerunCommandArgs...)
+	var stdBuffer bytes.Buffer
+	mw := io.MultiWriter(os.Stdout, &stdBuffer)
+
+	rrCmd.Stdout = mw
+	rrCmd.Stderr = mw
+
+	err = rrCmd.Run()
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "Failed to start mvn-rr err=%v\n", err)
+		fmt.Println(stdBuffer.String())
+		os.Exit(1)
+	}
+	fmt.Printf("mvn-rr output: \n%s\n", stdBuffer.String())
 }
 
 func isTestNameValid(testName string) bool {
