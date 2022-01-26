@@ -75,9 +75,10 @@ func main() {
 		appendCommandArgs(params)
 	}
 	if len(failedTests) > 0 {
-		failedTests = append([]string{"-Dtest=\""}, failedTests...)
-		failedTests = append(failedTests, "\"")
-		appendCommandArgs(strings.Join(failedTests, " "))
+		failedTestsList := strings.Join(failedTests, " ")
+		failedTestsList = strings.TrimSpace(failedTestsList)
+		dTest := []string{"-Dtest=\"", failedTestsList, "\""}
+		appendCommandArgs(strings.Join(dTest, " "))
 	}
 	appendCommandArgs(targets)
 
