@@ -65,6 +65,8 @@ jobs:
     needs: ship2demo
     runs-on: self-hosted
     if: github.event.pull_request.draft == false
+    outputs:
+      rerunFlag: ${{ steps.runTests.outcome }}
 
     steps:
       - name: Get current date
@@ -74,9 +76,17 @@ jobs:
       - name: Test App
         id: runTests
         continue-on-error: true
-        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true clean test
+        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
         env:
           JAVA_HOME: /srv/java11
+
+      - name: Publish List of failing tests (if any)
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: test-fails
+          path: target/test-fails.txt
+          if-no-files-found: ignore
 
       - name: Publish Screenshots of failing tests (if any)
         uses: actions/upload-artifact@v2
@@ -104,5 +114,56 @@ jobs:
       - name: Delete Test Video (No failed tests)
         if: steps.runTests.outcome == 'success'
         uses: wei/curl@master
+        continue-on-error: true
         with:
           args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-${{ steps.date.outputs.date }}
+
+  rerun-tests-demo:
+    name: Test::ReRun::Demo
+    needs: test-demo
+    runs-on: self-hosted
+    if: needs.test-demo.outputs.rerunFlag == 'failure'
+
+    steps:
+      - name: Download file with failed tests
+        uses: actions/download-artifact@v2
+        with:
+          name: test-fails
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%y%m%d-%H%M')"
+      - name: ReRun Tests with mvn-rr
+        id: reRunTests
+        continue-on-error: true
+        run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
+        env:
+          JAVA_HOME: /srv/java11
+
+      - name: Publish Screenshots of still failing tests (if any)
+        uses: actions/upload-artifact@v2
+        continue-on-error: true
+        with:
+          name: stillFailedTests
+          path: target/reports/**/*.png
+          if-no-files-found: ignore
+
+      - name: Publish New Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.27
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Demo Unit Test Results
+          comment_title: Demo Unit Test Statistics
+          hide_comments: off
+          test_changes_limit: 0
+          files: target/surefire-reports/**/*.xml
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
+          check_run_annotations: all tests, skipped tests
+
+      - name: Delete Test Video (No failed tests)
+        if: steps.reRunTests.outcome == 'success'
+        uses: wei/curl@master
+        continue-on-error: true
+        with:
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-rerun-${{ steps.date.outputs.date }}

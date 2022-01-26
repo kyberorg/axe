@@ -62,6 +62,11 @@ public final class TestApp {
         public static final String SHOW_TEST_NAMES_IN_VIDEO = "test.show-test-names-in-video";
 
         /**
+         * File, where we record failed test.
+         */
+        public static final String FAILED_TESTS_FILE = "test.report.failed-tests-filename";
+
+        /**
          * {@link Selenide} related constants.
          */
         public static class Selenide {
@@ -105,6 +110,11 @@ public final class TestApp {
          * By default, we don't show test names in video.
          */
         public static final String SHOW_TEST_NAMES_IN_VIDEO = "false";
+
+        /**
+         * This is default value for {@link TestApp.Properties#FAILED_TESTS_FILE} indicates that no value set.
+         */
+        public static final String EMPTY_FILENAME = "EMPTY_FILE";
 
         /**
          * {@link Selenide}-related defaults.

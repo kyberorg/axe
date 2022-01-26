@@ -7,10 +7,14 @@ import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;
 import lombok.Getter;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Locale;
 
@@ -35,7 +39,8 @@ public abstract class YalseeTest {
     private static final boolean REPORT_PASSED_TESTS =
             Boolean.parseBoolean(
                     System.getProperty(TestApp.Properties.REPORT_PASSED_TESTS, TestApp.Defaults.REPORT_PASSED_TESTS));
-
+    private static final String FILE_WITH_FAILED_TESTS = System.getProperty(TestApp.Properties.FAILED_TESTS_FILE,
+            TestApp.Defaults.EMPTY_FILENAME);
 
     /**
      * Global init (before all tests).
@@ -59,6 +64,7 @@ public abstract class YalseeTest {
         TestTimer.getTimer().stopTimer();
         System.out.println("Testing is completed");
         printSummary();
+        addFailedTestsToFile();
         Mutex.getMutex().markAfterTestsAsExecuted();
     }
 
@@ -212,6 +218,33 @@ public abstract class YalseeTest {
         //print me now
         summary.append(String.valueOf(App.NEW_LINE).repeat(2));
         System.out.println(summary);
+    }
+
+    private static void addFailedTestsToFile() {
+        if (FILE_WITH_FAILED_TESTS.equals(TestApp.Defaults.EMPTY_FILENAME)) return;
+        TestReport testReport = TestReport.getReport();
+        if (testReport.countOnFireTests() == 0 && testReport.countFailedTests() == 0) return;
+        File file = new File(FILE_WITH_FAILED_TESTS);
+
+        //on fire tests
+        for (TestData testData : testReport.getOnFireTests()) {
+            try {
+                FileUtils.writeStringToFile(file, testData.toTestName() + App.NEW_LINE,
+                        StandardCharsets.UTF_8, true);
+            } catch (IOException e) {
+                System.err.println("Failed to write failed test to file " + FILE_WITH_FAILED_TESTS);
+            }
+        }
+
+        //failed tests
+        for (TestData testData : testReport.getFailedTests()) {
+            try {
+                FileUtils.writeStringToFile(file, testData.toTestName() + App.NEW_LINE,
+                        StandardCharsets.UTF_8, true);
+            } catch (IOException e) {
+                System.err.println("Failed to write failed test to file " + FILE_WITH_FAILED_TESTS);
+            }
+        }
     }
 
     /**
