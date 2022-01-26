@@ -10,7 +10,6 @@ import io.kyberorg.yalsee.test.pageobjects.external.QuayIo;
 import io.kyberorg.yalsee.test.pageobjects.external.VR;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -101,7 +100,6 @@ public class HomePageTest extends SelenideTest {
     public void openSomethingNonExisting() {
         open("/perkele");
         verifyThatPage404Opened();
-        Assertions.assertEquals(0, RandomUtils.nextInt() % 2);
     }
 
     /**
@@ -111,7 +109,6 @@ public class HomePageTest extends SelenideTest {
     public void openSomethingNonExistingDeeperThanSingleLevel() {
         open("/void/something/here");
         verifyThatPage404Opened();
-        Assertions.assertEquals(0, RandomUtils.nextInt() % 2);
     }
 
     /**
