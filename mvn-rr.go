@@ -63,7 +63,7 @@ func main() {
 
 	fmt.Printf("Running with \n%s\n", string(versionOut))
 
-	rrCmdArgs := mvnCmd
+	rrCmdArgs := ""
 
 	if profiles != EmptyString {
 		rrCmdArgs += "-P" + profiles + " "
