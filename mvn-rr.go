@@ -78,7 +78,7 @@ func main() {
 		failedTestsList := strings.Join(failedTests, " ")
 		failedTestsList = strings.TrimSpace(failedTestsList)
 		dTest := []string{"-Dtest=\"", failedTestsList, "\""}
-		appendCommandArgs(strings.Join(dTest, " "))
+		appendCommandArgs(strings.Join(dTest, ""))
 	}
 	appendCommandArgs(targets)
 
