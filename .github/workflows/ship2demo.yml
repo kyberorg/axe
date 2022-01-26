@@ -132,4 +132,4 @@ jobs:
       - name: cat it
         run: cat test-fails.txt
       - name: run mvn-rr
-        run: ./mvn-rr -mavenOpts="-Done=valOne -Dtwo=valTwo" -file="test-fails.txt"
+        run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444" -targets="clean test"
