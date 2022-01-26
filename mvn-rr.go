@@ -77,9 +77,10 @@ func main() {
 		appendCommandArgs(strings.Join(dTest, ""))
 	}
 	appendCommandArgs("clean")
+	appendCommandArgs("test-compile")
 	appendCommandArgs("test")
 
-	fmt.Printf("%s %s \n", mvnCmd, rerunCommandArgs)
+	fmt.Printf("%s %s \n", mvnCmd, strings.Join(rerunCommandArgs, ""))
 
 	rrCmd := exec.Command(mvnCmd, rerunCommandArgs...)
 	var stdBuffer bytes.Buffer
