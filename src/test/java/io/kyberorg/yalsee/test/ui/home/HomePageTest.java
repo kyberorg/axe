@@ -35,7 +35,6 @@ public class HomePageTest extends SelenideTest {
         open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
-        Assertions.fail();
     }
 
     /**
@@ -110,6 +109,7 @@ public class HomePageTest extends SelenideTest {
     public void openSomethingNonExistingDeeperThanSingleLevel() {
         open("/void/something/here");
         verifyThatPage404Opened();
+        Assertions.fail();
     }
 
     /**

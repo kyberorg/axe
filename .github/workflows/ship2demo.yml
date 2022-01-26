@@ -136,6 +136,8 @@ jobs:
         id: reRunTests
         continue-on-error: true
         run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
+        env:
+          JAVA_HOME: /srv/java11
 
       - name: Publish Screenshots of still failing tests (if any)
         uses: actions/upload-artifact@v2
