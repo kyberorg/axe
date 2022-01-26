@@ -73,7 +73,7 @@ func main() {
 	if len(failedTests) > 0 {
 		failedTestsList := strings.Join(failedTests, ",")
 		failedTestsList = strings.TrimSpace(failedTestsList)
-		dTest := []string{"-Dtest=\"", failedTestsList, "\""}
+		dTest := []string{"-Dtest=", failedTestsList}
 		appendCommandArgs(strings.Join(dTest, ""))
 	}
 	appendCommandArgs("clean")
@@ -93,8 +93,9 @@ func main() {
 		_, _ = fmt.Fprintf(os.Stderr, "Failed to start mvn-rr err=%v\n", err)
 		fmt.Println(stdBuffer.String())
 		os.Exit(1)
+	} else {
+		fmt.Printf("mvn-rr output: \n%s\n", stdBuffer.String())
 	}
-	fmt.Printf("mvn-rr output: \n%s\n", stdBuffer.String())
 }
 
 func isTestNameValid(testName string) bool {

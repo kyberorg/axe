@@ -100,6 +100,7 @@ public class HomePageTest extends SelenideTest {
     public void openSomethingNonExisting() {
         open("/perkele");
         verifyThatPage404Opened();
+        Assertions.fail();
     }
 
     /**
