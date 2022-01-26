@@ -30,9 +30,6 @@ public abstract class YalseeTest {
                     TestApp.Defaults.SHOW_TEST_NAMES_IN_VIDEO)
             );
 
-    public static final String FILE_WITH_FAILED_TESTS = System.getProperty(TestApp.Properties.FAILED_TESTS_FILE,
-            TestApp.Defaults.EMPTY_FILENAME);
-
     protected static final String BUILD_NAME =
             System.getProperty(TestApp.Properties.BUILD_NAME, TestApp.Defaults.BUILD_NAME);
     protected static final String BASE_URL = TestUtils.getTestUrl();
@@ -42,7 +39,8 @@ public abstract class YalseeTest {
     private static final boolean REPORT_PASSED_TESTS =
             Boolean.parseBoolean(
                     System.getProperty(TestApp.Properties.REPORT_PASSED_TESTS, TestApp.Defaults.REPORT_PASSED_TESTS));
-
+    private static final String FILE_WITH_FAILED_TESTS = System.getProperty(TestApp.Properties.FAILED_TESTS_FILE,
+            TestApp.Defaults.EMPTY_FILENAME);
 
     /**
      * Global init (before all tests).

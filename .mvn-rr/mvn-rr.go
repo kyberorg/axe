@@ -20,14 +20,13 @@ const (
 var (
 	failedTests []string
 	cmdArgs     []string
+	targets     = []string{"clean", "test"}
 )
 
 func main() {
 	failedTestsList := flag.String("file", EmptyFile, "File with failed test")
 	mvnProfiles := flag.String("profiles", EmptyString, "Maven Profiles (if any)")
 	mvnExtraParams := flag.String("params", EmptyString, "Maven params aka -D flags")
-
-	targets := []string{"clean", "test"}
 
 	flag.Parse()
 
@@ -70,7 +69,6 @@ func main() {
 		appendArg("-P" + profiles)
 	}
 
-	//params
 	cmdArgs = append(cmdArgs, params...)
 
 	if len(failedTests) > 0 {
@@ -80,7 +78,6 @@ func main() {
 		appendArg(strings.Join(dTest, ""))
 	}
 
-	//targets
 	cmdArgs = append(cmdArgs, targets...)
 
 	fmt.Printf("%s %s \n", mvnCmd, strings.Join(cmdArgs, " "))
