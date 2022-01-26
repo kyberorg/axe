@@ -19,12 +19,15 @@ const (
 
 var (
 	failedTests []string
+	cmdArgs     []string
 )
 
 func main() {
 	failedTestsList := flag.String("file", EmptyFile, "File with failed test")
 	mvnProfiles := flag.String("profiles", EmptyString, "Maven Profiles (if any)")
 	mvnExtraParams := flag.String("params", EmptyString, "Maven params aka -D flags")
+
+	targets := []string{"clean", "test"}
 
 	flag.Parse()
 
@@ -37,7 +40,7 @@ func main() {
 	}
 
 	profiles := strings.TrimSpace(*mvnProfiles)
-	params := strings.TrimSpace(*mvnExtraParams)
+	params := strings.Split(*mvnExtraParams, " ")
 
 	file, err := os.Open(*failedTestsList)
 	if err != nil {
@@ -63,25 +66,26 @@ func main() {
 
 	fmt.Printf("Running with \n%s\n", string(versionOut))
 
-	rrCmdArgs := mvnCmd
-
 	if profiles != EmptyString {
-		rrCmdArgs += "-P" + profiles + " "
+		appendArg("-P" + profiles)
 	}
-	if params != EmptyString {
-		rrCmdArgs += params + " "
-	}
+
+	//params
+	cmdArgs = append(cmdArgs, params...)
+
 	if len(failedTests) > 0 {
 		failedTestsList := strings.Join(failedTests, ",")
 		failedTestsList = strings.TrimSpace(failedTestsList)
 		dTest := []string{"-Dtest=", failedTestsList}
-		rrCmdArgs += strings.Join(dTest, "") + " "
+		appendArg(strings.Join(dTest, ""))
 	}
-	rrCmdArgs += "clean test-compile test"
 
-	fmt.Printf("%s %s \n", mvnCmd, rrCmdArgs)
+	//targets
+	cmdArgs = append(cmdArgs, targets...)
 
-	rrCmd := exec.Command(rrCmdArgs)
+	fmt.Printf("%s %s \n", mvnCmd, strings.Join(cmdArgs, " "))
+
+	rrCmd := exec.Command(mvnCmd, cmdArgs...)
 	var stdBuffer bytes.Buffer
 	mw := io.MultiWriter(os.Stdout, &stdBuffer)
 
@@ -124,4 +128,8 @@ func isTestNameValid(testName string) bool {
 
 func appendFailedTest(failedTest string) {
 	failedTests = append(failedTests, failedTest)
+}
+
+func appendArg(arg string) {
+	cmdArgs = append(cmdArgs, arg)
 }
