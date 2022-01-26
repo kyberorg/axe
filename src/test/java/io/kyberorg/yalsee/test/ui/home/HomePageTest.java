@@ -180,9 +180,10 @@ public class HomePageTest extends SelenideTest {
         //cleaning session first
         open("/myLinks");
         MyLinksViewPageObject.cleanSession();
-        open("/");
         waitForVaadin();
         CookieBannerPageObject.closeBannerIfAny();
+        open("/");
+        waitForVaadin();
 
         String link = "https://vr.fi";
         String description = "Suomen junat";
