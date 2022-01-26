@@ -26,7 +26,6 @@ func main() {
 	failedTestsList := flag.String("file", EmptyFile, "File with failed test")
 	mvnProfiles := flag.String("profiles", EmptyString, "Maven Profiles (if any)")
 	mvnExtraParams := flag.String("params", EmptyString, "Maven params aka -D flags")
-	mvnTargets := flag.String("targets", "test", "Space-separated maven targets")
 
 	flag.Parse()
 
@@ -38,13 +37,8 @@ func main() {
 			"This is not what your want. Use plain maven instead.")
 	}
 
-	if *mvnTargets == EmptyString {
-		log.Fatalf("No maven targets defined. Nothing to do.")
-	}
-
 	profiles := strings.TrimSpace(*mvnProfiles)
 	params := strings.TrimSpace(*mvnExtraParams)
-	targets := strings.TrimSpace(*mvnTargets)
 
 	file, err := os.Open(*failedTestsList)
 	if err != nil {
@@ -82,7 +76,8 @@ func main() {
 		dTest := []string{"-Dtest=\"", failedTestsList, "\""}
 		appendCommandArgs(strings.Join(dTest, ""))
 	}
-	appendCommandArgs(targets)
+	appendCommandArgs("clean")
+	appendCommandArgs("test")
 
 	fmt.Printf("%s %s", mvnCmd, rerunCommandArgs)
 
