@@ -71,7 +71,7 @@ func main() {
 		appendCommandArgs(params)
 	}
 	if len(failedTests) > 0 {
-		failedTestsList := strings.Join(failedTests, " ")
+		failedTestsList := strings.Join(failedTests, ",")
 		failedTestsList = strings.TrimSpace(failedTestsList)
 		dTest := []string{"-Dtest=\"", failedTestsList, "\""}
 		appendCommandArgs(strings.Join(dTest, ""))
@@ -79,7 +79,7 @@ func main() {
 	appendCommandArgs("clean")
 	appendCommandArgs("test")
 
-	fmt.Printf("%s %s", mvnCmd, rerunCommandArgs)
+	fmt.Printf("%s %s \n", mvnCmd, rerunCommandArgs)
 
 	rrCmd := exec.Command(mvnCmd, rerunCommandArgs...)
 	var stdBuffer bytes.Buffer
