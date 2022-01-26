@@ -18,8 +18,7 @@ const (
 )
 
 var (
-	failedTests      []string
-	rerunCommandArgs []string
+	failedTests []string
 )
 
 func main() {
@@ -64,25 +63,25 @@ func main() {
 
 	fmt.Printf("Running with \n%s\n", string(versionOut))
 
+	rrCmdArgs := mvnCmd
+
 	if profiles != EmptyString {
-		appendCommandArgs("-P" + profiles)
+		rrCmdArgs += "-P" + profiles + " "
 	}
 	if params != EmptyString {
-		appendCommandArgs(params)
+		rrCmdArgs += params + " "
 	}
 	if len(failedTests) > 0 {
 		failedTestsList := strings.Join(failedTests, ",")
 		failedTestsList = strings.TrimSpace(failedTestsList)
 		dTest := []string{"-Dtest=", failedTestsList}
-		appendCommandArgs(strings.Join(dTest, ""))
+		rrCmdArgs += strings.Join(dTest, "") + " "
 	}
-	appendCommandArgs("clean")
-	appendCommandArgs("test-compile")
-	appendCommandArgs("test")
+	rrCmdArgs += "clean test-compile test"
 
-	fmt.Printf("%s %s \n", mvnCmd, strings.Join(rerunCommandArgs, ""))
+	fmt.Printf("%s %s \n", mvnCmd, rrCmdArgs)
 
-	rrCmd := exec.Command(mvnCmd, rerunCommandArgs...)
+	rrCmd := exec.Command(mvnCmd, rrCmdArgs)
 	var stdBuffer bytes.Buffer
 	mw := io.MultiWriter(os.Stdout, &stdBuffer)
 
@@ -125,8 +124,4 @@ func isTestNameValid(testName string) bool {
 
 func appendFailedTest(failedTest string) {
 	failedTests = append(failedTests, failedTest)
-}
-
-func appendCommandArgs(arg string) {
-	rerunCommandArgs = append(rerunCommandArgs, arg)
 }
