@@ -31,7 +31,7 @@ func main() {
 	if *failedTestsList == EmptyFile {
 		log.Fatal("No file with failed test defined. Please use '-file /path/to/file' flag.")
 	}
-	if strings.Contains(*mvnExtraParams, "-Dtest") {
+	if strings.Contains(*mvnExtraParams, "-Dtest=") {
 		log.Fatal("Conflict: mvn-rr constructs own -Dtest and your version would be overridden. " +
 			"This is not what your want. Use plain maven instead.")
 	}
