@@ -97,8 +97,6 @@ func main() {
 		_, _ = fmt.Fprintf(os.Stderr, "Failed to start mvn-rr err=%v\n", err)
 		fmt.Println(stdBuffer.String())
 		os.Exit(1)
-	} else {
-		fmt.Printf("mvn-rr output: \n%s\n", stdBuffer.String())
 	}
 }
 
