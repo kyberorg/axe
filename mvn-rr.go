@@ -63,7 +63,7 @@ func main() {
 
 	fmt.Printf("Running with \n%s\n", string(versionOut))
 
-	rrCmdArgs := ""
+	rrCmdArgs := mvnCmd
 
 	if profiles != EmptyString {
 		rrCmdArgs += "-P" + profiles + " "
@@ -81,7 +81,7 @@ func main() {
 
 	fmt.Printf("%s %s \n", mvnCmd, rrCmdArgs)
 
-	rrCmd := exec.Command(mvnCmd, rrCmdArgs)
+	rrCmd := exec.Command(rrCmdArgs)
 	var stdBuffer bytes.Buffer
 	mw := io.MultiWriter(os.Stdout, &stdBuffer)
 
