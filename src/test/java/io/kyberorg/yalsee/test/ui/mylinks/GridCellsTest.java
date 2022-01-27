@@ -112,8 +112,9 @@ public class GridCellsTest extends SelenideTest {
     public void onClickToLinkShortLinkCopiedToClipboard() {
         if (isRemoteRun()) {
             assertThat(clipboard()).isInstanceOf(SelenoidClipboard.class);
-            SelenideTest.cleanClipboard();
         }
+        SelenideTest.cleanClipboard();
+
         SelenideElement linkSpan = Grid.GridData.get().getRow(1).getLinkSpan();
         String linkText = linkSpan.getText();
         assertTrue(StringUtils.isNotBlank(linkText));

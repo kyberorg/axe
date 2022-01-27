@@ -46,6 +46,9 @@ public abstract class SelenideTest extends YalseeTest {
         }
     }
 
+    /**
+     * Cleans Clipboard (local or remote), if it is not empty.
+     */
     protected static void cleanClipboard() {
         if (StringUtils.isNotBlank(clipboard().getText())) {
             clipboard().setText("");
