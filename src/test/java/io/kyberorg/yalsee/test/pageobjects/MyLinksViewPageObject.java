@@ -160,6 +160,15 @@ public final class MyLinksViewPageObject {
                 }
 
                 /**
+                 * Span where link text is located.
+                 *
+                 * @return {@link SelenideElement} with Span, where link text is.
+                 */
+                public SelenideElement getLinkSpan() {
+                    return getLinkCell().$("span");
+                }
+
+                /**
                  * Description Cell.
                  *
                  * @return {@link SelenideElement} with Description Cell.

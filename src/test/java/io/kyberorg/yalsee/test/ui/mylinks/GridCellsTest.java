@@ -1,19 +1,22 @@
 package io.kyberorg.yalsee.test.ui.mylinks;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
+import org.selenide.selenoid.SelenoidClipboard;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
 import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -52,7 +55,7 @@ public class GridCellsTest extends SelenideTest {
      */
     @Test
     public void onItemClickItemDetailsOpenedAndHaveAllNeededElementsInside() {
-        SelenideElement item = Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement item = Grid.GridData.get().getRow(1).getLinkCell();
         item.click();
         SelenideElement itemDetailsElement = Grid.GridData.get().getRow(1).getItemDetails();
         Grid.GridItem.Details itemDetails = Grid.GridItem.Details.of(itemDetailsElement);
@@ -108,20 +111,23 @@ public class GridCellsTest extends SelenideTest {
     @Test
     public void onClickToLinkShortLinkCopiedToClipboard() {
         if (isRemoteRun()) {
-            //currently, we have problem accessing remote clipboard.
-            //TODO remove once fixed
-            return;
+            assertThat(clipboard()).isInstanceOf(SelenoidClipboard.class);
+            SelenideTest.cleanClipboard();
         }
-        SelenideElement linkCell = Grid.GridData.get().getRow(1).getLinkCell();
-        String link = linkCell.getText();
-        linkCell.click();
-        String textFromClipboard = Selenide.clipboard().getText();
-        assertEquals("http://" + link, textFromClipboard);
+        SelenideElement linkSpan = Grid.GridData.get().getRow(1).getLinkSpan();
+        String linkText = linkSpan.getText();
+        assertTrue(StringUtils.isNotBlank(linkText));
+        String ident = linkText.replace(TestUtils.getAppShortDomain(), ""); //will leave only "/ident" part
+
+        linkSpan.click();
+        sleep(App.ONE_SECOND_IN_MILLIS);
+        String textFromClipboard = clipboard().getText();
+        assertEquals(TestUtils.getAppShortUrl() + ident, textFromClipboard);
 
         //closing item details if opened, which opens within same click
         SelenideElement itemDetails = Grid.GridData.get().getRow(1).getItemDetails();
         if (itemDetails.isDisplayed()) {
-            linkCell.click();
+            linkSpan.click();
         }
     }
 
