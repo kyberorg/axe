@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
 
+import static com.codeborne.selenide.Selenide.clipboard;
+
 /**
  * Base for all UI Tests, which run with Selenide.
  *
@@ -41,6 +43,15 @@ public abstract class SelenideTest extends YalseeTest {
         if (shouldRunTestsAtGrid()) {
             Configuration.remote = getGridFullUrl();
             tuneDriverWithCapabilities();
+        }
+    }
+
+    /**
+     * Cleans Clipboard (local or remote), if it is not empty.
+     */
+    protected static void cleanClipboard() {
+        if (StringUtils.isNotBlank(clipboard().getText())) {
+            clipboard().setText("");
         }
     }
 

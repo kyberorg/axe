@@ -288,6 +288,14 @@
             <version>6.2.1</version>
             <scope>test</scope>
         </dependency>
+        <!-- Selenide plugin for Selenoid -->
+        <dependency>
+            <groupId>org.selenide</groupId>
+            <artifactId>selenide-selenoid</artifactId>
+            <version>2.1.0</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <!-- Selenium 4 -->
         <dependency>
