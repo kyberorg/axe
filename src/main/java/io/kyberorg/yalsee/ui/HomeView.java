@@ -356,8 +356,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         resultArea.setVisible(true);
         myLinksNoteArea.setVisible(true);
         generateQRCode(savedLink.getIdent());
-        //scrolling to results
-        resultArea.getElement().callJsFunction("scrollIntoView");
+        scrollToResults();
     }
 
     private void onFailStoreLink(final OperationResult opResult) {
@@ -456,6 +455,14 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         qrCodeArea.setVisible(false);
 
         myLinksNoteArea.setVisible(false);
+    }
+
+    private void scrollToResults() {
+        if (UI.getCurrent().getPage() != null) {
+            UI.getCurrent().getPage().executeJs(
+                    "arguments[0].scrollIntoView({behavior:'smooth', block: 'start', inline: 'nearest'})",
+                    linkCounter);
+        }
     }
 
     public static class IDs {
