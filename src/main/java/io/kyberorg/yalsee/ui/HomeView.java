@@ -356,6 +356,8 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         resultArea.setVisible(true);
         myLinksNoteArea.setVisible(true);
         generateQRCode(savedLink.getIdent());
+        //scrolling to results
+        resultArea.getElement().callJsFunction("scrollIntoView");
     }
 
     private void onFailStoreLink(final OperationResult opResult) {
