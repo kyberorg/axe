@@ -347,7 +347,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(YalseeSession.getCurrent())) {
             settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
         }
-
+        settings.addInlineFromFile(InitialPageSettings.Position.PREPEND,
+                "yalsee.js", InitialPageSettings.WrapMode.JAVASCRIPT);
         settings.addInlineFromFile(InitialPageSettings.Position.PREPEND,
                 "show-test-name.js", InitialPageSettings.WrapMode.JAVASCRIPT);
     }

@@ -460,8 +460,8 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private void scrollToResults() {
         if (UI.getCurrent().getPage() != null) {
             UI.getCurrent().getPage().executeJs(
-                    "arguments[0].scrollIntoView({behavior:'smooth', block: 'start', inline: 'nearest'})",
-                    linkCounter);
+                    "setTimeout(scrollToResults, 500)"
+            );
         }
     }
 
