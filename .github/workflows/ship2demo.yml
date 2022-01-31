@@ -52,7 +52,7 @@ jobs:
         run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-7)"
 
       - name: Wait for site appears online
-        uses: kyberorg/wait_for_new_version@v2
+        uses: kyberorg/wait_for_new_version@v3
         with:
           url: https://demo.yals.ee
           responseCode: 200
