@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -191,6 +192,17 @@ public class ActionsTest extends SelenideTest {
         waitForVaadin();
 
         Grid.GridData.get().getDataRows().shouldHave(size(0));
+    }
+
+    /**
+     * When Menu item clicked Grid Column Order remains the same.
+     */
+    @Test
+    public void onMenuClickGridColumnOrderRemainsSame() {
+        MainViewPageObject.Menu.MY_LINKS_ITEM.click();
+        waitForVaadin();
+        SelenideElement firstCell = Grid.Header.get().getCells().get(0);
+        firstCell.shouldHave(text("Link"));
     }
 
     private void saveOneLink() {
