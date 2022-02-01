@@ -77,6 +77,7 @@ public final class App {
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
         public static final int SESSION_TIMEOUT_SECONDS = 1800;
+        public static final int NOTIFICATION_DURATION_MILLIS = 3000;
     }
 
     public static class Api {
@@ -86,6 +87,7 @@ public final class App {
     public static class Session {
         public static final int SESSION_WATCHDOG_INTERVAL = 20; //20 seconds
         public static final int SESSION_SYNC_INTERVAL = 5; //5 seconds
+        public static final String EMPTY_ID = "";
     }
 
     public static class CookieNames {

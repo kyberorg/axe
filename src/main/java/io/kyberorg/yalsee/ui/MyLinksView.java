@@ -13,10 +13,12 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.dom.DomEvent;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -26,6 +28,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.App.Session;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.events.LinkUpdatedEvent;
@@ -61,7 +64,6 @@ import java.util.Optional;
 @PageTitle("Yalsee: My Links")
 public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MyLinksView.class.getSimpleName() + "]";
-    private static final String USER_MODE_FLAG = "UserMode";
 
     private final Span sessionBanner = new Span();
     private final Span noRecordsBanner = new Span();
@@ -75,6 +77,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private Grid.Column<LinkInfo> descriptionColumn;
     private Grid.Column<LinkInfo> qrCodeColumn;
     private Grid.Column<LinkInfo> deleteColumn;
+    private final Notification userModeNotification = createUserModeNotification();
 
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
@@ -96,7 +99,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private void init() {
-        sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse(null);
+        sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse(Session.EMPTY_ID);
         deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
         clientHasSmallScreen = isSmallScreen();
 
@@ -144,15 +147,12 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
-        //User-mode activation
-        grid.getElement().addEventListener("keydown", event -> {
-                    YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(true));
-                    activateLinkEditor();
-                    log.info("{} User mode activated.", TAG);
-                })
-                .setFilter("event.key === 'R' && event.shiftKey");
+        //Toggle User-mode (kinda easter egg)
+        grid.getElement().addEventListener("keydown", this::toggleUserMode)
+                .setFilter("event.shiftKey && event.key === 'R'");
 
         initGridEditor();
+        activateLinkEditor();
 
         removeAll();
         add(sessionBanner, noRecordsBanner, endSessionButton, grid);
@@ -324,6 +324,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private void onLinkEvent(final Link link) {
         //act only if link deleted was saved within our session
+        if (sessionId.equals(Session.EMPTY_ID)) return;
         if (getSessionIdFromLink(link).equals(sessionId)) {
             updateDataAndState();
         }
@@ -343,6 +344,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private void updateDataAndState() {
+        if (sessionId.equals(Session.EMPTY_ID)) return;
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
             ui.access(() -> {
@@ -480,9 +482,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private String getSessionIdFromLink(final Link linkFromEvent) {
         Optional<LinkInfo> linkInfo = linkInfoService.getLinkInfoByLink(linkFromEvent);
         if (linkInfo.isPresent()) {
-            return StringUtils.isNotBlank(linkInfo.get().getSession()) ? linkInfo.get().getSession() : "";
+            return StringUtils.isNotBlank(linkInfo.get().getSession()) ? linkInfo.get().getSession() : Session.EMPTY_ID;
         } else {
-            return "";
+            return Session.EMPTY_ID;
         }
     }
 
@@ -501,6 +503,40 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
             isSmallScreen = YalseeSession.getCurrent().map(session -> session.getDevice().isMobile()).orElse(false);
         }
         return isSmallScreen;
+    }
+
+    private void toggleUserMode(final DomEvent event) {
+        boolean userModeActivated = YalseeSession.getCurrent()
+                .map(ys -> ys.getFlags().isUserModeEnabled()).orElse(false);
+        if (userModeActivated) {
+            YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(false));
+            ui.access(() -> {
+                this.userModeNotification.setText("User mode deactivated");
+                this.userModeNotification.open();
+            });
+            log.info("{} User mode deactivated.", TAG);
+        } else {
+            YalseeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(true));
+            ui.access(() -> {
+                activateLinkEditor();
+                this.userModeNotification.setText("User mode activated");
+                this.userModeNotification.open();
+            });
+            log.info("{} User mode activated.", TAG);
+        }
+    }
+
+    private Notification createUserModeNotification() {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.TOP_CENTER);
+        notification.setDuration(App.Defaults.NOTIFICATION_DURATION_MILLIS);
+        notification.addDetachListener(this::refreshPage);
+        return notification;
+    }
+
+    private void refreshPage(final DetachEvent event) {
+        event.getUI().getPage().reload();
     }
 
     public static class IDs {
