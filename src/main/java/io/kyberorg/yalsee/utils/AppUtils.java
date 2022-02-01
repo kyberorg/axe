@@ -262,10 +262,12 @@ public class AppUtils implements Serializable {
         notification.setPosition(Notification.Position.MIDDLE);
 
         HorizontalLayout layout = new HorizontalLayout();
-        Label label = new Label(text);
-        Button closeButton = new Button("OK", event -> notification.close());
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
+        Label label = new Label(text);
         label.getStyle().set("margin-right", "0.5rem");
+        Button closeButton = new Button("OK", event -> notification.close());
+        closeButton.getElement().setAttribute("aria-label", "Close");
         closeButton.getStyle().set("margin-right", "0.5rem");
 
         layout.add(label, closeButton);
