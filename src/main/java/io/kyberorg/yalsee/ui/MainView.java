@@ -210,9 +210,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         Image logo = new Image("/images/logo.png", "Icon");
         logo.setId(APP_LOGO);
         logo.addClassName("logo-image");
-        logo.addClickListener(this::onLogoClicked);
-        Tab logoTab = new Tab(logo);
-        logoTab.setEnabled(false);
+
+        RouterLink logoLink = new RouterLink(null, HomeView.class);
+        logoLink.add(logo);
+
+        Tab logoTab = new Tab(logoLink);
         tabs.add(logoTab);
     }
 
@@ -311,7 +313,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void onLogoClicked(final ClickEvent<Image> event) {
-        this.ui.navigate(Endpoint.UI.HOME_PAGE);
+        if (this.ui != null && this.ui.getPage() != null) {
+            this.ui.getPage().open(Endpoint.UI.HOME_PAGE);
+        }
     }
 
     @Override
