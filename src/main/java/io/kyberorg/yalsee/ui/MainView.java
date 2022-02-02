@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.ui;
 
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -310,12 +309,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public void applyTheme(final boolean isDarkTheme) {
         final String theme = isDarkTheme ? "dark" : "light";
         this.ui.getPage().executeJs("document.documentElement.setAttribute(\"theme\",\"" + theme + "\")");
-    }
-
-    private void onLogoClicked(final ClickEvent<Image> event) {
-        if (this.ui != null && this.ui.getPage() != null) {
-            this.ui.getPage().open(Endpoint.UI.HOME_PAGE);
-        }
     }
 
     @Override
