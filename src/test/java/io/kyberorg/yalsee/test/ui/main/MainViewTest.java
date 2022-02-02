@@ -69,7 +69,7 @@ public class MainViewTest extends SelenideTest {
      */
     @Test
     @Issue("https://github.com/kyberorg/yalsee/issues/748")
-    public void LongVersionOfLogoIsUsedAtMenu() {
+    public void longVersionOfLogoIsUsedAtMenu() {
         SelenideUtils.assertThatImageIsNotSquared(MainViewPageObject.LOGO);
     }
 

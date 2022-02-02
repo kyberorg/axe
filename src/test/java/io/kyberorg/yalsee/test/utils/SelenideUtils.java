@@ -39,7 +39,7 @@ public final class SelenideUtils {
     }
 
     /**
-     * Asserts that image element contains image not-squared image (width != height).
+     * Asserts that element contains not-squared image (width != height).
      *
      * @param image element with image.
      */
