@@ -52,6 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
@@ -91,31 +92,65 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private DeviceUtils deviceUtils;
     private boolean clientHasSmallScreen;
 
-    @Override
-    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        init();
+    @PostConstruct
+    private void pageInit() {
+        initElements();
+        setPageStructure();
         setIds();
-        applyLoadState();
     }
 
-    private void init() {
-        sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse(Session.EMPTY_ID);
-        deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
-        clientHasSmallScreen = isSmallScreen();
-
+    private void initElements() {
         sessionBanner.setText("Those are links stored in current session. "
                 + "Soon you will be able to store them permanently, once we introduce users");
 
         noRecordsBannerText.setText("It looks lonely here. What about saving something at ");
         noRecordsBannerLink.setHref("/");
         noRecordsBannerLink.setText("MainPage");
-        noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
 
         endSessionButton.setText("End session");
         endSessionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        endSessionButton.addClickListener(this::onCleanButtonClick);
+        endSessionButton.addClickListener(this::onEndSessionButtonClick);
         endSessionButton.getStyle().set("align-self", "flex-end");
 
+        initGrid();
+        initGridEditor();
+    }
+
+    private void setPageStructure() {
+        noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
+        add(sessionBanner, noRecordsBanner, endSessionButton, grid);
+    }
+
+    private void setIds() {
+        setId(MyLinksView.class.getSimpleName());
+        sessionBanner.setId(IDs.SESSION_BANNER);
+        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
+        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
+        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
+        endSessionButton.setId(IDs.END_SESSION_BUTTON);
+        grid.setId(IDs.GRID);
+        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
+        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
+        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
+        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
+    }
+
+    @Override
+    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        applyLoadState();
+        activateLinkEditor();
+
+        sessionId = YalseeSession.getCurrent().map(YalseeSession::getSessionId).orElse(Session.EMPTY_ID);
+        deviceUtils = DeviceUtils.createWithUI(UI.getCurrent());
+        clientHasSmallScreen = isSmallScreen();
+    }
+
+    private void applyLoadState() {
+        noRecordsBanner.setVisible(gridIsEmpty());
+    }
+
+    private void initGrid() {
+        //remove default columns - first
         grid.removeAllColumns();
 
         linkColumn = grid.addComponentColumn(this::link).setHeader("Link");
@@ -123,7 +158,6 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
         deleteColumn = grid.addComponentColumn(this::createDeleteButton).setHeader("Actions");
 
-        //Item Details
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
                         "<div class='" + IDs.ITEM_DETAILS_CLASS
                                 + "' style='border: 1px solid gray; padding: 10px; width: 100%; "
@@ -150,30 +184,6 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         //Toggle User-mode (kinda easter egg)
         grid.getElement().addEventListener("keydown", this::toggleUserMode)
                 .setFilter("event.shiftKey && event.key === 'R'");
-
-        initGridEditor();
-        activateLinkEditor();
-
-        removeAll();
-        add(sessionBanner, noRecordsBanner, endSessionButton, grid);
-    }
-
-    private void setIds() {
-        setId(MyLinksView.class.getSimpleName());
-        sessionBanner.setId(IDs.SESSION_BANNER);
-        noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
-        noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
-        noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
-        endSessionButton.setId(IDs.END_SESSION_BUTTON);
-        grid.setId(IDs.GRID);
-        linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
-        descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
-        qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
-        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
-    }
-
-    private void applyLoadState() {
-        noRecordsBanner.setVisible(gridIsEmpty());
     }
 
     private Span link(final LinkInfo linkInfo) {
@@ -338,7 +348,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         }
     }
 
-    private void onCleanButtonClick(final ClickEvent<Button> buttonClickEvent) {
+    private void onEndSessionButtonClick(final ClickEvent<Button> buttonClickEvent) {
         YalseeSession.getCurrent().ifPresent(sessionService::destroySession);
         appUtils.endVaadinSession(VaadinSession.getCurrent());
     }

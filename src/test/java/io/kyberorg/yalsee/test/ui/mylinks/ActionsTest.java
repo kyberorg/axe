@@ -11,6 +11,7 @@ import io.kyberorg.yalsee.ui.err.PageNotFoundView;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,6 +199,7 @@ public class ActionsTest extends SelenideTest {
      * When Menu item clicked Grid Column Order remains the same.
      */
     @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/695")
     public void onMenuClickGridColumnOrderRemainsSame() {
         MainViewPageObject.Menu.MY_LINKS_ITEM.click();
         waitForVaadin();
