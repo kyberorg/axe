@@ -77,7 +77,7 @@ public final class App {
     public static class Defaults {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
         public static final int SESSION_TIMEOUT_SECONDS = 1800;
-        public static final int NOTIFICATION_DURATION_MILLIS = 3000;
+        public static final int NOTIFICATION_DURATION_MILLIS = 1500;
     }
 
     public static class Api {
