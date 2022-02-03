@@ -3,11 +3,10 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
-import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
+import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
-import io.kyberorg.yalsee.ui.err.PageNotFoundView;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,30 +57,29 @@ public class ActionsTest extends SelenideTest {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.click();
 
+        DeleteDialog.DIALOG.shouldBe(visible);
+        DeleteDialog.DELETE_BUTTON.click();
+
         //reload needed - because Vaadin just hides element in grid
         openMyLinksPage();
         Grid.GridData.get().getDataRows().shouldHave(size(0));
     }
 
     /**
-     * Tests that Delete Button really deletes Record,
-     * so link is no longer in system and {@link PageNotFoundView} appears.
+     * On Delete Button clicked - opens Delete Confirmation Dialog.
      */
     @Test
-    public void deleteButtonDeletesRecord() {
+    @Issue("https://github.com/kyberorg/yalsee/issues/680")
+    public void onDeleteButtonClicked_opensDeleteConfirmationDialog() {
         saveOneLink();
-        String shortUrl = HomePageObject.getSavedUrl();
-
         openMyLinksPage();
+        clickFirstDeleteButton();
 
-        Grid.GridData.get().getDataRows().shouldHave(size(1));
-        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
-        deleteButton.click();
+        DeleteDialog.DIALOG.should(exist);
+        DeleteDialog.DIALOG.shouldBe(visible);
 
-        open(shortUrl);
-
-        NotFoundViewPageObject.TITLE.shouldBe(visible);
-        NotFoundViewPageObject.TITLE.shouldHave(text("404"));
+        //cleanup
+        DeleteDialog.CANCEL_BUTTON.click();
     }
 
     /**
@@ -153,9 +151,9 @@ public class ActionsTest extends SelenideTest {
         String longUrlOne = "https://github.com/kyberorg/yalsee/issues/195";
         String longUrlTwo = "https://gist.github.com/kyberorg/e3621b30a217addf8566736dc47eb997";
 
-        saveOneLink(longUrlOne);
+        MyLinksViewPageObject.saveOneLink(longUrlOne);
         String shortUrlOne = UrlUtils.removeProtocol(HomePageObject.getSavedUrl());
-        saveOneLink(longUrlTwo);
+        MyLinksViewPageObject.saveOneLink(longUrlTwo);
         String shortUrlTwo = UrlUtils.removeProtocol(HomePageObject.getSavedUrl());
 
         openMyLinksPage();
@@ -207,18 +205,7 @@ public class ActionsTest extends SelenideTest {
         firstCell.shouldHave(text("Link"));
     }
 
-    private void saveOneLink() {
-        saveOneLink("https://kyberorg.io");
-    }
-
-    private void saveOneLink(final String url) {
-        open("/");
-        waitForVaadin();
-        HomePageObject.pasteValueInFormAndSubmitIt(url);
-    }
-
-    private void openMyLinksPage() {
-        open("/myLinks");
-        waitForVaadin();
+    static void saveOneLink() {
+        MyLinksViewPageObject.saveOneLink("https://kyberorg.io");
     }
 }

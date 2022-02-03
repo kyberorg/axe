@@ -17,7 +17,7 @@ import io.kyberorg.yalsee.internal.Callback;
  *
  * @since 3.10
  */
-public class ConfirmDeletionDialog extends Composite<Dialog> {
+public class DeleteConfirmationDialog extends Composite<Dialog> {
 
     private final H3 title = new H3("Confirm Delete");
     private final Span message = new Span("Are you sure? This action cannot be undone.");
@@ -30,19 +30,19 @@ public class ConfirmDeletionDialog extends Composite<Dialog> {
     /**
      * Creates dialog. Created dialog ain't open automatically.
      *
-     * @return created {@link ConfirmDeletionDialog} for further modification.
+     * @return created {@link DeleteConfirmationDialog} for further modification.
      */
-    public static ConfirmDeletionDialog create() {
-        return new ConfirmDeletionDialog();
+    public static DeleteConfirmationDialog create() {
+        return new DeleteConfirmationDialog();
     }
 
     /**
      * Sets action performed when user pressed Delete Button.
      *
      * @param callback callable method in lambda.
-     * @return same {@link ConfirmDeletionDialog} for chaining.
+     * @return same {@link DeleteConfirmationDialog} for chaining.
      */
-    public ConfirmDeletionDialog onDeleteButton(final Callback callback) {
+    public DeleteConfirmationDialog onDeleteButton(final Callback callback) {
         defaultDeleteButtonAction.remove();
         this.deleteButton.addClickListener(e -> {
             callback.execute();
@@ -58,7 +58,7 @@ public class ConfirmDeletionDialog extends Composite<Dialog> {
         this.dialog.open();
     }
 
-    private ConfirmDeletionDialog() {
+    private DeleteConfirmationDialog() {
         VerticalLayout dialogLayout = createDialogLayout();
         setClassNames();
         dialog.add(dialogLayout);
