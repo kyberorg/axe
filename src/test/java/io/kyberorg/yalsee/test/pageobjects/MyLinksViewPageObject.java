@@ -7,8 +7,10 @@ import io.kyberorg.yalsee.ui.MyLinksView;
 import lombok.Data;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.constants.App.FOUR;
 import static io.kyberorg.yalsee.constants.App.THREE;
+import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
  * Page Object for {@link MyLinksView}.
@@ -292,10 +294,34 @@ public final class MyLinksViewPageObject {
         }
     }
 
+    public static class DeleteDialog {
+        public static final SelenideElement DIALOG = $(".delete-dialog");
+        public static final SelenideElement TITLE = $(".delete-dialog-title");
+        public static final SelenideElement MESSAGE = $(".delete-dialog-message");
+        public static final SelenideElement CANCEL_BUTTON = $(".delete-dialog-cancel-btn");
+        public static final SelenideElement DELETE_BUTTON = $(".delete-dialog-delete-btn");
+    }
+
     /**
      * Cleans current session by clicking {@link #END_SESSION_BUTTON}.
      */
     public static void cleanSession() {
         END_SESSION_BUTTON.click();
+    }
+
+    /**
+     * Opens MyLinks Page.
+     */
+    public static void openMyLinksPage() {
+        open("/myLinks");
+        waitForVaadin();
+    }
+
+    /**
+     * Clicks first delete button.
+     */
+    public static void clickFirstDeleteButton() {
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
+        deleteButton.click();
     }
 }

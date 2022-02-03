@@ -130,6 +130,17 @@ public final class HomePageObject {
     }
 
     /**
+     * Saves given url.
+     *
+     * @param url string with long URL.
+     */
+    public static void saveOneLink(final String url) {
+        open("/");
+        waitForVaadin();
+        pasteValueInFormAndSubmitIt(url);
+    }
+
+    /**
      * Retrieves result link from element.
      *
      * @return string with short URL

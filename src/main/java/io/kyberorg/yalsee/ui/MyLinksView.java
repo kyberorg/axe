@@ -40,6 +40,7 @@ import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.YalseeSession;
+import io.kyberorg.yalsee.ui.components.DeleteConfirmationDialog;
 import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -342,7 +343,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private void onDeleteButtonClick(final LinkInfo item) {
         if (item != null) {
-            deleteLinkAndLinkInfo(item);
+            DeleteConfirmationDialog.create().setDeleteButtonAction(() -> this.deleteLinkAndLinkInfo(item)).show();
         } else {
             ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
         }
