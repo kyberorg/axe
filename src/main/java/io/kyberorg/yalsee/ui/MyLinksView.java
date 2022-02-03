@@ -343,8 +343,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private void onDeleteButtonClick(final LinkInfo item) {
         if (item != null) {
-            DeleteConfirmationDialog.create().onDeleteButton(() -> this.deleteLinkAndLinkInfo(item)).show();
-            //deleteLinkAndLinkInfo(item);
+            DeleteConfirmationDialog.create().setDeleteButtonAction(() -> this.deleteLinkAndLinkInfo(item)).show();
         } else {
             ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
         }

@@ -42,7 +42,7 @@ public final class DeleteConfirmationDialog extends Composite<Dialog> {
      * @param callback callable method in lambda.
      * @return same {@link DeleteConfirmationDialog} for chaining.
      */
-    public DeleteConfirmationDialog onDeleteButton(final Callback callback) {
+    public DeleteConfirmationDialog setDeleteButtonAction(final Callback callback) {
         defaultDeleteButtonAction.remove();
         this.deleteButton.addClickListener(e -> {
             callback.execute();
