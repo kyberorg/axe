@@ -17,7 +17,7 @@ import io.kyberorg.yalsee.internal.Callback;
  *
  * @since 3.10
  */
-public class DeleteConfirmationDialog extends Composite<Dialog> {
+public final class DeleteConfirmationDialog extends Composite<Dialog> {
 
     private final H3 title = new H3("Confirm Delete");
     private final Span message = new Span("Are you sure? This action cannot be undone.");

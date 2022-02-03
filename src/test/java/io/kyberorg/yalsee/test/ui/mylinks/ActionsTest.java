@@ -3,7 +3,6 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
-import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
@@ -151,9 +150,9 @@ public class ActionsTest extends SelenideTest {
         String longUrlOne = "https://github.com/kyberorg/yalsee/issues/195";
         String longUrlTwo = "https://gist.github.com/kyberorg/e3621b30a217addf8566736dc47eb997";
 
-        MyLinksViewPageObject.saveOneLink(longUrlOne);
+        HomePageObject.saveOneLink(longUrlOne);
         String shortUrlOne = UrlUtils.removeProtocol(HomePageObject.getSavedUrl());
-        MyLinksViewPageObject.saveOneLink(longUrlTwo);
+        HomePageObject.saveOneLink(longUrlTwo);
         String shortUrlTwo = UrlUtils.removeProtocol(HomePageObject.getSavedUrl());
 
         openMyLinksPage();
@@ -206,6 +205,6 @@ public class ActionsTest extends SelenideTest {
     }
 
     static void saveOneLink() {
-        MyLinksViewPageObject.saveOneLink("https://kyberorg.io");
+        HomePageObject.saveOneLink("https://kyberorg.io");
     }
 }

@@ -309,17 +309,17 @@ public final class MyLinksViewPageObject {
         END_SESSION_BUTTON.click();
     }
 
-    public static void saveOneLink(final String url) {
-        open("/");
-        waitForVaadin();
-        HomePageObject.pasteValueInFormAndSubmitIt(url);
-    }
-
+    /**
+     * Opens MyLinks Page.
+     */
     public static void openMyLinksPage() {
         open("/myLinks");
         waitForVaadin();
     }
 
+    /**
+     * Clicks first delete button.
+     */
     public static void clickFirstDeleteButton() {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.click();

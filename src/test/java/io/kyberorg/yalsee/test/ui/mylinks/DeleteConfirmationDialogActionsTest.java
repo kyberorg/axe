@@ -79,7 +79,7 @@ public class DeleteConfirmationDialogActionsTest extends SelenideTest {
      */
     @Test
     public void deleteButtonDeletesRecord() {
-        saveOneLink("https://kyberorg.io");
+        HomePageObject.saveOneLink("https://kyberorg.io");
         String shortUrl = HomePageObject.getSavedUrl();
 
         openMyLinksPage();
@@ -103,7 +103,7 @@ public class DeleteConfirmationDialogActionsTest extends SelenideTest {
     }
 
     private void saveLinkAndReturnToMyLinksPage() {
-        saveOneLink("https://kyberorg.io");
+        HomePageObject.saveOneLink("https://kyberorg.io");
         openMyLinksPage();
     }
 }
