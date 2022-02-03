@@ -7,5 +7,8 @@ package io.kyberorg.yalsee.internal;
  */
 @FunctionalInterface
 public interface Callback {
+    /**
+     * Triggers execution.
+     */
     void execute();
 }
