@@ -285,6 +285,39 @@ public class ActionsTest extends SelenideTest {
         secondDescriptionEditor.pressEnter();
     }
 
+    /**
+     * When first Editor opened and there is double click on second item  - first Editor should be closed and
+     * discarding Value.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenFirstEditorOpenedAndSecondItemDoubleClicked_firstEditorShouldBeClosedAndDiscardValue() {
+        final String firstDescription = "Kyberorg's Site";
+        final String secondDescription = "Kv.ee";
+        HomePageObject.saveLinkWithDescription("https://kyberorg.io", firstDescription);
+        HomePageObject.saveLinkWithDescription("https://kv.ee", secondDescription);
+        openMyLinksPage();
+
+        closeGridEditorIfOpened(1);
+        closeGridEditorIfOpened(2);
+
+        SelenideElement firstDescriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement secondDescriptionEditor = Grid.GridData.get().getRow(2).getDescriptionEditor();
+        SelenideElement firstDescriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement secondDescriptionCell = Grid.GridData.get().getRow(2).getDescriptionCell();
+
+        firstDescriptionCell.doubleClick();
+        firstDescriptionEditor.setValue("It is my site");
+        secondDescriptionCell.doubleClick();
+
+        firstDescriptionEditor.shouldNotBe(visible);
+        firstDescriptionCell.shouldHave(text(firstDescription));
+        secondDescriptionEditor.shouldBe(visible);
+
+        //cleanup
+        secondDescriptionEditor.pressEnter();
+    }
+
     static void saveOneLink() {
         HomePageObject.saveOneLink("https://kyberorg.io");
     }

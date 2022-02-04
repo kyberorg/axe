@@ -294,6 +294,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         descriptionColumn.setEditorComponent(editDescriptionField);
 
         grid.addItemDoubleClickListener(event -> {
+            if (grid.getEditor().isOpen()) grid.getEditor().cancel();
             grid.getEditor().editItem(event.getItem());
             editDescriptionField.focus();
         });
