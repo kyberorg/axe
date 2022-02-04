@@ -251,13 +251,14 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private Button createSaveButton(final LinkInfo item) {
         Button saveButton = new Button("Save", clickEvent -> onSaveButtonClick(item));
         saveButton.setClassName("save-btn");
-        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
         return saveButton;
     }
 
     private Button createCancelButton(final LinkInfo item) {
         Button cancelButton = new Button("Cancel", clickEvent -> onCancelButtonClick(item));
         cancelButton.setClassName("cancel-btn");
+        cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         return cancelButton;
     }
 
