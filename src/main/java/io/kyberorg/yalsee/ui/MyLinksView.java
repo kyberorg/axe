@@ -380,6 +380,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private void onEditButtonClick(final LinkInfo item) {
         if (item != null) {
+            if (grid.getEditor().isOpen()) grid.getEditor().cancel();
             grid.getEditor().editItem(item);
         }
     }

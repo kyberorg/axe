@@ -252,6 +252,36 @@ public class ActionsTest extends SelenideTest {
         descriptionCell.shouldHave(text(originalDescription));
     }
 
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenFirstEditorOpenedAndSecondEditClicked_firstEditorShouldClosedWithDiscardingValue() {
+        final String firstDescription = "Kyberorg's Site";
+        final String secondDescription = "Kv.ee";
+        HomePageObject.saveLinkWithDescription("https://kyberorg.io", firstDescription);
+        HomePageObject.saveLinkWithDescription("https://kv.ee", secondDescription);
+        openMyLinksPage();
+
+        closeGridEditorIfOpened(1);
+        closeGridEditorIfOpened(2);
+
+        SelenideElement firstEditButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement secondEditButton = Grid.GridData.get().getRow(2).getEditButton();
+        SelenideElement firstDescriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement secondDescriptionEditor = Grid.GridData.get().getRow(2).getDescriptionEditor();
+        SelenideElement firstDescriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+
+        firstEditButton.click();
+        firstDescriptionEditor.setValue("It is my site");
+        secondEditButton.click();
+
+        firstDescriptionEditor.shouldNotBe(visible);
+        firstDescriptionCell.shouldHave(text(firstDescription));
+        secondDescriptionEditor.shouldBe(visible);
+
+        //cleanup
+        secondDescriptionEditor.pressEnter();
+    }
+
     static void saveOneLink() {
         HomePageObject.saveOneLink("https://kyberorg.io");
     }
