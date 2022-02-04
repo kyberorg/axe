@@ -204,6 +204,54 @@ public class ActionsTest extends SelenideTest {
         firstCell.shouldHave(text("Link"));
     }
 
+    /**
+     * When Save Button clicked - Editor saves Value and closes.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenSaveButtonClicked_editorSavesValueAndCloses() {
+        String newDescription = "New Description";
+        saveOneLink();
+        openMyLinksPage();
+
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement saveButton = Grid.GridData.get().getRow(1).getSaveButton();
+
+        editButton.click();
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        descriptionEditor.setValue(newDescription);
+        saveButton.click();
+
+        descriptionEditor.shouldNotBe(visible);
+        SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.shouldNotBe(empty);
+        descriptionCell.shouldHave(text(newDescription));
+    }
+
+    /**
+     * When Cancel Button clicked - Editor discards Changes and closes.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenCancelButtonClicked_editorDiscardsChangesAndCloses() {
+        final String originalDescription = "Kyberorg's Site";
+        HomePageObject.saveLinkWithDescription("https://kyberorg.io", originalDescription);
+        openMyLinksPage();
+
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement cancelButton = Grid.GridData.get().getRow(1).getCancelButton();
+
+        editButton.click();
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        descriptionEditor.setValue("It is my site");
+        cancelButton.click();
+
+        descriptionEditor.shouldNotBe(visible);
+        SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.shouldNotBe(empty);
+        descriptionCell.shouldHave(text(originalDescription));
+    }
+
     static void saveOneLink() {
         HomePageObject.saveOneLink("https://kyberorg.io");
     }

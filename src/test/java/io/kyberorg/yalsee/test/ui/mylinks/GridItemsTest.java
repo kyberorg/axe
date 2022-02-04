@@ -9,6 +9,7 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -126,13 +127,46 @@ public class GridItemsTest extends SelenideTest {
     }
 
     /**
-     * Tests that Actions Cell has one Button.
+     * Tests that Actions Cell has two Buttons.
      */
     @Test
-    public void actionsCellHasOneButton() {
+    public void actionsCellHasTwoButtons() {
         SelenideElement actionsCell = Grid.GridData.get().getRow(1).getActionsCell();
-        ElementsCollection vaadinButtons = actionsCell.$("flow-component-renderer").$$("vaadin-button");
-        vaadinButtons.shouldHave(size(1));
+        ElementsCollection vaadinButtons = actionsCell.$("flow-component-renderer vaadin-horizontal-layout").
+                $$("vaadin-button");
+        vaadinButtons.shouldHave(size(2));
+    }
+
+    /**
+     * Tests that Actions Cell has Edit Button.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void actionsCellHasEditButton() {
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        editButton.should(exist);
+        editButton.shouldBe(visible);
+        editButton.shouldHave(text("Edit"));
+    }
+
+    /**
+     * Tests that Edit Button is active.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void editButtonIsActive() {
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        editButton.shouldBe(enabled);
+    }
+
+    /**
+     * Edit Button should have primary Theme.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void editButtonIsPrimary() {
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        TestUtils.assertHasTheme(editButton, "primary");
     }
 
     /**
@@ -153,6 +187,26 @@ public class GridItemsTest extends SelenideTest {
     public void deleteButtonIsActive() {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.shouldBe(enabled);
+    }
+
+    /**
+     * Save Button should be hidden by default.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void saveButtonIsHiddenByDefault() {
+        SelenideElement saveButton = Grid.GridData.get().getRow(1).getSaveButton();
+        saveButton.shouldNot(exist);
+    }
+
+    /**
+     * Cancel Button should be hidden by default.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void cancelButtonIsHiddenByDefault() {
+        SelenideElement cancelButton = Grid.GridData.get().getRow(1).getCancelButton();
+        cancelButton.shouldNot(exist);
     }
 
     /**
