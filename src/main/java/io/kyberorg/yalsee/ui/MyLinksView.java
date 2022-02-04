@@ -258,7 +258,6 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private Button createCancelButton(final LinkInfo item) {
         Button cancelButton = new Button("Cancel", clickEvent -> onCancelButtonClick(item));
         cancelButton.setClassName("cancel-btn");
-        cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         return cancelButton;
     }
 
@@ -388,19 +387,16 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private void onDeleteButtonClick(final LinkInfo item) {
         if (item != null) {
             DeleteConfirmationDialog.create().setDeleteButtonAction(() -> this.deleteLinkAndLinkInfo(item)).show();
-        } else {
-            ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
         }
     }
 
-    private void onSaveButtonClick(LinkInfo item) {
+    private void onSaveButtonClick(final LinkInfo item) {
         if (item != null) {
             grid.getEditor().save();
-            grid.getEditor().cancel();
         }
     }
 
-    private void onCancelButtonClick(LinkInfo item) {
+    private void onCancelButtonClick(final LinkInfo item) {
         if (item != null) {
             grid.getEditor().cancel();
         }

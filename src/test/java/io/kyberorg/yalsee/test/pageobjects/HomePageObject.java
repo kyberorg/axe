@@ -150,8 +150,8 @@ public final class HomePageObject {
      */
     public static void saveLinkWithDescription(final String url, final String description) {
         Assertions.assertTrue(StringUtils.isNotBlank(url), "Got empty long link");
-        Assertions.assertTrue(StringUtils.isNotBlank(description), "Got empty description. " +
-                "This method excepts non-empty description");
+        Assertions.assertTrue(StringUtils.isNotBlank(description), "Got empty description. "
+                + "This method excepts non-empty description");
 
         open("/");
         waitForVaadin();
