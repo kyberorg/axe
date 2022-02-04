@@ -9,12 +9,12 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
+import org.junitpioneer.jupiter.Issue;
 import org.selenide.selenoid.SelenoidClipboard;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.Grid;
-import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.cleanSession;
+import static io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -198,6 +198,95 @@ public class GridCellsTest extends SelenideTest {
 
         //cleanup
         Grid.GridItem.BigQRCodeModal.MODAL.pressEscape();
+    }
+
+    /**
+     * Edit Button should open Editor.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void editButtonShouldOpenEditor() {
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        editButton.click();
+
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        descriptionEditor.should(exist);
+        descriptionEditor.shouldBe(visible);
+
+        //clean-up
+        descriptionEditor.pressEnter();
+    }
+
+    /**
+     * Action Buttons are changed, when editor opens by click on edit button.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void actionButtonsAreChanged_whenEditorOpensByClickOnEditButton() {
+        closeGridEditorIfOpened(1);
+
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
+        SelenideElement saveButton = Grid.GridData.get().getRow(1).getSaveButton();
+        SelenideElement cancelButton = Grid.GridData.get().getRow(1).getCancelButton();
+
+        editButton.click();
+
+        editButton.shouldNotBe(visible);
+        deleteButton.shouldNotBe(visible);
+        saveButton.shouldBe(visible);
+        cancelButton.shouldBe(visible);
+
+        //clean-up
+        cancelButton.click();
+    }
+
+    /**
+     * Action Buttons are changed, when editor opens by double-click on description.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void actionButtonsAreChanged_whenEditorOpensByDoubleClickOnDescription() {
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
+        SelenideElement saveButton = Grid.GridData.get().getRow(1).getSaveButton();
+        SelenideElement cancelButton = Grid.GridData.get().getRow(1).getCancelButton();
+
+        SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.doubleClick();
+
+        editButton.shouldNotBe(visible);
+        deleteButton.shouldNotBe(visible);
+        saveButton.shouldBe(visible);
+        cancelButton.shouldBe(visible);
+
+        //cleanup
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        descriptionEditor.pressEnter();
+    }
+
+    /**
+     * Action Buttons are changed back, when editor closes.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void actionButtonsAreChangedBack_whenEditorCloses() {
+        closeGridEditorIfOpened(1);
+
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
+        SelenideElement saveButton = Grid.GridData.get().getRow(1).getSaveButton();
+        SelenideElement cancelButton = Grid.GridData.get().getRow(1).getCancelButton();
+
+        //open editor
+        editButton.click();
+        //close editor
+        cancelButton.click();
+
+        editButton.shouldBe(visible);
+        deleteButton.shouldBe(visible);
+        saveButton.shouldNotBe(visible);
+        cancelButton.shouldNotBe(visible);
     }
 
     /**

@@ -8,12 +8,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.editor.EditorCloseEvent;
+import com.vaadin.flow.component.grid.editor.EditorSaveEvent;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
@@ -78,7 +79,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private Grid.Column<LinkInfo> linkColumn;
     private Grid.Column<LinkInfo> descriptionColumn;
     private Grid.Column<LinkInfo> qrCodeColumn;
-    private Grid.Column<LinkInfo> deleteColumn;
+    private Grid.Column<LinkInfo> actionsColumn;
+
+    private final Notification savedNotification = createSavedNotification();
     private final Notification userModeNotification = createUserModeNotification();
 
     private final LinkInfoService linkInfoService;
@@ -133,7 +136,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
         descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
         qrCodeColumn.setClassNameGenerator(item -> IDs.QR_CODE_COLUMN_CLASS);
-        deleteColumn.setClassNameGenerator(item -> IDs.DELETE_COLUMN_CLASS);
+        actionsColumn.setClassNameGenerator(item -> "actionsCol");
     }
 
     @Override
@@ -157,7 +160,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         linkColumn = grid.addComponentColumn(this::link).setHeader("Link");
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
-        deleteColumn = grid.addComponentColumn(this::createDeleteButton).setHeader("Actions");
+        actionsColumn = grid.addComponentColumn(this::createActions).setHeader("Actions");
 
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
                         "<div class='" + IDs.ITEM_DETAILS_CLASS
@@ -216,10 +219,47 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         return image;
     }
 
+    private HorizontalLayout createActions(final LinkInfo item) {
+        Button editButton = createEditButton(item);
+        Button deleteButton = createDeleteButton(item);
+        Button saveButton = createSaveButton(item);
+        Button cancelButton = createCancelButton(item);
+
+        HorizontalLayout actionsLayout = new HorizontalLayout();
+        if (grid.getEditor().isOpen()) {
+            actionsLayout.add(saveButton, cancelButton);
+        } else {
+            actionsLayout.add(editButton, deleteButton);
+        }
+        return actionsLayout;
+    }
+
+    private Button createEditButton(final LinkInfo item) {
+        Button editButton = new Button("Edit", clickEvent -> onEditButtonClick(item));
+        editButton.setClassName("edit-btn");
+        editButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        return editButton;
+    }
+
     private Button createDeleteButton(final LinkInfo item) {
         Button deleteButton = new Button("Delete", clickEvent -> onDeleteButtonClick(item));
+        deleteButton.setClassName("delete-btn");
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         return deleteButton;
+    }
+
+    private Button createSaveButton(final LinkInfo item) {
+        Button saveButton = new Button("Save", clickEvent -> onSaveButtonClick(item));
+        saveButton.setClassName("save-btn");
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
+        return saveButton;
+    }
+
+    private Button createCancelButton(final LinkInfo item) {
+        Button cancelButton = new Button("Cancel", clickEvent -> onCancelButtonClick(item));
+        cancelButton.setClassName("cancel-btn");
+        cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        return cancelButton;
     }
 
     private String getLongLink(final LinkInfo linkInfo) {
@@ -241,6 +281,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private void initGridEditor() {
         grid.getEditor().setBinder(binder);
+        grid.getEditor().setBuffered(true);
 
         TextField editDescriptionField = new TextField();
         // Close the editor in case of backward between components
@@ -257,12 +298,10 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
             editDescriptionField.focus();
         });
 
-        grid.getEditor().addCloseListener(this::updateLinkInfo);
+        grid.getEditor().addSaveListener(this::onEditorSaveEvent);
         //Saving by click Enter
-        grid.getElement().addEventListener("keydown", event -> {
-            grid.getEditor().save();
-            grid.getEditor().cancel();
-        }).setFilter("event.key === 'Enter'");
+        grid.getElement().addEventListener("keydown", event -> grid.getEditor().save())
+                .setFilter("event.key === 'Enter'");
     }
 
     private void activateLinkEditor() {
@@ -281,7 +320,6 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
             linkColumn.setEditorComponent(editableLink);
         }
     }
-
 
     @Override
     protected void onAttach(final AttachEvent attachEvent) {
@@ -341,11 +379,28 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         }
     }
 
+    private void onEditButtonClick(final LinkInfo item) {
+        if (item != null) {
+            if (grid.getEditor().isOpen()) grid.getEditor().cancel();
+            grid.getEditor().editItem(item);
+        }
+    }
+
     private void onDeleteButtonClick(final LinkInfo item) {
         if (item != null) {
             DeleteConfirmationDialog.create().setDeleteButtonAction(() -> this.deleteLinkAndLinkInfo(item)).show();
-        } else {
-            ErrorUtils.getErrorNotification("Failed to delete: no item selected").open();
+        }
+    }
+
+    private void onSaveButtonClick(final LinkInfo item) {
+        if (item != null) {
+            grid.getEditor().save();
+        }
+    }
+
+    private void onCancelButtonClick(final LinkInfo item) {
+        if (item != null) {
+            grid.getEditor().cancel();
         }
     }
 
@@ -366,9 +421,14 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         }
     }
 
-    private void updateLinkInfo(final EditorCloseEvent<LinkInfo> event) {
+    private void onEditorSaveEvent(final EditorSaveEvent<LinkInfo> event) {
         LinkInfo linkInfo = event.getItem();
         if (linkInfo == null) return;
+        this.savedNotification.open();
+        updateLinkInfo(linkInfo);
+    }
+
+    private void updateLinkInfo(final LinkInfo linkInfo) {
         Optional<LinkInfo> oldLinkInfo = linkInfoService.getLinkInfoById(linkInfo.getId());
         if (oldLinkInfo.isPresent()) {
             boolean identNotUpdated = linkInfo.getIdent().equals(oldLinkInfo.get().getIdent());
@@ -537,6 +597,15 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         }
     }
 
+    private Notification createSavedNotification() {
+        Notification notification = new Notification();
+        notification.setText("Saved!");
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(App.Defaults.NOTIFICATION_DURATION_MILLIS);
+        return notification;
+    }
+
     private Notification createUserModeNotification() {
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
@@ -563,7 +632,6 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         public static final String LINK_COLUMN_CLASS = "linkCol";
         public static final String DESCRIPTION_COLUMN_CLASS = "descriptionCol";
         public static final String QR_CODE_COLUMN_CLASS = "qrCodeCol";
-        public static final String DELETE_COLUMN_CLASS = "deleteCol";
         public static final String ITEM_DETAILS_CLASS = "item-details";
         public static final String ITEM_DETAILS_LINK_CLASS = "long-link";
         public static final String ITEM_DETAILS_CREATED_TIME_LABEL_CLASS = "created-time-label";

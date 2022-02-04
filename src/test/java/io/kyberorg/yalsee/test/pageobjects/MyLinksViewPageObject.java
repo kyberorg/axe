@@ -216,12 +216,43 @@ public final class MyLinksViewPageObject {
                 }
 
                 /**
+                 * Edit Button Element.
+                 *
+                 * @return {@link SelenideElement} with Edit Button Element.
+                 */
+                public SelenideElement getEditButton() {
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.edit-btn");
+                }
+
+                /**
                  * Delete Button Element.
                  *
                  * @return {@link SelenideElement} with Delete Button Element.
                  */
                 public SelenideElement getDeleteButton() {
-                    return getActionsCell().$("flow-component-renderer vaadin-button");
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.delete-btn");
+                }
+
+                /**
+                 * Save Button Element.
+                 *
+                 * @return {@link SelenideElement} with Save Button Element.
+                 */
+                public SelenideElement getSaveButton() {
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.save-btn");
+                }
+
+                /**
+                 * Cancel Button Element.
+                 *
+                 * @return {@link SelenideElement} with Cancel Button Element.
+                 */
+                public SelenideElement getCancelButton() {
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.cancel-btn");
                 }
 
                 /**
@@ -323,5 +354,17 @@ public final class MyLinksViewPageObject {
     public static void clickFirstDeleteButton() {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.click();
+    }
+
+    /**
+     * Closes Grid Editor on given Row.
+     *
+     * @param rowNumber row number from 1.
+     */
+    public static void closeGridEditorIfOpened(final int rowNumber) {
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(rowNumber).getDescriptionEditor();
+        if (descriptionEditor.exists()) {
+            descriptionEditor.pressEnter();
+        }
     }
 }
