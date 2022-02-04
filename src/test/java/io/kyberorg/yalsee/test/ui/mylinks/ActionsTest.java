@@ -252,9 +252,12 @@ public class ActionsTest extends SelenideTest {
         descriptionCell.shouldHave(text(originalDescription));
     }
 
+    /**
+     * When first Editor opened and second Edit Button Clicked - first Editor should be closed and discarding Value.
+     */
     @Test
     @Issue("https://github.com/kyberorg/yalsee/issues/679")
-    public void whenFirstEditorOpenedAndSecondEditClicked_firstEditorShouldClosedWithDiscardingValue() {
+    public void whenFirstEditorOpenedAndSecondEditButtonClicked_firstEditorShouldBeClosedAndDiscardValue() {
         final String firstDescription = "Kyberorg's Site";
         final String secondDescription = "Kv.ee";
         HomePageObject.saveLinkWithDescription("https://kyberorg.io", firstDescription);
