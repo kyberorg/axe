@@ -320,7 +320,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                     .setFilter("event.key === 'Tab' && event.shiftKey");
 
             binder.forField(editableLink)
-                    .withValidator(ident -> ident.length() >= 2, "Back-part must contain at least 2 chars")
+                    .withValidator(ident -> ident.length() >= 2, "Must contain at least 2 chars")
                     .withValidator(ident -> identValidator.validate(ident).ok(), "Back-part is not valid")
                     .withValidator(ident -> {
                         if (editableLink.isCurrentValueDiffersFrom(ident)) {
@@ -331,7 +331,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                             //got same value
                             return true;
                         }
-                    }, "Back-part already taken. Try another")
+                    }, "Already taken. Try another")
                     .withValidationStatusHandler(status -> {
                         editableLink.getEditIdentField().setInvalid(status.isError());
                         editableLink.getEditIdentField().setErrorMessage(status.getMessage().orElse(""));
