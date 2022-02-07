@@ -30,6 +30,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.App.Session;
+import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.events.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.LinkSavedEvent;
 import io.kyberorg.yalsee.events.LinkUpdatedEvent;
@@ -57,6 +58,7 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -89,6 +91,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private final LinkService linkService;
     private final YalseeSessionService sessionService;
     private final AppUtils appUtils;
+    private final IdentValidator identValidator;
 
     private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
     private UI ui;
@@ -316,8 +319,24 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                             event -> grid.getEditor().cancel())
                     .setFilter("event.key === 'Tab' && event.shiftKey");
 
-            binder.forField(editableLink).bind("ident");
-
+            binder.forField(editableLink)
+                    .withValidator(ident -> ident.length() >= 2, "Must contain at least 2 chars")
+                    .withValidator(ident -> identValidator.validate(ident).ok(), "Back-part is not valid")
+                    .withValidator(ident -> {
+                        if (editableLink.isCurrentValueDiffersFrom(ident)) {
+                            //value changed - we need to validate new value
+                            return Objects.equals(linkService.isLinkWithIdentExist(ident).getResult(),
+                                    OperationResult.ELEMENT_NOT_FOUND);
+                        } else {
+                            //got same value
+                            return true;
+                        }
+                    }, "Already taken. Try another")
+                    .withValidationStatusHandler(status -> {
+                        editableLink.getEditIdentField().setInvalid(status.isError());
+                        editableLink.getEditIdentField().setErrorMessage(status.getMessage().orElse(""));
+                    })
+                    .bind("ident");
             linkColumn.setEditorComponent(editableLink);
         }
     }
@@ -425,14 +444,18 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private void onEditorSaveEvent(final EditorSaveEvent<LinkInfo> event) {
         LinkInfo linkInfo = event.getItem();
         if (linkInfo == null) return;
-        this.savedNotification.open();
-        updateLinkInfo(linkInfo);
+        boolean updateSucceeded = updateLinkInfo(linkInfo);
+        if (updateSucceeded) {
+            this.savedNotification.open();
+        }
     }
 
-    private void updateLinkInfo(final LinkInfo linkInfo) {
+    private boolean updateLinkInfo(final LinkInfo linkInfo) {
         Optional<LinkInfo> oldLinkInfo = linkInfoService.getLinkInfoById(linkInfo.getId());
         if (oldLinkInfo.isPresent()) {
             boolean identNotUpdated = linkInfo.getIdent().equals(oldLinkInfo.get().getIdent());
+            boolean descriptionNotUpdated = linkInfo.getDescription().equals(oldLinkInfo.get().getDescription());
+            if (identNotUpdated && descriptionNotUpdated) return false; //just skipping with no message
             if (identNotUpdated) {
                 linkInfoService.update(linkInfo);
             } else {
@@ -467,20 +490,24 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                             } else {
                                 ErrorUtils.getErrorNotification(linkUpdateResult.getMessage()).open();
                             }
+                            return false;
                         }
                     } else {
                         ErrorUtils.getErrorNotification("Failed to update back-part").open();
-                        return;
+                        return false;
                     }
                 } else {
                     ErrorUtils.getErrorNotification("Back-part updates are allowed only for users. "
                             + "Become user once we introduce them").open();
+                    return false;
                 }
             }
         } else {
             ErrorUtils.getErrorNotification("Not saved. Internal error: ID mismatch").open();
+            return false;
         }
         updateDataAndState();
+        return true;
     }
 
     private void deleteLinkAndLinkInfo(final LinkInfo linkInfo) {

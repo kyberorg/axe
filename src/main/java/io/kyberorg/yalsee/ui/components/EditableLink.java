@@ -9,6 +9,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 
+import java.util.Objects;
+
 /**
  * This Component is combination of {@link Label} with Short Domain and editable {@link TextField} with ident.
  * It implements {@link HasValue} interface by proxying methods to editable part, which is {@link TextField}.
@@ -24,6 +26,8 @@ public class EditableLink extends Composite<HorizontalLayout> implements
     @Getter
     private final TextField editIdentField;
 
+    private String oldValue = null;
+
     /**
      * Creates object.
      *
@@ -38,12 +42,13 @@ public class EditableLink extends Composite<HorizontalLayout> implements
 
     @Override
     public void setValue(final String value) {
+        oldValue = editIdentField.getValue();
         editIdentField.setValue(value);
     }
 
     @Override
     public HasValue<?, String> getHasValue() {
-        return null;
+        return this;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class EditableLink extends Composite<HorizontalLayout> implements
 
     @Override
     public String getOldValue() {
-        return editIdentField.getValue();
+        return oldValue;
     }
 
     @Override
@@ -85,5 +90,15 @@ public class EditableLink extends Composite<HorizontalLayout> implements
     @Override
     public boolean isRequiredIndicatorVisible() {
         return editIdentField.isRequiredIndicatorVisible();
+    }
+
+    /**
+     * Defines if {@link #editIdentField} will be updated or not.
+     *
+     * @param newValue string with new value.
+     * @return true - if {@link #editIdentField} value is differs from new one, false if values are same.
+     */
+    public boolean isCurrentValueDiffersFrom(final String newValue) {
+        return !Objects.equals(oldValue, newValue);
     }
 }
