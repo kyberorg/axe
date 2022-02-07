@@ -444,14 +444,18 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private void onEditorSaveEvent(final EditorSaveEvent<LinkInfo> event) {
         LinkInfo linkInfo = event.getItem();
         if (linkInfo == null) return;
-        this.savedNotification.open();
-        updateLinkInfo(linkInfo);
+        boolean updateSucceeded = updateLinkInfo(linkInfo);
+        if (updateSucceeded) {
+            this.savedNotification.open();
+        }
     }
 
-    private void updateLinkInfo(final LinkInfo linkInfo) {
+    private boolean updateLinkInfo(final LinkInfo linkInfo) {
         Optional<LinkInfo> oldLinkInfo = linkInfoService.getLinkInfoById(linkInfo.getId());
         if (oldLinkInfo.isPresent()) {
             boolean identNotUpdated = linkInfo.getIdent().equals(oldLinkInfo.get().getIdent());
+            boolean descriptionNotUpdated = linkInfo.getDescription().equals(oldLinkInfo.get().getDescription());
+            if (identNotUpdated && descriptionNotUpdated) return false; //just skipping with no message
             if (identNotUpdated) {
                 linkInfoService.update(linkInfo);
             } else {
@@ -486,20 +490,24 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                             } else {
                                 ErrorUtils.getErrorNotification(linkUpdateResult.getMessage()).open();
                             }
+                            return false;
                         }
                     } else {
                         ErrorUtils.getErrorNotification("Failed to update back-part").open();
-                        return;
+                        return false;
                     }
                 } else {
                     ErrorUtils.getErrorNotification("Back-part updates are allowed only for users. "
                             + "Become user once we introduce them").open();
+                    return false;
                 }
             }
         } else {
             ErrorUtils.getErrorNotification("Not saved. Internal error: ID mismatch").open();
+            return false;
         }
         updateDataAndState();
+        return true;
     }
 
     private void deleteLinkAndLinkInfo(final LinkInfo linkInfo) {
