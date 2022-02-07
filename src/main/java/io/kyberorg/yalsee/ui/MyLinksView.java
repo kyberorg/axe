@@ -319,7 +319,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                             event -> grid.getEditor().cancel())
                     .setFilter("event.key === 'Tab' && event.shiftKey");
 
-            binder.forField(editableLink)
+            binder.forField(editableLink.getEditIdentField())
                     .withValidator(ident -> ident.length() >= 2, "Must contain at least 2 chars")
                     .withValidator(ident -> identValidator.validate(ident).ok(), "Back-part is not valid")
                     .withValidator(ident -> {
@@ -454,7 +454,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         Optional<LinkInfo> oldLinkInfo = linkInfoService.getLinkInfoById(linkInfo.getId());
         if (oldLinkInfo.isPresent()) {
             boolean identNotUpdated = linkInfo.getIdent().equals(oldLinkInfo.get().getIdent());
-            boolean descriptionNotUpdated = linkInfo.getDescription().equals(oldLinkInfo.get().getDescription());
+            boolean descriptionNotUpdated =
+                    StringUtils.isAllBlank(linkInfo.getDescription(), oldLinkInfo.get().getDescription())
+                            || linkInfo.getDescription().equals(oldLinkInfo.get().getDescription());
             if (identNotUpdated && descriptionNotUpdated) return false; //just skipping with no message
             if (identNotUpdated) {
                 linkInfoService.update(linkInfo);
