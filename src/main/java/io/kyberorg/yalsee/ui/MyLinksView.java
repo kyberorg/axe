@@ -42,6 +42,7 @@ import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.YalseeSession;
+import io.kyberorg.yalsee.ui.components.ColumnToggleContextMenu;
 import io.kyberorg.yalsee.ui.components.DeleteConfirmationDialog;
 import io.kyberorg.yalsee.ui.components.EditableLink;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
@@ -76,6 +77,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private final Anchor noRecordsBannerLink = new Anchor();
 
     private final Button endSessionButton = new Button();
+    private final Button toggleColumnsButton = new Button();
+    private final ColumnToggleContextMenu columnToggleMenu = new ColumnToggleContextMenu(toggleColumnsButton);
 
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
@@ -119,13 +122,19 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         endSessionButton.addClickListener(this::onEndSessionButtonClick);
         endSessionButton.getStyle().set("align-self", "flex-end");
 
+        toggleColumnsButton.setText("Show/Hide Columns");
+        toggleColumnsButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        endSessionButton.getStyle().set("align-self", "flex-end");
+
         initGrid();
         initGridEditor();
+
+        columnToggleMenu.addColumnsFromGrid(grid);
     }
 
     private void setPageStructure() {
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
-        add(sessionBanner, noRecordsBanner, endSessionButton, grid);
+        add(sessionBanner, noRecordsBanner, endSessionButton, toggleColumnsButton, grid);
     }
 
     private void setIds() {
@@ -135,6 +144,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
         noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
         endSessionButton.setId(IDs.END_SESSION_BUTTON);
+        toggleColumnsButton.setId("toggleColumnsButton");
         grid.setId(IDs.GRID);
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
         descriptionColumn.setClassNameGenerator(item -> IDs.DESCRIPTION_COLUMN_CLASS);
@@ -160,10 +170,10 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         //remove default columns - first
         grid.removeAllColumns();
 
-        linkColumn = grid.addComponentColumn(this::link).setHeader("Link");
-        descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description");
-        qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code");
-        actionsColumn = grid.addComponentColumn(this::createActions).setHeader("Actions");
+        linkColumn = grid.addComponentColumn(this::link).setHeader("Link").setKey("Link");
+        descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description").setKey("Description");
+        qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code").setKey("QR Code");
+        actionsColumn = grid.addComponentColumn(this::createActions).setHeader("Actions").setKey("Actions");
 
         grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
                         "<div class='" + IDs.ITEM_DETAILS_CLASS
