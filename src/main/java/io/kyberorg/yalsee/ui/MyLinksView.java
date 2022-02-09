@@ -85,8 +85,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private final Button endSessionButton = new Button();
 
-    private final Div filterToggleLayout = new Div();
-    private final TextField filterField = new TextField();
+    private final Div filterAndToggleLayout = new Div();
+    private final TextField gridFilterField = new TextField();
     private final Button toggleColumnsButton = new Button();
     private final ColumnToggleContextMenu columnToggleMenu = new ColumnToggleContextMenu(toggleColumnsButton);
 
@@ -133,14 +133,14 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         endSessionButton.addClickListener(this::onEndSessionButtonClick);
         endSessionButton.getStyle().set("align-self", "flex-end");
 
-        filterToggleLayout.setWidthFull();
+        filterAndToggleLayout.setWidthFull();
 
-        filterField.setMaxWidth("50%");
-        filterField.setPlaceholder("Search");
-        filterField.setPrefixComponent(VaadinIcon.SEARCH.create());
-        filterField.setValueChangeMode(ValueChangeMode.EAGER);
-        filterField.setClearButtonVisible(true);
-        filterField.getStyle().set("align-self", "flex-start");
+        gridFilterField.setMaxWidth("50%");
+        gridFilterField.setPlaceholder("Search");
+        gridFilterField.setPrefixComponent(VaadinIcon.SEARCH.create());
+        gridFilterField.setValueChangeMode(ValueChangeMode.EAGER);
+        gridFilterField.setClearButtonVisible(true);
+        gridFilterField.getStyle().set("align-self", "flex-start");
 
         toggleColumnsButton.setText("Show/Hide Columns");
         toggleColumnsButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -150,14 +150,14 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         initGridEditor();
 
         //those actions should be performed after initGrid()
-        filterField.addValueChangeListener(e -> grid.getDataProvider().refreshAll());
+        gridFilterField.addValueChangeListener(e -> grid.getDataProvider().refreshAll());
         columnToggleMenu.addColumnsFromGrid(grid);
     }
 
     private void setPageStructure() {
-        filterToggleLayout.add(filterField, toggleColumnsButton);
+        filterAndToggleLayout.add(gridFilterField, toggleColumnsButton);
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
-        add(sessionBanner, noRecordsBanner, endSessionButton, filterToggleLayout, grid);
+        add(sessionBanner, noRecordsBanner, endSessionButton, filterAndToggleLayout, grid);
     }
 
     private void setIds() {
@@ -167,8 +167,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
         noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
         endSessionButton.setId(IDs.END_SESSION_BUTTON);
-        filterToggleLayout.setId("filterToggleLayout");
-        filterField.setId("gridFilter");
+        filterAndToggleLayout.setId("filterAndToggleLayout");
+        gridFilterField.setId("gridFilterField");
         toggleColumnsButton.setId("toggleColumnsButton");
         grid.setId(IDs.GRID);
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
@@ -378,8 +378,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private boolean filterItems(final LinkInfo linkInfo) {
-        String searchTerm = filterField.getValue().trim();
-
+        String searchTerm = gridFilterField.getValue().trim();
         if (StringUtils.isBlank(searchTerm)) return true;
 
         boolean matchesIdent = matchesTerm(linkInfo.getIdent(), searchTerm);
