@@ -222,7 +222,7 @@ public class DefaultVisualStateTest extends SelenideTest {
     @Issue("https://github.com/kyberorg/yalsee/issues/756")
     public void toggleColumnsMenuShouldHave4Elements() {
         TOGGLE_COLUMNS_BUTTON.click();
-        ToggleColumnsMenu.MENU_ITEMS.shouldHave(size(4));
+        ToggleColumnsMenu.MENU_ITEMS.shouldHave(size(FOUR));
         //cleanup
         ToggleColumnsMenu.closeMenu();
     }

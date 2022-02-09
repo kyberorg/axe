@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.ui.components;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
@@ -11,6 +12,11 @@ import com.vaadin.flow.component.grid.Grid;
  * @since 3.10
  */
 public class ColumnToggleContextMenu extends ContextMenu {
+    /**
+     * Creates {@link ColumnToggleContextMenu} and links it with given {@link Component}.
+     *
+     * @param target component (normally {@link Button}), which opens this Menu.
+     */
     public ColumnToggleContextMenu(final Component target) {
         super(target);
         setOpenOnClick(true);

@@ -45,6 +45,9 @@ public final class MyLinksViewPageObject {
         public static final SelenideElement ACTIONS_ITEM =
                 $x("//vaadin-context-menu-item[text()='Actions']");
 
+        /**
+         * Closes {@link ToggleColumnsMenu}.
+         */
         public static void closeMenu() {
             $("body").pressEscape();
         }

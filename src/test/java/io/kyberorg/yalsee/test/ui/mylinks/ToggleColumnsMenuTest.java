@@ -1,7 +1,6 @@
 package io.kyberorg.yalsee.test.ui.mylinks;
 
 import com.codeborne.selenide.CollectionCondition;
-import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject.*;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,9 +31,11 @@ public class ToggleColumnsMenuTest extends SelenideTest {
         CookieBannerPageObject.closeBannerIfAny(); //banner re-appears for new session
     }
 
+    /**
+     * Refreshing page to clean state up.
+     */
     @BeforeEach
     public void beforeEachTest() {
-        //page refresh - to clean up menu state.
         open("/myLinks");
         waitForVaadin();
     }
