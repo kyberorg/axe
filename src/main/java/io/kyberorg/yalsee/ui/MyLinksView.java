@@ -124,7 +124,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
         toggleColumnsButton.setText("Show/Hide Columns");
         toggleColumnsButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        endSessionButton.getStyle().set("align-self", "flex-end");
+        toggleColumnsButton.getStyle().set("align-self", "flex-end");
 
         initGrid();
         initGridEditor();
