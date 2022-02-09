@@ -12,13 +12,16 @@ import com.vaadin.flow.component.grid.editor.EditorSaveEvent;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.dom.DomEvent;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -58,9 +61,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -77,6 +78,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private final Anchor noRecordsBannerLink = new Anchor();
 
     private final Button endSessionButton = new Button();
+
+    private final HorizontalLayout filterToggleLayout = new HorizontalLayout();
+    private final TextField filterField = new TextField();
     private final Button toggleColumnsButton = new Button();
     private final ColumnToggleContextMenu columnToggleMenu = new ColumnToggleContextMenu(toggleColumnsButton);
 
@@ -122,6 +126,12 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         endSessionButton.addClickListener(this::onEndSessionButtonClick);
         endSessionButton.getStyle().set("align-self", "flex-end");
 
+        filterField.setWidth("50%");
+        filterField.setPlaceholder("Search");
+        filterField.setPrefixComponent(VaadinIcon.SEARCH.create());
+        filterField.setValueChangeMode(ValueChangeMode.EAGER);
+        filterField.addValueChangeListener(e -> grid.getDataProvider().refreshAll());
+
         toggleColumnsButton.setText("Show/Hide Columns");
         toggleColumnsButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         toggleColumnsButton.getStyle().set("align-self", "flex-end");
@@ -133,8 +143,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private void setPageStructure() {
+        filterToggleLayout.add(filterField, toggleColumnsButton);
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
-        add(sessionBanner, noRecordsBanner, endSessionButton, toggleColumnsButton, grid);
+        add(sessionBanner, noRecordsBanner, endSessionButton, filterToggleLayout, grid);
     }
 
     private void setIds() {
@@ -197,6 +208,17 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                 .withEventHandler("handleClick", item -> grid.getDataProvider().refreshItem(item)));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
+
+        List<LinkInfo> items;
+        if (sessionId.equals(Session.EMPTY_ID)) {
+            items = new ArrayList<>(0);
+        } else {
+            items = linkInfoService.getAllRecordWithSession(sessionId);
+        }
+        ListDataProvider<LinkInfo> dataProvider = new ListDataProvider<>(items);
+        dataProvider.setFilter(this::filterItems);
+        grid.setDataProvider(dataProvider);
+
 
         //Toggle User-mode (kinda easter egg)
         grid.getElement().addEventListener("keydown", this::toggleUserMode)
@@ -349,6 +371,17 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                     .bind("ident");
             linkColumn.setEditorComponent(editableLink);
         }
+    }
+
+    private boolean filterItems(final LinkInfo linkInfo) {
+        String searchTerm = filterField.getValue().trim();
+
+        if (StringUtils.isBlank(searchTerm)) return true;
+
+        boolean matchesIdent = matchesTerm(linkInfo.getIdent(), searchTerm);
+        boolean matchesDescription = matchesTerm(linkInfo.getDescription(), searchTerm);
+
+        return matchesIdent || matchesDescription;
     }
 
     @Override
@@ -601,6 +634,10 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private boolean gridIsEmpty() {
         return grid.getDataProvider().size(new Query<>()) == 0;
+    }
+
+    private boolean matchesTerm(final String value, final String searchTerm) {
+        return value.toLowerCase().contains(searchTerm.toLowerCase());
     }
 
     private boolean isSmallScreen() {
