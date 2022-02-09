@@ -6,8 +6,7 @@ import io.kyberorg.yalsee.test.utils.vaadin.elements.GridElement;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import lombok.Data;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static io.kyberorg.yalsee.constants.App.FOUR;
 import static io.kyberorg.yalsee.constants.App.THREE;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
@@ -33,6 +32,27 @@ public final class MyLinksViewPageObject {
     }
 
     public static final SelenideElement END_SESSION_BUTTON = $("#" + MyLinksView.IDs.END_SESSION_BUTTON);
+    public static final SelenideElement TOGGLE_COLUMNS_BUTTON = $("#toggleColumnsButton");
+
+    public static class ToggleColumnsMenu {
+        public static final SelenideElement MENU_BOX = $("vaadin-context-menu-list-box");
+        public static final ElementsCollection MENU_ITEMS = MENU_BOX.$$(".vaadin-menu-item");
+        public static final SelenideElement LINK_ITEM = $x("//vaadin-context-menu-item[text()='Link']");
+        public static final SelenideElement DESCRIPTION_ITEM =
+                $x("//vaadin-context-menu-item[text()='Description']");
+        public static final SelenideElement QR_CODE_ITEM =
+                $x("//vaadin-context-menu-item[text()='QR Code']");
+        public static final SelenideElement ACTIONS_ITEM =
+                $x("//vaadin-context-menu-item[text()='Actions']");
+
+        /**
+         * Closes {@link ToggleColumnsMenu}.
+         */
+        public static void closeMenu() {
+            $("body").pressEscape();
+        }
+    }
+
     public static final SelenideElement GRID = $("vaadin-grid#" + MyLinksView.IDs.GRID);
 
     public static class Grid {
