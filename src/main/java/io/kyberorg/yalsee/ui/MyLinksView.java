@@ -6,10 +6,12 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.EditorSaveEvent;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -18,6 +20,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
@@ -61,12 +64,15 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 @SpringComponent
 @UIScope
+@CssImport("./css/my_links_page.css")
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: My Links")
 public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
@@ -79,7 +85,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private final Button endSessionButton = new Button();
 
-    private final HorizontalLayout filterToggleLayout = new HorizontalLayout();
+    private final Div filterToggleLayout = new Div();
     private final TextField filterField = new TextField();
     private final Button toggleColumnsButton = new Button();
     private final ColumnToggleContextMenu columnToggleMenu = new ColumnToggleContextMenu(toggleColumnsButton);
@@ -101,6 +107,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private final IdentValidator identValidator;
 
     private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
+    private ListDataProvider<LinkInfo> dataProvider;
     private UI ui;
     private String sessionId;
     private DeviceUtils deviceUtils;
@@ -126,11 +133,14 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         endSessionButton.addClickListener(this::onEndSessionButtonClick);
         endSessionButton.getStyle().set("align-self", "flex-end");
 
-        filterField.setWidth("50%");
+        filterToggleLayout.setWidthFull();
+
+        filterField.setMaxWidth("50%");
         filterField.setPlaceholder("Search");
         filterField.setPrefixComponent(VaadinIcon.SEARCH.create());
         filterField.setValueChangeMode(ValueChangeMode.EAGER);
-        filterField.addValueChangeListener(e -> grid.getDataProvider().refreshAll());
+        filterField.setClearButtonVisible(true);
+        filterField.getStyle().set("align-self", "flex-start");
 
         toggleColumnsButton.setText("Show/Hide Columns");
         toggleColumnsButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -139,6 +149,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         initGrid();
         initGridEditor();
 
+        //those actions should be performed after initGrid()
+        filterField.addValueChangeListener(e -> grid.getDataProvider().refreshAll());
         columnToggleMenu.addColumnsFromGrid(grid);
     }
 
@@ -155,6 +167,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
         noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
         endSessionButton.setId(IDs.END_SESSION_BUTTON);
+        filterToggleLayout.setId("filterToggleLayout");
+        filterField.setId("gridFilter");
         toggleColumnsButton.setId("toggleColumnsButton");
         grid.setId(IDs.GRID);
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
@@ -209,21 +223,11 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
-        List<LinkInfo> items;
-        if (sessionId.equals(Session.EMPTY_ID)) {
-            items = new ArrayList<>(0);
-        } else {
-            items = linkInfoService.getAllRecordWithSession(sessionId);
-        }
-        ListDataProvider<LinkInfo> dataProvider = new ListDataProvider<>(items);
-        dataProvider.setFilter(this::filterItems);
-        grid.setDataProvider(dataProvider);
-
-
         //Toggle User-mode (kinda easter egg)
         grid.getElement().addEventListener("keydown", this::toggleUserMode)
                 .setFilter("event.shiftKey && event.key === 'R'");
     }
+
 
     private Span link(final LinkInfo linkInfo) {
         Span link = new Span();
@@ -477,8 +481,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
             ui.access(() -> {
-                grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
-                grid.getDataProvider().refreshAll();
+                dataProvider = DataProvider.ofCollection(linkInfoService.getAllRecordWithSession(sessionId));
+                dataProvider.setFilter(this::filterItems);
+                grid.setDataProvider(dataProvider);
                 noRecordsBanner.setVisible(gridIsEmpty());
             });
         }
@@ -637,6 +642,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private boolean matchesTerm(final String value, final String searchTerm) {
+        if (StringUtils.isBlank(value) || StringUtils.isBlank(searchTerm)) return false;
         return value.toLowerCase().contains(searchTerm.toLowerCase());
     }
 
