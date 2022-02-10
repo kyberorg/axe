@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.pageobjects;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.GridElement;
+import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import lombok.Data;
 
@@ -50,6 +51,29 @@ public final class MyLinksViewPageObject {
          */
         public static void closeMenu() {
             $("body").pressEscape();
+        }
+    }
+
+    public static final SelenideElement GRID_FILTER_FIELD = $("#gridFilterField");
+
+    public static class GridFilter {
+        public static final SelenideElement SEARCH_ICON = $("iron-icon[slot='prefix']");
+        public static final SelenideElement CLEAR_BUTTON = TextFieldElement.byCss("#gridFilterField").getClearButton();
+
+        /**
+         * Sets given value to Filter's Field.
+         *
+         * @param value string with filter's value.
+         */
+        public static void setFilter(final String value) {
+            GRID_FILTER_FIELD.setValue(value);
+        }
+
+        /**
+         * Clean current filter's value.
+         */
+        public static void cleanFilter() {
+            CLEAR_BUTTON.click();
         }
     }
 

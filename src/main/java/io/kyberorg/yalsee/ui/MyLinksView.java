@@ -6,19 +6,25 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.EditorSaveEvent;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.dom.DomEvent;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -66,6 +72,7 @@ import java.util.Optional;
 @Slf4j
 @SpringComponent
 @UIScope
+@CssImport("./css/my_links_page.css")
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
 @PageTitle("Yalsee: My Links")
 public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
@@ -77,6 +84,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private final Anchor noRecordsBannerLink = new Anchor();
 
     private final Button endSessionButton = new Button();
+
+    private final Div filterAndToggleLayout = new Div();
+    private final TextField gridFilterField = new TextField();
     private final Button toggleColumnsButton = new Button();
     private final ColumnToggleContextMenu columnToggleMenu = new ColumnToggleContextMenu(toggleColumnsButton);
 
@@ -97,6 +107,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     private final IdentValidator identValidator;
 
     private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
+    private ListDataProvider<LinkInfo> dataProvider;
     private UI ui;
     private String sessionId;
     private DeviceUtils deviceUtils;
@@ -122,6 +133,15 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         endSessionButton.addClickListener(this::onEndSessionButtonClick);
         endSessionButton.getStyle().set("align-self", "flex-end");
 
+        filterAndToggleLayout.setWidthFull();
+
+        gridFilterField.setMaxWidth("50%");
+        gridFilterField.setPlaceholder("Search");
+        gridFilterField.setPrefixComponent(VaadinIcon.SEARCH.create());
+        gridFilterField.setValueChangeMode(ValueChangeMode.EAGER);
+        gridFilterField.setClearButtonVisible(true);
+        gridFilterField.getStyle().set("align-self", "flex-start");
+
         toggleColumnsButton.setText("Show/Hide Columns");
         toggleColumnsButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         toggleColumnsButton.getStyle().set("align-self", "flex-end");
@@ -129,12 +149,15 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         initGrid();
         initGridEditor();
 
+        //those actions should be performed after initGrid()
+        gridFilterField.addValueChangeListener(e -> grid.getDataProvider().refreshAll());
         columnToggleMenu.addColumnsFromGrid(grid);
     }
 
     private void setPageStructure() {
+        filterAndToggleLayout.add(gridFilterField, toggleColumnsButton);
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
-        add(sessionBanner, noRecordsBanner, endSessionButton, toggleColumnsButton, grid);
+        add(sessionBanner, noRecordsBanner, endSessionButton, filterAndToggleLayout, grid);
     }
 
     private void setIds() {
@@ -144,6 +167,8 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
         noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
         endSessionButton.setId(IDs.END_SESSION_BUTTON);
+        filterAndToggleLayout.setId("filterAndToggleLayout");
+        gridFilterField.setId("gridFilterField");
         toggleColumnsButton.setId("toggleColumnsButton");
         grid.setId(IDs.GRID);
         linkColumn.setClassNameGenerator(item -> IDs.LINK_COLUMN_CLASS);
@@ -202,6 +227,7 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         grid.getElement().addEventListener("keydown", this::toggleUserMode)
                 .setFilter("event.shiftKey && event.key === 'R'");
     }
+
 
     private Span link(final LinkInfo linkInfo) {
         Span link = new Span();
@@ -351,6 +377,22 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         }
     }
 
+    private boolean filterItems(final LinkInfo linkInfo) {
+        String searchTerm = gridFilterField.getValue().trim();
+        if (StringUtils.isBlank(searchTerm)) return true;
+
+        boolean matchesIdent = matchesTerm(linkInfo.getIdent(), searchTerm);
+        boolean matchesDescription = matchesTerm(linkInfo.getDescription(), searchTerm);
+
+        String longLink = getLongLink(linkInfo);
+        if (StringUtils.isBlank(longLink)) {
+            return matchesIdent || matchesDescription;
+        } else {
+            boolean matchesLongLink = matchesTerm(longLink, searchTerm);
+            return matchesIdent || matchesDescription || matchesLongLink;
+        }
+    }
+
     @Override
     protected void onAttach(final AttachEvent attachEvent) {
         super.onAttach(attachEvent);
@@ -444,8 +486,9 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
             ui.access(() -> {
-                grid.setItems(linkInfoService.getAllRecordWithSession(sessionId));
-                grid.getDataProvider().refreshAll();
+                dataProvider = DataProvider.ofCollection(linkInfoService.getAllRecordWithSession(sessionId));
+                dataProvider.setFilter(this::filterItems);
+                grid.setDataProvider(dataProvider);
                 noRecordsBanner.setVisible(gridIsEmpty());
             });
         }
@@ -601,6 +644,11 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
 
     private boolean gridIsEmpty() {
         return grid.getDataProvider().size(new Query<>()) == 0;
+    }
+
+    private boolean matchesTerm(final String value, final String searchTerm) {
+        if (StringUtils.isBlank(value) || StringUtils.isBlank(searchTerm)) return false;
+        return value.toLowerCase().contains(searchTerm.toLowerCase());
     }
 
     private boolean isSmallScreen() {

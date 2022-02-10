@@ -42,4 +42,13 @@ public class TextFieldElement {
     public SelenideElement getLabel() {
         return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container label");
     }
+
+    /**
+     * Provides Button that removes text from {@link TextField}.
+     *
+     * @return {@link SelenideElement}, which represents clean button element.
+     */
+    public SelenideElement getClearButton() {
+        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container #clearButton");
+    }
 }

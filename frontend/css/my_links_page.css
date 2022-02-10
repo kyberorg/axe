@@ -1,0 +1,7 @@
+/* Needs because at Extra small devices display flex breaks page layout */
+@media (min-width: 576px) {
+    #filterAndToggleLayout {
+        display: flex;
+        justify-content: space-between;
+    }
+}
