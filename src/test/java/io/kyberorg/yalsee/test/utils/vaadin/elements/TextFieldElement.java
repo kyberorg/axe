@@ -42,4 +42,8 @@ public class TextFieldElement {
     public SelenideElement getLabel() {
         return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container label");
     }
+
+    public SelenideElement getCleanButton() {
+        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container #clearButton");
+    }
 }

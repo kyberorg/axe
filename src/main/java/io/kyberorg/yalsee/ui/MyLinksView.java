@@ -384,7 +384,13 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
         boolean matchesIdent = matchesTerm(linkInfo.getIdent(), searchTerm);
         boolean matchesDescription = matchesTerm(linkInfo.getDescription(), searchTerm);
 
-        return matchesIdent || matchesDescription;
+        String longLink = getLongLink(linkInfo);
+        if (StringUtils.isBlank(longLink)) {
+            return matchesIdent || matchesDescription;
+        } else {
+            boolean matchesLongLink = matchesTerm(longLink, searchTerm);
+            return matchesIdent || matchesDescription || matchesLongLink;
+        }
     }
 
     @Override
