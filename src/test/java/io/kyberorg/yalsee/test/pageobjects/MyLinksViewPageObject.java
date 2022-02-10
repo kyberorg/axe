@@ -58,7 +58,7 @@ public final class MyLinksViewPageObject {
 
     public static class GridFilter {
         public static final SelenideElement SEARCH_ICON = $("iron-icon[slot='prefix']");
-        public static final SelenideElement CLOSE_BUTTON = TextFieldElement.byCss("#gridFilterField").getCleanButton();
+        public static final SelenideElement CLEAR_BUTTON = TextFieldElement.byCss("#gridFilterField").getClearButton();
 
         /**
          * Sets given value to Filter's Field.
@@ -73,7 +73,7 @@ public final class MyLinksViewPageObject {
          * Clean current filter's value.
          */
         public static void cleanFilter() {
-            CLOSE_BUTTON.click();
+            CLEAR_BUTTON.click();
         }
     }
 

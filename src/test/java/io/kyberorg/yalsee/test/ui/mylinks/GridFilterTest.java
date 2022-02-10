@@ -127,7 +127,9 @@ public class GridFilterTest extends SelenideTest {
         HomePageObject.saveOneLink("https://kyberorg.io");
         HomePageObject.saveOneLink("https://google.ee");
 
+        openMyLinksPage();
         Grid.GridData.get().getDataRows().shouldHave(size(2));
+
         GridFilter.setFilter("google");
         Grid.GridData.get().getDataRows().filterBy(visible).shouldHave(size(1));
     }

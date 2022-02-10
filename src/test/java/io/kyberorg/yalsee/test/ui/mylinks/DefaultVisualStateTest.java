@@ -295,7 +295,7 @@ public class DefaultVisualStateTest extends SelenideTest {
     @Issue("https://github.com/kyberorg/yalsee/issues/762")
     public void whenNoTextInsideGridFilterField_cleanTextButtonShouldBeHidden() {
         GRID_FILTER_FIELD.shouldBe(empty);
-        GridFilter.CLOSE_BUTTON.shouldNotBe(visible);
+        GridFilter.CLEAR_BUTTON.shouldNotBe(visible);
     }
 
     /**
@@ -306,9 +306,9 @@ public class DefaultVisualStateTest extends SelenideTest {
     public void whenTextInsideGridFilterField_cleanTextButtonShouldAppear() {
         GRID_FILTER_FIELD.shouldBe(empty);
         GRID_FILTER_FIELD.setValue("Test");
-        GridFilter.CLOSE_BUTTON.shouldBe(visible);
+        GridFilter.CLEAR_BUTTON.shouldBe(visible);
         //clean up
-        GridFilter.CLOSE_BUTTON.click();
+        GridFilter.CLEAR_BUTTON.click();
     }
 
     /**
@@ -319,8 +319,8 @@ public class DefaultVisualStateTest extends SelenideTest {
     public void cleanTextButtonClearsText() {
         GRID_FILTER_FIELD.shouldBe(empty);
         GRID_FILTER_FIELD.setValue("CleanMe");
-        GridFilter.CLOSE_BUTTON.shouldBe(visible);
-        GridFilter.CLOSE_BUTTON.click();
+        GridFilter.CLEAR_BUTTON.shouldBe(visible);
+        GridFilter.CLEAR_BUTTON.click();
         GRID_FILTER_FIELD.shouldBe(empty);
     }
 }
