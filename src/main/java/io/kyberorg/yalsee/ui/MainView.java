@@ -206,11 +206,14 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     }
 
     private void addLogo() {
-        Image logo = new Image("/images/logo.png", "Icon");
+        Image logo = new Image("/images/logo_long.png", "YalseeLogo");
         logo.setId(APP_LOGO);
         logo.addClassName("logo-image");
-        Tab logoTab = new Tab(logo);
-        logoTab.setEnabled(false);
+
+        RouterLink logoLink = new RouterLink(null, HomeView.class);
+        logoLink.add(logo);
+
+        Tab logoTab = new Tab(logoLink);
         tabs.add(logoTab);
     }
 

@@ -3,6 +3,8 @@ package io.kyberorg.yalsee.test.pageobjects;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
 import io.kyberorg.yalsee.ui.HomeView;
+import org.junit.jupiter.api.Assertions;
+import org.junit.platform.commons.util.StringUtils;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -127,6 +129,38 @@ public final class HomePageObject {
     public static void storeAndOpenSavedUrl(final String urlToStore) {
         String shortLink = storeAndReturnSavedUrl(urlToStore);
         open(shortLink + addRedirectPageBypassSymbol());
+    }
+
+    /**
+     * Saves given url.
+     *
+     * @param url string with long URL.
+     */
+    public static void saveOneLink(final String url) {
+        open("/");
+        waitForVaadin();
+        pasteValueInFormAndSubmitIt(url);
+    }
+
+    /**
+     * Saves given URL with given description.
+     *
+     * @param url         non-empty string with long link
+     * @param description non-empty string with description.
+     */
+    public static void saveLinkWithDescription(final String url, final String description) {
+        Assertions.assertTrue(StringUtils.isNotBlank(url), "Got empty long link");
+        Assertions.assertTrue(StringUtils.isNotBlank(description), "Got empty description. "
+                + "This method excepts non-empty description");
+
+        open("/");
+        waitForVaadin();
+        pasteValueInForm(url);
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.DESCRIPTION_INPUT.setValue(description);
+
+        MainArea.SUBMIT_BUTTON.click();
+        waitForVaadin();
     }
 
     /**

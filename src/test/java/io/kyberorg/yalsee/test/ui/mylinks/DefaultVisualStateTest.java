@@ -5,10 +5,12 @@ import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
 import io.kyberorg.yalsee.ui.HomeView;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -181,5 +183,144 @@ public class DefaultVisualStateTest extends SelenideTest {
     public void gridShouldHaveNoDataRows() {
         ElementsCollection gridDataRows = Grid.GridData.get().getDataRows();
         gridDataRows.shouldHave(size(0));
+    }
+
+    /**
+     * Toggle Columns Button should be present and active.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/756")
+    public void toggleColumnsButtonShouldBePresentAndActive() {
+        TOGGLE_COLUMNS_BUTTON.should(exist);
+        TOGGLE_COLUMNS_BUTTON.shouldBe(visible);
+    }
+
+    /**
+     * Toggle Columns Button should have tertiary style.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/756")
+    public void toggleColumnsButtonShouldHaveTertiaryStyle() {
+        TestUtils.assertHasTheme(TOGGLE_COLUMNS_BUTTON, "tertiary");
+    }
+
+    /**
+     * On click on Toggle Columns Button Menu appears.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/756")
+    public void whenClickOnToggleColumnsButton_menuAppears() {
+        TOGGLE_COLUMNS_BUTTON.click();
+        ToggleColumnsMenu.MENU_BOX.shouldBe(visible);
+        //cleanup
+        ToggleColumnsMenu.closeMenu();
+    }
+
+    /**
+     * Toggle Columns Menu should have 4 elements.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/756")
+    public void toggleColumnsMenuShouldHave4Elements() {
+        TOGGLE_COLUMNS_BUTTON.click();
+        ToggleColumnsMenu.MENU_ITEMS.shouldHave(size(FOUR));
+        //cleanup
+        ToggleColumnsMenu.closeMenu();
+    }
+
+    /**
+     * Toggle Columns Menu has all needed elements inside.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/756")
+    public void toggleColumnsMenuHasAllNeededElementsInside() {
+        TOGGLE_COLUMNS_BUTTON.click();
+        ToggleColumnsMenu.ACTIONS_ITEM.shouldBe(visible);
+        ToggleColumnsMenu.DESCRIPTION_ITEM.shouldBe(visible);
+        ToggleColumnsMenu.QR_CODE_ITEM.shouldBe(visible);
+        ToggleColumnsMenu.ACTIONS_ITEM.shouldBe(visible);
+        //cleanup
+        ToggleColumnsMenu.closeMenu();
+    }
+
+    /**
+     * Toggle Columns Menu Elements are checked.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/756")
+    public void toggleColumnsMenuShouldHaveAllElementsChecked() {
+        TOGGLE_COLUMNS_BUTTON.click();
+        ToggleColumnsMenu.LINK_ITEM.shouldHave(attribute("menu-item-checked"));
+        ToggleColumnsMenu.DESCRIPTION_ITEM.shouldHave(attribute("menu-item-checked"));
+        ToggleColumnsMenu.QR_CODE_ITEM.shouldHave(attribute("menu-item-checked"));
+        ToggleColumnsMenu.ACTIONS_ITEM.shouldHave(attribute("menu-item-checked"));
+        //cleanup
+        ToggleColumnsMenu.closeMenu();
+    }
+
+    /**
+     * Grid Filter Field should be present.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/762")
+    public void gridFilterFieldShouldBePresent() {
+        GRID_FILTER_FIELD.should(exist);
+        GRID_FILTER_FIELD.shouldBe(visible);
+    }
+
+    /**
+     * Grid Filter Field should have Search Icon.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/762")
+    public void gridFilterFieldShouldHaveSearchIcon() {
+        GridFilter.SEARCH_ICON.shouldBe(visible);
+        GridFilter.SEARCH_ICON.shouldHave(attribute("icon", "vaadin:search"));
+    }
+
+    /**
+     * Grid Filter Field should have Placeholder.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/762")
+    public void gridFilterFieldShouldHavePlaceholder() {
+        SelenideElement input = TextFieldElement.byCss("#gridFilterField").getInput();
+        input.shouldHave(attribute("placeholder", "Search"));
+    }
+
+    /**
+     * When no Text inside Grid Filter Field - Clean Text Button should be hidden.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/762")
+    public void whenNoTextInsideGridFilterField_cleanTextButtonShouldBeHidden() {
+        GRID_FILTER_FIELD.shouldBe(empty);
+        GridFilter.CLEAR_BUTTON.shouldNotBe(visible);
+    }
+
+    /**
+     * When Text inside Grid Filter Field - Clean Text Button should appear.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/762")
+    public void whenTextInsideGridFilterField_cleanTextButtonShouldAppear() {
+        GRID_FILTER_FIELD.shouldBe(empty);
+        GRID_FILTER_FIELD.setValue("Test");
+        GridFilter.CLEAR_BUTTON.shouldBe(visible);
+        //clean up
+        GridFilter.CLEAR_BUTTON.click();
+    }
+
+    /**
+     * Clean Text Button clears Text.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/762")
+    public void cleanTextButtonClearsText() {
+        GRID_FILTER_FIELD.shouldBe(empty);
+        GRID_FILTER_FIELD.setValue("CleanMe");
+        GridFilter.CLEAR_BUTTON.shouldBe(visible);
+        GridFilter.CLEAR_BUTTON.click();
+        GRID_FILTER_FIELD.shouldBe(empty);
     }
 }

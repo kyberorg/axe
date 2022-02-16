@@ -3,12 +3,14 @@ package io.kyberorg.yalsee.test.pageobjects;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.GridElement;
+import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
 import io.kyberorg.yalsee.ui.MyLinksView;
 import lombok.Data;
 
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.*;
 import static io.kyberorg.yalsee.constants.App.FOUR;
 import static io.kyberorg.yalsee.constants.App.THREE;
+import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
  * Page Object for {@link MyLinksView}.
@@ -31,6 +33,50 @@ public final class MyLinksViewPageObject {
     }
 
     public static final SelenideElement END_SESSION_BUTTON = $("#" + MyLinksView.IDs.END_SESSION_BUTTON);
+    public static final SelenideElement TOGGLE_COLUMNS_BUTTON = $("#toggleColumnsButton");
+
+    public static class ToggleColumnsMenu {
+        public static final SelenideElement MENU_BOX = $("vaadin-context-menu-list-box");
+        public static final ElementsCollection MENU_ITEMS = MENU_BOX.$$(".vaadin-menu-item");
+        public static final SelenideElement LINK_ITEM = $x("//vaadin-context-menu-item[text()='Link']");
+        public static final SelenideElement DESCRIPTION_ITEM =
+                $x("//vaadin-context-menu-item[text()='Description']");
+        public static final SelenideElement QR_CODE_ITEM =
+                $x("//vaadin-context-menu-item[text()='QR Code']");
+        public static final SelenideElement ACTIONS_ITEM =
+                $x("//vaadin-context-menu-item[text()='Actions']");
+
+        /**
+         * Closes {@link ToggleColumnsMenu}.
+         */
+        public static void closeMenu() {
+            $("body").pressEscape();
+        }
+    }
+
+    public static final SelenideElement GRID_FILTER_FIELD = $("#gridFilterField");
+
+    public static class GridFilter {
+        public static final SelenideElement SEARCH_ICON = $("iron-icon[slot='prefix']");
+        public static final SelenideElement CLEAR_BUTTON = TextFieldElement.byCss("#gridFilterField").getClearButton();
+
+        /**
+         * Sets given value to Filter's Field.
+         *
+         * @param value string with filter's value.
+         */
+        public static void setFilter(final String value) {
+            GRID_FILTER_FIELD.setValue(value);
+        }
+
+        /**
+         * Clean current filter's value.
+         */
+        public static void cleanFilter() {
+            CLEAR_BUTTON.click();
+        }
+    }
+
     public static final SelenideElement GRID = $("vaadin-grid#" + MyLinksView.IDs.GRID);
 
     public static class Grid {
@@ -214,12 +260,43 @@ public final class MyLinksViewPageObject {
                 }
 
                 /**
+                 * Edit Button Element.
+                 *
+                 * @return {@link SelenideElement} with Edit Button Element.
+                 */
+                public SelenideElement getEditButton() {
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.edit-btn");
+                }
+
+                /**
                  * Delete Button Element.
                  *
                  * @return {@link SelenideElement} with Delete Button Element.
                  */
                 public SelenideElement getDeleteButton() {
-                    return getActionsCell().$("flow-component-renderer vaadin-button");
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.delete-btn");
+                }
+
+                /**
+                 * Save Button Element.
+                 *
+                 * @return {@link SelenideElement} with Save Button Element.
+                 */
+                public SelenideElement getSaveButton() {
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.save-btn");
+                }
+
+                /**
+                 * Cancel Button Element.
+                 *
+                 * @return {@link SelenideElement} with Cancel Button Element.
+                 */
+                public SelenideElement getCancelButton() {
+                    return getActionsCell().
+                            $("flow-component-renderer vaadin-horizontal-layout vaadin-button.cancel-btn");
                 }
 
                 /**
@@ -292,10 +369,46 @@ public final class MyLinksViewPageObject {
         }
     }
 
+    public static class DeleteDialog {
+        public static final SelenideElement DIALOG = $(".delete-dialog");
+        public static final SelenideElement TITLE = $(".delete-dialog-title");
+        public static final SelenideElement MESSAGE = $(".delete-dialog-message");
+        public static final SelenideElement CANCEL_BUTTON = $(".delete-dialog-cancel-btn");
+        public static final SelenideElement DELETE_BUTTON = $(".delete-dialog-delete-btn");
+    }
+
     /**
      * Cleans current session by clicking {@link #END_SESSION_BUTTON}.
      */
     public static void cleanSession() {
         END_SESSION_BUTTON.click();
+    }
+
+    /**
+     * Opens MyLinks Page.
+     */
+    public static void openMyLinksPage() {
+        open("/myLinks");
+        waitForVaadin();
+    }
+
+    /**
+     * Clicks first delete button.
+     */
+    public static void clickFirstDeleteButton() {
+        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
+        deleteButton.click();
+    }
+
+    /**
+     * Closes Grid Editor on given Row.
+     *
+     * @param rowNumber row number from 1.
+     */
+    public static void closeGridEditorIfOpened(final int rowNumber) {
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(rowNumber).getDescriptionEditor();
+        if (descriptionEditor.exists()) {
+            descriptionEditor.pressEnter();
+        }
     }
 }

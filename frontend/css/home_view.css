@@ -24,6 +24,7 @@ body {
 
 #qrCode {
     border-radius: var(--yalsee-qr-code-border-radius);
+    max-width: 100%;
 }
 
 .my-links-note-area {

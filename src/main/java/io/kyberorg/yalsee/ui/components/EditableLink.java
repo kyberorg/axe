@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.ui.components;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
@@ -8,6 +9,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * This Component is combination of {@link Label} with Short Domain and editable {@link TextField} with ident.
@@ -24,6 +28,10 @@ public class EditableLink extends Composite<HorizontalLayout> implements
     @Getter
     private final TextField editIdentField;
 
+    private String oldValue;
+    private HasValue<?, String> hasValue;
+    private boolean isFromClient;
+
     /**
      * Creates object.
      *
@@ -34,6 +42,14 @@ public class EditableLink extends Composite<HorizontalLayout> implements
         this.editIdentField = new TextField();
 
         getContent().add(shortDomainPart, editIdentField);
+
+        editIdentField.addValueChangeListener(this::onValueChanged);
+    }
+
+    private void onValueChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> e) {
+        oldValue = e.getOldValue();
+        hasValue = e.getHasValue();
+        isFromClient = e.isFromClient();
     }
 
     @Override
@@ -43,17 +59,17 @@ public class EditableLink extends Composite<HorizontalLayout> implements
 
     @Override
     public HasValue<?, String> getHasValue() {
-        return null;
+        return hasValue;
     }
 
     @Override
     public boolean isFromClient() {
-        return false;
+        return isFromClient;
     }
 
     @Override
     public String getOldValue() {
-        return editIdentField.getValue();
+        return oldValue;
     }
 
     @Override
@@ -85,5 +101,16 @@ public class EditableLink extends Composite<HorizontalLayout> implements
     @Override
     public boolean isRequiredIndicatorVisible() {
         return editIdentField.isRequiredIndicatorVisible();
+    }
+
+    /**
+     * Defines if {@link #editIdentField} will be updated or not.
+     *
+     * @param newValue string with new value.
+     * @return true - if {@link #editIdentField} value is differs from new one, false if values are same.
+     */
+    public boolean isCurrentValueDiffersFrom(final String newValue) {
+        if (StringUtils.isBlank(this.oldValue)) return false;
+        return !Objects.equals(this.oldValue, newValue);
     }
 }

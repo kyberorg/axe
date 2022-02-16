@@ -2,14 +2,14 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
-import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
+import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.MyLinksView;
-import io.kyberorg.yalsee.ui.err.PageNotFoundView;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,30 +56,29 @@ public class ActionsTest extends SelenideTest {
         SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
         deleteButton.click();
 
+        DeleteDialog.DIALOG.shouldBe(visible);
+        DeleteDialog.DELETE_BUTTON.click();
+
         //reload needed - because Vaadin just hides element in grid
         openMyLinksPage();
         Grid.GridData.get().getDataRows().shouldHave(size(0));
     }
 
     /**
-     * Tests that Delete Button really deletes Record,
-     * so link is no longer in system and {@link PageNotFoundView} appears.
+     * On Delete Button clicked - opens Delete Confirmation Dialog.
      */
     @Test
-    public void deleteButtonDeletesRecord() {
+    @Issue("https://github.com/kyberorg/yalsee/issues/680")
+    public void onDeleteButtonClicked_opensDeleteConfirmationDialog() {
         saveOneLink();
-        String shortUrl = HomePageObject.getSavedUrl();
-
         openMyLinksPage();
+        clickFirstDeleteButton();
 
-        Grid.GridData.get().getDataRows().shouldHave(size(1));
-        SelenideElement deleteButton = Grid.GridData.get().getRow(1).getDeleteButton();
-        deleteButton.click();
+        DeleteDialog.DIALOG.should(exist);
+        DeleteDialog.DIALOG.shouldBe(visible);
 
-        open(shortUrl);
-
-        NotFoundViewPageObject.TITLE.shouldBe(visible);
-        NotFoundViewPageObject.TITLE.shouldHave(text("404"));
+        //cleanup
+        DeleteDialog.CANCEL_BUTTON.click();
     }
 
     /**
@@ -151,9 +150,9 @@ public class ActionsTest extends SelenideTest {
         String longUrlOne = "https://github.com/kyberorg/yalsee/issues/195";
         String longUrlTwo = "https://gist.github.com/kyberorg/e3621b30a217addf8566736dc47eb997";
 
-        saveOneLink(longUrlOne);
+        HomePageObject.saveOneLink(longUrlOne);
         String shortUrlOne = UrlUtils.removeProtocol(HomePageObject.getSavedUrl());
-        saveOneLink(longUrlTwo);
+        HomePageObject.saveOneLink(longUrlTwo);
         String shortUrlTwo = UrlUtils.removeProtocol(HomePageObject.getSavedUrl());
 
         openMyLinksPage();
@@ -193,18 +192,133 @@ public class ActionsTest extends SelenideTest {
         Grid.GridData.get().getDataRows().shouldHave(size(0));
     }
 
-    private void saveOneLink() {
-        saveOneLink("https://kyberorg.io");
+    /**
+     * When Menu item clicked Grid Column Order remains the same.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/695")
+    public void onMenuClickGridColumnOrderRemainsSame() {
+        MainViewPageObject.Menu.MY_LINKS_ITEM.click();
+        waitForVaadin();
+        SelenideElement firstCell = Grid.Header.get().getCells().get(0);
+        firstCell.shouldHave(text("Link"));
     }
 
-    private void saveOneLink(final String url) {
-        open("/");
-        waitForVaadin();
-        HomePageObject.pasteValueInFormAndSubmitIt(url);
+    /**
+     * When Save Button clicked - Editor saves Value and closes.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenSaveButtonClicked_editorSavesValueAndCloses() {
+        String newDescription = "New Description";
+        saveOneLink();
+        openMyLinksPage();
+
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement saveButton = Grid.GridData.get().getRow(1).getSaveButton();
+
+        editButton.click();
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        descriptionEditor.setValue(newDescription);
+        saveButton.click();
+
+        descriptionEditor.shouldNotBe(visible);
+        SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.shouldNotBe(empty);
+        descriptionCell.shouldHave(text(newDescription));
     }
 
-    private void openMyLinksPage() {
-        open("/myLinks");
-        waitForVaadin();
+    /**
+     * When Cancel Button clicked - Editor discards Changes and closes.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenCancelButtonClicked_editorDiscardsChangesAndCloses() {
+        final String originalDescription = "Kyberorg's Site";
+        HomePageObject.saveLinkWithDescription("https://kyberorg.io", originalDescription);
+        openMyLinksPage();
+
+        SelenideElement editButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement cancelButton = Grid.GridData.get().getRow(1).getCancelButton();
+
+        editButton.click();
+        SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        descriptionEditor.setValue("It is my site");
+        cancelButton.click();
+
+        descriptionEditor.shouldNotBe(visible);
+        SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        descriptionCell.shouldNotBe(empty);
+        descriptionCell.shouldHave(text(originalDescription));
+    }
+
+    /**
+     * When first Editor opened and second Edit Button Clicked - first Editor should be closed and discarding Value.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenFirstEditorOpenedAndSecondEditButtonClicked_firstEditorShouldBeClosedAndDiscardValue() {
+        final String firstDescription = "Kyberorg's Site";
+        final String secondDescription = "Kv.ee";
+        HomePageObject.saveLinkWithDescription("https://kyberorg.io", firstDescription);
+        HomePageObject.saveLinkWithDescription("https://kv.ee", secondDescription);
+        openMyLinksPage();
+
+        closeGridEditorIfOpened(1);
+        closeGridEditorIfOpened(2);
+
+        SelenideElement firstEditButton = Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement secondEditButton = Grid.GridData.get().getRow(2).getEditButton();
+        SelenideElement firstDescriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement secondDescriptionEditor = Grid.GridData.get().getRow(2).getDescriptionEditor();
+        SelenideElement firstDescriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+
+        firstEditButton.click();
+        firstDescriptionEditor.setValue("It is my site");
+        secondEditButton.click();
+
+        firstDescriptionEditor.shouldNotBe(visible);
+        firstDescriptionCell.shouldHave(text(firstDescription));
+        secondDescriptionEditor.shouldBe(visible);
+
+        //cleanup
+        secondDescriptionEditor.pressEnter();
+    }
+
+    /**
+     * When first Editor opened and there is double click on second item  - first Editor should be closed and
+     * discarding Value.
+     */
+    @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/679")
+    public void whenFirstEditorOpenedAndSecondItemDoubleClicked_firstEditorShouldBeClosedAndDiscardValue() {
+        final String firstDescription = "Kyberorg's Site";
+        final String secondDescription = "Kv.ee";
+        HomePageObject.saveLinkWithDescription("https://kyberorg.io", firstDescription);
+        HomePageObject.saveLinkWithDescription("https://kv.ee", secondDescription);
+        openMyLinksPage();
+
+        closeGridEditorIfOpened(1);
+        closeGridEditorIfOpened(2);
+
+        SelenideElement firstDescriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement secondDescriptionEditor = Grid.GridData.get().getRow(2).getDescriptionEditor();
+        SelenideElement firstDescriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement secondDescriptionCell = Grid.GridData.get().getRow(2).getDescriptionCell();
+
+        firstDescriptionCell.doubleClick();
+        firstDescriptionEditor.setValue("It is my site");
+        secondDescriptionCell.doubleClick();
+
+        firstDescriptionEditor.shouldNotBe(visible);
+        firstDescriptionCell.shouldHave(text(firstDescription));
+        secondDescriptionEditor.shouldBe(visible);
+
+        //cleanup
+        secondDescriptionEditor.pressEnter();
+    }
+
+    static void saveOneLink() {
+        HomePageObject.saveOneLink("https://kyberorg.io");
     }
 }

@@ -12,8 +12,9 @@ a[highlight] {
 
 .logo-image {
     border-radius: 100%;
-    width: 56px;
+    width: 165px;
     height: 56px;
+    cursor: pointer;
 }
 
 vaadin-drawer-toggle {

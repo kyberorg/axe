@@ -1,5 +1,9 @@
 package io.kyberorg.yalsee.test.utils;
 
+import com.codeborne.selenide.SelenideElement;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Dimension;
+
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -32,5 +36,18 @@ public final class SelenideUtils {
      */
     public static String getPageTitle() {
         return title();
+    }
+
+    /**
+     * Asserts that element contains not-squared image (width != height).
+     *
+     * @param image element with image.
+     */
+    public static void assertThatImageIsNotSquared(final SelenideElement image) {
+        Assertions.assertTrue(image.isImage(), "Element is not image");
+        Dimension imageDimensions = image.getSize();
+        Assertions.assertTrue(imageDimensions.getWidth() != imageDimensions.getHeight(),
+                String.format("Excepted: not squared image, Got: %dx%d square",
+                        imageDimensions.getWidth(), imageDimensions.getHeight()));
     }
 }

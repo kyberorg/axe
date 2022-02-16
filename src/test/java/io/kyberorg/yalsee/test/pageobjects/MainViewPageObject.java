@@ -18,4 +18,9 @@ public final class MainViewPageObject {
 
     public static final SelenideElement LOGO = $("#" + MainView.IDs.APP_LOGO);
     public static final SelenideElement GOOGLE_ANALYTICS_CONTROL_SPAN = $("#gtag");
+
+    public static final class Menu {
+        public static final SelenideElement MY_LINKS_ITEM = $("a[href='myLinks']");
+    }
+
 }
