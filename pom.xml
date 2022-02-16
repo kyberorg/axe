@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.8.1</vaadin.version>
+        <vaadin.version>14.8.2</vaadin.version>
         
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -285,7 +285,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>6.2.1</version>
+            <version>6.3.2</version>
             <scope>test</scope>
         </dependency>
         <!-- Selenide plugin for Selenoid -->
