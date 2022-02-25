@@ -12,7 +12,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 /**
  * {@link Dialog} that allows share links.
  */
-public class ShareMenu extends Composite<Dialog> {
+public final class ShareMenu extends Composite<Dialog> {
     private final H4 title = new H4("Share");
     private final Icon closeIcon = VaadinIcon.CLOSE.create();
 
