@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -30,6 +31,7 @@ import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.session.YalseeSession;
+import io.kyberorg.yalsee.ui.components.ShareMenu;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
@@ -81,6 +83,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
     private Span linkCounter;
 
     private Notification errorNotification;
+    private ShareMenu shareMenu;
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
@@ -97,6 +100,8 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
 
         removeAll();
         add(leftDiv, centralLayout, rightDiv);
+
+        shareMenu = ShareMenu.create();
     }
 
     private void applyStyle() {
@@ -190,6 +195,10 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         shortLink = new Anchor("", "");
         shortLink.setId(IDs.SHORT_LINK);
         shortLink.addClassName("strong-link");
+
+        Icon shareIcon = new Icon(VaadinIcon.SHARE);
+        shareIcon.setId(IDs.SHARE_ICON);
+        shareIcon.addClickListener(this::openShareMenu);
 
         com.vaadin.flow.component.icon.Icon copyLinkImage;
         copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.COPY);
@@ -318,6 +327,11 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         } else {
             log.debug("{} Form is not valid", TAG);
         }
+    }
+
+    private void openShareMenu(final ClickEvent<Icon> iconClickEvent) {
+        log.trace("{} Share manu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
+        shareMenu.show();
     }
 
     private void copyLinkToClipboard(
@@ -490,5 +504,6 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         public static final String MY_LINKS_NOTE_START = "myLinksNoteStart";
         public static final String MY_LINKS_NOTE_LINK = "myLinksNoteLink";
         public static final String MY_LINKS_NOTE_END = "myLinksNoteEnd";
+        public static final String SHARE_ICON = "shareIcon";
     }
 }
