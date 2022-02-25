@@ -208,7 +208,7 @@ public class HomeView extends HorizontalLayout implements BeforeEnterObserver {
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-        resultArea.add(emptySpan, shortLink, copyLinkImage);
+        resultArea.add(emptySpan, shortLink, shareIcon, copyLinkImage);
         resultArea.addClassNames("result-area", "border");
         resultArea.setWidthFull();
         return resultArea;
