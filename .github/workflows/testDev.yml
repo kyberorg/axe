@@ -28,7 +28,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.28
+        uses: EnricoMi/publish-unit-test-result-action@v1.31
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
