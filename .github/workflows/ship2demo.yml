@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Login to quay.io
         run: echo "${{ secrets.QUAY_TOKEN }}" | docker login -u "${{ secrets.QUAY_USERNAME }}" --password-stdin quay.io
@@ -97,7 +97,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.27
+        uses: EnricoMi/publish-unit-test-result-action@v1.31
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -148,7 +148,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish New Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.27
+        uses: EnricoMi/publish-unit-test-result-action@v1.31
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
