@@ -285,8 +285,8 @@
         <!-- Selenide Test Framework -->
         <dependency>
             <groupId>com.codeborne</groupId>
-            <artifactId>selenide</artifactId>
-            <version>6.3.2</version>
+          <artifactId>selenide</artifactId>
+            <version>6.3.4</version>
             <scope>test</scope>
         </dependency>
         <!-- Selenide plugin for Selenoid -->
