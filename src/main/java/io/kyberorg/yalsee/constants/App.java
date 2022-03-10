@@ -17,6 +17,7 @@ public final class App {
     public static final int THREE = 3;
     public static final int FOUR = 4;
     public static final int ONE_SECOND_IN_MILLIS = 1000;
+    public static final String TIME_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss z";
 
     private App() {
         throw new UnsupportedOperationException("Utility class");

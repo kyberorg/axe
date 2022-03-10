@@ -64,7 +64,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -629,8 +631,15 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private String getTime(final Timestamp ts) {
-        Date date = new Date(ts.getTime());
-        return date.toString();
+        ZoneId timeZone;
+        if (deviceUtils != null && deviceUtils.areDetailsSet()) {
+            timeZone = ZoneId.of(deviceUtils.getTimezoneId());
+        } else {
+            timeZone = ZoneId.systemDefault();
+        }
+        ZonedDateTime tzDate = ts.toLocalDateTime().atZone(timeZone);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(App.TIME_DATE_FORMAT);
+        return tzDate.format(formatter);
     }
 
     private String getSessionIdFromLink(final Link linkFromEvent) {
