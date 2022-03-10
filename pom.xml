@@ -42,7 +42,7 @@
         <!-- Plugins version: used 2+ times -->
         <git.plugin.version>4.9.10</git.plugin.version>
         <properties.plugin.version>1.0.0</properties.plugin.version>
-        <selenium.version>4.1.1</selenium.version>
+        <selenium.version>4.1.2</selenium.version>
     </properties>
     
     <parent>
@@ -285,7 +285,7 @@
         <!-- Selenide Test Framework -->
         <dependency>
             <groupId>com.codeborne</groupId>
-            <artifactId>selenide</artifactId>
+          <artifactId>selenide</artifactId>
             <version>6.3.4</version>
             <scope>test</scope>
         </dependency>
