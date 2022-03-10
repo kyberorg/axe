@@ -6,6 +6,7 @@ import com.vaadin.flow.component.page.ExtendedClientDetails;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.shared.BrowserDetails;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.Getter;
 
 /**
  * Client Device-related stuff.
@@ -17,6 +18,8 @@ public final class DeviceUtils {
     private static final int EXTRA_SMALL_WIDTH_BREAKPOINT_PIXELS = 576;
 
     private int screenWidth;
+    @Getter
+    private String timezoneId;
     private boolean areDetailsSet;
 
     /**
@@ -73,6 +76,7 @@ public final class DeviceUtils {
 
     private void setDetails(final ExtendedClientDetails clientDetails) {
         this.screenWidth = clientDetails.getScreenWidth();
+        this.timezoneId = clientDetails.getTimeZoneId();
         this.areDetailsSet = true;
     }
 }
