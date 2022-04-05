@@ -206,13 +206,13 @@ public class MyLinksView extends YalseeLayout implements BeforeEnterObserver {
                                 + "' style='border: 1px solid gray; padding: 10px; width: 100%; "
                                 + "box-sizing: border-box;'>"
                                 + "<div><b><a class='"
-                                + IDs.ITEM_DETAILS_LINK_CLASS + "' href=\"[[item.href]]\">[[item.longLink]]</a></b>"
+                                + IDs.ITEM_DETAILS_LINK_CLASS + "' href=\"${item.href}\">${item.longLink}</a></b>"
                                 + "<br>"
                                 + "<div><span class='"
                                 + IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS + "'>Created: </span><span class='"
-                                + IDs.ITEM_DETAILS_CREATED_TIME_CLASS + "'>[[item.created]]</span><span class='"
+                                + IDs.ITEM_DETAILS_CREATED_TIME_CLASS + "'>${item.created}</span><span class='"
                                 + IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS + "'>, Updated: </span><span class='"
-                                + IDs.ITEM_DETAILS_UPDATED_TIME_CLASS + "'>[[item.updated]]</span></div>"
+                                + IDs.ITEM_DETAILS_UPDATED_TIME_CLASS + "'>${item.updated}</span></div>"
                                 + "</div>"
                                 + "</div>")
                 .withProperty("href", this::getLongLink)
