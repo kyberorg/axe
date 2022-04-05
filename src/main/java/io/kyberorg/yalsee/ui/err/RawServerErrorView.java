@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.ui.err;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -79,6 +80,10 @@ public class RawServerErrorView extends YalseeLayout implements HasUrlParameter<
 
         techInfo.setVisible(false);
         initTechInfo();
+
+        // hide the splash screen after the main view is loaded
+        UI.getCurrent().getPage().executeJs(
+                "document.querySelector('#splash-screen').classList.add('loaded')");
     }
 
     private void applyStyle() {
