@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.configuration;
 
+import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -59,8 +60,12 @@ public class EndpointsListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private boolean routePresentInApplication(final String routeToCheck) {
+        //Due to bug in Vaadin23 https://yls.ee/zlfDzP we are not able to check application routes.
+        //Checking just ident.
+
         //noinspection rawtypes we need only status
-        HttpResponse httpResponse = Unirest.get(appUtils.getServerUrl() + routeToCheck).asEmpty();
+        HttpResponse httpResponse = Unirest.get(appUtils.getServerUrl() + Endpoint.Api.LINKS_API + routeToCheck)
+                .asEmpty();
         return httpResponse.getStatus() != STATUS_404;
     }
 }

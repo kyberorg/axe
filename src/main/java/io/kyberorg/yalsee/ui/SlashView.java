@@ -22,7 +22,6 @@ import io.kyberorg.yalsee.ui.err.ServerErrorView;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +30,6 @@ import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 
 @Slf4j
 @RequiredArgsConstructor
-@Controller
 @UIScope
 public class SlashView extends YalseeLayout implements HasErrorParameter<NotFoundException> {
     private static final String TAG = "[" + SlashView.class.getSimpleName() + "]";
