@@ -132,6 +132,7 @@ public class RedirectView extends YalseeLayout implements HasErrorParameter<Need
         if (shouldSkipRedirectPage()) {
             log.info("{} skipping redirect page for {}", TAG, this.origin);
             if (Objects.nonNull(this.page)) {
+                directAccessBanner.setText("Redirecting to " + this.origin);
                 doJSRedirect(target);
                 return STATUS_302;
             } else {

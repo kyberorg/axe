@@ -50,6 +50,6 @@ public class TextFieldElement {
      * @return {@link SelenideElement}, which represents clean button element.
      */
     public SelenideElement getClearButton() {
-        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container vaadin-input-container #clearButton");
+        return $vaadin(cssSelector).shadowRoot("#clearButton");
     }
 }

@@ -9,7 +9,6 @@ import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.QuayIo;
 import io.kyberorg.yalsee.test.pageobjects.external.VR;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -244,7 +243,7 @@ public class HomePageTest extends SelenideTest {
     }
 
     private void verifyThatVROpened() {
-        Assertions.assertEquals(VR.TITLE_TEXT, SelenideUtils.getPageTitle());
+        VR.VR_LOGO.shouldBe(visible);
     }
 
     private void verifyThatQuayIoOpened() {

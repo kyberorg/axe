@@ -1,5 +1,9 @@
 package io.kyberorg.yalsee.test.pageobjects.external;
 
+import com.codeborne.selenide.SelenideElement;
+
+import static com.codeborne.selenide.Selenide.$;
+
 /**
  * Page object for page http://www.travemünde.de/ .
  *
@@ -8,7 +12,7 @@ package io.kyberorg.yalsee.test.pageobjects.external;
 @SuppressWarnings("SpellCheckingInspection")
 public final class TravemundeDe {
 
-    public static final String TITLE_TEXT = "Travemünde.de –Offizielles Stadtportal für die Hansestadt Lübeck";
+    public static final SelenideElement BODY = $("body.travemuende");
 
     private TravemundeDe() {
         throw new UnsupportedOperationException("Utility class");
