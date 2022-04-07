@@ -31,6 +31,7 @@ jobs:
 
       - name: Delete pushed image to prevent mess
         run: docker rmi quay.io/kyberorg/yalsee:prod
+        continue-on-error: true
 
       - name: Deploy
         uses: wei/curl@master
