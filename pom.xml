@@ -179,7 +179,7 @@
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.13.6</version>
+            <version>3.13.7</version>
         </dependency>
         
         <!-- For extra validation of URL  -->
