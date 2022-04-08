@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.services;
 
-import io.kyberorg.yalsee.models.dao.YalseeSessionLocalDao;
-import io.kyberorg.yalsee.models.dao.YalseeSessionRedisDao;
+import io.kyberorg.yalsee.dao.YalseeSessionLocalDao;
+import io.kyberorg.yalsee.dao.YalseeSessionRedisDao;
 import io.kyberorg.yalsee.redis.pubsub.MessageEvent;
 import io.kyberorg.yalsee.redis.pubsub.RedisMessageSender;
 import io.kyberorg.yalsee.redis.pubsub.YalseeMessage;

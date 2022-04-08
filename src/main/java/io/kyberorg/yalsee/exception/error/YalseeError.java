@@ -1,14 +1,14 @@
 package io.kyberorg.yalsee.exception.error;
 
 import io.kyberorg.yalsee.constants.HttpCode;
-import io.kyberorg.yalsee.ui.err.ServerErrorView;
+import io.kyberorg.yalsee.ui.err.ServerErrorPage;
 import lombok.Data;
 
 import java.util.Date;
 
 /**
  * Useful data about happened error in application.
- * Used for error reporting in {@link ServerErrorView}.
+ * Used for error reporting in {@link ServerErrorPage}.
  *
  * @since 2.7
  */

@@ -3,13 +3,13 @@ package io.kyberorg.yalsee.services;
 import io.kyberorg.yalsee.configuration.EndpointsListener;
 import io.kyberorg.yalsee.core.BanHammer;
 import io.kyberorg.yalsee.core.IdentGenerator;
-import io.kyberorg.yalsee.events.LinkDeletedEvent;
-import io.kyberorg.yalsee.events.LinkSavedEvent;
-import io.kyberorg.yalsee.events.LinkUpdatedEvent;
+import io.kyberorg.yalsee.dao.LinkDao;
+import io.kyberorg.yalsee.events.link.LinkDeletedEvent;
+import io.kyberorg.yalsee.events.link.LinkSavedEvent;
+import io.kyberorg.yalsee.events.link.LinkUpdatedEvent;
 import io.kyberorg.yalsee.exception.URLDecodeException;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
-import io.kyberorg.yalsee.models.dao.LinkRepo;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
@@ -33,7 +33,7 @@ import java.util.Optional;
 @Service
 public class LinkService {
     private static final String TAG = "[" + LinkService.class.getSimpleName() + "]";
-    private final LinkRepo repo;
+    private final LinkDao repo;
     private final LinkInfoService linkInfoService;
     private final EndpointsListener endpointsListener;
 

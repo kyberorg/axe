@@ -2,11 +2,11 @@ package io.kyberorg.yalsee.test.ui.mylinks;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.MyLinksView;
+import io.kyberorg.yalsee.test.utils.TestUtils;
+import io.kyberorg.yalsee.ui.MyLinksPage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
@@ -19,7 +19,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests {@link MyLinksView} visual state with one link saved.
+ * Tests {@link MyLinksPage} visual state with one link saved.
  *
  * @since 3.2
  */

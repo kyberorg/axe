@@ -1,8 +1,8 @@
 package io.kyberorg.yalsee.session;
 
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
-import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.events.session.YalseeSessionCreatedEvent;
+import io.kyberorg.yalsee.events.session.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.redis.serializers.YalseeSessionGsonRedisSerializer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

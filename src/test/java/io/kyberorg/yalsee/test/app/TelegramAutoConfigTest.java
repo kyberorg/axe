@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.test.app;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.json.TelegramStatusResponse;
-import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;

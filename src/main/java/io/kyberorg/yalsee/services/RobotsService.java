@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.services;
 
-import io.kyberorg.yalsee.models.dao.RobotsRedisDao;
+import io.kyberorg.yalsee.dao.RobotsRedisDao;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;

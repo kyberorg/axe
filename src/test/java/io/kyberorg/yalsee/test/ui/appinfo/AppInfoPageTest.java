@@ -1,11 +1,11 @@
 package io.kyberorg.yalsee.test.ui.appinfo;
 
 import io.kyberorg.yalsee.Endpoint;
-import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

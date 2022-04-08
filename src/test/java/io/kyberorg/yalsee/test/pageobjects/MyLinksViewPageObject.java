@@ -4,7 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.GridElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
-import io.kyberorg.yalsee.ui.MyLinksView;
+import io.kyberorg.yalsee.ui.MyLinksPage;
 import lombok.Data;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -13,26 +13,26 @@ import static io.kyberorg.yalsee.constants.App.THREE;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
- * Page Object for {@link MyLinksView}.
+ * Page Object for {@link MyLinksPage}.
  *
  * @since 3.2
  */
 public final class MyLinksViewPageObject {
-    private static final GridElement GRID_ELEMENT = GridElement.byCss("vaadin-grid#" + MyLinksView.IDs.GRID);
-    public static final SelenideElement PAGE = $("#" + MyLinksView.class.getSimpleName());
+    private static final GridElement GRID_ELEMENT = GridElement.byCss("vaadin-grid#" + MyLinksPage.IDs.GRID);
+    public static final SelenideElement PAGE = $("#" + MyLinksPage.class.getSimpleName());
 
     private MyLinksViewPageObject() {
         throw new UnsupportedOperationException("Utility class");
     }
 
     public static class Banners {
-        public static final SelenideElement SESSION_BANNER = $("#" + MyLinksView.IDs.SESSION_BANNER);
-        public static final SelenideElement NO_RECORDS_BANNER = $("#" + MyLinksView.IDs.NO_RECORDS_BANNER);
-        public static final SelenideElement NO_RECORDS_BANNER_TEXT = $("#" + MyLinksView.IDs.NO_RECORDS_BANNER_TEXT);
-        public static final SelenideElement NO_RECORDS_BANNER_LINK = $("#" + MyLinksView.IDs.NO_RECORDS_BANNER_LINK);
+        public static final SelenideElement SESSION_BANNER = $("#" + MyLinksPage.IDs.SESSION_BANNER);
+        public static final SelenideElement NO_RECORDS_BANNER = $("#" + MyLinksPage.IDs.NO_RECORDS_BANNER);
+        public static final SelenideElement NO_RECORDS_BANNER_TEXT = $("#" + MyLinksPage.IDs.NO_RECORDS_BANNER_TEXT);
+        public static final SelenideElement NO_RECORDS_BANNER_LINK = $("#" + MyLinksPage.IDs.NO_RECORDS_BANNER_LINK);
     }
 
-    public static final SelenideElement END_SESSION_BUTTON = $("#" + MyLinksView.IDs.END_SESSION_BUTTON);
+    public static final SelenideElement END_SESSION_BUTTON = $("#" + MyLinksPage.IDs.END_SESSION_BUTTON);
     public static final SelenideElement TOGGLE_COLUMNS_BUTTON = $("#toggleColumnsButton");
 
     public static class ToggleColumnsMenu {
@@ -77,7 +77,7 @@ public final class MyLinksViewPageObject {
         }
     }
 
-    public static final SelenideElement GRID = $("vaadin-grid#" + MyLinksView.IDs.GRID);
+    public static final SelenideElement GRID = $("vaadin-grid#" + MyLinksPage.IDs.GRID);
 
     public static class Grid {
         public static class Header {
@@ -322,7 +322,7 @@ public final class MyLinksViewPageObject {
                  * @return {@link SelenideElement} with Long Link Element.
                  */
                 public SelenideElement getLongLink() {
-                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_LINK_CLASS);
+                    return itemDetails.$("." + MyLinksPage.IDs.ITEM_DETAILS_LINK_CLASS);
                 }
 
                 /**
@@ -331,7 +331,7 @@ public final class MyLinksViewPageObject {
                  * @return {@link SelenideElement} with Created Time Label.
                  */
                 public SelenideElement getCreatedTimeLabel() {
-                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS);
+                    return itemDetails.$("." + MyLinksPage.IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS);
                 }
 
                 /**
@@ -340,7 +340,7 @@ public final class MyLinksViewPageObject {
                  * @return {@link SelenideElement} with Created Time Span.
                  */
                 public SelenideElement getCreatedTime() {
-                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_CREATED_TIME_CLASS);
+                    return itemDetails.$("." + MyLinksPage.IDs.ITEM_DETAILS_CREATED_TIME_CLASS);
                 }
 
                 /**
@@ -349,7 +349,7 @@ public final class MyLinksViewPageObject {
                  * @return {@link SelenideElement} with Updated Time Label.
                  */
                 public SelenideElement getUpdatedTimeLabel() {
-                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS);
+                    return itemDetails.$("." + MyLinksPage.IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS);
                 }
 
                 /**
@@ -358,7 +358,7 @@ public final class MyLinksViewPageObject {
                  * @return {@link SelenideElement} with Updated Time Span.
                  */
                 public SelenideElement getUpdatedTime() {
-                    return itemDetails.$("." + MyLinksView.IDs.ITEM_DETAILS_UPDATED_TIME_CLASS);
+                    return itemDetails.$("." + MyLinksPage.IDs.ITEM_DETAILS_UPDATED_TIME_CLASS);
                 }
             }
 

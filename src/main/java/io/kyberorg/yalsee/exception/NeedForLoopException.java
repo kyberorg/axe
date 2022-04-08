@@ -1,9 +1,9 @@
 package io.kyberorg.yalsee.exception;
 
-import io.kyberorg.yalsee.ui.err.ServerErrorLoopView;
+import io.kyberorg.yalsee.ui.err.ServerErrorLoopPage;
 
 /**
- * Exception, which not intended to be thrown, just {@link ServerErrorLoopView} handles it.
+ * Exception, which not intended to be thrown, just {@link ServerErrorLoopPage} handles it.
  *
  * @since 2.7.4
  */

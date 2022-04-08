@@ -1,8 +1,8 @@
 package io.kyberorg.yalsee.session;
 
-import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
-import io.kyberorg.yalsee.events.YalseeSessionCreatedEvent;
-import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.events.session.YalseeSessionAlmostExpiredEvent;
+import io.kyberorg.yalsee.events.session.YalseeSessionCreatedEvent;
+import io.kyberorg.yalsee.events.session.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

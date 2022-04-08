@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.MattermostResponse;
-import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import io.kyberorg.yalsee.test.utils.mock.MattermostMock;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;

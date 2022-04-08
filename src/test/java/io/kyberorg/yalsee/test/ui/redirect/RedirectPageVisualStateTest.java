@@ -1,12 +1,12 @@
 package io.kyberorg.yalsee.test.ui.redirect;
 
-import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
 import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.special.RedirectView;
+import io.kyberorg.yalsee.test.utils.TestUtils;
+import io.kyberorg.yalsee.ui.special.RedirectPage;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
- * Testing Visual State of {@link RedirectView}.
+ * Testing Visual State of {@link RedirectPage}.
  *
  * @since 3.0.5
  */

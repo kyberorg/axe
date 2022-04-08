@@ -27,8 +27,8 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.events.YalseeSessionAlmostExpiredEvent;
-import io.kyberorg.yalsee.events.YalseeSessionDestroyedEvent;
+import io.kyberorg.yalsee.events.session.YalseeSessionAlmostExpiredEvent;
+import io.kyberorg.yalsee.events.session.YalseeSessionDestroyedEvent;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.YalseeSessionCookieService;
 import io.kyberorg.yalsee.services.YalseeSessionService;
@@ -119,15 +119,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         //items
         addLogo();
         addSubTitle();
-        addMenuTab("Main", HomeView.class, VaadinIcon.HOME);
-        addMenuTab("My Links", MyLinksView.class, VaadinIcon.TABLE);
-        addMenuTab("App Info", AppInfoView.class, VaadinIcon.INFO);
+        addMenuTab("Main", HomePage.class, VaadinIcon.HOME);
+        addMenuTab("My Links", MyLinksPage.class, VaadinIcon.TABLE);
+        addMenuTab("App Info", AppInfoPage.class, VaadinIcon.INFO);
         addMenuTab("Settings", SettingsPage.class, VaadinIcon.COG);
         addMenuTab("API Doks", App.Api.API_DOKS_URL, VaadinIcon.CURLY_BRACKETS);
 
         // dev-only items
         if (appUtils.isDevelopmentModeActivated()) {
-            addMenuTab("Debug", DebugView.class, VaadinIcon.FLASK);
+            addMenuTab("Debug", DebugPage.class, VaadinIcon.FLASK);
         }
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
@@ -210,7 +210,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
         logo.setId(APP_LOGO);
         logo.addClassName("logo-image");
 
-        RouterLink logoLink = new RouterLink(null, HomeView.class);
+        RouterLink logoLink = new RouterLink(null, HomePage.class);
         logoLink.add(logo);
 
         Tab logoTab = new Tab(logoLink);

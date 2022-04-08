@@ -3,7 +3,7 @@ package io.kyberorg.yalsee.test.app;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.test.TestApp;
-import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import kong.unirest.HttpRequestWithBody;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;

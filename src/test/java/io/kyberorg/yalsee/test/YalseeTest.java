@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test;
 import com.codeborne.selenide.Configuration;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import io.kyberorg.yalsee.test.utils.TestWatcherExtension;
 import io.kyberorg.yalsee.test.utils.report.TestData;
 import io.kyberorg.yalsee.test.utils.report.TestReport;

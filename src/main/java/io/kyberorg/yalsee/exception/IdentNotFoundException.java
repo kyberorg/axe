@@ -1,9 +1,9 @@
 package io.kyberorg.yalsee.exception;
 
-import io.kyberorg.yalsee.ui.err.IdentNotFoundView;
+import io.kyberorg.yalsee.ui.err.IdentNotFoundPage;
 
 /**
- * Exception, which not intended to be thrown, just {@link IdentNotFoundView} handles it.
+ * Exception, which not intended to be thrown, just {@link IdentNotFoundPage} handles it.
  *
  * @since 2.7.4
  */

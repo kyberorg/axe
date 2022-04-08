@@ -2,7 +2,6 @@ package io.kyberorg.yalsee.test.utils;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
-import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.YalseeTest;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.report.TestData;
