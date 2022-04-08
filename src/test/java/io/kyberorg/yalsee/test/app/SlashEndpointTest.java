@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static io.kyberorg.yalsee.Endpoint.ForTests.SLASH_BASE;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
-import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
+import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbol;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

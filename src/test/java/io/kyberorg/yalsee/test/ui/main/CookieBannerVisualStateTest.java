@@ -1,9 +1,9 @@
 package io.kyberorg.yalsee.test.ui.main;
 
-import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.AppInfoView;
+import io.kyberorg.yalsee.test.utils.TestUtils;
+import io.kyberorg.yalsee.ui.AppInfoPage;
 import io.kyberorg.yalsee.ui.components.CookieBanner;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -104,7 +104,7 @@ public class CookieBannerVisualStateTest extends SelenideTest {
     }
 
     /**
-     * More Info Link links with {@link AppInfoView} Page.
+     * More Info Link links with {@link AppInfoPage} Page.
      */
     @Test
     public void moreInfoLinkHrefIsAppInfoPage() {

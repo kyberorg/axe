@@ -2,7 +2,7 @@ package io.kyberorg.yalsee;
 
 import io.kyberorg.yalsee.controllers.AppOfflineController;
 import io.kyberorg.yalsee.controllers.YalseeErrorController;
-import io.kyberorg.yalsee.ui.err.ServerErrorView;
+import io.kyberorg.yalsee.ui.err.ServerErrorPage;
 
 /**
  * List of application endpoints.
@@ -199,7 +199,7 @@ public final class Endpoint {
         public static final String APP_OFFLINE = "/app-offline";
 
         /**
-         * Server Error Loopback View. Intended to be used only within {@link ServerErrorView}.
+         * Server Error Loopback View. Intended to be used only within {@link ServerErrorPage}.
          */
         public static final String SERVER_ERROR_LOOP = "server-error-loop";
 

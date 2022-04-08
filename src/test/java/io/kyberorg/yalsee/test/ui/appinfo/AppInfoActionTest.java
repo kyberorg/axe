@@ -5,7 +5,7 @@ import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.CookieAndYou;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.AppInfoView;
+import io.kyberorg.yalsee.ui.AppInfoPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Testing interaction with {@link AppInfoView}.
+ * Testing interaction with {@link AppInfoPage}.
  *
  * @since 3.5
  */

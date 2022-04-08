@@ -1,13 +1,13 @@
 package io.kyberorg.yalsee.test.ui.usage;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.test.TestUtils;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.Eki;
 import io.kyberorg.yalsee.test.pageobjects.external.Wikipedia;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_BUTTON;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ResultArea.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
+import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

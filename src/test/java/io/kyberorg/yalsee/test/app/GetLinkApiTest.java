@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.api.links.GetLinkRestController;
-import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;

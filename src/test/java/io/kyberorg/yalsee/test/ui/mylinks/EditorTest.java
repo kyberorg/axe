@@ -4,7 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.MyLinksView;
+import io.kyberorg.yalsee.ui.MyLinksPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Tests Grid Editor at {@link MyLinksView}.
+ * Tests Grid Editor at {@link MyLinksPage}.
  *
  * @since 3.2
  */

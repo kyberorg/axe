@@ -2,17 +2,17 @@ package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
-import io.kyberorg.yalsee.ui.HomeView;
+import io.kyberorg.yalsee.ui.HomePage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static io.kyberorg.yalsee.test.TestUtils.addRedirectPageBypassSymbol;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
+import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbol;
 
 /**
- * Page Object for {@link HomeView}.
+ * Page Object for {@link HomePage}.
  *
  * @since 2.2
  */
@@ -23,47 +23,47 @@ public final class HomePageObject {
     }
 
     public static class MainArea {
-        public static final SelenideElement MAIN_AREA = $("#" + HomeView.IDs.MAIN_AREA);
-        public static final SelenideElement TITLE = $("#" + HomeView.IDs.TITLE);
+        public static final SelenideElement MAIN_AREA = $("#" + HomePage.IDs.MAIN_AREA);
+        public static final SelenideElement TITLE = $("#" + HomePage.IDs.TITLE);
         public static final SelenideElement LONG_URL_INPUT_LABEL =
-                TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getLabel();
+                TextFieldElement.byCss("#" + HomePage.IDs.INPUT).getLabel();
         public static final SelenideElement LONG_URL_INPUT =
-                TextFieldElement.byCss("#" + HomeView.IDs.INPUT).getInput();
+                TextFieldElement.byCss("#" + HomePage.IDs.INPUT).getInput();
         public static final SelenideElement DESCRIPTION_ACCORDION =
-                $("#" + HomeView.IDs.DESCRIPTION_ACCORDION);
+                $("#" + HomePage.IDs.DESCRIPTION_ACCORDION);
         public static final SelenideElement DESCRIPTION_ACCORDION_PANEL =
                 DESCRIPTION_ACCORDION.$("vaadin-accordion-panel");
         public static final SelenideElement DESCRIPTION_INPUT_ELEMENT =
-                $("#" + HomeView.IDs.DESCRIPTION_INPUT);
+                $("#" + HomePage.IDs.DESCRIPTION_INPUT);
         public static final SelenideElement DESCRIPTION_INPUT =
-                TextFieldElement.byCss("#" + HomeView.IDs.DESCRIPTION_INPUT).getInput();
-        public static final SelenideElement BANNER = $("#" + HomeView.IDs.BANNER);
-        public static final SelenideElement SUBMIT_BUTTON = $("#" + HomeView.IDs.SUBMIT_BUTTON);
+                TextFieldElement.byCss("#" + HomePage.IDs.DESCRIPTION_INPUT).getInput();
+        public static final SelenideElement BANNER = $("#" + HomePage.IDs.BANNER);
+        public static final SelenideElement SUBMIT_BUTTON = $("#" + HomePage.IDs.SUBMIT_BUTTON);
     }
 
     public static class OverallArea {
-        public static final SelenideElement OVERALL_AREA = $("#" + HomeView.IDs.OVERALL_AREA);
-        public static final SelenideElement OVERALL_LINKS_TEXT = $("#" + HomeView.IDs.OVERALL_LINKS_TEXT);
-        public static final SelenideElement OVERALL_LINKS_NUMBER = $("#" + HomeView.IDs.OVERALL_LINKS_NUMBER);
+        public static final SelenideElement OVERALL_AREA = $("#" + HomePage.IDs.OVERALL_AREA);
+        public static final SelenideElement OVERALL_LINKS_TEXT = $("#" + HomePage.IDs.OVERALL_LINKS_TEXT);
+        public static final SelenideElement OVERALL_LINKS_NUMBER = $("#" + HomePage.IDs.OVERALL_LINKS_NUMBER);
     }
 
     public static class ResultArea {
-        public static final SelenideElement RESULT_AREA = $("#" + HomeView.IDs.RESULT_AREA);
-        public static final SelenideElement RESULT_LINK = $("#" + HomeView.IDs.SHORT_LINK);
-        public static final SelenideElement COPY_LINK_ICON = $("#" + HomeView.IDs.COPY_LINK_BUTTON);
+        public static final SelenideElement RESULT_AREA = $("#" + HomePage.IDs.RESULT_AREA);
+        public static final SelenideElement RESULT_LINK = $("#" + HomePage.IDs.SHORT_LINK);
+        public static final SelenideElement COPY_LINK_ICON = $("#" + HomePage.IDs.COPY_LINK_BUTTON);
     }
 
     public static class QrCodeArea {
-        public static final SelenideElement QR_CODE_AREA = $("#" + HomeView.IDs.QR_CODE_AREA);
-        public static final SelenideElement QR_CODE = $("#" + HomeView.IDs.QR_CODE);
+        public static final SelenideElement QR_CODE_AREA = $("#" + HomePage.IDs.QR_CODE_AREA);
+        public static final SelenideElement QR_CODE = $("#" + HomePage.IDs.QR_CODE);
     }
 
     public static class MyLinksNoteArea {
-        public static final SelenideElement MY_LINKS_NOTE_AREA = $("#" + HomeView.IDs.MY_LINKS_NOTE_AREA);
-        public static final SelenideElement MY_LINKS_NOTE_TEXT = $("#" + HomeView.IDs.MY_LINKS_NOTE_TEXT);
-        public static final SelenideElement MY_LINKS_NOTE_LINK = $("#" + HomeView.IDs.MY_LINKS_NOTE_LINK);
+        public static final SelenideElement MY_LINKS_NOTE_AREA = $("#" + HomePage.IDs.MY_LINKS_NOTE_AREA);
+        public static final SelenideElement MY_LINKS_NOTE_TEXT = $("#" + HomePage.IDs.MY_LINKS_NOTE_TEXT);
+        public static final SelenideElement MY_LINKS_NOTE_LINK = $("#" + HomePage.IDs.MY_LINKS_NOTE_LINK);
         public static final SelenideElement MY_LINKS_NOTE_POST_TEXT =
-                $("#" + HomeView.IDs.MY_LINKS_NOTE_END);
+                $("#" + HomePage.IDs.MY_LINKS_NOTE_END);
     }
 
     public static class ErrorModal {

@@ -1,8 +1,8 @@
 package io.kyberorg.yalsee.services;
 
+import io.kyberorg.yalsee.dao.LinkInfoDao;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
-import io.kyberorg.yalsee.models.dao.LinkInfoRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class LinkInfoService {
-    private final LinkInfoRepo repo;
+    private final LinkInfoDao repo;
 
     /**
      * Creates {@link LinkInfo} with session info.

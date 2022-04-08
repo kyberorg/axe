@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.services.overall;
 
-import io.kyberorg.yalsee.models.dao.LinkRepo;
+import io.kyberorg.yalsee.dao.LinkDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Objects;
 @Service
 public class OverallService {
 
-    private final LinkRepo repo;
+    private final LinkDao repo;
 
     /**
      * Retrieves number of stored links.

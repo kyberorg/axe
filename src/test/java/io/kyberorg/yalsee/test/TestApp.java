@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test;
 
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 
 /**
  * Test Application constants, pretty same as {@link App}, but only stuff used in testing scope.

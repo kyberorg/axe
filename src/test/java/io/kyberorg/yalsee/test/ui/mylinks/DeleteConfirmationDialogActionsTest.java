@@ -5,7 +5,7 @@ import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.ui.components.DeleteConfirmationDialog;
-import io.kyberorg.yalsee.ui.err.PageNotFoundView;
+import io.kyberorg.yalsee.ui.err.PageNotFoundPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
@@ -75,7 +75,7 @@ public class DeleteConfirmationDialogActionsTest extends SelenideTest {
 
     /**
      * Tests that Delete Button - opens Dialog and Dialog's Delete button really deletes Record,
-     * so link is no longer in system and {@link PageNotFoundView} appears.
+     * so link is no longer in system and {@link PageNotFoundPage} appears.
      */
     @Test
     public void deleteButtonDeletesRecord() {

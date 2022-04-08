@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.json.EmptyJson;
 import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.json.PostLinkResponse;
 import io.kyberorg.yalsee.test.TestApp;
-import io.kyberorg.yalsee.test.TestUtils;
+import io.kyberorg.yalsee.test.utils.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
