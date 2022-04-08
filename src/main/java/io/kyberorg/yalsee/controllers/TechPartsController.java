@@ -6,6 +6,7 @@ import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.util.Date;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
 /**
  * Handles tech resources. Currently, only Fail endpoint for tests.
@@ -68,7 +67,7 @@ public class TechPartsController {
 
             sitemapGenerator.addUrl(mainPage).addUrl(appInfo);
         } catch (MalformedURLException e) {
-            response.setStatus(STATUS_500);
+            response.setStatus(HttpCode.SERVER_ERROR);
             throw new RuntimeException("Server URL is not configured - cannot generate Sitemap.xml");
         }
 

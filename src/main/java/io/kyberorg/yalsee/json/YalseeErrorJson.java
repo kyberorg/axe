@@ -11,8 +11,6 @@ import lombok.Setter;
 
 import java.util.Date;
 
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
-
 @Builder
 @Getter
 @Setter
@@ -33,7 +31,7 @@ public class YalseeErrorJson implements YalseeJson {
     @Builder.Default
     @JsonProperty("status")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private int status = STATUS_500;
+    private int status = HttpCode.SERVER_ERROR;
 
     @JsonProperty("path")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

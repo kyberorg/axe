@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.constants.HttpCode;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -9,8 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import static io.kyberorg.yalsee.Endpoint.ForTests.SLASH_BASE;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbol;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +41,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(true);
 
-        assertEquals(STATUS_302, result.getStatus());
+        assertEquals(HttpCode.TEMPORARY_REDIRECT, result.getStatus());
         assertTrue(result.getHeaders().containsKey(Header.LOCATION));
         String location = result.getHeaders().getFirst(Header.LOCATION);
         assertTrue(StringUtils.isNotBlank(location), "Got empty " + Header.LOCATION + " header");
@@ -60,7 +59,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
     }
 
 }

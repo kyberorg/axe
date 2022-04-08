@@ -9,15 +9,13 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.RedirectLoopDetector;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;
 import lombok.RequiredArgsConstructor;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
 /**
  * Catches all unhandled exceptions from Vaadin Servlet.
@@ -38,7 +36,7 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
         String path = "/" + beforeEnterEvent.getLocation().getPathWithQueryParameters();
 
         ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException(cause)
-                .addStatus(STATUS_500)
+                .addStatus(HttpCode.SERVER_ERROR)
                 .addPath(path)
                 .build();
         YalseeError yalseeError = errorUtils.convertExceptionToYalseeError(args);
@@ -53,6 +51,6 @@ public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErr
         VaadinResponse.getCurrent().setHeader(Header.LOCATION,
                 "/" + errorPageRoute + "?" + App.Params.ERROR_ID + "=" + errorId);
 
-        return STATUS_302;
+        return HttpCode.TEMPORARY_REDIRECT;
     }
 }

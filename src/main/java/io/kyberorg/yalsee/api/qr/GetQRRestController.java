@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.api.qr;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.QRCodeResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -14,9 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_400;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 
 /**
  * Generates QR from short link.
@@ -137,7 +135,7 @@ public class GetQRRestController {
                     case QRCodeService.ERR_MALFORMED_HEIGHT:
                         log.info("{} not valid size/width/height", TAG);
                         YalseeErrorJson errJson = YalseeErrorJson.createWithMessage(result.getMessage())
-                                .andStatus(STATUS_400);
+                                .andStatus(HttpCode.BAD_REQUEST);
                         return ResponseEntity.badRequest().body(errJson);
                     default:
                         return ApiUtils.handleServerError();
@@ -145,9 +143,9 @@ public class GetQRRestController {
             case OperationResult.ELEMENT_NOT_FOUND:
                 log.info("{} ident not found", TAG);
                 YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("No links found by this ident. "
-                        + "Ident should be stored before requesting QR code")
-                        .andStatus(STATUS_404);
-                return ResponseEntity.status(STATUS_404).body(errorJson);
+                                + "Ident should be stored before requesting QR code")
+                        .andStatus(HttpCode.NOT_FOUND);
+                return ResponseEntity.status(HttpCode.NOT_FOUND).body(errorJson);
             case OperationResult.SYSTEM_DOWN:
                 log.error("{} Database is DOWN", TAG);
                 return ApiUtils.handleSystemDown();
@@ -161,7 +159,7 @@ public class GetQRRestController {
     private ResponseEntity<YalseeErrorJson> handleNumberFormatException(final String message) {
         YalseeErrorJson errorJson = YalseeErrorJson
                 .createWithMessage(message)
-                .andStatus(STATUS_400);
+                .andStatus(HttpCode.BAD_REQUEST);
         return ResponseEntity.badRequest().body(errorJson);
     }
 }

@@ -18,12 +18,13 @@ public final class UserMessageGenerator {
 
     static {
         MAPPING.put(App.NO_STATUS, DEFAULT_MESSAGE);
-        MAPPING.put(HttpCode.STATUS_400, "Got malformed request");
-        MAPPING.put(HttpCode.STATUS_404, "Requested resource was not found at server");
-        MAPPING.put(HttpCode.STATUS_405, "API called with wrong method");
-        MAPPING.put(HttpCode.STATUS_415, "Unsupported MimeType, maybe " + Header.CONTENT_TYPE + " Header is missing");
-        MAPPING.put(HttpCode.STATUS_500, DEFAULT_MESSAGE);
-        MAPPING.put(HttpCode.STATUS_503, "Application is down");
+        MAPPING.put(HttpCode.BAD_REQUEST, "Got malformed request");
+        MAPPING.put(HttpCode.NOT_FOUND, "Requested resource was not found at server");
+        MAPPING.put(HttpCode.METHOD_NOT_ALLOWED, "API called with wrong method");
+        MAPPING.put(HttpCode.UNSUPPORTED_MEDIA_TYPE,
+                "Unsupported MimeType, maybe " + Header.CONTENT_TYPE + " Header is missing");
+        MAPPING.put(HttpCode.SERVER_ERROR, DEFAULT_MESSAGE);
+        MAPPING.put(HttpCode.APP_IS_DOWN, "Application is down");
     }
 
     private UserMessageGenerator() {

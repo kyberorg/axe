@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.api.links;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.core.IdentValidator;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 
 /**
  * Deletes malware links.
@@ -77,8 +76,8 @@ public class DeleteLinkRestController {
             case OperationResult.ELEMENT_NOT_FOUND:
                 log.info("{} ident not found", TAG);
                 YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("No link with given ident stored")
-                        .andStatus(STATUS_404);
-                return ResponseEntity.status(STATUS_404).body(errorJson);
+                        .andStatus(HttpCode.NOT_FOUND);
+                return ResponseEntity.status(HttpCode.NOT_FOUND).body(errorJson);
             case OperationResult.SYSTEM_DOWN:
                 log.error("{} Database is DOWN", TAG);
                 return ApiUtils.handleSystemDown();

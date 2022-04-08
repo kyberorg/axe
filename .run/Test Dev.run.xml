@@ -6,7 +6,7 @@
         <option name="METHOD_NAME" value=""/>
         <option name="TEST_OBJECT" value="package"/>
         <option name="VM_PARAMETERS"
-                value="-ea -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dapp.shortUrl=https://d.yls.ee -Dsurefire.rerunFailingTestsCount=2 -Dselenide.timeout=10000"/>
+                value="-ea --add-opens java.base/java.lang=ALL-UNNAMED -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dapp.shortUrl=https://d.yls.ee -Dsurefire.rerunFailingTestsCount=2 -Dselenide.timeout=10000"/>
         <method v="2">
             <option name="Make" enabled="true"/>
         </method>

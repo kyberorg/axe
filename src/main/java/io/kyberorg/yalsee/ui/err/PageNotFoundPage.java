@@ -8,12 +8,10 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.PageNotFoundException;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
-
 
 @SpringComponent
 @UIScope
@@ -60,7 +58,7 @@ public class PageNotFoundPage extends YalseeLayout implements HasErrorParameter<
      */
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<PageNotFoundException> parameter) {
-        return STATUS_404;
+        return HttpCode.NOT_FOUND;
     }
 
     public static class IDs {

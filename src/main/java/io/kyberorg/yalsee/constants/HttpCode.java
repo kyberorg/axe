@@ -10,87 +10,87 @@ public final class HttpCode {
     /**
      * 200 - ok.
      */
-    public static final int STATUS_200 = 200;
+    public static final int OK = 200;
 
     /**
      * 201 - created.
      */
-    public static final int STATUS_201 = 201;
+    public static final int CREATED = 201;
 
     /**
      * 204 - no content.
      */
-    public static final int STATUS_204 = 204;
+    public static final int NO_CONTENT = 204;
 
     /**
-     * 301 - permanent redirect.
+     * 307 - temp redirect.
      */
-    public static final int STATUS_301 = 301;
+    public static final int TEMPORARY_REDIRECT = 307;
 
     /**
-     * 302 - temp redirect.
+     * 308 - permanent redirect.
      */
-    public static final int STATUS_302 = 302;
+    public static final int PERMANENT_REDIRECT = 308;
 
     /**
      * 400 - bad request.
      */
-    public static final int STATUS_400 = 400;
+    public static final int BAD_REQUEST = 400;
 
     /**
      * 401 - Unauthorized.
      */
-    public static final int STATUS_401 = 401;
+    public static final int UNAUTHORIZED = 401;
 
     /**
      * 403 - forbidden.
      */
-    public static final int STATUS_403 = 403;
+    public static final int FORBIDDEN = 403;
 
     /**
      * 404 - not found.
      */
-    public static final int STATUS_404 = 404;
+    public static final int NOT_FOUND = 404;
 
     /**
      * 405 - Method not allowed.
      */
-    public static final int STATUS_405 = 405;
+    public static final int METHOD_NOT_ALLOWED = 405;
 
     /**
      * 406 - Not acceptable.
      */
-    public static final int STATUS_406 = 406;
+    public static final int NOT_ACCEPTABLE = 406;
 
     /**
      * 409 - conflict.
      */
-    public static final int STATUS_409 = 409;
+    public static final int CONFLICT = 409;
 
     /**
      * 415 - Unsupported Media Type.
      */
-    public static final int STATUS_415 = 415;
+    public static final int UNSUPPORTED_MEDIA_TYPE = 415;
 
     /**
      * 422 - unprocessable entry.
      */
-    public static final int STATUS_422 = 422;
+    public static final int UNPROCESSABLE_ENTRY = 422;
 
     /**
      * 500 - server error.
      */
-    public static final int STATUS_500 = 500;
+    public static final int SERVER_ERROR = 500;
 
     /**
      * 501 - not implemented.
      */
-    public static final int STATUS_501 = 501;
+    public static final int NOT_IMPLEMENTED = 501;
 
     /**
      * 503 - application is down.
      */
-    public static final int STATUS_503 = 503;
+    public static final int APP_IS_DOWN = 503;
 
     private HttpCode() {
         throw new UnsupportedOperationException("Utility class");

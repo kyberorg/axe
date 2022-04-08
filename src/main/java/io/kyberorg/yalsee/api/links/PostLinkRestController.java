@@ -25,8 +25,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
-import static io.kyberorg.yalsee.constants.HttpCode.*;
-
 /**
  * Stores new link.
  *
@@ -57,7 +55,7 @@ public class PostLinkRestController {
 
         if (requestJson == null) {
             YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Body should be a JSON object")
-                    .andStatus(STATUS_400);
+                    .andStatus(HttpCode.BAD_REQUEST);
             return ResponseEntity.badRequest().body(errorJson);
         }
 
@@ -105,13 +103,13 @@ public class PostLinkRestController {
                 //sent 409
                 YalseeErrorJson errorJson = YalseeErrorJson.
                         createWithMessage("We already have link stored with given ident. Try another one")
-                        .andStatus(HttpCode.STATUS_409);
-                return ResponseEntity.status(STATUS_409).body(errorJson);
+                        .andStatus(HttpCode.CONFLICT);
+                return ResponseEntity.status(HttpCode.CONFLICT).body(errorJson);
             case OperationResult.BANNED:
                 //analyse ban reason and send 403
                 String banReason = storeResult.getMessage();
-                YalseeErrorJson errorJson1 = YalseeErrorJson.createWithMessage(banReason).andStatus(STATUS_403);
-                return ResponseEntity.status(STATUS_403).body(errorJson1);
+                YalseeErrorJson errorJson1 = YalseeErrorJson.createWithMessage(banReason).andStatus(HttpCode.FORBIDDEN);
+                return ResponseEntity.status(HttpCode.FORBIDDEN).body(errorJson1);
             case OperationResult.SYSTEM_DOWN:
                 return ApiUtils.handleSystemDown();
             case OperationResult.GENERAL_FAIL:
@@ -123,21 +121,21 @@ public class PostLinkRestController {
     private ResponseEntity<YalseeErrorJson> handleMalformedUrl() {
         YalseeErrorJson errorJson =
                 YalseeErrorJson.createWithMessage("Got malformed value at 'link' field. Should be valid URL")
-                        .andStatus(STATUS_422);
+                        .andStatus(HttpCode.UNPROCESSABLE_ENTRY);
         return ResponseEntity.unprocessableEntity().body(errorJson);
     }
 
     private ResponseEntity<YalseeErrorJson> handleMalformedUrl(final OperationResult operationResult) {
         YalseeErrorJson errorJson =
                 YalseeErrorJson.createWithMessage(operationResult.getMessage())
-                        .andStatus(STATUS_422);
+                        .andStatus(HttpCode.UNPROCESSABLE_ENTRY);
         return ResponseEntity.unprocessableEntity().body(errorJson);
     }
 
     private ResponseEntity<YalseeErrorJson> handleMalformedIdent() {
         YalseeErrorJson errorJson =
                 YalseeErrorJson.createWithMessage("Got malformed 'ident'. It should be from 2 to 255 chars.")
-                        .andStatus(STATUS_422);
+                        .andStatus(HttpCode.UNPROCESSABLE_ENTRY);
         return ResponseEntity.unprocessableEntity().body(errorJson);
     }
 }

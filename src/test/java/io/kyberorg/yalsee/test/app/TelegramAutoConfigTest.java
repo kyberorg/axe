@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.json.TelegramStatusResponse;
 import io.kyberorg.yalsee.test.utils.TestUtils;
 import io.kyberorg.yalsee.utils.AppUtils;
@@ -11,12 +12,11 @@ import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_200;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Testing telegram bot auto configuration.
+ * Testing telegram bot autoconfiguration.
  *
  * @since 2.5
  */
@@ -42,7 +42,7 @@ public class TelegramAutoConfigTest extends UnirestTest {
 
         logRequestAndResponse(request, apiResponse, TAG);
 
-        if (apiResponse.getStatus() == STATUS_200) {
+        if (apiResponse.getStatus() == HttpCode.OK) {
             String status = extractBotStatus(apiResponse);
             assertTrue(status.contains("Online"));
         } else {

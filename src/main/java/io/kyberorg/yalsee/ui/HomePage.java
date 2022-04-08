@@ -20,6 +20,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.events.link.LinkDeletedEvent;
 import io.kyberorg.yalsee.events.link.LinkSavedEvent;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
@@ -39,8 +40,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -424,7 +423,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         showError("Internal error. QR generation failed");
         errorUtils.reportToBugsnag(YalseeErrorBuilder
                 .withTechMessage(String.format("onFailGenerateQRCode: Operation failed. OpResult: %s", operationResult))
-                .withStatus(STATUS_500)
+                .withStatus(HttpCode.SERVER_ERROR)
                 .build());
         this.qrCode.setSrc("");
         qrCodeArea.setVisible(false);

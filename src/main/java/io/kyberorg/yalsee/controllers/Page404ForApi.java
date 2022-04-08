@@ -55,11 +55,11 @@ public class Page404ForApi {
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         if (hasAcceptHeader && !AppUtils.clientWantsJson(req)) {
             resp.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON);
-            resp.setStatus(HttpCode.STATUS_406);
+            resp.setStatus(HttpCode.NOT_ACCEPTABLE);
             return;
         }
 
-        resp.setStatus(HttpCode.STATUS_404);
+        resp.setStatus(HttpCode.NOT_FOUND);
         resp.setContentType(MimeType.APPLICATION_JSON);
         resp.getWriter().write(payload.toString());
     }

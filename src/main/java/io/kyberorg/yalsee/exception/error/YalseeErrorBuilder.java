@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 public final class YalseeErrorBuilder {
     private String messageToUser;
     private final String techMessage;
-    private int httpStatus = HttpCode.STATUS_500;
+    private int httpStatus = HttpCode.SERVER_ERROR;
     private Throwable rawException = null;
 
     /**

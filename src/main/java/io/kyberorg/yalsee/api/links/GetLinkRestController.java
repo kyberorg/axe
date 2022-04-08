@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_501;
-
 /**
  * Gets long links.
  *
@@ -38,13 +35,13 @@ public class GetLinkRestController {
     /**
      * Wildcard API. Currently, not implemented. Reserved to provide user's links.
      *
-     * @return currently {@link ResponseEntity} with {@link YalseeErrorJson} and {@link HttpCode#STATUS_501}
+     * @return currently {@link ResponseEntity} with {@link YalseeErrorJson} and {@link HttpCode#NOT_IMPLEMENTED}
      */
     @GetMapping(path = {Endpoint.Api.LINKS_API, Endpoint.Api.LINKS_API + "/"})
     public ResponseEntity<?> getLinks() {
         YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("Not implemented yet")
-                .andStatus(STATUS_501);
-        return ResponseEntity.status(STATUS_501).body(errorJson);
+                .andStatus(HttpCode.NOT_IMPLEMENTED);
+        return ResponseEntity.status(HttpCode.NOT_IMPLEMENTED).body(errorJson);
     }
 
     /**
@@ -89,8 +86,8 @@ public class GetLinkRestController {
             case OperationResult.ELEMENT_NOT_FOUND:
                 log.info("{} ident not found", TAG);
                 YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("No link with given ident stored")
-                        .andStatus(STATUS_404);
-                return ResponseEntity.status(STATUS_404).body(errorJson);
+                        .andStatus(HttpCode.NOT_FOUND);
+                return ResponseEntity.status(HttpCode.NOT_FOUND).body(errorJson);
             case OperationResult.SYSTEM_DOWN:
                 log.error("{} Database is DOWN", TAG);
                 return ApiUtils.handleSystemDown();

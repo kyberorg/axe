@@ -18,7 +18,7 @@ public class YalseeError {
     private final String timeStamp = new Date().toString();
     private String messageToUser;
     private String techMessage;
-    private int httpStatus = HttpCode.STATUS_500;
+    private int httpStatus = HttpCode.SERVER_ERROR;
     private Throwable rawException;
     private String path;
 
