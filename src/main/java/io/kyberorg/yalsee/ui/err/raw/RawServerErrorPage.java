@@ -63,7 +63,7 @@ public class RawServerErrorPage extends ServerErrorLayout implements HasUrlParam
      * @return http status
      */
     @Override
-    public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<RawServerException> parameter) {
+    public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<RawServerException> parameter) {
         return errorUtils.parseStatusFromErrorParameter(parameter, HttpCode.SERVER_ERROR);
     }
 }

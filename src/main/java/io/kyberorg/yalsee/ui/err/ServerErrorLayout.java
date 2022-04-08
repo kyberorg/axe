@@ -19,6 +19,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * Basic layout for ServerError pages.
+ *
+ * @since 3.11
+ */
 @Slf4j
 public class ServerErrorLayout extends YalseeLayout {
     public static final String TAG = "[" + ServerErrorLayout.class.getSimpleName() + "]";
@@ -101,6 +106,11 @@ public class ServerErrorLayout extends YalseeLayout {
         }
     }
 
+    /**
+     * Extracts values from {@link YalseeError} object and fills those values to fields accordingly.
+     *
+     * @param yalseeError non-empty error object to extract data from.
+     */
     protected void fillUIWithValuesFromError(final YalseeError yalseeError) {
         if (StringUtils.isNotBlank(yalseeError.getTimeStamp())) {
             when.setText(yalseeError.getTimeStamp());
