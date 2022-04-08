@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.PostLinkRequest;
 import io.kyberorg.yalsee.json.PostLinkResponse;
@@ -16,7 +17,6 @@ import org.junit.platform.commons.util.StringUtils;
 import java.lang.reflect.Field;
 
 import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -64,7 +64,7 @@ public abstract class UnirestTest extends YalseeTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_201, result.getStatus());
+        assertEquals(HttpCode.CREATED, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -86,9 +86,9 @@ public abstract class UnirestTest extends YalseeTest {
         HttpResponse<JsonNode> result = request.asJson();
         logRequestAndResponse(request, result, TAG);
 
-        if (result.getStatus() == STATUS_200) {
+        if (result.getStatus() == HttpCode.OK) {
             return result.getBody().getObject().getString("link");
-        } else if (result.getStatus() == STATUS_404) {
+        } else if (result.getStatus() == HttpCode.NOT_FOUND) {
             return LINK_NOT_FOUND_STATUS;
         } else {
             throw new RuntimeException("Error occurred while retrieving link. Please see logs above");

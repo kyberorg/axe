@@ -65,7 +65,7 @@ public class YalseeErrorController implements ErrorController {
         path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
         status = getCorrectStatus();
 
-        if (status < HttpCode.STATUS_400) {
+        if (status < HttpCode.BAD_REQUEST) {
             //there is no error
             logRequest(false);
             return;
@@ -97,7 +97,7 @@ public class YalseeErrorController implements ErrorController {
                 return;
             } else {
                 response.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON);
-                response.setStatus(HttpCode.STATUS_406);
+                response.setStatus(HttpCode.NOT_ACCEPTABLE);
             }
             return;
         }
@@ -109,7 +109,7 @@ public class YalseeErrorController implements ErrorController {
                 responseWithJson(errorJson);
             } else {
                 resp.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON + "," + MimeType.TEXT_HTML);
-                resp.setStatus(HttpCode.STATUS_406);
+                resp.setStatus(HttpCode.NOT_ACCEPTABLE);
             }
         } else {
             //html
@@ -119,17 +119,17 @@ public class YalseeErrorController implements ErrorController {
 
     private int getCorrectStatus() {
         if (request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE) == null) {
-            status = HttpCode.STATUS_500;
+            status = HttpCode.SERVER_ERROR;
         } else {
             try {
                 status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
             } catch (Exception e) {
-                status = HttpCode.STATUS_500;
+                status = HttpCode.SERVER_ERROR;
             }
 
             //DB is DOWN
             if (cause instanceof CannotCreateTransactionException) {
-                status = HttpCode.STATUS_503;
+                status = HttpCode.APP_IS_DOWN;
             }
         }
         return status;
@@ -169,13 +169,13 @@ public class YalseeErrorController implements ErrorController {
         final String errorPageRoute = loopDetector.isLoopDetected()
                 ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
 
-        response.setStatus(HttpCode.STATUS_301);
+        response.setStatus(HttpCode.PERMANENT_REDIRECT);
         response.setHeader(Header.LOCATION, "/" + errorPageRoute + "?"
                 + App.Params.ERROR_ID + "=" + errorId);
     }
 
     private void redirectToAppDownAnalogPage() {
-        response.setStatus(HttpCode.STATUS_301);
+        response.setStatus(HttpCode.PERMANENT_REDIRECT);
         response.setHeader(Header.LOCATION, Endpoint.TNT.APP_OFFLINE);
     }
 

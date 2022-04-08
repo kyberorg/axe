@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.EmptyJson;
 import io.kyberorg.yalsee.json.PostLinkRequest;
@@ -18,7 +19,6 @@ import org.junitpioneer.jupiter.Issue;
 
 import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
 import static io.kyberorg.yalsee.constants.Header.X_YALSEE_TOKEN;
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static io.kyberorg.yalsee.core.IdentGenerator.IDENT_DEFAULT_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +42,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -56,7 +56,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_415, result.getStatus());
+        assertEquals(HttpCode.UNSUPPORTED_MEDIA_TYPE, result.getStatus());
     }
 
     /**
@@ -72,7 +72,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -88,7 +88,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -107,7 +107,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_422, result.getStatus());
+        assertEquals(HttpCode.UNPROCESSABLE_ENTRY, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -128,7 +128,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_422, result.getStatus());
+        assertEquals(HttpCode.UNPROCESSABLE_ENTRY, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -149,7 +149,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_422, result.getStatus());
+        assertEquals(HttpCode.UNPROCESSABLE_ENTRY, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -170,7 +170,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_201, result.getStatus());
+        assertEquals(HttpCode.CREATED, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
@@ -191,7 +191,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_201, result.getStatus());
+        assertEquals(HttpCode.CREATED, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -225,7 +225,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_201, result.getStatus());
+        assertEquals(HttpCode.CREATED, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -262,7 +262,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_201, result.getStatus());
+        assertEquals(HttpCode.CREATED, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
@@ -283,7 +283,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_403, result.getStatus());
+        assertEquals(HttpCode.FORBIDDEN, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
@@ -314,7 +314,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_201, result.getStatus());
+        assertEquals(HttpCode.CREATED, result.getStatus());
     }
 
     /**
@@ -341,7 +341,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_409, result.getStatus());
+        assertEquals(HttpCode.CONFLICT, result.getStatus());
     }
 
 }

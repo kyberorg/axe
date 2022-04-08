@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.PostLinkRequest;
 import kong.unirest.HttpRequest;
@@ -19,7 +20,6 @@ import java.io.IOException;
 import java.util.Base64;
 
 import static io.kyberorg.yalsee.constants.Header.CONTENT_TYPE;
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -49,7 +49,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         assertNotNull(body);
@@ -73,7 +73,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         assertNotNull(body);
@@ -95,7 +95,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -109,7 +109,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -122,7 +122,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -142,7 +142,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         String qrCode = body.getObject().getString("qr_code");
@@ -165,7 +165,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -182,7 +182,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -199,7 +199,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -216,7 +216,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -233,7 +233,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -246,7 +246,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -264,7 +264,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -282,7 +282,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -300,7 +300,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -318,7 +318,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -336,7 +336,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -354,7 +354,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -372,7 +372,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -390,7 +390,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -408,7 +408,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -427,7 +427,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         String qrCode = body.getObject().getString("qr_code");
@@ -449,7 +449,7 @@ public class GetQRApiTest extends UnirestTest {
 
             logRequestAndResponse(request, result, TAG);
 
-            if (result.getStatus() != STATUS_201) {
+            if (result.getStatus() != HttpCode.CREATED) {
                 log.error("Store API fail");
                 throw new IllegalStateException("Could not get short link from Store API");
             }

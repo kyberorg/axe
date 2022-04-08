@@ -4,6 +4,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.api.mm.MattermostRestController;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.MattermostResponse;
 import io.kyberorg.yalsee.test.utils.TestUtils;
@@ -18,8 +19,6 @@ import org.junit.jupiter.api.Test;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_200;
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_400;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -49,7 +48,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
@@ -68,7 +67,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
     }
@@ -90,7 +89,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -112,7 +111,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -131,7 +130,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -155,7 +154,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -179,7 +178,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -204,7 +203,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -227,7 +226,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
         assertTrue(isResultMattermostReplyJson(result));
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
 
@@ -250,7 +249,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
         assertTrue(
                 isResultMattermostReplyJson(result),
                 "Reply should valid " + MattermostResponse.class.getSimpleName() + " object");
@@ -274,7 +273,7 @@ public class MattermostApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
         assertTrue(
                 isResultMattermostReplyJson(result),
                 "Reply should valid " + MattermostResponse.class.getSimpleName() + " object");

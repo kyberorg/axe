@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.app;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.test.utils.TestUtils;
 import kong.unirest.HttpRequest;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -39,7 +39,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -55,7 +55,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.TEXT_HTML, result);
@@ -72,7 +72,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -88,7 +88,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -107,7 +107,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_406, result.getStatus());
+        assertEquals(HttpCode.NOT_ACCEPTABLE, result.getStatus());
     }
 
     /**
@@ -122,7 +122,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_500, result.getStatus());
+        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -138,7 +138,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_500, result.getStatus());
+        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.TEXT_HTML, result);
@@ -155,7 +155,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_500, result.getStatus());
+        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -171,7 +171,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_500, result.getStatus());
+        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
         TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
@@ -189,7 +189,7 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(STATUS_406, result.getStatus());
+        assertEquals(HttpCode.NOT_ACCEPTABLE, result.getStatus());
     }
 
     /**
@@ -205,7 +205,7 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "robots.txt is empty");
@@ -224,7 +224,7 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "humans.txt is empty");
@@ -243,7 +243,7 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "favicon.ico is empty");
@@ -264,7 +264,7 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "sitemap.xml is empty");
@@ -319,7 +319,7 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return null;
 
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         String body = result.getBody();
         return body.split(App.NEW_LINE);

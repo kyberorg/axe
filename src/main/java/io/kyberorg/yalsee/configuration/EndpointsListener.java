@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.configuration;
 
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.utils.AppUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -14,7 +15,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_404;
 
 /**
  * Provides information about registered endpoints and routes.
@@ -61,6 +61,6 @@ public class EndpointsListener implements ApplicationListener<ContextRefreshedEv
     private boolean routePresentInApplication(final String routeToCheck) {
         //noinspection rawtypes we need only status
         HttpResponse httpResponse = Unirest.get(appUtils.getServerUrl() + routeToCheck).asEmpty();
-        return httpResponse.getStatus() != STATUS_404;
+        return httpResponse.getStatus() != HttpCode.NOT_FOUND;
     }
 }

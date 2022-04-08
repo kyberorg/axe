@@ -10,6 +10,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.core.IdentGenerator;
 import io.kyberorg.yalsee.exception.IdentNotFoundException;
 import io.kyberorg.yalsee.exception.NeedForRedirectException;
@@ -26,8 +27,6 @@ import org.springframework.stereotype.Controller;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_302;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -75,7 +74,7 @@ public class SlashPage extends YalseeLayout implements HasErrorParameter<NotFoun
             rerouteTo404(route, event, Target.PAGE_NOT_FOUND);
         }
 
-        return STATUS_302;
+        return HttpCode.TEMPORARY_REDIRECT;
     }
 
     private boolean isIdent(final String route) {

@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.api.links.GetLinkRestController;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.test.utils.TestUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import kong.unirest.HttpRequest;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -36,7 +36,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_501, result.getStatus());
+        assertEquals(HttpCode.NOT_IMPLEMENTED, result.getStatus());
 
         TestUtils.assertResultIsYalsErrorJson(result);
     }
@@ -53,7 +53,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_501, result.getStatus());
+        assertEquals(HttpCode.NOT_IMPLEMENTED, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -73,7 +73,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -90,7 +90,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -107,7 +107,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -124,7 +124,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -141,7 +141,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -158,7 +158,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -175,7 +175,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -192,7 +192,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -209,7 +209,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -226,7 +226,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -243,7 +243,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -260,7 +260,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_400, result.getStatus());
+        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -275,7 +275,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsYalsErrorJson(result);
     }
 
@@ -293,7 +293,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_200, result.getStatus());
+        assertEquals(HttpCode.OK, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }

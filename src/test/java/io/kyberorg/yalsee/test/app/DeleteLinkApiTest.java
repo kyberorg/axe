@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.app;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.utils.TestUtils;
 import kong.unirest.HttpRequestWithBody;
@@ -10,7 +11,6 @@ import kong.unirest.Unirest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -33,7 +33,7 @@ public class DeleteLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_401, result.getStatus());
+        assertEquals(HttpCode.UNAUTHORIZED, result.getStatus());
 
         assertTrue(verifyLinkIsStored(ident), "Link should not be deleted");
     }
@@ -51,7 +51,7 @@ public class DeleteLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_401, result.getStatus());
+        assertEquals(HttpCode.UNAUTHORIZED, result.getStatus());
 
         assertTrue(verifyLinkIsStored(ident), "Link should not be deleted");
     }
@@ -72,7 +72,7 @@ public class DeleteLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_204, result.getStatus());
+        assertEquals(HttpCode.NO_CONTENT, result.getStatus());
 
         assertFalse(verifyLinkIsStored(ident), "Link should be deleted");
     }
@@ -93,7 +93,7 @@ public class DeleteLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_404, result.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -114,7 +114,7 @@ public class DeleteLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(STATUS_204, result.getStatus());
+        assertEquals(HttpCode.NO_CONTENT, result.getStatus());
 
         //second request
         HttpRequestWithBody request2 = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
@@ -124,6 +124,6 @@ public class DeleteLinkApiTest extends UnirestTest {
         logRequestAndResponse(request2, result2, TAG);
 
         assertNotNull(result2);
-        assertEquals(STATUS_404, result2.getStatus());
+        assertEquals(HttpCode.NOT_FOUND, result2.getStatus());
     }
 }

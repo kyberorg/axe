@@ -4,12 +4,11 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.GeneralServerException;
 import io.kyberorg.yalsee.exception.NeedForLoopException;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_500;
 
 /**
  * This View sends everything back to {@link ServerErrorPage} and intended to be used only
@@ -26,6 +25,6 @@ public class ServerErrorLoopPage extends YalseeLayout implements HasErrorParamet
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<NeedForLoopException> parameter) {
         event.rerouteToError(GeneralServerException.class, parameter.getCustomMessage());
-        return STATUS_500;
+        return HttpCode.SERVER_ERROR;
     }
 }

@@ -15,6 +15,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
@@ -25,8 +26,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 
 @Slf4j
 @SpringComponent
@@ -123,7 +122,7 @@ public class RedirectPage extends YalseeLayout implements HasErrorParameter<Need
         if (parts.length != 2) {
             log.error("Something wrong with received message {} it's length {}, but only 2 parts are excepted",
                     message, parts.length);
-            return STATUS_500;
+            return HttpCode.SERVER_ERROR;
         }
 
         this.origin = appUtils.getShortUrl() + "/" + parts[0];
@@ -145,7 +144,7 @@ public class RedirectPage extends YalseeLayout implements HasErrorParameter<Need
 
         directAccessBanner.setVisible(false);
         redirectPage.setVisible(true);
-        return STATUS_200;
+        return HttpCode.OK;
     }
 
     private boolean shouldSkipRedirectPage() {
@@ -164,10 +163,10 @@ public class RedirectPage extends YalseeLayout implements HasErrorParameter<Need
     private int doHeaderRedirect(final String target) {
         if (StringUtils.isNotBlank(target)) {
             VaadinResponse.getCurrent().setHeader(Header.LOCATION, UrlUtils.covertUnicodeUrlToAscii(target));
-            return STATUS_302;
+            return HttpCode.TEMPORARY_REDIRECT;
         } else {
             log.error("{} Target is empty", TAG);
-            return STATUS_500;
+            return HttpCode.SERVER_ERROR;
         }
     }
 

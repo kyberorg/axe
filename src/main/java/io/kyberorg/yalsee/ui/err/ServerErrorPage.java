@@ -13,6 +13,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.controllers.YalseeErrorController;
 import io.kyberorg.yalsee.exception.GeneralServerException;
 import io.kyberorg.yalsee.exception.NeedForLoopException;
@@ -28,8 +29,6 @@ import org.springframework.transaction.CannotCreateTransactionException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
-
-import static io.kyberorg.yalsee.constants.HttpCode.*;
 
 @Slf4j
 @SpringComponent
@@ -188,15 +187,15 @@ public class ServerErrorPage extends YalseeLayout implements HasErrorParameter<G
     public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
         YalseeError yalseeError = errorUtils.getYalseeErrorFromEvent(event);
         if (Objects.isNull(yalseeError)) {
-            event.rerouteToError(NeedForLoopException.class, Integer.toString(STATUS_500));
+            event.rerouteToError(NeedForLoopException.class, Integer.toString(HttpCode.SERVER_ERROR));
             return;
         }
 
         switch (yalseeError.getHttpStatus()) {
-            case STATUS_404:
+            case HttpCode.NOT_FOUND:
                 event.rerouteToError(NotFoundException.class);
                 return;
-            case STATUS_503:
+            case HttpCode.APP_IS_DOWN:
                 event.rerouteToError(CannotCreateTransactionException.class);
                 return;
             default:
@@ -215,6 +214,6 @@ public class ServerErrorPage extends YalseeLayout implements HasErrorParameter<G
      */
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<GeneralServerException> parameter) {
-        return errorUtils.parseStatusFromErrorParameter(parameter, STATUS_500);
+        return errorUtils.parseStatusFromErrorParameter(parameter, HttpCode.SERVER_ERROR);
     }
 }

@@ -6,11 +6,10 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.*;
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import org.springframework.transaction.CannotCreateTransactionException;
-
-import static io.kyberorg.yalsee.constants.HttpCode.STATUS_503;
 
 @PageTitle("Yalsee: Error 503")
 @Route(value = Endpoint.UI.ERROR_PAGE_503, layout = MainView.class)
@@ -45,6 +44,6 @@ public class AppDownPage extends YalseeLayout implements HasErrorParameter<Canno
     @Override
     public int setErrorParameter(final BeforeEnterEvent event,
                                  final ErrorParameter<CannotCreateTransactionException> parameter) {
-        return STATUS_503;
+        return HttpCode.APP_IS_DOWN;
     }
 }
