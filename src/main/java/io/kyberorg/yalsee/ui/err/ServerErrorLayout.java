@@ -4,37 +4,30 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.router.*;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
-import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
-import io.kyberorg.yalsee.controllers.YalseeErrorController;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.err.raw.RawServerErrorPage;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Basic layout for ServerError pages.
+ *
+ * @since 3.11
+ */
 @Slf4j
-@SpringComponent
-@UIScope
-@PageTitle("Yalsee: Error 500")
-@Route(value = Endpoint.UI.RAW_ERROR_PAGE_500)
-@CssImport("./css/error_views.css")
-public class RawServerErrorPage extends YalseeLayout implements HasUrlParameter<String> {
-    public static final String TAG = "[" + RawServerErrorPage.class.getSimpleName() + "]";
+public class ServerErrorLayout extends YalseeLayout {
+    public static final String TAG = "[" + ServerErrorLayout.class.getSimpleName() + "]";
 
-    private final ErrorUtils errorUtils;
     private final AppUtils appUtils;
 
     private final H1 title = new H1();
@@ -43,6 +36,7 @@ public class RawServerErrorPage extends YalseeLayout implements HasUrlParameter<
     private final Image image = new Image();
 
     private final Accordion techInfo = new Accordion();
+
     private AccordionPanel userMessagePanel;
     private AccordionPanel timeStampPanel;
     private AccordionPanel techMessagePanel;
@@ -56,11 +50,9 @@ public class RawServerErrorPage extends YalseeLayout implements HasUrlParameter<
     /**
      * Creates {@link RawServerErrorPage}.
      *
-     * @param errorUtils error utils for actions with errors
-     * @param appUtils   application utils
+     * @param appUtils application utils
      */
-    public RawServerErrorPage(final ErrorUtils errorUtils, final AppUtils appUtils) {
-        this.errorUtils = errorUtils;
+    public ServerErrorLayout(final AppUtils appUtils) {
         this.appUtils = appUtils;
 
         init();
@@ -114,7 +106,12 @@ public class RawServerErrorPage extends YalseeLayout implements HasUrlParameter<
         }
     }
 
-    private void fillUIWithValuesFromError(final YalseeError yalseeError) {
+    /**
+     * Extracts values from {@link YalseeError} object and fills those values to fields accordingly.
+     *
+     * @param yalseeError non-empty error object to extract data from.
+     */
+    protected void fillUIWithValuesFromError(final YalseeError yalseeError) {
         if (StringUtils.isNotBlank(yalseeError.getTimeStamp())) {
             when.setText(yalseeError.getTimeStamp());
         }
@@ -171,17 +168,4 @@ public class RawServerErrorPage extends YalseeLayout implements HasUrlParameter<
                 .replaceAll("at ", "&emsp;&emsp;at ");
     }
 
-    /**
-     * EntryPoint from {@link YalseeErrorController}.
-     *
-     * @param event     Vaadin Event with location, payload
-     * @param parameter string goes after errors/500. We ignore it, because we use queryParams instead
-     */
-    @Override
-    public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
-        YalseeError yalseeError = errorUtils.getYalseeErrorFromEvent(event);
-        if (!Objects.isNull(yalseeError)) {
-            fillUIWithValuesFromError(yalseeError);
-        }
-    }
 }

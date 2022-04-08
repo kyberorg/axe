@@ -28,11 +28,6 @@ public final class HttpCode {
     public static final int TEMPORARY_REDIRECT = 307;
 
     /**
-     * 308 - permanent redirect.
-     */
-    public static final int PERMANENT_REDIRECT = 308;
-
-    /**
      * 400 - bad request.
      */
     public static final int BAD_REQUEST = 400;

@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.exception.error;
 
 import io.kyberorg.yalsee.constants.HttpCode;
-import io.kyberorg.yalsee.ui.err.ServerErrorPage;
+import io.kyberorg.yalsee.ui.err.server.ServerErrorPage;
 import lombok.Data;
 
 import java.util.Date;
