@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.err;
+package io.kyberorg.yalsee.ui.err.server;
 
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;

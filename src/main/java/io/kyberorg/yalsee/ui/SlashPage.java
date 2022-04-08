@@ -19,7 +19,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.ui.core.YalseeLayout;
 import io.kyberorg.yalsee.ui.err.AppDownPage;
-import io.kyberorg.yalsee.ui.err.ServerErrorPage;
+import io.kyberorg.yalsee.ui.err.server.ServerErrorPage;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

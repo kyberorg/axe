@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.exception;
 
-import io.kyberorg.yalsee.ui.err.ServerErrorPage;
+import io.kyberorg.yalsee.ui.err.server.ServerErrorPage;
 
 /**
  * Very general exception, which not intended to be thrown, just {@link ServerErrorPage} handles it.

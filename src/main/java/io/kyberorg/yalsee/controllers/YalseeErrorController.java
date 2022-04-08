@@ -169,13 +169,13 @@ public class YalseeErrorController implements ErrorController {
         final String errorPageRoute = loopDetector.isLoopDetected()
                 ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
 
-        response.setStatus(HttpCode.PERMANENT_REDIRECT);
+        response.setStatus(HttpCode.TEMPORARY_REDIRECT);
         response.setHeader(Header.LOCATION, "/" + errorPageRoute + "?"
                 + App.Params.ERROR_ID + "=" + errorId);
     }
 
     private void redirectToAppDownAnalogPage() {
-        response.setStatus(HttpCode.PERMANENT_REDIRECT);
+        response.setStatus(HttpCode.TEMPORARY_REDIRECT);
         response.setHeader(Header.LOCATION, Endpoint.TNT.APP_OFFLINE);
     }
 

@@ -2,7 +2,8 @@ package io.kyberorg.yalsee;
 
 import io.kyberorg.yalsee.controllers.AppOfflineController;
 import io.kyberorg.yalsee.controllers.YalseeErrorController;
-import io.kyberorg.yalsee.ui.err.ServerErrorPage;
+import io.kyberorg.yalsee.ui.err.raw.RawServerErrorLoopPage;
+import io.kyberorg.yalsee.ui.err.server.ServerErrorPage;
 
 /**
  * List of application endpoints.
@@ -202,6 +203,11 @@ public final class Endpoint {
          * Server Error Loopback View. Intended to be used only within {@link ServerErrorPage}.
          */
         public static final String SERVER_ERROR_LOOP = "server-error-loop";
+
+        /**
+         * Raw Server Error Loopback View. Intended to be used only within {@link RawServerErrorLoopPage}.
+         */
+        public static final String RAW_SERVER_ERROR_LOOP = "raw-server-error-loop";
 
         /**
          * Site Preview image for SEO.
