@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.ui.pages.debug;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -12,6 +13,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.elements.Section;
 import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 @SpringComponent
@@ -43,5 +45,11 @@ public class DebugPage extends YalseeLayout implements BeforeEnterObserver {
         }
 
         add(new Span("Ready to debug something..."));
+
+        Section section = new Section();
+        section.setSectionTitle("My Title");
+        section.addElements(new Text("aaa"), new Text("bbb"));
+
+        add(section);
     }
 }

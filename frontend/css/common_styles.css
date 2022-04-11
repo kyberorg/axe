@@ -123,6 +123,10 @@
     padding-top: 1em;
 }
 
+.white-border {
+    border-color: white;
+}
+
 @font-face {
     font-family: 'Pebble';
     src: url('/Pebble-Regular.woff2') format('woff2'),
