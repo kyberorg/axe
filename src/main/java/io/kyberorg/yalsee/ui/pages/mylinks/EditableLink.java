@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.components;
+package io.kyberorg.yalsee.ui.pages.mylinks;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Composite;

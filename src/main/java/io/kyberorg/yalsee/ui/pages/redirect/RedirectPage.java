@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.special;
+package io.kyberorg.yalsee.ui.pages.redirect;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
@@ -18,7 +18,7 @@ import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.ui.MainView;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;

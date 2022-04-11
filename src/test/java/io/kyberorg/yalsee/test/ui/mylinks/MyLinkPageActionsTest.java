@@ -5,7 +5,7 @@ import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.MainViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.MyLinksPage;
+import io.kyberorg.yalsee.ui.pages.mylinks.MyLinksPage;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

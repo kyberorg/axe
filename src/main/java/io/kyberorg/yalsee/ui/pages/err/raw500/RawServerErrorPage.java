@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.err.raw;
+package io.kyberorg.yalsee.ui.pages.err.raw500;
 
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.*;
@@ -10,7 +10,7 @@ import io.kyberorg.yalsee.controllers.YalseeErrorController;
 import io.kyberorg.yalsee.exception.RawLoopException;
 import io.kyberorg.yalsee.exception.RawServerException;
 import io.kyberorg.yalsee.exception.error.YalseeError;
-import io.kyberorg.yalsee.ui.err.ServerErrorLayout;
+import io.kyberorg.yalsee.ui.layouts.ServerErrorLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;

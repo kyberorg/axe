@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.exception;
 
-import io.kyberorg.yalsee.ui.err.server.ServerErrorLoopPage;
+import io.kyberorg.yalsee.ui.pages.err.err500.ServerErrorLoopPage;
 
 /**
  * Exception, which not intended to be thrown, just {@link ServerErrorLoopPage} handles it.

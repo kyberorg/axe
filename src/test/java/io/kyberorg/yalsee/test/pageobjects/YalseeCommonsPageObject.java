@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.visible;

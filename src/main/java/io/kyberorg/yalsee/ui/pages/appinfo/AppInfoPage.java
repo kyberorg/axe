@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui;
+package io.kyberorg.yalsee.ui.pages.appinfo;
 
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
@@ -16,7 +16,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.services.GitService;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
 import io.kyberorg.yalsee.utils.maven.MavenInfo;

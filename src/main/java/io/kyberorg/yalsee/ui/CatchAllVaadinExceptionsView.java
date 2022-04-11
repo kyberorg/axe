@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.special;
+package io.kyberorg.yalsee.ui;
 
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
@@ -11,7 +11,7 @@ import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.error.YalseeError;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import io.kyberorg.yalsee.utils.RedirectLoopDetector;
 import io.kyberorg.yalsee.utils.YalseeErrorKeeper;

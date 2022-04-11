@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.components;
+package io.kyberorg.yalsee.ui.elements;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;

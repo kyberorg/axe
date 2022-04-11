@@ -2,8 +2,8 @@ package io.kyberorg.yalsee;
 
 import io.kyberorg.yalsee.controllers.AppOfflineController;
 import io.kyberorg.yalsee.controllers.YalseeErrorController;
-import io.kyberorg.yalsee.ui.err.raw.RawServerErrorLoopPage;
-import io.kyberorg.yalsee.ui.err.server.ServerErrorPage;
+import io.kyberorg.yalsee.ui.pages.err.err500.ServerErrorPage;
+import io.kyberorg.yalsee.ui.pages.err.raw500.RawServerErrorLoopPage;
 
 /**
  * List of application endpoints.

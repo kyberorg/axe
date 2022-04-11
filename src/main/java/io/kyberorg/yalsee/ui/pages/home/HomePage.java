@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui;
+package io.kyberorg.yalsee.ui.pages.home;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.accordion.Accordion;
@@ -31,6 +31,7 @@ import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.session.YalseeSession;
+import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;

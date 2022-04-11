@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.TestUtils;
-import io.kyberorg.yalsee.ui.special.RedirectPage;
+import io.kyberorg.yalsee.ui.pages.redirect.RedirectPage;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

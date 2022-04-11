@@ -5,7 +5,7 @@ import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.GitHub;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.special.RedirectPage;
+import io.kyberorg.yalsee.ui.pages.redirect.RedirectPage;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

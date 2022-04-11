@@ -1,6 +1,6 @@
 package io.kyberorg.yalsee.exception;
 
-import io.kyberorg.yalsee.ui.err.PageNotFoundPage;
+import io.kyberorg.yalsee.ui.pages.err.page404.PageNotFoundPage;
 
 /**
  * Exception, which not intended to be thrown, just {@link PageNotFoundPage} handles it.

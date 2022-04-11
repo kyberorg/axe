@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui;
+package io.kyberorg.yalsee.ui.pages.slash;
 
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
@@ -17,9 +17,9 @@ import io.kyberorg.yalsee.exception.NeedForRedirectException;
 import io.kyberorg.yalsee.exception.PageNotFoundException;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
-import io.kyberorg.yalsee.ui.err.AppDownPage;
-import io.kyberorg.yalsee.ui.err.server.ServerErrorPage;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
+import io.kyberorg.yalsee.ui.pages.err.appdown.AppDownPage;
+import io.kyberorg.yalsee.ui.pages.err.err500.ServerErrorPage;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

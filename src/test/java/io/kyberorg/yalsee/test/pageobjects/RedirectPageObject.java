@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.ui.special.RedirectPage;
+import io.kyberorg.yalsee.ui.pages.redirect.RedirectPage;
 
 import static com.codeborne.selenide.Selenide.$;
 

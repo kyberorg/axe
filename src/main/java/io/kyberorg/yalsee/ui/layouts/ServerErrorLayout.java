@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.err;
+package io.kyberorg.yalsee.ui.layouts;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
@@ -9,8 +9,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.exception.error.YalseeError;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
-import io.kyberorg.yalsee.ui.err.raw.RawServerErrorPage;
+import io.kyberorg.yalsee.ui.pages.err.raw500.RawServerErrorPage;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
