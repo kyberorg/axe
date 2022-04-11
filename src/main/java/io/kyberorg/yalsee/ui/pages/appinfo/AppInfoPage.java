@@ -2,7 +2,6 @@ package io.kyberorg.yalsee.ui.pages.appinfo;
 
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,6 +16,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.services.GitService;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.elements.Section;
 import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.git.GitRepoState;
@@ -45,20 +45,21 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
     private void init() {
         setId(IDs.VIEW_ID);
 
-        final VerticalLayout publicInfoArea = publicInfoArea();
-        final VerticalLayout cookieArea = cookieArea();
+        final Section publicInfoArea = publicInfoArea();
+        final Section cookieArea = cookieArea();
 
         removeAll();
         add(publicInfoArea, cookieArea);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
-            final VerticalLayout devInfoArea = devInfoArea();
-            add(devInfoArea);
+            final H3 h3 = new H3("Dev Info");
+            final Section devInfoArea = devInfoArea();
+            add(h3, devInfoArea);
         }
     }
 
-    private VerticalLayout publicInfoArea() {
-        VerticalLayout publicArea = new VerticalLayout();
+    private Section publicInfoArea() {
+        Section publicArea = new Section("About App");
         HorizontalLayout versionRaw = new HorizontalLayout();
         publicArea.setId(IDs.PUBLIC_INFO_AREA);
 
@@ -79,7 +80,6 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         versionRaw.setWidthFull();
         versionRaw.add(version);
 
-        publicArea.setWidthFull();
         publicArea.add(versionRaw);
 
         if (appUtils.isGoogleAnalyticsEnabled()) {
@@ -92,11 +92,9 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         return publicArea;
     }
 
-    private VerticalLayout cookieArea() {
-        VerticalLayout cookieArea = new VerticalLayout();
+    private Section cookieArea() {
+        Section cookieArea = new Section("About Cookies");
         cookieArea.setId(IDs.COOKIE_AREA);
-        H4 title = new H4("About Cookies");
-        title.setId(IDs.COOKIE_TITLE);
 
         Span cookieText = new Span();
         cookieText.setId(IDs.COOKIE_TEXT_SPAN);
@@ -127,12 +125,12 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         cookieSettingsSpan.add(cookieSettingsText, cookieSettingsLink, point);
         cookieText.add(textStart, link, textEnd, techDetailsText);
 
-        cookieArea.add(title, cookieText, cookieSettingsSpan);
+        cookieArea.setContent(cookieText, cookieSettingsSpan);
         return cookieArea;
     }
 
-    private VerticalLayout devInfoArea() {
-        VerticalLayout devInfoArea = new VerticalLayout();
+    private Section devInfoArea() {
+        Section devInfoArea = new Section();
         devInfoArea.setId(IDs.DEV_INFO_AREA);
 
         String vaadinVersionStr = mavenInfo.hasValues() ? mavenInfo.getVaadinVersion() : UNDEFINED;
@@ -141,14 +139,15 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         String gitBranchStr = gitRepoState.hasValues() ? gitRepoState.getBranch() : UNDEFINED;
         String gitHostStr = gitRepoState.hasValues() ? gitRepoState.getBuildHost() : UNDEFINED;
 
-        H3 h3 = new H3("Dev Info");
+
         Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr
                 + " (Flow: " + vaadinFlowVersion + ")");
 
         Span gitBranch = new Span("Git branch: " + gitBranchStr);
         Span gitHost = new Span("Built at " + gitHostStr);
 
-        devInfoArea.add(h3, vaadinVersion, gitBranch, gitHost);
+        VerticalLayout devInfoLayout = new VerticalLayout(vaadinVersion, gitBranch, gitHost);
+        devInfoArea.setContent(devInfoLayout);
 
         add(devInfoArea);
         return devInfoArea;

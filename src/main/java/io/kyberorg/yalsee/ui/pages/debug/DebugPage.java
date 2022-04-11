@@ -47,8 +47,8 @@ public class DebugPage extends YalseeLayout implements BeforeEnterObserver {
         add(new Span("Ready to debug something..."));
 
         Section section = new Section();
-        section.setSectionTitle("My Title");
-        section.addElements(new Text("aaa"), new Text("bbb"));
+        section.setTitle("My Title");
+        section.setContent(new Text("aaa"), new Text("bbb"));
 
         add(section);
     }
