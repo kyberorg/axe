@@ -20,7 +20,7 @@ jobs:
           JAVA_HOME: /srv/java11
 
       - name: Publish Screenshots of failing tests (if any)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         continue-on-error: true
         with:
           name: failedTests
