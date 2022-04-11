@@ -98,7 +98,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.31
+        uses: EnricoMi/publish-unit-test-result-action@v1.32
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -149,7 +149,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish New Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.31
+        uses: EnricoMi/publish-unit-test-result-action@v1.32
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
