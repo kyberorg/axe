@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui;
+package io.kyberorg.yalsee.ui.pages.debug;
 
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
@@ -11,7 +11,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.session.YalseeSession;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 @SpringComponent
 @UIScope

@@ -4,7 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.GridElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
-import io.kyberorg.yalsee.ui.MyLinksPage;
+import io.kyberorg.yalsee.ui.pages.mylinks.MyLinksPage;
 import lombok.Data;
 
 import static com.codeborne.selenide.Selenide.*;

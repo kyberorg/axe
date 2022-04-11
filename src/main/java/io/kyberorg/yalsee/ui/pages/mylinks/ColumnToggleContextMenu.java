@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.components;
+package io.kyberorg.yalsee.ui.pages.mylinks;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;

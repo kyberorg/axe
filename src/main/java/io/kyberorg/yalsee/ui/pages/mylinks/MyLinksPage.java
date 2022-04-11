@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui;
+package io.kyberorg.yalsee.ui.pages.mylinks;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
@@ -48,10 +48,9 @@ import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.YalseeSession;
-import io.kyberorg.yalsee.ui.components.ColumnToggleContextMenu;
-import io.kyberorg.yalsee.ui.components.DeleteConfirmationDialog;
-import io.kyberorg.yalsee.ui.components.EditableLink;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.elements.DeleteConfirmationDialog;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.DeviceUtils;

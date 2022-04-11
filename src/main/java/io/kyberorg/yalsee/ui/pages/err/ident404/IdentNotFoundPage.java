@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.err;
+package io.kyberorg.yalsee.ui.pages.err.ident404;
 
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
@@ -11,7 +11,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.IdentNotFoundException;
 import io.kyberorg.yalsee.ui.MainView;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 @SpringComponent
 @UIScope

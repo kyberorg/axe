@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.err.raw;
+package io.kyberorg.yalsee.ui.pages.err.raw500;
 
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -7,7 +7,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.RawLoopException;
 import io.kyberorg.yalsee.exception.RawServerException;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 /**
  * This View sends everything back to {@link RawServerErrorPage} and intended to be used only

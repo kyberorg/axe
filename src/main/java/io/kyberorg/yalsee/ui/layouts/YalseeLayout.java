@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.core;
+package io.kyberorg.yalsee.ui.layouts;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;

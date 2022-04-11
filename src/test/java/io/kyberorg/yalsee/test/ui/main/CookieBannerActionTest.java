@@ -4,8 +4,8 @@ import io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject;
 import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.AppInfoPage;
-import io.kyberorg.yalsee.ui.components.CookieBanner;
+import io.kyberorg.yalsee.ui.elements.CookieBanner;
+import io.kyberorg.yalsee.ui.pages.appinfo.AppInfoPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

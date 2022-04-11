@@ -5,7 +5,7 @@ import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.BetaSettings;
 import io.kyberorg.yalsee.test.pageobjects.SettingsPageObject.CookieSettings;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.ui.SettingsPage;
+import io.kyberorg.yalsee.ui.pages.settings.SettingsPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

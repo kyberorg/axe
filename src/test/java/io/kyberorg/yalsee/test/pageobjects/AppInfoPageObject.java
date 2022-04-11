@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.ui.AppInfoPage;
+import io.kyberorg.yalsee.ui.pages.appinfo.AppInfoPage;
 
 import static com.codeborne.selenide.Selenide.$;
 

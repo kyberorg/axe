@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.ui.SettingsPage;
+import io.kyberorg.yalsee.ui.pages.settings.SettingsPage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
 

@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.test.pageobjects.elements;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.ui.components.CookieBanner;
+import io.kyberorg.yalsee.ui.elements.CookieBanner;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;

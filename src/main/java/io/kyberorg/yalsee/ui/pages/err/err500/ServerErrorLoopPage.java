@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.err.server;
+package io.kyberorg.yalsee.ui.pages.err.err500;
 
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -8,7 +8,7 @@ import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.exception.GeneralServerException;
 import io.kyberorg.yalsee.exception.NeedForLoopException;
 import io.kyberorg.yalsee.ui.MainView;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 /**
  * This View sends everything back to {@link ServerErrorPage} and intended to be used only

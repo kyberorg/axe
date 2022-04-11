@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui;
+package io.kyberorg.yalsee.ui.pages.settings;
 
 import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.AbstractField;
@@ -19,7 +19,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.session.YalseeSession;
-import io.kyberorg.yalsee.ui.core.YalseeLayout;
+import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 import static io.kyberorg.yalsee.constants.App.ONE_SECOND_IN_MILLIS;
 

@@ -2,7 +2,7 @@ package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
-import io.kyberorg.yalsee.ui.HomePage;
+import io.kyberorg.yalsee.ui.pages.home.HomePage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
 

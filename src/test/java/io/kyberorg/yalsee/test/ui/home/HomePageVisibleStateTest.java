@@ -7,7 +7,7 @@ import io.kyberorg.yalsee.test.ui.SelenideTest;
 import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import io.kyberorg.yalsee.test.utils.browser.BrowserSize;
 import io.kyberorg.yalsee.test.utils.browser.BrowserUtils;
-import io.kyberorg.yalsee.ui.HomePage;
+import io.kyberorg.yalsee.ui.pages.home.HomePage;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

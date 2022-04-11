@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import io.kyberorg.yalsee.ui.err.IdentNotFoundPage;
+import io.kyberorg.yalsee.ui.pages.err.ident404.IdentNotFoundPage;
 
 import static com.codeborne.selenide.Selenide.$;
 
