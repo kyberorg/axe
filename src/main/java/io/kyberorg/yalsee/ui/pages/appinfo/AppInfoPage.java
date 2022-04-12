@@ -57,7 +57,7 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private Section publicInfoArea() {
-        Section publicArea = new Section("About App");
+        Section publicArea = new Section("About Application");
         HorizontalLayout versionRaw = new HorizontalLayout();
         publicArea.setId(IDs.PUBLIC_INFO_AREA);
 
