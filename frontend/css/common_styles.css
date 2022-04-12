@@ -131,6 +131,10 @@
     max-width: 100%;
 }
 
+vaadin-vertical-layout.section-content {
+    padding-left: 0;
+}
+
 @font-face {
     font-family: 'Pebble';
     src: url('/Pebble-Regular.woff2') format('woff2'),

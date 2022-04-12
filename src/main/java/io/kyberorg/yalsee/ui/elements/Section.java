@@ -2,14 +2,13 @@ package io.kyberorg.yalsee.ui.elements;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 public class Section extends Composite<VerticalLayout> {
     private final H5 title = new H5();
-    private final Div content = new Div();
+    private final VerticalLayout content = new VerticalLayout();
 
     public Section() {
         this("");
@@ -19,7 +18,10 @@ public class Section extends Composite<VerticalLayout> {
         if (StringUtils.isNotBlank(titleText)) {
             title.setText(titleText);
             getContent().add(title);
+            //setting content closer to title
+            content.getStyle().set("padding-top", "0");
         }
+        content.setClassName("section-content");
         getContent().add(content);
         getContent().addClassName("border");
         getContent().addClassName("color-border");
@@ -35,7 +37,7 @@ public class Section extends Composite<VerticalLayout> {
         content.add(components);
     }
 
-    public void setContent(final Component customLayout) {
+    public void setCustomContent(final Component customLayout) {
         getContent().replace(content, customLayout);
     }
 
@@ -43,9 +45,12 @@ public class Section extends Composite<VerticalLayout> {
         content.add(component);
     }
 
-    public void setCustomTitle(final Component customTitle) {
+    public void setCustomTitleElement(final Component customTitle) {
         getContent().removeAll();
         getContent().add(customTitle);
         getContent().add(content);
+
+        //setting content closer to title
+        content.getStyle().set("padding-top", "0");
     }
 }

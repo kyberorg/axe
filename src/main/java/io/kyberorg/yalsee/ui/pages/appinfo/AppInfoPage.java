@@ -4,7 +4,6 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -146,12 +145,9 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         Span gitHost = new Span("Built at " + gitHostStr);
 
         H4 devInfoTitle = new H4("Dev Info");
-        VerticalLayout devInfoLayout = new VerticalLayout(vaadinVersion, gitBranch, gitHost);
-        devInfoLayout.getStyle().set("padding-top", "0em");
-        devInfoLayout.getStyle().set("padding-left", "0em");
 
-        devInfoArea.setCustomTitle(devInfoTitle);
-        devInfoArea.setContent(devInfoLayout);
+        devInfoArea.setCustomTitleElement(devInfoTitle);
+        devInfoArea.setContent(vaadinVersion, gitBranch, gitHost);
 
         add(devInfoArea);
         return devInfoArea;

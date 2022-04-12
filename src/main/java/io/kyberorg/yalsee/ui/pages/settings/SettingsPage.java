@@ -10,7 +10,6 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -34,7 +33,6 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
 
     private final H3 pageTitle = new H3("Application Settings");
     private final Section cookieSettingsSection = new Section("Cookie Settings");
-    private final VerticalLayout cookieSettingsLayout = new VerticalLayout();
     private final Span techCookiesSpan = new Span();
     private final Span techCookiesLabel = new Span("Technical cookies: ");
     private final ToggleButton techCookiesValue = new ToggleButton(true);
@@ -42,7 +40,6 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
     private final Span analyticsCookiesLabel = new Span("Analytics cookies: ");
     private final ToggleButton analyticsCookiesValue = new ToggleButton();
     private final Section betaSettingsSection = new Section("Beta (Feature preview)");
-    private final VerticalLayout betaSettingsLayout = new VerticalLayout();
     private final Span darkModeSpan = new Span();
     private final Span darkModeLabel = new Span("Dark Mode: ");
     private final ToggleButton darkModeValue = new ToggleButton();
@@ -107,11 +104,8 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
 
         darkModeSpan.add(darkModeLabel, darkModeValue);
 
-        cookieSettingsLayout.add(techCookiesSpan, analyticsCookiesSpan);
-        betaSettingsLayout.add(darkModeSpan);
-
-        cookieSettingsSection.setContent(cookieSettingsLayout);
-        betaSettingsSection.setContent(betaSettingsLayout);
+        cookieSettingsSection.setContent(techCookiesSpan, analyticsCookiesSpan);
+        betaSettingsSection.setContent(darkModeSpan);
 
         add(pageTitle, cookieSettingsSection, betaSettingsSection);
     }
