@@ -13,6 +13,8 @@ public class Section extends Composite<VerticalLayout> {
     private final H5 title = new H5();
     private final VerticalLayout content = new VerticalLayout();
 
+    private final VerticalLayout self = getContent();
+
     /**
      * Creates Section without title.
      */
@@ -28,20 +30,19 @@ public class Section extends Composite<VerticalLayout> {
     public Section(final String titleText) {
         if (StringUtils.isNotBlank(titleText)) {
             title.setText(titleText);
-            getContent().add(title);
-            //setting content closer to title
-            content.getStyle().set("padding-top", "0");
+            self.add(title);
+            setContentCloserToTitle();
         }
 
         content.setClassName("section-content");
-        getContent().add(content);
-        getContent().addClassName("border");
-        getContent().addClassName("color-border");
-        getContent().addClassName("section");
+        self.add(content);
+        self.addClassName("border");
+        self.addClassName("color-border");
+        self.addClassName("section");
     }
 
     /**
-     * Sets title.
+     * Sets the given string as the text of title component.
      *
      * @param text string with title.
      */
@@ -55,12 +56,10 @@ public class Section extends Composite<VerticalLayout> {
      * @param customTitle custom element to replace default title.
      */
     public void setCustomTitleElement(final Component customTitle) {
-        getContent().removeAll();
-        getContent().add(customTitle);
-        getContent().add(content);
-
-        //setting content closer to title
-        content.getStyle().set("padding-top", "0");
+        self.removeAll();
+        self.add(customTitle);
+        self.add(content);
+        setContentCloserToTitle();
     }
 
     /**
@@ -79,7 +78,7 @@ public class Section extends Composite<VerticalLayout> {
      * @param customLayout layout to set as content.
      */
     public void setCustomContent(final Component customLayout) {
-        getContent().replace(content, customLayout);
+        self.replace(content, customLayout);
     }
 
     /**
@@ -89,5 +88,9 @@ public class Section extends Composite<VerticalLayout> {
      */
     public void add(final Component component) {
         content.add(component);
+    }
+
+    private void setContentCloserToTitle() {
+        content.getStyle().set("padding-top", "0");
     }
 }
