@@ -3,12 +3,12 @@ package io.kyberorg.yalsee.ui.elements;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 public class Section extends Composite<VerticalLayout> {
-    private final H4 title = new H4();
+    private final H5 title = new H5();
     private final Div content = new Div();
 
     public Section() {
@@ -35,7 +35,17 @@ public class Section extends Composite<VerticalLayout> {
         content.add(components);
     }
 
+    public void setContent(final Component customLayout) {
+        getContent().replace(content, customLayout);
+    }
+
     public void add(final Component component) {
         content.add(component);
+    }
+
+    public void setCustomTitle(final Component customTitle) {
+        getContent().removeAll();
+        getContent().add(customTitle);
+        getContent().add(content);
     }
 }

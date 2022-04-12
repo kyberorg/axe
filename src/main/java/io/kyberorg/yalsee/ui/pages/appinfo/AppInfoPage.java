@@ -1,7 +1,7 @@
 package io.kyberorg.yalsee.ui.pages.appinfo;
 
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -52,9 +52,8 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         add(publicInfoArea, cookieArea);
 
         if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
-            final H3 h3 = new H3("Dev Info");
             final Section devInfoArea = devInfoArea();
-            add(h3, devInfoArea);
+            add(devInfoArea);
         }
     }
 
@@ -146,7 +145,12 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         Span gitBranch = new Span("Git branch: " + gitBranchStr);
         Span gitHost = new Span("Built at " + gitHostStr);
 
+        H4 devInfoTitle = new H4("Dev Info");
         VerticalLayout devInfoLayout = new VerticalLayout(vaadinVersion, gitBranch, gitHost);
+        devInfoLayout.getStyle().set("padding-top", "0em");
+        devInfoLayout.getStyle().set("padding-left", "0em");
+
+        devInfoArea.setCustomTitle(devInfoTitle);
         devInfoArea.setContent(devInfoLayout);
 
         add(devInfoArea);
