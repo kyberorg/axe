@@ -50,10 +50,19 @@ public class AppInfoPageTest extends SelenideTest {
     }
 
     /**
+     * Tests that public area is wrapped by section element.
+     */
+    @Test
+    public void publicAreaIsSection() {
+        PUBLIC_INFO_AREA.shouldHave(cssClass("section"));
+    }
+
+    /**
      * Tests if public area has all elements that required to be.
      */
     @Test
     public void publicAreaHasAllRequiredElements() {
+        TITLE.shouldBe(visible);
         VERSION.shouldBe(visible);
         VERSION.shouldHave(text("version"));
         VERSION.shouldHave(text("commit"));
@@ -61,6 +70,15 @@ public class AppInfoPageTest extends SelenideTest {
         COMMIT_LINK.shouldBe(visible);
         COMMIT_LINK.shouldNotBe(empty);
         COMMIT_LINK.shouldHave(attribute("href"));
+    }
+
+    /**
+     * Tests that public area has title with words "About" and "Application".
+     */
+    @Test
+    public void publicAreaHasWordsAboutAndApplication() {
+        TITLE.shouldHave(text("About"));
+        TITLE.shouldHave(text("Application"));
     }
 
     /**
@@ -86,6 +104,14 @@ public class AppInfoPageTest extends SelenideTest {
     public void cookieAreaShouldBeVisible() {
         CookieArea.COOKIE_AREA.should(exist);
         CookieArea.COOKIE_AREA.shouldBe(visible);
+    }
+
+    /**
+     * Tests that Cookie Area is wrapped by section element.
+     */
+    @Test
+    public void cookieAreaIsSection() {
+        CookieArea.COOKIE_AREA.shouldHave(cssClass("section"));
     }
 
     /**

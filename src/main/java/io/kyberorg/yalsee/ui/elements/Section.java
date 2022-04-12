@@ -4,12 +4,14 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Bordered element with title and content.
  */
 public class Section extends Composite<VerticalLayout> {
+    @Getter
     private final H5 title = new H5();
     private final VerticalLayout content = new VerticalLayout();
 

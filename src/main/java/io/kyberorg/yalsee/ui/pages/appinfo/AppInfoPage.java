@@ -60,6 +60,7 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         Section publicArea = new Section("About Application");
         HorizontalLayout versionRaw = new HorizontalLayout();
         publicArea.setId(IDs.PUBLIC_INFO_AREA);
+        publicArea.getTitle().setId(IDs.PUBLIC_INFO_AREA_TITLE);
 
         String latestTag = gitService.getLatestTag();
         String latestCommit = gitService.getLatestCommit();
@@ -93,6 +94,7 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
     private Section cookieArea() {
         Section cookieArea = new Section("About Cookies");
         cookieArea.setId(IDs.COOKIE_AREA);
+        cookieArea.getTitle().setId(IDs.COOKIE_TITLE);
 
         Span cookieText = new Span();
         cookieText.setId(IDs.COOKIE_TEXT_SPAN);
@@ -156,6 +158,7 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
     public static class IDs {
         public static final String VIEW_ID = "appInfoView";
         public static final String PUBLIC_INFO_AREA = "publicInfoArea";
+        public static final String PUBLIC_INFO_AREA_TITLE = "publicInfoTitle";
         public static final String VERSION = "version";
         public static final String COMMIT_LINK = "commitLink";
         public static final String DEV_INFO_AREA = "devInfoArea";
@@ -169,6 +172,7 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         public static final String COOKIE_SETTINGS_TEXT = "cookieSettingsText";
         public static final String COOKIE_SETTINGS_LINK = "cookieSettingsLink";
         public static final String COOKIE_SETTINGS_POINT = "cookieSettingsPoint";
+
 
     }
 }
