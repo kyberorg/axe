@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -20,6 +19,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.elements.Section;
 import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 
 import static io.kyberorg.yalsee.constants.App.ONE_SECOND_IN_MILLIS;
@@ -32,14 +32,14 @@ import static io.kyberorg.yalsee.constants.App.ONE_SECOND_IN_MILLIS;
 public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
 
     private final H3 pageTitle = new H3("Application Settings");
-    private final H4 cookieSettingsTitle = new H4("Cookie Settings");
+    private final Section cookieSettingsSection = new Section("Cookie Settings");
     private final Span techCookiesSpan = new Span();
     private final Span techCookiesLabel = new Span("Technical cookies: ");
     private final ToggleButton techCookiesValue = new ToggleButton(true);
     private final Span analyticsCookiesSpan = new Span();
     private final Span analyticsCookiesLabel = new Span("Analytics cookies: ");
     private final ToggleButton analyticsCookiesValue = new ToggleButton();
-    private final H4 betaSettingsTitle = new H4("Beta (Feature preview)");
+    private final Section betaSettingsSection = new Section("Beta (Feature preview)");
     private final Span darkModeSpan = new Span();
     private final Span darkModeLabel = new Span("Dark Mode: ");
     private final ToggleButton darkModeValue = new ToggleButton();
@@ -84,7 +84,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
     private void setIds() {
         setId(IDs.PAGE_ID);
         pageTitle.setId(IDs.PAGE_TITLE);
-        cookieSettingsTitle.setId(IDs.COOKIE_SETTINGS_TITLE);
+        cookieSettingsSection.setId(IDs.COOKIE_SETTINGS_TITLE);
         techCookiesSpan.setId(IDs.TECH_COOKIE_SPAN);
         techCookiesLabel.setId(IDs.TECH_COOKIE_LABEL);
         techCookiesValue.setId(IDs.TECH_COOKIE_VALUE);
@@ -92,7 +92,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         analyticsCookiesLabel.setId(IDs.ANALYTICS_COOKIE_LABEL);
         analyticsCookiesValue.setId(IDs.ANALYTICS_COOKIE_VALUE);
 
-        betaSettingsTitle.setId(IDs.BETA_SETTINGS_TITLE);
+        betaSettingsSection.setId(IDs.BETA_SETTINGS_TITLE);
         darkModeSpan.setId(IDs.DARK_MODE_SPAN);
         darkModeLabel.setId(IDs.DARK_MODE_LABEL);
         darkModeValue.setId(IDs.DARK_MODE_VALUE);
@@ -104,7 +104,10 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
 
         darkModeSpan.add(darkModeLabel, darkModeValue);
 
-        add(pageTitle, cookieSettingsTitle, techCookiesSpan, analyticsCookiesSpan, betaSettingsTitle, darkModeSpan);
+        cookieSettingsSection.setContent(techCookiesSpan, analyticsCookiesSpan);
+        betaSettingsSection.setContent(darkModeSpan);
+
+        add(pageTitle, cookieSettingsSection, betaSettingsSection);
     }
 
     private void setInitialState() {
