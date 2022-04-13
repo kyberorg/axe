@@ -56,8 +56,8 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         genInfoSection.setId(IDs.GENERAL_INFO_SECTION);
         genInfoSection.getTitle().setId(IDs.GENERAL_INFO_SECTION_TITLE);
 
-        Span generalInfoSpan = new Span("Yalsee makes your really long links short. " +
-                "You can use and share those short links where space really matters.");
+        Span generalInfoSpan = new Span("Yalsee makes your really long links short. "
+                + "You can use and share those short links where space really matters.");
         generalInfoSpan.setId(IDs.GENERAL_INFO_SPAN);
         genInfoSection.add(generalInfoSpan);
 
