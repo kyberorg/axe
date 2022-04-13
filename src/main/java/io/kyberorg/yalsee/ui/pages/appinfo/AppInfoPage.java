@@ -1,7 +1,6 @@
 package io.kyberorg.yalsee.ui.pages.appinfo;
 
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -30,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
     private static final String UNDEFINED = "UNDEFINED";
     private static final int COMMIT_HASH_LENGTH = 7;
-
     private final GitService gitService;
     private final GitRepoState gitRepoState;
     private final MavenInfo mavenInfo;
@@ -44,57 +42,40 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
     private void init() {
         setId(IDs.VIEW_ID);
 
-        final Section publicInfoArea = publicInfoArea();
-        final Section cookieArea = cookieArea();
+        final Section generalInfoSection = generalInfoSection();
+        final Section cookieSection = cookieSection();
+        final Section techInfoSection = techInfoSection();
 
         removeAll();
-        add(publicInfoArea, cookieArea);
 
-        if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
-            final Section devInfoArea = devInfoArea();
-            add(devInfoArea);
-        }
+        add(generalInfoSection, cookieSection, techInfoSection);
     }
 
-    private Section publicInfoArea() {
-        Section publicArea = new Section("About Application");
-        HorizontalLayout versionRaw = new HorizontalLayout();
-        publicArea.setId(IDs.PUBLIC_INFO_AREA);
-        publicArea.getTitle().setId(IDs.PUBLIC_INFO_AREA_TITLE);
+    private Section generalInfoSection() {
+        Section genInfoSection = new Section("About Application");
+        genInfoSection.setId(IDs.GENERAL_INFO_SECTION);
+        genInfoSection.getTitle().setId(IDs.GENERAL_INFO_SECTION_TITLE);
 
-        String latestTag = gitService.getLatestTag();
-        String latestCommit = gitService.getLatestCommit();
-
-        Span versionStart = new Span(String.format("Version %s (based on commit ", latestTag));
-        Anchor commit =
-                new Anchor(
-                        String.format("%s/%s", App.Git.REPOSITORY, latestCommit),
-                        latestCommit.substring(0, Integer.min(latestCommit.length(), COMMIT_HASH_LENGTH)));
-        commit.setId(IDs.COMMIT_LINK);
-        Span versionEnd = new Span(")");
-
-        Span version = new Span(versionStart, commit, versionEnd);
-        version.setId(IDs.VERSION);
-
-        versionRaw.setWidthFull();
-        versionRaw.add(version);
-
-        publicArea.add(versionRaw);
+        Span generalInfoSpan = new Span("Yalsee makes your really long links short. "
+                + "You can use and share those short links where space really matters.");
+        generalInfoSpan.setId(IDs.GENERAL_INFO_SPAN);
+        genInfoSection.add(generalInfoSpan);
 
         if (appUtils.isGoogleAnalyticsEnabled()) {
             Span googleAnalyticsBanner = new Span("This site uses Google Analytics for statistics only. "
-                    + "We respect privacy and DNT (Do Not Track) header");
+                    + "No marketing, advertising or any other bullshit. "
+                    + "We respect privacy and DNT (Do Not Track) header.");
             googleAnalyticsBanner.setId(IDs.GOOGLE_ANALYTICS_BANNER);
-            publicArea.add(googleAnalyticsBanner);
+            genInfoSection.add(googleAnalyticsBanner);
         }
 
-        return publicArea;
+        return genInfoSection;
     }
 
-    private Section cookieArea() {
-        Section cookieArea = new Section("About Cookies");
-        cookieArea.setId(IDs.COOKIE_AREA);
-        cookieArea.getTitle().setId(IDs.COOKIE_TITLE);
+    private Section cookieSection() {
+        Section cookieSection = new Section("About Cookies");
+        cookieSection.setId(IDs.COOKIE_SECTION);
+        cookieSection.getTitle().setId(IDs.COOKIE_TITLE);
 
         Span cookieText = new Span();
         cookieText.setId(IDs.COOKIE_TEXT_SPAN);
@@ -125,45 +106,70 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         cookieSettingsSpan.add(cookieSettingsText, cookieSettingsLink, point);
         cookieText.add(textStart, link, textEnd, techDetailsText);
 
-        cookieArea.setContent(cookieText, cookieSettingsSpan);
-        return cookieArea;
+        cookieSection.setContent(cookieText, cookieSettingsSpan);
+        return cookieSection;
     }
 
-    private Section devInfoArea() {
-        Section devInfoArea = new Section();
-        devInfoArea.setId(IDs.DEV_INFO_AREA);
+    private Section techInfoSection() {
+        Section techInfoSection = new Section("Tech Info");
+        techInfoSection.setId(IDs.TECH_INFO_SECTION);
 
-        String vaadinVersionStr = mavenInfo.hasValues() ? mavenInfo.getVaadinVersion() : UNDEFINED;
-        String vaadinFlowVersion = Version.getFullVersion();
+        techInfoSection.getTitle().setId(IDs.TECH_INFO_TITLE);
 
-        String gitBranchStr = gitRepoState.hasValues() ? gitRepoState.getBranch() : UNDEFINED;
-        String gitHostStr = gitRepoState.hasValues() ? gitRepoState.getBuildHost() : UNDEFINED;
+        techInfoSection.add(versionRaw());
 
+        if (appUtils.isDevelopmentModeActivated() || appUtils.hasDevHeader()) {
+            String vaadinVersionStr = mavenInfo.hasValues() ? mavenInfo.getVaadinVersion() : UNDEFINED;
+            String vaadinFlowVersion = Version.getFullVersion();
 
-        Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr
-                + " (Flow: " + vaadinFlowVersion + ")");
+            String gitBranchStr = gitRepoState.hasValues() ? gitRepoState.getBranch() : UNDEFINED;
+            String gitHostStr = gitRepoState.hasValues() ? gitRepoState.getBuildHost() : UNDEFINED;
 
-        Span gitBranch = new Span("Git branch: " + gitBranchStr);
-        Span gitHost = new Span("Built at " + gitHostStr);
+            Span vaadinVersion = new Span("Vaadin version: " + vaadinVersionStr
+                    + " (Flow: " + vaadinFlowVersion + ")");
 
-        H4 devInfoTitle = new H4("Dev Info");
+            Span gitBranch = new Span("Git branch: " + gitBranchStr);
+            Span gitHost = new Span("Built at " + gitHostStr);
 
-        devInfoArea.setCustomTitleElement(devInfoTitle);
-        devInfoArea.setContent(vaadinVersion, gitBranch, gitHost);
+            techInfoSection.add(vaadinVersion);
+            techInfoSection.add(gitBranch);
+            techInfoSection.add(gitHost);
+        }
 
-        add(devInfoArea);
-        return devInfoArea;
+        add(techInfoSection);
+        return techInfoSection;
+    }
+
+    private HorizontalLayout versionRaw() {
+        HorizontalLayout versionRaw = new HorizontalLayout();
+
+        String latestTag = gitService.getLatestTag();
+        String latestCommit = gitService.getLatestCommit();
+
+        Span versionStart = new Span(String.format("Version %s (based on commit ", latestTag));
+        Anchor commit =
+                new Anchor(
+                        String.format("%s/%s", App.Git.REPOSITORY, latestCommit),
+                        latestCommit.substring(0, Integer.min(latestCommit.length(), COMMIT_HASH_LENGTH)));
+        commit.setId(IDs.COMMIT_LINK);
+        Span versionEnd = new Span(")");
+
+        Span version = new Span(versionStart, commit, versionEnd);
+        version.setId(IDs.VERSION);
+
+        versionRaw.setWidthFull();
+        versionRaw.add(version);
+
+        return versionRaw;
     }
 
     public static class IDs {
         public static final String VIEW_ID = "appInfoView";
-        public static final String PUBLIC_INFO_AREA = "publicInfoArea";
-        public static final String PUBLIC_INFO_AREA_TITLE = "publicInfoTitle";
-        public static final String VERSION = "version";
-        public static final String COMMIT_LINK = "commitLink";
-        public static final String DEV_INFO_AREA = "devInfoArea";
+        public static final String GENERAL_INFO_SECTION = "genInfoSection";
+        public static final String GENERAL_INFO_SECTION_TITLE = "genInfoTitle";
+        public static final String GENERAL_INFO_SPAN = "genInfoSpan";
         public static final String GOOGLE_ANALYTICS_BANNER = "googleAnalyticsBanner";
-        public static final String COOKIE_AREA = "cookieArea";
+        public static final String COOKIE_SECTION = "cookieSection";
         public static final String COOKIE_TITLE = "cookieTitle";
         public static final String COOKIE_TEXT_SPAN = "cookieTextSpan";
         public static final String COOKIE_LINK = "cookieLink";
@@ -172,7 +178,9 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         public static final String COOKIE_SETTINGS_TEXT = "cookieSettingsText";
         public static final String COOKIE_SETTINGS_LINK = "cookieSettingsLink";
         public static final String COOKIE_SETTINGS_POINT = "cookieSettingsPoint";
-
-
+        public static final String TECH_INFO_SECTION = "techInfoSection";
+        public static final String TECH_INFO_TITLE = "techInfoTitle";
+        public static final String VERSION = "version";
+        public static final String COMMIT_LINK = "commitLink";
     }
 }

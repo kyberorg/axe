@@ -12,16 +12,15 @@ import static com.codeborne.selenide.Selenide.$;
  */
 public class AppInfoPageObject {
 
-    public static class PublicInfoArea {
-        public static final SelenideElement PUBLIC_INFO_AREA = $("#" + AppInfoPage.IDs.PUBLIC_INFO_AREA);
-        public static final SelenideElement TITLE = $("#publicInfoTitle");
-        public static final SelenideElement VERSION = $("#" + AppInfoPage.IDs.VERSION);
-        public static final SelenideElement COMMIT_LINK = $("#" + AppInfoPage.IDs.COMMIT_LINK);
+    public static class GeneralInfoSection {
+        public static final SelenideElement SECTION = $("#" + AppInfoPage.IDs.GENERAL_INFO_SECTION);
+        public static final SelenideElement TITLE = $("#" + AppInfoPage.IDs.GENERAL_INFO_SECTION_TITLE);
+        public static final SelenideElement SPAN = $("#" + AppInfoPage.IDs.GENERAL_INFO_SPAN);
         public static final SelenideElement GOOGLE_ANALYTICS_BANNER = $("#" + AppInfoPage.IDs.GOOGLE_ANALYTICS_BANNER);
     }
 
-    public static final class CookieArea {
-        public static final SelenideElement COOKIE_AREA = $("#" + AppInfoPage.IDs.COOKIE_AREA);
+    public static final class CookieSection {
+        public static final SelenideElement SECTION = $("#" + AppInfoPage.IDs.COOKIE_SECTION);
         public static final SelenideElement TITLE = $("#" + AppInfoPage.IDs.COOKIE_TITLE);
         public static final SelenideElement TEXT_SECTION = $("#" + AppInfoPage.IDs.COOKIE_TEXT_SPAN);
         public static final SelenideElement LINK = $("#" + AppInfoPage.IDs.COOKIE_LINK);
@@ -30,5 +29,13 @@ public class AppInfoPageObject {
         public static final SelenideElement COOKIE_SETTINGS_TEXT = $("#" + AppInfoPage.IDs.COOKIE_SETTINGS_TEXT);
         public static final SelenideElement COOKIE_SETTINGS_LINK = $("#" + AppInfoPage.IDs.COOKIE_SETTINGS_LINK);
         public static final SelenideElement COOKIE_SETTINGS_POINT = $("#" + AppInfoPage.IDs.COOKIE_SETTINGS_POINT);
+    }
+
+    public static final class TechInfoSection {
+        public static final SelenideElement SECTION = $("#" + AppInfoPage.IDs.TECH_INFO_SECTION);
+        public static final SelenideElement TITLE = $("#" + AppInfoPage.IDs.TECH_INFO_TITLE);
+        public static final SelenideElement VERSION = $("#" + AppInfoPage.IDs.VERSION);
+        public static final SelenideElement COMMIT_LINK = $("#" + AppInfoPage.IDs.COMMIT_LINK);
+
     }
 }

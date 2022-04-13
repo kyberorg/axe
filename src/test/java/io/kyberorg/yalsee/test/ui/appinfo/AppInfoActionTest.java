@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.open;
-import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.CookieArea;
+import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.CookieSection;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,7 +37,7 @@ public class AppInfoActionTest extends SelenideTest {
      */
     @Test
     public void linkOpensCookiesAndYouSite() {
-        CookieArea.LINK.click();
+        CookieSection.LINK.click();
         assertEquals(CookieAndYou.TITLE_TEXT, Selenide.title());
     }
 
@@ -46,7 +46,7 @@ public class AppInfoActionTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsLinkOpensSettingsPage() {
-        CookieArea.COOKIE_SETTINGS_LINK.click();
+        CookieSection.COOKIE_SETTINGS_LINK.click();
         waitForVaadin();
         SettingsPageObject.PAGE_ID.should(exist);
     }

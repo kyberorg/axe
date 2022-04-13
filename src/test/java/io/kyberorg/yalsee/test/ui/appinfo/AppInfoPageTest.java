@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.appinfo;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.test.TestedEnv;
+import io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.TechInfoSection;
 import io.kyberorg.yalsee.test.pageobjects.YalseeCommonsPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -11,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.CookieArea;
-import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.PublicInfoArea.*;
+import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.CookieSection;
+import static io.kyberorg.yalsee.test.pageobjects.AppInfoPageObject.GeneralInfoSection;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**
@@ -41,44 +42,44 @@ public class AppInfoPageTest extends SelenideTest {
     }
 
     /**
-     * Tests if public area is exists and visible.
+     * Tests if general info section is exists and visible.
      */
     @Test
-    public void publicAreaIsVisible() {
-        PUBLIC_INFO_AREA.should(exist);
-        PUBLIC_INFO_AREA.shouldBe(visible);
+    public void generalInfoSectionIsVisible() {
+        GeneralInfoSection.SECTION.should(exist);
+        GeneralInfoSection.SECTION.shouldBe(visible);
     }
 
     /**
-     * Tests that public area is wrapped by section element.
+     * Tests that general info section is wrapped by section element.
      */
     @Test
-    public void publicAreaIsSection() {
-        PUBLIC_INFO_AREA.shouldHave(cssClass("section"));
+    public void generalInfoSectionIsSection() {
+        GeneralInfoSection.SECTION.shouldHave(cssClass("section"));
     }
 
     /**
-     * Tests if public area has all elements that required to be.
+     * Tests if general info section has all elements that required to be.
      */
     @Test
-    public void publicAreaHasAllRequiredElements() {
-        TITLE.shouldBe(visible);
-        VERSION.shouldBe(visible);
-        VERSION.shouldHave(text("version"));
-        VERSION.shouldHave(text("commit"));
-
-        COMMIT_LINK.shouldBe(visible);
-        COMMIT_LINK.shouldNotBe(empty);
-        COMMIT_LINK.shouldHave(attribute("href"));
+    public void generalInfoSectionHasAllRequiredElements() {
+        GeneralInfoSection.TITLE.shouldBe(visible);
+        GeneralInfoSection.SPAN.shouldBe(visible);
+        GeneralInfoSection.SPAN.shouldHave(text("makes"));
+        GeneralInfoSection.SPAN.shouldHave(text("long links short"));
+        GeneralInfoSection.SPAN.shouldHave(text("use"));
+        GeneralInfoSection.SPAN.shouldHave(text("share"));
+        GeneralInfoSection.SPAN.shouldHave(text("space"));
+        GeneralInfoSection.SPAN.shouldHave(text("matters"));
     }
 
     /**
-     * Tests that public area has title with words "About" and "Application".
+     * Tests that general info section has title with words "About" and "Application".
      */
     @Test
-    public void publicAreaHasWordsAboutAndApplication() {
-        TITLE.shouldHave(text("About"));
-        TITLE.shouldHave(text("Application"));
+    public void generalInfoSectionHasWordsAboutAndApplication() {
+        GeneralInfoSection.TITLE.shouldHave(text("About"));
+        GeneralInfoSection.TITLE.shouldHave(text("Application"));
     }
 
     /**
@@ -86,14 +87,14 @@ public class AppInfoPageTest extends SelenideTest {
      * or absent if disabled.
      */
     @Test
-    public void publicAreaHasInfoAboutGoogleAnalytics() {
+    public void generalInfoSectionHasInfoAboutGoogleAnalytics() {
         TestedEnv testedEnv = TestUtils.getTestedEnv();
         if (testedEnv.isGoogleAnalyticsEnabled()) {
-            GOOGLE_ANALYTICS_BANNER.should(exist);
-            GOOGLE_ANALYTICS_BANNER.shouldBe(visible);
-            GOOGLE_ANALYTICS_BANNER.shouldHave(text("Google Analytics"));
+            GeneralInfoSection.GOOGLE_ANALYTICS_BANNER.should(exist);
+            GeneralInfoSection.GOOGLE_ANALYTICS_BANNER.shouldBe(visible);
+            GeneralInfoSection.GOOGLE_ANALYTICS_BANNER.shouldHave(text("Google Analytics"));
         } else {
-            GOOGLE_ANALYTICS_BANNER.shouldNot(exist);
+            GeneralInfoSection.GOOGLE_ANALYTICS_BANNER.shouldNot(exist);
         }
     }
 
@@ -102,8 +103,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieAreaShouldBeVisible() {
-        CookieArea.COOKIE_AREA.should(exist);
-        CookieArea.COOKIE_AREA.shouldBe(visible);
+        CookieSection.SECTION.should(exist);
+        CookieSection.SECTION.shouldBe(visible);
     }
 
     /**
@@ -111,7 +112,7 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieAreaIsSection() {
-        CookieArea.COOKIE_AREA.shouldHave(cssClass("section"));
+        CookieSection.SECTION.shouldHave(cssClass("section"));
     }
 
     /**
@@ -119,8 +120,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieAreaShouldHaveTitle() {
-        CookieArea.TITLE.should(exist);
-        CookieArea.TITLE.shouldBe(visible);
+        CookieSection.TITLE.should(exist);
+        CookieSection.TITLE.shouldBe(visible);
     }
 
     /**
@@ -128,7 +129,7 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void titleHasWordCookies() {
-        CookieArea.TITLE.shouldHave(text("Cookies"));
+        CookieSection.TITLE.shouldHave(text("Cookies"));
     }
 
     /**
@@ -136,7 +137,7 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void linkShouldBeActive() {
-        CookieArea.LINK.shouldBe(enabled);
+        CookieSection.LINK.shouldBe(enabled);
     }
 
     /**
@@ -144,8 +145,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void linkShouldHaveTextCookiesAndHrefCookieAndYou() {
-        CookieArea.LINK.shouldHave(text("Cookies"));
-        CookieArea.LINK.shouldHave(attribute("href", "https://www.cookiesandyou.com/"));
+        CookieSection.LINK.shouldHave(text("Cookies"));
+        CookieSection.LINK.shouldHave(attribute("href", "https://www.cookiesandyou.com/"));
     }
 
 
@@ -154,8 +155,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void techDetailsShouldBeVisible() {
-        CookieArea.TEXT_SECTION.should(exist);
-        CookieArea.TEXT_SECTION.shouldBe(visible);
+        CookieSection.TEXT_SECTION.should(exist);
+        CookieSection.TEXT_SECTION.shouldBe(visible);
     }
 
     /**
@@ -163,10 +164,10 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void techDetailsShouldHaveNeededWords() {
-        CookieArea.TECH_DETAILS_TEXT.shouldHave(text("cookies"));
-        CookieArea.TECH_DETAILS_TEXT.shouldHave(text("JSESSION"));
-        CookieArea.TECH_DETAILS_TEXT.shouldHave(text("session"));
-        CookieArea.TECH_DETAILS_TEXT.shouldHave(text("Google Analytics"));
+        CookieSection.TECH_DETAILS_TEXT.shouldHave(text("cookies"));
+        CookieSection.TECH_DETAILS_TEXT.shouldHave(text("JSESSION"));
+        CookieSection.TECH_DETAILS_TEXT.shouldHave(text("session"));
+        CookieSection.TECH_DETAILS_TEXT.shouldHave(text("Google Analytics"));
     }
 
     /**
@@ -174,8 +175,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsSpanExistsAndVisible() {
-        CookieArea.COOKIE_SETTING_SPAN.should(exist);
-        CookieArea.COOKIE_SETTING_SPAN.shouldBe(visible);
+        CookieSection.COOKIE_SETTING_SPAN.should(exist);
+        CookieSection.COOKIE_SETTING_SPAN.shouldBe(visible);
     }
 
     /**
@@ -183,8 +184,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsTextExistsAndVisible() {
-        CookieArea.COOKIE_SETTINGS_TEXT.should(exist);
-        CookieArea.COOKIE_SETTINGS_TEXT.shouldBe(visible);
+        CookieSection.COOKIE_SETTINGS_TEXT.should(exist);
+        CookieSection.COOKIE_SETTINGS_TEXT.shouldBe(visible);
     }
 
     /**
@@ -192,7 +193,7 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsTextHasWordsCookieSettings() {
-        CookieArea.COOKIE_SETTINGS_TEXT.shouldHave(text("cookie settings"));
+        CookieSection.COOKIE_SETTINGS_TEXT.shouldHave(text("cookie settings"));
     }
 
     /**
@@ -200,8 +201,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsLinkExistsAndVisible() {
-        CookieArea.COOKIE_SETTINGS_LINK.should(exist);
-        CookieArea.COOKIE_SETTINGS_LINK.shouldBe(visible);
+        CookieSection.COOKIE_SETTINGS_LINK.should(exist);
+        CookieSection.COOKIE_SETTINGS_LINK.shouldBe(visible);
     }
 
     /**
@@ -209,7 +210,7 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsLinkIsActive() {
-        CookieArea.COOKIE_SETTINGS_LINK.shouldBe(enabled);
+        CookieSection.COOKIE_SETTINGS_LINK.shouldBe(enabled);
     }
 
     /**
@@ -217,8 +218,8 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsLinkShouldHaveTextAndLeadsToSettingsPage() {
-        CookieArea.COOKIE_SETTINGS_LINK.shouldHave(text("Settings Page"));
-        CookieArea.COOKIE_SETTINGS_LINK.shouldHave(attribute("href",
+        CookieSection.COOKIE_SETTINGS_LINK.shouldHave(text("Settings Page"));
+        CookieSection.COOKIE_SETTINGS_LINK.shouldHave(attribute("href",
                 TestUtils.getTestUrl() + "/" + Endpoint.UI.SETTINGS_PAGE));
     }
 
@@ -227,8 +228,43 @@ public class AppInfoPageTest extends SelenideTest {
      */
     @Test
     public void cookieSettingsSentenceEndsWithDot() {
-        CookieArea.COOKIE_SETTINGS_POINT.should(exist);
-        CookieArea.COOKIE_SETTINGS_POINT.shouldBe(visible);
-        CookieArea.COOKIE_SETTINGS_POINT.shouldHave(text("."));
+        CookieSection.COOKIE_SETTINGS_POINT.should(exist);
+        CookieSection.COOKIE_SETTINGS_POINT.shouldBe(visible);
+        CookieSection.COOKIE_SETTINGS_POINT.shouldHave(text("."));
+    }
+
+    /**
+     * Tests if tech info section is exists and visible.
+     */
+    @Test
+    public void techInfoSectionIsVisible() {
+        TechInfoSection.SECTION.should(exist);
+        TechInfoSection.SECTION.shouldBe(visible);
+    }
+
+    /**
+     * Tests that tech info section is wrapped by section element.
+     */
+    @Test
+    public void techInfoSectionIsSection() {
+        TechInfoSection.SECTION.shouldHave(cssClass("section"));
+    }
+
+    /**
+     * Tests if tech info section has all elements that required to be.
+     */
+    @Test
+    public void techInfoSectionHasAllRequiredElements() {
+        TechInfoSection.TITLE.shouldBe(visible);
+        TechInfoSection.TITLE.shouldHave(text("Tech"));
+        TechInfoSection.TITLE.shouldHave(text("Info"));
+
+        TechInfoSection.VERSION.shouldBe(visible);
+        TechInfoSection.VERSION.shouldHave(text("version"));
+        TechInfoSection.VERSION.shouldHave(text("commit"));
+
+        TechInfoSection.COMMIT_LINK.shouldBe(visible);
+        TechInfoSection.COMMIT_LINK.shouldNotBe(empty);
+        TechInfoSection.COMMIT_LINK.shouldHave(attribute("href"));
     }
 }

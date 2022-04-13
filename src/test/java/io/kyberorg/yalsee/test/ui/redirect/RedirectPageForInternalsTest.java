@@ -86,7 +86,7 @@ public class RedirectPageForInternalsTest extends SelenideTest {
     }
 
     private void expectAppInfoPageOpened() {
-        AppInfoPageObject.PublicInfoArea.PUBLIC_INFO_AREA.shouldBe(visible);
+        AppInfoPageObject.GeneralInfoSection.SECTION.shouldBe(visible);
     }
 
     private void expectRedirectPageOpened() {

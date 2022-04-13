@@ -60,7 +60,7 @@ public class CookieBannerActionTest extends SelenideTest {
     @Test
     public void moreInfoLinkOpensAppInfoPage() {
         BannerText.LINK.click();
-        AppInfoPageObject.PublicInfoArea.PUBLIC_INFO_AREA.shouldBe(visible);
+        AppInfoPageObject.GeneralInfoSection.SECTION.shouldBe(visible);
     }
 
     /**
