@@ -64,7 +64,7 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         if (appUtils.isGoogleAnalyticsEnabled()) {
             Span googleAnalyticsBanner = new Span("This site uses Google Analytics for statistics only. "
                     + "No marketing, advertising or any other bullshit. "
-                    + "We respect privacy and DNT (Do Not Track) header");
+                    + "We respect privacy and DNT (Do Not Track) header.");
             googleAnalyticsBanner.setId(IDs.GOOGLE_ANALYTICS_BANNER);
             genInfoSection.add(googleAnalyticsBanner);
         }
@@ -113,6 +113,8 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
     private Section techInfoSection() {
         Section techInfoSection = new Section("Tech Info");
         techInfoSection.setId(IDs.TECH_INFO_SECTION);
+
+        techInfoSection.getTitle().setId(IDs.TECH_INFO_TITLE);
 
         techInfoSection.add(versionRaw());
 
@@ -177,6 +179,7 @@ public class AppInfoPage extends YalseeLayout implements BeforeEnterObserver {
         public static final String COOKIE_SETTINGS_LINK = "cookieSettingsLink";
         public static final String COOKIE_SETTINGS_POINT = "cookieSettingsPoint";
         public static final String TECH_INFO_SECTION = "techInfoSection";
+        public static final String TECH_INFO_TITLE = "techInfoTitle";
         public static final String VERSION = "version";
         public static final String COMMIT_LINK = "commitLink";
     }
