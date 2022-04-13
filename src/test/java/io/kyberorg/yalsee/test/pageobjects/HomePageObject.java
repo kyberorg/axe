@@ -17,7 +17,6 @@ import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbo
  * @since 2.2
  */
 public final class HomePageObject {
-
     private HomePageObject() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -68,7 +67,7 @@ public final class HomePageObject {
 
     public static class ErrorModal {
         public static final SelenideElement ERROR_MODAL =
-                $("#vaadin-notification-card");
+                $("vaadin-notification-card");
         public static final SelenideElement ERROR_TEXT =
                 ERROR_MODAL.$("flow-component-renderer div vaadin-horizontal-layout label");
         public static final SelenideElement ERROR_BUTTON =

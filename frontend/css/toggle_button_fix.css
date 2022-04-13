@@ -1,0 +1,4 @@
+:host(.toggle-button) [part='checkbox']::after {
+    width: calc(1.2em - 4px);
+    height: calc(1.2em - 4px);
+}

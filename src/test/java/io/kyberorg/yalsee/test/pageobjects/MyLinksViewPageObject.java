@@ -20,7 +20,6 @@ import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin
 public final class MyLinksViewPageObject {
     private static final GridElement GRID_ELEMENT = GridElement.byCss("vaadin-grid#" + MyLinksPage.IDs.GRID);
     public static final SelenideElement PAGE = $("#" + MyLinksPage.class.getSimpleName());
-
     private MyLinksViewPageObject() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -57,7 +56,7 @@ public final class MyLinksViewPageObject {
     public static final SelenideElement GRID_FILTER_FIELD = $("#gridFilterField");
 
     public static class GridFilter {
-        public static final SelenideElement SEARCH_ICON = $("iron-icon[slot='prefix']");
+        public static final SelenideElement SEARCH_ICON = $("vaadin-icon[slot='prefix']");
         public static final SelenideElement CLEAR_BUTTON = TextFieldElement.byCss("#gridFilterField").getClearButton();
 
         /**

@@ -1,10 +1,10 @@
 package io.kyberorg.yalsee.test.ui.home;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
-import io.kyberorg.yalsee.test.utils.SelenideUtils;
 import io.kyberorg.yalsee.test.utils.browser.BrowserSize;
 import io.kyberorg.yalsee.test.utils.browser.BrowserUtils;
 import io.kyberorg.yalsee.ui.pages.home.HomePage;
@@ -163,7 +163,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void shouldHaveCorrectTitle() {
-        assertEquals("Yalsee - the link shortener", SelenideUtils.getPageTitle());
+        assertEquals("Yalsee - the link shortener", Selenide.title());
     }
 
     /**

@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.grid.editor.EditorSaveEvent;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -20,10 +21,9 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.dom.DomEvent;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -66,6 +66,7 @@ import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -201,18 +202,18 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code").setKey("QR Code");
         actionsColumn = grid.addComponentColumn(this::createActions).setHeader("Actions").setKey("Actions");
 
-        grid.setItemDetailsRenderer(TemplateRenderer.<LinkInfo>of(
+        grid.setItemDetailsRenderer(LitRenderer.<LinkInfo>of(
                         "<div class='" + IDs.ITEM_DETAILS_CLASS
                                 + "' style='border: 1px solid gray; padding: 10px; width: 100%; "
                                 + "box-sizing: border-box;'>"
                                 + "<div><b><a class='"
-                                + IDs.ITEM_DETAILS_LINK_CLASS + "' href=\"[[item.href]]\">[[item.longLink]]</a></b>"
+                                + IDs.ITEM_DETAILS_LINK_CLASS + "' href=\"${item.href}\">${item.longLink}</a></b>"
                                 + "<br>"
                                 + "<div><span class='"
                                 + IDs.ITEM_DETAILS_CREATED_TIME_LABEL_CLASS + "'>Created: </span><span class='"
-                                + IDs.ITEM_DETAILS_CREATED_TIME_CLASS + "'>[[item.created]]</span><span class='"
+                                + IDs.ITEM_DETAILS_CREATED_TIME_CLASS + "'>${item.created}</span><span class='"
                                 + IDs.ITEM_DETAILS_UPDATED_TIME_LABEL_CLASS + "'>, Updated: </span><span class='"
-                                + IDs.ITEM_DETAILS_UPDATED_TIME_CLASS + "'>[[item.updated]]</span></div>"
+                                + IDs.ITEM_DETAILS_UPDATED_TIME_CLASS + "'>${item.updated}</span></div>"
                                 + "</div>"
                                 + "</div>")
                 .withProperty("href", this::getLongLink)
@@ -220,7 +221,7 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
                 .withProperty("created", this::getCreatedTime)
                 .withProperty("updated", this::getUpdatedTime)
                 // This is now how we open the details
-                .withEventHandler("handleClick", item -> grid.getDataProvider().refreshItem(item)));
+                .withFunction("handleClick", item -> grid.getDataProvider().refreshItem(item)));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
 
@@ -487,9 +488,9 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
             ui.access(() -> {
-                dataProvider = DataProvider.ofCollection(linkInfoService.getAllRecordWithSession(sessionId));
-                dataProvider.setFilter(this::filterItems);
-                grid.setDataProvider(dataProvider);
+                List<LinkInfo> records = linkInfoService.getAllRecordWithSession(sessionId);
+                GridListDataView<LinkInfo> dataView = grid.setItems(records);
+                dataView.addFilter(this::filterItems);
                 noRecordsBanner.setVisible(gridIsEmpty());
             });
         }

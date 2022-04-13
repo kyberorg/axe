@@ -33,8 +33,8 @@
         <!-- Java version -->
         <java.version>11</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>14.8.5</vaadin.version>
-        
+        <vaadin.version>23.0.4</vaadin.version>
+
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -43,6 +43,9 @@
         <git.plugin.version>4.9.10</git.plugin.version>
         <properties.plugin.version>1.1.0</properties.plugin.version>
         <selenium.version>4.1.3</selenium.version>
+
+        <!-- Temporary falling back to V14 BootStrap system. See https://github.com/vaadin/flow/issues/13421 -->
+        <vaadin.useDeprecatedV14Bootstrapping>true</vaadin.useDeprecatedV14Bootstrapping>
     </properties>
     
     <parent>

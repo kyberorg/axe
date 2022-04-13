@@ -34,7 +34,7 @@ body {
 
 /* Use it for area that needed to "together" with upper area */
 .joint-area {
-    margin-top: 0;
+    margin-top: -1em;
 }
 
 /* Font size for Short Link in Result Area */

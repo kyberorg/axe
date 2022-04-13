@@ -13,7 +13,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Contains IDN URL multi step tests for Front page.
@@ -90,7 +89,7 @@ public class IdnTest extends SelenideTest {
     @RetryingTest(2)
     public void germanUrl() {
         HomePageObject.storeAndOpenSavedUrl("http://www.travemünde.de/");
-        assertEquals(TravemundeDe.TITLE_TEXT, SelenideUtils.getPageTitle());
+        TravemundeDe.BODY.should(exist);
     }
 
     /**
@@ -99,7 +98,7 @@ public class IdnTest extends SelenideTest {
     @RetryingTest(2)
     public void estonianUrl() {
         HomePageObject.storeAndOpenSavedUrl("https://sõnaveeb.ee");
-        assertEquals(SonaveebEe.TITLE_TEXT, SelenideUtils.getPageTitle());
+        SonaveebEe.LOGO.shouldHave(attribute("alt", SonaveebEe.LOGO_ALT_TEXT));
     }
 
     /**
