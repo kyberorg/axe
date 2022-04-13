@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class AppInfoPageObject {
 
     public static class PublicInfoArea {
-        public static final SelenideElement PUBLIC_INFO_AREA = $("#" + AppInfoPage.IDs.PUBLIC_INFO_AREA);
+        public static final SelenideElement PUBLIC_INFO_AREA = $("#" + AppInfoPage.IDs.GENERAL_INFO_SECTION);
         public static final SelenideElement TITLE = $("#publicInfoTitle");
         public static final SelenideElement VERSION = $("#" + AppInfoPage.IDs.VERSION);
         public static final SelenideElement COMMIT_LINK = $("#" + AppInfoPage.IDs.COMMIT_LINK);
@@ -21,7 +21,7 @@ public class AppInfoPageObject {
     }
 
     public static final class CookieArea {
-        public static final SelenideElement COOKIE_AREA = $("#" + AppInfoPage.IDs.COOKIE_AREA);
+        public static final SelenideElement COOKIE_AREA = $("#" + AppInfoPage.IDs.COOKIE_SECTION);
         public static final SelenideElement TITLE = $("#" + AppInfoPage.IDs.COOKIE_TITLE);
         public static final SelenideElement TEXT_SECTION = $("#" + AppInfoPage.IDs.COOKIE_TEXT_SPAN);
         public static final SelenideElement LINK = $("#" + AppInfoPage.IDs.COOKIE_LINK);
