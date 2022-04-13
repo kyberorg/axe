@@ -12,8 +12,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.page.Push;
-import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -23,8 +21,6 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.session.YalseeSessionAlmostExpiredEvent;
@@ -57,15 +53,6 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @Slf4j
 @SpringComponent
 @UIScope
-@Push
-@Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
-@PWA(
-        name = "Yalsee - the link shortener",
-        shortName = "yalsee",
-        offlinePath = "offline-page.html",
-        offlineResources = {"images/logo.png", "Pebble-Regular.woff"},
-        description = "Yalsee - the link shortener")
-@Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
 @CssImport(value = "./css/toggle_button_fix.css", themeFor = "vaadin-checkbox")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
