@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.test.utils.vaadin.elements;
 import com.codeborne.selenide.SelenideElement;
 import com.vaadin.flow.component.textfield.TextField;
 
+import static com.codeborne.selenide.Selenide.$;
 import static io.kyberorg.yalsee.test.utils.vaadin.VaadinUtils.$vaadin;
 
 /**
@@ -31,7 +32,7 @@ public class TextFieldElement {
      * @return {@link SelenideElement}, which represents input element.
      */
     public SelenideElement getInput() {
-        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container div[part=\"input-field\"] slot input");
+        return $(cssSelector).$("input");
     }
 
     /**
@@ -40,7 +41,7 @@ public class TextFieldElement {
      * @return {@link SelenideElement}, which represents label element.
      */
     public SelenideElement getLabel() {
-        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container label");
+        return $(cssSelector).$("label");
     }
 
     /**
@@ -49,6 +50,6 @@ public class TextFieldElement {
      * @return {@link SelenideElement}, which represents clean button element.
      */
     public SelenideElement getClearButton() {
-        return $vaadin(cssSelector).shadowRoot("div.vaadin-text-field-container #clearButton");
+        return $vaadin(cssSelector).shadowRoot("#clearButton");
     }
 }

@@ -65,8 +65,9 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
         offlinePath = "offline-page.html",
         offlineResources = {"images/logo.png", "Pebble-Regular.woff"},
         description = "Yalsee - the link shortener")
-@Theme(value = Lumo.class, variant = Lumo.LIGHT)
+@Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/main_view.css")
+@CssImport(value = "./css/toggle_button_fix.css", themeFor = "vaadin-checkbox")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
