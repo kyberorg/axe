@@ -40,15 +40,11 @@ public class YalseeHealthIndicator implements HealthIndicator {
         }
 
         StartPageStatus startPageStatus = isMainPageAccessible();
-        switch (startPageStatus) {
-            case OK:
-                return Health.up().build();
-            case DOWN:
-                return Health.down().outOfService().build();
-            case UNKNOWN:
-            default:
-                return Health.unknown().build();
-        }
+        return switch (startPageStatus) {
+            case OK -> Health.up().build();
+            case DOWN -> Health.down().outOfService().build();
+            default -> Health.unknown().build();
+        };
     }
 
     private StartPageStatus isMainPageAccessible() {

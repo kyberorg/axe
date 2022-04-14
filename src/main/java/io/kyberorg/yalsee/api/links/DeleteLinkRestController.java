@@ -73,18 +73,20 @@ public class DeleteLinkRestController {
     private ResponseEntity<YalseeErrorJson> handleDeleteOperationFail(final OperationResult result) {
         String operationResult = result.getResult();
         switch (operationResult) {
-            case OperationResult.ELEMENT_NOT_FOUND:
+            case OperationResult.ELEMENT_NOT_FOUND -> {
                 log.info("{} ident not found", TAG);
                 YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage("No link with given ident stored")
                         .andStatus(HttpCode.NOT_FOUND);
                 return ResponseEntity.status(HttpCode.NOT_FOUND).body(errorJson);
-            case OperationResult.SYSTEM_DOWN:
+            }
+            case OperationResult.SYSTEM_DOWN -> {
                 log.error("{} Database is DOWN", TAG);
                 return ApiUtils.handleSystemDown();
-            case OperationResult.GENERAL_FAIL:
-            default:
+            }
+            default -> {
                 log.error("{} Error: {}", TAG, result.getMessage());
                 return ApiUtils.handleServerError();
+            }
         }
     }
 }

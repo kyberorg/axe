@@ -57,16 +57,12 @@ public class ServerErrorPage extends ServerErrorLayout implements HasErrorParame
         }
 
         switch (yalseeError.getHttpStatus()) {
-            case HttpCode.NOT_FOUND:
-                event.rerouteToError(NotFoundException.class);
-                return;
-            case HttpCode.APP_IS_DOWN:
-                event.rerouteToError(CannotCreateTransactionException.class);
-                return;
-            default:
+            case HttpCode.NOT_FOUND -> event.rerouteToError(NotFoundException.class);
+            case HttpCode.APP_IS_DOWN -> event.rerouteToError(CannotCreateTransactionException.class);
+            default -> {
                 fillUIWithValuesFromError(yalseeError);
                 event.rerouteToError(NeedForLoopException.class, Integer.toString(yalseeError.getHttpStatus()));
-                break;
+            }
         }
     }
 

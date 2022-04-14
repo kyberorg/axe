@@ -75,20 +75,13 @@ public final class TelegramObject {
         this.command = TelegramCommand.createFromString(args[0]);
 
         switch (this.command) {
-            case NOT_A_COMMAND:
-                this.arguments = createArgumentsFromMessageWithoutCommand(this.userMessage);
-                break;
-            case YALSEE:
+            case NOT_A_COMMAND -> this.arguments = createArgumentsFromMessageWithoutCommand(this.userMessage);
+            case YALSEE -> {
                 String remainedArgs = this.userMessage.replace(this.command.getCommandText(), "").trim();
                 this.arguments = createArgumentsFromMessageWithoutCommand(remainedArgs);
-                break;
-            case UNKNOWN:
-            case USAGE:
-            case START:
-            default:
-                //no reason for manipulating with user message
-                this.arguments = TelegramArguments.builder().buildEmpty();
-                break;
+            }
+            //no reason for manipulating with user message
+            default -> this.arguments = TelegramArguments.builder().buildEmpty();
         }
     }
 
