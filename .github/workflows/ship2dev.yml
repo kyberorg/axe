@@ -21,7 +21,7 @@ jobs:
       - name: Resolve Dependencies
         run: mvn --batch-mode --update-snapshots dependency:tree
 
-      - name: Complile JAR
+      - name: Compile JAR
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Docker build and tag
