@@ -44,10 +44,9 @@ public class TestSuite {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof TestSuite)) {
+        if (!(o instanceof TestSuite other)) {
             return false;
         }
-        TestSuite other = (TestSuite) o;
         if (this.getSuiteClazz() != null && other.getSuiteClazz() != null) {
             return this.getSuiteClazz().getSimpleName().equals(other.getSuiteClazz().getSimpleName());
         } else {

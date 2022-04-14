@@ -62,10 +62,9 @@ public final class TestData {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof TestData)) {
+        if (!(o instanceof TestData other)) {
             return false;
         }
-        TestData other = (TestData) o;
 
         if (this.getName() != null && this.getTestSuite() != null) {
             return this.getName().equals(other.getName()) && this.getTestSuite().equals(other.getTestSuite());

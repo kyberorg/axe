@@ -234,8 +234,7 @@ public class YalseeSession {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof YalseeSession)) return false;
-        YalseeSession session = (YalseeSession) o;
+        if (!(o instanceof YalseeSession session)) return false;
         return getSessionId().equals(session.getSessionId())
                 && Objects.equals(getDevice(), session.getDevice())
                 && getFlags().equals(session.getFlags())
