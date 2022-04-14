@@ -77,7 +77,7 @@ jobs:
       - name: Test App
         id: runTests
         continue-on-error: true
-        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
+        run: MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED" mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
         env:
           JAVA_HOME: /srv/java17
 
@@ -136,7 +136,7 @@ jobs:
       - name: ReRun Tests with mvn-rr
         id: reRunTests
         continue-on-error: true
-        run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
+        run: MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED" ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
         env:
           JAVA_HOME: /srv/java17
 
