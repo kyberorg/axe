@@ -16,7 +16,7 @@ public enum TestedEnv {
     LOCAL("http://localhost:8080", "http://l.yls.ee", false, "-", "+"),
     DEV("https://dev.yals.ee", "https://d.yls.ee", true, "gtag.dev.html", "+"),
     POC("https://poc.yals.ee", "https://p.yls.ee", true, "gtag.dev.html", "+"),
-    DEMO("https://demo.yals.ee", "https://q.yls.ee", true, "gtag.demo.html", "+"),
+    QA("https://qa.yals.ee", "https://q.yls.ee", true, "gtag.qa.html", "+"),
     PROD("https://yals.ee", "https://yls.ee", true, "gtag.html", "+");
 
     @Getter

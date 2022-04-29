@@ -18,12 +18,12 @@ Please see [Release Page](https://github.com/kyberorg/yalsee/releases)
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## About: Git Branches, Tags and Releases
-| Branch    | Docker Tag     | Deploy Destination  |
-|-----------|----------------|---------------------|
-| trunk     | trunk          | PROD                |
-| (PR)      | RC             | demo                |
-| (tag)     | (tag name)     | -                   |
-| any other | dev/custom tag | dev                 | 
+| Branch    | Docker Tag     | Deploy Destination |
+|-----------|----------------|--------------------|
+| trunk     | trunk          | PROD               |
+| (PR)      | qa             | qa                 |
+| (tag)     | (tag name)     | -                  |
+| any other | dev/custom tag | dev                | 
 
 ### Trunk
 Considered as default branch.

@@ -113,7 +113,7 @@ Can add several browsers like `chrome,firefox`
 
 EnvVars:
 
-* SPRING_PROFILES_ACTIVE: `dev,demo or prod`
+* SPRING_PROFILES_ACTIVE: `dev,qa or prod`
 * DB_HOST: `hostname or service (container) name`
 * DB_NAME: `database name`
 * DB_USER: `username for database`
@@ -162,12 +162,12 @@ Volumes:
 
 #### About Telegram Bots
 
-| Stage     | Bot Name       | Human Readable Name | 
-|-----------|----------------|---------------------|
-| PROD      | yalsee_bot     | Yalsee Bot          |
-| Demo      | yls_demo_bot   | Yls Demo Bot        | 
-| Dev       | yls_dev_bot    | Yls Dev Bot         | 
-| Local     | yls_local_bot  | Yls Local Bot       |
+| Stage | Bot Name       | Human Readable Name | 
+|-------|----------------|---------------------|
+| PROD  | yalsee_bot     | Yalsee Bot          |
+| QA    | yls_demo_bot   | Yls Demo Bot        | 
+| Dev   | yls_dev_bot    | Yls Dev Bot         | 
+| Local | yls_local_bot  | Yls Local Bot       |
 
 ##### Bot description
 
