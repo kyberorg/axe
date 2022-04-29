@@ -62,7 +62,7 @@ jobs:
           hasActuator: true
           commitSha: ${{ steps.deployed_commit.outputs.sha }}
   test-qa:
-    name: Test::qa
+    name: Test::QA
     needs: ship2qa
     runs-on: self-hosted
     if: github.event.pull_request.draft == false
