@@ -1,4 +1,4 @@
-name: "Ship - Demo"
+name: "Ship - QA"
 
 on:
   pull_request:
@@ -15,8 +15,8 @@ on:
       - 'Dockerfile*'
 
 jobs:
-  ship2demo:
-    name: Ship::Demo
+  ship2qa:
+    name: Ship::QA
     runs-on: self-hosted
     if: github.event.pull_request.draft == false
 
@@ -34,19 +34,19 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.PROD -t quay.io/kyberorg/yalsee:demo .
+        run: docker build -f Dockerfile.PROD -t quay.io/kyberorg/yalsee:qa .
 
       - name: Docker push
-        run: docker push quay.io/kyberorg/yalsee:demo
+        run: docker push quay.io/kyberorg/yalsee:qa
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi quay.io/kyberorg/yalsee:demo
+        run: docker rmi quay.io/kyberorg/yalsee:qa
         continue-on-error: true
 
       - name: Deploy
         uses: wei/curl@master
         with:
-          args: -X POST ${{ secrets.DEMO_DEPLOY_HOOK }}
+          args: -X POST ${{ secrets.QA_DEPLOY_HOOK }}
 
       - name: Get deployed commit SHA
         id: deployed_commit
@@ -55,15 +55,15 @@ jobs:
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v3
         with:
-          url: https://demo.yals.ee
+          url: https://qa.yals.ee
           responseCode: 200
           timeout: 120
           interval: 1.5
           hasActuator: true
           commitSha: ${{ steps.deployed_commit.outputs.sha }}
-  test-demo:
-    name: Test::Demo
-    needs: ship2demo
+  test-qa:
+    name: Test::qa
+    needs: ship2qa
     runs-on: self-hosted
     if: github.event.pull_request.draft == false
     outputs:
@@ -77,7 +77,7 @@ jobs:
       - name: Test App
         id: runTests
         continue-on-error: true
-        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
+        run: mvn -Ptesting-only -Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
         env:
           JAVA_HOME: /srv/java11
 
@@ -102,8 +102,8 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Demo Unit Test Results
-          comment_title: Demo Unit Test Statistics
+          check_name: QA Unit Test Results
+          comment_title: QA Unit Test Statistics
           hide_comments: all but latest
           comment_mode: 'update last'
           test_changes_limit: 5
@@ -117,13 +117,13 @@ jobs:
         uses: wei/curl@master
         continue-on-error: true
         with:
-          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-${{ steps.date.outputs.date }}
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-qa-${{ steps.date.outputs.date }}
 
-  rerun-tests-demo:
-    name: Test::ReRun::Demo
-    needs: test-demo
+  rerun-tests-qa:
+    name: Test::ReRun::QA
+    needs: test-qa
     runs-on: self-hosted
-    if: needs.test-demo.outputs.rerunFlag == 'failure'
+    if: needs.test-qa.outputs.rerunFlag == 'failure'
 
     steps:
       - name: Download file with failed tests
@@ -136,7 +136,7 @@ jobs:
       - name: ReRun Tests with mvn-rr
         id: reRunTests
         continue-on-error: true
-        run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
+        run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
         env:
           JAVA_HOME: /srv/java11
 
@@ -153,8 +153,8 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Demo Unit Test Results
-          comment_title: Demo Unit Test Statistics
+          check_name: QA Unit Test Results
+          comment_title: QA Unit Test Statistics
           hide_comments: off
           test_changes_limit: 0
           files: target/surefire-reports/**/*.xml
@@ -167,4 +167,4 @@ jobs:
         uses: wei/curl@master
         continue-on-error: true
         with:
-          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-rerun-${{ steps.date.outputs.date }}
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-qa-rerun-${{ steps.date.outputs.date }}
