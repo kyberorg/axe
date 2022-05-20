@@ -3,7 +3,7 @@ FROM amazoncorretto:11 as builder
 COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM quay.io/kyberorg/yalsee-base:distroless-jre-17 as runner
+FROM kio.ee/kyberorg/yalsee-base:distroless-jre-17 as runner
 
 WORKDIR /app
 COPY --from=builder  dependencies/ ./
