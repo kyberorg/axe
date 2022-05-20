@@ -37,7 +37,7 @@ jobs:
         run: docker build -f Dockerfile.PROD -t kio.ee/kyberorg/yalsee:qa .
 
       - name: Docker push
-        run: docker push reg.kio.ee/kyberorg/yalsee:qa
+        run: docker push kio.ee/kyberorg/yalsee:qa
 
       - name: Delete pushed image to prevent mess
         run: docker rmi kio.ee/kyberorg/yalsee:qa

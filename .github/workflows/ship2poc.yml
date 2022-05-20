@@ -30,7 +30,7 @@ jobs:
         run: docker push kio.ee/kyberorg/yalsee:poc
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi reg.kio.ee/kyberorg/yalsee:poc
+        run: docker rmi kio.ee/kyberorg/yalsee:poc
         continue-on-error: true
 
       - name: Deploy
