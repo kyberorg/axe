@@ -147,6 +147,11 @@ public final class TestApp {
          * Hash Code initial restart.
          */
         public static final int HASH_CODE_INITIAL_RESTART = 17;
+
+        /**
+         * Two Seconds in milliseconds.
+         */
+        public static final int TWO_SECONDS = 2000;
     }
 
     /**
