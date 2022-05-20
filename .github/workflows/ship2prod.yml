@@ -14,8 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Login to reg.kio.ee
-        run: echo "${{ secrets.REG_KIO_PASS }}" | docker login -u "${{ secrets.REG_KIO_USER }}" --password-stdin reg.kio.ee
+      - name: Login to kio.ee
+        run: echo "${{ secrets.KIO_PASS }}" | docker login -u "${{ secrets.KIO_USER }}" --password-stdin kio.ee
 
       - name: Resolve Dependencies
         run: mvn --batch-mode --update-snapshots dependency:tree
@@ -24,13 +24,13 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.PROD -t reg.kio.ee/kyberorg/yalsee:prod .
+        run: docker build -f Dockerfile.PROD -t kio.ee/kyberorg/yalsee:prod .
 
       - name: Docker push
-        run: docker push reg.kio.ee/kyberorg/yalsee:prod
+        run: docker push kio.ee/kyberorg/yalsee:prod
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi reg.kio.ee/kyberorg/yalsee:prod
+        run: docker rmi kio.ee/kyberorg/yalsee:prod
         continue-on-error: true
 
       - name: Deploy

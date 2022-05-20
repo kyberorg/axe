@@ -1,4 +1,5 @@
-docker pull golang:1.17.5-bullseye
-docker build -t quay.io/kyberorg/golang:1.17.5 -f Dockerfile.golang .
-docker push quay.io/kyberorg/golang:1.17.5
-
+docker login kio.ee
+docker pull golang:1.18.2-bullseye
+docker build -t kio.ee/kyberorg/golang:1.18.2 -f Dockerfile.golang .
+docker push kio.ee/kyberorg/golang:1.18.2
+docker logout kio.ee

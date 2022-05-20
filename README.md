@@ -1,7 +1,8 @@
 # Yalsee - the link shortener
-Simple link shortener [yals.ee](https://yals.ee), which produce links like [https://yls.ee/Cxwycs](https://yls.ee/Cxwycs)
+Simple link shortener [yals.ee](https://yals.ee), which produce links
+like [https://yls.ee/Cxwycs](https://yls.ee/Cxwycs)
 
-Docker image: [`kyberorg/yalsee`](https://hub.docker.com/repository/docker/kyberorg/yalsee)
+Docker image: `kio.ee/kyberorg/yalsee`
 
 ### Note on Anti-scam redirect page
 Since release `3.0.5` by default when user opens short link instead of redirect appears redirect page with destination
