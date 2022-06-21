@@ -34,6 +34,8 @@
         <java.version>11</java.version>
         <!-- Vaadin version -->
         <vaadin.version>23.0.9</vaadin.version>
+        <!-- QR Code Software version-->
+        <qr.zxing.version>3.5.0</qr.zxing.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -224,12 +226,12 @@
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
-            <version>3.4.1</version>
+            <version>${qr.zxing.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>3.4.1</version>
+            <version>${qr.zxing.version}</version>
         </dependency>
         
         <!-- BugSnag: error reporting -->
@@ -289,7 +291,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
           <artifactId>selenide</artifactId>
-            <version>6.4.0</version>
+            <version>6.6.4</version>
             <scope>test</scope>
         </dependency>
         <!-- Selenide plugin for Selenoid -->
