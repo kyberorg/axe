@@ -54,7 +54,6 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @SpringComponent
 @UIScope
 @CssImport("./css/main_view.css")
-@CssImport(value = "./css/toggle_button_fix.css", themeFor = "vaadin-checkbox")
 public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
