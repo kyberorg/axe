@@ -15,7 +15,7 @@ jobs:
       - name: Test App
         id: runTests
         continue-on-error: true
-        run: mvn -Ptesting-only -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-dev-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://d.yls.ee -Dtest.deleteToken=${{ secrets.DEV_DELETE_TOKEN }} clean test-compile test
+        run: mvn -Ptesting-only -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=yalsee-dev-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://d.yls.ee -Dtest.deleteToken=${{ secrets.DEV_DELETE_TOKEN }} clean test-compile test
         env:
           JAVA_HOME: /srv/java17
 
@@ -28,14 +28,14 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.32
+        uses: EnricoMi/publish-unit-test-result-action@v1.39
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Dev Unit Test Results
           comment_title: Dev Unit Test Statistics
           hide_comments: all but latest
-          comment_mode: 'update last'
+          comment_mode: 'always'
           test_changes_limit: 5
           files: target/surefire-reports/**/*.xml
           report_individual_runs: true

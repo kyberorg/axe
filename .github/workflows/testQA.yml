@@ -1,10 +1,10 @@
-name: "Test - Demo"
+name: "Test - QA"
 
 on: [ workflow_dispatch ]
 
 jobs:
-  test-demo:
-    name: Test::Demo
+  test-qa:
+    name: Test::QA
     runs-on: self-hosted
 
     steps:
@@ -15,7 +15,7 @@ jobs:
       - name: Test App
         id: runTests
         continue-on-error: true
-        run: mvn -Ptesting-only -Dtest.url=https://demo.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dtest.buildName=yalsee-demo-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.DEMO_DELETE_TOKEN }} clean test
+        run: mvn -Ptesting-only -Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} clean test
         env:
           JAVA_HOME: /srv/java17
 
@@ -28,14 +28,14 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.32
+        uses: EnricoMi/publish-unit-test-result-action@v1.39
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Demo Unit Test Results
-          comment_title: Demo Unit Test Statistics
+          check_name: QA Unit Test Results
+          comment_title: QA Unit Test Statistics
           hide_comments: all but latest
-          comment_mode: 'update last'
+          comment_mode: 'always'
           test_changes_limit: 5
           files: target/surefire-reports/**/*.xml
           report_individual_runs: true
@@ -46,4 +46,4 @@ jobs:
         if: steps.runTests.outcome == 'success'
         uses: wei/curl@master
         with:
-          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-demo-${{ steps.date.outputs.date }}
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-qa-${{ steps.date.outputs.date }}

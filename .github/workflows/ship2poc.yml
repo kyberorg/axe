@@ -14,8 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Login to quay.io
-        run: echo "${{ secrets.QUAY_TOKEN }}" | docker login -u "${{ secrets.QUAY_USERNAME }}" --password-stdin quay.io
+      - name: Login to kio.ee
+        run: echo "${{ secrets.KIO_PASS }}" | docker login -u "${{ secrets.KIO_USER }}" --password-stdin kio.ee
 
       - name: Resolve Dependencies
         run: mvn --batch-mode --update-snapshots dependency:tree
@@ -24,13 +24,13 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.DEV -t quay.io/kyberorg/yalsee:poc .
+        run: docker build -f Dockerfile.DEV -t kio.ee/kyberorg/yalsee:poc .
 
       - name: Docker push
-        run: docker push quay.io/kyberorg/yalsee:poc
+        run: docker push kio.ee/kyberorg/yalsee:poc
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi quay.io/kyberorg/yalsee:poc
+        run: docker rmi kio.ee/kyberorg/yalsee:poc
         continue-on-error: true
 
       - name: Deploy

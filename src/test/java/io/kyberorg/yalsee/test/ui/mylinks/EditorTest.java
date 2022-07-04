@@ -1,6 +1,8 @@
 package io.kyberorg.yalsee.test.ui.mylinks;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.kyberorg.yalsee.test.TestApp;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -121,6 +123,8 @@ public class EditorTest extends SelenideTest {
         String newDescription = "Testing update time";
         SelenideElement descriptionCell = Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.doubleClick();
+
+        Selenide.sleep(TestApp.Constants.TWO_SECONDS);
 
         SelenideElement descriptionEditor = Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.setValue(newDescription);
