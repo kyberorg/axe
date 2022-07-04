@@ -98,7 +98,7 @@
         <!-- See https://checkstyle.org/config_javadoc.html -->
         <module name="InvalidJavadocPosition"/>
         <module name="JavadocMethod">
-            <property name="excludeScope" value="private"/>
+            <property name="accessModifiers" value="public"/>
         </module>
         <module name="JavadocType"/>
         <module name="JavadocVariable">
