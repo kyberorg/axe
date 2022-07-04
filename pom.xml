@@ -127,7 +127,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        
+        <!-- Postgres Driver -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- In-memory database for default profile and testing purposes -->
         <dependency>
             <groupId>com.h2database</groupId>

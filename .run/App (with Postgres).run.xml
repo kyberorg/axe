@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="App (with Postgres)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="local" />
+    <option name="ENABLE_JMX_AGENT" value="false" />
+    <envs>
+      <env name="LOG_LEVEL_APP" value="debug" />
+    </envs>
+    <module name="yalsee" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.kyberorg.yalsee.Application" />
+    <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="yalsee [clean, package]" run_configuration_type="MavenRunConfiguration" />
+    </method>
+  </configuration>
+</component>
