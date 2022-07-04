@@ -31,7 +31,8 @@ public class EndpointsListener implements ApplicationListener<ContextRefreshedEv
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         ApplicationContext applicationContext = event.getApplicationContext();
-        applicationContext.getBean(RequestMappingHandlerMapping.class).getHandlerMethods().forEach(
+        applicationContext.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class)
+                .getHandlerMethods().forEach(
                 (key, value) -> routes.addAll(key.getDirectPaths())
         );
     }
