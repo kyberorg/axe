@@ -35,7 +35,7 @@ jobs:
           check_name: Dev Unit Test Results
           comment_title: Dev Unit Test Statistics
           hide_comments: all but latest
-          comment_mode: 'update last'
+          comment_mode: 'always'
           test_changes_limit: 5
           files: target/surefire-reports/**/*.xml
           report_individual_runs: true
