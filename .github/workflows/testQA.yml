@@ -17,7 +17,7 @@ jobs:
         continue-on-error: true
         run: mvn -Ptesting-only -Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} clean test
         env:
-          JAVA_HOME: /srv/java11
+          JAVA_HOME: /srv/java17
 
       - name: Publish Screenshots of failing tests (if any)
         uses: actions/upload-artifact@v3

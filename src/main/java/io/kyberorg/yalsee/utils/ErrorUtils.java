@@ -135,8 +135,7 @@ public class ErrorUtils {
 
             if (hasStatus) yalseeErrorBuilder.withStatus(args.getStatus());
 
-        } else if (exception instanceof YalseeException) {
-            YalseeException yalseeException = (YalseeException) exception;
+        } else if (exception instanceof YalseeException yalseeException) {
 
             StringBuilder techMessage = new StringBuilder(yalseeException.getMessage());
             this.enrichTechMessageWithStatusAndPath(techMessage, args);

@@ -3,6 +3,7 @@
 ### Common info
 
 * I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs
+* Minimal Java level is `17`
 
 ### How to start coding
 

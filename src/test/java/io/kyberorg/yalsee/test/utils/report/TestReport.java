@@ -217,22 +217,11 @@ public final class TestReport {
     private void updateCounters(final TestData testData) {
         if (testData.getTestResult() == null) return;
         switch (testData.getTestResult()) {
-            case PASSED:
-                passedTestsCounter.increment();
-                break;
-            case FAILED:
-                failedTestsCounter.increment();
-                break;
-            case IGNORED:
-                ignoredTestsCounter.increment();
-                break;
-            case ABORTED:
-                abortedTestsCounter.increment();
-                break;
-            case ON_FIRE:
-            default:
-                onFireTestsCounter.increment();
-                break;
+            case PASSED -> passedTestsCounter.increment();
+            case FAILED -> failedTestsCounter.increment();
+            case IGNORED -> ignoredTestsCounter.increment();
+            case ABORTED -> abortedTestsCounter.increment();
+            default -> onFireTestsCounter.increment();
         }
     }
 

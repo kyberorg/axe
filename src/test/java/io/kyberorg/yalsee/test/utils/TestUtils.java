@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.constants.Header;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.test.TestApp;
+import io.kyberorg.yalsee.test.TestApp.RunMode;
 import io.kyberorg.yalsee.test.TestedEnv;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.UrlUtils;
@@ -143,18 +144,12 @@ public final class TestUtils {
             return System.getProperty(TestApp.Properties.TEST_URL);
         }
 
-        TestApp.RunMode runMode = TestApp.RunMode.valueOf(
-                System.getProperty(TestApp.Properties.TEST_RUN_MODE, TestApp.RunMode.LOCAL.name()));
+        RunMode runMode = RunMode.valueOf(
+                System.getProperty(TestApp.Properties.TEST_RUN_MODE, RunMode.LOCAL.name()));
 
-        switch (runMode) {
-            case GRID:
-                localUrl = System.getProperty(TestApp.Properties.TEST_URL);
-                break;
-            case LOCAL:
-            default:
-                localUrl = String.format("http://localhost:%d", serverPort);
-                break;
-        }
+        localUrl = (runMode == RunMode.GRID)
+                ? System.getProperty(TestApp.Properties.TEST_URL)
+                : String.format("http://localhost:%d", serverPort);
 
         return localUrl;
     }

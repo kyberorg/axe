@@ -79,7 +79,7 @@ jobs:
         continue-on-error: true
         run: mvn -Ptesting-only -Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
         env:
-          JAVA_HOME: /srv/java11
+          JAVA_HOME: /srv/java17
 
       - name: Publish List of failing tests (if any)
         uses: actions/upload-artifact@v3
@@ -138,7 +138,7 @@ jobs:
         continue-on-error: true
         run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
         env:
-          JAVA_HOME: /srv/java11
+          JAVA_HOME: /srv/java17
 
       - name: Publish Screenshots of still failing tests (if any)
         uses: actions/upload-artifact@v3

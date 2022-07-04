@@ -21,7 +21,6 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -109,7 +108,6 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
     private final IdentValidator identValidator;
 
     private final Binder<LinkInfo> binder = new Binder<>(LinkInfo.class);
-    private ListDataProvider<LinkInfo> dataProvider;
     private UI ui;
     private String sessionId;
     private DeviceUtils deviceUtils;
@@ -529,20 +527,14 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
                             linkInfoService.update(linkInfo);
                         } else {
                             if (linkUpdateResult.getMessage() == null) {
-                                String errorMessage;
-                                switch (linkUpdateResult.getResult()) {
-                                    case OperationResult.CONFLICT:
-                                        errorMessage = "We already have link with given ident. Please try another one";
-                                        break;
-                                    case OperationResult.SYSTEM_DOWN:
-                                        errorMessage = "Failed to update data. System is partly inaccessible. "
-                                                + "Try again later";
-                                        break;
-                                    case OperationResult.GENERAL_FAIL:
-                                    default:
-                                        errorMessage = "Something unexpected happened at server-side. Try again later.";
-                                        break;
-                                }
+                                String errorMessage = switch (linkUpdateResult.getResult()) {
+                                    case OperationResult.CONFLICT ->
+                                            "We already have link with given ident. Please try another one";
+                                    case OperationResult.SYSTEM_DOWN ->
+                                            "Failed to update data. System is partly inaccessible. "
+                                                    + "Try again later";
+                                    default -> "Something unexpected happened at server-side. Try again later.";
+                                };
                                 ErrorUtils.getErrorNotification(errorMessage).open();
                             } else {
                                 ErrorUtils.getErrorNotification(linkUpdateResult.getMessage()).open();
@@ -579,16 +571,11 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         //also, no reason to updateData on success as it will be updated by LinkDeletedEvent
         if (deleteLinkResult.ok()) return;
         switch (deleteLinkResult.getResult()) {
-            case OperationResult.ELEMENT_NOT_FOUND:
-                ErrorUtils.getErrorNotification("Deletion failed: no such link found").open();
-                break;
-            case OperationResult.SYSTEM_DOWN:
-                ErrorUtils.getErrorNotification("System is partly inaccessible. Try again later").open();
-                break;
-            case OperationResult.GENERAL_FAIL:
-            default:
-                ErrorUtils.getErrorNotification("Something wrong at server-side. Try again later").open();
-                break;
+            case OperationResult.ELEMENT_NOT_FOUND ->
+                    ErrorUtils.getErrorNotification("Deletion failed: no such link found").open();
+            case OperationResult.SYSTEM_DOWN ->
+                    ErrorUtils.getErrorNotification("System is partly inaccessible. Try again later").open();
+            default -> ErrorUtils.getErrorNotification("Something wrong at server-side. Try again later").open();
         }
     }
 

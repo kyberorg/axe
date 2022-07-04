@@ -66,19 +66,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (telegramCommand.isYalseeCommand()) {
                 message = doYalsee();
             } else {
-                switch (telegramCommand) {
-                    case NOT_A_COMMAND:
-                        message = doYalsee();
-                        break;
-                    case START:
-                    case USAGE:
-                    case UNKNOWN:
-                        //noinspection DuplicateBranchesInSwitch (in the name of readable code)
-                        message = telegramService.usage();
-                        break;
-                    default:
-                        message = telegramService.usage();
-                        break;
+                if (telegramCommand == TelegramCommand.NOT_A_COMMAND) {
+                    message = doYalsee();
+                } else {
+                    message = telegramService.usage();
                 }
             }
 

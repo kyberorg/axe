@@ -46,20 +46,14 @@ public final class ApiUtils {
      */
     public static ResponseEntity<YalseeErrorJson> handleTokenFail(final OperationResult checkResult) {
         String errorMarker = checkResult.getResult();
-        YalseeErrorJson errorJson;
-        switch (errorMarker) {
-            case TokenChecker.REQUEST_IS_EMPTY:
-                errorJson = YalseeErrorJson.createWithMessage("Got empty request").andStatus(HttpCode.SERVER_ERROR);
-                break;
-            case TokenChecker.NO_TOKEN:
-                errorJson = YalseeErrorJson.createWithMessage("Unauthorized: Auth Token must be present")
-                        .andStatus(HttpCode.UNAUTHORIZED);
-                break;
-            case TokenChecker.WRONG_TOKEN:
-            default:
-                errorJson = YalseeErrorJson.createWithMessage("Unauthorized: Wrong Token")
-                        .andStatus(HttpCode.UNAUTHORIZED);
-        }
+        YalseeErrorJson errorJson = switch (errorMarker) {
+            case TokenChecker.REQUEST_IS_EMPTY ->
+                    YalseeErrorJson.createWithMessage("Got empty request").andStatus(HttpCode.SERVER_ERROR);
+            case TokenChecker.NO_TOKEN -> YalseeErrorJson.createWithMessage("Unauthorized: Auth Token must be present")
+                    .andStatus(HttpCode.UNAUTHORIZED);
+            default -> YalseeErrorJson.createWithMessage("Unauthorized: Wrong Token")
+                    .andStatus(HttpCode.UNAUTHORIZED);
+        };
         return ResponseEntity.status(errorJson.getStatus()).body(errorJson);
     }
 
@@ -72,16 +66,13 @@ public final class ApiUtils {
     public static ResponseEntity<YalseeErrorJson> handleIdentFail(final OperationResult validateResult) {
         String errorReason = validateResult.getMessage();
         YalseeErrorJson errorJson;
-        switch (errorReason) {
-            case IdentValidator.EMPTY_IDENT:
-                errorJson = YalseeErrorJson.createWithMessage("Request should be like this: "
-                                + Endpoint.Api.LINKS_API_PLUS_IDENT + " and ident should not be empty")
-                        .andStatus(HttpCode.BAD_REQUEST);
-                break;
-            case IdentValidator.MALFORMED_IDENT:
-            default:
-                errorJson = YalseeErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string")
-                        .andStatus(HttpCode.BAD_REQUEST);
+        if (errorReason.equals(IdentValidator.EMPTY_IDENT)) {
+            errorJson = YalseeErrorJson.createWithMessage("Request should be like this: "
+                            + Endpoint.Api.LINKS_API_PLUS_IDENT + " and ident should not be empty")
+                    .andStatus(HttpCode.BAD_REQUEST);
+        } else {
+            errorJson = YalseeErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string")
+                    .andStatus(HttpCode.BAD_REQUEST);
         }
         return ResponseEntity.badRequest().body(errorJson);
     }
