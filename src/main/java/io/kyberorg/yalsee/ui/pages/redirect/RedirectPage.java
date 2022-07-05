@@ -134,7 +134,7 @@ public class RedirectPage extends YalseeLayout implements HasErrorParameter<Need
         }
 
         originLink.setText(this.origin);
-        originLink.setHref(this.origin);
+        originLink.setHref(this.origin + appUtils.getRedirectPageBypassSymbol());
         lenDiffText.setText(makeLengthDifferenceText());
 
         targetLink.setText(this.target);

@@ -45,13 +45,12 @@ public class RedirectPageTest extends SelenideTest {
     }
 
     /**
-     * Tests that on click on short link same page is opened.
+     * Tests that on click on short link opens target page.
      */
     @Test
-    public void shortLinkLeadsToSamePage() {
+    public void shortLinkLeadsToLongLink() {
         RedirectPageObject.Links.ORIGIN_LINK.click();
-        waitForVaadin();
-        RedirectPageObject.VIEW.should(exist);
+        verifyThatGitHubOpened();
     }
 
     /**

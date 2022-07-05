@@ -197,7 +197,7 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Determines if client's request has {@link Header#ACCEPT} header with exact {@link MimeType}.
+     * Determines if client's request R {@link Header#ACCEPT} header with exact {@link MimeType}.
      *
      * @param req valid {@link HttpServletRequest} request
      * @return true, if request has {@link Header#ACCEPT} header and its value is not wildcard

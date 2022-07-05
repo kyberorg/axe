@@ -49,12 +49,16 @@ public class RedirectPageVisualStateTest extends SelenideTest {
     }
 
     /**
-     * Tests that element with short link is link itself and points to same page.
+     * Tests that element with short link is link itself and points to same page with bypass symbol.
      */
     @Test
     public void originLinkIsLinkAndPointsToSamePage() {
+        String bypassSymbol = RedirectPageObject.Elements.BYPASS_SYMBOL.getText();
+
         RedirectPageObject.Links.ORIGIN_LINK.shouldBe(visible);
         RedirectPageObject.Links.ORIGIN_LINK.shouldHave(attribute("href"));
+        RedirectPageObject.Links.ORIGIN_LINK.shouldHave(attribute("href",
+                ourShortLink + bypassSymbol));
     }
 
     /**
