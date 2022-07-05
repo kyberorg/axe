@@ -120,13 +120,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-        
-        <!-- MySQL Driver for production use-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+
         <!-- Postgres Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
