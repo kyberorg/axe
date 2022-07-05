@@ -11,6 +11,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -52,6 +53,7 @@ public class RedirectPageVisualStateTest extends SelenideTest {
      * Tests that element with short link is link itself and points to same page with bypass symbol.
      */
     @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/832")
     public void originLinkIsLinkAndPointsToSamePage() {
         String bypassSymbol = RedirectPageObject.Elements.BYPASS_SYMBOL.getText();
 

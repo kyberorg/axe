@@ -9,6 +9,7 @@ import io.kyberorg.yalsee.ui.pages.redirect.RedirectPage;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
@@ -48,6 +49,7 @@ public class RedirectPageTest extends SelenideTest {
      * Tests that on click on short link opens target page.
      */
     @Test
+    @Issue("https://github.com/kyberorg/yalsee/issues/832")
     public void shortLinkLeadsToLongLink() {
         RedirectPageObject.Links.ORIGIN_LINK.click();
         verifyThatGitHubOpened();
