@@ -46,9 +46,9 @@ server.pid
 /dist/
 .cache
 .mvn
-docker/localMySQL/yalsdb
-docker/localMySQL/yalsee_db
-docker/localMySQL/redis
+/docker/yalsee-local-run/redis
+/docker/yalsee-local-run/postgres
+/docker/yalsee-local-run/pgadmin
 /node_modules/
 
 package.json

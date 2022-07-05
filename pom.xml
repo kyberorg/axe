@@ -120,14 +120,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-        
-        <!-- MySQL Driver for production use-->
+
+        <!-- Postgres Driver -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
-        
+
         <!-- In-memory database for default profile and testing purposes -->
         <dependency>
             <groupId>com.h2database</groupId>

@@ -4,6 +4,7 @@
 
 * I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs
 * Minimal Java level is `17`
+* Application needs `postgres` and optionally `redis` (sessions and robot list)
 
 ### How to start coding
 
@@ -14,17 +15,24 @@
 
 ### About: local profile
 
-To develop with locally running dockerized MySQL database use `local` profile.
+To develop with locally running dockerized Postgres database and Redis use `local` profile.
 
 Profile can be activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `local`
 
-MySQL can be started from `docker/localMySQL` directory by running:
+Before very first run you must prepare pgadmin directory with correct ownership
+```shell
+cd docker/yalsee-local-run
+mkdir pgadmin
+chown 5050:5050 pgadmin
+```
+
+Containers with Postgres/Redis and their admin interfaces can be started from `docker/yalsee-local-run` directory by running:
 
 ```shell script
 docker-compose up -d
 ``` 
 
-MySQL can be stopped from `docker/localMySQL` directory by running:
+Containers can be stopped from `docker/yalsee-local-run` directory by running:
 
 ```shell script
 docker-compose down
@@ -106,7 +114,7 @@ Can add several browsers like `chrome,firefox`
 ### How to Deploy app
 
 * Docker image: `quay.io/kyberorg/yalsee`
-* H2 (default profile) or MySQL database (local profile) needed to run.
+* H2 (default profile) or Postgres database (local profile) needed to run.
 * Redis for storing sessions and stuff like this.
 * I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs. So token from Bugsnag needed.
 
