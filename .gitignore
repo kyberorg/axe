@@ -59,3 +59,4 @@ webpack.generated.js
 /frontend/generated/
 pnpmfile.js
 vite.generated.ts
+/frontend/index.html
