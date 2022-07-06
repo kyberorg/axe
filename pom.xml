@@ -46,8 +46,8 @@
         <properties.plugin.version>1.1.0</properties.plugin.version>
         <selenium.version>4.3.0</selenium.version>
 
-        <!-- Temporary falling back to V14 BootStrap system. See https://github.com/vaadin/flow/issues/13421 -->
-        <vaadin.useDeprecatedV14Bootstrapping>true</vaadin.useDeprecatedV14Bootstrapping>
+        <!-- See https://github.com/vaadin/flow/issues/13421 -->
+        <vaadin.eagerServerLoad>true</vaadin.eagerServerLoad>
     </properties>
     
     <parent>
