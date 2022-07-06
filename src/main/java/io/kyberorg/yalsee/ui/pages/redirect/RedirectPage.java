@@ -135,6 +135,11 @@ public class RedirectPage extends YalseeLayout implements HasErrorParameter<Need
 
         originLink.setText(this.origin);
         originLink.setHref(this.origin + appUtils.getRedirectPageBypassSymbol());
+
+        //intercepting click event
+        // just because in Vaadin 23+ unable to modify VaadinResponse after it send, so doHeaderRedirect fails
+        originLink.getElement().addEventListener("click", e -> doJSRedirect(target));
+
         lenDiffText.setText(makeLengthDifferenceText());
 
         targetLink.setText(this.target);
