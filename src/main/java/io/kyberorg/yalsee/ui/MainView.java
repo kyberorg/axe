@@ -21,7 +21,6 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.events.session.YalseeSessionAlmostExpiredEvent;
 import io.kyberorg.yalsee.events.session.YalseeSessionDestroyedEvent;
@@ -54,7 +53,7 @@ import static io.kyberorg.yalsee.ui.MainView.IDs.APP_LOGO;
 @SpringComponent
 @UIScope
 @CssImport("./css/main_view.css")
-public class MainView extends AppLayout implements BeforeEnterObserver, PageConfigurator {
+public class MainView extends AppLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
@@ -301,51 +300,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver, PageConf
     public void applyTheme(final boolean isDarkTheme) {
         final String theme = isDarkTheme ? "dark" : "light";
         this.ui.getPage().executeJs("document.documentElement.setAttribute(\"theme\",\"" + theme + "\")");
-    }
-
-    @Override
-    public void configurePage(final InitialPageSettings settings) {
-        String title = "Yalsee - the link shortener";
-        String description = "The free URL shortener for making long and ugly links into short URLs"
-                + " that are easy to share and use.";
-
-        String previewImage = appUtils.getServerUrl() + Endpoint.TNT.PREVIEW_IMAGE;
-
-        settings.addFavIcon("icon", "/icons/favicon-32x32.png", "32x32");
-        settings.addLink("shortcut icon", "/icons/favicon-16x16.png");
-        settings.addLink("apple-touch-icon", "/icons/apple-touch-icon.png");
-        settings.addLink("manifest", "/site.webmanifest");
-        settings.addLink("mask-icon", "/icons/safari-pinned-tab.svg");
-
-        settings.addMetaTag("apple-mobile-web-app-title", "yalsee");
-        settings.addMetaTag("application-name", "yalsee");
-        settings.addMetaTag("msapplication-TileColor", "#ffc40d");
-        settings.addMetaTag("theme-color", "#ffffff");
-
-        //SEO Tags
-        settings.addMetaTag("title", title);
-        settings.addMetaTag("description", description);
-
-        settings.addMetaTag("og:type", "website");
-        settings.addMetaTag("og:url", appUtils.getServerUrl());
-        settings.addMetaTag("og:title", title);
-        settings.addMetaTag("og:description", description);
-        settings.addMetaTag("og:image", previewImage);
-
-        settings.addMetaTag("twitter:card", "summary_large_image");
-        settings.addMetaTag("twitter:url", appUtils.getServerUrl());
-        settings.addMetaTag("twitter:title", title);
-        settings.addMetaTag("twitter:description", description);
-        settings.addMetaTag("twitter:image", previewImage);
-
-        settings.addInlineFromFile("splash-screen.html", InitialPageSettings.WrapMode.NONE);
-        if (appUtils.isGoogleAnalyticsEnabled() && appUtils.isGoogleAnalyticsAllowed(YalseeSession.getCurrent())) {
-            settings.addInlineFromFile(appUtils.getGoggleAnalyticsFileName(), InitialPageSettings.WrapMode.NONE);
-        }
-        settings.addInlineFromFile(InitialPageSettings.Position.PREPEND,
-                "yalsee.js", InitialPageSettings.WrapMode.JAVASCRIPT);
-        settings.addInlineFromFile(InitialPageSettings.Position.PREPEND,
-                "show-test-name.js", InitialPageSettings.WrapMode.JAVASCRIPT);
     }
 
     @PreDestroy
