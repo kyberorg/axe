@@ -137,6 +137,25 @@ public final class UrlUtils {
                 .replaceFirst("ftp", "").replaceFirst("://", "");
     }
 
+    /**
+     * Checks if string with url has protocol part.
+     *
+     * @param url string with valid URL
+     * @return true if URL has part with protocol aka schema, false is not.
+     * @throws RuntimeException if string has not valid URL or not URL
+     */
+    public static boolean hasProtocol(final String url) {
+        try {
+            URI uri = new URI(replaceSpacesInUrl(url));
+            return uri.getScheme() != null;
+
+        } catch (URISyntaxException e) {
+            String message = String.format("String '%s': malformed URL or not URL at all", url);
+            log.warn("{} {}", TAG, message);
+            throw new RuntimeException(message, e);
+        }
+    }
+
     private static String replaceSpacesInUrl(final String originUrl) {
         return originUrl.replaceAll(" ", "+");
     }

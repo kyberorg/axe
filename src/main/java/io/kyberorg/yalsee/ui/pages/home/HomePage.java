@@ -11,7 +11,9 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -72,6 +74,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private Span titleLongPart;
     private TextField input;
+    private RadioButtonGroup<String> protocolSelector;
     private Accordion descriptionAccordion;
     private TextField descriptionInput;
     private Button submitButton;
@@ -112,6 +115,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         linkCounter.setText(Long.toString(linksStored));
 
         input.setAutofocus(true);
+        protocolSelector.setVisible(false);
         descriptionAccordion.close();
         submitButton.setEnabled(true);
 
@@ -135,6 +139,14 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         input.setId(IDs.INPUT);
         input.setPlaceholder("https://mysuperlongurlhere.tld");
         input.setWidthFull();
+        input.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        input.addValueChangeListener(this::onInputChanged);
+
+        protocolSelector = new RadioButtonGroup<>();
+        protocolSelector.setId(IDs.PROTOCOL_SELECTOR);
+        protocolSelector.setLabel("Protocol");
+        protocolSelector.setItems("https://", "http://", "ftp://");
+        protocolSelector.setValue("https://");
 
         descriptionAccordion = new Accordion();
         descriptionAccordion.setId(IDs.DESCRIPTION_ACCORDION);
@@ -158,7 +170,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         descriptionAccordion.add("Link Description (optional)", descriptionInput);
 
         VerticalLayout mainArea =
-                new VerticalLayout(title, input, descriptionAccordion, publicAccessBanner, submitButton);
+                new VerticalLayout(title, input, protocolSelector, descriptionAccordion, publicAccessBanner, submitButton);
         mainArea.setId(IDs.MAIN_AREA);
         mainArea.addClassNames("main-area", "border", "large-text");
         return mainArea;
@@ -303,7 +315,17 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
             isFormValid = false;
         } else {
             try {
-                longUrl = UrlUtils.makeFullUri(longUrl.trim()).toString();
+                boolean hasProtocol = UrlUtils.hasProtocol(longUrl.trim());
+                if (!hasProtocol) {
+                    String selectedProtocol = protocolSelector.getValue();
+                    if (StringUtils.isNotBlank(selectedProtocol)) {
+                        longUrl = selectedProtocol + longUrl.trim();
+                    } else {
+                        log.error("{} ProtocolSelector has empty value", TAG);
+                        showError("Something went wrong at our side. long link has unknown protocol. " +
+                                "Please try again");
+                    }
+                }
             } catch (RuntimeException e) {
                 log.error("{} URL validation failed", TAG);
                 log.debug("", e);
@@ -463,11 +485,24 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
     }
 
+    private void onInputChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        String longLink = event.getValue();
+        if (StringUtils.isNotBlank(longLink)) {
+            try {
+                boolean hasProto = UrlUtils.hasProtocol(longLink);
+                protocolSelector.setVisible(!hasProto);
+            } catch (RuntimeException e) {
+                showError("Long link is malformed, not URL at all or just protocol not supported yet");
+            }
+        }
+    }
+
     public static class IDs {
         public static final String VIEW_ID = "homeView";
         public static final String MAIN_AREA = "mainArea";
         public static final String TITLE = "siteTitle";
         public static final String INPUT = "longUrlInput";
+        public static final String PROTOCOL_SELECTOR = "protocolSelector";
         public static final String DESCRIPTION_ACCORDION = "descriptionAccordion";
         public static final String DESCRIPTION_INPUT = "descriptionInput";
         public static final String BANNER = "publicAccessBanner";
