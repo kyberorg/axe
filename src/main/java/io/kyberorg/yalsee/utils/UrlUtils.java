@@ -147,7 +147,8 @@ public final class UrlUtils {
     public static boolean hasProtocol(final String url) {
         try {
             URI uri = new URI(replaceSpacesInUrl(url));
-            return uri.getScheme() != null;
+            //just because parser parses hostname as scheme when ports present
+            return uri.getScheme() != null && url.contains("://");
 
         } catch (URISyntaxException e) {
             String message = String.format("String '%s': malformed URL or not URL at all", url);

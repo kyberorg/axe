@@ -146,7 +146,6 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         protocolSelector.setId(IDs.PROTOCOL_SELECTOR);
         protocolSelector.setLabel("Protocol");
         protocolSelector.setItems("https://", "http://", "ftp://");
-        protocolSelector.setValue("https://");
 
         descriptionAccordion = new Accordion();
         descriptionAccordion.setId(IDs.DESCRIPTION_ACCORDION);
@@ -307,7 +306,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         String longUrl = input.getValue();
         String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
-        cleanForm();
+        //cleanForm();
 
         if (StringUtils.isBlank(longUrl)) {
             String errorMessage = "Long URL cannot be empty";
@@ -321,9 +320,10 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
                     if (StringUtils.isNotBlank(selectedProtocol)) {
                         longUrl = selectedProtocol + longUrl.trim();
                     } else {
-                        log.error("{} ProtocolSelector has empty value", TAG);
-                        showError("Something went wrong at our side. long link has unknown protocol. " +
-                                "Please try again");
+                        protocolSelector.setVisible(true);
+                        protocolSelector.setErrorMessage("Please select protocol");
+                        protocolSelector.setInvalid(true);
+                        isFormValid = false;
                     }
                 }
             } catch (RuntimeException e) {
@@ -335,6 +335,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
 
         if (isFormValid) {
+            cleanForm();
             cleanResults();
             saveLink(longUrl, linkDescription);
         } else {
@@ -459,6 +460,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private void cleanForm() {
         input.setValue("");
+        protocolSelector.setVisible(false);
+        protocolSelector.setValue("");
         descriptionInput.setValue("");
     }
 
@@ -466,6 +469,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         if (errorNotification != null && errorNotification.isOpened()) {
             errorNotification.close();
         }
+        protocolSelector.setErrorMessage("");
+        protocolSelector.setInvalid(false);
     }
 
     private void cleanResults() {
