@@ -306,7 +306,6 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         String longUrl = input.getValue();
         String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
-        //cleanForm();
 
         if (StringUtils.isBlank(longUrl)) {
             String errorMessage = "Long URL cannot be empty";

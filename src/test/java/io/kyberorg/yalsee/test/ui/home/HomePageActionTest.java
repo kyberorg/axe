@@ -234,7 +234,7 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void linkWithSpacesShouldBeTrimmedAndSaved() {
-        HomePageObject.pasteValueInFormAndSubmitIt(" quay.io/kyberorg/yalsee-base");
+        HomePageObject.pasteValueInFormAndSubmitIt(" https://quay.io/kyberorg/yalsee-base");
 
         SelenideElement shortLink = ResultArea.RESULT_LINK;
         $(shortLink).shouldBe(visible);
@@ -249,6 +249,7 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void protocolSelectorHasNoDefaultOption() {
+        HomePageObject.pasteValueInFormAndSubmitIt("kv.ee");
         MainArea.ProtocolSelector.HTTPS_OPTION.shouldNotBe(selected);
         MainArea.ProtocolSelector.HTTP_OPTION.shouldNotBe(selected);
         MainArea.ProtocolSelector.FTP_OPTION.shouldNotBe(selected);

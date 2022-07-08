@@ -35,11 +35,11 @@ public final class HomePageObject {
             public static final SelenideElement ERROR_MESSAGE = $("#error-message-vaadin-radio-group-1");
             public static final ElementsCollection OPTIONS = SELECTOR.$$("vaadin-radio-button");
             public static final SelenideElement HTTPS_OPTION =
-                    $x("//vaadin-radio-button[.//*[@id='vaadin-radio-button-4']]");
+                    $x("//vaadin-radio-button[.//*[@value='1']]");
             public static final SelenideElement HTTP_OPTION =
-                    $x("//vaadin-radio-button[.//*[@id='vaadin-radio-button-5']]");
+                    $x("//vaadin-radio-button[.//*[@value='2']]");
             public static final SelenideElement FTP_OPTION =
-                    $x("//vaadin-radio-button[.//*[@id='vaadin-radio-button-6']]");
+                    $x("//vaadin-radio-button[.//*[@value='3']]");
         }
 
         public static final SelenideElement DESCRIPTION_ACCORDION =

@@ -146,7 +146,8 @@ public final class UrlUtils {
      */
     public static boolean hasProtocol(final String url) {
         try {
-            URI uri = new URI(replaceSpacesInUrl(url));
+            if (StringUtils.isBlank(url)) return false;
+            URI uri = new URI(replaceSpacesInUrl(url.trim()));
             //just because parser parses hostname as scheme when ports present
             return uri.getScheme() != null && url.contains("://");
 

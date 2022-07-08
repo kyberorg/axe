@@ -144,7 +144,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
         MainArea.ProtocolSelector.SELECTOR.shouldBe(visible);
         MainArea.ProtocolSelector.LABEL.shouldBe(visible);
         MainArea.ProtocolSelector.LABEL.shouldHave(text("Protocol"));
-        MainArea.ProtocolSelector.ERROR_MESSAGE.shouldNotBe(visible);
+        MainArea.ProtocolSelector.ERROR_MESSAGE.shouldBe(visible);
     }
 
     /**
@@ -152,6 +152,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void protocolSelectorHasThreeOptions() {
+        HomePageObject.pasteValueInFormAndSubmitIt("kv.ee");
         MainArea.ProtocolSelector.OPTIONS.shouldHave(size(App.THREE));
         MainArea.ProtocolSelector.HTTPS_OPTION.shouldBe(visible);
         MainArea.ProtocolSelector.HTTPS_OPTION.shouldHave(text("https://"));
