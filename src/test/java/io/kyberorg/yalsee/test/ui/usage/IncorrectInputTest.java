@@ -44,7 +44,7 @@ public class IncorrectInputTest extends SelenideTest {
 
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text(CANNOT_EMPTY_TEXT));
-        formIsClearedResultAndQRCodeAreNotVisible();
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
     }
 
     /**
@@ -77,7 +77,7 @@ public class IncorrectInputTest extends SelenideTest {
     public void shortVariantOfNotUrlInput() {
         HomePageObject.pasteValueInFormAndSubmitIt("g&%g");
 
-        formIsClearedResultAndQRCodeAreNotVisible();
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
@@ -90,7 +90,7 @@ public class IncorrectInputTest extends SelenideTest {
     public void longVariantOfNotUrlInput() {
         HomePageObject.pasteValueInFormAndSubmitIt("veryLongStringWhichIsNotURL%&");
 
-        formIsClearedResultAndQRCodeAreNotVisible();
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
@@ -103,7 +103,7 @@ public class IncorrectInputTest extends SelenideTest {
     public void urlWithSpacesShallNotPass() {
         HomePageObject.pasteValueInFormAndSubmitIt("https://site with spaces.com");
 
-        formIsClearedResultAndQRCodeAreNotVisible();
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text(UrlExtraValidator.URL_NOT_VALID));
     }
@@ -116,7 +116,7 @@ public class IncorrectInputTest extends SelenideTest {
     public void urlWithSpecialCharsShallNotPass() {
         HomePageObject.pasteValueInFormAndSubmitIt("http://f%&k.com");
 
-        formIsClearedResultAndQRCodeAreNotVisible();
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text(MALFORMED_URL_TEXT));
     }
@@ -128,7 +128,7 @@ public class IncorrectInputTest extends SelenideTest {
     @Test
     public void urlWithBadProtocolShallNotPass() {
         HomePageObject.pasteValueInFormAndSubmitIt("file:///etc/passwd");
-        formIsClearedResultAndQRCodeAreNotVisible();
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text("protocol not supported"));
     }
@@ -139,8 +139,8 @@ public class IncorrectInputTest extends SelenideTest {
      */
     @Test
     public void urlSingleLayerDomainLinksAreNotAllowed() {
-        HomePageObject.pasteValueInFormAndSubmitIt("localhost");
-        formIsClearedResultAndQRCodeAreNotVisible();
+        HomePageObject.pasteValueInFormAndSubmitIt("http://localhost");
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text(NOT_ALLOWED_TEXT));
     }
@@ -151,8 +151,8 @@ public class IncorrectInputTest extends SelenideTest {
      */
     @Test
     public void urlSingleDomainLinksAreNotAllowed() {
-        HomePageObject.pasteValueInFormAndSubmitIt("localhost/ff.ff");
-        formIsClearedResultAndQRCodeAreNotVisible();
+        HomePageObject.pasteValueInFormAndSubmitIt("http://localhost/ff.ff");
+        linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         ERROR_TEXT.shouldHave(text(NOT_ALLOWED_TEXT));
     }
@@ -163,10 +163,9 @@ public class IncorrectInputTest extends SelenideTest {
         ERROR_BUTTON.shouldBe(visible);
     }
 
-    private void formIsClearedResultAndQRCodeAreNotVisible() {
+    private void linkIsNotSavedAndResultAndQRCodeAreNotVisible() {
         RESULT_AREA.shouldNotBe(visible);
         QR_CODE_AREA.shouldNotBe(visible);
-        LONG_URL_INPUT.shouldBe(empty);
     }
 
 }

@@ -36,6 +36,10 @@ body {
 .joint-area {
     margin-top: -1em;
 }
+/* Protocol Selector should be closer to input */
+#protocolSelector {
+    padding-top: 0;
+}
 
 /* Font size for Short Link in Result Area */
 #shortLink {

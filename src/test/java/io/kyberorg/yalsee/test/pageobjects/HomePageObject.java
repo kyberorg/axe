@@ -1,13 +1,13 @@
 package io.kyberorg.yalsee.test.pageobjects;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.utils.vaadin.elements.TextFieldElement;
 import io.kyberorg.yalsee.ui.pages.home.HomePage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbol;
 
@@ -28,6 +28,20 @@ public final class HomePageObject {
                 TextFieldElement.byCss("#" + HomePage.IDs.INPUT).getLabel();
         public static final SelenideElement LONG_URL_INPUT =
                 TextFieldElement.byCss("#" + HomePage.IDs.INPUT).getInput();
+
+        public static class ProtocolSelector {
+            public static final SelenideElement SELECTOR = $("#protocolSelector");
+            public static final SelenideElement LABEL = $("#label-vaadin-radio-group-1");
+            public static final SelenideElement ERROR_MESSAGE = $("#error-message-vaadin-radio-group-1");
+            public static final ElementsCollection OPTIONS = SELECTOR.$$("vaadin-radio-button");
+            public static final SelenideElement HTTPS_OPTION =
+                    $x("//vaadin-radio-button[.//*[@value='1']]");
+            public static final SelenideElement HTTP_OPTION =
+                    $x("//vaadin-radio-button[.//*[@value='2']]");
+            public static final SelenideElement FTP_OPTION =
+                    $x("//vaadin-radio-button[.//*[@value='3']]");
+        }
+
         public static final SelenideElement DESCRIPTION_ACCORDION =
                 $("#" + HomePage.IDs.DESCRIPTION_ACCORDION);
         public static final SelenideElement DESCRIPTION_ACCORDION_PANEL =
@@ -169,5 +183,12 @@ public final class HomePageObject {
      */
     public static String getSavedUrl() {
         return ResultArea.RESULT_LINK.getText();
+    }
+
+    /**
+     * Cleans input field.
+     */
+    public static void cleanInput() {
+        MainArea.LONG_URL_INPUT.setValue("");
     }
 }
