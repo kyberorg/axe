@@ -307,7 +307,9 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
 
-        if (longUrl != null) { longUrl = longUrl.trim();}
+        if (longUrl != null) {
+            longUrl = longUrl.trim();
+        }
 
         if (StringUtils.isBlank(longUrl)) {
             String errorMessage = "Long URL cannot be empty";
@@ -493,7 +495,9 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private void onInputChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
         String longLink = input.getValue();
-        if (longLink != null) { longLink = longLink.trim();}
+        if (longLink != null) {
+            longLink = longLink.trim();
+        }
         if (StringUtils.isNotBlank(longLink)) {
             try {
                 boolean hasProtocol = UrlUtils.hasProtocol(longLink);
