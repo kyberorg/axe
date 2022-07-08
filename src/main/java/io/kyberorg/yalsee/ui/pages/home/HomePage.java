@@ -307,21 +307,23 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         String linkDescription = descriptionInput.getValue();
         log.debug("{} Got long URL: {}", TAG, longUrl);
 
+        if (longUrl != null) { longUrl = longUrl.trim();}
+
         if (StringUtils.isBlank(longUrl)) {
             String errorMessage = "Long URL cannot be empty";
             showError(errorMessage);
             isFormValid = false;
         } else {
             try {
-                boolean hasProtocol = UrlUtils.hasProtocol(longUrl.trim());
+                boolean hasProtocol = UrlUtils.hasProtocol(longUrl);
                 if (!hasProtocol) {
                     String selectedProtocol = protocolSelector.getValue();
                     if (StringUtils.isNotBlank(selectedProtocol)) {
-                        longUrl = selectedProtocol + longUrl.trim();
+                        longUrl = selectedProtocol + longUrl;
                     } else {
-                        protocolSelector.setVisible(true);
-                        protocolSelector.setErrorMessage("Please select protocol");
                         protocolSelector.setInvalid(true);
+                        protocolSelector.setErrorMessage("Please select protocol");
+                        protocolSelector.setVisible(true);
                         isFormValid = false;
                     }
                 }
@@ -336,7 +338,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         if (isFormValid) {
             cleanForm();
             cleanResults();
-            saveLink(longUrl.trim(), linkDescription);
+            saveLink(longUrl, linkDescription);
         } else {
             log.debug("{} Form is not valid", TAG);
         }
@@ -490,7 +492,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     }
 
     private void onInputChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
-        String longLink = event.getValue();
+        String longLink = input.getValue();
+        if (longLink != null) { longLink = longLink.trim();}
         if (StringUtils.isNotBlank(longLink)) {
             try {
                 boolean hasProtocol = UrlUtils.hasProtocol(longLink);
@@ -498,6 +501,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
             } catch (RuntimeException e) {
                 log.debug("{} URL validation failed", TAG);
             }
+        } else {
+            protocolSelector.setVisible(false);
         }
     }
 

@@ -80,7 +80,7 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void saveLinkByClickingEnterAndVerify() {
-        pasteValueInForm("https://vr.fi");
+        HomePageObject.pasteValueInForm("https://vr.fi");
         MainArea.SUBMIT_BUTTON.pressEnter();
 
         //dirty hack to handle double Enter (occurs time to time)
@@ -154,7 +154,7 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void whenLinkAndDescriptionInputsAreEmptyErrorShown() {
-        pasteValueInFormAndSubmitIt("");
+        HomePageObject.pasteValueInFormAndSubmitIt("");
         ErrorModal.ERROR_MODAL.shouldBe(visible);
         closeErrorBoxIfDisplayed();
     }
@@ -189,7 +189,7 @@ public class HomePageActionTest extends SelenideTest {
         String link = "https://vr.fi";
         String description = "Suomen junat";
 
-        pasteValueInForm(link);
+        HomePageObject.pasteValueInForm(link);
         MainArea.DESCRIPTION_ACCORDION.click();
         MainArea.DESCRIPTION_INPUT.setValue(description);
 
@@ -211,7 +211,7 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void whenLinkAndDescriptionInputsAreEmptyFieldsAreCleanedUp() {
-        pasteValueInFormAndSubmitIt("");
+        HomePageObject.pasteValueInFormAndSubmitIt("");
         closeErrorBoxIfDisplayed();
         MainArea.LONG_URL_INPUT.shouldBe(empty);
         MainArea.DESCRIPTION_INPUT.shouldBe(empty);
@@ -223,7 +223,7 @@ public class HomePageActionTest extends SelenideTest {
     @Test
     public void whenLinkIsEmptyAndDescriptionInputIsFilledFieldsAreCleanedUp() {
         MainArea.DESCRIPTION_ACCORDION.click();
-        pasteValueInFormAndSubmitIt("");
+        HomePageObject.pasteValueInFormAndSubmitIt("");
         closeErrorBoxIfDisplayed();
         MainArea.LONG_URL_INPUT.shouldBe(empty);
         MainArea.DESCRIPTION_INPUT.shouldBe(empty);
@@ -340,8 +340,8 @@ public class HomePageActionTest extends SelenideTest {
     }
 
     private void verifyThatHttpKyberorgIoOpened() {
-        HttpKyberorgIo.H1.shouldBe(visible);
-        HttpKyberorgIo.H1.shouldHave(text(HttpKyberorgIo.TITLE_TEXT));
+        HttpKyberorgIo.TITLE.shouldBe(visible);
+        HttpKyberorgIo.TITLE.shouldHave(text(HttpKyberorgIo.TITLE_TEXT));
     }
 
     private void verifyThatRedirectPageOpened() {
