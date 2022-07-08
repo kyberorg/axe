@@ -168,8 +168,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
         descriptionAccordion.add("Link Description (optional)", descriptionInput);
 
-        VerticalLayout mainArea =
-                new VerticalLayout(title, input, protocolSelector, descriptionAccordion, publicAccessBanner, submitButton);
+        VerticalLayout mainArea = new VerticalLayout(title, input, protocolSelector, descriptionAccordion,
+                publicAccessBanner, submitButton);
         mainArea.setId(IDs.MAIN_AREA);
         mainArea.addClassNames("main-area", "border", "large-text");
         return mainArea;
@@ -490,14 +490,14 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
     }
 
-    private void onInputChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+    private void onInputChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
         String longLink = event.getValue();
         if (StringUtils.isNotBlank(longLink)) {
             try {
-                boolean hasProto = UrlUtils.hasProtocol(longLink);
-                protocolSelector.setVisible(!hasProto);
+                boolean hasProtocol = UrlUtils.hasProtocol(longLink);
+                protocolSelector.setVisible(!hasProtocol);
             } catch (RuntimeException e) {
-                showError("Long link is malformed, not URL at all or just protocol not supported yet");
+                log.debug("{} URL validation failed", TAG);
             }
         }
     }

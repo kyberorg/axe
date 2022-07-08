@@ -1,6 +1,5 @@
 package io.kyberorg.yalsee.test.ui.home;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.constants.App;

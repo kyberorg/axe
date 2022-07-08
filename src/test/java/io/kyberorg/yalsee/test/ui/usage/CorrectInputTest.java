@@ -77,15 +77,6 @@ public class CorrectInputTest extends SelenideTest {
         checkExpectedBehavior();
     }
 
-    /**
-     * Stores link without protocol.
-     */
-    @Test
-    public void linkWithoutProtocol() {
-        String link = "www.kv.ee/2992207";
-        HomePageObject.pasteValueInFormAndSubmitIt(link);
-        checkExpectedBehavior();
-    }
 
     /**
      * Correctly stores and uses link from Russian Wiki (one with cyrillic letters).
