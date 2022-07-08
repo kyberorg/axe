@@ -1,7 +1,9 @@
 package io.kyberorg.yalsee.test.ui.home;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
@@ -15,8 +17,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static io.kyberorg.yalsee.test.utils.browser.BrowserUtils.EXTRA_SMALL_SCREEN_MAX_WIDTH_PIXELS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +48,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void errorModalNotExistByDefault() {
-        HomePageObject.ErrorModal.ERROR_MODAL.shouldNot(exist);
+        ErrorModal.ERROR_MODAL.shouldNot(exist);
     }
 
     /**
@@ -52,8 +56,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void mainAreaIsVisible() {
-        HomePageObject.MainArea.MAIN_AREA.should(exist);
-        HomePageObject.MainArea.MAIN_AREA.shouldBe(visible);
+        MainArea.MAIN_AREA.should(exist);
+        MainArea.MAIN_AREA.shouldBe(visible);
     }
 
     /**
@@ -61,8 +65,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void overallAreaIsVisible() {
-        HomePageObject.OverallArea.OVERALL_AREA.should(exist);
-        HomePageObject.OverallArea.OVERALL_AREA.shouldBe(visible);
+        OverallArea.OVERALL_AREA.should(exist);
+        OverallArea.OVERALL_AREA.shouldBe(visible);
     }
 
     /**
@@ -70,7 +74,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void resultAreaIsHidden() {
-        HomePageObject.ResultArea.RESULT_AREA.shouldNotBe(visible);
+        ResultArea.RESULT_AREA.shouldNotBe(visible);
     }
 
     /**
@@ -78,7 +82,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void qrCodeAreaIsHidden() {
-        HomePageObject.QrCodeArea.QR_CODE_AREA.shouldNotBe(visible);
+        QrCodeArea.QR_CODE_AREA.shouldNotBe(visible);
     }
 
     /**
@@ -86,7 +90,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void myLinksNoteAreaIsHidden() {
-        HomePageObject.MyLinksNoteArea.MY_LINKS_NOTE_AREA.shouldNotBe(visible);
+        MyLinksNoteArea.MY_LINKS_NOTE_AREA.shouldNotBe(visible);
     }
 
     /**
@@ -94,8 +98,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void mainAreaHasFieldAndButton() {
-        HomePageObject.MainArea.LONG_URL_INPUT.should(exist);
-        HomePageObject.MainArea.SUBMIT_BUTTON.should(exist);
+        MainArea.LONG_URL_INPUT.should(exist);
+        MainArea.SUBMIT_BUTTON.should(exist);
     }
 
     /**
@@ -103,7 +107,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void formHasOnlyOneButton() {
-        List<SelenideElement> buttons = HomePageObject.MainArea.MAIN_AREA.findAll("vaadin-button");
+        List<SelenideElement> buttons = MainArea.MAIN_AREA.findAll("vaadin-button");
         assertEquals(1, buttons.size(), "Only 1 button expected");
     }
 
@@ -112,8 +116,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void inputAndButtonAreNotDisabled() {
-        HomePageObject.MainArea.LONG_URL_INPUT.shouldBe(enabled);
-        HomePageObject.MainArea.SUBMIT_BUTTON.shouldBe(enabled);
+        MainArea.LONG_URL_INPUT.shouldBe(enabled);
+        MainArea.SUBMIT_BUTTON.shouldBe(enabled);
     }
 
     /**
@@ -121,7 +125,41 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void inputShouldHavePlaceholder() {
-        HomePageObject.MainArea.LONG_URL_INPUT.shouldHave(attribute("placeholder"));
+        MainArea.LONG_URL_INPUT.shouldHave(attribute("placeholder"));
+    }
+
+    /**
+     * Tests that Protocol Selector is not visible by default.
+     */
+    @Test
+    public void protocolSelectorNotVisibleByDefault() {
+        MainArea.ProtocolSelector.SELECTOR.shouldNotBe(visible);
+    }
+
+    /**
+     * Protocol Selector has all needed elements.
+     */
+    @Test
+    public void protocolSelectorHasAllNeededElements() {
+        HomePageObject.pasteValueInFormAndSubmitIt("kv.ee");
+        MainArea.ProtocolSelector.SELECTOR.shouldBe(visible);
+        MainArea.ProtocolSelector.LABEL.shouldBe(visible);
+        MainArea.ProtocolSelector.LABEL.shouldHave(text("Protocol"));
+        MainArea.ProtocolSelector.ERROR_MESSAGE.shouldNotBe(visible);
+    }
+
+    /**
+     * Protocol Selector has 3 options, they all visible and have needed text.
+     */
+    @Test
+    public void protocolSelectorHasThreeOptions() {
+        MainArea.ProtocolSelector.OPTIONS.shouldHave(size(App.THREE));
+        MainArea.ProtocolSelector.HTTPS_OPTION.shouldBe(visible);
+        MainArea.ProtocolSelector.HTTPS_OPTION.shouldHave(text("https://"));
+        MainArea.ProtocolSelector.HTTP_OPTION.shouldBe(visible);
+        MainArea.ProtocolSelector.HTTP_OPTION.shouldHave(text("http://"));
+        MainArea.ProtocolSelector.FTP_OPTION.shouldBe(visible);
+        MainArea.ProtocolSelector.FTP_OPTION.shouldHave(text("ftp://"));
     }
 
     /**
@@ -129,8 +167,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void descriptionAccordionExistsAndVisible() {
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.should(exist);
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldBe(visible);
+        MainArea.DESCRIPTION_ACCORDION.should(exist);
+        MainArea.DESCRIPTION_ACCORDION.shouldBe(visible);
     }
 
     /**
@@ -138,7 +176,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void descriptionAccordionClosedByDefault() {
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
+        MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
     }
 
     /**
@@ -146,8 +184,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void descriptionAccordionHasWordsDescriptionAndOptional() {
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(text("Description"));
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(text("optional"));
+        MainArea.DESCRIPTION_ACCORDION.shouldHave(text("Description"));
+        MainArea.DESCRIPTION_ACCORDION.shouldHave(text("optional"));
     }
 
     /**
@@ -155,7 +193,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void descriptionInputIsHiddenByDefault() {
-        HomePageObject.MainArea.DESCRIPTION_INPUT_ELEMENT.shouldBe(hidden);
+        MainArea.DESCRIPTION_INPUT_ELEMENT.shouldBe(hidden);
     }
 
     /**
@@ -171,7 +209,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void mainDivShouldHaveTitle() {
-        HomePageObject.MainArea.TITLE.should(exist);
+        MainArea.TITLE.should(exist);
     }
 
     /**
@@ -179,7 +217,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void titleShouldBeH2() {
-        assertEquals("h2", HomePageObject.MainArea.TITLE.getTagName().toLowerCase());
+        assertEquals("h2", MainArea.TITLE.getTagName().toLowerCase());
     }
 
     /**
@@ -189,9 +227,9 @@ public class HomePageVisibleStateTest extends SelenideTest {
     public void titleShouldContainWordLong() {
         BrowserSize browserSize = BrowserUtils.getBrowserSize();
         if (browserSize.getWidth() > EXTRA_SMALL_SCREEN_MAX_WIDTH_PIXELS) {
-            HomePageObject.MainArea.TITLE.shouldHave(text("long"));
+            MainArea.TITLE.shouldHave(text("long"));
         } else {
-            HomePageObject.MainArea.TITLE.shouldNot(have(text("long")));
+            MainArea.TITLE.shouldNot(have(text("long")));
         }
     }
 
@@ -200,7 +238,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void titleShouldHaveNoExtraSpaceBelow() {
-        HomePageObject.MainArea.TITLE.shouldHave(cssClass("compact-title"));
+        MainArea.TITLE.shouldHave(cssClass("compact-title"));
     }
 
     /**
@@ -208,8 +246,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void titleShouldHaveWordsLinksAndShort() {
-        HomePageObject.MainArea.TITLE.shouldHave(text("links"));
-        HomePageObject.MainArea.TITLE.shouldHave(text("short"));
+        MainArea.TITLE.shouldHave(text("links"));
+        MainArea.TITLE.shouldHave(text("short"));
     }
 
     /**
@@ -217,7 +255,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void inputFieldShouldBeAfterTitle() {
-        SelenideElement nextElement = HomePageObject.MainArea.TITLE.sibling(0);
+        SelenideElement nextElement = MainArea.TITLE.sibling(0);
         nextElement.should(exist);
         nextElement.shouldHave(id(HomePage.IDs.INPUT));
     }
@@ -227,8 +265,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void inputFieldHasLabel() {
-        HomePageObject.MainArea.LONG_URL_INPUT_LABEL.should(exist);
-        String labelText = HomePageObject.MainArea.LONG_URL_INPUT_LABEL.getText();
+        MainArea.LONG_URL_INPUT_LABEL.should(exist);
+        String labelText = MainArea.LONG_URL_INPUT_LABEL.getText();
         Assertions.assertTrue(StringUtils.isNotBlank(labelText));
     }
 
@@ -237,8 +275,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void buttonIsPrimaryAndHasText() {
-        HomePageObject.MainArea.SUBMIT_BUTTON.shouldHave(attribute("theme", "primary"));
-        HomePageObject.MainArea.SUBMIT_BUTTON.shouldHave(text("Shorten it!"));
+        MainArea.SUBMIT_BUTTON.shouldHave(attribute("theme", "primary"));
+        MainArea.SUBMIT_BUTTON.shouldHave(text("Shorten it!"));
     }
 
     /**
@@ -246,9 +284,9 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void publicAccessBannerIsPresentAndHasNeededText() {
-        HomePageObject.MainArea.BANNER.should(exist);
-        HomePageObject.MainArea.BANNER.shouldBe(visible);
-        HomePageObject.MainArea.BANNER.shouldHave(text("public"));
+        MainArea.BANNER.should(exist);
+        MainArea.BANNER.shouldBe(visible);
+        MainArea.BANNER.shouldHave(text("public"));
     }
 
     /**
@@ -256,9 +294,9 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void overallLinksTextExistsAndDisplayed() {
-        HomePageObject.OverallArea.OVERALL_LINKS_TEXT.should(exist);
-        HomePageObject.OverallArea.OVERALL_LINKS_TEXT.shouldBe(visible);
-        HomePageObject.OverallArea.OVERALL_LINKS_TEXT.shouldHave(text("Yalsee already saved"));
+        OverallArea.OVERALL_LINKS_TEXT.should(exist);
+        OverallArea.OVERALL_LINKS_TEXT.shouldBe(visible);
+        OverallArea.OVERALL_LINKS_TEXT.shouldHave(text("Yalsee already saved"));
     }
 
     /**
@@ -266,10 +304,10 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void overallLinksNumberExistsAndNumber() {
-        HomePageObject.OverallArea.OVERALL_LINKS_NUMBER.should(exist);
-        HomePageObject.OverallArea.OVERALL_LINKS_NUMBER.shouldBe(visible);
+        OverallArea.OVERALL_LINKS_NUMBER.should(exist);
+        OverallArea.OVERALL_LINKS_NUMBER.shouldBe(visible);
 
-        String numberText = HomePageObject.OverallArea.OVERALL_LINKS_NUMBER.getText();
+        String numberText = OverallArea.OVERALL_LINKS_NUMBER.getText();
         try {
             int numberOfSavedLinks = Integer.parseInt(numberText);
             Assertions.assertTrue(numberOfSavedLinks >= 0);

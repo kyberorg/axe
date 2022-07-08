@@ -6,9 +6,13 @@ import io.kyberorg.yalsee.test.pageobjects.MyLinksViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.RedirectPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
+import io.kyberorg.yalsee.test.pageobjects.external.HttpKyberorgIo;
 import io.kyberorg.yalsee.test.pageobjects.external.QuayIo;
 import io.kyberorg.yalsee.test.pageobjects.external.VR;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
+import io.kyberorg.yalsee.ui.pages.home.HomePage;
+import liquibase.pro.packaged.M;
+import org.jboss.jandex.Main;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbol;
 
@@ -41,8 +46,8 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
-        HomePageObject.MainArea.LONG_URL_INPUT.should(exist);
-        HomePageObject.MainArea.SUBMIT_BUTTON.should(exist);
+        MainArea.LONG_URL_INPUT.should(exist);
+        MainArea.SUBMIT_BUTTON.should(exist);
     }
 
     /**
@@ -51,7 +56,7 @@ public class HomePageActionTest extends SelenideTest {
     @Test
     public void saveLinkAndClickOnResult() {
         HomePageObject.pasteValueInFormAndSubmitIt("https://vr.fi");
-        SelenideElement shortLink = HomePageObject.ResultArea.RESULT_LINK;
+        SelenideElement shortLink = ResultArea.RESULT_LINK;
 
         $(shortLink).shouldBe(visible);
         shortLink.click();
@@ -65,7 +70,7 @@ public class HomePageActionTest extends SelenideTest {
     @Test
     public void saveLinkAndCopyValueAndOpenIt() {
         HomePageObject.pasteValueInFormAndSubmitIt("https://vr.fi");
-        SelenideElement shortLink = HomePageObject.ResultArea.RESULT_LINK;
+        SelenideElement shortLink = ResultArea.RESULT_LINK;
         $(shortLink).shouldBe(visible);
         String shortUrl = shortLink.getText();
 
@@ -78,13 +83,13 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void saveLinkByClickingEnterAndVerify() {
-        HomePageObject.pasteValueInForm("https://vr.fi");
-        HomePageObject.MainArea.SUBMIT_BUTTON.pressEnter();
+        pasteValueInForm("https://vr.fi");
+        MainArea.SUBMIT_BUTTON.pressEnter();
 
         //dirty hack to handle double Enter (occurs time to time)
         closeErrorBoxIfDisplayed();
 
-        SelenideElement shortLink = HomePageObject.ResultArea.RESULT_LINK;
+        SelenideElement shortLink = ResultArea.RESULT_LINK;
         $(shortLink).shouldBe(visible);
         String shortUrl = shortLink.getText();
 
@@ -116,9 +121,9 @@ public class HomePageActionTest extends SelenideTest {
     @Test
     public void descriptionInputHasNotEmptyPlaceholder() {
         //open it
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldHave(attribute("placeholder"));
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.DESCRIPTION_INPUT.shouldBe(visible);
+        MainArea.DESCRIPTION_INPUT.shouldHave(attribute("placeholder"));
     }
 
     /**
@@ -126,10 +131,10 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void accordionOpensAndDescriptionInputBecomesVisible() {
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.shouldHave(attribute("opened"));
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(visible);
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(enabled);
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.DESCRIPTION_ACCORDION.shouldHave(attribute("opened"));
+        MainArea.DESCRIPTION_INPUT.shouldBe(visible);
+        MainArea.DESCRIPTION_INPUT.shouldBe(enabled);
     }
 
     /**
@@ -152,8 +157,8 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void whenLinkAndDescriptionInputsAreEmptyErrorShown() {
-        HomePageObject.pasteValueInFormAndSubmitIt("");
-        HomePageObject.ErrorModal.ERROR_MODAL.shouldBe(visible);
+        pasteValueInFormAndSubmitIt("");
+        ErrorModal.ERROR_MODAL.shouldBe(visible);
         closeErrorBoxIfDisplayed();
     }
 
@@ -162,12 +167,12 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void whenLinkInputIsEmptyAndDescriptionInputFilledErrorShown() {
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_INPUT.setValue("Some description");
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.DESCRIPTION_INPUT.setValue("Some description");
 
-        HomePageObject.MainArea.SUBMIT_BUTTON.click();
+        MainArea.SUBMIT_BUTTON.click();
 
-        HomePageObject.ErrorModal.ERROR_MODAL.shouldBe(visible);
+        ErrorModal.ERROR_MODAL.shouldBe(visible);
         closeErrorBoxIfDisplayed();
     }
 
@@ -187,11 +192,11 @@ public class HomePageActionTest extends SelenideTest {
         String link = "https://vr.fi";
         String description = "Suomen junat";
 
-        HomePageObject.pasteValueInForm(link);
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.MainArea.DESCRIPTION_INPUT.setValue(description);
+        pasteValueInForm(link);
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.DESCRIPTION_INPUT.setValue(description);
 
-        HomePageObject.MainArea.SUBMIT_BUTTON.click();
+        MainArea.SUBMIT_BUTTON.click();
 
         open("/myLinks");
         SelenideElement descriptionCell =
@@ -209,10 +214,10 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void whenLinkAndDescriptionInputsAreEmptyFieldsAreCleanedUp() {
-        HomePageObject.pasteValueInFormAndSubmitIt("");
+        pasteValueInFormAndSubmitIt("");
         closeErrorBoxIfDisplayed();
-        HomePageObject.MainArea.LONG_URL_INPUT.shouldBe(empty);
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(empty);
+        MainArea.LONG_URL_INPUT.shouldBe(empty);
+        MainArea.DESCRIPTION_INPUT.shouldBe(empty);
     }
 
     /**
@@ -220,11 +225,11 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void whenLinkIsEmptyAndDescriptionInputIsFilledFieldsAreCleanedUp() {
-        HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
-        HomePageObject.pasteValueInFormAndSubmitIt("");
+        MainArea.DESCRIPTION_ACCORDION.click();
+        pasteValueInFormAndSubmitIt("");
         closeErrorBoxIfDisplayed();
-        HomePageObject.MainArea.LONG_URL_INPUT.shouldBe(empty);
-        HomePageObject.MainArea.DESCRIPTION_INPUT.shouldBe(empty);
+        MainArea.LONG_URL_INPUT.shouldBe(empty);
+        MainArea.DESCRIPTION_INPUT.shouldBe(empty);
     }
 
     /**
@@ -234,12 +239,97 @@ public class HomePageActionTest extends SelenideTest {
     public void linkWithSpacesShouldBeTrimmedAndSaved() {
         HomePageObject.pasteValueInFormAndSubmitIt(" quay.io/kyberorg/yalsee-base");
 
-        SelenideElement shortLink = HomePageObject.ResultArea.RESULT_LINK;
+        SelenideElement shortLink = ResultArea.RESULT_LINK;
         $(shortLink).shouldBe(visible);
         String shortUrl = shortLink.getText();
 
         open(shortUrl + addRedirectPageBypassSymbol());
         verifyThatQuayIoOpened();
+    }
+
+    /**
+     * Tests that there is no default option within protocol selector aka no option selected.
+     */
+    @Test
+    public void protocolSelectorHasNoDefaultOption() {
+        MainArea.ProtocolSelector.HTTPS_OPTION.shouldNotBe(selected);
+        MainArea.ProtocolSelector.HTTP_OPTION.shouldNotBe(selected);
+        MainArea.ProtocolSelector.FTP_OPTION.shouldNotBe(selected);
+    }
+
+    /**
+     * Link not saved when no Protocol selected.
+     */
+    @Test
+    public void noProtocolSelected_linkNotSaved() {
+        HomePageObject.pasteValueInFormAndSubmitIt("kv.ee");
+        ResultArea.RESULT_AREA.shouldNotBe(visible);
+    }
+
+    /**
+     * No Protocol selected - Error Message shown.
+     */
+    @Test
+    public void noProtocolSelected_ErrorMessageShown() {
+        HomePageObject.pasteValueInFormAndSubmitIt("kv.ee");
+        MainArea.ProtocolSelector.ERROR_MESSAGE.shouldBe(visible);
+        MainArea.ProtocolSelector.ERROR_MESSAGE.shouldHave(text("Please select protocol"));
+    }
+
+    /**
+     * When HTTPS protocol selector - link with HTTPS saved.
+     */
+    @Test
+    public void whenHttpsProtocolSelected_linkWithHttpsSaved() {
+        HomePageObject.pasteValueInForm("vr.fi");
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.ProtocolSelector.HTTPS_OPTION.click();
+        MainArea.SUBMIT_BUTTON.click();
+        String savedLink = HomePageObject.getSavedUrl();
+        open(savedLink + addRedirectPageBypassSymbol());
+        verifyThatVROpened();
+    }
+
+    /**
+     * When HTTP protocol selector - link with HTTP saved.
+     */
+    @Test
+    public void whenHttpProtocolSelected_linkWithHttpSaved() {
+        HomePageObject.pasteValueInForm("http.kyberorg.io");
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.ProtocolSelector.HTTP_OPTION.click();
+        MainArea.SUBMIT_BUTTON.click();
+        String savedLink = HomePageObject.getSavedUrl();
+        open(savedLink + addRedirectPageBypassSymbol());
+        verifyThatHttpKyberorgIoOpened();
+    }
+
+    /**
+     * When FTP protocol selector - link with FTP saved.
+     */
+    @Test
+    public void whenFtpProtocolSelected_linkWithFtpSaved() {
+        HomePageObject.pasteValueInForm("ftp.gwdg.de/pub/linux/manjaro/");
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.ProtocolSelector.FTP_OPTION.click();
+        MainArea.SUBMIT_BUTTON.click();
+        String savedLink = HomePageObject.getSavedUrl();
+        open(savedLink);
+        RedirectPageObject.Links.TARGET_LINK.shouldHave(text("ftp://"));
+    }
+
+    /**
+     * When protocol added to input - protocol selector should close.
+     */
+    @Test
+    public void protocolAdded_protocolSelectorClosed() {
+        HomePageObject.pasteValueInForm("vr.fi");
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.ProtocolSelector.SELECTOR.shouldBe(visible);
+        HomePageObject.cleanInput();
+        HomePageObject.pasteValueInForm("https://vr.fi");
+        MainArea.DESCRIPTION_ACCORDION.click();
+        MainArea.ProtocolSelector.SELECTOR.shouldNotBe(visible);
     }
 
     private void verifyThatVROpened() {
@@ -249,6 +339,11 @@ public class HomePageActionTest extends SelenideTest {
     private void verifyThatQuayIoOpened() {
         QuayIo.LOGO.should(exist);
         QuayIo.LOGO.shouldBe(visible);
+    }
+
+    private void verifyThatHttpKyberorgIoOpened() {
+        HttpKyberorgIo.H1.shouldBe(visible);
+        HttpKyberorgIo.H1.shouldHave(text(HttpKyberorgIo.TITLE_TEXT));
     }
 
     private void verifyThatRedirectPageOpened() {
@@ -261,8 +356,8 @@ public class HomePageActionTest extends SelenideTest {
     }
 
     private void closeErrorBoxIfDisplayed() {
-        if (HomePageObject.ErrorModal.ERROR_MODAL.isDisplayed()) {
-            HomePageObject.ErrorModal.ERROR_BUTTON.click();
+        if (ErrorModal.ERROR_MODAL.isDisplayed()) {
+            ErrorModal.ERROR_BUTTON.click();
         }
     }
 }
