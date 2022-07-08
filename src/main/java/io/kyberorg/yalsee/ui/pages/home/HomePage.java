@@ -336,7 +336,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         if (isFormValid) {
             cleanForm();
             cleanResults();
-            saveLink(longUrl, linkDescription);
+            saveLink(longUrl.trim(), linkDescription);
         } else {
             log.debug("{} Form is not valid", TAG);
         }
