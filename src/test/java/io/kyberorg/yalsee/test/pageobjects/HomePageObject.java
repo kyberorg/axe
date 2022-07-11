@@ -48,7 +48,7 @@ public final class HomePageObject {
         public static final SelenideElement DESCRIPTION_ACCORDION =
                 $("#" + HomePage.IDs.DESCRIPTION_ACCORDION);
 
-        public final static class DescriptionInput {
+        public static class DescriptionInput {
             private static final String DESCRIPTION_INPUT_SELECTOR = "#descriptionInput";
             public static final SelenideElement ELEMENT = $(DESCRIPTION_INPUT_SELECTOR);
             public static final SelenideElement INPUT = TextFieldElement.byCss(DESCRIPTION_INPUT_SELECTOR).getInput();
