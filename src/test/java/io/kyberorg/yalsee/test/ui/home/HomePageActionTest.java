@@ -43,7 +43,7 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void urlWithJustSlashWillOpenFrontPage() {
-        MainArea.LONG_URL_INPUT.should(exist);
+        MainArea.LongURLInput.INPUT.should(exist);
         MainArea.SUBMIT_BUTTON.should(exist);
     }
 
@@ -119,8 +119,8 @@ public class HomePageActionTest extends SelenideTest {
     public void descriptionInputHasNotEmptyPlaceholder() {
         //open it
         MainArea.DESCRIPTION_ACCORDION.click();
-        MainArea.DESCRIPTION_INPUT.shouldBe(visible);
-        MainArea.DESCRIPTION_INPUT.shouldHave(attribute("placeholder"));
+        MainArea.DescriptionInput.INPUT.shouldBe(visible);
+        MainArea.DescriptionInput.INPUT.shouldHave(attribute("placeholder"));
     }
 
     /**
@@ -130,8 +130,8 @@ public class HomePageActionTest extends SelenideTest {
     public void accordionOpensAndDescriptionInputBecomesVisible() {
         MainArea.DESCRIPTION_ACCORDION.click();
         MainArea.DESCRIPTION_ACCORDION.shouldHave(attribute("opened"));
-        MainArea.DESCRIPTION_INPUT.shouldBe(visible);
-        MainArea.DESCRIPTION_INPUT.shouldBe(enabled);
+        MainArea.DescriptionInput.INPUT.shouldBe(visible);
+        MainArea.DescriptionInput.INPUT.shouldBe(enabled);
     }
 
     /**
@@ -165,7 +165,7 @@ public class HomePageActionTest extends SelenideTest {
     @Test
     public void whenLinkInputIsEmptyAndDescriptionInputFilledErrorShown() {
         MainArea.DESCRIPTION_ACCORDION.click();
-        MainArea.DESCRIPTION_INPUT.setValue("Some description");
+        MainArea.DescriptionInput.INPUT.setValue("Some description");
 
         MainArea.SUBMIT_BUTTON.click();
 
@@ -191,7 +191,7 @@ public class HomePageActionTest extends SelenideTest {
 
         HomePageObject.pasteValueInForm(link);
         MainArea.DESCRIPTION_ACCORDION.click();
-        MainArea.DESCRIPTION_INPUT.setValue(description);
+        MainArea.DescriptionInput.INPUT.setValue(description);
 
         MainArea.SUBMIT_BUTTON.click();
 
@@ -213,8 +213,8 @@ public class HomePageActionTest extends SelenideTest {
     public void whenLinkAndDescriptionInputsAreEmptyFieldsAreCleanedUp() {
         HomePageObject.pasteValueInFormAndSubmitIt("");
         closeErrorBoxIfDisplayed();
-        MainArea.LONG_URL_INPUT.shouldBe(empty);
-        MainArea.DESCRIPTION_INPUT.shouldBe(empty);
+        MainArea.LongURLInput.INPUT.shouldBe(empty);
+        MainArea.DescriptionInput.INPUT.shouldBe(empty);
     }
 
     /**
@@ -225,8 +225,8 @@ public class HomePageActionTest extends SelenideTest {
         MainArea.DESCRIPTION_ACCORDION.click();
         HomePageObject.pasteValueInFormAndSubmitIt("");
         closeErrorBoxIfDisplayed();
-        MainArea.LONG_URL_INPUT.shouldBe(empty);
-        MainArea.DESCRIPTION_INPUT.shouldBe(empty);
+        MainArea.LongURLInput.INPUT.shouldBe(empty);
+        MainArea.DescriptionInput.INPUT.shouldBe(empty);
     }
 
     /**
@@ -328,6 +328,66 @@ public class HomePageActionTest extends SelenideTest {
         HomePageObject.pasteValueInForm("https://vr.fi");
         MainArea.DESCRIPTION_ACCORDION.click();
         MainArea.ProtocolSelector.SELECTOR.shouldNotBe(visible);
+    }
+
+    /**
+     * Test that clear button appears when there is text in input field.
+     */
+    @Test
+    public void whenTextInLongURLInput_clearButtonAppears() {
+        HomePageObject.pasteValueInForm("kv.ee");
+        MainArea.LongURLInput.CLEAR_BUTTON.shouldBe(visible);
+    }
+
+    /**
+     * Clear button actually clears input.
+     */
+    @Test
+    public void clearButtonClearsInput() {
+        HomePageObject.pasteValueInForm("kv.ee");
+        MainArea.LongURLInput.CLEAR_BUTTON.click();
+        MainArea.LongURLInput.INPUT.shouldBe(empty);
+    }
+
+    /**
+     * Test that clear button disappears when text cleared.
+     */
+    @Test
+    public void whenTextCleared_clearButtonShouldDisappear() {
+        HomePageObject.pasteValueInForm("kv.ee");
+        MainArea.LongURLInput.CLEAR_BUTTON.shouldBe(visible);
+        HomePageObject.cleanInput();
+        MainArea.LongURLInput.CLEAR_BUTTON.shouldNotBe(visible);
+    }
+
+    /**
+     * Test that clear button appears when there is text in input field.
+     */
+    @Test
+    public void whenTextInDescriptionInput_clearButtonAppears() {
+        HomePageObject.fillInDescription("Kinnisvaraportaal Nr 1");
+        MainArea.DescriptionInput.CLEAR_BUTTON.shouldBe(visible);
+    }
+
+    /**
+     * Description Clear button actually clears description input.
+     */
+    @Test
+    public void descriptionClearButtonClearsDescription() {
+        HomePageObject.fillInDescription("Kinnisvaraportaal Nr 1");
+        MainArea.DescriptionInput.CLEAR_BUTTON.click();
+        MainArea.DescriptionInput.INPUT.shouldBe(empty);
+    }
+
+    /**
+     * Test that clear button disappears when text cleared.
+     */
+    @Test
+    public void whenDescriptionTextCleared_clearButtonShouldDisappear() {
+        HomePageObject.fillInDescription("Kinnisvaraportaal Nr 1");
+        MainArea.DescriptionInput.CLEAR_BUTTON.shouldBe(visible);
+        HomePageObject.cleanDescription();
+        MainArea.DescriptionInput.CLEAR_BUTTON.shouldNotBe(visible);
     }
 
     private void verifyThatVROpened() {

@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.usage;
 
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LongURLInput;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
-import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MyLinksNoteArea.*;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
@@ -136,7 +136,7 @@ public class CorrectInputTest extends SelenideTest {
         assert myLinksNoteLinkHref != null;
         assertTrue(myLinksNoteLinkHref.endsWith(myLinksPagePath), "link in 'href' should lead to MyLinks page");
 
-        LONG_URL_INPUT.shouldBe(empty);
+        LongURLInput.INPUT.shouldBe(empty);
 
         ERROR_MODAL.shouldNot(exist);
     }
