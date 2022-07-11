@@ -24,10 +24,13 @@ public final class HomePageObject {
     public static class MainArea {
         public static final SelenideElement MAIN_AREA = $("#" + HomePage.IDs.MAIN_AREA);
         public static final SelenideElement TITLE = $("#" + HomePage.IDs.TITLE);
-        public static final SelenideElement LONG_URL_INPUT_LABEL =
-                TextFieldElement.byCss("#" + HomePage.IDs.INPUT).getLabel();
-        public static final SelenideElement LONG_URL_INPUT =
-                TextFieldElement.byCss("#" + HomePage.IDs.INPUT).getInput();
+
+        public static class LongURLInput {
+            private static final String INPUT_SELECTOR = "#longUrlInput";
+            public static final SelenideElement LABEL = TextFieldElement.byCss(INPUT_SELECTOR).getLabel();
+            public static final SelenideElement INPUT = TextFieldElement.byCss(INPUT_SELECTOR).getInput();
+            public static final SelenideElement CLEAR_BUTTON = TextFieldElement.byCss(INPUT_SELECTOR).getClearButton();
+        }
 
         public static class ProtocolSelector {
             public static final SelenideElement SELECTOR = $("#protocolSelector");
@@ -44,12 +47,17 @@ public final class HomePageObject {
 
         public static final SelenideElement DESCRIPTION_ACCORDION =
                 $("#" + HomePage.IDs.DESCRIPTION_ACCORDION);
-        public static final SelenideElement DESCRIPTION_ACCORDION_PANEL =
-                DESCRIPTION_ACCORDION.$("vaadin-accordion-panel");
-        public static final SelenideElement DESCRIPTION_INPUT_ELEMENT =
-                $("#" + HomePage.IDs.DESCRIPTION_INPUT);
-        public static final SelenideElement DESCRIPTION_INPUT =
-                TextFieldElement.byCss("#" + HomePage.IDs.DESCRIPTION_INPUT).getInput();
+
+        public static class DescriptionInput {
+            private static final String DESCRIPTION_INPUT_SELECTOR = "#descriptionInput";
+            public static final SelenideElement ELEMENT = $(DESCRIPTION_INPUT_SELECTOR);
+            public static final SelenideElement INPUT = TextFieldElement.byCss(DESCRIPTION_INPUT_SELECTOR).getInput();
+            public static final SelenideElement CLEAR_BUTTON =
+                    TextFieldElement.byCss(DESCRIPTION_INPUT_SELECTOR).getClearButton();
+
+        }
+
+
         public static final SelenideElement BANNER = $("#" + HomePage.IDs.BANNER);
         public static final SelenideElement SUBMIT_BUTTON = $("#" + HomePage.IDs.SUBMIT_BUTTON);
     }
@@ -109,7 +117,7 @@ public final class HomePageObject {
      * @param link string with long URL to paste
      */
     public static void pasteValueInForm(final String link) {
-        MainArea.LONG_URL_INPUT.setValue(link);
+        MainArea.LongURLInput.INPUT.setValue(link);
     }
 
     /**
@@ -170,7 +178,7 @@ public final class HomePageObject {
         waitForVaadin();
         pasteValueInForm(url);
         MainArea.DESCRIPTION_ACCORDION.click();
-        MainArea.DESCRIPTION_INPUT.setValue(description);
+        MainArea.DescriptionInput.INPUT.setValue(description);
 
         MainArea.SUBMIT_BUTTON.click();
         waitForVaadin();
@@ -189,6 +197,28 @@ public final class HomePageObject {
      * Cleans input field.
      */
     public static void cleanInput() {
-        MainArea.LONG_URL_INPUT.setValue("");
+        MainArea.LongURLInput.INPUT.setValue("");
+    }
+
+    /**
+     * Pastes given description string to description field. Method opens accordion if it is closed.
+     *
+     * @param description not empty string with description.
+     */
+    public static void fillInDescription(final String description) {
+        if (!MainArea.DescriptionInput.INPUT.isDisplayed()) {
+            MainArea.DESCRIPTION_ACCORDION.click();
+        }
+        MainArea.DescriptionInput.INPUT.setValue(description);
+    }
+
+    /**
+     * Cleans description input. Method opens accordion if it is closed.
+     */
+    public static void cleanDescription() {
+        if (!MainArea.DescriptionInput.INPUT.isDisplayed()) {
+            MainArea.DESCRIPTION_ACCORDION.click();
+        }
+        MainArea.DescriptionInput.INPUT.setValue("");
     }
 }

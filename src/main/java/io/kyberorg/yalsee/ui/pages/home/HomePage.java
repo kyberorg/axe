@@ -139,6 +139,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         input.setId(IDs.INPUT);
         input.setPlaceholder("https://mysuperlongurlhere.tld");
         input.setWidthFull();
+        input.setClearButtonVisible(true);
         input.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         input.addValueChangeListener(this::onInputChanged);
 
@@ -155,6 +156,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         descriptionInput.setId(IDs.DESCRIPTION_INPUT);
         descriptionInput.setPlaceholder("what is link about...");
         descriptionInput.setWidthFull();
+        descriptionInput.setClearButtonVisible(true);
 
         Span publicAccessBanner =
                 new Span("Note: all links considered as public and can be used by anyone");

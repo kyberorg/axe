@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.test.ui.usage;
 
 import com.codeborne.selenide.SelenideElement;
 import io.kyberorg.yalsee.test.pageobjects.HomePageObject;
+import io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LongURLInput;
 import io.kyberorg.yalsee.test.pageobjects.NotFoundViewPageObject;
 import io.kyberorg.yalsee.test.pageobjects.elements.CookieBannerPageObject;
 import io.kyberorg.yalsee.test.pageobjects.external.Eki;
@@ -21,7 +22,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_BUTTON;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.ERROR_MODAL;
-import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ResultArea.*;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
 import static io.kyberorg.yalsee.test.utils.TestUtils.addRedirectPageBypassSymbol;
@@ -72,7 +72,7 @@ public class MultiStepTest extends SelenideTest {
         HomePageObject.pasteValueInFormAndSubmitIt("https://github.com/kyberorg/yalsee");
 
         RESULT_AREA.shouldBe(visible);
-        LONG_URL_INPUT.shouldBe(empty);
+        LongURLInput.INPUT.shouldBe(empty);
 
         HomePageObject.pasteValueInFormAndSubmitIt("g&%g");
         RESULT_AREA.shouldNotBe(visible);
@@ -90,12 +90,12 @@ public class MultiStepTest extends SelenideTest {
         COPY_LINK_ICON.shouldBe(visible);
 
         COPY_LINK_ICON.click();
-        LONG_URL_INPUT.click();
+        LongURLInput.INPUT.click();
 
-        LONG_URL_INPUT.sendKeys(Keys.chord(Keys.CONTROL, "v"));
+        LongURLInput.INPUT.sendKeys(Keys.chord(Keys.CONTROL, "v"));
 
         String shortLink = RESULT_LINK.text();
-        String pastedLink = LONG_URL_INPUT.val();
+        String pastedLink = LongURLInput.INPUT.val();
 
         assertEquals(shortLink, pastedLink);
     }

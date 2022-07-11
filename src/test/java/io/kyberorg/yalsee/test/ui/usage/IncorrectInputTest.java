@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ErrorModal.*;
-import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.MainArea.LONG_URL_INPUT;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.QrCodeArea.QR_CODE_AREA;
 import static io.kyberorg.yalsee.test.pageobjects.HomePageObject.ResultArea.RESULT_AREA;
 import static io.kyberorg.yalsee.test.pageobjects.VaadinPageObject.waitForVaadin;
