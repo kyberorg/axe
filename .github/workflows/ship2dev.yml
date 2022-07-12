@@ -44,7 +44,7 @@ jobs:
       - name: Deploy
         uses: wei/curl@master
         with:
-          args: -X POST ${{ secrets.DEV_DEPLOY_HOOK }}
+          args: -X POST ${{ secrets.DEV_DEPLOY_HOOK }}?tag=dev@${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Get deployed commit SHA
         id: deployed_commit
