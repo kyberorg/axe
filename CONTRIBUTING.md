@@ -113,7 +113,7 @@ Can add several browsers like `chrome,firefox`
 
 ### How to Deploy app
 
-* Docker image: `quay.io/kyberorg/yalsee`
+* Docker image: `kio.ee/yalsee/yalsee`
 * H2 (default profile) or Postgres database (local profile) needed to run.
 * Redis for storing sessions and stuff like this.
 * I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs. So token from Bugsnag needed.

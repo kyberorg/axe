@@ -25,13 +25,13 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.DEV -t kio.ee/kyberorg/yalsee:dev .
+        run: docker build -f Dockerfile.DEV -t kio.ee/yalsee/yalsee:dev .
 
       - name: Docker push
-        run: docker push kio.ee/kyberorg/yalsee:dev
+        run: docker push kio.ee/yalsee/yalsee:dev
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi kio.ee/kyberorg/yalsee:dev
+        run: docker rmi kio.ee/yalsee/yalsee:dev
         continue-on-error: true
 
       - name: Deploy

@@ -97,7 +97,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void mainAreaHasFieldAndButton() {
-        MainArea.LONG_URL_INPUT.should(exist);
+        MainArea.LongURLInput.INPUT.should(exist);
         MainArea.SUBMIT_BUTTON.should(exist);
     }
 
@@ -115,7 +115,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void inputAndButtonAreNotDisabled() {
-        MainArea.LONG_URL_INPUT.shouldBe(enabled);
+        MainArea.LongURLInput.INPUT.shouldBe(enabled);
         MainArea.SUBMIT_BUTTON.shouldBe(enabled);
     }
 
@@ -124,7 +124,15 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void inputShouldHavePlaceholder() {
-        MainArea.LONG_URL_INPUT.shouldHave(attribute("placeholder"));
+        MainArea.LongURLInput.INPUT.shouldHave(attribute("placeholder"));
+    }
+
+    /**
+     * Tests input, its clear button should not be visible by default.
+     */
+    @Test
+    public void inputClearButtonNotVisibleByDefault() {
+        MainArea.LongURLInput.CLEAR_BUTTON.shouldNotBe(visible);
     }
 
     /**
@@ -176,7 +184,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void descriptionAccordionClosedByDefault() {
-        MainArea.DESCRIPTION_INPUT.shouldNotBe(visible);
+        MainArea.DescriptionInput.INPUT.shouldNotBe(visible);
     }
 
     /**
@@ -193,7 +201,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void descriptionInputIsHiddenByDefault() {
-        MainArea.DESCRIPTION_INPUT_ELEMENT.shouldBe(hidden);
+        MainArea.DescriptionInput.ELEMENT.shouldBe(hidden);
     }
 
     /**
@@ -265,8 +273,8 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void inputFieldHasLabel() {
-        MainArea.LONG_URL_INPUT_LABEL.should(exist);
-        String labelText = MainArea.LONG_URL_INPUT_LABEL.getText();
+        MainArea.LongURLInput.LABEL.should(exist);
+        String labelText = MainArea.LongURLInput.LABEL.getText();
         Assertions.assertTrue(StringUtils.isNotBlank(labelText));
     }
 
