@@ -102,8 +102,8 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: QA Unit Test Results
-          comment_title: QA Unit Test Statistics
+          check_name: QA Test Results
+          comment_title: QA Test Statistics
           hide_comments: off
           comment_mode: 'always'
           test_changes_limit: 5
@@ -153,8 +153,8 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: QA Unit Test Results
-          comment_title: QA Unit Test Statistics
+          check_name: QA Test Results
+          comment_title: QA Test Statistics
           hide_comments: off
           test_changes_limit: 0
           files: target/surefire-reports/**/*.xml
