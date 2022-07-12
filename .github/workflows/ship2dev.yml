@@ -29,7 +29,7 @@ jobs:
 
       - name: Get Docker image SHA256
         id: docker_image_sha
-        run: echo "::set-output name=imageSha::$(docker inspect --format='{{index .RepoDigests 0}}' kio.ee/yalsee/yalsee:dev)"
+        run: echo "::set-output name=imageSha::$(docker images --no-trunc --quiet kio.ee/yalsee/yalsee:dev)"
 
       - name: Debug image SHA256
         run: echo ${{ steps.docker_image_sha.outputs.sha }}
