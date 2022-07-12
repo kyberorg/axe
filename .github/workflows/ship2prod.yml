@@ -29,14 +29,24 @@ jobs:
       - name: Docker push
         run: docker push kio.ee/yalsee/yalsee:prod
 
+      - name: Get Docker image SHA256
+        id: docker_image_sha
+        run: echo "::set-output name=imageSha::$(docker images --digests | awk 'NR==2 {print $3}')"
+
+      - name: Debug image SHA256
+        run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
+
       - name: Delete pushed image to prevent mess
         run: docker rmi kio.ee/yalsee/yalsee:prod
         continue-on-error: true
 
+      - name: Waiting for image to appear at Registry
+        run: sleep 10
+
       - name: Deploy
         uses: wei/curl@master
         with:
-          args: -X POST ${{ secrets.PROD_DEPLOY_HOOK }}
+          args: -X POST ${{ secrets.PROD_DEPLOY_HOOK }}?tag=prod@${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Get deployed commit SHA
         id: deployed_commit
