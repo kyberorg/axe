@@ -27,6 +27,9 @@ jobs:
       - name: Docker build and tag
         run: docker build -f Dockerfile.DEV -t kio.ee/yalsee/yalsee:dev .
 
+      - name: Docker push
+        run: docker push kio.ee/yalsee/yalsee:dev
+
       - name: Get Docker image SHA256
         id: docker_image_sha
         run: echo "::set-output name=imageSha::$(docker images --no-trunc --quiet kio.ee/yalsee/yalsee:dev)"
@@ -34,8 +37,8 @@ jobs:
       - name: Debug image SHA256
         run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
 
-      - name: Docker push
-        run: docker push kio.ee/yalsee/yalsee:dev
+      - name: Debug
+        run: docker images --digests
 
       - name: Delete pushed image to prevent mess
         run: docker rmi kio.ee/yalsee/yalsee:dev
