@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @SpringComponent
 @UIScope
 public class CatchAllVaadinExceptionsView extends YalseeLayout implements HasErrorParameter<Exception> {
-
     private final RedirectLoopDetector loopDetector;
     private final YalseeErrorKeeper yalseeErrorKeeper;
     private final ErrorUtils errorUtils;
