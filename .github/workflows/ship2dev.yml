@@ -32,13 +32,10 @@ jobs:
 
       - name: Get Docker image SHA256
         id: docker_image_sha
-        run: echo "::set-output name=imageSha::$(docker images --no-trunc --quiet kio.ee/yalsee/yalsee:dev)"
+        run: echo "::set-output name=imageSha::$(docker images --digests | awk 'NR==2 {print $3}')"
 
       - name: Debug image SHA256
         run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
-
-      - name: Debug
-        run: docker images --digests
 
       - name: Delete pushed image to prevent mess
         run: docker rmi kio.ee/yalsee/yalsee:dev
