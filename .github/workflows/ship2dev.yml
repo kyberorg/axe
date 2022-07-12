@@ -32,7 +32,7 @@ jobs:
         run: echo "::set-output name=imageSha::$(docker images --no-trunc --quiet kio.ee/yalsee/yalsee:dev)"
 
       - name: Debug image SHA256
-        run: echo ${{ steps.docker_image_sha.outputs.sha }}
+        run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Docker push
         run: docker push kio.ee/yalsee/yalsee:dev
