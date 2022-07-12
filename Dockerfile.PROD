@@ -1,9 +1,9 @@
-FROM amazoncorretto:11 as builder
+FROM kio.ee/hub/library/amazoncorretto:17-alpine as builder
 
 COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM kio.ee/kyberorg/yalsee-base:distroless-jre-17 as runner
+FROM kio.ee/yalsee/base:alpine-jre-17 as runner
 
 WORKDIR /app
 COPY --from=builder  dependencies/ ./

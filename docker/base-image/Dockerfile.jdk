@@ -1,4 +1,4 @@
-FROM kio.ee/kyberorg/golang:1.18.2 as healthcheckBuild
+FROM kio.ee/lib/golang:1.18.3-alpine as healthcheckBuild
 WORKDIR /go/src/app
 
 COPY cmd/healthcheck.go cmd/healthcheck.go
@@ -6,21 +6,23 @@ COPY cmd/healthcheck.go cmd/healthcheck.go
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
 # Set ownership and permissions as required
-# 65532 - is nonroot @ distroless. See: https://github.com/GoogleContainerTools/distroless/issues/235
+# 65532 - is appuser @runner.
 RUN mkdir /app && chown -R 65532:65532 /app
 
-FROM kio.ee/kyberorg/golang:1.18.2 as entrypointBuild
+FROM kio.ee/lib/golang:1.18.3-alpine as entrypointBuild
 WORKDIR /go/src/app
 COPY cmd/entrypoint.go cmd/entrypoint.go
 
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
-FROM gcr.io/distroless/java17-debian11:debug-nonroot as runner
+FROM kio.ee/lib/eclipse-temurin:17-jdk-alpine as runner
 LABEL maintainer="Aleksandr Muravja <alex@kyberorg.io>"
 COPY --from=healthcheckBuild /go/bin/cmd /app/healthcheck
 COPY --from=entrypointBuild /go/bin/cmd /app/entrypoint
 
 HEALTHCHECK --start-period=60s --interval=5s --timeout=20s --retries=3 CMD ["/app/healthcheck"]
 
-USER nonroot
+RUN addgroup -S --gid 65532  appgroup && adduser -S appuser --uid 65532 -G appgroup
+USER appuser
+
 ENTRYPOINT ["/app/entrypoint"]

@@ -1,3 +1,0 @@
-FROM golang:1.18.2-bullseye
-LABEL maintainer="Aleksandr Muravja <alex@kyberorg.io>"
-RUN set -eux; apt-get update; apt-get -y --no-install-recommends upgrade; rm -rf /var/lib/apt/lists/*
