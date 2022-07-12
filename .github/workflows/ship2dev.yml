@@ -41,7 +41,7 @@ jobs:
         run: docker rmi kio.ee/yalsee/yalsee:dev
         continue-on-error: true
 
-      - name: Wait for Harbor
+      - name: Waiting for image to appear at Registry
         run: sleep 5
 
       - name: Deploy
