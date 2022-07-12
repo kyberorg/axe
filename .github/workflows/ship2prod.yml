@@ -41,7 +41,7 @@ jobs:
         continue-on-error: true
 
       - name: Waiting for image to appear at Registry
-        run: sleep 5
+        run: sleep 10
 
       - name: Deploy
         uses: wei/curl@master
