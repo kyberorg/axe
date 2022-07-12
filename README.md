@@ -2,7 +2,7 @@
 Simple link shortener [yals.ee](https://yals.ee), which produce links
 like [https://yls.ee/Cxwycs](https://yls.ee/Cxwycs)
 
-Docker image: `kio.ee/kyberorg/yalsee`
+Docker image: `kio.ee/yalsee/yalsee`
 
 ### Note on Anti-scam redirect page
 Since release `3.0.5` by default when user opens short link instead of redirect appears redirect page with destination
