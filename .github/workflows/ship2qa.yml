@@ -60,6 +60,8 @@ jobs:
           imageRepo: yalsee
           imageTag: qa
           imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
+          interval: '2s'
+          timeout: '1m'
 
       - name: Deploy
         uses: wei/curl@master
