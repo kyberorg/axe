@@ -44,7 +44,7 @@ jobs:
       - name: Waiting for image to appear at Registry
         uses: kyberorg/wait_for_harbor@v0.1
         with:
-          hostname: 'my.harbor.com'
+          hostname: kio.ee
           robot: ${{ secrets.KIO_USER }}
           token: ${{ secrets.KIO_PASS }}
           imageProject: yalsee
