@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class DeleteLinkRestController {
     private static final String TAG = "[" + DeleteLinkRestController.class.getSimpleName() + "]";
-
     private final LinkService linkService;
     private final TokenChecker tokenChecker;
     private final IdentValidator identValidator;
