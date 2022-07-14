@@ -70,5 +70,4 @@ public class WebApp implements AppShellConfigurator {
         settings.addInlineFromFile(Inline.Position.PREPEND, "yalsee.js", Inline.Wrapping.JAVASCRIPT);
         settings.addInlineFromFile(Inline.Position.PREPEND, "show-test-name.js", Inline.Wrapping.JAVASCRIPT);
     }
-
 }
