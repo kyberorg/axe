@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -84,6 +85,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     private Span linkCounter;
 
     private Notification errorNotification;
+    private ShareMenu shareMenu;
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
@@ -100,6 +102,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
         removeAll();
         add(leftDiv, centralLayout, rightDiv);
+
+        shareMenu = ShareMenu.create();
     }
 
     private void applyStyle() {
@@ -204,15 +208,19 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         shortLink.setId(IDs.SHORT_LINK);
         shortLink.addClassName("strong-link");
 
-        com.vaadin.flow.component.icon.Icon copyLinkImage;
-        copyLinkImage = new com.vaadin.flow.component.icon.Icon(VaadinIcon.COPY);
+        Icon shareIcon = new Icon(VaadinIcon.SHARE);
+        shareIcon.setId(IDs.SHARE_ICON);
+        shareIcon.addClickListener(this::openShareMenu);
+
+        Icon copyLinkImage;
+        copyLinkImage = new Icon(VaadinIcon.COPY);
         copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
         copyLinkImage.addClickListener(this::copyLinkToClipboard);
 
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-        resultArea.add(emptySpan, shortLink, copyLinkImage);
+        resultArea.add(emptySpan, shortLink, shareIcon, copyLinkImage);
         resultArea.addClassNames("result-area", "border");
         resultArea.setWidthFull();
         return resultArea;
@@ -512,6 +520,11 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
     }
 
+    private void openShareMenu(final ClickEvent<Icon> iconClickEvent) {
+        log.trace("{} Share manu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
+        shareMenu.show();
+    }
+
     public static class IDs {
         public static final String VIEW_ID = "homeView";
         public static final String MAIN_AREA = "mainArea";
@@ -540,5 +553,6 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         public static final String MY_LINKS_NOTE_START = "myLinksNoteStart";
         public static final String MY_LINKS_NOTE_LINK = "myLinksNoteLink";
         public static final String MY_LINKS_NOTE_END = "myLinksNoteEnd";
+        public static final String SHARE_ICON = "shareMenu";
     }
 }
