@@ -41,7 +41,7 @@ jobs:
         continue-on-error: true
 
       - name: Waiting for image to appear at Registry
-        uses: kyberorg/wait_for_harbor@v0.1
+        uses: kyberorg/wait_for_harbor@v0.1.1
         with:
           hostname: kio.ee
           robot: ${{ secrets.KIO_USER }}
@@ -50,8 +50,6 @@ jobs:
           imageRepo: yalsee
           imageTag: prod
           imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
-          interval: '2s'
-          timeout: '1m'
 
       - name: Deploy
         uses: wei/curl@master
