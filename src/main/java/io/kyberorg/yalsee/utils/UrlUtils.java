@@ -1,14 +1,12 @@
 package io.kyberorg.yalsee.utils;
 
 import io.kyberorg.yalsee.exception.URLDecodeException;
+import io.kyberorg.yalsee.exception.URLEncodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.net.IDN;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 import static io.kyberorg.yalsee.utils.AppUtils.isAscii;
@@ -123,6 +121,16 @@ public final class UrlUtils {
             log.error("{} Failed to decode URL", TAG);
             log.debug("", e);
             throw new URLDecodeException(e.getCause());
+        }
+    }
+
+    public static String encodeUrl(final String rawUrl) throws URLEncodeException {
+        try {
+            return URLEncoder.encode(rawUrl, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            log.error("{} Failed to encode URL", TAG);
+            log.debug("", e);
+            throw new URLEncodeException(e.getCause());
         }
     }
 

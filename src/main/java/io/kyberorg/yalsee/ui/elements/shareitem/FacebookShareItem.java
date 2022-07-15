@@ -11,16 +11,18 @@ public class FacebookShareItem extends ShareItem {
 
     @Override
     public void constructLink() {
-        StringBuilder sb = new StringBuilder("https://facebook.com/");
+        StringBuilder sb = new StringBuilder("https://facebook.com/dialog/share?");
+        sb.append("app_id=").append("1017183535654329"); //TODO facebook app id as params
 
-        sb.append("url=").append(getShortLink());
+        sb.append("href=").append(getShortLink());
         boolean isDefaultShortLink = getShortLink().equals(DEFAULT_SHORT_LINK);
         boolean descriptionNotEmpty = StringUtils.isNotBlank(getDescription());
         if (isDefaultShortLink || descriptionNotEmpty) {
             sb.append("&");
             sb.append("description=").append(getDescription());
         }
-        fullLink = sb.toString(); //TODO encode URL
+        sb.append("&display=popup");
+        fullLink = sb.toString();
     }
 
 }

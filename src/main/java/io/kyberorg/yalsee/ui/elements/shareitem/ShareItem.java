@@ -4,10 +4,11 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import io.kyberorg.yalsee.exception.URLEncodeException;
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
+import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,10 +56,18 @@ public abstract class ShareItem extends Composite<VerticalLayout> {
         label.setText(labelText);
     }
 
-
     protected abstract void constructLink();
 
     protected void onLogoClick(final ClickEvent<Image> clickEvent) {
-        Notification.show("Opening " + fullLink); //TODO replace with opening link in new tab.
+        String encodedUrl;
+        try {
+            encodedUrl = fullLink; //TODO fixit
+            //encodedUrl = UrlUtils.encodeUrl(fullLink);
+            getUI().ifPresent(ui -> ui.getPage().open(encodedUrl, "_blank"));
+        } catch (URLEncodeException e) {
+            ErrorUtils.getErrorNotification("Internal Error:  failed to open URL").open();
+        }
+
+
     }
 }

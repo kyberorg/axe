@@ -11,16 +11,16 @@ public class EmailShareItem extends ShareItem {
 
     @Override
     public void constructLink() {
-        StringBuilder sb = new StringBuilder("emailto: ");
-
+        StringBuilder sb = new StringBuilder("mailto:");
         sb.append("body=").append(getShortLink());
         boolean isDefaultShortLink = getShortLink().equals(DEFAULT_SHORT_LINK);
         boolean descriptionNotEmpty = StringUtils.isNotBlank(getDescription());
         if (isDefaultShortLink || descriptionNotEmpty) {
             sb.append("-");
             sb.append(getDescription());
+            sb.append("&subject=").append(getDescription());
         }
-        fullLink = sb.toString(); //TODO encode URL
+        fullLink = sb.toString();
     }
 
 }

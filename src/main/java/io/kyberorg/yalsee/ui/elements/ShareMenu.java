@@ -15,6 +15,7 @@ import io.kyberorg.yalsee.ui.elements.shareitem.EmailShareItem;
 import io.kyberorg.yalsee.ui.elements.shareitem.FacebookShareItem;
 import io.kyberorg.yalsee.ui.elements.shareitem.ShareItem;
 import io.kyberorg.yalsee.ui.elements.shareitem.TwitterShareItem;
+import io.kyberorg.yalsee.utils.ClipboardUtils;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -25,9 +26,7 @@ import java.util.List;
  */
 public final class ShareMenu extends Composite<Dialog> {
     private final Icon closeIcon = VaadinIcon.CLOSE.create();
-
     private final Dialog dialog = getContent();
-
     private final List<ShareItem> shareItems = new ArrayList<>();
     private TextField shortLinkText;
 
@@ -104,7 +103,8 @@ public final class ShareMenu extends Composite<Dialog> {
     }
 
     private void onCopyButtonClicked(final ClickEvent<Button> event) {
-        Notification.show("Copied");
+        ClipboardUtils.copyToClipboardAndNotify(shortLinkText.getValue(),
+                "Short link copied", Notification.Position.MIDDLE);
     }
 
     public enum Icons {
