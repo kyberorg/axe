@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.ui.elements.shareitem;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -12,7 +13,9 @@ import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class ShareItem extends Composite<VerticalLayout> {
     protected static final String DEFAULT_SHORT_LINK = "https://yals.ee";
     protected static final String DEFAULT_DESCRIPTION = "Yalsee: Yet another link shortener";
@@ -63,9 +66,21 @@ public abstract class ShareItem extends Composite<VerticalLayout> {
         try {
             encodedUrl = fullLink; //TODO fixit
             //encodedUrl = UrlUtils.encodeUrl(fullLink);
-            getUI().ifPresent(ui -> ui.getPage().open(encodedUrl, "_blank"));
+            UI ui = null;
+            if (getUI().isPresent()) {
+                ui = getUI().get();
+            } else if (UI.getCurrent() != null) {
+                ui = UI.getCurrent();
+            }
+            if (ui != null) {
+                ui.getPage().open(encodedUrl, "_Yalsee");
+            } else {
+                log.warn("Failed to open URL. No UI found.");
+            }
+
         } catch (URLEncodeException e) {
-            ErrorUtils.getErrorNotification("Internal Error:  failed to open URL").open();
+            log.warn("Failed to open URL. Encoding failed. Got {}" + URLEncodeException.class.getSimpleName());
+            ErrorUtils.getErrorNotification("Internal Error: failed to open URL").open();
         }
 
 
