@@ -87,6 +87,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     private Notification errorNotification;
     private ShareMenu shareMenu;
 
+    private String descriptionInputHolder;
+
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
@@ -348,6 +350,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
 
         if (isFormValid) {
+            saveDescription();
             cleanForm();
             cleanResults();
             saveLink(longUrl, linkDescription);
@@ -471,6 +474,10 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         errorNotification.open();
     }
 
+    private void saveDescription() {
+        descriptionInputHolder = descriptionInput.getValue();
+    }
+
     private void cleanForm() {
         input.setValue("");
         protocolSelector.setVisible(false);
@@ -521,7 +528,11 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     }
 
     private void openShareMenu(final ClickEvent<Icon> iconClickEvent) {
-        log.trace("{} Share manu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
+        shareMenu.setShortLink(shortLink.getText());
+        if (StringUtils.isNotBlank(descriptionInputHolder)) {
+            shareMenu.setDescription(descriptionInputHolder);
+        }
+        log.trace("{} Share menu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
         shareMenu.show();
     }
 

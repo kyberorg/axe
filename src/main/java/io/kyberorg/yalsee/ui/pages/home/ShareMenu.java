@@ -11,6 +11,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import io.kyberorg.yalsee.ui.elements.shareitem.EmailShareItem;
+import io.kyberorg.yalsee.ui.elements.shareitem.FacebookShareItem;
+import io.kyberorg.yalsee.ui.elements.shareitem.ShareItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link Dialog} that allows share links.
@@ -20,6 +25,9 @@ public final class ShareMenu extends Composite<Dialog> {
 
     private final Dialog dialog = getContent();
 
+    private final List<ShareItem> shareItems = new ArrayList<>();
+    private TextField shortLinkText;
+
     /**
      * Creates dialog. Created dialog ain't open automatically.
      *
@@ -27,6 +35,15 @@ public final class ShareMenu extends Composite<Dialog> {
      */
     public static ShareMenu create() {
         return new ShareMenu();
+    }
+
+    public void setShortLink(String shortLink) {
+        shortLinkText.setValue(shortLink);
+        shareItems.forEach(item -> item.updateShortLink(shortLink));
+    }
+
+    public void setDescription(String description) {
+        shareItems.forEach(item -> item.updateDescription(description));
     }
 
     /**
@@ -52,23 +69,24 @@ public final class ShareMenu extends Composite<Dialog> {
         VerticalLayout dialogLayout = new VerticalLayout();
 
         HorizontalLayout locationsLayout = new HorizontalLayout();
-        EmailShareItem emailShareItem = new EmailShareItem();
-        emailShareItem.constructLink("shortLinkHere", "descHere"); //TODO maybe should go to constructor
-        EmailShareItem emailShareItem1 = new EmailShareItem();
-        emailShareItem.constructLink("shortLinkHere", "descHere");
 
-        locationsLayout.add(emailShareItem, emailShareItem1);
+        shareItems.add(new EmailShareItem());
+        shareItems.add(new FacebookShareItem());
 
-        HorizontalLayout textAndCopyLayout = new HorizontalLayout();
-        TextField tx = new TextField();
-        tx.setValue("shortLinkHere");
-        tx.setReadOnly(true);
+        shareItems.forEach(locationsLayout::add);
+
+        HorizontalLayout textAndCopyLayout;
+        textAndCopyLayout = new HorizontalLayout();
+
+        shortLinkText = new TextField();
+        shortLinkText.setValue("https://yals.ee");
+        shortLinkText.setReadOnly(true);
 
         Button copyButton = new Button();
         copyButton.setText("Copy");
         copyButton.addClickListener(this::onCopyButtonClicked);
 
-        textAndCopyLayout.add(tx, copyButton);
+        textAndCopyLayout.add(shortLinkText, copyButton);
         dialogLayout.add(locationsLayout, textAndCopyLayout);
         return dialogLayout;
     }
