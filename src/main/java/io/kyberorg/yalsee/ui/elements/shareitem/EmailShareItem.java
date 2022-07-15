@@ -1,10 +1,11 @@
 package io.kyberorg.yalsee.ui.elements.shareitem;
 
+import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import org.apache.commons.lang3.StringUtils;
 
 public class EmailShareItem extends ShareItem {
     public EmailShareItem() {
-        setImageFile("logo.png"); //TODO fix
+        setImageFile(ShareMenu.Icons.EMAIL);
         setLabelText("Email");
     }
 

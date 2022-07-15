@@ -35,6 +35,7 @@ import io.kyberorg.yalsee.services.QRCodeService;
 import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.MainView;
+import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;

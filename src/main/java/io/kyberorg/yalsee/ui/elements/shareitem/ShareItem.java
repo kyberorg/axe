@@ -5,7 +5,9 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,11 +43,12 @@ public abstract class ShareItem extends Composite<VerticalLayout> {
         logo.addClickListener(this::onLogoClick);
 
         label = new Text("ShareItem");
+        getContent().setAlignItems(FlexComponent.Alignment.CENTER);
         getContent().add(logo, label);
     }
 
-    protected void setImageFile(final String imageFile) {
-        logo.setSrc("/images/" + imageFile); //TODO path
+    protected void setImageFile(final ShareMenu.Icons icon) {
+        logo.setSrc("/images/" + icon.getFileName());
     }
 
     protected void setLabelText(final String labelText) {

@@ -3,22 +3,22 @@ package io.kyberorg.yalsee.ui.elements.shareitem;
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import org.apache.commons.lang3.StringUtils;
 
-public class FacebookShareItem extends ShareItem {
-    public FacebookShareItem() {
-        setImageFile(ShareMenu.Icons.FACEBOOK);
-        setLabelText("Facebook");
+public class TwitterShareItem extends ShareItem {
+    public TwitterShareItem() {
+        setImageFile(ShareMenu.Icons.TWITTER);
+        setLabelText("Twitter");
     }
 
     @Override
     public void constructLink() {
-        StringBuilder sb = new StringBuilder("https://facebook.com/");
+        StringBuilder sb = new StringBuilder("https://twitter.com/");
 
-        sb.append("url=").append(getShortLink());
+        sb.append("body=").append(getShortLink());
         boolean isDefaultShortLink = getShortLink().equals(DEFAULT_SHORT_LINK);
         boolean descriptionNotEmpty = StringUtils.isNotBlank(getDescription());
         if (isDefaultShortLink || descriptionNotEmpty) {
             sb.append("&");
-            sb.append("description=").append(getDescription());
+            sb.append("desc=").append(getDescription());
         }
         fullLink = sb.toString(); //TODO encode URL
     }

@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.ui.pages.home;
+package io.kyberorg.yalsee.ui.elements;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Composite;
@@ -13,6 +13,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import io.kyberorg.yalsee.ui.elements.shareitem.EmailShareItem;
 import io.kyberorg.yalsee.ui.elements.shareitem.FacebookShareItem;
 import io.kyberorg.yalsee.ui.elements.shareitem.ShareItem;
+import io.kyberorg.yalsee.ui.elements.shareitem.TwitterShareItem;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,15 +74,18 @@ public final class ShareMenu extends Composite<Dialog> {
 
         shareItems.add(new EmailShareItem());
         shareItems.add(new FacebookShareItem());
+        shareItems.add(new TwitterShareItem());
 
         shareItems.forEach(locationsLayout::add);
 
         HorizontalLayout textAndCopyLayout;
         textAndCopyLayout = new HorizontalLayout();
+        textAndCopyLayout.setWidthFull();
 
         shortLinkText = new TextField();
         shortLinkText.setValue("https://yals.ee");
         shortLinkText.setReadOnly(true);
+        shortLinkText.setWidthFull();
 
         Button copyButton = new Button();
         copyButton.setText("Copy");
@@ -93,5 +98,18 @@ public final class ShareMenu extends Composite<Dialog> {
 
     private void onCopyButtonClicked(final ClickEvent<Button> event) {
         Notification.show("Copied");
+    }
+
+    public enum Icons {
+        EMAIL("email.png"),
+        FACEBOOK("facebook.png"),
+        TWITTER("twitter.png");
+
+        @Getter
+        private final String fileName;
+
+        Icons(String fileName) {
+            this.fileName = fileName;
+        }
     }
 }
