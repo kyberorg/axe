@@ -49,6 +49,7 @@ import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.elements.DeleteConfirmationDialog;
+import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
@@ -90,6 +91,7 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
     private final TextField gridFilterField = new TextField();
     private final Button toggleColumnsButton = new Button();
     private final ColumnToggleContextMenu columnToggleMenu = new ColumnToggleContextMenu(toggleColumnsButton);
+    private final ShareMenu shareMenu = ShareMenu.create();
 
     private final Grid<LinkInfo> grid = new Grid<>(LinkInfo.class);
     private Grid.Column<LinkInfo> linkColumn;
@@ -259,18 +261,29 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private HorizontalLayout createActions(final LinkInfo item) {
+        Button shareButton = createShareButton(item);
         Button editButton = createEditButton(item);
         Button deleteButton = createDeleteButton(item);
         Button saveButton = createSaveButton(item);
         Button cancelButton = createCancelButton(item);
 
         HorizontalLayout actionsLayout = new HorizontalLayout();
+        actionsLayout.add(shareButton);
         if (grid.getEditor().isOpen()) {
             actionsLayout.add(saveButton, cancelButton);
+            shareButton.removeThemeVariants(ButtonVariant.LUMO_PRIMARY);
         } else {
             actionsLayout.add(editButton, deleteButton);
+            shareButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         }
         return actionsLayout;
+    }
+
+    private Button createShareButton(LinkInfo item) {
+        Button shareButton = new Button("Share", clickEvent -> onShareButtonClick(item));
+        shareButton.setClassName("share-btn");
+        shareButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+        return shareButton;
     }
 
     private Button createEditButton(final LinkInfo item) {
@@ -448,6 +461,16 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         if (sessionId.equals(Session.EMPTY_ID)) return;
         if (getSessionIdFromLink(link).equals(sessionId)) {
             updateDataAndState();
+        }
+    }
+
+    private void onShareButtonClick(final LinkInfo item) {
+        if (item != null) {
+            shareMenu.setShortLink(appUtils.getShortUrl() + "/" + item.getIdent());
+            if (StringUtils.isNotBlank(item.getDescription())) {
+                shareMenu.setDescription(item.getDescription());
+            }
+            shareMenu.show();
         }
     }
 
