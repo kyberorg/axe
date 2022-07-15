@@ -71,6 +71,7 @@ public final class ShareMenu extends Composite<Dialog> {
         VerticalLayout dialogLayout = new VerticalLayout();
 
         HorizontalLayout locationsLayout = new HorizontalLayout();
+        locationsLayout.setClassName("share-items-layout");
 
         shareItems.add(new EmailShareItem());
         shareItems.add(new FacebookShareItem());
