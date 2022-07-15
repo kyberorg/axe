@@ -8,6 +8,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import io.kyberorg.yalsee.ui.elements.shareitem.EmailShareItem;
@@ -70,6 +71,10 @@ public final class ShareMenu extends Composite<Dialog> {
     private VerticalLayout createDialogLayout() {
         VerticalLayout dialogLayout = new VerticalLayout();
 
+        Scroller scroller = new Scroller();
+        scroller.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
+        scroller.setWidthFull();
+
         HorizontalLayout locationsLayout = new HorizontalLayout();
         locationsLayout.setClassName("share-items-layout");
 
@@ -92,8 +97,9 @@ public final class ShareMenu extends Composite<Dialog> {
         copyButton.setText("Copy");
         copyButton.addClickListener(this::onCopyButtonClicked);
 
+        scroller.setContent(locationsLayout);
         textAndCopyLayout.add(shortLinkText, copyButton);
-        dialogLayout.add(locationsLayout, textAndCopyLayout);
+        dialogLayout.add(scroller, textAndCopyLayout);
         return dialogLayout;
     }
 

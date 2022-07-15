@@ -89,15 +89,3 @@ body {
     }
 }
 
-/* */
-@media (max-width: 377px) {
-    .share-items-layout {
-        margin-left: -2em;
-    }
-}
-
-@media (min-width: 378px) and (max-width: 431px) {
-    .share-items-layout {
-        margin-left: -2em;
-    }
-}
