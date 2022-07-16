@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
  * API tools and helper methods.
  */
 public final class ApiUtils {
-
     private ApiUtils() {
         throw new UnsupportedOperationException("Utility class");
     }
