@@ -6,6 +6,7 @@ import com.vaadin.flow.component.page.ExtendedClientDetails;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.shared.BrowserDetails;
 import com.vaadin.flow.spring.annotation.UIScope;
+import io.kyberorg.yalsee.session.YalseeSession;
 import lombok.Getter;
 
 /**
@@ -47,6 +48,20 @@ public final class DeviceUtils {
     public static boolean isMobileDevice(final String userAgent) {
         BrowserDetails browserDetails = new BrowserDetails(userAgent);
         return browserDetails.isAndroid() || browserDetails.isIPhone() || browserDetails.isWindowsPhone();
+    }
+
+    public static boolean isMobileDevice() {
+        if (YalseeSession.getCurrent().isPresent()) {
+            YalseeSession session = YalseeSession.getCurrent().get();
+            if (session.getDevice() != null) {
+                return session.getDevice().isMobile();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
     }
 
     private DeviceUtils(final UI ui) throws InitializationException {

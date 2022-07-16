@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.kyberorg.yalsee.exception.URLEncodeException;
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
+import io.kyberorg.yalsee.utils.DeviceUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -75,7 +76,12 @@ public abstract class ShareItem extends Composite<VerticalLayout> {
                 ui = UI.getCurrent();
             }
             if (ui != null) {
-                ui.getPage().open(encodedUrl, "_Yalsee");
+                if (DeviceUtils.isMobileDevice()) {
+                    ui.getPage().open(encodedUrl);
+                } else {
+                    ui.getPage().open(encodedUrl, "_blank");
+                }
+
             } else {
                 log.warn("Failed to open URL. No UI found.");
             }
