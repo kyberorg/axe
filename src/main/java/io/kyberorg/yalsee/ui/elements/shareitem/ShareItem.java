@@ -5,6 +5,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.kyberorg.yalsee.exception.URLEncodeException;
@@ -65,6 +66,7 @@ public abstract class ShareItem extends Composite<VerticalLayout> {
         String encodedUrl;
         try {
             encodedUrl = fullLink; //TODO fixit
+            Notification.show(encodedUrl); //TODO remote after debug
             //encodedUrl = UrlUtils.encodeUrl(fullLink);
             UI ui = null;
             if (getUI().isPresent()) {
