@@ -77,7 +77,7 @@ public abstract class ShareItem extends Composite<VerticalLayout> {
             }
             if (ui != null) {
                 if (DeviceUtils.isMobileDevice()) {
-                    ui.getPage().open(encodedUrl, "_self");
+                    ui.getPage().open(encodedUrl, "_parent");
                 } else {
                     ui.getPage().open(encodedUrl, "_blank");
                 }
