@@ -187,7 +187,6 @@ Volumes:
 * Commands: yalsee - https://longLink.tld description
 
 ### Release notes
-
 There following sections:
 
 * `:star: Features` - new stuff in application
