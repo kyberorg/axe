@@ -2,7 +2,6 @@
   <configuration default="false" name="Dockerfile_(Local_Build)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
-        <option name="buildOnly" value="true"/>
         <option name="command" value="" />
         <option name="containerName" value="" />
         <option name="entrypoint" value="" />
