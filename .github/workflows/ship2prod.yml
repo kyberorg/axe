@@ -24,7 +24,7 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
       - name: Pull latest base and build images
-        run: for img in kio.ee/base/go:1.18.4 kio.ee/base/java:17-jdk kio.ee/base/java:17-jre; do docker pull $img; done
+        run: for img in kio.ee/base/go:1.18 kio.ee/base/java:17-jdk kio.ee/base/java:17-jre; do docker pull $img; done
 
       - name: Docker build and tag
         run: docker build -f Dockerfile.PROD -t kio.ee/yalsee/yalsee:prod .

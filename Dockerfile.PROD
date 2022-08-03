@@ -1,9 +1,9 @@
-FROM kio.ee/base/go:1.18.4 as healthcheckBuilder
+FROM kio.ee/base/go:1.18 as healthcheckBuilder
 WORKDIR /go/src/app
 COPY cmd/healthcheck.go cmd/healthcheck.go
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
-FROM kio.ee/base/go:1.18.4 as entrypointBuilder
+FROM kio.ee/base/go:1.18 as entrypointBuilder
 WORKDIR /go/src/app
 COPY cmd/entrypoint.go cmd/entrypoint.go
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
