@@ -16,8 +16,11 @@ RUN java -Djarmode=layertools -jar yalsee.jar extract
 FROM eclipse-temurin:17 as runner
 WORKDIR /app
 
-COPY --from=healthcheckBuilder --chown=appuser:appgroup /go/bin/cmd ./healthcheck
-COPY --from=entrypointBuilder --chown=appuser:appgroup /go/bin/cmd ./entrypoint
+#COPY --from=healthcheckBuilder --chown=appuser:appgroup /go/bin/cmd ./healthcheck
+#COPY --from=entrypointBuilder --chown=appuser:appgroup /go/bin/cmd ./entrypoint
+
+COPY --from=healthcheckBuilder /go/bin/cmd ./healthcheck
+COPY --from=entrypointBuilder /go/bin/cmd ./entrypoint
 
 COPY --from=appBuilder  dependencies/ ./
 COPY --from=appBuilder snapshot-dependencies/ ./
@@ -28,7 +31,7 @@ LABEL maintainer="Aleksandr Muravja <alex@kyberorg.io>"
 COPY --from=appBuilder spring-boot-loader/ ./
 COPY --from=appBuilder application/ ./
 
-USER appuser
+#USER appuser
 HEALTHCHECK CMD ["/app/healthcheck", "/"]
 ENTRYPOINT ["/app/entrypoint"]
 EXPOSE 8080
