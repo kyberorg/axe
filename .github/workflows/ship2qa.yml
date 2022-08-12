@@ -64,6 +64,17 @@ jobs:
           imageTag: qa
           imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
 
+      - name: Run Harbor Scan Report
+        uses: kyberorg/harbor-scan-report@v0.1
+        with:
+          harbor-host: kio.ee
+          harbor-robot: ${{ secrets.KIO_USER }}
+          harbor-token: ${{ secrets.KIO_PASS }}
+          image: kio.ee/yalsee/yalsee:qa
+          max-allowed-severity: medium
+          github-url: ${{ github.event.pull_request.comments_url }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy
         uses: wei/curl@master
         with:
