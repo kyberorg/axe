@@ -28,7 +28,7 @@
         <connection>scm:git:https://github.com/kyberorg/yalsee.git</connection>
         <developerConnection>scm:git:https://github.com/kyberorg/yalsee.git</developerConnection>
     </scm>
-    
+
     <properties>
         <!-- Java version -->
         <java.version>17</java.version>
