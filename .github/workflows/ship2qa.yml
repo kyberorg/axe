@@ -65,7 +65,7 @@ jobs:
           imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Run Harbor Scan Report
-        uses: kyberorg/harbor-scan-report@v0.1
+        uses: kyberorg/harbor-scan-report@v0.2
         with:
           harbor-host: kio.ee
           harbor-robot: ${{ secrets.KIO_USER }}
