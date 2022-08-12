@@ -12,7 +12,8 @@ FROM kio.ee/base/java:17-jdk as appBuilder
 COPY target/yalsee.jar yalsee.jar
 RUN java -Djarmode=layertools -jar yalsee.jar extract
 
-FROM kio.ee/base/java:17-jre as runner
+# FROM kio.ee/base/java:17-jre as runner
+FROM eclipse-temurin:17 as runner
 WORKDIR /app
 
 COPY --from=healthcheckBuilder --chown=appuser:appgroup /go/bin/cmd ./healthcheck
