@@ -65,16 +65,19 @@ jobs:
           imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Run Harbor Scan Report
-        uses: kyberorg/harbor-scan-report@v0.3.1
+        uses: kyberorg/harbor-scan-report@v0.4
         with:
           harbor-host: kio.ee
           harbor-robot: ${{ secrets.KIO_USER }}
           harbor-token: ${{ secrets.KIO_PASS }}
           image: kio.ee/yalsee/yalsee:qa
+          digest: ${{ steps.docker_image_sha.outputs.imageSha }}
           max-allowed-severity: medium
+          timeout: 90
           github-url: ${{ github.event.pull_request.comments_url }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-mode: update_last
+
 
       - name: Deploy
         uses: wei/curl@master
