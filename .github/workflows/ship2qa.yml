@@ -53,17 +53,6 @@ jobs:
         run: docker rmi kio.ee/yalsee/yalsee:qa
         continue-on-error: true
 
-      - name: Waiting for image to appear at Registry
-        uses: kyberorg/wait_for_harbor@v0.1.1
-        with:
-          hostname: kio.ee
-          robot: ${{ secrets.KIO_USER }}
-          token: ${{ secrets.KIO_PASS }}
-          imageProject: yalsee
-          imageRepo: yalsee
-          imageTag: qa
-          imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
-
       - name: Run Harbor Scan Report
         uses: kyberorg/harbor-scan-report@v0.4
         with:
@@ -77,7 +66,6 @@ jobs:
           github-url: ${{ github.event.pull_request.comments_url }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-mode: update_last
-
 
       - name: Deploy
         uses: wei/curl@master
