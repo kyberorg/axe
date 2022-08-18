@@ -62,7 +62,7 @@ jobs:
           image: kio.ee/yalsee/yalsee:qa
           digest: ${{ steps.docker_image_sha.outputs.imageSha }}
           max-allowed-severity: medium
-          timeout: 90
+          timeout: 100
           github-url: ${{ github.event.pull_request.comments_url }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-mode: update_last
