@@ -44,7 +44,6 @@
         <!-- Plugins version: used 2+ times -->
         <git.plugin.version>4.9.10</git.plugin.version>
         <properties.plugin.version>1.1.0</properties.plugin.version>
-        <selenium.version>4.3.0</selenium.version>
 
         <!-- See https://github.com/vaadin/flow/issues/13421 -->
         <vaadin.eagerServerLoad>true</vaadin.eagerServerLoad>
@@ -300,33 +299,6 @@
             <groupId>org.selenide</groupId>
             <artifactId>selenide-selenoid</artifactId>
             <version>2.2.3</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <!-- Selenium 4 -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-remote-driver</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-            <version>${selenium.version}</version>
             <scope>test</scope>
         </dependency>
 
