@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Login to kio.ee
-        run: echo "${{ secrets.KIO_PASS }}" | docker login -u "${{ secrets.KIO_USER }}" --password-stdin kio.ee
+        run: cat ${{ secrets.KIO_TOKEN_FILE }} | docker login -u "${{ secrets.KIO_ROBOT }}" --password-stdin kio.ee
 
       - name: Resolve Dependencies
         run: mvn --batch-mode --update-snapshots dependency:tree
