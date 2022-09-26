@@ -38,3 +38,4 @@ Build manually. By design, I use tags for Releases aka Milestones.
 * Always start from trunk branch.
 * Uses `dev` docker tag, unless custom (or branch named) tag provided.
 * Deploy destination = dev server
+
