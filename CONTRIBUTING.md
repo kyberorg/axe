@@ -110,7 +110,6 @@ Can add several browsers like `chrome,firefox`
 * Local server port can be changed using `-Dport` property
 
 ## For Ops
-
 ### How to Deploy app
 
 * Docker image: `kio.ee/yalsee/yalsee`
