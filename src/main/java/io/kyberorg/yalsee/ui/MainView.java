@@ -203,7 +203,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         logo.setId(APP_LOGO);
         logo.addClassName("logo-image");
 
-        RouterLink logoLink = new RouterLink(null, HomePage.class);
+        RouterLink logoLink = new RouterLink("", HomePage.class);
         logoLink.add(logo);
 
         Tab logoTab = new Tab(logoLink);
@@ -218,7 +218,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
     }
 
     private void addMenuTab(final String label, final Class<? extends Component> target, final VaadinIcon icon) {
-        RouterLink link = new RouterLink(null, target);
+        RouterLink link = new RouterLink("", target);
         link.add(icon.create());
         link.add(label);
         link.setHighlightCondition(HighlightConditions.sameLocation());
