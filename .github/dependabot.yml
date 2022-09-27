@@ -18,7 +18,7 @@ updates:
       - "PR"
     ignore:
       - dependency-name: "hibernate-validator"
-        versions: [ "[7.x.x.Final,)" ]
+        versions: [ "[7.x.x.Final,8.x.x.Final)" ]
       - dependency-name: "vaadin.version"
         versions: [ "[15.x.x,)" ]
 
