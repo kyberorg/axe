@@ -34,8 +34,8 @@ public final class HomePageObject {
 
         public static class ProtocolSelector {
             public static final SelenideElement SELECTOR = $("#protocolSelector");
-            public static final SelenideElement LABEL = $("#label-vaadin-radio-group-1");
-            public static final SelenideElement ERROR_MESSAGE = $("#error-message-vaadin-radio-group-1");
+            public static final SelenideElement LABEL = $("#label-vaadin-radio-group-3");
+            public static final SelenideElement ERROR_MESSAGE = $("#error-message-vaadin-radio-group-5");
             public static final ElementsCollection OPTIONS = SELECTOR.$$("vaadin-radio-button");
             public static final SelenideElement HTTPS_OPTION =
                     $x("//vaadin-radio-button[.//*[@value='1']]");
