@@ -32,15 +32,9 @@ Should always be stable.
 Deploys to Production
 
 ### Tags
-
 Build manually. By design, I use tags for Releases aka Milestones.
 
 ### Other branches aka features
-
 * Always start from trunk branch.
 * Uses `dev` docker tag, unless custom (or branch named) tag provided.
 * Deploy destination = dev server
-
-## About: icons
-
-Some icons (Facebook, Twitter and other logos) are provided by [Freepik](https://www.flaticon.com/).
