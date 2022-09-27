@@ -40,17 +40,21 @@ jobs:
         run: docker build -f Dockerfile.PROD -t kio.ee/yalsee/yalsee:qa .
 
       - name: Docker push
-        run: docker push kio.ee/yalsee/yalsee:qa
+        run: docker push kio.ee/yalsee/yalsee:qa > qa.sha
 
       - name: Get Docker image SHA256
         id: docker_image_sha
-        run: echo "::set-output name=imageSha::$(docker images --digests kio.ee/yalsee/yalsee:qa | awk 'NR==2 {print $3}')"
+        run: echo "::set-output name=imageSha::$(cat qa.sha | tail -n 1 | awk '{print $3}')"
 
       - name: Debug image SHA256
         run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Delete pushed image to prevent mess
         run: docker rmi kio.ee/yalsee/yalsee:qa
+        continue-on-error: true
+
+      - name: Delete SHA file to prevent mess
+        run: rm -f qa.sha
         continue-on-error: true
 
       - name: Run Harbor Scan Report
