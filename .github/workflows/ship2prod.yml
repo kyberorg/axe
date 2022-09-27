@@ -34,7 +34,7 @@ jobs:
 
       - name: Get Docker image SHA256
         id: docker_image_sha
-        run: echo "::set-output name=imageSha::$(docker images --digests | awk 'NR==2 {print $3}')"
+        run: echo "::set-output name=imageSha::$(docker images --digests kio.ee/yalsee/yalsee:prod | awk 'NR==2 {print $3}')"
 
       - name: Debug image SHA256
         run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
