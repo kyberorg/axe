@@ -197,4 +197,4 @@ There following sections:
 * `:package: Dependencies Updates`
 * `:broom: Cleanup/Refactoring`
 * `:notebook_with_decorative_cover: Dokumentation`
- 
+  
