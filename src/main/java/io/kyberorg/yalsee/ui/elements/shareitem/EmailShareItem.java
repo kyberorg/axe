@@ -1,7 +1,6 @@
 package io.kyberorg.yalsee.ui.elements.shareitem;
 
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
-import io.kyberorg.yalsee.utils.UrlUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class EmailShareItem extends ShareItem {
@@ -12,25 +11,30 @@ public class EmailShareItem extends ShareItem {
 
     @Override
     public void constructLink() {
+        String subject;
+        String body;
+
         boolean isDefaultShortLink = getShortLink().equals(DEFAULT_SHORT_LINK);
         boolean descriptionNotEmpty = StringUtils.isNotBlank(getDescription());
 
-        StringBuilder subjectBuilder = new StringBuilder();
-        if (!isDefaultShortLink || descriptionNotEmpty) {
-            subjectBuilder.append(getDescription());
+        if (isDefaultShortLink) {
+            subject = DEFAULT_DESCRIPTION;
+            body = DEFAULT_SHORT_LINK + " - " + DEFAULT_DESCRIPTION;
         } else {
-            subjectBuilder.append(getShortLink());
+            StringBuilder subjectBuilder = new StringBuilder();
+            if (descriptionNotEmpty) {
+                subjectBuilder.append(getDescription());
+            }
+
+            StringBuilder bodyBuilder = new StringBuilder(getShortLink());
+            if (descriptionNotEmpty) {
+                bodyBuilder.append(" - ");
+                bodyBuilder.append(getDescription());
+            }
+
+            subject = subjectBuilder.toString();
+            body = bodyBuilder.toString();
         }
-
-        StringBuilder bodyBuilder = new StringBuilder(getShortLink());
-        if (!isDefaultShortLink || descriptionNotEmpty) {
-            bodyBuilder.append(" - ");
-            bodyBuilder.append(getDescription());
-        }
-
-        String subject = UrlUtils.encodeUrl(subjectBuilder.toString());
-        String body = UrlUtils.encodeUrl(bodyBuilder.toString());
-
-        fullLink = "mailto:" + "subject=" + subject + "&body=" + body;
+        fullLink = "mailto:?" + "subject=" + subject + "&body=" + body;
     }
 }
