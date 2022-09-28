@@ -27,4 +27,4 @@
 :notebook_with_decorative_cover: Dokumentation/Repo Maintenance
 ---
 
-* Made Changelog (#925) by @kyberorg
+* Made Changelog (https://github.com/kyberorg/yalsee/issues/925) by @kyberorg
