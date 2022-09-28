@@ -1,3 +1,30 @@
-# Changes
+# Yalsee ChangeLog
 
-* :notebook_with_decorative_cover: Made Changelog by @kyberorg in #925
+:star: Features
+---
+
+:hammer: Improvements
+---
+
+:shield: Security
+---
+
+:lady_beetle: Bug Fixes
+---
+
+:test_tube: Testing
+---
+
+:computer: Ops
+---
+
+:package: Dependencies Updates
+---
+
+:broom: Cleanup/Refactoring
+---
+
+:notebook_with_decorative_cover: Dokumentation
+---
+
+* Made Changelog by @kyberorg in #925
