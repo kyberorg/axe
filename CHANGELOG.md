@@ -24,7 +24,7 @@
 :broom: Cleanup/Refactoring
 ---
 
-:notebook_with_decorative_cover: Dokumentation
+:notebook_with_decorative_cover: Dokumentation/Repo Maintenance
 ---
 
-* Made Changelog by @kyberorg in #925
+* Made Changelog (#925) by @kyberorg
