@@ -1,4 +1,4 @@
-# Yalsee ChangeLog
+# Yalsee Changelog
 
 :star: Features
 ---
