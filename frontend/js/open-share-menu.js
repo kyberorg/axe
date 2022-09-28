@@ -3,18 +3,21 @@ window.openShareMenu = (link, description) => {
         alert("Your browser doesn't support sharing")
         return
     }
-    let titleString;
+    let shareData;
     if (description != null && description) {
-        titleString = description;
+        shareData = {
+            title: link,
+            text: description,
+            url: link,
+        }
     } else {
-        titleString = link;
+        shareData = {
+            title: link,
+            url: link,
+        }
     }
 
-    window.navigator.share({
-        title: titleString,
-        text: description,
-        url: link,
-    })
+    window.navigator.share(shareData)
         .then(() => console.log("Item shared"))
         .catch(() => console.error("Failed to share link"));
 }
