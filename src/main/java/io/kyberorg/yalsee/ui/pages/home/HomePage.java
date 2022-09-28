@@ -5,6 +5,7 @@ import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -36,10 +37,7 @@ import io.kyberorg.yalsee.services.overall.OverallService;
 import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
-import io.kyberorg.yalsee.utils.AppUtils;
-import io.kyberorg.yalsee.utils.ClipboardUtils;
-import io.kyberorg.yalsee.utils.ErrorUtils;
-import io.kyberorg.yalsee.utils.UrlUtils;
+import io.kyberorg.yalsee.utils.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +50,7 @@ import org.greenrobot.eventbus.Subscribe;
 @UIScope
 @CssImport("./css/common_styles.css")
 @CssImport("./css/home_view.css")
+@JsModule("./js/open-share-menu.js")
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
 @PageTitle("Yalsee - the link shortener")
 public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
@@ -529,12 +528,16 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     }
 
     private void openShareMenu(final ClickEvent<Icon> iconClickEvent) {
-        shareMenu.setShortLink(shortLink.getText());
-        if (StringUtils.isNotBlank(descriptionInputHolder)) {
-            shareMenu.setDescription(descriptionInputHolder);
+        if (ui != null && ui.getPage() != null && DeviceUtils.isMobileDevice()) {
+            ui.getPage().executeJs("window.openShareMenu($0)", shortLink.getText());
+        } else {
+            shareMenu.setShortLink(shortLink.getText());
+            if (StringUtils.isNotBlank(descriptionInputHolder)) {
+                shareMenu.setDescription(descriptionInputHolder);
+            }
+            log.trace("{} Share menu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
+            shareMenu.show();
         }
-        log.trace("{} Share menu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
-        shareMenu.show();
     }
 
     public static class IDs {
