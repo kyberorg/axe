@@ -6,8 +6,8 @@ window.openShareMenu = (link, description) => {
     let shareData;
     if (description != null && description) {
         shareData = {
-            title: link,
-            text: description,
+            title: link + "title-here",
+            text: description + " - text-here",
             url: link,
         }
     } else {
