@@ -28,3 +28,4 @@
 ---
 
 * Made Changelog (https://github.com/kyberorg/yalsee/issues/925) by @kyberorg
+  in https://github.com/kyberorg/yalsee/pull/959
