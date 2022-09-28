@@ -529,7 +529,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private void openShareMenu(final ClickEvent<Icon> iconClickEvent) {
         if (ui != null && ui.getPage() != null && DeviceUtils.isMobileDevice()) {
-            ui.getPage().executeJs("window.openShareMenu($0)", shortLink.getText(), descriptionInputHolder);
+            ui.getPage().executeJs("window.openShareMenu($0)", shortLink.getText());
         } else {
             shareMenu.setShortLink(shortLink.getText());
             if (StringUtils.isNotBlank(descriptionInputHolder)) {

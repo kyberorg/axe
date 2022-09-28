@@ -469,7 +469,7 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
             String shortLink = appUtils.getShortUrl() + "/" + item.getIdent();
 
             if (ui != null && ui.getPage() != null && DeviceUtils.isMobileDevice()) {
-                ui.getPage().executeJs("window.openShareMenu($0, $1)", shortLink, item.getDescription());
+                ui.getPage().executeJs("window.openShareMenu($0)", shortLink);
             } else {
                 shareMenu.setShortLink(shortLink);
                 if (StringUtils.isNotBlank(item.getDescription())) {
