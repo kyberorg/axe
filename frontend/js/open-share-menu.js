@@ -4,7 +4,7 @@ window.openShareMenu = (link, description) => {
         return
     }
     let titleString;
-    if (description) {
+    if (description != null && description) {
         titleString = description;
     } else {
         titleString = link;
