@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.ui.elements.shareitem;
 
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
+import io.kyberorg.yalsee.utils.UrlUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class EmailShareItem extends ShareItem {
@@ -11,16 +12,25 @@ public class EmailShareItem extends ShareItem {
 
     @Override
     public void constructLink() {
-        StringBuilder sb = new StringBuilder("mailto:");
-        sb.append("body=").append(getShortLink());
         boolean isDefaultShortLink = getShortLink().equals(DEFAULT_SHORT_LINK);
         boolean descriptionNotEmpty = StringUtils.isNotBlank(getDescription());
-        if (isDefaultShortLink || descriptionNotEmpty) {
-            sb.append("-");
-            sb.append(getDescription());
-            sb.append("&subject=").append(getDescription());
-        }
-        fullLink = sb.toString();
-    }
 
+        StringBuilder subjectBuilder = new StringBuilder();
+        if (!isDefaultShortLink || descriptionNotEmpty) {
+            subjectBuilder.append(getDescription());
+        } else {
+            subjectBuilder.append(getShortLink());
+        }
+
+        StringBuilder bodyBuilder = new StringBuilder(getShortLink());
+        if (!isDefaultShortLink || descriptionNotEmpty) {
+            bodyBuilder.append(" - ");
+            bodyBuilder.append(getDescription());
+        }
+
+        String subject = UrlUtils.encodeUrl(subjectBuilder.toString());
+        String body = UrlUtils.encodeUrl(bodyBuilder.toString());
+
+        fullLink = "mailto:" + "subject=" + subject + "&body=" + body;
+    }
 }
