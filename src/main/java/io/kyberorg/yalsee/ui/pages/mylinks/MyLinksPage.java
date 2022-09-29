@@ -360,14 +360,14 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private Icon createSaveIcon(final LinkInfo item) {
-        Icon saveIcon = new Icon(VaadinIcon.CHECK_CIRCLE);
+        Icon saveIcon = new Icon(VaadinIcon.ADD_DOCK);
         saveIcon.addClickListener(clickEvent -> onSaveButtonClick(item));
         saveIcon.setClassName("save-icon");
         return saveIcon;
     }
 
     private Icon createCancelIcon(final LinkInfo item) {
-        Icon cancelIcon = new Icon(VaadinIcon.CLOSE_CIRCLE);
+        Icon cancelIcon = new Icon(VaadinIcon.BAN);
         cancelIcon.addClickListener(clickEvent -> onCancelButtonClick(item));
         cancelIcon.setClassName("cancel-icon");
         return cancelIcon;
