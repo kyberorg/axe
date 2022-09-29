@@ -2,6 +2,7 @@
 
 :star: Features
 ---
+* Share Menu (https://github.com/kyberorg/yalsee/issues/734) by @kyberorg in https://github.com/kyberorg/yalsee/pull/960
 
 :hammer: Improvements
 ---

@@ -127,14 +127,14 @@ public class GridItemsTest extends SelenideTest {
     }
 
     /**
-     * Tests that Actions Cell has two Buttons.
+     * Tests that Actions Cell has 3 Buttons.
      */
     @Test
-    public void actionsCellHasTwoButtons() {
+    public void actionsCellHasThreeButtons() {
         SelenideElement actionsCell = Grid.GridData.get().getRow(1).getActionsCell();
         ElementsCollection vaadinButtons = actionsCell.$("flow-component-renderer vaadin-horizontal-layout").
                 $$("vaadin-button");
-        vaadinButtons.shouldHave(size(2));
+        vaadinButtons.shouldHave(size(3));
     }
 
     /**
