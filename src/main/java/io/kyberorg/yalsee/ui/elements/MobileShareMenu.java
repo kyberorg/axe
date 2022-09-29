@@ -1,6 +1,7 @@
-package io.kyberorg.yalsee.ui.elements.shareitem;
+package io.kyberorg.yalsee.ui.elements;
 
 import com.vaadin.flow.component.page.Page;
+import io.kyberorg.yalsee.ui.elements.shareitem.ShareItem;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -32,11 +33,8 @@ public final class MobileShareMenu {
      * @param link not-empty string with short link.
      * @return same object, but with {@link #shortLink} set.
      */
-    public MobileShareMenu setLink(String link) {
-        if (StringUtils.isBlank(link)) {
-            link = ShareItem.DEFAULT_SHORT_LINK;
-        }
-        this.shortLink = link;
+    public MobileShareMenu setLink(final String link) {
+        this.shortLink = StringUtils.isNotBlank(link) ? link : ShareItem.getDefaultShortLink();
         return this;
     }
 
