@@ -15,6 +15,7 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -201,7 +202,12 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         linkColumn = grid.addComponentColumn(this::link).setHeader("Link").setKey("Link");
         descriptionColumn = grid.addColumn(LinkInfo::getDescription).setHeader("Description").setKey("Description");
         qrCodeColumn = grid.addComponentColumn(this::qrImage).setHeader("QR Code").setKey("QR Code");
-        actionsColumn = grid.addComponentColumn(this::createActions).setHeader("Actions").setKey("Actions");
+        if (isSmallScreen()) {
+            actionsColumn = grid.addComponentColumn(this::createActionsForSmallScreens);
+        } else {
+            actionsColumn = grid.addComponentColumn(this::createActions);
+        }
+        actionsColumn.setHeader("Actions").setKey("Actions");
 
         grid.setItemDetailsRenderer(LitRenderer.<LinkInfo>of(
                         "<div class='" + IDs.ITEM_DETAILS_CLASS
@@ -314,6 +320,59 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         return cancelButton;
     }
+
+    private HorizontalLayout createActionsForSmallScreens(final LinkInfo item) {
+        Icon shareIcon = createShareIcon(item);
+        Icon editIcon = createEditIcon(item);
+        Icon deleteIcon = createDeleteIcon(item);
+        Icon saveIcon = createSaveIcon(item);
+        Icon cancelIcon = createCancelIcon(item);
+
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.add(shareIcon);
+        if (grid.getEditor().isOpen()) {
+            layout.add(saveIcon, cancelIcon);
+        } else {
+            layout.add(editIcon, deleteIcon);
+        }
+        return layout;
+    }
+
+    private Icon createShareIcon(final LinkInfo item) {
+        Icon shareIcon = new Icon(VaadinIcon.SHARE);
+        shareIcon.addClickListener(clickEvent -> onShareButtonClick(item));
+        shareIcon.setClassName("share-icon");
+        return shareIcon;
+    }
+
+    private Icon createEditIcon(final LinkInfo item) {
+        Icon editIcon = new Icon(VaadinIcon.EDIT);
+        editIcon.addClickListener(clickEvent -> onEditButtonClick(item));
+        editIcon.setClassName("edit-icon");
+        return editIcon;
+    }
+
+    private Icon createDeleteIcon(final LinkInfo item) {
+        Icon deleteIcon = new Icon(VaadinIcon.TRASH);
+        deleteIcon.addClickListener(clickEvent -> onDeleteButtonClick(item));
+        deleteIcon.setClassName("delete-icon");
+        return deleteIcon;
+    }
+
+    private Icon createSaveIcon(final LinkInfo item) {
+        Icon saveIcon = new Icon(VaadinIcon.ADD_DOCK);
+        saveIcon.addClickListener(clickEvent -> onSaveButtonClick(item));
+        saveIcon.setClassName("save-icon");
+        return saveIcon;
+    }
+
+    private Icon createCancelIcon(final LinkInfo item) {
+        Icon cancelIcon = new Icon(VaadinIcon.CLOSE_CIRCLE);
+        cancelIcon.addClickListener(clickEvent -> onCancelButtonClick(item));
+        cancelIcon.setClassName("cancel-icon");
+        return cancelIcon;
+    }
+
 
     private String getLongLink(final LinkInfo linkInfo) {
         OperationResult result = linkService.getLinkWithIdent(linkInfo.getIdent());
