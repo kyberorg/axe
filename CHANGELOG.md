@@ -6,6 +6,8 @@
 
 :hammer: Improvements
 ---
+* Buttons replaced with icons on small screens (https://github.com/kyberorg/yalsee/issues/915) by @kyberorg
+  in https://github.com/kyberorg/yalsee/pull/961
 
 :shield: Security
 ---
