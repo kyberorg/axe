@@ -50,6 +50,11 @@ public final class DeviceUtils {
         return browserDetails.isAndroid() || browserDetails.isIPhone() || browserDetails.isWindowsPhone();
     }
 
+    /**
+     * Defines if current device is Mobile or not, based on User-Agent stored in {@link YalseeSession}.
+     *
+     * @return true - if device is mobile phone, false if not.
+     */
     public static boolean isMobileDevice() {
         if (YalseeSession.getCurrent().isPresent()) {
             YalseeSession session = YalseeSession.getCurrent().get();

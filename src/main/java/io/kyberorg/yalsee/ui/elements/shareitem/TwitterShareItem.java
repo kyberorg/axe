@@ -3,7 +3,13 @@ package io.kyberorg.yalsee.ui.elements.shareitem;
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Share link via Twitter.
+ */
 public class TwitterShareItem extends ShareItem {
+    /**
+     * Creates {@link TwitterShareItem}.
+     */
     public TwitterShareItem() {
         setImageFile(ShareMenu.Icons.TWITTER);
         setLabelText("Twitter");
@@ -20,7 +26,8 @@ public class TwitterShareItem extends ShareItem {
             sb.append("&");
             sb.append("text=").append(getDescription());
         }
-        fullLink = sb.toString();
+        String fullLink = sb.toString();
+        setFullLink(fullLink);
     }
 
 }

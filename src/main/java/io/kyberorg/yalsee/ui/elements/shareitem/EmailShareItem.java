@@ -3,7 +3,13 @@ package io.kyberorg.yalsee.ui.elements.shareitem;
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Share link via Email.
+ */
 public class EmailShareItem extends ShareItem {
+    /**
+     * Constructs {@link EmailShareItem}.
+     */
     public EmailShareItem() {
         setImageFile(ShareMenu.Icons.EMAIL);
         setLabelText("Email");
@@ -35,6 +41,7 @@ public class EmailShareItem extends ShareItem {
             subject = subjectBuilder.toString();
             body = bodyBuilder.toString();
         }
-        fullLink = "mailto:?" + "subject=" + subject + "&body=" + body;
+        String fullLink = "mailto:?" + "subject=" + subject + "&body=" + body;
+        setFullLink(fullLink);
     }
 }

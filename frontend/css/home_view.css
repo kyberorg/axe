@@ -76,12 +76,6 @@ body {
     margin-bottom: -0.5em;
 }
 
-.share-item-logo {
-    width: 60px;
-    height: 60px;
-    border-radius: 100%;
-}
-
 /* Hide word long for extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
     .title-long-text {

@@ -4,7 +4,13 @@ import io.kyberorg.yalsee.ui.elements.ShareMenu;
 import io.kyberorg.yalsee.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Share link via Facebook.
+ */
 public class FacebookShareItem extends ShareItem {
+    /**
+     * Construct {@link FacebookShareItem}.
+     */
     public FacebookShareItem() {
         setImageFile(ShareMenu.Icons.FACEBOOK);
         setLabelText("Facebook");
@@ -23,7 +29,8 @@ public class FacebookShareItem extends ShareItem {
             sb.append("description=").append(getDescription());
         }
         sb.append("&display=popup");
-        fullLink = sb.toString();
+        String fullLink = sb.toString();
+        setFullLink(fullLink);
     }
 
 }

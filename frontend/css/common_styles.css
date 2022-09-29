@@ -176,3 +176,9 @@ vcf-toggle-button {
 vaadin-drawer-toggle {
     color: var(--yalsee-drawer-toggle-color);
 }
+
+.share-item-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+}

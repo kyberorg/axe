@@ -39,12 +39,22 @@ public final class ShareMenu extends Composite<Dialog> {
         return new ShareMenu();
     }
 
-    public void setShortLink(String shortLink) {
+    /**
+     * Sets short link for all {@link ShareItem}s.
+     *
+     * @param shortLink string with valid short link.
+     */
+    public void setShortLink(final String shortLink) {
         shortLinkText.setValue(shortLink);
         shareItems.forEach(item -> item.updateShortLink(shortLink));
     }
 
-    public void setDescription(String description) {
+    /**
+     * Sets description for all {@link ShareItem}s.
+     *
+     * @param description not empty string with description.
+     */
+    public void setDescription(final String description) {
         shareItems.forEach(item -> item.updateDescription(description));
     }
 
@@ -115,7 +125,7 @@ public final class ShareMenu extends Composite<Dialog> {
         @Getter
         private final String fileName;
 
-        Icons(String fileName) {
+        Icons(final String fileName) {
             this.fileName = fileName;
         }
     }

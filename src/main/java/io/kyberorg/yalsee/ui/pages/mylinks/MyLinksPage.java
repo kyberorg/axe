@@ -280,7 +280,7 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         return actionsLayout;
     }
 
-    private Button createShareButton(LinkInfo item) {
+    private Button createShareButton(final LinkInfo item) {
         Button shareButton = new Button("Share", clickEvent -> onShareButtonClick(item));
         shareButton.setClassName("share-btn");
         shareButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
