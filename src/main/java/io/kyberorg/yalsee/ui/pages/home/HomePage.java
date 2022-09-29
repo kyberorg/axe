@@ -528,6 +528,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     }
 
     private void openShareMenu(final ClickEvent<Icon> iconClickEvent) {
+        log.trace("{} Share menu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
         if (ui != null && ui.getPage() != null && DeviceUtils.isMobileDevice()) {
             MobileShareMenu.createForPage(ui.getPage()).setLink(shortLink.getText()).show();
         } else {
@@ -535,7 +536,6 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
             if (StringUtils.isNotBlank(descriptionInputHolder)) {
                 shareMenu.setDescription(descriptionInputHolder);
             }
-            log.trace("{} Share menu clicked. From client? {}", TAG, iconClickEvent.isFromClient());
             shareMenu.show();
         }
     }

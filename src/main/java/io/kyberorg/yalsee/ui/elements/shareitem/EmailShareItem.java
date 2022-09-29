@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class EmailShareItem extends ShareItem {
     /**
-     * Constructs {@link EmailShareItem}.
+     * Creates {@link EmailShareItem}.
      */
     public EmailShareItem() {
         setImageFile(ShareMenu.Icons.EMAIL);

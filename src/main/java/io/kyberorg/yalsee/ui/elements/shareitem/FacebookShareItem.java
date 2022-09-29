@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FacebookShareItem extends ShareItem {
     /**
-     * Construct {@link FacebookShareItem}.
+     * Creates {@link FacebookShareItem}.
      */
     public FacebookShareItem() {
         setImageFile(ShareMenu.Icons.FACEBOOK);
