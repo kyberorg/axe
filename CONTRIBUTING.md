@@ -110,7 +110,6 @@ Can add several browsers like `chrome,firefox`
 * Local server port can be changed using `-Dport` property
 
 ## For Ops
-
 ### How to Deploy app
 
 * Docker image: `kio.ee/yalsee/yalsee`
@@ -132,6 +131,7 @@ EnvVars:
 * DELETE_TOKEN or DELETE_TOKEN_FILE: `temporary master token for deleting links` (needed until auth story introduced)
 * REDIS_HOST: `redis hostname/ip or container name`
 * REDIS_PASSWORD or REDIS_PASSWORD_FILE: `password for connecting to redis`
+* FACEBOOK_APP_ID: `Facebook Application ID for sharing link to Facebook`
 
 Optional EnvVars:
 

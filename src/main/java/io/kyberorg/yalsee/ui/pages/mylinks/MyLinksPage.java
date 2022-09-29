@@ -50,6 +50,7 @@ import io.kyberorg.yalsee.session.YalseeSession;
 import io.kyberorg.yalsee.ui.MainView;
 import io.kyberorg.yalsee.ui.elements.DeleteConfirmationDialog;
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
+import io.kyberorg.yalsee.ui.elements.shareitem.MobileShareMenu;
 import io.kyberorg.yalsee.ui.layouts.YalseeLayout;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.ClipboardUtils;
@@ -469,7 +470,7 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
             String shortLink = appUtils.getShortUrl() + "/" + item.getIdent();
 
             if (ui != null && ui.getPage() != null && DeviceUtils.isMobileDevice()) {
-                ui.getPage().executeJs("window.openShareMenu($0)", shortLink);
+                MobileShareMenu.createForPage(ui.getPage()).setLink(shortLink).show();
             } else {
                 shareMenu.setShortLink(shortLink);
                 if (StringUtils.isNotBlank(item.getDescription())) {

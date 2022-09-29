@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class ShareItem extends Composite<VerticalLayout> {
-    protected static final String DEFAULT_SHORT_LINK = "https://yals.ee";
+    static final String DEFAULT_SHORT_LINK = "https://yals.ee";
     protected static final String DEFAULT_DESCRIPTION = "Yalsee: Yet another link shortener";
 
     protected Image logo;

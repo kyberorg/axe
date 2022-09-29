@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.ui.elements.shareitem;
 
 import io.kyberorg.yalsee.ui.elements.ShareMenu;
+import io.kyberorg.yalsee.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class FacebookShareItem extends ShareItem {
@@ -12,7 +13,7 @@ public class FacebookShareItem extends ShareItem {
     @Override
     public void constructLink() {
         StringBuilder sb = new StringBuilder("https://facebook.com/dialog/share?");
-        sb.append("app_id=").append("1017183535654329"); //TODO facebook app id as params
+        sb.append("app_id=").append(AppUtils.getFacebookId());
         sb.append("&");
         sb.append("href=").append(getShortLink());
         boolean isDefaultShortLink = getShortLink().equals(DEFAULT_SHORT_LINK);

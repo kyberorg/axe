@@ -69,6 +69,13 @@ public class AppUtils implements Serializable {
      */
     private static int sessionTimeout;
 
+    /**
+     * This field is dirty hack to access Facebook App ID from static context.
+     * To be populated with {@link #populateStaticFields()}
+     */
+    @Getter
+    private static String facebookId;
+
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     public static final String HTML_MODE = "innerHTML";
     private static final String DUMMY_HOST = "DummyHost";
@@ -134,6 +141,7 @@ public class AppUtils implements Serializable {
     private void populateStaticFields() {
         shortUrl = getShortUrl();
         sessionTimeout = getSessionTimeout();
+        facebookId = getFacebookAppId();
     }
 
     /**
@@ -598,6 +606,15 @@ public class AppUtils implements Serializable {
             }
         }
         return null;
+    }
+
+    /**
+     * Reads Facebook AppId from Settings.
+     *
+     * @return String with Facebook Application ID or {@link App#NO_VALUE}.
+     */
+    public String getFacebookAppId() {
+        return getEnv().getProperty(App.Properties.FACEBOOK_APP_ID, App.NO_VALUE);
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {
