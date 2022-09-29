@@ -367,7 +367,7 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
     }
 
     private Icon createCancelIcon(final LinkInfo item) {
-        Icon cancelIcon = new Icon(VaadinIcon.BAN);
+        Icon cancelIcon = new Icon(VaadinIcon.CLOSE_CIRCLE);
         cancelIcon.addClickListener(clickEvent -> onCancelButtonClick(item));
         cancelIcon.setClassName("cancel-icon");
         return cancelIcon;
