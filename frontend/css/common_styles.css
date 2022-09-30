@@ -182,3 +182,7 @@ vaadin-drawer-toggle {
     height: 60px;
     border-radius: 100%;
 }
+
+.action-icon {
+    color: var(--yalsee-text-color);
+}

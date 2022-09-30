@@ -71,6 +71,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -327,6 +328,9 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         Icon deleteIcon = createDeleteIcon(item);
         Icon saveIcon = createSaveIcon(item);
         Icon cancelIcon = createCancelIcon(item);
+
+        Stream.of(shareIcon, editIcon, deleteIcon, saveIcon, cancelIcon)
+                .forEach(icon -> icon.addClassName("action-icon"));
 
         HorizontalLayout layout = new HorizontalLayout();
         layout.add(shareIcon);
