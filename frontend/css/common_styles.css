@@ -184,5 +184,5 @@ vaadin-drawer-toggle {
 }
 
 .action-icon {
-    color: var(--yalsee-text-color);
+    color: var(--lumo-primary-text-color);
 }
