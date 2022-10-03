@@ -157,8 +157,9 @@ html {
     --yalsee-drawer-toggle-color: rgb(24, 39, 57);
     --yalsee-qr-code-border-radius: 0%;
     --yalsee-success-color: rgb(21, 132, 67);
-    --yalsee-primary-color: rgb(0, 106, 245);
     --yalsee-danger-color: rgb(202, 21, 12);
+    --yalsee-primary-color: rgb(0, 106, 245);
+    --yalsee-secondary-color: rgb(37, 51, 68);
     --yalsee-tertiary-color: rgb(144, 189, 249);
 }
 
@@ -170,10 +171,7 @@ html[theme="dark"] {
     --yalsee-text-color: rgb(245, 249, 255);
     --yalsee-drawer-toggle-color: rgb(235, 243, 254);
     --yalsee-qr-code-border-radius: 5%;
-    --yalsee-success-color: rgb(21, 132, 67);
-    --yalsee-primary-color: rgb(0, 106, 245);
-    --yalsee-danger-color: rgb(202, 21, 12);
-    --yalsee-tertiary-color: rgb(144, 189, 249);
+    --yalsee-secondary-color: rgb(215, 224, 237);
 }
 
 vcf-toggle-button {

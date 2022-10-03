@@ -339,7 +339,7 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
             layout.add(editIcon, deleteIcon);
             shareIcon.setClassName("success");
             editIcon.setClassName("primary");
-            cancelIcon.setClassName("danger");
+            deleteIcon.setClassName("danger");
         }
         return layout;
     }
