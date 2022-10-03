@@ -6,22 +6,22 @@
     }
 }
 
-.share-icon {
+.success {
     color: var(--yalsee-success-color);
 }
 
-.edit-icon {
+.primary {
     color: var(--yalsee-primary-color);
 }
 
-.delete-icon {
+.danger {
     color: var(--yalsee-danger-color)
 }
 
-.save-icon {
-    color: var(--yalsee-primary-color);
+.secondary {
+    color: var(--yalsee-secondary-color);
 }
 
-.cancel-icon {
+.tertiary {
     color: var(--yalsee-tertiary-color);
 }
