@@ -5,3 +5,23 @@
         justify-content: space-between;
     }
 }
+
+.share-icon {
+    color: var(--yalsee-success-color);
+}
+
+.edit-icon {
+    color: var(--yalsee-primary-color);
+}
+
+.delete-icon {
+    color: var(--yalsee-danger-color)
+}
+
+.save-icon {
+    color: var(--yalsee-primary-color);
+}
+
+.cancel-icon {
+    color: var(--yalsee-tertiary-color);
+}

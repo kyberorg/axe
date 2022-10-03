@@ -156,6 +156,10 @@ html {
     --yalsee-text-color: rgb(25, 36, 52);
     --yalsee-drawer-toggle-color: rgb(24, 39, 57);
     --yalsee-qr-code-border-radius: 0%;
+    --yalsee-success-color: rgb(21, 132, 67);
+    --yalsee-primary-color: rgb(0, 106, 245);
+    --yalsee-danger-color: rgb(202, 21, 12);
+    --yalsee-tertiary-color: rgb(144, 189, 249);
 }
 
 html[theme="dark"] {
@@ -166,7 +170,10 @@ html[theme="dark"] {
     --yalsee-text-color: rgb(245, 249, 255);
     --yalsee-drawer-toggle-color: rgb(235, 243, 254);
     --yalsee-qr-code-border-radius: 5%;
-
+    --yalsee-success-color: rgb(21, 132, 67);
+    --yalsee-primary-color: rgb(0, 106, 245);
+    --yalsee-danger-color: rgb(202, 21, 12);
+    --yalsee-tertiary-color: rgb(144, 189, 249);
 }
 
 vcf-toggle-button {
@@ -183,6 +190,3 @@ vaadin-drawer-toggle {
     border-radius: 100%;
 }
 
-.action-icon {
-    color: var(--lumo-primary-text-color);
-}
