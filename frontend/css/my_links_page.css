@@ -5,3 +5,23 @@
         justify-content: space-between;
     }
 }
+
+.success {
+    color: var(--yalsee-success-color);
+}
+
+.primary {
+    color: var(--yalsee-primary-color);
+}
+
+.danger {
+    color: var(--yalsee-danger-color)
+}
+
+.secondary {
+    color: var(--yalsee-secondary-color);
+}
+
+.tertiary {
+    color: var(--yalsee-tertiary-color);
+}

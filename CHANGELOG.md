@@ -6,6 +6,8 @@
 
 :hammer: Improvements
 ---
+* Icon colors changed from black to different ones (https://github.com/kyberorg/yalsee/issues/962) by @kyberorg
+  in https://github.com/kyberorg/yalsee/pull/964
 * Buttons replaced with icons on small screens (https://github.com/kyberorg/yalsee/issues/915) by @kyberorg
   in https://github.com/kyberorg/yalsee/pull/961
 

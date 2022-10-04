@@ -332,8 +332,14 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         layout.add(shareIcon);
         if (grid.getEditor().isOpen()) {
             layout.add(saveIcon, cancelIcon);
+            shareIcon.setClassName("secondary");
+            saveIcon.setClassName("success");
+            cancelIcon.setClassName("tertiary");
         } else {
             layout.add(editIcon, deleteIcon);
+            shareIcon.setClassName("success");
+            editIcon.setClassName("primary");
+            deleteIcon.setClassName("danger");
         }
         return layout;
     }
