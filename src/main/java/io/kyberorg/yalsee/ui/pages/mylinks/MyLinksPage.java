@@ -275,12 +275,11 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         Button cancelButton = createCancelButton(item);
 
         HorizontalLayout actionsLayout = new HorizontalLayout();
-        actionsLayout.add(shareButton);
         if (grid.getEditor().isOpen()) {
             actionsLayout.add(saveButton, cancelButton);
             shareButton.removeThemeVariants(ButtonVariant.LUMO_PRIMARY);
         } else {
-            actionsLayout.add(editButton, deleteButton);
+            actionsLayout.add(shareButton, editButton, deleteButton);
             shareButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         }
         return actionsLayout;
@@ -329,14 +328,13 @@ public class MyLinksPage extends YalseeLayout implements BeforeEnterObserver {
         Icon cancelIcon = createCancelIcon(item);
 
         HorizontalLayout layout = new HorizontalLayout();
-        layout.add(shareIcon);
         if (grid.getEditor().isOpen()) {
             layout.add(saveIcon, cancelIcon);
             shareIcon.setClassName("secondary");
             saveIcon.setClassName("success");
             cancelIcon.setClassName("tertiary");
         } else {
-            layout.add(editIcon, deleteIcon);
+            layout.add(shareIcon, editIcon, deleteIcon);
             shareIcon.setClassName("success");
             editIcon.setClassName("primary");
             deleteIcon.setClassName("danger");
