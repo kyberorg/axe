@@ -16,6 +16,8 @@
 
 :shield: Security
 ---
+* Security updates (https://github.com/kyberorg/yalsee/issues/966)  by @kyberorg
+  in https://github.com/kyberorg/yalsee/pull/968
 
 :lady_beetle: Bug Fixes
 ---
