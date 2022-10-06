@@ -15,8 +15,6 @@ import io.kyberorg.yalsee.utils.ErrorUtils;
 
 public class AppMenu extends Composite<MenuBar> {
 
-    private final Button userButton;
-
     /**
      * Creates menu, that should be shown to all visitors.
      *
@@ -44,7 +42,7 @@ public class AppMenu extends Composite<MenuBar> {
         MenuBar menu = getContent();
         menu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
 
-        userButton = new Button();
+        Button userButton = new Button();
         userButton.getStyle().set("border-radius", "100%");
         Component icon = isUserMenu ? VaadinIcon.SPECIALIST.create() : VaadinIcon.USER.create();
         userButton.setIcon(icon);
@@ -107,11 +105,11 @@ public class AppMenu extends Composite<MenuBar> {
     }
 
     private void showWhyRegisterModal(final ClickEvent<MenuItem> event) {
-
+        showNotImplementedWarning();
     }
 
     private void openTermsOfServicePage(final ClickEvent<MenuItem> event) {
-
+        showNotImplementedWarning();
     }
 
     private void showNotImplementedWarning() {
