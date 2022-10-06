@@ -84,6 +84,11 @@ public class YalseeSession {
          */
         private boolean darkMode = false;
 
+        /**
+         * Is Users Feature enabled.
+         */
+        private boolean usersFeatureEnabled = false;
+
         @Override
         public boolean equals(final Object o) {
             if (this == o) return true;

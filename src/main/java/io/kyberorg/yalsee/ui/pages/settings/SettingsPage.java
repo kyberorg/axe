@@ -43,6 +43,10 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
     private final Span darkModeSpan = new Span();
     private final Span darkModeLabel = new Span("Dark Mode: ");
     private final ToggleButton darkModeValue = new ToggleButton();
+
+    private final Span usersFeatureSpan = new Span();
+    private final Span usersFeatureLabel = new Span("Users: ");
+    private final ToggleButton usersFeatureValue = new ToggleButton();
     private final Notification savedNotification = makeSavedNotification();
 
     private final MainView mainView;
@@ -75,6 +79,7 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
                 .ifPresent(ys -> {
                     analyticsCookiesValue.setValue(ys.getSettings().isAnalyticsCookiesAllowed());
                     darkModeValue.setValue(ys.getSettings().isDarkMode());
+                    usersFeatureValue.setValue(ys.getSettings().isUsersFeatureEnabled());
                     if (ys.hasDevice()) adjustNotificationPosition(ys.getDevice().isMobile());
                 });
         //automatic set all values, all other actions are from client.
@@ -103,9 +108,10 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue, pageReloadPostfix());
 
         darkModeSpan.add(darkModeLabel, darkModeValue);
+        usersFeatureSpan.add(usersFeatureLabel, usersFeatureValue, pageReloadPostfix());
 
         cookieSettingsSection.setContent(techCookiesSpan, analyticsCookiesSpan);
-        betaSettingsSection.setContent(darkModeSpan);
+        betaSettingsSection.setContent(darkModeSpan, usersFeatureSpan);
 
         add(pageTitle, cookieSettingsSection, betaSettingsSection);
     }
@@ -117,6 +123,8 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         analyticsCookiesValue.addValueChangeListener(this::onAnalyticCookiesChanged);
         darkModeValue.setValue(false);
         darkModeValue.addValueChangeListener(this::onDarkModeChanged);
+        usersFeatureValue.setValue(false);
+        usersFeatureValue.addValueChangeListener(this::onUsersFeatureSwitchChanged);
     }
 
     private void onAnalyticCookiesChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
@@ -129,6 +137,11 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         final boolean isDarkTheme = event.getValue();
         mainView.applyTheme(isDarkTheme);
         YalseeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
+    }
+
+    private void onUsersFeatureSwitchChanged(AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
+        YalseeSession.getCurrent().ifPresent(session -> session.getSettings().setUsersFeatureEnabled(event.getValue()));
+        notifyClient();
     }
 
     private void notifyClient() {
