@@ -36,6 +36,9 @@ public final class AppMenu extends Composite<MenuBar> {
         return new AppMenu(true);
     }
 
+    /**
+     * Applies Styles that forces Menu Button to be placed at right side of the page.
+     */
     public void moveUserButtonToFarRight() {
         getContent().getStyle().set("margin-left", "auto");
         getContent().getStyle().set("margin-right", "1rem");
