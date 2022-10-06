@@ -13,7 +13,10 @@ import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import io.kyberorg.yalsee.utils.ErrorUtils;
 
-public class AppMenu extends Composite<MenuBar> {
+/**
+ * Application Menu.
+ */
+public final class AppMenu extends Composite<MenuBar> {
 
     /**
      * Creates menu, that should be shown to all visitors.

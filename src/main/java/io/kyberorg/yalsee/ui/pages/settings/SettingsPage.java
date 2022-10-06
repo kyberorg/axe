@@ -139,8 +139,8 @@ public class SettingsPage extends YalseeLayout implements BeforeEnterObserver {
         YalseeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
     }
 
-    private void onUsersFeatureSwitchChanged(AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
-        YalseeSession.getCurrent().ifPresent(session -> session.getSettings().setUsersFeatureEnabled(event.getValue()));
+    private void onUsersFeatureSwitchChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> e) {
+        YalseeSession.getCurrent().ifPresent(session -> session.getSettings().setUsersFeatureEnabled(e.getValue()));
         notifyClient();
     }
 
