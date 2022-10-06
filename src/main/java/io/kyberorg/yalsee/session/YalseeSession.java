@@ -95,7 +95,8 @@ public class YalseeSession {
             if (o == null || getClass() != o.getClass()) return false;
             Settings settings = (Settings) o;
             return analyticsCookiesAllowed == settings.analyticsCookiesAllowed
-                    && darkMode == settings.darkMode;
+                    && darkMode == settings.darkMode
+                    && usersFeatureEnabled == settings.usersFeatureEnabled;
         }
 
         @Override
