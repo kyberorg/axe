@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Anchor;
@@ -33,6 +34,7 @@ import io.kyberorg.yalsee.services.YalseeSessionCookieService;
 import io.kyberorg.yalsee.services.YalseeSessionService;
 import io.kyberorg.yalsee.session.Device;
 import io.kyberorg.yalsee.session.YalseeSession;
+import io.kyberorg.yalsee.ui.elements.AppMenu;
 import io.kyberorg.yalsee.ui.elements.CookieBanner;
 import io.kyberorg.yalsee.ui.pages.appinfo.AppInfoPage;
 import io.kyberorg.yalsee.ui.pages.debug.DebugPage;
@@ -65,12 +67,17 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
     private final YalseeSessionService sessionService;
     private final YalseeSessionCookieService cookieService;
 
+    private HorizontalLayout header;
+    private final Component appMenuPlaceholder = new Button();
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
     private final UI ui = UI.getCurrent();
     private final Device currentDevice;
     private String currentSessionId;
+
+    //needed to prevent execution of {@link #beforeEnter()} twice;
+    private boolean pageAlreadyInitialized = false;
 
     /**
      * Creates Main Application (NavBar, Menu and Content) View.
@@ -109,7 +116,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         setPrimarySection(Section.NAVBAR);
 
         //do not set touch-optimized to true, because it moves navbar down.
-        addToNavbar(createHeader());
+        header = createHeader();
+        addToNavbar(header);
 
         //items
         addLogo();
@@ -137,6 +145,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        if (pageAlreadyInitialized) return;
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
 
         Optional<YalseeSession> session = YalseeSession.getCurrent();
@@ -149,6 +158,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
             cookieBanner.getContent().open();
             session.ifPresent(ys -> ys.getFlags().setCookieBannerAlreadyShown(true));
         }
+
+        boolean isUserFeatureEnabled;
+        isUserFeatureEnabled = session.map(ys -> ys.getSettings().isUsersFeatureEnabled()).orElse(false);
+        if (isUserFeatureEnabled) {
+            AppMenu appMenu = AppMenu.createNormalMenu();
+            header.replace(appMenuPlaceholder, appMenu);
+            appMenu.moveUserButtonToFarRight();
+        }
+        pageAlreadyInitialized = true;
     }
 
     /**
@@ -180,7 +198,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         }
     }
 
-    private Component createHeader() {
+    private HorizontalLayout createHeader() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
         layout.setWidthFull();
@@ -196,7 +214,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         Span testName = new Span();
         testName.setId(IDs.TEST_NAME_SPAN);
 
-        layout.add(toggle, title, testName);
+        appMenuPlaceholder.setVisible(false);
+
+        layout.add(toggle, title, testName, appMenuPlaceholder);
         return layout;
     }
 
