@@ -104,7 +104,7 @@ public class Device implements Serializable {
      *
      * @return true - if connection has local IP address, false is not.
      */
-    public boolean isInternal() {
+    public boolean isInternalTraffic() {
         if (StringUtils.isBlank(this.getIp())) return false;
         return this.getIp().equals(LOCALHOST_IP);
     }
