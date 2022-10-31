@@ -28,6 +28,11 @@ public class Device implements Serializable {
      */
     public static final String DEFAULT_IP = "0.0.0.0";
 
+    /**
+     * IP address for localhost aka internal connection.
+     */
+    private static final String LOCALHOST_IP = "127.0.0.1";
+
     private String userAgent = DEFAULT_USER_AGENT;
     private String ip = DEFAULT_IP;
     private boolean secureConnection = false;
@@ -92,6 +97,16 @@ public class Device implements Serializable {
      */
     public boolean isSameDevice(final Device another) {
         return userAgent.equals(another.getUserAgent());
+    }
+
+    /**
+     * Defines if connection is from the same server aka health-checks etc.
+     *
+     * @return true - if connection has local IP address, false is not.
+     */
+    public boolean isInternalTraffic() {
+        if (StringUtils.isBlank(this.getIp())) return false;
+        return this.getIp().equals(LOCALHOST_IP);
     }
 
     @Override
