@@ -34,7 +34,7 @@ jobs:
 
       - name: Get Docker image SHA256
         id: docker_image_sha
-        run: echo "::set-output name=imageSha::$(cat prod.sha | tail -n 1 | awk '{print $3}')"
+        run: echo "imageSha=$(cat prod.sha | tail -n 1 | awk '{print $3}')" >> $GITHUB_OUTPUT
 
       - name: Debug image SHA256
         run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
@@ -65,7 +65,7 @@ jobs:
 
       - name: Get deployed commit SHA
         id: deployed_commit
-        run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-7)"
+        run: echo "sha=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v3
