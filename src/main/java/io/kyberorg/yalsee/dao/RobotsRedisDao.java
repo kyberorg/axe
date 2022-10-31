@@ -21,7 +21,7 @@ public class RobotsRedisDao extends RedisDao {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private static final String LIST_NAME = RedisDao.getApplicationPrefix() + "AAA-Robots";
+    private static final String LIST_NAME = RedisDao.getApplicationPrefix() + "Robots";
 
     private ListOperations<String, String> listOps;
 
