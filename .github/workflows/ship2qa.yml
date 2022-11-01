@@ -65,7 +65,7 @@ jobs:
           harbor-token: ${{ secrets.KIO_PASS }}
           image: kio.ee/yalsee/yalsee:qa
           digest: ${{ steps.docker_image_sha.outputs.imageSha }}
-          max-allowed-severity: medium
+          max-allowed-severity: high
           report-sort-by: score
           timeout: 100
           github-url: ${{ github.event.pull_request.comments_url }}
