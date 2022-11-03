@@ -58,10 +58,10 @@ public class GetLinkApiTest extends UnirestTest {
     }
 
     /**
-     * Request with non-alphanumeric chars = 400.
+     * Request with non-alphanumeric chars = 500. As Spring HTTP Firewall will reject this URL
      */
     @Test
-    public void onRequestWithSpecialCharIdentStatusIs400() {
+    public void onRequestWithSpecialCharIdent_StatusIs500_and_SpringFirewallRejectedError() {
         String specChars = "%#";
         String url =
                 TEST_URL
@@ -73,8 +73,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
-        TestUtils.assertResultIsYalsErrorJson(result);
+        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
     }
 
     /**
