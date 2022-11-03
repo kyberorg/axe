@@ -132,9 +132,10 @@ EnvVars:
 * REDIS_HOST: `redis hostname/ip or container name`
 * REDIS_PASSWORD or REDIS_PASSWORD_FILE: `password for connecting to redis`
 * FACEBOOK_APP_ID: `Facebook Application ID for sharing link to Facebook`
+* SERVER_KEY: `Symmetric encryption/decryption key`
+* PASSWORD_SALT: `String with Salt added to Password during encryption proccess`
 
 Optional EnvVars:
-
 * LOG_LEVEL_APP: `see Logging part`
 * PORT: `start server at port other than 8080 `
 * SERVER_URL: `https://yals.ee` (most likely don't needed as regulated by Spring profile)
