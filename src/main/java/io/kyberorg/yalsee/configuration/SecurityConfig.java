@@ -13,8 +13,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    /**
+     * Setting up HTTP Security for Spring. Without this Spring Boot makes every application page protected.
+     * We don't need it.
+     *
+     * @param httpSecurity {@link HttpSecurity} bean
+     * @return configured {@link  HttpSecurity} bean
+     * @throws Exception if any occur
+     */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable() //vaadin has its own
                 .authorizeRequests()
                 .antMatchers("/protected/path").authenticated() //protect some page
@@ -22,6 +30,11 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
+    /**
+     * Disabling WebSecurity from SpringBoot. We don't use it.
+     *
+     * @return {@link WebSecurityCustomizer} bean with disabled web security.
+     */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().anyRequest();

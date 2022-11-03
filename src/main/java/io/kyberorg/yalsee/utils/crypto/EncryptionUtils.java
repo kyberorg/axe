@@ -29,7 +29,7 @@ class EncryptionUtils {
 
     private final Environment env;
 
-    public EncryptionUtils(final Environment env) {
+    EncryptionUtils(final Environment env) {
         this.env = env;
         this.serverKey = setServerKey();
         this.passwordSalt = setPasswordSalt();
