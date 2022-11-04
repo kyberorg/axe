@@ -82,7 +82,6 @@ public class YalseeErrorController implements ErrorController {
         YalseeErrorJson errorJson = YalseeErrorJson.createFromYalseeError(yalseeError);
         String errorId = storeYalseeError(yalseeError);
 
-        //TODO change it to fireEvent
         errorUtils.reportToBugsnag(yalseeError);
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);

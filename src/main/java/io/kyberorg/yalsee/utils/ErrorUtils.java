@@ -34,7 +34,7 @@ import static io.kyberorg.yalsee.constants.App.NO_STATUS;
 @Component
 public class ErrorUtils {
     private static final String TAG = "[" + ErrorUtils.class.getSimpleName() + "]";
-    private static final int SERVER_SIDE_ERROR_STATUS = 500;
+    private static final int SERVER_ERROR_HTTP_STATUS = 500;
     private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
     private final AppUtils appUtils;
@@ -185,18 +185,17 @@ public class ErrorUtils {
             report.addToTab(tabName, "Raw Exception", yalseeError.getRawException());
         });
         bugsnag.notify(yalseeException);
-        if (yalseeError.getHttpStatus() >= SERVER_SIDE_ERROR_STATUS) {
+        if (yalseeError.getHttpStatus() >= SERVER_ERROR_HTTP_STATUS) {
             notifyByEmail(yalseeError);
         }
     }
 
     /**
-     * Reports issue to Maintainer's email
+     * Reports issue to Maintainer's email.
      *
      * @param yalseeError {@link YalseeError} object
      */
     public void notifyByEmail(final YalseeError yalseeError) {
-        //TODO get email for errors
         String emailForErrors = appUtils.getEmailForErrors();
         if (emailForErrors.equals(App.NO_VALUE)) {
             log.warn("{} failed to notify about server error by email. Reason: email for errors is not set", TAG);
