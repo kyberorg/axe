@@ -81,6 +81,18 @@
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
 
+        <!-- Spring Boot Mailing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!-- Email Templating -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
         <!-- Spring Boot Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -79,5 +79,20 @@
       "name": "app.mail.email4errors",
       "type": "java.lang.String",
       "description": "Email address for sending errors."
+    },
+    {
+      "name": "app.mail.from-address",
+      "type": "java.lang.String",
+      "description": "E-Mail Address used in FROM field in email."
+    },
+    {
+      "name": "app.mail.credentials.username",
+      "type": "java.lang.String",
+      "description": "GMail Username."
+    },
+    {
+      "name": "app.mail.credentials.password",
+      "type": "java.lang.String",
+      "description": "GMail password."
     }
   ] }
