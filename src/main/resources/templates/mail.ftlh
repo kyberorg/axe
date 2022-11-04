@@ -15,7 +15,7 @@
                 <tr>
                     <td></td>
                     <td class="content" align="center" valign="top" width="600" style="padding-bottom: 20px;">
-                        <#include "parts/image-table.ftl" parse=false>
+                        <#include "parts/image-table.ftl" parse=true>
                         <table class="main" cellpadding="0" cellspacing="0"
                                style="border: 1px solid #e9e9e9; border-radius: 3px;" bgcolor="white">
                             <tr>
