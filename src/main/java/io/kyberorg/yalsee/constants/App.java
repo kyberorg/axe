@@ -35,6 +35,7 @@ public final class App {
     }
 
     public static class Properties {
+        public static final String APPLICATION_NAME = "spring.application.name";
         public static final String TELEGRAM_ENABLED = "telegram.enabled";
         public static final String TELEGRAM_TOKEN = "telegram.token";
         public static final String SERVER_URL = "server.url";
@@ -54,6 +55,7 @@ public final class App {
         public static final String FACEBOOK_APP_ID = "app.facebook.app-id";
         public static final String SERVER_KEY = "app.security.server-key";
         public static final String PASSWORD_SALT = "app.security.password-salt";
+        public static final String EMAIL_FOR_ERRORS = "app.mail.email4errors";
     }
 
     public static class Env {
