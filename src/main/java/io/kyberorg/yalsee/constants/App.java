@@ -54,6 +54,8 @@ public final class App {
         public static final String FACEBOOK_APP_ID = "app.facebook.app-id";
         public static final String SERVER_KEY = "app.security.server-key";
         public static final String PASSWORD_SALT = "app.security.password-salt";
+        public static final String EMAIL_FOR_ERRORS = "app.mail.email4errors";
+        public static final String APPLICATION_NAME = "spring.application.name";
     }
 
     public static class Env {

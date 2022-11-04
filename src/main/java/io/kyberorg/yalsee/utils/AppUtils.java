@@ -617,6 +617,19 @@ public class AppUtils implements Serializable {
         return getEnv().getProperty(App.Properties.FACEBOOK_APP_ID, App.NO_VALUE);
     }
 
+    /**
+     * Reads Email for sending errors from Settings.
+     *
+     * @return String with  Email for sending errors or {@link App#NO_VALUE}.
+     */
+    public String getEmailForErrors() {
+        return getEnv().getProperty(App.Properties.EMAIL_FOR_ERRORS, App.NO_VALUE);
+    }
+
+    public String getApplicationName() {
+        return getEnv().getProperty(App.Properties.APPLICATION_NAME, "Yalsee");
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

@@ -14,14 +14,13 @@ import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static io.kyberorg.yalsee.constants.App.NO_STATUS;
 
@@ -30,12 +29,15 @@ import static io.kyberorg.yalsee.constants.App.NO_STATUS;
  *
  * @since 2.7
  */
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class ErrorUtils {
-
+    private static final String TAG = "[" + ErrorUtils.class.getSimpleName() + "]";
+    private static final int SERVER_SIDE_ERROR_STATUS = 500;
     private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
+    private final AppUtils appUtils;
 
     /**
      * Converts from stack trace to String with stack trace.
@@ -183,6 +185,43 @@ public class ErrorUtils {
             report.addToTab(tabName, "Raw Exception", yalseeError.getRawException());
         });
         bugsnag.notify(yalseeException);
+        if (yalseeError.getHttpStatus() >= SERVER_SIDE_ERROR_STATUS) {
+            notifyByEmail(yalseeError);
+        }
+    }
+
+    /**
+     * Reports issue to Maintainer's email
+     *
+     * @param yalseeError {@link YalseeError} object
+     */
+    public void notifyByEmail(final YalseeError yalseeError) {
+        //TODO get email for errors
+        String emailForErrors = appUtils.getEmailForErrors();
+        if (emailForErrors.equals(App.NO_VALUE)) {
+            log.warn("{} failed to notify about server error by email. Reason: email for errors is not set", TAG);
+            return;
+        }
+        String appName = appUtils.getApplicationName();
+        String subject = appName + " Error Report";
+        String jsonizedYalseeError = AppUtils.GSON.toJson(yalseeError);
+
+        Map<String, Object> templateVars = new HashMap<>(1);
+        templateVars.put("yalseeError", jsonizedYalseeError);
+
+        //TODO replace this stub call with 2 calls below
+        sendEmail(emailForErrors, subject, templateVars);
+        //TODO create letter - this needs EmailSenderService
+        //TODO send it - this needs EmailSenderService
+    }
+
+    //TODO remove this stub method once EmailSenderService is ready
+    private void sendEmail(final String addressTo, final String subject, final Map<String, Object> templateVars) {
+        log.debug("{} Error Email is {}", TAG, addressTo);
+        log.debug("{} Subject is {}", TAG, subject);
+        if (templateVars.isEmpty()) {
+            log.debug("{} no template vars were set.", TAG);
+        }
     }
 
     /**
