@@ -74,7 +74,13 @@ public class EmailSenderService {
      */
     @Async
     public void sendEmail(final String emailAddress, final MimeMessage letter) {
-        log.info("{} Sending {} to {}", TAG, letter, emailAddress);
+        Object subject;
+        try {
+            subject = letter.getSubject();
+        } catch (MessagingException e) {
+            subject = letter;
+        }
+        log.info("{} Sending \"{}\" to {}", TAG, subject, emailAddress);
         mailSender.send(letter);
     }
 
