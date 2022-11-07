@@ -94,5 +94,10 @@
       "name": "app.mail.credentials.password",
       "type": "java.lang.String",
       "description": "GMail password."
+    },
+    {
+      "name": "app.mail.debug",
+      "type": "java.lang.Boolean",
+      "description": "Enables/Disables Mail (SMTP) Debugging output."
     }
   ] }

@@ -19,11 +19,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service, that prepares email letter and sends it via {@link JavaMailSender}.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class EmailSenderService {
-
     private static final String TAG = EmailSenderService.class.getSimpleName();
     private static final String CORE_TEMPLATE = "mail.ftlh";
     private final JavaMailSender mailSender;
@@ -31,13 +33,19 @@ public class EmailSenderService {
 
     private final Configuration configuration;
 
-    @Async
-    public void sendEmail(final String emailAddress, final MimeMessage letter) {
-        log.info("{} Sending {} to {}", TAG, letter, emailAddress);
-        mailSender.send(letter);
-    }
-
-    public MimeMessage createLetter(final LetterType letterType, final String email, final String subject,
+    /**
+     * Prepares email letter.
+     *
+     * @param letterType  type of letter, linked to template (see {@link LetterType}).
+     * @param targetEmail string with email address we should send to
+     * @param subject     email subject
+     * @param vars        template variables.
+     * @return prepared email letter.
+     * @throws MessagingException when message cannot be prepared correctly.
+     * @throws IOException        when error occurs while reading or writing.
+     * @throws TemplateException  when templating fails
+     */
+    public MimeMessage createLetter(final LetterType letterType, final String targetEmail, final String subject,
                                     final Map<String, Object> vars)
             throws MessagingException, IOException, TemplateException {
         final MimeMessage mailMessage = getEmptyMimeMessage();
@@ -51,18 +59,30 @@ public class EmailSenderService {
 
         helper.setReplyTo(appUtils.getEmailFromAddress());
         helper.setFrom(appUtils.getEmailFromAddress());
-        helper.setTo(email);
+        helper.setTo(targetEmail);
         helper.setSubject(fullSubject);
 
         helper.setText(letterHtmlBody, true);
         return mailMessage;
     }
 
+    /**
+     * Sends letter.
+     *
+     * @param emailAddress string with email address we send to.
+     * @param letter       prepared by {@link #createLetter(LetterType, String, String, Map)} letter.
+     */
+    @Async
+    public void sendEmail(final String emailAddress, final MimeMessage letter) {
+        log.info("{} Sending {} to {}", TAG, letter, emailAddress);
+        mailSender.send(letter);
+    }
+
     private MimeMessage getEmptyMimeMessage() {
         return mailSender.createMimeMessage();
     }
 
-    private String createLetterBody(LetterType letterType, Map<String, Object> vars)
+    private String createLetterBody(final LetterType letterType, final Map<String, Object> vars)
             throws TemplateException, IOException {
         StringWriter stringWriter = new StringWriter();
         Map<String, Object> model = new HashMap<>();

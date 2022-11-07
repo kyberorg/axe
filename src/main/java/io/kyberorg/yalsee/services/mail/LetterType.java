@@ -15,6 +15,11 @@ public enum LetterType {
         this.templateFile = template;
     }
 
+    /**
+     * Provides filename of template linked to given {@link LetterType}.
+     *
+     * @return string with filename and extension (myTemplate.ftl).
+     */
     public String getTemplateFile() {
         return templateFile;
     }
