@@ -35,7 +35,7 @@
         <!-- Vaadin version -->
         <vaadin.version>23.2.6</vaadin.version>
         <!-- QR Code Software version-->
-        <qr.zxing.version>3.5.0</qr.zxing.version>
+        <qr.zxing.version>3.5.1</qr.zxing.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
