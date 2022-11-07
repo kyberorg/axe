@@ -158,6 +158,7 @@ Optional EnvVars:
 * REDIS_TIMEOUT_MILLIS: `Redis connection timeout in milliseconds` (most likely don't needed as regulated by Spring
   profile)
 * REDIS_ENABLED: `true/false` (most likely don't needed as regulated by Spring profile)
+* MAIL_DEBUG: `true/false` (enables/disables mail (SMTP) debug output. Default: false)
 
 Ports:
 
