@@ -12,12 +12,15 @@ import io.kyberorg.yalsee.exception.YalseeException;
 import io.kyberorg.yalsee.exception.error.UserMessageGenerator;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
+import io.kyberorg.yalsee.services.mail.EmailSenderService;
+import io.kyberorg.yalsee.services.mail.LetterType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.MimeMessage;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
@@ -38,6 +41,7 @@ public class ErrorUtils {
     private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
     private final AppUtils appUtils;
+    private final EmailSenderService emailSenderService;
 
     /**
      * Converts from stack trace to String with stack trace.
@@ -201,25 +205,20 @@ public class ErrorUtils {
             log.warn("{} failed to notify about server error by email. Reason: email for errors is not set", TAG);
             return;
         }
-        String appName = appUtils.getApplicationName();
-        String subject = appName + " Error Report";
+        String subject = "Error Report";
         String jsonizedYalseeError = AppUtils.GSON.toJson(yalseeError);
 
         Map<String, Object> templateVars = new HashMap<>(1);
         templateVars.put("yalseeError", jsonizedYalseeError);
 
-        //TODO replace this stub call with 2 calls below
-        sendEmail(emailForErrors, subject, templateVars);
-        //TODO create letter - this needs EmailSenderService
-        //TODO send it - this needs EmailSenderService
-    }
-
-    //TODO remove this stub method once EmailSenderService is ready
-    private void sendEmail(final String addressTo, final String subject, final Map<String, Object> templateVars) {
-        log.debug("{} Error Email is {}", TAG, addressTo);
-        log.debug("{} Subject is {}", TAG, subject);
-        if (templateVars.isEmpty()) {
-            log.debug("{} no template vars were set.", TAG);
+        try {
+            MimeMessage letter =
+                    emailSenderService.createLetter(LetterType.SERVER_ERROR, emailForErrors, subject, templateVars);
+            emailSenderService.sendEmail(emailForErrors, letter);
+        } catch (Exception e) {
+            log.error("{} failed to create or send error report email. Got exception {}",
+                    TAG, e.getClass().getSimpleName());
+            log.error("", e);
         }
     }
 

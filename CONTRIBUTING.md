@@ -134,8 +134,11 @@ EnvVars:
 * FACEBOOK_APP_ID: `Facebook Application ID for sharing link to Facebook`
 * SERVER_KEY: `Symmetric encryption/decryption key`
 * PASSWORD_SALT: `String with Salt added to Password during encryption proccess`
+* MAIL_USER: `Gmail User (email address)`
+* MAIL_PASSWORD: `Gmail Application Password`
 
 Optional EnvVars:
+
 * LOG_LEVEL_APP: `see Logging part`
 * PORT: `start server at port other than 8080 `
 * SERVER_URL: `https://yals.ee` (most likely don't needed as regulated by Spring profile)
@@ -155,6 +158,7 @@ Optional EnvVars:
 * REDIS_TIMEOUT_MILLIS: `Redis connection timeout in milliseconds` (most likely don't needed as regulated by Spring
   profile)
 * REDIS_ENABLED: `true/false` (most likely don't needed as regulated by Spring profile)
+* MAIL_DEBUG: `true/false` (enables/disables mail (SMTP) debug output. Default: false)
 
 Ports:
 

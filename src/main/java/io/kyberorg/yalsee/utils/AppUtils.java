@@ -627,6 +627,15 @@ public class AppUtils implements Serializable {
     }
 
     /**
+     * Reads from profile Email Address we should send letters from.
+     *
+     * @return String with Email Address or default value.
+     */
+    public String getEmailFromAddress() {
+        return getEnv().getProperty(App.Properties.EMAIL_FROM_ADDRESS, App.Defaults.EMAIL_FROM_ADDRESS);
+    }
+
+    /**
      * Reads Application Name from properties.
      *
      * @return String with Application Name,defined in profile or harcoded value {@literal Yalsee}.
