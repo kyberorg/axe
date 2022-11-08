@@ -45,4 +45,97 @@
             <column name="session"/>
         </createIndex>
     </changeSet>
+    <changeSet id="4" author="kyberorg" failOnError="true">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="TEXT"/>
+            <column name="user_role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="BOOLEAN"/>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
+        <createTable tableName="accounts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auth_data"/>
+            </column>
+            <column name="user" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmed" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="accounts"
+                                 constraintName="FK_ACCOUNT_DATA_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="tokens">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user" type="BIGINT"/>
+            <column name="confirmation_for" type="BIGINT"/>
+            <column name="not_valid_after" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="tokens"/>
+        <addForeignKeyConstraint baseColumnNames="confirmation_for" baseTableName="tokens"
+                                 constraintName="FK_TOKEN_ON_CONFIRMATION_FOR" referencedColumnNames="id"
+                                 referencedTableName="accounts"/>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="tokens" constraintName="FK_TOKEN_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="user_preferences">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_preferences"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="main_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_reset_channel" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_preferences"
+                                 constraintName="FK_USER_PREFERENCES_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
 </databaseChangeLog>
