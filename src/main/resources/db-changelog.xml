@@ -138,4 +138,32 @@
                                  constraintName="FK_USER_PREFERENCES_ON_USER" referencedColumnNames="id"
                                  referencedTableName="users"/>
     </changeSet>
+    <changeSet id="5" author="kyberorg" failOnError="true">
+        <!-- Creating yalsee user -->
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="username" value="yalsee"/>
+            <column name="password" value=""/>
+            <column name="user_role" value="SUPER_ADMIN"/>
+            <column name="is_enabled" valueBoolean="true"/>
+            <column name="created" valueDate="now()"/>
+            <column name="updated" valueDate="now()"/>
+        </insert>
+        <insert tableName="accounts">
+            <column name="id" value="1"/>
+            <column name="user" value="1"/>
+            <column name="type" value="LOCAL"/>
+            <column name="account_name" value="yalsee"/>
+            <column name="confirmed" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_preferences">
+            <column name="id" value="1"/>
+            <column name="user_id" value="1"/>
+            <column name="tfa_enabled" valueBoolean="false"/>
+            <column name="tfa_channel" value="LOCAL"/>
+            <column name="main_channel" value="LOCAL"/>
+            <!-- Next line is here just for dokumentation. Do not uncomment it. -->
+            <!--<column name="password_reset_channel" value="null"/>-->
+        </insert>
+    </changeSet>
 </databaseChangeLog>

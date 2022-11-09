@@ -118,12 +118,36 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Returns User by its ID.
+     *
+     * @param id id of {@link User}
+     * @return {@link Optional} with found {@link User} or {@link Optional#empty()}
+     */
+    public Optional<User> getUserById(final long id) {
+        return userDao.findById(id);
+    }
+
+    /**
+     * Method, that returns default application user.
+     *
+     * @return {@link User} record for default user.
+     * @throws UsernameNotFoundException when no default user found.
+     */
+    public User getDefaultUser() throws UsernameNotFoundException {
+        //returning Yalsee user
+        Optional<User> yalsee = getUserById(1L);
+        if (yalsee.isPresent()) {
+            return yalsee.get();
+        } else {
+            throw new UsernameNotFoundException("Suddenly there is no default user in the system");
+        }
+    }
+
     void enableUser(final User user) {
         user.setEnabled(true);
         userDao.update(user);
     }
 
-    private Optional<User> getUserById(final long id) {
-        return userDao.findById(id);
-    }
+
 }
