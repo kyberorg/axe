@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
@@ -35,4 +33,7 @@ public class LinkInfo extends TimeModel {
     @Column(name = SESSION_COLUMN)
     private String session;
 
+    @ManyToOne
+    @JoinColumn(name = "owner")
+    private User owner;
 }

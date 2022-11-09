@@ -10,6 +10,7 @@ import io.kyberorg.yalsee.events.link.LinkUpdatedEvent;
 import io.kyberorg.yalsee.exception.URLDecodeException;
 import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
@@ -192,8 +193,9 @@ public class LinkService {
 
             String sessionId = input.getSessionID();
             String description = input.getDescription();
+            User owner = input.getLinkOwner();
 
-            linkInfoService.createLinkInfo(ident, sessionId, description);
+            linkInfoService.createLinkInfo(ident, sessionId, description, owner);
 
             log.info("{} Saved. {\"ident\": {}, \"link\": {}}", TAG, ident, decodedLink);
             EventBus.getDefault().post(LinkSavedEvent.createWith(savedLink));
