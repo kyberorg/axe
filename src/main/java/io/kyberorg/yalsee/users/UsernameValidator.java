@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * The dot (.), underscore (_), or hyphen (-) does not appear consecutively, e.g., java..regex
  * The number of characters must be between 2 and 20.
  */
-public class UsernameValidator {
+public final class UsernameValidator {
     private UsernameValidator() {
         throw new UnsupportedOperationException("Utility class");
     }

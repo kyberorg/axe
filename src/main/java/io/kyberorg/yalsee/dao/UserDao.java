@@ -15,5 +15,5 @@ public interface UserDao extends TimeAwareCrudDao<User, Long> {
      * @param username string with username to search.
      * @return {@link Optional} with {@link User} record inside or {@link Optional#empty()}.
      */
-    Optional<User> findByUsername(final String username);
+    Optional<User> findByUsername(String username);
 }

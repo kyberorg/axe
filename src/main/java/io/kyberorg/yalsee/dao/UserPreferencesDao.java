@@ -16,5 +16,5 @@ public interface UserPreferencesDao extends CrudRepository<UserPreferences, Long
      * @param user owner of {@link UserPreferences}
      * @return {@link Optional} with found {@link UserPreferences} record or {@link Optional#empty()}.
      */
-    Optional<UserPreferences> findByUser(final User user);
+    Optional<UserPreferences> findByUser(User user);
 }

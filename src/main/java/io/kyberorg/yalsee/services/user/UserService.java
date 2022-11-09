@@ -103,7 +103,7 @@ public class UserService implements UserDetailsService {
      * @param newPassword string with plain password known as new password.
      * @return {@link OperationResult#success()} or {@link OperationResult} with error and message.
      */
-    public OperationResult resetPassword(User user, String newPassword) {
+    public OperationResult resetPassword(final User user, final String newPassword) {
         try {
             user.setPassword(passwordUtils.encryptPassword(newPassword));
             userDao.update(user);

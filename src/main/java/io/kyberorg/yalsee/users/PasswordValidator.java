@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  * Not Empty
  * Contains 3+ chars
  */
-public class PasswordValidator {
+public final class PasswordValidator {
     private static final int PASSWORD_MIN_LENGTH = 3;
     private static final String ERR_EMPTY_PASSWORD = "Password cannot be empty";
     private static final String ERR_SHORT_PASSWORD = "Password is too short";
