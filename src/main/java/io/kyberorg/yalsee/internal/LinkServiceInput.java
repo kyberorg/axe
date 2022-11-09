@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.internal;
 
+import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.services.LinkService;
 import lombok.*;
 
@@ -14,12 +15,12 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 public class LinkServiceInput {
-
     @NonNull
     private String link;
     private String customIdent;
     private String sessionID;
     private String description;
+    private User linkOwner;
 
     /**
      * Creates builder with required parameter set.
