@@ -5,12 +5,12 @@ import io.kyberorg.yalsee.models.Account;
 import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.services.mail.EmailService;
 import io.kyberorg.yalsee.users.AccountType;
 import io.kyberorg.yalsee.utils.crypto.SymmetricCryptTool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
@@ -31,17 +31,16 @@ public class AccountService {
     private final SymmetricCryptTool cryptTool;
     private final TokenService tokenService;
     private final UserService userService;
+    private final EmailService emailService;
 
-    public static final String OP_EMPTY_EMAIL = "Email cannot be empty";
-    public static final String OP_EMAIL_NOT_VALID = "Please use valid email address";
-    public static final String OP_EMAIL_ALREADY_EXISTS = "Email already used";
+    public static final String ERR_EMAIL_ALREADY_EXISTS = "Email already used";
     public static final String ERR_ENCRYPTION_FAILED = "Failed to encrypt plain text value before saving";
 
     private String accountToSearch;
 
-    public boolean isAccountAlreadyExists(final String account, final AccountType accountType) {
-        if (StringUtils.isBlank(account)) return false;
-        this.accountToSearch = account;
+    public boolean isAccountAlreadyExists(final String accountName, final AccountType accountType) {
+        if (StringUtils.isBlank(accountName)) return false;
+        this.accountToSearch = accountName;
 
         List<Account> accounts = accountDao.findByAccountType(accountType);
         Account sameAccount = accounts.parallelStream()
@@ -49,6 +48,10 @@ public class AccountService {
                 .findFirst()
                 .orElse(null);
         return Objects.nonNull(sameAccount);
+    }
+
+    public boolean isAccountUnique(final String accountName, final AccountType accountType) {
+        return !isAccountAlreadyExists(accountName, accountType);
     }
 
     public OperationResult createLocalAccount(final User user) {
@@ -67,9 +70,13 @@ public class AccountService {
     }
 
     public OperationResult createEmailAccount(final User user, final String email) {
-        OperationResult emailValidationResult = isEmailValid(email);
+        OperationResult emailValidationResult = emailService.isEmailValid(email);
         if (emailValidationResult.notOk()) {
             return emailValidationResult;
+        }
+
+        if (isAccountUnique(email, AccountType.EMAIL)) {
+            return OperationResult.conflict().withMessage(ERR_EMAIL_ALREADY_EXISTS);
         }
 
         String encryptedEmail;
@@ -170,21 +177,5 @@ public class AccountService {
         } else {
             return false;
         }
-    }
-
-    private OperationResult isEmailValid(final String email) {
-        if (StringUtils.isBlank(email)) {
-            return OperationResult.malformedInput().withMessage(OP_EMPTY_EMAIL);
-        }
-
-        boolean isEmailValid = EmailValidator.getInstance().isValid(email);
-        if (!isEmailValid) {
-            return OperationResult.malformedInput().withMessage(OP_EMAIL_NOT_VALID);
-        }
-
-        if (isAccountAlreadyExists(email, AccountType.EMAIL)) {
-            return OperationResult.conflict().withMessage(OP_EMAIL_ALREADY_EXISTS);
-        }
-        return OperationResult.success();
     }
 }
