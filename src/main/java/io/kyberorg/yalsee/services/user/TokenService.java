@@ -13,6 +13,9 @@ import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.Optional;
 
+/**
+ * Service, that manipulates with {@link Token}s.
+ */
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -21,9 +24,16 @@ public class TokenService {
 
     private static final String ERR_USER_ALREADY_HAS_TOKEN = "User already has token";
 
-    private TokenDao tokenDao;
+    private final TokenDao tokenDao;
 
-    public OperationResult createConfirmationToken(final User user, final Account authorization) {
+    /**
+     * Creates {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN}.
+     *
+     * @param user    account owner.
+     * @param account {@link Account} object
+     * @return {@link OperationResult} with created {@link Token} or {@link OperationResult} with error.
+     */
+    public OperationResult createConfirmationToken(final User user, final Account account) {
         boolean userAlreadyHasConfirmationToken =
                 tokenDao.existsByTokenTypeAndUser(TokenType.ACCOUNT_CONFIRMATION_TOKEN, user);
         if (userAlreadyHasConfirmationToken) {
@@ -31,7 +41,7 @@ public class TokenService {
         }
 
         Token confirmationToken = Token.create(TokenType.ACCOUNT_CONFIRMATION_TOKEN).forUser(user);
-        confirmationToken.setConfirmationFor(authorization);
+        confirmationToken.setConfirmationFor(account);
 
         verifyTokenValueIsUnique(confirmationToken);
 
@@ -47,7 +57,13 @@ public class TokenService {
         }
     }
 
-    public OperationResult createVerificationCode(User user) {
+    /**
+     * Creates {@link TokenType#LOGIN_VERIFICATION_TOKEN}.
+     *
+     * @param user token's owner
+     * @return {@link OperationResult} with created {@link Token} or {@link OperationResult} with error.
+     */
+    public OperationResult createVerificationCode(final User user) {
         Token verificationToken = Token.create(TokenType.LOGIN_VERIFICATION_TOKEN).forUser(user);
         verifyTokenValueIsUnique(verificationToken);
 
@@ -63,7 +79,13 @@ public class TokenService {
         }
     }
 
-    public OperationResult createPasswordResetToken(User user) {
+    /**
+     * Create {@link TokenType#PASSWORD_RESET_TOKEN}.
+     *
+     * @param user token's owner
+     * @return {@link OperationResult} with created {@link Token} or {@link OperationResult} with error.
+     */
+    public OperationResult createPasswordResetToken(final User user) {
         boolean tokenAlreadyExists = tokenDao.existsByTokenTypeAndUser(TokenType.PASSWORD_RESET_TOKEN, user);
         Token passwordResetToken;
         if (tokenAlreadyExists) {
@@ -89,7 +111,14 @@ public class TokenService {
         }
     }
 
-    public boolean isTokenExists(String token, TokenType tokenType) {
+    /**
+     * Check if {@link Token} exists.
+     *
+     * @param token     string with token value.
+     * @param tokenType type of {@link Token}
+     * @return true if token exists, false - is not.
+     */
+    public boolean isTokenExists(final String token, final TokenType tokenType) {
         Optional<Token> foundToken = tokenDao.findFirstByTokenAndTokenType(token, tokenType);
         if (foundToken.isPresent()) {
             Optional<Token> validToken = returnOnlyValidToken(foundToken.get());
@@ -99,12 +128,24 @@ public class TokenService {
         }
     }
 
-    public Optional<Token> getToken(String tokenString) {
+    /**
+     * Gets Token by its {@link Token#token} value.
+     *
+     * @param tokenString string with token value
+     * @return {@link Optional} with found {@link Token} found or {@link Optional#empty()}
+     */
+    public Optional<Token> getToken(final String tokenString) {
         Optional<Token> token = tokenDao.findFirstByToken(tokenString);
         return token.isPresent() ? returnOnlyValidToken(token.get()) : Optional.empty();
     }
 
-    public OperationResult deleteToken(String token) {
+    /**
+     * Deletes token.
+     *
+     * @param token string with token
+     * @return {@link OperationResult#success()} or {@link OperationResult} with error.
+     */
+    public OperationResult deleteToken(final String token) {
         try {
             Optional<Token> tokenRecord = getToken(token);
             if (tokenRecord.isPresent()) {

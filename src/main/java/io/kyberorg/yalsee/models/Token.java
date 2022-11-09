@@ -18,6 +18,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "tokens")
 public class Token extends TimeModel {
+    /**
+     * Default length of Token (code).
+     */
+    private static final int CODE_TOKEN_LEN = 6;
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 
@@ -37,18 +41,37 @@ public class Token extends TimeModel {
     @Column(name = "not_valid_after", nullable = false)
     private Timestamp notValidAfter;
 
+    /**
+     * Starts creating {@link Token} of given {@link TokenType}.
+     *
+     * @param tokenType desired {@link TokenType}
+     * @return {@link Token.Builder} to continue building {@link Token}.
+     */
     public static Token.Builder create(final TokenType tokenType) {
         return new Token.Builder(tokenType);
     }
 
+    /**
+     * Checks {@link Token}'s validity.
+     *
+     * @return true - if token is still valid, false - if expired.
+     */
     public boolean isStillValid() {
         return notValidAfter.after(TimeModel.now());
     }
 
+    /**
+     * Opposite version of {@link #isStillValid()}.
+     *
+     * @return true - if token expired, false - if not.
+     */
     public boolean isExpired() {
         return !isStillValid();
     }
 
+    /**
+     * Updates Token Value and resets its lifetime (period when token considered valid, see {@link #isStillValid()}).
+     */
     public void updateToken() {
         this.token = generateNewToken(this.tokenType.getValueType());
         updateTokenLifeTime();
@@ -63,14 +86,14 @@ public class Token extends TimeModel {
         return newToken;
     }
 
-    private static String generateNewToken(TokenValueType tokenValueType) {
+    private static String generateNewToken(final TokenValueType tokenValueType) {
         return switch (tokenValueType) {
-            case CODE -> RandomStringUtils.randomNumeric(6);
+            case CODE -> RandomStringUtils.randomNumeric(CODE_TOKEN_LEN);
             case UUID -> UUID.randomUUID().toString();
         };
     }
 
-    private static Timestamp setTokenLifeTime(Token currentToken) {
+    private static Timestamp setTokenLifeTime(final Token currentToken) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(currentToken.getCreated().getTime());
         cal.add(Calendar.SECOND, currentToken.tokenType.getTokenAge());
@@ -84,6 +107,9 @@ public class Token extends TimeModel {
         this.setNotValidAfter(new Timestamp(cal.getTime().getTime()));
     }
 
+    /**
+     * Builder for {@link Token}.
+     */
     public static class Builder {
         private final TokenType tokenType;
 
@@ -91,9 +117,14 @@ public class Token extends TimeModel {
             this.tokenType = tokenType;
         }
 
+        /**
+         * Adds {@link Token}s owner.
+         *
+         * @param user {@link User} that should own given {@link Token}.
+         * @return built {@link Token} record.
+         */
         public Token forUser(final User user) {
             return Token.createToken(tokenType, user);
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.models;
 
 import io.kyberorg.yalsee.users.UserRole;
+import io.kyberorg.yalsee.utils.crypto.PasswordUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -35,6 +36,13 @@ public class User extends TimeModel implements UserDetails {
     @Column(name = "is_enabled")
     private boolean enabled = false;
 
+    /**
+     * Create User.
+     *
+     * @param username          string with username
+     * @param encryptedPassword string with encrypted password. See {@link PasswordUtils#encryptPassword(String)}
+     * @return created {@link User} record.
+     */
     public static User create(final String username, final String encryptedPassword) {
         User userObject = new User();
         userObject.setUsername(username);

@@ -1,5 +1,8 @@
 package io.kyberorg.yalsee.users;
 
+import io.kyberorg.yalsee.result.OperationResult;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +18,12 @@ import java.util.regex.Pattern;
  * The number of characters must be between 2 and 20.
  */
 public class UsernameValidator {
+    private UsernameValidator() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     /**
+     * Username Pattern.
      * ^[a-zA-Z0-9]      # start with an alphanumeric character
      * (                 # start of (group 1)
      * [._-](?![._-])  # follow by a dot, hyphen, or underscore, negative lookahead to
@@ -32,7 +40,12 @@ public class UsernameValidator {
     private static final String USERNAME_PATTERN =
             "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){0,18}[a-zA-Z0-9]$";
 
-    private static final Pattern pattern = Pattern.compile(USERNAME_PATTERN);
+    private static final Pattern COMPILED_PATTERN = Pattern.compile(USERNAME_PATTERN);
+
+    private static final int USERNAME_MAX_LENGTH = 100;
+    private static final String ERR_EMPTY_USERNAME = "Username cannot be empty";
+    private static final String ERR_NOT_VALID_CHARS_IN_USERNAME = "There are non-valid chars in username";
+    private static final String ERR_USERNAME_IS_TOO_LONG = "Username is too long";
 
     /**
      * Tests username on username requirements.
@@ -40,8 +53,17 @@ public class UsernameValidator {
      * @param username not-empty string with username to validate.
      * @return true - if username meets requirements, false - if not.
      */
-    public static boolean isValid(final String username) {
-        Matcher matcher = pattern.matcher(username);
-        return matcher.matches();
+    public static OperationResult isValid(final String username) {
+        if (StringUtils.isBlank(username)) {
+            return OperationResult.malformedInput().withMessage(ERR_EMPTY_USERNAME);
+        }
+        Matcher matcher = COMPILED_PATTERN.matcher(username);
+        if (!matcher.matches()) {
+            return OperationResult.malformedInput().withMessage(ERR_NOT_VALID_CHARS_IN_USERNAME);
+        }
+        if (username.length() > USERNAME_MAX_LENGTH) {
+            return OperationResult.malformedInput().withMessage(ERR_USERNAME_IS_TOO_LONG);
+        }
+        return OperationResult.success();
     }
 }

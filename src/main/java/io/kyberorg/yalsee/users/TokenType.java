@@ -2,6 +2,9 @@ package io.kyberorg.yalsee.users;
 
 import lombok.Getter;
 
+/**
+ * Type of Token with its properties.
+ */
 public enum TokenType {
     ACCOUNT_CONFIRMATION_TOKEN(86400, "ct", TokenValueType.UUID), //24h
     LOGIN_VERIFICATION_TOKEN(3600, "", TokenValueType.CODE), //1h
@@ -17,7 +20,7 @@ public enum TokenType {
     @Getter
     private final TokenValueType valueType;
 
-    TokenType(int tokenAgeSeconds, String identPrefix, TokenValueType tokenValueType) {
+    TokenType(final int tokenAgeSeconds, final String identPrefix, final TokenValueType tokenValueType) {
         this.tokenAge = tokenAgeSeconds;
         this.identPrefix = identPrefix;
         this.valueType = tokenValueType;

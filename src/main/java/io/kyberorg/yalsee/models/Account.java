@@ -14,7 +14,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "accounts")
-public class Account extends BaseModel {
+public final class Account extends BaseModel {
     @ManyToOne(optional = false)
     @JoinColumn(name = "user", nullable = false)
     private User user;
@@ -29,6 +29,12 @@ public class Account extends BaseModel {
     @Column(name = "confirmed", nullable = false)
     private boolean confirmed = false;
 
+    /**
+     * Starts to create new {@link Account} of given {@link AccountType}.
+     *
+     * @param accountType desired {@link AccountType}.
+     * @return {@link Account.Builder} to complete building {@link Account}.
+     */
     public static Account.Builder create(final AccountType accountType) {
         return new Builder(accountType);
     }
@@ -45,6 +51,12 @@ public class Account extends BaseModel {
             this.accountType = accountType;
         }
 
+        /**
+         * Sets owner of {@link Account}.
+         *
+         * @param user accounts owner.
+         * @return built {@link Account} record.
+         */
         public Account forUser(final User user) {
             return new Account(accountType, user);
         }

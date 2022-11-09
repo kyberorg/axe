@@ -34,6 +34,12 @@ public class UserPreferences extends BaseModel {
     @Column(name = "password_reset_channel")
     private AccountType passwordResetChannel;
 
+    /**
+     * Creates new {@link UserPreferences}.
+     *
+     * @param user {@link UserPreferences} owner.
+     * @return created {@link UserPreferences}
+     */
     public static UserPreferences createForUser(final User user) {
         UserPreferences up = new UserPreferences();
         up.setUser(user);

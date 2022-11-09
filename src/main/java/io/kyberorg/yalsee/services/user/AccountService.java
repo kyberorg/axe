@@ -2,7 +2,6 @@ package io.kyberorg.yalsee.services.user;
 
 import io.kyberorg.yalsee.dao.AccountDao;
 import io.kyberorg.yalsee.models.Account;
-import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.mail.EmailService;
@@ -18,13 +17,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Service that handles Account issues.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class AccountService {
-    public static final String TAG = "[" + AccountService.class.getSimpleName() + "]";
-    private static final String ERR_NO_SUCH_TOKEN_FOUND = "No such token found";
-    private static final String ERR_TOKEN_HAS_NO_LINKED_ACCOUNT = "Confirmation Token has no account to confirm";
+    private static final String TAG = "[" + AccountService.class.getSimpleName() + "]";
+    private static final String ERR_ACCOUNT_IS_EMPTY = "Account is null";
     private static final String ERR_USER_HAS_NO_LOCAL_ACCOUNT = "User has no local account";
 
     private final AccountDao accountDao;
@@ -33,16 +34,23 @@ public class AccountService {
     private final UserService userService;
     private final EmailService emailService;
 
-    public static final String ERR_EMAIL_ALREADY_EXISTS = "Email already used";
-    public static final String ERR_ENCRYPTION_FAILED = "Failed to encrypt plain text value before saving";
+    private static final String ERR_EMAIL_ALREADY_EXISTS = "Email already used";
+    private static final String ERR_ENCRYPTION_FAILED = "Failed to encrypt plain text value before saving";
 
     private String accountToSearch;
 
+    /**
+     * Checks if {@link Account} exists.
+     *
+     * @param accountName string with {@link Account#accountName}.
+     * @param accountType {@link Account#type}
+     * @return true - if account with given name exists, false - is no such record.
+     */
     public boolean isAccountAlreadyExists(final String accountName, final AccountType accountType) {
         if (StringUtils.isBlank(accountName)) return false;
         this.accountToSearch = accountName;
 
-        List<Account> accounts = accountDao.findByAccountType(accountType);
+        List<Account> accounts = accountDao.findByType(accountType);
         Account sameAccount = accounts.parallelStream()
                 .filter(this::accountHasGivenAccountName)
                 .findFirst()
@@ -50,10 +58,23 @@ public class AccountService {
         return Objects.nonNull(sameAccount);
     }
 
+    /**
+     * Opposite of {@link #isAccountAlreadyExists(String, AccountType)}.
+     *
+     * @param accountName string with {@link Account#accountName}.
+     * @param accountType {@link Account#type}
+     * @return true - if account with given name not exist, false - if exists.
+     */
     public boolean isAccountUnique(final String accountName, final AccountType accountType) {
         return !isAccountAlreadyExists(accountName, accountType);
     }
 
+    /**
+     * Creates {@link AccountType#LOCAL} account.
+     *
+     * @param user {@link Account}'s owner.
+     * @return {@link OperationResult} with created {@link Account} in payload or {@link OperationResult} with error.
+     */
     public OperationResult createLocalAccount(final User user) {
         Account localAccount = Account.create(AccountType.LOCAL).forUser(user);
         localAccount.setAccountName(user.getUsername());
@@ -69,6 +90,13 @@ public class AccountService {
         }
     }
 
+    /**
+     * Creates {@link AccountType#EMAIL} account.
+     *
+     * @param user  {@link Account}'s owner.
+     * @param email string with email address.
+     * @return {@link OperationResult} with created {@link Account} in payload or {@link OperationResult} with error.
+     */
     public OperationResult createEmailAccount(final User user, final String email) {
         OperationResult emailValidationResult = emailService.isEmailValid(email);
         if (emailValidationResult.notOk()) {
@@ -102,28 +130,25 @@ public class AccountService {
         }
     }
 
-    public OperationResult confirmAccount(String tokenString) {
+    /**
+     * Sets that {@link Account} confirmed.
+     *
+     * @param accountToConfirm account to confirm.
+     * @return {@link OperationResult#success()} or {@link OperationResult} with error.
+     */
+    public OperationResult confirmAccount(final Account accountToConfirm) {
         try {
-            //search token - Op.notFound()
-            Optional<Token> token = tokenService.getToken(tokenString);
-            if (token.isEmpty()) {
-                log.info("{} token {} not found", TAG, tokenString);
-                return OperationResult.elementNotFound().withMessage(ERR_NO_SUCH_TOKEN_FOUND);
-            }
-
-            //search account linked to confirmation token
-            Account accountToConfirm = token.get().getConfirmationFor();
             if (accountToConfirm == null) {
-                return OperationResult.generalFail().withMessage(ERR_TOKEN_HAS_NO_LINKED_ACCOUNT);
+                return OperationResult.generalFail().withMessage(ERR_ACCOUNT_IS_EMPTY);
             }
 
             // confirming account
             accountToConfirm.setConfirmed(true);
             accountDao.save(accountToConfirm);
 
-            User user = token.get().getUser();
+            User user = accountToConfirm.getUser();
             Optional<Account> userLocalAccount =
-                    accountDao.findByUserAndAccountType(user, AccountType.LOCAL);
+                    accountDao.findByUserAndType(user, AccountType.LOCAL);
             if (userLocalAccount.isEmpty()) {
                 log.error("{} User {} has no {} account. System Bug.",
                         TAG, user.getUsername(), AccountType.LOCAL.name());
@@ -148,11 +173,24 @@ public class AccountService {
         }
     }
 
-    public Optional<Account> getAccount(User user, AccountType accountType) {
-        return accountDao.findByUserAndAccountType(user, accountType);
+    /**
+     * Get Account by {@link User} and {@link AccountType}.
+     *
+     * @param user        account's owner
+     * @param accountType account's type
+     * @return {@link Optional} with found {@link Account} or {@link Optional#empty()}.
+     */
+    public Optional<Account> getAccount(final User user, final AccountType accountType) {
+        return accountDao.findByUserAndType(user, accountType);
     }
 
-    public Optional<String> decryptAccountName(Account account) {
+    /**
+     * Decrypts account name.
+     *
+     * @param account {@link Account} record.
+     * @return {@link Optional} with decrypted {@link String} or {@link Optional#empty()}
+     */
+    public Optional<String> decryptAccountName(final Account account) {
         if (account != null && StringUtils.isNotBlank(account.getAccountName())) {
             OperationResult result = cryptTool.decrypt(account.getAccountName());
             if (result.ok()) {
@@ -165,7 +203,7 @@ public class AccountService {
         }
     }
 
-    private boolean accountHasGivenAccountName(Account account) {
+    private boolean accountHasGivenAccountName(final Account account) {
         OperationResult result = cryptTool.decrypt(account.getAccountName());
         if (result.ok()) {
             String valueFromDb = result.getStringPayload();
