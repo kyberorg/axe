@@ -175,4 +175,39 @@
         <addForeignKeyConstraint baseTableName="link_info" baseColumnNames="owner" referencedTableName="users"
                                  referencedColumnNames="id" constraintName="FK_LINK_OWNER"/>
     </changeSet>
+    <changeSet id="7" author="kyberorg">
+        <createTable tableName="user_settings">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_settings"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="main_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_reset_channel" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_settings"
+                                 constraintName="FK_USER_SETTINGS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        <insert tableName="user_settings">
+            <column name="id" value="1"/>
+            <column name="user_id" value="1"/>
+            <column name="tfa_enabled" valueBoolean="false"/>
+            <column name="tfa_channel" value="LOCAL"/>
+            <column name="main_channel" value="LOCAL"/>
+            <!-- Next line is here just for dokumentation. Do not uncomment it. -->
+            <!--<column name="password_reset_channel" value="null"/>-->
+        </insert>
+        <dropTable tableName="user_preferences"/>
+    </changeSet>
 </databaseChangeLog>

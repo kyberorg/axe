@@ -13,8 +13,8 @@ import javax.persistence.*;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "user_preferences")
-public class UserPreferences extends BaseModel {
+@Table(name = "user_settings")
+public class UserSettings extends BaseModel {
     @OneToOne(cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -35,13 +35,13 @@ public class UserPreferences extends BaseModel {
     private AccountType passwordResetChannel;
 
     /**
-     * Creates new {@link UserPreferences}.
+     * Creates new {@link UserSettings}.
      *
-     * @param user {@link UserPreferences} owner.
-     * @return created {@link UserPreferences}
+     * @param user {@link UserSettings} owner.
+     * @return created {@link UserSettings}
      */
-    public static UserPreferences createForUser(final User user) {
-        UserPreferences up = new UserPreferences();
+    public static UserSettings createForUser(final User user) {
+        UserSettings up = new UserSettings();
         up.setUser(user);
         return up;
     }
