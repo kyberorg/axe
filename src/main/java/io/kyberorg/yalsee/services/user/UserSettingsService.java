@@ -28,7 +28,7 @@ public class UserSettingsService {
      * @param user owner
      * @return {@link OperationResult} with created {@link UserSettings} or {@link OperationResult} with error.
      */
-    public OperationResult createNewPreferences(final User user) {
+    public OperationResult createNewSettings(final User user) {
         UserSettings userSettings = UserSettings.createForUser(user);
         return createOrUpdateUserSettings(userSettings);
     }
