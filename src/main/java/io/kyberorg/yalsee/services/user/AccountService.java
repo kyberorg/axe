@@ -87,7 +87,8 @@ public class AccountService {
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
-            return OperationResult.generalFail();
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
 
@@ -128,7 +129,8 @@ public class AccountService {
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
-            return OperationResult.generalFail();
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
 
