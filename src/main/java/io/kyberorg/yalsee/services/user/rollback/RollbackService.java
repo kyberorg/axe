@@ -1,8 +1,10 @@
 package io.kyberorg.yalsee.services.user.rollback;
 
 import io.kyberorg.yalsee.constants.HttpCode;
+import io.kyberorg.yalsee.dao.AccountDao;
 import io.kyberorg.yalsee.dao.TokenDao;
 import io.kyberorg.yalsee.dao.UserDao;
+import io.kyberorg.yalsee.dao.UserSettingsDao;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.models.BaseModel;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -25,8 +27,10 @@ import java.util.Stack;
 @Service
 public class RollbackService {
     private final ErrorUtils errorUtils;
-    private final UserDao userDao;
+    private final AccountDao accountDao;
     private final TokenDao tokenDao;
+    private final UserDao userDao;
+    private final UserSettingsDao userSettingsDao;
 
     public static final String TAG = "[" + RollbackService.class.getSimpleName() + "]";
     public static final String ERR_NO_SUCH_DAO = "No corresponding DAO found for given model";
@@ -74,8 +78,10 @@ public class RollbackService {
 
     private CrudRepository<? extends BaseModel, Long> getDaoByModel(final Class<? extends BaseModel> model) {
         return switch (model.getSimpleName().toLowerCase(Locale.ROOT)) {
-            case "user" -> userDao;
+            case "account" -> accountDao;
             case "token" -> tokenDao;
+            case "user" -> userDao;
+            case "usersettings" -> userSettingsDao;
             default -> null;
         };
     }
