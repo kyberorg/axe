@@ -24,7 +24,6 @@ public class UserOperationsService {
     private final UserSettingsService userSettingsService;
 
     public OperationResult registerUser(final RegisterUserInput input) {
-        //TODO implement
         //create user
         OperationResult userCreateResult = userService.createUser(input.username(), input.password());
         if (userCreateResult.notOk()) {

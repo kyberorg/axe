@@ -29,7 +29,8 @@ public class RollbackService {
 
     @Async
     public void rollback(final Stack<RollbackTask> rollbackTasks) {
-        for (RollbackTask task : rollbackTasks) {
+        while (!rollbackTasks.isEmpty()) {
+            RollbackTask task = rollbackTasks.pop();
             log.info("{} Removing record with ID {} from {} table",
                     TAG, task.getRecordId(), task.getModel().getSimpleName());
         }

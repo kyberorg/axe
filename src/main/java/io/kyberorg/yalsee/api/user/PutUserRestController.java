@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class RegisterUserController {
-    public static final String TAG = "[" + RegisterUserController.class.getSimpleName() + "]";
+public class PutUserRestController {
+    public static final String TAG = "[" + PutUserRestController.class.getSimpleName() + "]";
 
     private final EmailService emailService;
     private final AccountService accountService;
@@ -107,7 +107,7 @@ public class RegisterUserController {
         //email exists - > 409
         boolean emailAlreadyExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
         if (emailAlreadyExists) {
-            String errMessage = String.format("Email %s is already taken", email);
+            String errMessage = String.format("Email %s is already taken. Please try another one", email);
             return ApiUtils.handleError(HttpCode.CONFLICT, errMessage);
         }
         return null;
@@ -122,7 +122,7 @@ public class RegisterUserController {
         //username exists -> 409
         boolean isUserAlreadyExist = userService.isUserExists(username);
         if (isUserAlreadyExist) {
-            return ApiUtils.handleError(HttpCode.CONFLICT, "Username already exists");
+            return ApiUtils.handleError(HttpCode.CONFLICT, "Username already exists. Please try another one");
         }
         return null;
     }
