@@ -37,7 +37,7 @@ public class RollbackService {
             RollbackTask task = rollbackTasks.pop();
             OperationResult result = noOp(task);
             if (result.notOk()) {
-                StringBuilder message = new StringBuilder("Got exception on user rollback.");
+                StringBuilder message = new StringBuilder("Exception on User Rollback. ");
                 message.append("Current task: ").append(task.getName());
                 message.append("Error: ").append(result.getMessage());
                 message.append("Remaining (un-done) tasks are: ");

@@ -12,6 +12,6 @@ public class RollbackTask {
     private final long recordId;
 
     public String getName() {
-        return "Task. Model: " + model.getSimpleName() + " ( ID " + recordId + ")";
+        return RollbackTask.class.getSimpleName() + "[" + model.getSimpleName() + " (ID " + recordId + ")]";
     }
 }
