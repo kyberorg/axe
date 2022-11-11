@@ -84,7 +84,7 @@ public class AccountService {
         try {
             accountDao.save(localAccount);
             log.info("{} created local account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
-            return OperationResult.success();
+            return OperationResult.success().addPayload(localAccount);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
