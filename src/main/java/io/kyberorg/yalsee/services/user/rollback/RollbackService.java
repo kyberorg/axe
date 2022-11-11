@@ -45,9 +45,9 @@ public class RollbackService {
             RollbackTask task = rollbackTasks.pop();
             OperationResult result = performRollback(task);
             if (result.notOk()) {
-                StringBuilder message = new StringBuilder("Exception on User Rollback. ");
-                message.append("Current task: ").append(task.getName());
-                message.append("Error: ").append(result.getMessage());
+                StringBuilder message = new StringBuilder("Exception while executing ");
+                message.append(task.getName()).append(" ");
+                message.append("Error: ").append(result.getMessage()).append(" ");
                 message.append("Remaining (un-done) tasks are: ");
                 for (RollbackTask t : rollbackTasks) {
                     message.append(t.getName());
@@ -89,6 +89,7 @@ public class RollbackService {
     private void reportToBugsnag(final String techMessage, final int code) {
         errorUtils.reportToBugsnag(YalseeErrorBuilder
                 .withTechMessage(techMessage)
+                .withMessageToUser("Rollback failed")
                 .withStatus(code)
                 .build());
     }
