@@ -52,6 +52,8 @@ public class UserOperationsService {
         //create local account
         OperationResult createLocalAccountResult = accountService.createLocalAccount(createdUser);
         if (createLocalAccountResult.notOk()) {
+            log.error("{} failed to create local {}. OpResult: {}",
+                    TAG, Account.class.getSimpleName(), createLocalAccountResult);
             rollbackService.rollback(rollbackTasks);
             return createLocalAccountResult;
         }
@@ -61,6 +63,8 @@ public class UserOperationsService {
         //create email account
         OperationResult createEmailAccountResult = accountService.createEmailAccount(createdUser, input.email());
         if (createEmailAccountResult.notOk()) {
+            log.error("{} failed to create email {}. OpResult: {}",
+                    TAG, Account.class.getSimpleName(), createEmailAccountResult);
             rollbackService.rollback(rollbackTasks);
             return createEmailAccountResult;
         }

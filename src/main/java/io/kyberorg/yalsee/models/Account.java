@@ -18,7 +18,6 @@ public final class Account extends BaseModel {
     @ManyToOne(optional = false)
     @JoinColumn(name = "user", nullable = false)
     private User user;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private AccountType type;
