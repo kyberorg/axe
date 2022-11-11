@@ -30,7 +30,6 @@ public class AccountService {
 
     private final AccountDao accountDao;
     private final SymmetricCryptTool cryptTool;
-    private final TokenService tokenService;
     private final UserService userService;
     private final EmailService emailService;
 
@@ -79,6 +78,8 @@ public class AccountService {
         Account localAccount = Account.create(AccountType.LOCAL).forUser(user);
         localAccount.setAccountName(user.getUsername());
         localAccount.setConfirmed(false);
+
+        log.debug("{} local account to create {}", TAG, localAccount);
 
         try {
             accountDao.save(localAccount);

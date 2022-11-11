@@ -93,7 +93,8 @@ public class PutUserRestController {
         OperationResult userRegistrationResult = userOpsService.registerUser(registerUserInput);
         if (userRegistrationResult.notOk()) {
             //TODO analyze it
-            return ApiUtils.handleError(HttpCode.SERVER_ERROR, userRegistrationResult);
+            log.error("{} failed to register user. OpResult: {}", TAG, userRegistrationResult);
+            return ApiUtils.handleServerError();
         }
         return ResponseEntity.status(HttpCode.CREATED).body(UserRegistrationResponse.create(email));
     }
