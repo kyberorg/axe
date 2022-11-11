@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.api.user;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.internal.RegisterUserInput;
 import io.kyberorg.yalsee.json.UserRegistrationRequest;
 import io.kyberorg.yalsee.json.UserRegistrationResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
@@ -49,7 +50,7 @@ public class RegisterUserController {
             consumes = MimeType.APPLICATION_JSON,
             produces = MimeType.APPLICATION_JSON)
     public ResponseEntity<?> registerUser(final @RequestBody UserRegistrationRequest requestJson) {
-        log.info("{} got PUT request: {}", TAG, requestJson);
+        log.debug("{} got PUT request: {}", TAG, requestJson);
         ResponseEntity<YalseeErrorJson> result;
 
         if (requestJson == null) {
@@ -59,6 +60,7 @@ public class RegisterUserController {
         String email = requestJson.getEmail();
         String username = requestJson.getUsername();
         String password = requestJson.getPassword();
+        boolean tfaEnabled = requestJson.isTfaEnabled();
 
         result = checkEmail(email);
         if (result != null) {
@@ -87,12 +89,13 @@ public class RegisterUserController {
         }
 
         //Register user
-        OperationResult userRegistrationResult = userOpsService.registerUser(username, password, email);
+        RegisterUserInput registerUserInput = new RegisterUserInput(email, username, password, tfaEnabled);
+        OperationResult userRegistrationResult = userOpsService.registerUser(registerUserInput);
         if (userRegistrationResult.notOk()) {
             //TODO analyze it
             return ApiUtils.handleError(HttpCode.SERVER_ERROR, userRegistrationResult);
         }
-        return ResponseEntity.status(HttpCode.CREATED).body(UserRegistrationResponse.create());
+        return ResponseEntity.status(HttpCode.CREATED).body(UserRegistrationResponse.create(email));
     }
 
     private ResponseEntity<YalseeErrorJson> checkEmail(final String email) {

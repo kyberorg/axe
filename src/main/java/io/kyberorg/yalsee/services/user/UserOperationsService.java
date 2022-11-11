@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services.user;
 
+import io.kyberorg.yalsee.internal.RegisterUserInput;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.UserSettings;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -21,10 +22,10 @@ public class UserOperationsService {
     private final UserService userService;
     private final UserSettingsService userSettingsService;
 
-    public OperationResult registerUser(final String username, final String password, final String email) {
+    public OperationResult registerUser(final RegisterUserInput input) {
         //TODO implement
         //create user
-        OperationResult userCreateResult = userService.createUser(username, password);
+        OperationResult userCreateResult = userService.createUser(input.username(), input.password());
         if (userCreateResult.notOk()) {
             return userCreateResult;
         }
