@@ -55,6 +55,7 @@ public class RollbackService {
         if (dao == null) return OperationResult.elementNotFound().withMessage(ERR_NO_SUCH_DAO);
         try {
             dao.deleteById(task.getRecordId());
+            log.debug("{} {} executed successfully", TAG, task.getName());
             return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
             reportToBugsnag("Database is DOWN", HttpCode.APP_IS_DOWN);
