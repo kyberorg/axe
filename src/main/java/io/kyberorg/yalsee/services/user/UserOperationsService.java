@@ -6,9 +6,10 @@ import io.kyberorg.yalsee.models.UserSettings;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.rollback.RollbackService;
 import io.kyberorg.yalsee.services.user.rollback.RollbackTask;
-import io.kyberorg.yalsee.services.user.rollback.RollbackTasks;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Stack;
 
 /**
  * Service, that performs user-related operations;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class UserOperationsService {
-    private final RollbackTasks rollbackTasks = new RollbackTasks();
+    private final Stack<RollbackTask> rollbackTasks = new Stack<>();
     private final RollbackService rollbackService;
 
     private final UserService userService;
@@ -40,6 +41,9 @@ public class UserOperationsService {
         }
         UserSettings userSettings = userSettingsCreateResult.getPayload(UserSettings.class);
         rollbackTasks.push(RollbackTask.create(UserSettings.class, userSettings.getId()));
+        //TODO remove after flight
+        rollbackService.rollback(rollbackTasks);
+
         //create local account
         //create email account
         //Settings update main channel

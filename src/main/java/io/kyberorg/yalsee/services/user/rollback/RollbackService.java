@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.Locale;
+import java.util.Stack;
 
 /**
  * Service, that performs rollbacks.
@@ -27,7 +28,7 @@ public class RollbackService {
     public static final String ERR_NO_SUCH_DAO = "No corresponding DAO found for given model";
 
     @Async
-    public void rollback(final RollbackTasks rollbackTasks) {
+    public void rollback(final Stack<RollbackTask> rollbackTasks) {
         for (RollbackTask task : rollbackTasks) {
             log.info("{} Removing record with ID {} from {} table",
                     TAG, task.getRecordId(), task.getModel().getSimpleName());
