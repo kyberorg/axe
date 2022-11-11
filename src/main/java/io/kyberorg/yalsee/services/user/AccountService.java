@@ -82,6 +82,7 @@ public class AccountService {
 
         try {
             accountDao.save(localAccount);
+            log.info("{} created local account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
             return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
@@ -122,6 +123,7 @@ public class AccountService {
 
         try {
             accountDao.save(emailAccount);
+            log.info("{} created email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
             return OperationResult.success().addPayload(emailAccount);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();

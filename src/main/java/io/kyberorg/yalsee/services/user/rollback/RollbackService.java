@@ -37,7 +37,7 @@ public class RollbackService {
 
     @Async
     public void rollback(final Stack<RollbackTask> rollbackTasks) {
-        log.info("{} Rollback Requested with following tasks", TAG);
+        log.info("{} Rollback requested with following tasks", TAG);
         for (RollbackTask rt : rollbackTasks) {
             log.info("{} {}", TAG, rt.getName());
         }
@@ -49,10 +49,14 @@ public class RollbackService {
                 message.append(task.getName()).append(" ");
                 message.append("Error: ").append(result.getMessage()).append(" ");
                 message.append("Remaining (un-done) tasks are: ");
-                for (RollbackTask t : rollbackTasks) {
-                    message.append(t.getName());
+                if (rollbackTasks.isEmpty()) {
+                    message.append("none");
+                } else {
+                    for (RollbackTask t : rollbackTasks) {
+                        message.append(t.getName());
+                    }
                 }
-                reportToBugsnag(message.toString(), HttpCode.SERVER_ERROR);
+                reportToBugsnag(message.toString(), HttpCode.SERVER_ERROR, null);
                 return;
             }
         }
@@ -67,7 +71,7 @@ public class RollbackService {
             log.debug("{} {} executed successfully", TAG, task.getName());
             return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
-            reportToBugsnag("Database is DOWN", HttpCode.APP_IS_DOWN);
+            reportToBugsnag("Database is DOWN", HttpCode.APP_IS_DOWN, e);
             return OperationResult.databaseDown();
         } catch (Exception e) {
             log.error("{} Exception on rolling changes back.", TAG);
@@ -86,10 +90,11 @@ public class RollbackService {
         };
     }
 
-    private void reportToBugsnag(final String techMessage, final int code) {
+    private void reportToBugsnag(final String techMessage, final int code, final Throwable e) {
         errorUtils.reportToBugsnag(YalseeErrorBuilder
                 .withTechMessage(techMessage)
                 .withMessageToUser("Rollback failed")
+                .addRawException(e)
                 .withStatus(code)
                 .build());
     }
