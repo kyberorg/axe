@@ -106,7 +106,7 @@ public class AccountService {
             return emailValidationResult;
         }
 
-        if (isAccountUnique(email, AccountType.EMAIL)) {
+        if (isAccountAlreadyExists(email, AccountType.EMAIL)) {
             return OperationResult.conflict().withMessage(ERR_EMAIL_ALREADY_EXISTS);
         }
 
