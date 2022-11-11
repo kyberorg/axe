@@ -1,9 +1,12 @@
 package io.kyberorg.yalsee.services.user.rollback;
 
+import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.dao.TokenDao;
 import io.kyberorg.yalsee.dao.UserDao;
+import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.models.BaseModel;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.CrudRepository;
@@ -21,6 +24,7 @@ import java.util.Stack;
 @RequiredArgsConstructor
 @Service
 public class RollbackService {
+    private final ErrorUtils errorUtils;
     private final UserDao userDao;
     private final TokenDao tokenDao;
 
@@ -31,8 +35,18 @@ public class RollbackService {
     public void rollback(final Stack<RollbackTask> rollbackTasks) {
         while (!rollbackTasks.isEmpty()) {
             RollbackTask task = rollbackTasks.pop();
-            log.info("{} Removing record with ID {} from {} table",
-                    TAG, task.getRecordId(), task.getModel().getSimpleName());
+            OperationResult result = noOp(task);
+            if (result.notOk()) {
+                StringBuilder message = new StringBuilder("Got exception on user rollback.");
+                message.append("Current task: ").append(task.getName());
+                message.append("Error: ").append(result.getMessage());
+                message.append("Remaining (un-done) tasks are: ");
+                for (RollbackTask t : rollbackTasks) {
+                    message.append(t.getName());
+                }
+                reportToBugsnag(message.toString(), HttpCode.SERVER_ERROR);
+                return;
+            }
         }
     }
 
@@ -43,14 +57,19 @@ public class RollbackService {
             dao.deleteById(task.getRecordId());
             return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
-            //TODO report to bugsnag
+            reportToBugsnag("Database is DOWN", HttpCode.APP_IS_DOWN);
             return OperationResult.databaseDown();
         } catch (Exception e) {
             log.error("{} Exception on rolling changes back.", TAG);
             log.debug("", e);
-            //TODO report to bugsnag
             return OperationResult.generalFail();
         }
+    }
+
+    private OperationResult noOp(final RollbackTask task) {
+        log.info("{} Removing record with ID {} from {} table",
+                TAG, task.getRecordId(), task.getModel().getSimpleName());
+        return OperationResult.generalFail().withMessage("Failed with test purpose");
     }
 
     private CrudRepository<? extends BaseModel, Long> getDaoByModel(final Class<? extends BaseModel> model) {
@@ -59,5 +78,12 @@ public class RollbackService {
             case "token" -> tokenDao;
             default -> null;
         };
+    }
+
+    private void reportToBugsnag(final String techMessage, final int code) {
+        errorUtils.reportToBugsnag(YalseeErrorBuilder
+                .withTechMessage(techMessage)
+                .withStatus(code)
+                .build());
     }
 }

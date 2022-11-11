@@ -10,4 +10,8 @@ import lombok.Data;
 public class RollbackTask {
     private final Class<? extends BaseModel> model;
     private final long recordId;
+
+    public String getName() {
+        return "Task. Model: " + model.getSimpleName() + " ( ID " + recordId + ")";
+    }
 }
