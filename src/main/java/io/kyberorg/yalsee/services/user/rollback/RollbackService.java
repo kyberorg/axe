@@ -33,9 +33,13 @@ public class RollbackService {
 
     @Async
     public void rollback(final Stack<RollbackTask> rollbackTasks) {
+        log.info("{} Rollback Requested with following tasks", TAG);
+        for (RollbackTask rt : rollbackTasks) {
+            log.info("{} {}", TAG, rt.getName());
+        }
         while (!rollbackTasks.isEmpty()) {
             RollbackTask task = rollbackTasks.pop();
-            OperationResult result = noOp(task);
+            OperationResult result = performRollback(task);
             if (result.notOk()) {
                 StringBuilder message = new StringBuilder("Exception on User Rollback. ");
                 message.append("Current task: ").append(task.getName());
@@ -51,6 +55,7 @@ public class RollbackService {
     }
 
     private OperationResult performRollback(final RollbackTask task) {
+        log.info("{} Starting {}", TAG, task.getName());
         CrudRepository<? extends BaseModel, Long> dao = getDaoByModel(task.getModel());
         if (dao == null) return OperationResult.elementNotFound().withMessage(ERR_NO_SUCH_DAO);
         try {
@@ -65,12 +70,6 @@ public class RollbackService {
             log.debug("", e);
             return OperationResult.generalFail();
         }
-    }
-
-    private OperationResult noOp(final RollbackTask task) {
-        log.info("{} Removing record with ID {} from {} table",
-                TAG, task.getRecordId(), task.getModel().getSimpleName());
-        return OperationResult.generalFail().withMessage("Failed with test purpose");
     }
 
     private CrudRepository<? extends BaseModel, Long> getDaoByModel(final Class<? extends BaseModel> model) {
