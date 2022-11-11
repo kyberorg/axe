@@ -212,5 +212,6 @@
     </changeSet>
     <changeSet id="8" author="kyberorg">
         <renameColumn tableName="accounts" oldColumnName="user" newColumnName="user_id"/>
+        <renameColumn tableName="tokens" oldColumnName="user" newColumnName="user_id />"
     </changeSet>
 </databaseChangeLog>
