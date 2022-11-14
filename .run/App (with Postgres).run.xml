@@ -10,7 +10,6 @@
     <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <method v="2">
       <option name="Make" enabled="true" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="yalsee [clean, package]" run_configuration_type="MavenRunConfiguration" />
     </method>
   </configuration>
 </component>
