@@ -58,7 +58,6 @@ public class UserService implements UserDetailsService {
      * @return {@link OperationResult} with created {@link User} in payload or {@link OperationResult} with error.
      */
     public OperationResult createUser(final String username, final String plainPassword) {
-        log.info("{} Got create user request: username {}", TAG, username);
         OperationResult usernameValidationResult = UsernameValidator.isValid(username);
         if (usernameValidationResult.notOk()) return usernameValidationResult;
 
@@ -73,7 +72,7 @@ public class UserService implements UserDetailsService {
             String encryptedPassword = passwordUtils.encryptPassword(plainPassword);
             User newUser = User.create(username, encryptedPassword);
             User savedUser = userDao.save(newUser);
-            log.info("{} User saved. Username: {}", TAG, newUser.getUsername());
+            log.info("{} Saved User. Username: {}", TAG, newUser.getUsername());
             return OperationResult.success().addPayload(savedUser);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();

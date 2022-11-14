@@ -30,7 +30,7 @@ public class Token extends TimeModel {
     private TokenType tokenType;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Setter(value = AccessLevel.PUBLIC)

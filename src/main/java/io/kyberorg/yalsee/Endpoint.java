@@ -147,6 +147,17 @@ public final class Endpoint {
          */
         public static final String PAGE_404 = "/errors/404api";
 
+        /**
+         * API for manipulating with Users.
+         * <p>
+         * /api/users
+         */
+        public static final String USERS_API = "/api/user";
+
+        /**
+         * Users Registration.
+         */
+        public static final String REGISTER_USER_API = USERS_API + "/";
     }
 
     public static class Static {
