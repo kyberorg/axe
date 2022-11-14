@@ -81,7 +81,7 @@ public class AccountService {
 
         try {
             accountDao.save(localAccount);
-            log.info("{} created local account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
+            log.info("{} Created local account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
             return OperationResult.success().addPayload(localAccount);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
@@ -113,7 +113,7 @@ public class AccountService {
         if (encryptEmailResult.ok()) {
             encryptedEmail = encryptEmailResult.getStringPayload();
         } else {
-            log.error("{} email encryption failed. Value: {}. Error: {}", TAG, email, encryptEmailResult.getMessage());
+            log.error("{} Email encryption failed. Value: {}. Error: {}", TAG, email, encryptEmailResult.getMessage());
             return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
         }
 
@@ -123,7 +123,7 @@ public class AccountService {
 
         try {
             accountDao.save(emailAccount);
-            log.info("{} created email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
+            log.info("{} Created email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
             return OperationResult.success().addPayload(emailAccount);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();

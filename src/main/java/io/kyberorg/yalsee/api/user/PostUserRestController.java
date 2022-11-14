@@ -3,6 +3,7 @@ package io.kyberorg.yalsee.api.user;
 import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
+import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.internal.RegisterUserInput;
 import io.kyberorg.yalsee.json.PostUserRequest;
 import io.kyberorg.yalsee.json.UserRegistrationResponse;
@@ -17,6 +18,7 @@ import io.kyberorg.yalsee.users.PasswordValidator;
 import io.kyberorg.yalsee.users.UsernameGenerator;
 import io.kyberorg.yalsee.users.UsernameValidator;
 import io.kyberorg.yalsee.utils.ApiUtils;
+import io.kyberorg.yalsee.utils.ErrorUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,8 @@ public class PostUserRestController {
     private final UserService userService;
     private final UsernameGenerator usernameGenerator;
     private final UserOperationsService userOpsService;
+
+    private final ErrorUtils errorUtils;
 
     /**
      * API that performs user registration.
@@ -92,8 +96,11 @@ public class PostUserRestController {
         RegisterUserInput registerUserInput = new RegisterUserInput(email, username, password, tfaEnabled);
         OperationResult userRegistrationResult = userOpsService.registerUser(registerUserInput);
         if (userRegistrationResult.notOk()) {
-            //TODO analyze it
             log.error("{} failed to register user. OpResult: {}", TAG, userRegistrationResult);
+            errorUtils.reportToBugsnag(YalseeErrorBuilder
+                    .withTechMessage(userRegistrationResult.getMessage())
+                    .withMessageToUser("User registration failed")
+                    .build());
             return ApiUtils.handleServerError();
         }
         return ResponseEntity.status(HttpCode.CREATED).body(UserRegistrationResponse.create(email));

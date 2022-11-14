@@ -79,10 +79,10 @@ public class UserOperationsService {
             userSettings.setTfaEnabled(true);
             userSettings.setTfaChannel(AccountType.EMAIL);
         }
-        OperationResult saveChannelUpdates = userSettingsService.updateUserSettings(userSettings);
-        if (saveChannelUpdates.notOk()) {
+        OperationResult saveChannelUpdatesResult = userSettingsService.updateUserSettings(userSettings);
+        if (saveChannelUpdatesResult.notOk()) {
             log.error("{} failed to update {}. OpResult: {}",
-                    TAG, UserSettings.class.getSimpleName(), saveChannelUpdates);
+                    TAG, UserSettings.class.getSimpleName(), saveChannelUpdatesResult);
         }
 
         //token create confirmation token
