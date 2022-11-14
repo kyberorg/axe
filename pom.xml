@@ -314,6 +314,13 @@
             <version>2.2.4</version>
             <scope>test</scope>
         </dependency>
+        <!-- Selenium to fix dep tree -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.5.3</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Tests Re-run -->
         <dependency>
