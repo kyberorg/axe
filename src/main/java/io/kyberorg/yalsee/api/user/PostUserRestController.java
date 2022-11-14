@@ -65,8 +65,12 @@ public class PostUserRestController {
         //So it works only with Master Token
         OperationResult tokenCheckResult = tokenChecker.checkMasterToken(request);
         if (tokenCheckResult.notOk()) {
+            log.warn("{} Master Token Check failed - returning 401", TAG);
             return ApiUtils.handleTokenFail(tokenCheckResult);
+        } else {
+            log.info("{} Master Token check passed", TAG);
         }
+
         ResponseEntity<YalseeErrorJson> result;
         if (requestJson == null) {
             return ApiUtils.handleError(HttpCode.BAD_REQUEST, "Body should be a JSON object");

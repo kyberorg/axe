@@ -95,8 +95,10 @@ public class UserOperationsService {
         rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
 
         //TODO replace with Senders once ready
-        log.info("{} Successfully got {} {} for {}. Now waiting to send it.",
+        log.info("{} Successfully created {}({}) for user '{}'. Now waiting to send it.",
                 TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
+        log.warn("{} Unable to send {} to {} - Senders System is not ready yet.",
+                TAG, confirmationToken.getTokenType(), input.getEmail());
         rollbackService.rollback(rollbackTasks);
 
         //send it
