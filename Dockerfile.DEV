@@ -28,6 +28,6 @@ COPY --from=appBuilder spring-boot-loader/ ./
 COPY --from=appBuilder application/ ./
 
 USER appuser
-HEALTHCHECK CMD ["/app/healthcheck", "/"]
+HEALTHCHECK CMD ["/app/healthcheck", "/actuator/health"]
 ENTRYPOINT ["/app/entrypoint"]
 EXPOSE 8080
