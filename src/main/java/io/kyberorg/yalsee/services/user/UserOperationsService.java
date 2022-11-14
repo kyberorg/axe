@@ -33,12 +33,12 @@ public class UserOperationsService {
 
     public OperationResult registerUser(final RegisterUserInput input) {
         //create user
-        OperationResult userCreateResult = userService.createUser(input.username(), input.password());
+        OperationResult userCreateResult = userService.createUser(input.getUsername(), input.getPassword());
         if (userCreateResult.notOk()) {
             return userCreateResult;
         }
         User createdUser = userCreateResult.getPayload(User.class);
-        rollbackTasks.push(RollbackTask.create(User.class, createdUser.getId()));
+        rollbackTasks.push(RollbackTask.create(User.class, createdUser));
 
         //create user settings
         OperationResult userSettingsCreateResult = userSettingsService.createNewSettings(createdUser);
@@ -47,7 +47,7 @@ public class UserOperationsService {
             return userSettingsCreateResult;
         }
         UserSettings userSettings = userSettingsCreateResult.getPayload(UserSettings.class);
-        rollbackTasks.push(RollbackTask.create(UserSettings.class, userSettings.getId()));
+        rollbackTasks.push(RollbackTask.create(UserSettings.class, userSettings));
 
         //create local account
         OperationResult createLocalAccountResult = accountService.createLocalAccount(createdUser);
@@ -58,10 +58,10 @@ public class UserOperationsService {
             return createLocalAccountResult;
         }
         Account localAccount = createLocalAccountResult.getPayload(Account.class);
-        rollbackTasks.push(RollbackTask.create(Account.class, localAccount.getId()));
+        rollbackTasks.push(RollbackTask.create(Account.class, localAccount));
 
         //create email account
-        OperationResult createEmailAccountResult = accountService.createEmailAccount(createdUser, input.email());
+        OperationResult createEmailAccountResult = accountService.createEmailAccount(createdUser, input.getEmail());
         if (createEmailAccountResult.notOk()) {
             log.error("{} failed to create email {}. OpResult: {}",
                     TAG, Account.class.getSimpleName(), createEmailAccountResult);
@@ -69,13 +69,13 @@ public class UserOperationsService {
             return createEmailAccountResult;
         }
         Account emailAccount = createEmailAccountResult.getPayload(Account.class);
-        rollbackTasks.push(RollbackTask.create(Account.class, emailAccount.getId()));
+        rollbackTasks.push(RollbackTask.create(Account.class, emailAccount));
 
         //Settings update main channel
         userSettings.setMainChannel(AccountType.EMAIL);
 
         //if tfa enabled
-        if (input.tfaEnabled()) {
+        if (input.isTfaEnabled()) {
             userSettings.setTfaEnabled(true);
             userSettings.setTfaChannel(AccountType.EMAIL);
         }
@@ -93,7 +93,7 @@ public class UserOperationsService {
             return createConfirmationTokenResult;
         }
         Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
-        rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken.getId()));
+        rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
 
         //TODO replace with Senders once ready
         log.info("{} Successfully got confirmation token for {} {}. Now waiting to send it.",

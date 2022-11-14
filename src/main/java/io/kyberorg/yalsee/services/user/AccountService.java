@@ -79,8 +79,6 @@ public class AccountService {
         localAccount.setAccountName(user.getUsername());
         localAccount.setConfirmed(false);
 
-        log.debug("{} local account to create {}", TAG, localAccount);
-
         try {
             accountDao.save(localAccount);
             log.info("{} created local account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());

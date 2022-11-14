@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Data(staticConstructor = "create")
 @Since(2.0)
-public class UserRegistrationRequest implements YalseeJson {
+public class PostUserRequest implements YalseeJson {
     @NotNull(message = "Email must be present")
     @JsonProperty("email")
     private String email;
@@ -19,7 +19,7 @@ public class UserRegistrationRequest implements YalseeJson {
 
     @NotNull(message = "Password must be present")
     @JsonProperty("password")
-    private String password;
+    private volatile String password;
 
     @JsonProperty("tfa_enabled")
     private boolean tfaEnabled = false;

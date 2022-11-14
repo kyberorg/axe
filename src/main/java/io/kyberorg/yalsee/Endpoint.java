@@ -157,7 +157,7 @@ public final class Endpoint {
         /**
          * Users Registration.
          */
-        public static final String USER_REGISTRATION_API = USERS_API + "/register";
+        public static final String REGISTER_USER_API = USERS_API + "/";
     }
 
     public static class Static {

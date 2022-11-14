@@ -37,23 +37,20 @@ public class RollbackService {
 
     @Async
     public void rollback(final Stack<RollbackTask> rollbackTasks) {
-        log.info("{} Rollback requested with following tasks", TAG);
-        for (RollbackTask rt : rollbackTasks) {
-            log.info("{} {}", TAG, rt.getName());
-        }
+        log.info("{} Rollback requested with {} tasks", TAG, rollbackTasks.size());
         while (!rollbackTasks.isEmpty()) {
             RollbackTask task = rollbackTasks.pop();
             OperationResult result = performRollback(task);
             if (result.notOk()) {
                 StringBuilder message = new StringBuilder("Exception while executing ");
-                message.append(task.getName()).append(" ");
+                message.append(task).append(" ");
                 message.append("Error: ").append(result.getMessage()).append(" ");
                 message.append("Remaining (un-done) tasks are: ");
                 if (rollbackTasks.isEmpty()) {
                     message.append("none");
                 } else {
                     for (RollbackTask t : rollbackTasks) {
-                        message.append(t.getName());
+                        message.append(t);
                     }
                 }
                 reportToBugsnag(message.toString(), HttpCode.SERVER_ERROR, null);
@@ -63,12 +60,12 @@ public class RollbackService {
     }
 
     private OperationResult performRollback(final RollbackTask task) {
-        log.info("{} Starting {}", TAG, task.getName());
+        log.info("{} Starting {}", TAG, task);
         CrudRepository<? extends BaseModel, Long> dao = getDaoByModel(task.getModel());
         if (dao == null) return OperationResult.elementNotFound().withMessage(ERR_NO_SUCH_DAO);
         try {
-            dao.deleteById(task.getRecordId());
-            log.debug("{} {} executed successfully", TAG, task.getName());
+            dao.deleteById(task.getRecord().getId());
+            log.debug("{} {} executed successfully", TAG, task);
             return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
             reportToBugsnag("Database is DOWN", HttpCode.APP_IS_DOWN, e);

@@ -21,11 +21,11 @@ import java.util.Collections;
 @Entity
 @Table(name = "users")
 public class User extends TimeModel implements UserDetails {
-    public static final int SYMBOLS_FOR_ENCRYPTION = 3;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
+    @ToString.Exclude
     @Column(name = "password")
     private String password;
 

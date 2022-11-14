@@ -4,7 +4,7 @@ import io.kyberorg.yalsee.Endpoint;
 import io.kyberorg.yalsee.constants.HttpCode;
 import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.internal.RegisterUserInput;
-import io.kyberorg.yalsee.json.UserRegistrationRequest;
+import io.kyberorg.yalsee.json.PostUserRequest;
 import io.kyberorg.yalsee.json.UserRegistrationResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class PutUserRestController {
-    public static final String TAG = "[" + PutUserRestController.class.getSimpleName() + "]";
+public class PostUserRestController {
+    public static final String TAG = "[" + PostUserRestController.class.getSimpleName() + "]";
 
     private final EmailService emailService;
     private final AccountService accountService;
@@ -43,14 +43,14 @@ public class PutUserRestController {
     /**
      * API that performs user registration.
      *
-     * @param requestJson {@link UserRegistrationRequest} JSON with link to save
+     * @param requestJson {@link PostUserRequest} JSON with link to save
      * @return {@link ResponseEntity} with {@link UserRegistrationResponse} or {@link YalseeErrorJson}.
      */
-    @PutMapping(value = Endpoint.Api.USER_REGISTRATION_API,
+    @PostMapping(value = Endpoint.Api.REGISTER_USER_API,
             consumes = MimeType.APPLICATION_JSON,
             produces = MimeType.APPLICATION_JSON)
-    public ResponseEntity<?> registerUser(final @RequestBody UserRegistrationRequest requestJson) {
-        log.debug("{} got PUT request: {}", TAG, requestJson);
+    public ResponseEntity<?> registerUser(final @RequestBody PostUserRequest requestJson) {
+        log.debug("{} got POST request: {}", TAG, requestJson);
         ResponseEntity<YalseeErrorJson> result;
 
         if (requestJson == null) {
