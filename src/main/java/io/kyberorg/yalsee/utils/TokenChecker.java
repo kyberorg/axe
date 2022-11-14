@@ -54,6 +54,21 @@ public class TokenChecker {
         }
     }
 
+    public OperationResult checkMasterToken(final HttpServletRequest request) {
+        if (request == null) return OperationResult.generalFail().withMessage(REQUEST_IS_EMPTY);
+
+        String token = extractToken(request);
+        if (StringUtils.isBlank(token)) {
+            return OperationResult.malformedInput().withMessage(NO_TOKEN);
+        }
+
+        if (token.equals(appUtils.getMasterToken())) {
+            return OperationResult.success();
+        } else {
+            return OperationResult.generalFail().withMessage(WRONG_TOKEN);
+        }
+    }
+
     private static String extractToken(final HttpServletRequest request) {
         return request.getHeader(Header.X_YALSEE_TOKEN);
     }

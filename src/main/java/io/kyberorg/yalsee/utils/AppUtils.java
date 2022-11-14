@@ -644,6 +644,15 @@ public class AppUtils implements Serializable {
         return getEnv().getProperty(App.Properties.APPLICATION_NAME, "Yalsee");
     }
 
+    /**
+     * Provides Master Token from EnvVars. This is hardcoded Token to perform potentially destructive operations.
+     *
+     * @return string with token, or {@link App#NO_VALUE}.
+     */
+    public String getMasterToken() {
+        return getEnv().getProperty(App.Env.MASTER_TOKEN, App.NO_VALUE);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

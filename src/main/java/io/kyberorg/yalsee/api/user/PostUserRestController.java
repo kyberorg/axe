@@ -19,6 +19,7 @@ import io.kyberorg.yalsee.users.UsernameGenerator;
 import io.kyberorg.yalsee.users.UsernameValidator;
 import io.kyberorg.yalsee.utils.ApiUtils;
 import io.kyberorg.yalsee.utils.ErrorUtils;
+import io.kyberorg.yalsee.utils.TokenChecker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * User Registration Endpoint.
@@ -43,20 +46,28 @@ public class PostUserRestController {
     private final UserOperationsService userOpsService;
 
     private final ErrorUtils errorUtils;
+    private final TokenChecker tokenChecker;
 
     /**
      * API that performs user registration.
      *
      * @param requestJson {@link PostUserRequest} JSON with link to save
+     * @param request     raw {@link HttpServletRequest} to get Headers from
      * @return {@link ResponseEntity} with {@link UserRegistrationResponse} or {@link YalseeErrorJson}.
      */
     @PostMapping(value = Endpoint.Api.REGISTER_USER_API,
             consumes = MimeType.APPLICATION_JSON,
             produces = MimeType.APPLICATION_JSON)
-    public ResponseEntity<?> registerUser(final @RequestBody PostUserRequest requestJson) {
+    public ResponseEntity<?> registerUser(final @RequestBody PostUserRequest requestJson,
+                                          final HttpServletRequest request) {
         log.debug("{} got POST request: {}", TAG, requestJson);
+        //Currently, this API is not public (at least until API Rate Limits will be implemented).
+        //So it works only with Master Token
+        OperationResult tokenCheckResult = tokenChecker.checkMasterToken(request);
+        if (tokenCheckResult.notOk()) {
+            return ApiUtils.handleTokenFail(tokenCheckResult);
+        }
         ResponseEntity<YalseeErrorJson> result;
-
         if (requestJson == null) {
             return ApiUtils.handleError(HttpCode.BAD_REQUEST, "Body should be a JSON object");
         }

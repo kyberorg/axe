@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Stack;
 
 /**
- * Service, that performs user-related operations;
+ * Service, that performs user-related operations.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +25,6 @@ public class UserOperationsService {
     private static final String TAG = "[" + UserOperationsService.class.getSimpleName() + "]";
     private final Stack<RollbackTask> rollbackTasks = new Stack<>();
     private final RollbackService rollbackService;
-
     private final UserService userService;
     private final UserSettingsService userSettingsService;
     private final AccountService accountService;
@@ -96,8 +95,8 @@ public class UserOperationsService {
         rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
 
         //TODO replace with Senders once ready
-        log.info("{} Successfully got confirmation token for {} {}. Now waiting to send it.",
-                TAG, confirmationToken, createdUser.getUsername());
+        log.info("{} Successfully got {} {} for {}. Now waiting to send it.",
+                TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
         rollbackService.rollback(rollbackTasks);
 
         //send it
