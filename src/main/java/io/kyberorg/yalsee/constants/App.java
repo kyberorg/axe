@@ -35,6 +35,7 @@ public final class App {
     }
 
     public static class Properties {
+        public static final String APPLICATION_NAME = "spring.application.name";
         public static final String TELEGRAM_ENABLED = "telegram.enabled";
         public static final String TELEGRAM_TOKEN = "telegram.token";
         public static final String SERVER_URL = "server.url";
@@ -52,6 +53,10 @@ public final class App {
         public static final String REDIRECT_PAGE_TIMEOUT = "app.redirect-page.timeout";
         public static final String SESSION_TIMEOUT = "app.session.timeout";
         public static final String FACEBOOK_APP_ID = "app.facebook.app-id";
+        public static final String SERVER_KEY = "app.security.server-key";
+        public static final String PASSWORD_SALT = "app.security.password-salt";
+        public static final String EMAIL_FOR_ERRORS = "app.mail.email4errors";
+        public static final String EMAIL_FROM_ADDRESS = "app.mail.from-address";
     }
 
     public static class Env {
@@ -59,6 +64,7 @@ public final class App {
         public static final String SERVER_URL = "SERVER_URL";
         public static final String BUGSNAG_TOKEN = "BUGSNAG_TOKEN";
         public static final String DELETE_TOKEN = "DELETE_TOKEN";
+        public static final String MASTER_TOKEN = "MASTER_TOKEN";
     }
 
     public static class Git {
@@ -80,6 +86,7 @@ public final class App {
         public static final int REDIRECT_PAGE_TIMEOUT_SECONDS = 10;
         public static final int SESSION_TIMEOUT_SECONDS = 1800;
         public static final int NOTIFICATION_DURATION_MILLIS = 1500;
+        public static final String EMAIL_FROM_ADDRESS = "yalsee@yals.ee";
     }
 
     public static class Api {

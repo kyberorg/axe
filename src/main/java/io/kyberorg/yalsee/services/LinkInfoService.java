@@ -3,12 +3,15 @@ package io.kyberorg.yalsee.services;
 import io.kyberorg.yalsee.dao.LinkInfoDao;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.LinkInfo;
+import io.kyberorg.yalsee.models.User;
+import io.kyberorg.yalsee.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -21,6 +24,7 @@ import java.util.Optional;
 @Service
 public class LinkInfoService {
     private final LinkInfoDao repo;
+    private final UserService userService;
 
     /**
      * Creates {@link LinkInfo} with session info.
@@ -28,8 +32,9 @@ public class LinkInfoService {
      * @param ident       string with part that identifies short link
      * @param session     string with session ID, omitted if {@code null} or empty
      * @param description string with link description, omitted if {@code null} or empty
+     * @param owner       link's owner
      */
-    public void createLinkInfo(final String ident, final String session, final String description) {
+    public void createLinkInfo(final String ident, final String session, final String description, final User owner) {
         LinkInfo linkInfo;
         if (linkInfoExistsForIdent(ident)) {
             update(repo.findSingleByIdent(ident));
@@ -46,6 +51,7 @@ public class LinkInfoService {
             linkInfo.setSession(session);
         }
 
+        linkInfo.setOwner(Objects.requireNonNullElseGet(owner, userService::getDefaultUser));
         repo.update(linkInfo);
     }
 

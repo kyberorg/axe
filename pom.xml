@@ -33,9 +33,9 @@
         <!-- Java version -->
         <java.version>17</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>23.2.2</vaadin.version>
+        <vaadin.version>23.2.8</vaadin.version>
         <!-- QR Code Software version-->
-        <qr.zxing.version>3.5.0</qr.zxing.version>
+        <qr.zxing.version>3.5.1</qr.zxing.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,7 +52,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.4</version>
+        <version>2.7.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     
@@ -63,10 +63,34 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>5.7.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+
         <!-- Spring Boot Logging -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Mailing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!-- Email Templating -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
 
         <!-- Spring Boot Actuator -->
@@ -129,7 +153,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.16.1</version>
+            <version>4.17.2</version>
         </dependency>
 
         <!-- Redis -->
@@ -159,7 +183,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.9.1</version>
+            <version>2.10</version>
         </dependency>
         
         <!-- Useful methods for strings -->
@@ -173,7 +197,7 @@
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.13.11</version>
+            <version>3.13.12</version>
         </dependency>
         
         <!-- For extra validation of URL  -->
@@ -194,7 +218,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>6.1.0</version>
+            <version>6.3.0</version>
         </dependency>
         
         <!-- Emoji Parser -->
@@ -295,12 +319,18 @@
         <dependency>
             <groupId>org.junit-pioneer</groupId>
             <artifactId>junit-pioneer</artifactId>
-            <version>1.7.1</version>
+            <version>1.8.0</version>
             <scope>test</scope>
         </dependency>
 
         <!-- Snyk deps -->
         <!-- We don't use those deps but other deps are using old version. So those are here to improve security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.7.5</version>
+        </dependency>
+
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
@@ -309,7 +339,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.14.0-rc3</version>
+            <version>2.14.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

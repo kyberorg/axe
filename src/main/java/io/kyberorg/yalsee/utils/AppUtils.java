@@ -617,6 +617,42 @@ public class AppUtils implements Serializable {
         return getEnv().getProperty(App.Properties.FACEBOOK_APP_ID, App.NO_VALUE);
     }
 
+    /**
+     * Reads Email for sending errors from Settings.
+     *
+     * @return String with Email for sending errors or {@link App#NO_VALUE}.
+     */
+    public String getEmailForErrors() {
+        return getEnv().getProperty(App.Properties.EMAIL_FOR_ERRORS, App.NO_VALUE);
+    }
+
+    /**
+     * Reads from profile Email Address we should send letters from.
+     *
+     * @return String with Email Address or default value.
+     */
+    public String getEmailFromAddress() {
+        return getEnv().getProperty(App.Properties.EMAIL_FROM_ADDRESS, App.Defaults.EMAIL_FROM_ADDRESS);
+    }
+
+    /**
+     * Reads Application Name from properties.
+     *
+     * @return String with Application Name,defined in profile or harcoded value {@literal Yalsee}.
+     */
+    public String getApplicationName() {
+        return getEnv().getProperty(App.Properties.APPLICATION_NAME, "Yalsee");
+    }
+
+    /**
+     * Provides Master Token from EnvVars. This is hardcoded Token to perform potentially destructive operations.
+     *
+     * @return string with token, or {@link App#NO_VALUE}.
+     */
+    public String getMasterToken() {
+        return getEnv().getProperty(App.Env.MASTER_TOKEN, App.NO_VALUE);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

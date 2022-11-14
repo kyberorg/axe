@@ -12,16 +12,18 @@ import io.kyberorg.yalsee.exception.YalseeException;
 import io.kyberorg.yalsee.exception.error.UserMessageGenerator;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
+import io.kyberorg.yalsee.services.mail.EmailSenderService;
+import io.kyberorg.yalsee.services.mail.LetterType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.MimeMessage;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static io.kyberorg.yalsee.constants.App.NO_STATUS;
 
@@ -30,12 +32,16 @@ import static io.kyberorg.yalsee.constants.App.NO_STATUS;
  *
  * @since 2.7
  */
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class ErrorUtils {
-
+    private static final String TAG = "[" + ErrorUtils.class.getSimpleName() + "]";
+    private static final int SERVER_ERROR_HTTP_STATUS = 500;
     private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
+    private final AppUtils appUtils;
+    private final EmailSenderService emailSenderService;
 
     /**
      * Converts from stack trace to String with stack trace.
@@ -183,6 +189,37 @@ public class ErrorUtils {
             report.addToTab(tabName, "Raw Exception", yalseeError.getRawException());
         });
         bugsnag.notify(yalseeException);
+        if (yalseeError.getHttpStatus() >= SERVER_ERROR_HTTP_STATUS) {
+            notifyByEmail(yalseeError);
+        }
+    }
+
+    /**
+     * Reports issue to Maintainer's email.
+     *
+     * @param yalseeError {@link YalseeError} object
+     */
+    public void notifyByEmail(final YalseeError yalseeError) {
+        String emailForErrors = appUtils.getEmailForErrors();
+        if (emailForErrors.equals(App.NO_VALUE)) {
+            log.warn("{} failed to notify about server error by email. Reason: email for errors is not set", TAG);
+            return;
+        }
+        String subject = "Error Report";
+        String jsonizedYalseeError = AppUtils.GSON.toJson(yalseeError);
+
+        Map<String, Object> templateVars = new HashMap<>(1);
+        templateVars.put("yalseeError", jsonizedYalseeError);
+
+        try {
+            MimeMessage letter =
+                    emailSenderService.createLetter(LetterType.SERVER_ERROR, emailForErrors, subject, templateVars);
+            emailSenderService.sendEmail(emailForErrors, letter);
+        } catch (Exception e) {
+            log.error("{} failed to create or send error report email. Got exception {}",
+                    TAG, e.getClass().getSimpleName());
+            log.error("", e);
+        }
     }
 
     /**

@@ -45,4 +45,173 @@
             <column name="session"/>
         </createIndex>
     </changeSet>
+    <changeSet id="4" author="kyberorg" failOnError="true">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="TEXT"/>
+            <column name="user_role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="BOOLEAN"/>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
+        <createTable tableName="accounts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auth_data"/>
+            </column>
+            <column name="user" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmed" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="accounts"
+                                 constraintName="FK_ACCOUNT_DATA_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="tokens">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user" type="BIGINT"/>
+            <column name="confirmation_for" type="BIGINT"/>
+            <column name="not_valid_after" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="token" constraintName="uc_token_token" tableName="tokens"/>
+        <addForeignKeyConstraint baseColumnNames="confirmation_for" baseTableName="tokens"
+                                 constraintName="FK_TOKEN_ON_CONFIRMATION_FOR" referencedColumnNames="id"
+                                 referencedTableName="accounts"/>
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="tokens" constraintName="FK_TOKEN_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="user_preferences">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_preferences"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="main_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_reset_channel" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_preferences"
+                                 constraintName="FK_USER_PREFERENCES_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="5" author="kyberorg" failOnError="true">
+        <!-- Creating yalsee user -->
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="username" value="yalsee"/>
+            <column name="password" value=""/>
+            <column name="user_role" value="SUPER_ADMIN"/>
+            <column name="is_enabled" valueBoolean="true"/>
+            <column name="created" valueDate="now()"/>
+            <column name="updated" valueDate="now()"/>
+        </insert>
+        <insert tableName="accounts">
+            <column name="id" value="1"/>
+            <column name="user" value="1"/>
+            <column name="type" value="LOCAL"/>
+            <column name="account_name" value="yalsee"/>
+            <column name="confirmed" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_preferences">
+            <column name="id" value="1"/>
+            <column name="user_id" value="1"/>
+            <column name="tfa_enabled" valueBoolean="false"/>
+            <column name="tfa_channel" value="LOCAL"/>
+            <column name="main_channel" value="LOCAL"/>
+            <!-- Next line is here just for dokumentation. Do not uncomment it. -->
+            <!--<column name="password_reset_channel" value="null"/>-->
+        </insert>
+    </changeSet>
+    <changeSet id="6" author="kyberorg" failOnError="true">
+        <addColumn tableName="link_info">
+            <column name="owner" type="BIGINT" defaultValue="1">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="link_info" baseColumnNames="owner" referencedTableName="users"
+                                 referencedColumnNames="id" constraintName="FK_LINK_OWNER"/>
+    </changeSet>
+    <changeSet id="7" author="kyberorg">
+        <createTable tableName="user_settings">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_settings"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tfa_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="main_channel" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_reset_channel" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_settings"
+                                 constraintName="FK_USER_SETTINGS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        <insert tableName="user_settings">
+            <column name="id" value="1"/>
+            <column name="user_id" value="1"/>
+            <column name="tfa_enabled" valueBoolean="false"/>
+            <column name="tfa_channel" value="LOCAL"/>
+            <column name="main_channel" value="LOCAL"/>
+            <!-- Next line is here just for dokumentation. Do not uncomment it. -->
+            <!--<column name="password_reset_channel" value="null"/>-->
+        </insert>
+        <dropTable tableName="user_preferences"/>
+    </changeSet>
+    <changeSet id="8" author="kyberorg">
+        <renameColumn tableName="accounts" oldColumnName="user" newColumnName="user_id"/>
+        <renameColumn tableName="tokens" oldColumnName="user" newColumnName="user_id"/>
+    </changeSet>
 </databaseChangeLog>
