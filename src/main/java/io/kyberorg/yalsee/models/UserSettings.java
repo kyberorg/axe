@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_settings")
 public class UserSettings extends BaseModel {
-    @OneToOne(cascade = CascadeType.REMOVE, optional = false)
+    @OneToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

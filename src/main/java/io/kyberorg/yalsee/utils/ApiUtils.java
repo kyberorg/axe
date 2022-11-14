@@ -38,6 +38,31 @@ public final class ApiUtils {
     }
 
     /**
+     * Constructs {@link ResponseEntity} with {@link YalseeErrorJson} inside. Uses user-defined message and status.
+     *
+     * @param httpStatus int with HTTP Status. See {@link HttpCode}.
+     * @param message    string with error message.
+     * @return {@link ResponseEntity} with {@link YalseeErrorJson} inside
+     */
+    public static ResponseEntity<YalseeErrorJson> handleError(final int httpStatus, final String message) {
+        YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage(message).andStatus(httpStatus);
+        return ResponseEntity.status(httpStatus).body(errorJson);
+    }
+
+    /**
+     * Constructs {@link ResponseEntity} with {@link YalseeErrorJson} inside.
+     * Uses user-defined status and message from {@link OperationResult}.
+     *
+     * @param httpStatus int with HTTP Status. See {@link HttpCode}.
+     * @param opResult   operation result to get message from.
+     * @return {@link ResponseEntity} with {@link YalseeErrorJson} inside
+     */
+    public static ResponseEntity<YalseeErrorJson> handleError(final int httpStatus, final OperationResult opResult) {
+        YalseeErrorJson errorJson = YalseeErrorJson.createWithMessage(opResult.getMessage()).andStatus(httpStatus);
+        return ResponseEntity.status(httpStatus).body(errorJson);
+    }
+
+    /**
      * Handles negative token check result.
      *
      * @param checkResult check result for analysis.

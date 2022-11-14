@@ -30,7 +30,6 @@ public class AccountService {
 
     private final AccountDao accountDao;
     private final SymmetricCryptTool cryptTool;
-    private final TokenService tokenService;
     private final UserService userService;
     private final EmailService emailService;
 
@@ -82,11 +81,13 @@ public class AccountService {
 
         try {
             accountDao.save(localAccount);
-            return OperationResult.success();
+            log.info("{} Created local account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
+            return OperationResult.success().addPayload(localAccount);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
-            return OperationResult.generalFail();
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
 
@@ -103,7 +104,7 @@ public class AccountService {
             return emailValidationResult;
         }
 
-        if (isAccountUnique(email, AccountType.EMAIL)) {
+        if (isAccountAlreadyExists(email, AccountType.EMAIL)) {
             return OperationResult.conflict().withMessage(ERR_EMAIL_ALREADY_EXISTS);
         }
 
@@ -112,7 +113,7 @@ public class AccountService {
         if (encryptEmailResult.ok()) {
             encryptedEmail = encryptEmailResult.getStringPayload();
         } else {
-            log.error("{} email encryption failed. Value: {}. Error: {}", TAG, email, encryptEmailResult.getMessage());
+            log.error("{} Email encryption failed. Value: {}. Error: {}", TAG, email, encryptEmailResult.getMessage());
             return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
         }
 
@@ -122,11 +123,13 @@ public class AccountService {
 
         try {
             accountDao.save(emailAccount);
+            log.info("{} Created email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
             return OperationResult.success().addPayload(emailAccount);
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {
-            return OperationResult.generalFail();
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
 
