@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.CannotCreateTransactionException;
 
 /**
- * Class that generates username.
+ * Class that generates Usernames.
  */
 @Slf4j
 @RequiredArgsConstructor

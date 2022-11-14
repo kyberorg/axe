@@ -6,7 +6,7 @@ import io.kyberorg.yalsee.constants.MimeType;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
 import io.kyberorg.yalsee.internal.RegisterUserInput;
 import io.kyberorg.yalsee.json.PostUserRequest;
-import io.kyberorg.yalsee.json.UserRegistrationResponse;
+import io.kyberorg.yalsee.json.PostUserResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.mail.EmailService;
@@ -49,11 +49,11 @@ public class PostUserRestController {
     private final TokenChecker tokenChecker;
 
     /**
-     * API that performs user registration.
+     * API that performs User Registration.
      *
      * @param requestJson {@link PostUserRequest} JSON with link to save
      * @param request     raw {@link HttpServletRequest} to get Headers from
-     * @return {@link ResponseEntity} with {@link UserRegistrationResponse} or {@link YalseeErrorJson}.
+     * @return {@link ResponseEntity} with {@link PostUserResponse} or {@link YalseeErrorJson}.
      */
     @PostMapping(value = Endpoint.Api.REGISTER_USER_API,
             consumes = MimeType.APPLICATION_JSON,
@@ -62,7 +62,7 @@ public class PostUserRestController {
                                           final HttpServletRequest request) {
         log.debug("{} got POST request: {}", TAG, requestJson);
         //Currently, this API is not public (at least until API Rate Limits will be implemented).
-        //So it works only with Master Token
+        //So it works only with Master Token provided.
         OperationResult tokenCheckResult = tokenChecker.checkMasterToken(request);
         if (tokenCheckResult.notOk()) {
             log.warn("{} Master Token Check failed - returning {}", TAG, HttpCode.UNAUTHORIZED);
@@ -71,16 +71,19 @@ public class PostUserRestController {
             log.info("{} Master Token Check - passed", TAG);
         }
 
-        ResponseEntity<YalseeErrorJson> result;
+        //checking Body
         if (requestJson == null) {
             return ApiUtils.handleError(HttpCode.BAD_REQUEST, "Body should be a JSON object");
         }
 
+        //extract fields
         String email = requestJson.getEmail();
         String username = requestJson.getUsername();
         String password = requestJson.getPassword();
         boolean tfaEnabled = requestJson.isTfaEnabled();
 
+        //inputs check
+        ResponseEntity<YalseeErrorJson> result;
         result = checkEmail(email);
         if (result != null) {
             return result;
@@ -92,6 +95,7 @@ public class PostUserRestController {
                 return result;
             }
         } else {
+            log.info("{} There is no user-defined Username in Request. Generating custom Username", TAG);
             OperationResult usernameGenerationResult = usernameGenerator.generate();
             if (usernameGenerationResult.ok()) {
                 username = usernameGenerationResult.getStringPayload();
@@ -107,11 +111,11 @@ public class PostUserRestController {
             return result;
         }
 
-        //Register user
+        //Registering user
         RegisterUserInput registerUserInput = new RegisterUserInput(email, username, password, tfaEnabled);
         OperationResult userRegistrationResult = userOpsService.registerUser(registerUserInput);
         if (userRegistrationResult.notOk()) {
-            log.error("{} failed to register user. OpResult: {}", TAG, userRegistrationResult);
+            log.error("{} Failed to register user. OpResult: {}", TAG, userRegistrationResult);
             errorUtils.reportToBugsnag(YalseeErrorBuilder
                     .withTechMessage(userRegistrationResult.getMessage())
                     .withMessageToUser("User registration failed")
@@ -119,7 +123,7 @@ public class PostUserRestController {
             return ApiUtils.handleServerError();
         }
         log.info("{} Success. User Registered - returning {}", TAG, HttpCode.CREATED);
-        return ResponseEntity.status(HttpCode.CREATED).body(UserRegistrationResponse.create(email));
+        return ResponseEntity.status(HttpCode.CREATED).body(PostUserResponse.create(email));
     }
 
     private ResponseEntity<YalseeErrorJson> checkEmail(final String email) {

@@ -54,6 +54,13 @@ public class TokenChecker {
         }
     }
 
+    /**
+     * Performs Master Token check.
+     *
+     * @param request {@link HttpServletRequest} with token inside.
+     * @return {@link OperationResult#OK} - when token is correct,
+     * {@link OperationResult} with one of the markers in message - if token is not valid.
+     */
     public OperationResult checkMasterToken(final HttpServletRequest request) {
         if (request == null) return OperationResult.generalFail().withMessage(REQUEST_IS_EMPTY);
 

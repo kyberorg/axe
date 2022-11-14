@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.Stack;
 
 /**
- * Service, that performs rollbacks.
+ * Service, that performs database rollback.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +35,11 @@ public class RollbackService {
     public static final String TAG = "[" + RollbackService.class.getSimpleName() + "]";
     public static final String ERR_NO_SUCH_DAO = "No corresponding DAO found for given model";
 
+    /**
+     * Performs database rollback by deleting records from last to first task aka LIFO order.
+     *
+     * @param rollbackTasks {@link Stack} of {@link RollbackTask}s.
+     */
     @Async
     public void rollback(final Stack<RollbackTask> rollbackTasks) {
         log.info("{} Rollback requested ({} tasks)", TAG, rollbackTasks.size());
@@ -57,6 +62,7 @@ public class RollbackService {
                 return;
             }
         }
+        log.info("{} Rollback completed", TAG);
     }
 
     private OperationResult performRollback(final RollbackTask task) {

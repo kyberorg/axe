@@ -9,6 +9,7 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.user.rollback.RollbackService;
 import io.kyberorg.yalsee.services.user.rollback.RollbackTask;
 import io.kyberorg.yalsee.users.AccountType;
+import io.kyberorg.yalsee.users.TokenType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,16 @@ public class UserOperationsService {
     private final AccountService accountService;
     private final TokenService tokenService;
 
+    /**
+     * Registers new User in System.
+     * Creates new records in App's Database and
+     * requests {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN} from {@link TokenService}.
+     *
+     * @param input {@link RegisterUserInput} with filled in fields.
+     * @return {@link OperationResult#success()} or {@link OperationResult} with error status and message inside.
+     */
     public OperationResult registerUser(final RegisterUserInput input) {
-        //create user
+        //Create User Record
         OperationResult userCreateResult = userService.createUser(input.getUsername(), input.getPassword());
         if (userCreateResult.notOk()) {
             return userCreateResult;
@@ -39,7 +48,7 @@ public class UserOperationsService {
         User createdUser = userCreateResult.getPayload(User.class);
         rollbackTasks.push(RollbackTask.create(User.class, createdUser));
 
-        //create user settings
+        //Create UserSettings Record
         OperationResult userSettingsCreateResult = userSettingsService.createNewSettings(createdUser);
         if (userSettingsCreateResult.notOk()) {
             rollbackService.rollback(rollbackTasks);
@@ -48,10 +57,10 @@ public class UserOperationsService {
         UserSettings userSettings = userSettingsCreateResult.getPayload(UserSettings.class);
         rollbackTasks.push(RollbackTask.create(UserSettings.class, userSettings));
 
-        //create local account
+        //Create Local Account
         OperationResult createLocalAccountResult = accountService.createLocalAccount(createdUser);
         if (createLocalAccountResult.notOk()) {
-            log.error("{} failed to create local {}. OpResult: {}",
+            log.error("{} Failed to create local {}. OpResult: {}",
                     TAG, Account.class.getSimpleName(), createLocalAccountResult);
             rollbackService.rollback(rollbackTasks);
             return createLocalAccountResult;
@@ -59,10 +68,10 @@ public class UserOperationsService {
         Account localAccount = createLocalAccountResult.getPayload(Account.class);
         rollbackTasks.push(RollbackTask.create(Account.class, localAccount));
 
-        //create email account
+        //Create Email Account
         OperationResult createEmailAccountResult = accountService.createEmailAccount(createdUser, input.getEmail());
         if (createEmailAccountResult.notOk()) {
-            log.error("{} failed to create email {}. OpResult: {}",
+            log.error("{} Failed to create email {}. OpResult: {}",
                     TAG, Account.class.getSimpleName(), createEmailAccountResult);
             rollbackService.rollback(rollbackTasks);
             return createEmailAccountResult;
@@ -70,21 +79,23 @@ public class UserOperationsService {
         Account emailAccount = createEmailAccountResult.getPayload(Account.class);
         rollbackTasks.push(RollbackTask.create(Account.class, emailAccount));
 
-        //Settings update main channel
+        //UserSettings change Main Channel to Email
         userSettings.setMainChannel(AccountType.EMAIL);
 
-        //if tfa enabled
+        //if TFA (2-factor Auth) enabled
         if (input.isTfaEnabled()) {
+            //Set TFA enabled and update its channel to Email
             userSettings.setTfaEnabled(true);
             userSettings.setTfaChannel(AccountType.EMAIL);
         }
+        //Save UserSettings
         OperationResult saveChannelUpdatesResult = userSettingsService.updateUserSettings(userSettings);
         if (saveChannelUpdatesResult.notOk()) {
-            log.error("{} failed to update {}. OpResult: {}",
+            log.error("{} Failed to update {}. OpResult: {}",
                     TAG, UserSettings.class.getSimpleName(), saveChannelUpdatesResult);
         }
 
-        //token create confirmation token
+        //Create Confirmation Token
         OperationResult createConfirmationTokenResult = tokenService.createConfirmationToken(createdUser, emailAccount);
         if (createConfirmationTokenResult.notOk()) {
             log.error("{} failed to create confirmation token for {}. OpResult: {}",
@@ -94,6 +105,7 @@ public class UserOperationsService {
         Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
         rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
 
+        //Send it
         //TODO replace with Senders once ready
         log.info("{} Successfully created {}({}) for user '{}'. Now waiting to send it.",
                 TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
@@ -102,7 +114,7 @@ public class UserOperationsService {
         log.warn("{} Requesting Rollback", TAG);
         rollbackService.rollback(rollbackTasks);
 
-        //send it
+        //Report success back
         return OperationResult.success();
     }
 }
