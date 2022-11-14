@@ -37,7 +37,7 @@ public class RollbackService {
 
     @Async
     public void rollback(final Stack<RollbackTask> rollbackTasks) {
-        log.info("{} Rollback requested with {} tasks", TAG, rollbackTasks.size());
+        log.info("{} Rollback requested ({} tasks)", TAG, rollbackTasks.size());
         while (!rollbackTasks.isEmpty()) {
             RollbackTask task = rollbackTasks.pop();
             OperationResult result = performRollback(task);

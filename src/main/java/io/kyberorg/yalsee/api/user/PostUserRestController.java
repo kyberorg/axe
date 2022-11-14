@@ -65,10 +65,10 @@ public class PostUserRestController {
         //So it works only with Master Token
         OperationResult tokenCheckResult = tokenChecker.checkMasterToken(request);
         if (tokenCheckResult.notOk()) {
-            log.warn("{} Master Token Check failed - returning 401", TAG);
+            log.warn("{} Master Token Check failed - returning {}", TAG, HttpCode.UNAUTHORIZED);
             return ApiUtils.handleTokenFail(tokenCheckResult);
         } else {
-            log.info("{} Master Token check passed", TAG);
+            log.info("{} Master Token Check - passed", TAG);
         }
 
         ResponseEntity<YalseeErrorJson> result;
@@ -118,6 +118,7 @@ public class PostUserRestController {
                     .build());
             return ApiUtils.handleServerError();
         }
+        log.info("{} Success. User Registered - returning {}", TAG, HttpCode.CREATED);
         return ResponseEntity.status(HttpCode.CREATED).body(UserRegistrationResponse.create(email));
     }
 

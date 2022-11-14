@@ -56,7 +56,7 @@ public class UserSettingsService {
     private OperationResult createOrUpdateUserSettings(final UserSettings userSettings) {
         try {
             userSettingsDao.save(userSettings);
-            log.info("{} Saved {} for {} {}",
+            log.info("{} Saved/Updated {} for {} {}",
                     TAG, UserSettings.class.getSimpleName(),
                     User.class.getSimpleName(), userSettings.getUser().getUsername());
             return OperationResult.success().addPayload(userSettings);
