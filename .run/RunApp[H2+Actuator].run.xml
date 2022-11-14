@@ -7,8 +7,6 @@
     <envs>
       <env name="SPRING_PROFILES_ACTIVE" value="actuator" />
     </envs>
-    <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="yalsee [clean, package]" run_configuration_type="MavenRunConfiguration" />
-    </method>
+    <method v="2"/>
   </configuration>
 </component>
