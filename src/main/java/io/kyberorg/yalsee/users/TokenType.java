@@ -6,7 +6,7 @@ import lombok.Getter;
  * Type of Token with its properties.
  */
 public enum TokenType {
-    ACCOUNT_CONFIRMATION_TOKEN(86400, "ct", TokenValueType.UUID), //24h
+    ACCOUNT_CONFIRMATION_TOKEN(86400, "", TokenValueType.UUID), //24h
     LOGIN_VERIFICATION_TOKEN(3600, "", TokenValueType.CODE), //1h
     PASSWORD_RESET_TOKEN(3600, "fp", TokenValueType.UUID), //1h
     USER_API_TOKEN(36000, "", TokenValueType.UUID); //10h

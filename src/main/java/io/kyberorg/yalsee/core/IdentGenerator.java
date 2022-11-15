@@ -1,5 +1,7 @@
 package io.kyberorg.yalsee.core;
 
+import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.users.TokenType;
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
@@ -42,5 +44,18 @@ public final class IdentGenerator {
      */
     public static String generateNewIdent() {
         return RandomStringUtils.randomAlphabetic(IDENT_DEFAULT_LENGTH);
+    }
+
+    /**
+     * Generates ident, based on {@link TokenType}. Method not checking if ident already exists.
+     *
+     * @param tokenType token type for getting ident prefix.
+     * @return ident prefix plus random part.
+     */
+    public static String generateTokenIdent(final TokenType tokenType) {
+        String prefix = tokenType.getIdentPrefix();
+        String number = RandomStringUtils.randomNumeric(App.FOUR);
+        String letter = RandomStringUtils.randomAlphabetic(1);
+        return String.join("", prefix, number, letter);
     }
 }

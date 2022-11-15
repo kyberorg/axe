@@ -7,7 +7,10 @@ package io.kyberorg.yalsee.services.mail;
  * template file name located in /resources/templates/content folder.
  */
 public enum LetterType {
-    SERVER_ERROR("serverError.ftl");
+    SERVER_ERROR("serverError.ftl"),
+    ACCOUNT_CONFIRMATION("accountConfirmation.ftl"),
+    LOGIN_VERIFICATION("otp.ftl"),
+    PASSWORD_RESET("passwordReset.ftl");
 
     private final String templateFile;
 
