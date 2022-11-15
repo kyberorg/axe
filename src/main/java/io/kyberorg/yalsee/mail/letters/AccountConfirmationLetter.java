@@ -10,6 +10,9 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Data for creating Account Confirmation Letter.
+ */
 @RequiredArgsConstructor
 public class AccountConfirmationLetter implements Letter {
     private final Token token;

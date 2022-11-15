@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Data needed for creating Login Verification Letter aka OTP.
+ */
 @RequiredArgsConstructor
 public class LoginVerificationLetter implements Letter {
     private final Token token;

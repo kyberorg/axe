@@ -68,10 +68,12 @@ public final class Endpoint {
          * Settings Page.
          */
         public static final String SETTINGS_PAGE = "settings";
+
         /**
          * Account Confirmation Page.
          */
         public static final String CONFIRMATION_PAGE = "account-confirmation";
+
         /**
          * Password Reset Page.
          */

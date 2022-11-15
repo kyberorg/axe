@@ -10,9 +10,11 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Data needed to create Password Reset Letter.
+ */
 @RequiredArgsConstructor
 public class PasswordResetLetter implements Letter {
-
     private final Token token;
 
     @Override

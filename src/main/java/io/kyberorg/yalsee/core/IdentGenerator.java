@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.core;
 
+import io.kyberorg.yalsee.constants.App;
 import io.kyberorg.yalsee.users.TokenType;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -53,7 +54,7 @@ public final class IdentGenerator {
      */
     public static String generateTokenIdent(final TokenType tokenType) {
         String prefix = tokenType.getIdentPrefix();
-        String number = RandomStringUtils.randomNumeric(4);
+        String number = RandomStringUtils.randomNumeric(App.FOUR);
         String letter = RandomStringUtils.randomAlphabetic(1);
         return String.join("", prefix, number, letter);
     }

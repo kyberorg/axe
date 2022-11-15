@@ -22,6 +22,9 @@ import javax.mail.internet.MimeMessage;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Sender, that sends tokens via E-Mail.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
