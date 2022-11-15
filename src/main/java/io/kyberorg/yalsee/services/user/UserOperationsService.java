@@ -6,6 +6,7 @@ import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.models.UserSettings;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.senders.Senders;
 import io.kyberorg.yalsee.services.user.rollback.RollbackService;
 import io.kyberorg.yalsee.services.user.rollback.RollbackTask;
 import io.kyberorg.yalsee.users.AccountType;
@@ -30,6 +31,7 @@ public class UserOperationsService {
     private final UserSettingsService userSettingsService;
     private final AccountService accountService;
     private final TokenService tokenService;
+    private final Senders senders;
 
     /**
      * Registers new User in System.
@@ -106,13 +108,15 @@ public class UserOperationsService {
         rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
 
         //Send it
-        //TODO replace with Senders once ready
-        log.info("{} Successfully created {}({}) for user '{}'. Now waiting to send it.",
+        log.info("{} Successfully created {}({}) for user '{}'",
                 TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
-        log.warn("{} Unable to send created {} to {} - Senders System is not ready yet.",
-                TAG, confirmationToken.getTokenType(), input.getEmail());
-        log.warn("{} Requesting Rollback", TAG);
-        rollbackService.rollback(rollbackTasks);
+        OperationResult sendResult = senders.getSender(AccountType.EMAIL).send(confirmationToken, input.getEmail());
+        if (sendResult.notOk()) {
+            log.warn("{} Unable to send created {} to {}. OpResult: {}",
+                    TAG, confirmationToken.getTokenType(), input.getEmail(), sendResult);
+            log.warn("{} Requesting Rollback", TAG);
+            rollbackService.rollback(rollbackTasks);
+        }
 
         //Report success back
         return OperationResult.success();
