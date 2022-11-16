@@ -1,7 +1,5 @@
 package io.kyberorg.yalsee.senders;
 
-import io.kyberorg.yalsee.core.IdentGenerator;
-import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.mail.letters.AccountConfirmationLetter;
 import io.kyberorg.yalsee.mail.letters.Letter;
 import io.kyberorg.yalsee.mail.letters.LoginVerificationLetter;
@@ -11,7 +9,6 @@ import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
 import io.kyberorg.yalsee.services.mail.EmailSenderService;
 import io.kyberorg.yalsee.services.mail.LetterType;
-import io.kyberorg.yalsee.users.TokenType;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,9 +53,9 @@ public class MailTokenSender extends TokenSender {
 
         //make link
         String link = letter.getLink();
-        //short link
-        if (shouldCreateShortLink(token.getTokenType())) {
-            OperationResult shortifyResult = makeShortLink(link);
+        //shortify link, if needed
+        if (token.getTokenType().shouldCreateShortLink()) {
+            OperationResult shortifyResult = linkService.shortifyLinkForTokens(link, token.getTokenType());
             if (shortifyResult.ok()) {
                 link = shortifyResult.getStringPayload();
             } else {
@@ -78,23 +75,6 @@ public class MailTokenSender extends TokenSender {
         //send email
         emailSenderService.sendEmail(email, mimeMessage);
         return OperationResult.success();
-    }
-
-    private OperationResult makeShortLink(final String longLink) {
-        String ident;
-        do {
-            ident = IdentGenerator.generateTokenIdent(TokenType.ACCOUNT_CONFIRMATION_TOKEN);
-        } while (linkService.isLinkWithIdentExist(ident).ok());
-
-        LinkServiceInput input = LinkServiceInput.builder(longLink).customIdent(ident).build();
-        OperationResult createLinkResult = linkService.createLink(input);
-        if (createLinkResult.ok()) {
-            //create short link
-            final String shortLink = appUtils.getShortUrl() + "/" + ident;
-            return OperationResult.success().addPayload(shortLink);
-        } else {
-            return createLinkResult;
-        }
     }
 
     private Letter getLetter(final Token token) {

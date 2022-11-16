@@ -1,6 +1,7 @@
 package io.kyberorg.yalsee.users;
 
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Type of Token with its properties.
@@ -24,5 +25,15 @@ public enum TokenType {
         this.tokenAge = tokenAgeSeconds;
         this.identPrefix = identPrefix;
         this.valueType = tokenValueType;
+    }
+
+    /**
+     * Defines if needed to create short link or not.
+     *
+     * @return true - if there is {@link TokenType#identPrefix} and therefore it needs to create short link,
+     * false - is not.
+     */
+    public boolean shouldCreateShortLink() {
+        return StringUtils.isNotBlank(this.getIdentPrefix());
     }
 }

@@ -12,6 +12,8 @@ import io.kyberorg.yalsee.internal.LinkServiceInput;
 import io.kyberorg.yalsee.models.Link;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
+import io.kyberorg.yalsee.users.TokenType;
+import io.kyberorg.yalsee.utils.AppUtils;
 import io.kyberorg.yalsee.utils.UrlExtraValidator;
 import io.kyberorg.yalsee.utils.UrlUtils;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,7 @@ public class LinkService {
     private final LinkDao repo;
     private final LinkInfoService linkInfoService;
     private final EndpointsListener endpointsListener;
+    private final AppUtils appUtils;
 
     public static final String OP_MALFORMED_IDENT = "Ident is not valid";
     public static final String OP_MALFORMED_URL = UrlExtraValidator.URL_NOT_VALID;
@@ -266,6 +269,31 @@ public class LinkService {
             log.error("{} Exception on storing new {}", TAG, Link.class.getSimpleName());
             log.debug("", e);
             return OperationResult.generalFail();
+        }
+    }
+
+    /**
+     * Makes long link short, based on {@link TokenType}.
+     *
+     * @param longLink  non-empty string with long link.
+     * @param tokenType token type to determine ident prefix.
+     * @return {@link OperationResult#success()} with short in {@link OperationResult#payload}
+     * or {@link OperationResult} from {@link #createLink(LinkServiceInput)} method.
+     */
+    public OperationResult shortifyLinkForTokens(final String longLink, final TokenType tokenType) {
+        String ident;
+        do {
+            ident = IdentGenerator.generateTokenIdent(tokenType);
+        } while (this.isLinkWithIdentExist(ident).ok());
+
+        LinkServiceInput input = LinkServiceInput.builder(longLink).customIdent(ident).build();
+        OperationResult createLinkResult = this.createLink(input);
+        if (createLinkResult.ok()) {
+            //create short link
+            final String shortLink = appUtils.getShortUrl() + "/" + ident;
+            return OperationResult.success().addPayload(shortLink);
+        } else {
+            return createLinkResult;
         }
     }
 

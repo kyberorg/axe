@@ -130,7 +130,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return message;
     }
 
-    private SendMessage createSendMessage(final String message) {
+    public SendMessage createSendMessage(final String message) {
         Message telegramMessage = getMessage();
         return SendMessage.builder()
                 .chatId(Long.toString(telegramMessage.getChatId()))
