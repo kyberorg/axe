@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class Senders {
     private final NoOpTokenSender noOpTokenSender;
     private final MailTokenSender mailTokenSender;
+    private final TelegramSender telegramSender;
 
     /**
      * Provides senders based on {@link AccountType}.
@@ -23,6 +24,7 @@ public class Senders {
         return switch (accountType) {
             case LOCAL -> noOpTokenSender;
             case EMAIL -> mailTokenSender;
+            case TELEGRAM -> telegramSender;
         };
     }
 }
