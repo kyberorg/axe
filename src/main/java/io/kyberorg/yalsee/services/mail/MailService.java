@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @RequiredArgsConstructor
 @Service
-public class EmailService {
+public class MailService {
     private static final String OP_EMPTY_EMAIL = "Email cannot be empty";
     private static final String OP_EMAIL_NOT_VALID = "Please use valid email address";
 

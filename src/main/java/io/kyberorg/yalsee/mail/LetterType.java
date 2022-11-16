@@ -1,4 +1,4 @@
-package io.kyberorg.yalsee.services.mail;
+package io.kyberorg.yalsee.mail;
 
 /**
  * Letter type and its template.

@@ -12,8 +12,8 @@ import io.kyberorg.yalsee.exception.YalseeException;
 import io.kyberorg.yalsee.exception.error.UserMessageGenerator;
 import io.kyberorg.yalsee.exception.error.YalseeError;
 import io.kyberorg.yalsee.exception.error.YalseeErrorBuilder;
-import io.kyberorg.yalsee.services.mail.EmailSenderService;
-import io.kyberorg.yalsee.services.mail.LetterType;
+import io.kyberorg.yalsee.mail.LetterType;
+import io.kyberorg.yalsee.services.mail.MailSenderService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class ErrorUtils {
     private final YalseeErrorKeeper errorKeeper;
     private final Bugsnag bugsnag;
     private final AppUtils appUtils;
-    private final EmailSenderService emailSenderService;
+    private final MailSenderService mailSenderService;
 
     /**
      * Converts from stack trace to String with stack trace.
@@ -213,8 +213,8 @@ public class ErrorUtils {
 
         try {
             MimeMessage letter =
-                    emailSenderService.createLetter(LetterType.SERVER_ERROR, emailForErrors, subject, templateVars);
-            emailSenderService.sendEmail(emailForErrors, letter);
+                    mailSenderService.createLetter(LetterType.SERVER_ERROR, emailForErrors, subject, templateVars);
+            mailSenderService.sendEmail(emailForErrors, letter);
         } catch (Exception e) {
             log.error("{} failed to create or send error report email. Got exception {}",
                     TAG, e.getClass().getSimpleName());

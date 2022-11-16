@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.senders;
 
+import io.kyberorg.yalsee.mail.LetterType;
 import io.kyberorg.yalsee.mail.letters.AccountConfirmationLetter;
 import io.kyberorg.yalsee.mail.letters.Letter;
 import io.kyberorg.yalsee.mail.letters.LoginVerificationLetter;
@@ -7,9 +8,7 @@ import io.kyberorg.yalsee.mail.letters.PasswordResetLetter;
 import io.kyberorg.yalsee.models.Token;
 import io.kyberorg.yalsee.result.OperationResult;
 import io.kyberorg.yalsee.services.LinkService;
-import io.kyberorg.yalsee.services.mail.EmailSenderService;
-import io.kyberorg.yalsee.services.mail.LetterType;
-import io.kyberorg.yalsee.utils.AppUtils;
+import io.kyberorg.yalsee.services.mail.MailSenderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,9 +29,8 @@ public class MailTokenSender extends TokenSender {
     private static final String ERR_TOKEN_IS_EMPTY = "Token is NULL";
     public static final String ERR_EMAIL_IS_EMPTY = "Email is empty";
     public static final String ERR_NO_LETTER_FOR_TYPE = "There is no letter template found for given Token Type";
-    private final EmailSenderService emailSenderService;
+    private final MailSenderService mailSenderService;
     private final LinkService linkService;
-    private final AppUtils appUtils;
 
     @Override
     public OperationResult send(final Token token, final String email) {
@@ -68,12 +66,12 @@ public class MailTokenSender extends TokenSender {
 
         MimeMessage mimeMessage;
         try {
-            mimeMessage = emailSenderService.createLetter(letterType, email, subject, vars);
+            mimeMessage = mailSenderService.createLetter(letterType, email, subject, vars);
         } catch (Exception e) {
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
         //send email
-        emailSenderService.sendEmail(email, mimeMessage);
+        mailSenderService.sendEmail(email, mimeMessage);
         return OperationResult.success();
     }
 

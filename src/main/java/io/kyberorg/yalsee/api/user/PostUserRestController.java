@@ -9,7 +9,7 @@ import io.kyberorg.yalsee.json.PostUserRequest;
 import io.kyberorg.yalsee.json.PostUserResponse;
 import io.kyberorg.yalsee.json.YalseeErrorJson;
 import io.kyberorg.yalsee.result.OperationResult;
-import io.kyberorg.yalsee.services.mail.EmailService;
+import io.kyberorg.yalsee.services.mail.MailService;
 import io.kyberorg.yalsee.services.user.AccountService;
 import io.kyberorg.yalsee.services.user.UserOperationsService;
 import io.kyberorg.yalsee.services.user.UserService;
@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PostUserRestController {
     public static final String TAG = "[" + PostUserRestController.class.getSimpleName() + "]";
 
-    private final EmailService emailService;
+    private final MailService mailService;
     private final AccountService accountService;
     private final UserService userService;
     private final UsernameGenerator usernameGenerator;
@@ -128,7 +128,7 @@ public class PostUserRestController {
 
     private ResponseEntity<YalseeErrorJson> checkEmail(final String email) {
         //email not valid -> 422 (?)
-        OperationResult emailValidationResult = emailService.isEmailValid(email);
+        OperationResult emailValidationResult = mailService.isEmailValid(email);
         if (emailValidationResult.notOk()) {
             return ApiUtils.handleError(HttpCode.UNPROCESSABLE_ENTRY, emailValidationResult);
         }

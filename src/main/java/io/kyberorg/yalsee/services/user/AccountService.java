@@ -4,7 +4,7 @@ import io.kyberorg.yalsee.dao.AccountDao;
 import io.kyberorg.yalsee.models.Account;
 import io.kyberorg.yalsee.models.User;
 import io.kyberorg.yalsee.result.OperationResult;
-import io.kyberorg.yalsee.services.mail.EmailService;
+import io.kyberorg.yalsee.services.mail.MailService;
 import io.kyberorg.yalsee.users.AccountType;
 import io.kyberorg.yalsee.utils.crypto.SymmetricCryptTool;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class AccountService {
     private final AccountDao accountDao;
     private final SymmetricCryptTool cryptTool;
     private final UserService userService;
-    private final EmailService emailService;
+    private final MailService mailService;
 
     private static final String ERR_EMAIL_ALREADY_EXISTS = "Email already used";
     private static final String ERR_ENCRYPTION_FAILED = "Failed to encrypt plain text value before saving";
@@ -99,7 +99,7 @@ public class AccountService {
      * @return {@link OperationResult} with created {@link Account} in payload or {@link OperationResult} with error.
      */
     public OperationResult createEmailAccount(final User user, final String email) {
-        OperationResult emailValidationResult = emailService.isEmailValid(email);
+        OperationResult emailValidationResult = mailService.isEmailValid(email);
         if (emailValidationResult.notOk()) {
             return emailValidationResult;
         }

@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 /**
- * Email Configuration. Credentials and server.
+ * Mail Configuration. Credentials and server.
  */
 @Configuration
 public class MailConfig {
