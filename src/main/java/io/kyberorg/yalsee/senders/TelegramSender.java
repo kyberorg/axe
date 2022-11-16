@@ -14,6 +14,7 @@ import io.kyberorg.yalsee.telegram.messages.LoginVerificationMessage;
 import io.kyberorg.yalsee.telegram.messages.PasswordResetMessage;
 import io.kyberorg.yalsee.telegram.messages.TelegramMessage;
 import io.kyberorg.yalsee.users.AccountType;
+import io.kyberorg.yalsee.users.TokenType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Sender, that sends tokens via Telegram
+ * Sender, that sends tokens via Telegram.
  */
 @Slf4j
 @Component
@@ -44,6 +45,7 @@ public class TelegramSender extends TokenSender {
             "Token owner has unconfirmed telegram account. Please confirm it first.";
 
     private static final String MSG_NO_NEED_TO_SEND_MESSAGE = "No need to send any message to given token type";
+    private static final String MSG_NO_LONG_LINK_FOUND = "No long link found in template vars";
 
     /**
      * Prepares message and sends it to user's Telegram. This method sends message only to confirmed Telegram Account.
@@ -78,10 +80,8 @@ public class TelegramSender extends TokenSender {
 
         //Shortify link, if needed
         if (templateVars.containsKey("link") && token.getTokenType().shouldCreateShortLink()) {
-            String longLink = (String) templateVars.getOrDefault("link", App.NO_VALUE);
-            OperationResult shortifyResult = linkService.shortifyLinkForTokens(longLink, token.getTokenType());
+            OperationResult shortifyResult = shortifyLink(templateVars, token.getTokenType());
             if (shortifyResult.ok()) {
-                //replace
                 templateVars.put("link", shortifyResult.getStringPayload());
             } else {
                 log.warn("{} Shortification failed. OpResult: {}", TAG, shortifyResult);
@@ -106,6 +106,14 @@ public class TelegramSender extends TokenSender {
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
         return OperationResult.success();
+    }
+
+    private OperationResult shortifyLink(final Map<String, Object> vars, final TokenType tokenType) {
+        String longLink = (String) vars.getOrDefault("link", App.NO_VALUE);
+        if (longLink.equals(App.NO_VALUE)) {
+            return OperationResult.elementNotFound().withMessage(MSG_NO_LONG_LINK_FOUND);
+        }
+        return linkService.shortifyLinkForTokens(longLink, tokenType);
     }
 
     private OperationResult tokenOwnerHasConfirmedTelegramAccount(final User tokenOwner) {
