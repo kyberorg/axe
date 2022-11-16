@@ -2,6 +2,7 @@ package io.kyberorg.yalsee.services.mail;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+import io.kyberorg.yalsee.mail.LetterType;
 import io.kyberorg.yalsee.utils.AppUtils;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,8 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class EmailSenderService {
-    private static final String TAG = EmailSenderService.class.getSimpleName();
+public class MailSenderService {
+    private static final String TAG = MailSenderService.class.getSimpleName();
     private static final String CORE_TEMPLATE = "mail.ftlh";
     private final JavaMailSender mailSender;
     private final AppUtils appUtils;

@@ -1,8 +1,8 @@
 package io.kyberorg.yalsee.mail.letters;
 
 import io.kyberorg.yalsee.Endpoint;
+import io.kyberorg.yalsee.mail.LetterType;
 import io.kyberorg.yalsee.models.Token;
-import io.kyberorg.yalsee.services.mail.LetterType;
 import io.kyberorg.yalsee.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 
