@@ -130,6 +130,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         return message;
     }
 
+    /**
+     * Converts String Message to {@link SendMessage}.
+     *
+     * @param message string with message to send.
+     * @return {@link SendMessage} with given message inside.
+     */
     public SendMessage createSendMessage(final String message) {
         Message telegramMessage = getMessage();
         return SendMessage.builder()

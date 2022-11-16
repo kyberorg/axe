@@ -10,6 +10,9 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Password Reset Message.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class PasswordResetMessage implements TelegramMessage {
@@ -24,14 +27,13 @@ public class PasswordResetMessage implements TelegramMessage {
 
     @Override
     public Map<String, Object> getTemplateVars() {
-        String link = getLink();
-        Map<String, Object> vars = new HashMap<>(1);
-        vars.put("link", link);
+        Map<String, Object> vars = new HashMap<>(2);
+        vars.put("link", getLink());
         vars.put("username", telegramAccount);
         return vars;
     }
 
-    public String getLink() {
+    private String getLink() {
         return MessageFormat.format("{0}/{1}?token={2}",
                 AppUtils.getShortUrlFromStaticContext(), Endpoint.UI.PASSWORD_RESET_PAGE, token);
     }

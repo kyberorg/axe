@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Message with OneTime Password aka OTP, used to confirm login attempt.
+ */
 @RequiredArgsConstructor
 public class LoginVerificationMessage implements TelegramMessage {
     private final Token token;

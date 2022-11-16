@@ -22,6 +22,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -35,8 +36,14 @@ public class TelegramSender extends TokenSender {
     private final AccountService accountService;
     private final LinkService linkService;
     private final Configuration configuration;
-
     private final TelegramBot telegramBot;
+
+    private static final String ERR_TOKEN_HAS_OWNER = "Token has no owner";
+    private static final String ERR_NO_TELEGRAM_ACCOUNT = "Token owner has no telegram account";
+    private static final String ERR_TELEGRAM_ACCOUNT_NOT_CONFIRMED =
+            "Token owner has unconfirmed telegram account. Please confirm it first.";
+
+    private static final String MSG_NO_NEED_TO_SEND_MESSAGE = "No need to send any message to given token type";
 
     /**
      * Prepares message and sends it to user's Telegram. This method sends message only to confirmed Telegram Account.
@@ -48,18 +55,15 @@ public class TelegramSender extends TokenSender {
     @Override
     public OperationResult send(final Token token, final String telegramAccount) {
         //Account confirmed?
-        boolean telegramAccountIsUnconfirmed;
-        try {
-            telegramAccountIsUnconfirmed = tokenOwnerHasUnconfirmedTelegramAccount(token.getUser());
-        } catch (RuntimeException e) {
-            log.warn("{} Failed to define if token owner {} has confirmed telegram account or not. Got exception {}",
-                    TAG, token.getUser(), e.getMessage());
-            return OperationResult.generalFail().withMessage(e.getMessage());
-        }
-        if (telegramAccountIsUnconfirmed) {
-            log.info("{} Token owner {} has unconfirmed Telegram Account", TAG, token.getUser());
-            return OperationResult.banned()
-                    .withMessage("Token owner has unconfirmed Telegram Account");
+        OperationResult telegramAccountConfirmedCheck = tokenOwnerHasConfirmedTelegramAccount(token.getUser());
+        if (telegramAccountConfirmedCheck.notOk()) {
+            if (Objects.equals(telegramAccountConfirmedCheck.getResult(), OperationResult.BANNED)) {
+                return OperationResult.banned().withMessage(ERR_TELEGRAM_ACCOUNT_NOT_CONFIRMED);
+            } else {
+                log.warn("{} Failed to define if token owner {} has confirmed telegram account or not. OpResult {}",
+                        TAG, token.getUser(), telegramAccountConfirmedCheck);
+                return telegramAccountConfirmedCheck;
+            }
         }
 
         //Getting right telegram message to send
@@ -67,8 +71,7 @@ public class TelegramSender extends TokenSender {
         if (telegramMessage == null) {
             log.info("{} Skipping sending: no need to send any message to given token type {}",
                     TAG, token.getTokenType());
-            return OperationResult.success()
-                    .withMessage("No need to send any message to given token type");
+            return OperationResult.success().withMessage(MSG_NO_NEED_TO_SEND_MESSAGE);
         }
         String templateFile = telegramMessage.getTemplate();
         Map<String, Object> templateVars = telegramMessage.getTemplateVars();
@@ -105,15 +108,17 @@ public class TelegramSender extends TokenSender {
         return OperationResult.success();
     }
 
-    private boolean tokenOwnerHasUnconfirmedTelegramAccount(final User tokenOwner) throws RuntimeException {
+    private OperationResult tokenOwnerHasConfirmedTelegramAccount(final User tokenOwner) {
         if (tokenOwner == null) {
-            throw new IllegalArgumentException("Token has no owner");
+            log.warn("{} Token owner is NULL", TAG);
+            return OperationResult.malformedInput().withMessage(ERR_TOKEN_HAS_OWNER);
         }
         Optional<Account> telegramAccount = accountService.getAccount(tokenOwner, AccountType.TELEGRAM);
         if (telegramAccount.isEmpty()) {
-            throw new IllegalStateException("Token owner has no telegram account");
+            log.warn("{} {}", TAG, ERR_NO_TELEGRAM_ACCOUNT);
+            return OperationResult.elementNotFound().withMessage(ERR_NO_TELEGRAM_ACCOUNT);
         }
-        return !telegramAccount.get().isConfirmed();
+        return telegramAccount.get().isConfirmed() ? OperationResult.success() : OperationResult.banned();
     }
 
     private TelegramMessage getTelegramMessage(final Token token, final String telegramAccount) {
@@ -124,7 +129,7 @@ public class TelegramSender extends TokenSender {
         };
     }
 
-    private String compileTemplate(String templateFile, Map<String, Object> templateVars)
+    private String compileTemplate(final String templateFile, final Map<String, Object> templateVars)
             throws IOException, TemplateException {
         StringWriter stringWriter = new StringWriter();
         configuration.getTemplate(templateFile).process(templateVars, stringWriter);
