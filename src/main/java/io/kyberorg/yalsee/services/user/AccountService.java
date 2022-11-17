@@ -76,8 +76,17 @@ public class AccountService {
      */
     public OperationResult createLocalAccount(final User user) {
         Account localAccount = Account.create(AccountType.LOCAL).forUser(user);
-        localAccount.setAccountName(user.getUsername());
         localAccount.setConfirmed(false);
+
+        String encryptedName;
+        OperationResult encryptNameResult = cryptTool.encrypt(user.getUsername());
+        if (encryptNameResult.ok()) {
+            encryptedName = encryptNameResult.getStringPayload();
+        } else {
+            log.error("{} Name encryption failed. Value: {}. OpResult: {}", TAG, user.getUsername(), encryptNameResult);
+            return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
+        }
+        localAccount.setAccountName(encryptedName);
 
         try {
             accountDao.save(localAccount);
