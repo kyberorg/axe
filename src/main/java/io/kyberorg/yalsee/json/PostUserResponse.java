@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Since;
 import io.kyberorg.yalsee.constants.App;
+import io.kyberorg.yalsee.telegram.TelegramCommand;
 import io.kyberorg.yalsee.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,7 +35,7 @@ public class PostUserResponse {
     }
 
     /**
-     * Builds {@link PostUserResponse}
+     * Builds {@link PostUserResponse}.
      */
     public static class Builder {
         private String email;
@@ -54,6 +55,7 @@ public class PostUserResponse {
         /**
          * Adds Telegram Confirmation Token String.
          *
+         * @param telegramToken string with telgram token, which links Yalsee Account with Telegram account.
          * @return {@link Builder} to continue building {@link PostUserResponse}.
          */
         public Builder addTelegramToken(final String telegramToken) {
@@ -77,14 +79,16 @@ public class PostUserResponse {
                 accountHasNoConfirmationMethods = false;
             }
             if (StringUtils.isNotBlank(telegramToken)) {
-                response.telegramConfirmationString = String.format("/ehlo %s", telegramToken);
+                final String telegramHelloCmd = TelegramCommand.HELLO.getCommandText();
+                response.telegramConfirmationString = String.format("%s %s", telegramHelloCmd, telegramToken);
                 sb.append("By the way, you can also ");
                 if (accountHasNoConfirmationMethods) {
                     sb.append("confirm your account in Telegram ");
                 } else {
                     sb.append("link your account in Telegram ");
                 }
-                sb.append("by sending following string '").append("/ehlo ").append(telegramToken).append("' to ")
+                sb.append("by sending following string '")
+                        .append(telegramHelloCmd).append(" ").append(telegramToken).append("' to ")
                         .append(App.AT).append(AppUtils.getTelegramBotName());
             }
             response.message = sb.toString();

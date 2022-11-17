@@ -11,6 +11,7 @@ public enum TelegramCommand {
     START("/start"),
     USAGE("/usage"),
     YALSEE("/yalsee"),
+    HELLO("/hello"),
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 

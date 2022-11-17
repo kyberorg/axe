@@ -133,7 +133,7 @@ public class UserOperationsService {
 
         //Report success back
         OperationResult success = OperationResult.success();
-        return Objects.isNull(telegramConfirmationToken) ?
-                success : success.addPayload(TELEGRAM_TOKEN_KEY, telegramConfirmationToken.getToken());
+        return Objects.isNull(telegramConfirmationToken)
+                ? success : success.addPayload(TELEGRAM_TOKEN_KEY, telegramConfirmationToken.getToken());
     }
 }
