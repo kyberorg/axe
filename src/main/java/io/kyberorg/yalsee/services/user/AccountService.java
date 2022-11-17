@@ -204,6 +204,11 @@ public class AccountService {
      */
     public Optional<String> decryptAccountName(final Account account) {
         if (account != null && StringUtils.isNotBlank(account.getAccountName())) {
+            //adding exception for AppUser - it is created by liquibase directly and therefore not encrypted.
+            if (account.getUser().getId() == 1) {
+                return Optional.of(account.getAccountName());
+            }
+            //for other Accounts decryption needed
             OperationResult result = cryptTool.decrypt(account.getAccountName());
             if (result.ok()) {
                 return Optional.of(result.getStringPayload());
