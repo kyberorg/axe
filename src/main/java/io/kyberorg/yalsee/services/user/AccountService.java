@@ -76,8 +76,17 @@ public class AccountService {
      */
     public OperationResult createLocalAccount(final User user) {
         Account localAccount = Account.create(AccountType.LOCAL).forUser(user);
-        localAccount.setAccountName(user.getUsername());
         localAccount.setConfirmed(false);
+
+        String encryptedName;
+        OperationResult encryptNameResult = cryptTool.encrypt(user.getUsername());
+        if (encryptNameResult.ok()) {
+            encryptedName = encryptNameResult.getStringPayload();
+        } else {
+            log.error("{} Name encryption failed. Value: {}. OpResult: {}", TAG, user.getUsername(), encryptNameResult);
+            return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
+        }
+        localAccount.setAccountName(encryptedName);
 
         try {
             accountDao.save(localAccount);
@@ -195,6 +204,11 @@ public class AccountService {
      */
     public Optional<String> decryptAccountName(final Account account) {
         if (account != null && StringUtils.isNotBlank(account.getAccountName())) {
+            //adding exception for AppUser - it is created by liquibase directly and therefore not encrypted.
+            if (account.getUser().getId() == 1) {
+                return Optional.of(account.getAccountName());
+            }
+            //for other Accounts decryption needed
             OperationResult result = cryptTool.decrypt(account.getAccountName());
             if (result.ok()) {
                 return Optional.of(result.getStringPayload());
