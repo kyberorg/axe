@@ -159,6 +159,7 @@ Optional EnvVars:
   profile)
 * REDIS_ENABLED: `true/false` (most likely don't needed as regulated by Spring profile)
 * MAIL_DEBUG: `true/false` (enables/disables mail (SMTP) debug output. Default: false)
+* TELEGRAM_BOT: `Name of telegram bot` (most likely don't needed as regulated by Spring profile)
 
 Ports:
 

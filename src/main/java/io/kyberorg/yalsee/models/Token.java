@@ -9,6 +9,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.UUID;
 
 @Getter
@@ -22,6 +23,7 @@ public class Token extends TimeModel {
      * Default length of Token (code).
      */
     private static final int CODE_TOKEN_LEN = 6;
+    private static final int TELEGRAM_TOKEN_LEN = 8;
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 
@@ -90,6 +92,7 @@ public class Token extends TimeModel {
         return switch (tokenValueType) {
             case CODE -> RandomStringUtils.randomNumeric(CODE_TOKEN_LEN);
             case UUID -> UUID.randomUUID().toString();
+            case TELEGRAM_TOKEN -> RandomStringUtils.randomAlphanumeric(TELEGRAM_TOKEN_LEN).toLowerCase(Locale.ROOT);
         };
     }
 

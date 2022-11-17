@@ -123,7 +123,13 @@ public class PostUserRestController {
             return ApiUtils.handleServerError();
         }
         log.info("{} Success. User Registered - returning {}", TAG, HttpCode.CREATED);
-        return ResponseEntity.status(HttpCode.CREATED).body(PostUserResponse.create(email));
+        PostUserResponse.Builder response = PostUserResponse.create().addEmail(email);
+
+        if (userRegistrationResult.hasPayload(UserOperationsService.TELEGRAM_TOKEN_KEY)) {
+            response.addTelegramToken(userRegistrationResult.
+                    getStringPayload(UserOperationsService.TELEGRAM_TOKEN_KEY));
+        }
+        return ResponseEntity.status(HttpCode.CREATED).body(response.build());
     }
 
     private ResponseEntity<YalseeErrorJson> checkEmail(final String email) {

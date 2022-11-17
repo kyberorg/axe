@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Stack;
 
 /**
@@ -25,6 +26,7 @@ import java.util.Stack;
 @Service
 public class UserOperationsService {
     private static final String TAG = "[" + UserOperationsService.class.getSimpleName() + "]";
+    public static final String TELEGRAM_TOKEN_KEY = "telegramToken";
     private final Stack<RollbackTask> rollbackTasks = new Stack<>();
     private final RollbackService rollbackService;
     private final UserService userService;
@@ -107,6 +109,17 @@ public class UserOperationsService {
         Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
         rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
 
+        //Create Telegram Confirmation Token
+        Token telegramConfirmationToken;
+        OperationResult createTelegramTokenResult = tokenService.createTelegramConfirmationToken(createdUser);
+        if (createTelegramTokenResult.ok()) {
+            telegramConfirmationToken = createTelegramTokenResult.getPayload(Token.class);
+        } else {
+            telegramConfirmationToken = null;
+            log.warn("{} failed to create Telegram token for {}. OpResult: {}",
+                    TAG, createdUser.getUsername(), createTelegramTokenResult);
+        }
+
         //Send it
         log.info("{} Successfully created {}({}) for user '{}'",
                 TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
@@ -119,6 +132,8 @@ public class UserOperationsService {
         }
 
         //Report success back
-        return OperationResult.success();
+        OperationResult success = OperationResult.success();
+        return Objects.isNull(telegramConfirmationToken)
+                ? success : success.addPayload(TELEGRAM_TOKEN_KEY, telegramConfirmationToken.getToken());
     }
 }
