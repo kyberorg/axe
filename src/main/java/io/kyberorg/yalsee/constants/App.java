@@ -38,6 +38,7 @@ public final class App {
         public static final String APPLICATION_NAME = "spring.application.name";
         public static final String TELEGRAM_ENABLED = "telegram.enabled";
         public static final String TELEGRAM_TOKEN = "telegram.token";
+        public static final String TELEGRAM_BOT_NAME = "app.telegram.bot-name";
         public static final String SERVER_URL = "server.url";
         public static final String SERVER_PORT = "server.port";
         public static final String PROXY_HOST = "http.proxyHost";

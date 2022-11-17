@@ -99,5 +99,10 @@
       "name": "app.mail.debug",
       "type": "java.lang.Boolean",
       "description": "Enables/Disables Mail (SMTP) Debugging output."
+    },
+    {
+      "name": "app.telegram.bot-name",
+      "type": "java.lang.String",
+      "description": "String with name of Telegram Bot."
     }
   ] }

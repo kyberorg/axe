@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Class that defines result of operation. Operation can be any action: validation, query from database and so on.
@@ -265,5 +266,24 @@ public class OperationResult {
             throw new IllegalArgumentException("Key cannot be empty");
         }
         return Primitives.wrap(classOfPayload).cast(this.payload.get(key));
+    }
+
+    /**
+     * Check if Payload contains something stored under given Key.
+     *
+     * @param key not-empty string with key to check.
+     * @return true - if {@link #payload} contains given key and under it stored non {@code null} value,
+     * false - if nothing stored under given key or {@link #payload} doesn't have given key.
+     * @throws IllegalArgumentException if key is {@code null} or empty.
+     */
+    public boolean hasPayload(final String key) {
+        if (StringUtils.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be empty");
+        }
+        if (this.payload.containsKey(key)) {
+            return Objects.nonNull(this.payload.get(key));
+        } else {
+            return false;
+        }
     }
 }

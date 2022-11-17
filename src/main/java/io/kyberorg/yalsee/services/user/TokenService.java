@@ -58,6 +58,37 @@ public class TokenService {
     }
 
     /**
+     * Creates {@link TokenType#TELEGRAM_CONFIRMATION_TOKEN}.
+     *
+     * @param user account owner.
+     * @return {@link OperationResult} with created {@link Token} or {@link OperationResult} with error.
+     */
+    public OperationResult createTelegramConfirmationToken(final User user) {
+        boolean userAlreadyHasTelegramConfirmationToken =
+                tokenDao.existsByTokenTypeAndUser(TokenType.TELEGRAM_CONFIRMATION_TOKEN, user);
+        if (userAlreadyHasTelegramConfirmationToken) {
+            Token existingToken = tokenDao.findByTokenTypeAndUser(TokenType.TELEGRAM_CONFIRMATION_TOKEN, user);
+            tokenDao.delete(existingToken);
+        }
+
+        Token token = Token.create(TokenType.TELEGRAM_CONFIRMATION_TOKEN).forUser(user);
+
+        verifyTokenValueIsUnique(token);
+
+        try {
+            tokenDao.save(token);
+            return OperationResult.success().addPayload(token);
+        } catch (CannotCreateTransactionException c) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} failed to create {} token {} for user {}",
+                    TAG, TokenType.TELEGRAM_CONFIRMATION_TOKEN, token, user);
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
+    /**
      * Creates {@link TokenType#LOGIN_VERIFICATION_TOKEN}.
      *
      * @param user token's owner

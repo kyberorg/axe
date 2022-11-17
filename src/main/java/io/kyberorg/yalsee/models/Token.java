@@ -90,6 +90,7 @@ public class Token extends TimeModel {
         return switch (tokenValueType) {
             case CODE -> RandomStringUtils.randomNumeric(CODE_TOKEN_LEN);
             case UUID -> UUID.randomUUID().toString();
+            case TELEGRAM_UUID -> UUID.randomUUID().toString().split("-", 1)[0];
         };
     }
 

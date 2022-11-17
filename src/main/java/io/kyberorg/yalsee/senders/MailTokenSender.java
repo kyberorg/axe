@@ -80,7 +80,7 @@ public class MailTokenSender extends TokenSender {
             case ACCOUNT_CONFIRMATION_TOKEN -> new AccountConfirmationLetter(token);
             case LOGIN_VERIFICATION_TOKEN -> new LoginVerificationLetter(token);
             case PASSWORD_RESET_TOKEN -> new PasswordResetLetter(token);
-            case USER_API_TOKEN -> null;
+            case USER_API_TOKEN, TELEGRAM_CONFIRMATION_TOKEN -> null;
         };
     }
 }

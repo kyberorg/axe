@@ -131,7 +131,7 @@ public class TelegramSender extends TokenSender {
 
     private TelegramMessage getTelegramMessage(final Token token, final String telegramAccount) {
         return switch (token.getTokenType()) {
-            case ACCOUNT_CONFIRMATION_TOKEN, USER_API_TOKEN -> null;
+            case ACCOUNT_CONFIRMATION_TOKEN, TELEGRAM_CONFIRMATION_TOKEN, USER_API_TOKEN -> null;
             case LOGIN_VERIFICATION_TOKEN -> new LoginVerificationMessage(token);
             case PASSWORD_RESET_TOKEN -> new PasswordResetMessage(token, telegramAccount);
         };

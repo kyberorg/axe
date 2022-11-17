@@ -5,5 +5,6 @@ package io.kyberorg.yalsee.users;
  */
 public enum TokenValueType {
     UUID,
+    TELEGRAM_UUID,
     CODE
 }

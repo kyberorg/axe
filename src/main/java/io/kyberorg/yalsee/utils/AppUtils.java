@@ -76,6 +76,13 @@ public class AppUtils implements Serializable {
     @Getter
     private static String facebookId;
 
+    /**
+     * This field is dirty hack to access Telegram Bot Name from static context.
+     * To be populated with {@link #populateStaticFields()}
+     */
+    @Getter
+    private static String telegramBotName;
+
     public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     public static final String HTML_MODE = "innerHTML";
     private static final String DUMMY_HOST = "DummyHost";
@@ -142,6 +149,7 @@ public class AppUtils implements Serializable {
         shortUrl = getShortUrl();
         sessionTimeout = getSessionTimeout();
         facebookId = getFacebookAppId();
+        telegramBotName = getTelegramBotsName();
     }
 
     /**
@@ -651,6 +659,15 @@ public class AppUtils implements Serializable {
      */
     public String getMasterToken() {
         return getEnv().getProperty(App.Env.MASTER_TOKEN, App.NO_VALUE);
+    }
+
+    /**
+     * Provides Telegram Bot Name from Properties.
+     *
+     * @return string with bot's name, or {@link App#NO_VALUE}.
+     */
+    public String getTelegramBotsName() {
+        return getEnv().getProperty(App.Properties.TELEGRAM_BOT_NAME, App.NO_VALUE);
     }
 
     private static boolean clientWantsJson(final String acceptHeader) {
