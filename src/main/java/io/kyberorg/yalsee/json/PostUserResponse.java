@@ -69,22 +69,22 @@ public class PostUserResponse {
         public PostUserResponse build() {
             boolean accountHasNoConfirmationMethods = true;
             PostUserResponse response = new PostUserResponse();
-            StringBuilder sb = new StringBuilder("Account is registered.");
+            StringBuilder sb = new StringBuilder("Account is registered. ");
 
             if (StringUtils.isNotBlank(email)) {
                 //got email
-                sb.append(String.format("Confirmation e-mail sent to %s.", email));
+                sb.append(String.format("Confirmation e-mail sent to %s ", email));
                 accountHasNoConfirmationMethods = false;
             }
             if (StringUtils.isNotBlank(telegramToken)) {
-                response.telegramConfirmationString = "/ehlo" + telegramToken;
+                response.telegramConfirmationString = String.format("/ehlo %s", telegramToken);
                 sb.append("By the way, you can also ");
                 if (accountHasNoConfirmationMethods) {
                     sb.append("confirm your account in Telegram ");
                 } else {
                     sb.append("link your account in Telegram ");
                 }
-                sb.append("by sending following string \"").append("/ehlo ").append(telegramToken).append("\" to ")
+                sb.append("by sending following string '").append("/ehlo ").append(telegramToken).append("' to ")
                         .append(App.AT).append(AppUtils.getTelegramBotName());
             }
             response.message = sb.toString();
