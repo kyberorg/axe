@@ -52,6 +52,7 @@ public class MailConfig {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.from", "dev@yals.ee"); //FIXME impl
         props.put("mail.debug", mailDebug);
 
         return gMailSender;
