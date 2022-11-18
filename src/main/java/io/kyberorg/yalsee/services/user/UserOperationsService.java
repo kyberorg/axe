@@ -131,6 +131,7 @@ public class UserOperationsService {
         OperationResult createTelegramTokenResult = tokenService.createTelegramConfirmationToken(createdUser);
         if (createTelegramTokenResult.ok()) {
             telegramConfirmationToken = createTelegramTokenResult.getPayload(Token.class);
+            rollbackTasks.push(RollbackTask.create(Token.class, telegramConfirmationToken));
         } else {
             telegramConfirmationToken = null;
             log.warn("{} failed to create Telegram token for {}. OpResult: {}",
