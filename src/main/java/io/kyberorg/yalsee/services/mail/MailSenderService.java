@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services.mail;
 
+import com.sun.mail.smtp.SMTPMessage;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import io.kyberorg.yalsee.mail.LetterType;
@@ -19,6 +20,8 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.sun.mail.smtp.SMTPMessage.RETURN_FULL;
 
 /**
  * Service, that prepares email letter and sends it via {@link JavaMailSender}.
@@ -49,7 +52,8 @@ public class MailSenderService {
     public MimeMessage createLetter(final LetterType letterType, final String targetEmail, final String subject,
                                     final Map<String, Object> vars)
             throws MessagingException, IOException, TemplateException {
-        final MimeMessage mailMessage = getEmptyMimeMessage();
+        SMTPMessage mailMessage;
+        mailMessage = new SMTPMessage(getEmptyMimeMessage());
         MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.toString());
 
         String appName = appUtils.getApplicationName();
@@ -62,6 +66,8 @@ public class MailSenderService {
         helper.setFrom(appUtils.getEmailFromAddress());
         helper.setTo(targetEmail);
         helper.setSubject(fullSubject);
+        mailMessage.setEnvelopeFrom(appUtils.getEmailFromAddress());
+        mailMessage.setReturnOption(RETURN_FULL);
 
         helper.setText(letterHtmlBody, true);
         return mailMessage;
