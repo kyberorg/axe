@@ -36,13 +36,13 @@ public class MailConfig {
         if (StringUtils.isAnyBlank(mailUser, mailPassword)) {
             return noOpSender();
         } else {
-            return gmailSender();
+            return yalseeSender();
         }
     }
 
-    private JavaMailSender gmailSender() {
+    private JavaMailSender yalseeSender() {
         JavaMailSenderImpl gMailSender = new JavaMailSenderImpl();
-        gMailSender.setHost("smtp.gmail.com");
+        gMailSender.setHost("mail.yals.ee");
         gMailSender.setPort(SMTP_TLS_PORT);
 
         gMailSender.setUsername(mailUser);
