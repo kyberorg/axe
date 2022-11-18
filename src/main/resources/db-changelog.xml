@@ -214,4 +214,7 @@
         <renameColumn tableName="accounts" oldColumnName="user" newColumnName="user_id"/>
         <renameColumn tableName="tokens" oldColumnName="user" newColumnName="user_id"/>
     </changeSet>
+    <changeSet id="9" author="kyberorg">
+        <renameColumn tableName="users" oldColumnName="is_enabled" newColumnName="is_confirmed"/>
+    </changeSet>
 </databaseChangeLog>

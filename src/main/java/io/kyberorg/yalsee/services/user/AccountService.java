@@ -154,28 +154,11 @@ public class AccountService {
                 return OperationResult.generalFail().withMessage(ERR_ACCOUNT_IS_EMPTY);
             }
 
-            // confirming account
-            accountToConfirm.setConfirmed(true);
-            accountDao.save(accountToConfirm);
-
-            User user = accountToConfirm.getUser();
-            Optional<Account> userLocalAccount =
-                    accountDao.findByUserAndType(user, AccountType.LOCAL);
-            if (userLocalAccount.isEmpty()) {
-                log.error("{} User {} has no {} account. System Bug.",
-                        TAG, user.getUsername(), AccountType.LOCAL.name());
-                return OperationResult.generalFail().withMessage(ERR_USER_HAS_NO_LOCAL_ACCOUNT);
+            User accountOwner = accountToConfirm.getUser();
+            if (accountOwner.isStillUnconfirmed()) {
+                userService.confirmUser(accountOwner);
             }
 
-            //if first non-local account confirmed  - confirm local account as well
-            boolean localAccountConfirmed = userLocalAccount.get().isConfirmed();
-            if (!localAccountConfirmed) {
-                userLocalAccount.get().setConfirmed(true);
-                accountDao.save(userLocalAccount.get());
-            }
-            if (!user.isEnabled()) {
-                userService.enableUser(user);
-            }
             return OperationResult.success();
         } catch (CannotCreateTransactionException c) {
             return OperationResult.databaseDown();

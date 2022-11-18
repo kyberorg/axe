@@ -33,8 +33,8 @@ public class User extends TimeModel implements UserDetails {
     @Column(name = "user_role", nullable = false)
     private UserRole userRole = UserRole.USER;
 
-    @Column(name = "is_enabled")
-    private boolean enabled = false;
+    @Column(name = "is_confirmed")
+    private boolean confirmed = false;
 
     /**
      * Create User.
@@ -63,7 +63,7 @@ public class User extends TimeModel implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return enabled;
+        return confirmed;
     }
 
     @Override
@@ -73,6 +73,15 @@ public class User extends TimeModel implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return confirmed;
+    }
+
+    /**
+     * Checks {@link User} on confirmation state.
+     *
+     * @return true - if {@link User} is not confirmed yet, false - if it is already confirmed.
+     */
+    public boolean isStillUnconfirmed() {
+        return !isConfirmed();
     }
 }

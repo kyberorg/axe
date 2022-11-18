@@ -75,6 +75,10 @@ public class PostUserRestController {
         if (requestJson == null) {
             return ApiUtils.handleError(HttpCode.BAD_REQUEST, "Body should be a JSON object");
         }
+        OperationResult inputValidationResult = requestJson.isValid();
+        if (inputValidationResult.notOk()) {
+            return ApiUtils.handleError(HttpCode.UNPROCESSABLE_ENTRY, inputValidationResult.getMessage());
+        }
 
         //extract fields
         String email = requestJson.getEmail();
@@ -84,9 +88,12 @@ public class PostUserRestController {
 
         //inputs check
         ResponseEntity<YalseeErrorJson> result;
-        result = checkEmail(email);
-        if (result != null) {
-            return result;
+
+        if (StringUtils.isNotBlank(email)) {
+            result = checkEmail(email);
+            if (result != null) {
+                return result;
+            }
         }
 
         if (StringUtils.isNotBlank(username)) {
