@@ -64,8 +64,7 @@ public class MailSenderService {
         helper.setSubject(fullSubject);
 
         helper.setText(letterHtmlBody, true);
-        mailMessage.addHeader("Return-Path", String.format("<%s>", appUtils.getEmailFromAddress()));
-        mailMessage.addHeader("Custom-Header", "Test Value");
+        mailMessage.addHeader("Return-Path", "Yalsee Dev <dev@yals.ee>");//FIXME remove hardcode
         return mailMessage;
     }
 
