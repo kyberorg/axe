@@ -26,7 +26,6 @@ import java.util.Optional;
 public class AccountService {
     private static final String TAG = "[" + AccountService.class.getSimpleName() + "]";
     private static final String ERR_ACCOUNT_IS_EMPTY = "Account is null";
-    private static final String ERR_USER_HAS_NO_LOCAL_ACCOUNT = "User has no local account";
 
     private final AccountDao accountDao;
     private final SymmetricCryptTool cryptTool;
@@ -204,16 +203,7 @@ public class AccountService {
     }
 
     private boolean accountHasGivenAccountName(final Account account) {
-        OperationResult result = cryptTool.decrypt(account.getAccountName());
-        if (result.ok()) {
-            String valueFromDb = result.getStringPayload();
-            if (StringUtils.isNotBlank(valueFromDb)) {
-                return valueFromDb.equals(accountToSearch);
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        Optional<String> decryptedAccountName = decryptAccountName(account);
+        return decryptedAccountName.map(accountName -> accountName.equals(accountToSearch)).orElse(false);
     }
 }
