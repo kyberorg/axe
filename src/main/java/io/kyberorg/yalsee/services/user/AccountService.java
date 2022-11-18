@@ -26,7 +26,6 @@ import java.util.Optional;
 public class AccountService {
     private static final String TAG = "[" + AccountService.class.getSimpleName() + "]";
     private static final String ERR_ACCOUNT_IS_EMPTY = "Account is null";
-    private static final String ERR_USER_HAS_NO_LOCAL_ACCOUNT = "User has no local account";
 
     private final AccountDao accountDao;
     private final SymmetricCryptTool cryptTool;
@@ -154,28 +153,11 @@ public class AccountService {
                 return OperationResult.generalFail().withMessage(ERR_ACCOUNT_IS_EMPTY);
             }
 
-            // confirming account
-            accountToConfirm.setConfirmed(true);
-            accountDao.save(accountToConfirm);
-
-            User user = accountToConfirm.getUser();
-            Optional<Account> userLocalAccount =
-                    accountDao.findByUserAndType(user, AccountType.LOCAL);
-            if (userLocalAccount.isEmpty()) {
-                log.error("{} User {} has no {} account. System Bug.",
-                        TAG, user.getUsername(), AccountType.LOCAL.name());
-                return OperationResult.generalFail().withMessage(ERR_USER_HAS_NO_LOCAL_ACCOUNT);
+            User accountOwner = accountToConfirm.getUser();
+            if (accountOwner.isStillUnconfirmed()) {
+                userService.confirmUser(accountOwner);
             }
 
-            //if first non-local account confirmed  - confirm local account as well
-            boolean localAccountConfirmed = userLocalAccount.get().isConfirmed();
-            if (!localAccountConfirmed) {
-                userLocalAccount.get().setConfirmed(true);
-                accountDao.save(userLocalAccount.get());
-            }
-            if (!user.isEnabled()) {
-                userService.enableUser(user);
-            }
             return OperationResult.success();
         } catch (CannotCreateTransactionException c) {
             return OperationResult.databaseDown();
@@ -221,16 +203,7 @@ public class AccountService {
     }
 
     private boolean accountHasGivenAccountName(final Account account) {
-        OperationResult result = cryptTool.decrypt(account.getAccountName());
-        if (result.ok()) {
-            String valueFromDb = result.getStringPayload();
-            if (StringUtils.isNotBlank(valueFromDb)) {
-                return valueFromDb.equals(accountToSearch);
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        Optional<String> decryptedAccountName = decryptAccountName(account);
+        return decryptedAccountName.map(accountName -> accountName.equals(accountToSearch)).orElse(false);
     }
 }

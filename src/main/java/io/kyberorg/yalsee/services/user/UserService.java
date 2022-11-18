@@ -143,8 +143,8 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    void enableUser(final User user) {
-        user.setEnabled(true);
+    void confirmUser(final User user) {
+        user.setConfirmed(true);
         userDao.update(user);
     }
 

@@ -13,6 +13,7 @@ import io.kyberorg.yalsee.users.AccountType;
 import io.kyberorg.yalsee.users.TokenType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -61,33 +62,37 @@ public class UserOperationsService {
         UserSettings userSettings = userSettingsCreateResult.getPayload(UserSettings.class);
         rollbackTasks.push(RollbackTask.create(UserSettings.class, userSettings));
 
-        //Create Local Account
-        OperationResult createLocalAccountResult = accountService.createLocalAccount(createdUser);
-        if (createLocalAccountResult.notOk()) {
-            log.error("{} Failed to create local {}. OpResult: {}",
-                    TAG, Account.class.getSimpleName(), createLocalAccountResult);
-            rollbackService.rollback(rollbackTasks);
-            return createLocalAccountResult;
+        Account userAccount;
+        if (StringUtils.isBlank(input.getEmail())) {
+            //Create Local Account
+            OperationResult createLocalAccountResult = accountService.createLocalAccount(createdUser);
+            if (createLocalAccountResult.notOk()) {
+                log.error("{} Failed to create local {}. OpResult: {}",
+                        TAG, Account.class.getSimpleName(), createLocalAccountResult);
+                rollbackService.rollback(rollbackTasks);
+                return createLocalAccountResult;
+            }
+            Account localAccount = createLocalAccountResult.getPayload(Account.class);
+            userAccount = localAccount;
+            rollbackTasks.push(RollbackTask.create(Account.class, localAccount));
+        } else {
+            //Create Email Account
+            OperationResult createEmailAccountResult = accountService.createEmailAccount(createdUser, input.getEmail());
+            if (createEmailAccountResult.notOk()) {
+                log.error("{} Failed to create email {}. OpResult: {}",
+                        TAG, Account.class.getSimpleName(), createEmailAccountResult);
+                rollbackService.rollback(rollbackTasks);
+                return createEmailAccountResult;
+            }
+            Account emailAccount = createEmailAccountResult.getPayload(Account.class);
+            userAccount = emailAccount;
+            rollbackTasks.push(RollbackTask.create(Account.class, emailAccount));
         }
-        Account localAccount = createLocalAccountResult.getPayload(Account.class);
-        rollbackTasks.push(RollbackTask.create(Account.class, localAccount));
-
-        //Create Email Account
-        OperationResult createEmailAccountResult = accountService.createEmailAccount(createdUser, input.getEmail());
-        if (createEmailAccountResult.notOk()) {
-            log.error("{} Failed to create email {}. OpResult: {}",
-                    TAG, Account.class.getSimpleName(), createEmailAccountResult);
-            rollbackService.rollback(rollbackTasks);
-            return createEmailAccountResult;
-        }
-        Account emailAccount = createEmailAccountResult.getPayload(Account.class);
-        rollbackTasks.push(RollbackTask.create(Account.class, emailAccount));
-
         //UserSettings change Main Channel to Email
-        userSettings.setMainChannel(AccountType.EMAIL);
+        userSettings.setMainChannel(userAccount.getType());
 
         //if TFA (2-factor Auth) enabled
-        if (input.isTfaEnabled()) {
+        if (input.isTfaEnabled() && userAccount.getType() == AccountType.EMAIL) {
             //Set TFA enabled and update its channel to Email
             userSettings.setTfaEnabled(true);
             userSettings.setTfaChannel(AccountType.EMAIL);
@@ -98,17 +103,29 @@ public class UserOperationsService {
             log.error("{} Failed to update {}. OpResult: {}",
                     TAG, UserSettings.class.getSimpleName(), saveChannelUpdatesResult);
         }
-
-        //Create Confirmation Token
-        OperationResult createConfirmationTokenResult = tokenService.createConfirmationToken(createdUser, emailAccount);
-        if (createConfirmationTokenResult.notOk()) {
-            log.error("{} failed to create confirmation token for {}. OpResult: {}",
-                    TAG, createdUser.getUsername(), createConfirmationTokenResult);
-            return createConfirmationTokenResult;
+        //Create and send - confirmation email for Accounts with Email set.
+        if (userAccount.getType() == AccountType.EMAIL) {
+            //Create Confirmation Token
+            OperationResult createConfirmationTokenResult =
+                    tokenService.createConfirmationToken(createdUser, userAccount);
+            if (createConfirmationTokenResult.notOk()) {
+                log.error("{} failed to create confirmation token for {}. OpResult: {}",
+                        TAG, createdUser.getUsername(), createConfirmationTokenResult);
+                return createConfirmationTokenResult;
+            }
+            Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
+            rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
+            //Send it
+            log.info("{} Successfully created {}({}) for user '{}'",
+                    TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
+            OperationResult sendResult = senders.getSender(AccountType.EMAIL).send(confirmationToken, input.getEmail());
+            if (sendResult.notOk()) {
+                log.warn("{} Unable to send created {} to {}. OpResult: {}",
+                        TAG, confirmationToken.getTokenType(), input.getEmail(), sendResult);
+                log.warn("{} Requesting Rollback", TAG);
+                rollbackService.rollback(rollbackTasks);
+            }
         }
-        Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
-        rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
-
         //Create Telegram Confirmation Token
         Token telegramConfirmationToken;
         OperationResult createTelegramTokenResult = tokenService.createTelegramConfirmationToken(createdUser);
@@ -118,17 +135,6 @@ public class UserOperationsService {
             telegramConfirmationToken = null;
             log.warn("{} failed to create Telegram token for {}. OpResult: {}",
                     TAG, createdUser.getUsername(), createTelegramTokenResult);
-        }
-
-        //Send it
-        log.info("{} Successfully created {}({}) for user '{}'",
-                TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
-        OperationResult sendResult = senders.getSender(AccountType.EMAIL).send(confirmationToken, input.getEmail());
-        if (sendResult.notOk()) {
-            log.warn("{} Unable to send created {} to {}. OpResult: {}",
-                    TAG, confirmationToken.getTokenType(), input.getEmail(), sendResult);
-            log.warn("{} Requesting Rollback", TAG);
-            rollbackService.rollback(rollbackTasks);
         }
 
         //Report success back
