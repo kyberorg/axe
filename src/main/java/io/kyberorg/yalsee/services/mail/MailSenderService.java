@@ -1,5 +1,6 @@
 package io.kyberorg.yalsee.services.mail;
 
+import com.sun.mail.smtp.SMTPMessage;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import io.kyberorg.yalsee.mail.LetterType;
@@ -64,8 +65,11 @@ public class MailSenderService {
         helper.setSubject(fullSubject);
 
         helper.setText(letterHtmlBody, true);
-        mailMessage.addHeader("Return-Path", "Yalsee Dev <dev@yals.ee>");//FIXME remove hardcode
-        return mailMessage;
+
+        SMTPMessage smtpMessage = new SMTPMessage(mailMessage);
+        smtpMessage.setEnvelopeFrom(appUtils.getEmailFromAddress());
+
+        return smtpMessage;
     }
 
     /**
