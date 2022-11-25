@@ -150,7 +150,9 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        //this one line should be executed every time - even if page already initialized.
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+        //avoid double init
         if (pageAlreadyInitialized) return;
 
         Optional<AxeSession> session = AxeSession.getCurrent();
