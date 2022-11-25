@@ -2,18 +2,17 @@ package pm.axe.test.ui.home;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.constants.App;
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.test.utils.browser.BrowserSize;
-import pm.axe.test.utils.browser.BrowserUtils;
-import pm.axe.ui.pages.home.HomePage;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import pm.axe.constants.App;
+import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.test.utils.browser.BrowserSize;
+import pm.axe.test.utils.browser.BrowserUtils;
+import pm.axe.ui.pages.home.HomePage;
 
 import java.util.List;
 

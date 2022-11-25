@@ -1,10 +1,10 @@
 package pm.axe.controllers;
 
-import pm.axe.Endpoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import pm.axe.Endpoint;
 
 /**
  * Simple analog application offline page, which is aka page 503.

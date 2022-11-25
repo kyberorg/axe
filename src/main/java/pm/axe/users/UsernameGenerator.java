@@ -1,13 +1,13 @@
 package pm.axe.users;
 
-import pm.axe.result.OperationResult;
-import pm.axe.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.CannotCreateTransactionException;
+import pm.axe.result.OperationResult;
+import pm.axe.services.user.UserService;
 
 /**
  * Class that generates Usernames.

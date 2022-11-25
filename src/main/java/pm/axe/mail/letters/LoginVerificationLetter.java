@@ -1,8 +1,8 @@
 package pm.axe.mail.letters;
 
-import pm.axe.mail.LetterType;
-import pm.axe.db.models.Token;
 import lombok.RequiredArgsConstructor;
+import pm.axe.db.models.Token;
+import pm.axe.mail.LetterType;
 
 import java.util.HashMap;
 import java.util.Map;

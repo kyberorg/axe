@@ -1,9 +1,9 @@
 package pm.axe.db.dao;
 
+import org.springframework.data.repository.CrudRepository;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.User;
 import pm.axe.users.AccountType;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;

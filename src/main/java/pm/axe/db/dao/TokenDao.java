@@ -1,11 +1,11 @@
 package pm.axe.db.dao;
 
+import lombok.NonNull;
+import org.springframework.scheduling.annotation.Async;
 import pm.axe.db.dao.base.TimeAwareCrudDao;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.users.TokenType;
-import lombok.NonNull;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.Optional;
 

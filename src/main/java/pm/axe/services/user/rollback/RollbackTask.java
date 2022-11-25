@@ -1,7 +1,7 @@
 package pm.axe.services.user.rollback;
 
-import pm.axe.db.models.BaseModel;
 import lombok.Data;
+import pm.axe.db.models.BaseModel;
 
 /**
  * Combination of Model and Record to delete during rollback process.

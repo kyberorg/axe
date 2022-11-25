@@ -1,7 +1,5 @@
 package pm.axe.test.app;
 
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -9,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import pm.axe.Endpoint;
+import pm.axe.constants.Header;
+import pm.axe.constants.HttpCode;
 import pm.axe.test.utils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +34,8 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(false);
 
-        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.SLASH_BASE + ident + TestUtils.addRedirectPageBypassSymbol());
+        HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.SLASH_BASE + ident
+                + TestUtils.addRedirectPageBypassSymbol());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);

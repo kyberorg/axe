@@ -1,9 +1,9 @@
 package pm.axe.test.pageobjects;
 
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.ui.pages.settings.SettingsPage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
+import pm.axe.ui.pages.settings.SettingsPage;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.$;

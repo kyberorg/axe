@@ -1,8 +1,8 @@
 package pm.axe.senders;
 
-import pm.axe.users.AccountType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import pm.axe.users.AccountType;
 
 /**
  * Senders factory.

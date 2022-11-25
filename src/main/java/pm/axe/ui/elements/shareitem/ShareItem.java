@@ -7,11 +7,11 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import pm.axe.ui.elements.ShareMenu;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import pm.axe.ui.elements.ShareMenu;
 
 /**
  * Common functionality for all items in {@link ShareMenu}.

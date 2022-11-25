@@ -12,9 +12,9 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import lombok.extern.slf4j.Slf4j;
 import pm.axe.Endpoint;
 import pm.axe.session.AxeSession;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.stream.Stream;
 

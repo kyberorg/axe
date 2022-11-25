@@ -1,12 +1,12 @@
 package pm.axe.utils;
 
+import org.springframework.http.ResponseEntity;
 import pm.axe.Endpoint;
 import pm.axe.api.middleware.TokenCheckerMiddleware;
 import pm.axe.constants.HttpCode;
 import pm.axe.core.IdentValidator;
 import pm.axe.json.AxeErrorJson;
 import pm.axe.result.OperationResult;
-import org.springframework.http.ResponseEntity;
 
 /**
  * API tools and helper methods.
@@ -74,7 +74,8 @@ public final class ApiUtils {
         AxeErrorJson errorJson = switch (errorMarker) {
             case TokenCheckerMiddleware.REQUEST_IS_EMPTY ->
                     AxeErrorJson.createWithMessage("Got empty request").andStatus(HttpCode.SERVER_ERROR);
-            case TokenCheckerMiddleware.NO_TOKEN -> AxeErrorJson.createWithMessage("Unauthorized: Auth Token must be present")
+            case TokenCheckerMiddleware.NO_TOKEN ->
+                    AxeErrorJson.createWithMessage("Unauthorized: Auth Token must be present")
                     .andStatus(HttpCode.UNAUTHORIZED);
             default -> AxeErrorJson.createWithMessage("Unauthorized: Wrong Token")
                     .andStatus(HttpCode.UNAUTHORIZED);

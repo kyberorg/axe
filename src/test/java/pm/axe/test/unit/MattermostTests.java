@@ -1,10 +1,10 @@
 package pm.axe.test.unit;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Test;
 import pm.axe.constants.App;
 import pm.axe.mm.Mattermost;
 import pm.axe.test.utils.mock.MattermostMock;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 

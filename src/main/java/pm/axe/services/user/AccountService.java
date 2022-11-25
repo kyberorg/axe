@@ -1,5 +1,10 @@
 package pm.axe.services.user;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.CannotCreateTransactionException;
 import pm.axe.db.dao.AccountDao;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.User;
@@ -7,11 +12,6 @@ import pm.axe.result.OperationResult;
 import pm.axe.services.mail.MailService;
 import pm.axe.users.AccountType;
 import pm.axe.utils.crypto.SymmetricCryptTool;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.List;
 import java.util.Objects;

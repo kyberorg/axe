@@ -3,11 +3,11 @@ package pm.axe.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
-import pm.axe.constants.HttpCode;
-import pm.axe.exception.error.AxeError;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import pm.axe.constants.HttpCode;
+import pm.axe.exception.error.AxeError;
 
 import java.util.Date;
 

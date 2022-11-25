@@ -26,17 +26,20 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.extern.slf4j.Slf4j;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import pm.axe.constants.App;
 import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
 import pm.axe.result.OperationResult;
 import pm.axe.services.AxeSessionCookieService;
 import pm.axe.services.AxeSessionService;
-import pm.axe.session.Device;
 import pm.axe.session.AxeSession;
+import pm.axe.session.Device;
 import pm.axe.ui.elements.AppMenu;
 import pm.axe.ui.elements.CookieBanner;
-import pm.axe.ui.elements.YalseeNowAxeNotification;
+import pm.axe.ui.elements.ProjektRenamedNotification;
 import pm.axe.ui.pages.appinfo.AppInfoPage;
 import pm.axe.ui.pages.debug.DebugPage;
 import pm.axe.ui.pages.home.HomePage;
@@ -44,13 +47,9 @@ import pm.axe.ui.pages.meetaxe.MeetAxePage;
 import pm.axe.ui.pages.mylinks.MyLinksPage;
 import pm.axe.ui.pages.settings.SettingsPage;
 import pm.axe.utils.AppUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.management.Notification;
 import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +74,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
     private final Tabs tabs = new Tabs();
     private final Map<Class<? extends Component>, Tab> tabToTarget = new HashMap<>();
 
-    private final YalseeNowAxeNotification yalseeNowAxeNotification = YalseeNowAxeNotification.create();
+    private final ProjektRenamedNotification projektRenamedNotification = ProjektRenamedNotification.create();
 
     private final UI ui = UI.getCurrent();
     private final Device currentDevice;
@@ -170,7 +169,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
                 .orElse(false);
         if (!renameNotificationAlreadyShown) {
             //show - new name notification.
-            yalseeNowAxeNotification.show();
+            projektRenamedNotification.show();
         }
 
         boolean isUserFeatureEnabled;

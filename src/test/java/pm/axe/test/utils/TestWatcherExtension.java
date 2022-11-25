@@ -2,14 +2,14 @@ package pm.axe.test.utils;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.extension.*;
 import pm.axe.test.AxeTest;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.report.TestData;
 import pm.axe.test.utils.report.TestReport;
 import pm.axe.test.utils.report.TestResult;
 import pm.axe.test.utils.report.TestSuite;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.extension.*;
 
 import java.util.List;
 import java.util.Optional;

@@ -10,7 +10,6 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import pm.axe.Endpoint;
@@ -19,21 +18,21 @@ import pm.axe.session.AxeSession;
 /**
  * Yalsee is now Axe Notification.
  */
-public class YalseeNowAxeNotification extends Composite<Notification> {
+public class ProjektRenamedNotification extends Composite<Notification> {
 
     /**
      * Creates Notification.
      *
-     * @return created {@link YalseeNowAxeNotification}.
+     * @return created {@link ProjektRenamedNotification}.
      */
-    public static YalseeNowAxeNotification create() {
-        return new YalseeNowAxeNotification();
+    public static ProjektRenamedNotification create() {
+        return new ProjektRenamedNotification();
     }
 
     /**
      * Creates new Notification.
      */
-    public YalseeNowAxeNotification() {
+    public ProjektRenamedNotification() {
         Notification notification = getContent();
         notification.setPosition(Notification.Position.TOP_CENTER);
 

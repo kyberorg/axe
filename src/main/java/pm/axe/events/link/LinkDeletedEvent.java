@@ -1,7 +1,7 @@
 package pm.axe.events.link;
 
-import pm.axe.db.models.Link;
 import lombok.Data;
+import pm.axe.db.models.Link;
 
 @Data(staticConstructor = "createWith")
 public class LinkDeletedEvent {

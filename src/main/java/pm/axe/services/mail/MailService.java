@@ -1,10 +1,10 @@
 package pm.axe.services.mail;
 
-import pm.axe.result.OperationResult;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
+import pm.axe.result.OperationResult;
 
 /**
  * Service that handles email issues.

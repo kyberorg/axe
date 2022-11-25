@@ -2,10 +2,10 @@ package pm.axe.test.pageobjects;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.test.utils.vaadin.elements.TextFieldElement;
-import pm.axe.ui.pages.home.HomePage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
+import pm.axe.test.utils.vaadin.elements.TextFieldElement;
+import pm.axe.ui.pages.home.HomePage;
 
 import static com.codeborne.selenide.Selenide.*;
 import static pm.axe.test.pageobjects.VaadinPageObject.waitForVaadin;

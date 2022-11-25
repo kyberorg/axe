@@ -3,7 +3,6 @@ package pm.axe.test.pageobjects;
 import com.codeborne.selenide.SelenideElement;
 import pm.axe.ui.layouts.AxeBaseLayout;
 
-
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;

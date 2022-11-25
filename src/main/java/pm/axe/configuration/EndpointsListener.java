@@ -1,7 +1,5 @@
 package pm.axe.configuration;
 
-import pm.axe.constants.HttpCode;
-import pm.axe.utils.AppUtils;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +9,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import pm.axe.constants.HttpCode;
+import pm.axe.utils.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;

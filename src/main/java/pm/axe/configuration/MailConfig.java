@@ -27,7 +27,7 @@ public class MailConfig {
     private boolean mailDebug;
 
     /**
-     * Provides Bean that actually performs sending.d
+     * Provides Bean that actually performs sending.
      *
      * @return if both {@link #mailUser} and {@link #mailPassword} are set - configured SMTP Sender,
      * if not - NoOp Sender (one that does nothing).

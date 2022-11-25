@@ -1,8 +1,8 @@
 package pm.axe.internal;
 
+import lombok.*;
 import pm.axe.db.models.User;
 import pm.axe.services.LinkService;
-import lombok.*;
 
 /**
  * Input for {@link LinkService}'s {@link LinkService#createLink(LinkServiceInput)}.

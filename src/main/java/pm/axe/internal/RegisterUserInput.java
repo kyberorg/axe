@@ -1,9 +1,9 @@
 package pm.axe.internal;
 
-import pm.axe.services.user.UserOperationsService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import pm.axe.services.user.UserOperationsService;
 
 /**
  * Incoming params for {@link UserOperationsService#registerUser(RegisterUserInput)}.

@@ -1,8 +1,8 @@
 package pm.axe.db.dao;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import pm.axe.db.models.Link;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 

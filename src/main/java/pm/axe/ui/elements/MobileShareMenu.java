@@ -1,8 +1,8 @@
 package pm.axe.ui.elements;
 
 import com.vaadin.flow.component.page.Page;
-import pm.axe.ui.elements.shareitem.ShareItem;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.ui.elements.shareitem.ShareItem;
 
 /**
  * Native Share Menu for Mobile Phones.

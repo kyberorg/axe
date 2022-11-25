@@ -1,20 +1,20 @@
 package pm.axe.services.user;
 
-import pm.axe.internal.RegisterUserInput;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
+import pm.axe.internal.RegisterUserInput;
 import pm.axe.result.OperationResult;
 import pm.axe.senders.Senders;
 import pm.axe.services.user.rollback.RollbackService;
 import pm.axe.services.user.rollback.RollbackTask;
 import pm.axe.users.AccountType;
 import pm.axe.users.TokenType;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Stack;

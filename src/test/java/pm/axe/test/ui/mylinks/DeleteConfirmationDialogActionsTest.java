@@ -1,16 +1,15 @@
 package pm.axe.test.ui.mylinks;
 
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.NotFoundViewPageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.ui.elements.DeleteConfirmationDialog;
-import pm.axe.ui.pages.err.page404.PageNotFoundPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
+import pm.axe.test.pageobjects.NotFoundViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.ui.elements.DeleteConfirmationDialog;
+import pm.axe.ui.pages.err.page404.PageNotFoundPage;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;

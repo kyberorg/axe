@@ -1,7 +1,7 @@
 package pm.axe.mm;
 
-import pm.axe.utils.UrlExtraValidator;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.utils.UrlExtraValidator;
 
 import java.util.Objects;
 

@@ -3,10 +3,10 @@ package pm.axe.json;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Since;
+import org.apache.commons.lang3.StringUtils;
 import pm.axe.constants.App;
 import pm.axe.telegram.TelegramCommand;
 import pm.axe.utils.AppUtils;
-import org.apache.commons.lang3.StringUtils;
 
 
 /**

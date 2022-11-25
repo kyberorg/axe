@@ -2,8 +2,6 @@ package pm.axe.configuration;
 
 import com.bugsnag.Bugsnag;
 import com.bugsnag.BugsnagSpringConfiguration;
-import pm.axe.constants.App;
-import pm.axe.utils.git.MavenGitInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
+import pm.axe.constants.App;
+import pm.axe.utils.git.MavenGitInfo;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;

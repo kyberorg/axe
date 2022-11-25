@@ -8,10 +8,9 @@ import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import pm.axe.session.AxeSession;
-import pm.axe.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import pm.axe.utils.AppUtils;
 
 @Component
 @RequiredArgsConstructor

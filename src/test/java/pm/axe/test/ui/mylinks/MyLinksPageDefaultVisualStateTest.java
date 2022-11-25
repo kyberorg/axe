@@ -2,17 +2,16 @@ package pm.axe.test.ui.mylinks;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.test.utils.TestUtils;
-import pm.axe.test.utils.vaadin.elements.TextFieldElement;
-import pm.axe.ui.pages.home.HomePage;
-import pm.axe.ui.pages.mylinks.MyLinksPage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.test.utils.TestUtils;
+import pm.axe.test.utils.vaadin.elements.TextFieldElement;
+import pm.axe.ui.pages.home.HomePage;
+import pm.axe.ui.pages.mylinks.MyLinksPage;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;

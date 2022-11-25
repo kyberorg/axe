@@ -1,10 +1,5 @@
 package pm.axe.configuration;
 
-import pm.axe.redis.pubsub.RedisMessageReceiver;
-import pm.axe.redis.pubsub.AxeRedisMessage;
-import pm.axe.redis.serializers.AxeMessageGsonRedisSerializer;
-import pm.axe.redis.serializers.AxeSessionGsonRedisSerializer;
-import pm.axe.session.AxeSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +14,11 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import pm.axe.redis.pubsub.AxeRedisMessage;
+import pm.axe.redis.pubsub.RedisMessageReceiver;
+import pm.axe.redis.serializers.AxeMessageGsonRedisSerializer;
+import pm.axe.redis.serializers.AxeSessionGsonRedisSerializer;
+import pm.axe.session.AxeSession;
 
 import java.time.Duration;
 

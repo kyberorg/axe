@@ -1,8 +1,8 @@
 package pm.axe.core;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import pm.axe.constants.App;
 import pm.axe.users.TokenType;
-import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  * Generates unique combination for short URL aka ident.

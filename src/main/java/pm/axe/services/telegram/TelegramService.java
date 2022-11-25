@@ -1,15 +1,15 @@
 package pm.axe.services.telegram;
 
 import com.vdurmont.emoji.EmojiParser;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 import pm.axe.constants.App;
 import pm.axe.db.models.Link;
 import pm.axe.telegram.TelegramBot;
 import pm.axe.telegram.TelegramObject;
 import pm.axe.utils.AppUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 
 /**
  * Service for {@link TelegramBot}.

@@ -2,12 +2,12 @@ package pm.axe.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
+import lombok.Data;
+import org.apache.commons.validator.GenericValidator;
 import pm.axe.api.mm.MattermostRestController;
 import pm.axe.constants.App;
 import pm.axe.mm.Mattermost;
 import pm.axe.utils.UrlExtraValidator;
-import lombok.Data;
-import org.apache.commons.validator.GenericValidator;
 
 /**
  * {@link MattermostRestController} outgoing JSON.

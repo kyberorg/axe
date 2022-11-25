@@ -12,6 +12,8 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import pm.axe.Endpoint;
 import pm.axe.constants.App;
 import pm.axe.constants.Header;
@@ -21,8 +23,6 @@ import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.UrlUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;

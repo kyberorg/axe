@@ -2,9 +2,9 @@ package pm.axe.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
-import pm.axe.utils.AppUtils;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.utils.AppUtils;
 
 /**
  * Store Endpoint outgoing JSON.

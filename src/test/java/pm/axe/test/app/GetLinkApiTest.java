@@ -1,14 +1,14 @@
 package pm.axe.test.app;
 
+import kong.unirest.HttpRequest;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import org.junit.jupiter.api.Test;
 import pm.axe.Endpoint;
 import pm.axe.api.links.GetLinkRestController;
 import pm.axe.constants.HttpCode;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.utils.UrlUtils;
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
-import org.junit.jupiter.api.Test;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

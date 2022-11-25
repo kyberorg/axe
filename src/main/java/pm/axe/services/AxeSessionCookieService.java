@@ -1,14 +1,14 @@
 package pm.axe.services;
 
-import pm.axe.constants.App;
-import pm.axe.result.OperationResult;
-import pm.axe.session.Device;
-import pm.axe.session.AxeSession;
-import pm.axe.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import pm.axe.constants.App;
+import pm.axe.result.OperationResult;
+import pm.axe.session.AxeSession;
+import pm.axe.session.Device;
+import pm.axe.utils.AppUtils;
 
 import javax.servlet.http.Cookie;
 import java.util.Objects;

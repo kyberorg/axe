@@ -1,9 +1,9 @@
 package pm.axe.senders;
 
-import pm.axe.db.models.Token;
-import pm.axe.result.OperationResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import pm.axe.db.models.Token;
+import pm.axe.result.OperationResult;
 
 /**
  * Senders, that does nothing.

@@ -1,10 +1,10 @@
 package pm.axe.mail.letters;
 
-import pm.axe.Endpoint;
-import pm.axe.mail.LetterType;
-import pm.axe.db.models.Token;
-import pm.axe.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
+import pm.axe.Endpoint;
+import pm.axe.db.models.Token;
+import pm.axe.mail.LetterType;
+import pm.axe.utils.AppUtils;
 
 import java.text.MessageFormat;
 import java.util.HashMap;

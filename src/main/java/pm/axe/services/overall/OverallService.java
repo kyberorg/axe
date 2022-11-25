@@ -1,8 +1,8 @@
 package pm.axe.services.overall;
 
-import pm.axe.db.dao.LinkDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pm.axe.db.dao.LinkDao;
 
 import java.util.Objects;
 

@@ -1,7 +1,7 @@
 package pm.axe.test.unit;
 
-import pm.axe.utils.UrlUtils;
 import org.junit.jupiter.api.Test;
+import pm.axe.utils.UrlUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

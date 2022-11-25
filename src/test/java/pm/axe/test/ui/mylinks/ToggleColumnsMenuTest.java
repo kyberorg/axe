@@ -1,14 +1,13 @@
 package pm.axe.test.ui.mylinks;
 
 import com.codeborne.selenide.CollectionCondition;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
 
 import static com.codeborne.selenide.Selenide.open;
 import static pm.axe.constants.App.FOUR;

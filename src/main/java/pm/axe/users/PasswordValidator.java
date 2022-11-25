@@ -1,7 +1,7 @@
 package pm.axe.users;
 
-import pm.axe.result.OperationResult;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.result.OperationResult;
 
 /**
  * Passwords Validator.

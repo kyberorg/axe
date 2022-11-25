@@ -1,17 +1,16 @@
 package pm.axe.test.ui.mylinks;
 
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.MainViewPageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.ui.pages.mylinks.MyLinksPage;
-import pm.axe.utils.UrlUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.HomePageObject;
+import pm.axe.test.pageobjects.MainViewPageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.ui.pages.mylinks.MyLinksPage;
+import pm.axe.utils.UrlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +18,9 @@ import java.util.List;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static pm.axe.constants.App.THREE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static pm.axe.constants.App.THREE;
 
 /**
  * Tests {@link MyLinksPage} by performing different actions with its elements.
@@ -166,11 +165,13 @@ public class MyLinkPageActionsTest extends SelenideTest {
         assertEquals(shortUrlTwo, actualLinkTwo);
 
         rowOne.getDescriptionCell().click();
-        String actualLongUrlOne = MyLinksViewPageObject.Grid.GridItem.Details.of(rowOne.getItemDetails()).getLongLink().getText();
+        String actualLongUrlOne =
+                MyLinksViewPageObject.Grid.GridItem.Details.of(rowOne.getItemDetails()).getLongLink().getText();
         assertEquals(longUrlOne, actualLongUrlOne);
 
         rowTwo.getDescriptionCell().click();
-        String actualLongUrlTwo = MyLinksViewPageObject.Grid.GridItem.Details.of(rowTwo.getItemDetails()).getLongLink().getText();
+        String actualLongUrlTwo =
+                MyLinksViewPageObject.Grid.GridItem.Details.of(rowTwo.getItemDetails()).getLongLink().getText();
         assertEquals(longUrlTwo, actualLongUrlTwo);
     }
 
@@ -216,12 +217,14 @@ public class MyLinkPageActionsTest extends SelenideTest {
         SelenideElement saveButton = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getSaveButton();
 
         editButton.click();
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.setValue(newDescription);
         saveButton.click();
 
         descriptionEditor.shouldNotBe(visible);
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.shouldNotBe(empty);
         descriptionCell.shouldHave(text(newDescription));
     }
@@ -240,12 +243,14 @@ public class MyLinkPageActionsTest extends SelenideTest {
         SelenideElement cancelButton = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getCancelButton();
 
         editButton.click();
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.setValue("It is my site");
         cancelButton.click();
 
         descriptionEditor.shouldNotBe(visible);
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.shouldNotBe(empty);
         descriptionCell.shouldHave(text(originalDescription));
     }
@@ -265,11 +270,16 @@ public class MyLinkPageActionsTest extends SelenideTest {
         MyLinksViewPageObject.closeGridEditorIfOpened(1);
         MyLinksViewPageObject.closeGridEditorIfOpened(2);
 
-        SelenideElement firstEditButton = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getEditButton();
-        SelenideElement secondEditButton = MyLinksViewPageObject.Grid.GridData.get().getRow(2).getEditButton();
-        SelenideElement firstDescriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
-        SelenideElement secondDescriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionEditor();
-        SelenideElement firstDescriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement firstEditButton =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getEditButton();
+        SelenideElement secondEditButton =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(2).getEditButton();
+        SelenideElement firstDescriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement secondDescriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionEditor();
+        SelenideElement firstDescriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
 
         firstEditButton.click();
         firstDescriptionEditor.setValue("It is my site");
@@ -299,10 +309,14 @@ public class MyLinkPageActionsTest extends SelenideTest {
         MyLinksViewPageObject.closeGridEditorIfOpened(1);
         MyLinksViewPageObject.closeGridEditorIfOpened(2);
 
-        SelenideElement firstDescriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
-        SelenideElement secondDescriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionEditor();
-        SelenideElement firstDescriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
-        SelenideElement secondDescriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionCell();
+        SelenideElement firstDescriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement secondDescriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionEditor();
+        SelenideElement firstDescriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement secondDescriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionCell();
 
         firstDescriptionCell.doubleClick();
         firstDescriptionEditor.setValue("It is my site");

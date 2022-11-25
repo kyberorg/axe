@@ -1,7 +1,7 @@
 package pm.axe.mail.letters;
 
-import pm.axe.mail.LetterType;
 import pm.axe.db.models.Token;
+import pm.axe.mail.LetterType;
 import pm.axe.users.UsernameGenerator;
 
 import java.util.Map;

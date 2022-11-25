@@ -1,5 +1,10 @@
 package pm.axe.test.app;
 
+import kong.unirest.HttpRequest;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Test;
 import pm.axe.Endpoint;
 import pm.axe.api.mm.MattermostRestController;
 import pm.axe.constants.App;
@@ -10,11 +15,6 @@ import pm.axe.json.MattermostResponse;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.test.utils.mock.MattermostMock;
 import pm.axe.utils.AppUtils;
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Test;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

@@ -1,9 +1,5 @@
 package pm.axe.session;
 
-import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
-import pm.axe.events.session.AxeSessionCreatedEvent;
-import pm.axe.events.session.AxeSessionDestroyedEvent;
-import pm.axe.services.AxeSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
@@ -11,6 +7,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pm.axe.constants.App;
+import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
+import pm.axe.events.session.AxeSessionCreatedEvent;
+import pm.axe.events.session.AxeSessionDestroyedEvent;
+import pm.axe.services.AxeSessionService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

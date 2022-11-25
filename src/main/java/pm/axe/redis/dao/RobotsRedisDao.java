@@ -1,10 +1,10 @@
 package pm.axe.redis.dao;
 
-import pm.axe.redis.dao.base.RedisDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import pm.axe.redis.dao.base.RedisDao;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;

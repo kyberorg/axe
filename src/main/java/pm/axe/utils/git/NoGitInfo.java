@@ -1,7 +1,7 @@
 package pm.axe.utils.git;
 
-import pm.axe.constants.App;
 import org.springframework.stereotype.Component;
+import pm.axe.constants.App;
 
 /**
  * Do nothing git info aka fallback, when other methods failed to apply.

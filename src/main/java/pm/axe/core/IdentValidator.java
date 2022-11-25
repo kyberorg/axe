@@ -1,8 +1,8 @@
 package pm.axe.core;
 
-import pm.axe.result.OperationResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import pm.axe.result.OperationResult;
 
 /**
  * Validates idents.

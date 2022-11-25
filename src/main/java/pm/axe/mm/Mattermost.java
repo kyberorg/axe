@@ -1,9 +1,9 @@
 package pm.axe.mm;
 
-import pm.axe.constants.App;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.constants.App;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

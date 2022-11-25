@@ -1,16 +1,13 @@
 package pm.axe.test.ui.main;
 
-import pm.axe.test.TestedEnv;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import pm.axe.test.pageobjects.SettingsPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
 import pm.axe.test.ui.SelenideTest;
-import pm.axe.test.utils.TestUtils;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import pm.axe.test.pageobjects.MainViewPageObject;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 

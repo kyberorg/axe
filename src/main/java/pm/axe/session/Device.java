@@ -2,12 +2,12 @@ package pm.axe.session;
 
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.WebBrowser;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import pm.axe.constants.Header;
 import pm.axe.services.RobotsService;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.DeviceUtils;
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Objects;

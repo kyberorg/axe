@@ -1,9 +1,5 @@
 package pm.axe.configuration;
 
-import pm.axe.constants.App;
-import pm.axe.telegram.TelegramBot;
-import pm.axe.utils.AppUtils;
-import pm.axe.utils.UrlExtraValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -12,6 +8,10 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.BotSession;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import pm.axe.constants.App;
+import pm.axe.telegram.TelegramBot;
+import pm.axe.utils.AppUtils;
+import pm.axe.utils.UrlExtraValidator;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

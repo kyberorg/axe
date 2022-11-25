@@ -2,24 +2,23 @@ package pm.axe.test.ui.usage;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
+import org.openqa.selenium.Keys;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.NotFoundViewPageObject;
+import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
 import pm.axe.test.pageobjects.external.Eki;
 import pm.axe.test.pageobjects.external.Wikipedia;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.Issue;
-import org.openqa.selenium.Keys;
-import pm.axe.test.pageobjects.VaadinPageObject;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

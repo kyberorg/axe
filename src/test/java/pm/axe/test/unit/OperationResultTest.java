@@ -1,10 +1,10 @@
 package pm.axe.test.unit;
 
-import pm.axe.db.models.Link;
-import pm.axe.result.OperationResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.db.models.Link;
+import pm.axe.result.OperationResult;
 
 /**
  * Test Suite for {@link OperationResult}.

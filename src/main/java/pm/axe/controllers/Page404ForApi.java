@@ -1,15 +1,15 @@
 package pm.axe.controllers;
 
+import kong.unirest.HttpMethod;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import pm.axe.Endpoint;
 import pm.axe.constants.Header;
 import pm.axe.constants.HttpCode;
 import pm.axe.constants.MimeType;
 import pm.axe.json.EndpointNotFoundResponse;
 import pm.axe.utils.AppUtils;
-import kong.unirest.HttpMethod;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

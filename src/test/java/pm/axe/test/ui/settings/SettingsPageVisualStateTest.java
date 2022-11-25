@@ -1,13 +1,12 @@
 package pm.axe.test.ui.settings;
 
-import pm.axe.test.pageobjects.AxeCommonsPageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.ui.pages.settings.SettingsPage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import pm.axe.test.pageobjects.AxeCommonsPageObject;
 import pm.axe.test.pageobjects.SettingsPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.ui.pages.settings.SettingsPage;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;

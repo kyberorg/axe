@@ -2,15 +2,14 @@ package pm.axe.test.ui.mylinks;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.test.TestApp;
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.ui.pages.mylinks.MyLinksPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pm.axe.test.TestApp;
+import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.ui.pages.mylinks.MyLinksPage;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -51,10 +50,12 @@ public class EditorTest extends SelenideTest {
     @Test
     public void descriptionShouldBeUpdatedImmediately() {
         String newDescription = "New Description";
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.doubleClick();
 
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.setValue(newDescription);
         descriptionEditor.pressEnter();
 
@@ -68,10 +69,12 @@ public class EditorTest extends SelenideTest {
     @Test
     public void descriptionStayAfterPageReload() {
         String newDescription = "Description should stay";
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.doubleClick();
 
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.setValue(newDescription);
         descriptionEditor.pressEnter();
 
@@ -98,17 +101,20 @@ public class EditorTest extends SelenideTest {
         VaadinPageObject.waitForVaadin();
 
         String newDescription = "The Description";
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.doubleClick();
 
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.setValue(newDescription);
         descriptionEditor.pressEnter();
 
         descriptionCell.shouldNotBe(empty);
         descriptionCell.shouldHave(text(newDescription));
 
-        SelenideElement secondDescription = MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionCell();
+        SelenideElement secondDescription =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(2).getDescriptionCell();
         secondDescription.shouldBe(empty);
     }
 
@@ -118,22 +124,27 @@ public class EditorTest extends SelenideTest {
     @Test
     public void updateTimeUpdatedAfterEdit() {
         String newDescription = "Testing update time";
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.doubleClick();
 
         Selenide.sleep(TestApp.Constants.TWO_SECONDS);
 
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.setValue(newDescription);
         descriptionEditor.pressEnter();
 
         descriptionCell.click();
-        SelenideElement itemDetailsElement = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getItemDetails();
+        SelenideElement itemDetailsElement =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getItemDetails();
         if (!itemDetailsElement.isDisplayed()) {
             descriptionCell.click();
         }
-        SelenideElement createdTimeSpan = MyLinksViewPageObject.Grid.GridItem.Details.of(itemDetailsElement).getCreatedTime();
-        SelenideElement updatedTimeSpan = MyLinksViewPageObject.Grid.GridItem.Details.of(itemDetailsElement).getUpdatedTime();
+        SelenideElement createdTimeSpan =
+                MyLinksViewPageObject.Grid.GridItem.Details.of(itemDetailsElement).getCreatedTime();
+        SelenideElement updatedTimeSpan =
+                MyLinksViewPageObject.Grid.GridItem.Details.of(itemDetailsElement).getUpdatedTime();
 
         assertNotEquals(createdTimeSpan.getText(), updatedTimeSpan.getText());
     }

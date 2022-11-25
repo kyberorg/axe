@@ -11,12 +11,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import lombok.Getter;
 import pm.axe.ui.elements.shareitem.EmailShareItem;
 import pm.axe.ui.elements.shareitem.FacebookShareItem;
 import pm.axe.ui.elements.shareitem.ShareItem;
 import pm.axe.ui.elements.shareitem.TwitterShareItem;
 import pm.axe.utils.ClipboardUtils;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;

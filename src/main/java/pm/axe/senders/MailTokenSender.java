@@ -1,18 +1,18 @@
 package pm.axe.senders;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+import pm.axe.db.models.Token;
 import pm.axe.mail.LetterType;
 import pm.axe.mail.letters.AccountConfirmationLetter;
 import pm.axe.mail.letters.Letter;
 import pm.axe.mail.letters.LoginVerificationLetter;
 import pm.axe.mail.letters.PasswordResetLetter;
-import pm.axe.db.models.Token;
 import pm.axe.result.OperationResult;
 import pm.axe.services.LinkService;
 import pm.axe.services.mail.MailSenderService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import javax.mail.internet.MimeMessage;
 import java.util.Map;

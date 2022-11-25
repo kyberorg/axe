@@ -1,14 +1,14 @@
 package pm.axe.redis.pubsub;
 
-import pm.axe.redis.serializers.AxeMessageGsonRedisSerializer;
-import pm.axe.services.AxeSessionService;
-import pm.axe.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.stereotype.Service;
+import pm.axe.redis.serializers.AxeMessageGsonRedisSerializer;
+import pm.axe.services.AxeSessionService;
+import pm.axe.utils.AppUtils;
 
 /**
  * Receives messages from Axe Redis Channel.

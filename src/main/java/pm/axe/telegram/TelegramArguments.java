@@ -1,9 +1,9 @@
 package pm.axe.telegram;
 
 
-import pm.axe.utils.UrlUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.utils.UrlUtils;
 
 import java.net.URI;
 import java.util.Objects;

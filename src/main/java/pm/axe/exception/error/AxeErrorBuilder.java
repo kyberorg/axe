@@ -1,7 +1,7 @@
 package pm.axe.exception.error;
 
-import pm.axe.constants.HttpCode;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.constants.HttpCode;
 
 /**
  * Builder for {@link AxeError}.

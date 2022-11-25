@@ -1,17 +1,17 @@
 package pm.axe.api.tg;
 
-import pm.axe.Endpoint;
-import pm.axe.json.TelegramStatusResponse;
-import pm.axe.json.AxeErrorJson;
-import pm.axe.json.AxeJson;
-import pm.axe.telegram.TelegramBot;
-import pm.axe.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import pm.axe.Endpoint;
+import pm.axe.json.AxeErrorJson;
+import pm.axe.json.AxeJson;
+import pm.axe.json.TelegramStatusResponse;
+import pm.axe.telegram.TelegramBot;
+import pm.axe.utils.AppUtils;
 
 /**
  * Reports telegram bot status.

@@ -1,13 +1,21 @@
 package pm.axe.api.user;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import pm.axe.Endpoint;
+import pm.axe.api.middleware.TokenCheckerMiddleware;
 import pm.axe.constants.HttpCode;
 import pm.axe.constants.MimeType;
 import pm.axe.exception.error.AxeErrorBuilder;
 import pm.axe.internal.RegisterUserInput;
+import pm.axe.json.AxeErrorJson;
 import pm.axe.json.PostUserRequest;
 import pm.axe.json.PostUserResponse;
-import pm.axe.json.AxeErrorJson;
 import pm.axe.result.OperationResult;
 import pm.axe.services.mail.MailService;
 import pm.axe.services.user.AccountService;
@@ -19,14 +27,6 @@ import pm.axe.users.UsernameGenerator;
 import pm.axe.users.UsernameValidator;
 import pm.axe.utils.ApiUtils;
 import pm.axe.utils.ErrorUtils;
-import pm.axe.api.middleware.TokenCheckerMiddleware;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,5 +1,8 @@
 package pm.axe.test.app;
 
+import kong.unirest.*;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.platform.commons.util.StringUtils;
 import pm.axe.Endpoint;
 import pm.axe.constants.App;
 import pm.axe.constants.HttpCode;
@@ -10,14 +13,11 @@ import pm.axe.test.AxeTest;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.utils.AppUtils;
-import kong.unirest.*;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.platform.commons.util.StringUtils;
 
 import java.lang.reflect.Field;
 
-import static pm.axe.constants.Header.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
+import static pm.axe.constants.Header.CONTENT_TYPE;
 
 /**
  * Tests, where we run application same ways in {@link SelenideTest} and test.

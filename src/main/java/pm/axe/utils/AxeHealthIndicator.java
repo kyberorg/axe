@@ -1,7 +1,5 @@
 package pm.axe.utils;
 
-import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 import kong.unirest.GetRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -12,6 +10,8 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import pm.axe.Endpoint;
+import pm.axe.constants.HttpCode;
 
 /**
  * Monitors if start page is accessible to users.

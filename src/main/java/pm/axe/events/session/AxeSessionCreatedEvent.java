@@ -1,7 +1,7 @@
 package pm.axe.events.session;
 
-import pm.axe.session.AxeSession;
 import lombok.Data;
+import pm.axe.session.AxeSession;
 
 /**
  * Event indicates that {@link AxeSession} created.

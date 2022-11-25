@@ -1,17 +1,16 @@
 package pm.axe.test.ui.redirect;
 
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pm.axe.Endpoint;
 import pm.axe.test.pageobjects.AppInfoPageObject;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.RedirectPageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
+import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.ui.pages.redirect.RedirectPage;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import pm.axe.test.pageobjects.VaadinPageObject;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.open;

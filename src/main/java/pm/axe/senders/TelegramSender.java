@@ -2,6 +2,10 @@ package pm.axe.senders;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import pm.axe.constants.App;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
@@ -15,10 +19,6 @@ import pm.axe.telegram.messages.PasswordResetMessage;
 import pm.axe.telegram.messages.TelegramMessage;
 import pm.axe.users.AccountType;
 import pm.axe.users.TokenType;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.io.StringWriter;

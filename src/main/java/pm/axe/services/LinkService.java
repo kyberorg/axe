@@ -1,21 +1,5 @@
 package pm.axe.services;
 
-import pm.axe.configuration.EndpointsListener;
-import pm.axe.core.BanHammer;
-import pm.axe.core.IdentGenerator;
-import pm.axe.db.dao.LinkDao;
-import pm.axe.events.link.LinkDeletedEvent;
-import pm.axe.events.link.LinkSavedEvent;
-import pm.axe.events.link.LinkUpdatedEvent;
-import pm.axe.exception.URLDecodeException;
-import pm.axe.internal.LinkServiceInput;
-import pm.axe.db.models.Link;
-import pm.axe.db.models.User;
-import pm.axe.result.OperationResult;
-import pm.axe.users.TokenType;
-import pm.axe.utils.AppUtils;
-import pm.axe.utils.UrlExtraValidator;
-import pm.axe.utils.UrlUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +7,22 @@ import org.greenrobot.eventbus.EventBus;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
+import pm.axe.configuration.EndpointsListener;
+import pm.axe.core.BanHammer;
+import pm.axe.core.IdentGenerator;
+import pm.axe.db.dao.LinkDao;
+import pm.axe.db.models.Link;
+import pm.axe.db.models.User;
+import pm.axe.events.link.LinkDeletedEvent;
+import pm.axe.events.link.LinkSavedEvent;
+import pm.axe.events.link.LinkUpdatedEvent;
+import pm.axe.exception.URLDecodeException;
+import pm.axe.internal.LinkServiceInput;
+import pm.axe.result.OperationResult;
+import pm.axe.users.TokenType;
+import pm.axe.utils.AppUtils;
+import pm.axe.utils.UrlExtraValidator;
+import pm.axe.utils.UrlUtils;
 
 import java.util.Optional;
 

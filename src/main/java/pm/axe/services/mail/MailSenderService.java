@@ -2,8 +2,6 @@ package pm.axe.services.mail;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
-import pm.axe.mail.LetterType;
-import pm.axe.utils.AppUtils;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import pm.axe.mail.LetterType;
+import pm.axe.utils.AppUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

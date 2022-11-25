@@ -1,15 +1,15 @@
 package pm.axe.services.user;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.CannotCreateTransactionException;
 import pm.axe.db.dao.TokenDao;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.result.OperationResult;
 import pm.axe.users.TokenType;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.Optional;
 

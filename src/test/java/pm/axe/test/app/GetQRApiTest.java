@@ -1,10 +1,5 @@
 package pm.axe.test.app;
 
-import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
-import pm.axe.json.PostLinkRequest;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -12,6 +7,11 @@ import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import pm.axe.Endpoint;
+import pm.axe.constants.App;
+import pm.axe.constants.HttpCode;
+import pm.axe.constants.MimeType;
+import pm.axe.json.PostLinkRequest;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,8 +19,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
 
-import static pm.axe.constants.Header.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
+import static pm.axe.constants.Header.CONTENT_TYPE;
 
 /**
  * Testing locations related to QR codes.

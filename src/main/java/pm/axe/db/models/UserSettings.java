@@ -1,10 +1,10 @@
 package pm.axe.db.models;
 
-import pm.axe.users.AccountType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import pm.axe.users.AccountType;
 
 import javax.persistence.*;
 

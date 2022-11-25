@@ -10,6 +10,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.RequiredArgsConstructor;
 import pm.axe.Endpoint;
 import pm.axe.constants.App;
 import pm.axe.services.GitService;
@@ -19,7 +20,6 @@ import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.git.GitRepoState;
 import pm.axe.utils.maven.MavenInfo;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @SpringComponent

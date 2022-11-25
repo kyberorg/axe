@@ -2,10 +2,10 @@ package pm.axe.test.pageobjects;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import lombok.Data;
 import pm.axe.test.utils.vaadin.elements.GridElement;
 import pm.axe.test.utils.vaadin.elements.TextFieldElement;
 import pm.axe.ui.pages.mylinks.MyLinksPage;
-import lombok.Data;
 
 import static com.codeborne.selenide.Selenide.*;
 import static pm.axe.constants.App.FOUR;

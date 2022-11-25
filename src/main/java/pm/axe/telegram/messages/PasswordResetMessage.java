@@ -1,10 +1,10 @@
 package pm.axe.telegram.messages;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import pm.axe.Endpoint;
 import pm.axe.db.models.Token;
 import pm.axe.utils.AppUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.text.MessageFormat;
 import java.util.HashMap;

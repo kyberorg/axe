@@ -1,18 +1,5 @@
 package pm.axe.api.links;
 
-import pm.axe.Endpoint;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
-import pm.axe.internal.LinkServiceInput;
-import pm.axe.json.PostLinkRequest;
-import pm.axe.json.PostLinkResponse;
-import pm.axe.json.AxeErrorJson;
-import pm.axe.db.models.Link;
-import pm.axe.result.OperationResult;
-import pm.axe.services.LinkService;
-import pm.axe.utils.ApiUtils;
-import pm.axe.api.middleware.TokenCheckerMiddleware;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +8,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pm.axe.Endpoint;
+import pm.axe.api.middleware.TokenCheckerMiddleware;
+import pm.axe.constants.Header;
+import pm.axe.constants.HttpCode;
+import pm.axe.constants.MimeType;
+import pm.axe.db.models.Link;
+import pm.axe.internal.LinkServiceInput;
+import pm.axe.json.AxeErrorJson;
+import pm.axe.json.PostLinkRequest;
+import pm.axe.json.PostLinkResponse;
+import pm.axe.result.OperationResult;
+import pm.axe.services.LinkService;
+import pm.axe.utils.ApiUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;

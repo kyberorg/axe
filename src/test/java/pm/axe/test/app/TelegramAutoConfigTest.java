@@ -1,16 +1,16 @@
 package pm.axe.test.app;
 
+import kong.unirest.HttpRequest;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 import pm.axe.Endpoint;
 import pm.axe.constants.App;
 import pm.axe.constants.HttpCode;
 import pm.axe.json.TelegramStatusResponse;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.utils.AppUtils;
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;

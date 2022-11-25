@@ -2,12 +2,12 @@ package pm.axe.test.ui;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
-import pm.axe.test.TestApp;
-import pm.axe.test.AxeTest;
-import pm.axe.test.utils.TestUtils;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
+import pm.axe.test.AxeTest;
+import pm.axe.test.TestApp;
+import pm.axe.test.utils.TestUtils;
 
 import static com.codeborne.selenide.Selenide.clipboard;
 

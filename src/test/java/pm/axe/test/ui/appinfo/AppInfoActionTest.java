@@ -1,20 +1,18 @@
 package pm.axe.test.ui.appinfo;
 
 import com.codeborne.selenide.Selenide;
-import pm.axe.test.pageobjects.SettingsPageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.pageobjects.external.CookieAndYou;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.ui.pages.appinfo.AppInfoPage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pm.axe.test.pageobjects.AppInfoPageObject;
+import pm.axe.test.pageobjects.SettingsPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.pageobjects.external.CookieAndYou;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.ui.pages.appinfo.AppInfoPage;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Testing interaction with {@link AppInfoPage}.

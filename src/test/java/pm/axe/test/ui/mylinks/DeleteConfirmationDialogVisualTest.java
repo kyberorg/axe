@@ -1,16 +1,15 @@
 package pm.axe.test.ui.mylinks;
 
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.test.utils.TestUtils;
-import pm.axe.ui.elements.DeleteConfirmationDialog;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.test.utils.TestUtils;
+import pm.axe.ui.elements.DeleteConfirmationDialog;
 
 import static com.codeborne.selenide.Condition.*;
 

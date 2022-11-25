@@ -1,18 +1,17 @@
 package pm.axe.test.ui.mylinks;
 
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.constants.App;
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.test.utils.TestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 import org.junitpioneer.jupiter.Issue;
 import org.selenide.selenoid.SelenoidClipboard;
+import pm.axe.constants.App;
+import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.test.utils.TestUtils;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -55,8 +54,10 @@ public class GridCellsTest extends SelenideTest {
     public void onItemClickItemDetailsOpenedAndHaveAllNeededElementsInside() {
         SelenideElement item = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getLinkCell();
         item.click();
-        SelenideElement itemDetailsElement = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getItemDetails();
-        MyLinksViewPageObject.Grid.GridItem.Details itemDetails = MyLinksViewPageObject.Grid.GridItem.Details.of(itemDetailsElement);
+        SelenideElement itemDetailsElement =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getItemDetails();
+        MyLinksViewPageObject.Grid.GridItem.Details itemDetails =
+                MyLinksViewPageObject.Grid.GridItem.Details.of(itemDetailsElement);
         itemDetailsElement.should(exist);
         itemDetailsElement.shouldBe(visible);
 
@@ -135,9 +136,11 @@ public class GridCellsTest extends SelenideTest {
      */
     @Test
     public void onDoubleClickToDescriptionEditorOpens() {
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.doubleClick();
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.should(exist);
         descriptionEditor.should(visible);
 
@@ -207,7 +210,8 @@ public class GridCellsTest extends SelenideTest {
         SelenideElement editButton = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getEditButton();
         editButton.click();
 
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.should(exist);
         descriptionEditor.shouldBe(visible);
 
@@ -250,7 +254,8 @@ public class GridCellsTest extends SelenideTest {
         SelenideElement saveButton = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getSaveButton();
         SelenideElement cancelButton = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getCancelButton();
 
-        SelenideElement descriptionCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
+        SelenideElement descriptionCell =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.doubleClick();
 
         editButton.shouldNotBe(visible);
@@ -259,7 +264,8 @@ public class GridCellsTest extends SelenideTest {
         cancelButton.shouldBe(visible);
 
         //cleanup
-        SelenideElement descriptionEditor = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
+        SelenideElement descriptionEditor =
+                MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionEditor();
         descriptionEditor.pressEnter();
     }
 

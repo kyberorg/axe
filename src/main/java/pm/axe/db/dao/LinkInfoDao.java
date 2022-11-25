@@ -1,8 +1,8 @@
 package pm.axe.db.dao;
 
+import org.springframework.stereotype.Repository;
 import pm.axe.db.dao.base.TimeAwareCrudDao;
 import pm.axe.db.models.LinkInfo;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

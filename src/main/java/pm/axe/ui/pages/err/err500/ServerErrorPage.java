@@ -4,6 +4,8 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.CannotCreateTransactionException;
 import pm.axe.Endpoint;
 import pm.axe.constants.HttpCode;
 import pm.axe.controllers.AxeErrorController;
@@ -14,8 +16,6 @@ import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.ServerErrorLayout;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.ErrorUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.Objects;
 

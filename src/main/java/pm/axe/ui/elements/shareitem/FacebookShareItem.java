@@ -1,8 +1,8 @@
 package pm.axe.ui.elements.shareitem;
 
+import org.apache.commons.lang3.StringUtils;
 import pm.axe.ui.elements.ShareMenu;
 import pm.axe.utils.AppUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Share link via Facebook.

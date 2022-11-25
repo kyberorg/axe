@@ -1,9 +1,9 @@
 package pm.axe.redis.pubsub;
 
-import pm.axe.utils.AppUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
+import pm.axe.utils.AppUtils;
 
 /**
  * Structure to communicate with in Axe Redis Channel.

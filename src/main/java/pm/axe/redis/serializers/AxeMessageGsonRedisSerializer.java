@@ -2,10 +2,10 @@ package pm.axe.redis.serializers;
 
 
 import com.google.gson.Gson;
-import pm.axe.redis.pubsub.AxeRedisMessage;
-import pm.axe.utils.AppUtils;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
+import pm.axe.redis.pubsub.AxeRedisMessage;
+import pm.axe.utils.AppUtils;
 
 /**
  * {@link RedisSerializer} for {@link AxeRedisMessage} objects, that uses {@link Gson}.

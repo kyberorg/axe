@@ -64,8 +64,8 @@ public class MeetAxePage extends AxeBaseLayout {
 
         title.setText("World, meet Axe");
 
-        firstLine.setText("As may notice this project changed title, branding and domain. " +
-                "Shorter links - better Internet!");
+        firstLine.setText("As may notice this project changed title, branding and domain. "
+                + "Shorter links - better Internet!");
 
         whySection();
         whatChangedSection();
@@ -83,14 +83,14 @@ public class MeetAxePage extends AxeBaseLayout {
     private void whySection() {
         whyTitle.setText("# But Why?");
         Code yalseeBig = new Code("Yals.ee"); //private is now working for some reason.
-        Span reasonZeroText = new Span(" was an abbreviation from Yet another Link Shortener. " +
-                "Now it has grown into a pretty functional fully-fledged link shortener.  " +
-                "It is not yet another anymore, it is one of the best in its area.");
+        Span reasonZeroText = new Span(" was an abbreviation from Yet another Link Shortener. "
+                + "Now it has grown into a pretty functional fully-fledged link shortener.  "
+                + "It is not yet another anymore, it is one of the best in its area.");
         reasonZero.add(yalseeBig, reasonZeroText);
         reasonOne.add("It was unclear how to spell Yalsee (with Y or J) at the start.");
 
-        Span reasonTwoPartOne = new Span("For short period of time stupid scammers used my project for " +
-                "their criminal activities. This was enough for some BigTechs to ban ");
+        Span reasonTwoPartOne = new Span("For short period of time stupid scammers used my project for "
+                + "their criminal activities. This was enough for some BigTechs to ban ");
         Span and = new Span(" and ");
         Code ylsee = new Code("yls.ee"); //private is now working for some reason.
         Span reasonTwoLastPart = new Span(" links. So a new domain will solve this issue as well.");

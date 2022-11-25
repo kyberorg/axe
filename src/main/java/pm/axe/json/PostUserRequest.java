@@ -2,11 +2,11 @@ package pm.axe.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Since;
-import pm.axe.api.user.PostUserRestController;
-import pm.axe.result.OperationResult;
 import lombok.Data;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.api.user.PostUserRestController;
+import pm.axe.result.OperationResult;
 
 import javax.validation.constraints.NotNull;
 

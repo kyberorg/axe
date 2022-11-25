@@ -21,14 +21,19 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import pm.axe.Endpoint;
 import pm.axe.constants.App;
 import pm.axe.constants.HttpCode;
+import pm.axe.db.models.Link;
 import pm.axe.events.link.LinkDeletedEvent;
 import pm.axe.events.link.LinkSavedEvent;
 import pm.axe.exception.error.AxeErrorBuilder;
 import pm.axe.internal.LinkServiceInput;
-import pm.axe.db.models.Link;
 import pm.axe.result.OperationResult;
 import pm.axe.services.LinkService;
 import pm.axe.services.QRCodeService;
@@ -38,11 +43,6 @@ import pm.axe.ui.MainView;
 import pm.axe.ui.elements.MobileShareMenu;
 import pm.axe.ui.elements.ShareMenu;
 import pm.axe.utils.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 
 @RequiredArgsConstructor

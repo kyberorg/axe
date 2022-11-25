@@ -1,7 +1,7 @@
 package pm.axe.utils;
 
-import pm.axe.ui.MainView;
 import org.springframework.stereotype.Component;
+import pm.axe.ui.MainView;
 
 /**
  * Detects redirects loops caused by exceptions at {@link MainView}.

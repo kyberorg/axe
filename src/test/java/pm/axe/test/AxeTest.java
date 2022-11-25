@@ -1,17 +1,17 @@
 package pm.axe.test;
 
 import com.codeborne.selenide.Configuration;
+import lombok.Getter;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 import pm.axe.constants.App;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.test.utils.TestWatcherExtension;
 import pm.axe.test.utils.report.TestData;
 import pm.axe.test.utils.report.TestReport;
-import lombok.Getter;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.IOException;

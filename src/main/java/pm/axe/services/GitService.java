@@ -1,11 +1,11 @@
 package pm.axe.services;
 
-import pm.axe.utils.git.GitInfo;
-import pm.axe.utils.git.MavenGitInfo;
-import pm.axe.utils.git.NoGitInfo;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pm.axe.utils.git.GitInfo;
+import pm.axe.utils.git.MavenGitInfo;
+import pm.axe.utils.git.NoGitInfo;
 
 /**
  * Service, that provides source of git information (like commit, tag, jne).

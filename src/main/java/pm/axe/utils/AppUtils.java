@@ -17,16 +17,16 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.MimeType;
-import pm.axe.session.AxeSession;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import pm.axe.constants.App;
+import pm.axe.constants.Header;
+import pm.axe.constants.MimeType;
+import pm.axe.session.AxeSession;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
@@ -40,7 +40,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -173,7 +172,7 @@ public class AppUtils implements Serializable {
         if (activeProfiles.length == 0) return true;
         boolean isProfileNotEnvironmental;
         boolean anotherEnvProfileFound = false;
-        for(String profile: activeProfiles) {
+        for (String profile: activeProfiles) {
             isProfileNotEnvironmental = (profile.equals(App.Profiles.ACTUATOR) || profile.equals(App.Profiles.PROXY));
             if (!isProfileNotEnvironmental) {
                 anotherEnvProfileFound = true;

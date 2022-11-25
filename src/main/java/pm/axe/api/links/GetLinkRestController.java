@@ -1,22 +1,22 @@
 package pm.axe.api.links;
 
-import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
-import pm.axe.core.IdentValidator;
-import pm.axe.json.GetLinkResponse;
-import pm.axe.json.AxeErrorJson;
-import pm.axe.result.OperationResult;
-import pm.axe.services.LinkService;
-import pm.axe.utils.ApiUtils;
-import pm.axe.utils.AppUtils;
-import pm.axe.utils.UrlUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import pm.axe.Endpoint;
+import pm.axe.constants.HttpCode;
+import pm.axe.constants.MimeType;
+import pm.axe.core.IdentValidator;
+import pm.axe.json.AxeErrorJson;
+import pm.axe.json.GetLinkResponse;
+import pm.axe.result.OperationResult;
+import pm.axe.services.LinkService;
+import pm.axe.utils.ApiUtils;
+import pm.axe.utils.AppUtils;
+import pm.axe.utils.UrlUtils;
 
 /**
  * Gets long links.

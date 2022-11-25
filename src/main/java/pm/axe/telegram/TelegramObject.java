@@ -1,10 +1,10 @@
 package pm.axe.telegram;
 
-import pm.axe.constants.App;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import pm.axe.constants.App;
 
 import java.util.Objects;
 

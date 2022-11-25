@@ -2,16 +2,16 @@ package pm.axe.test.ui.mylinks;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.test.utils.TestUtils;
-import pm.axe.ui.pages.mylinks.MyLinksPage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.constants.App;
+import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.test.utils.TestUtils;
+import pm.axe.ui.pages.mylinks.MyLinksPage;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
@@ -132,7 +132,7 @@ public class GridItemsTest extends SelenideTest {
         SelenideElement actionsCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getActionsCell();
         ElementsCollection vaadinButtons = actionsCell.$("flow-component-renderer vaadin-horizontal-layout").
                 $$("vaadin-button");
-        vaadinButtons.shouldHave(size(3));
+        vaadinButtons.shouldHave(size(App.THREE));
     }
 
     /**

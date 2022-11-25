@@ -6,8 +6,8 @@ import com.vaadin.flow.component.page.ExtendedClientDetails;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.shared.BrowserDetails;
 import com.vaadin.flow.spring.annotation.UIScope;
-import pm.axe.session.AxeSession;
 import lombok.Getter;
+import pm.axe.session.AxeSession;
 
 /**
  * Client Device-related stuff.

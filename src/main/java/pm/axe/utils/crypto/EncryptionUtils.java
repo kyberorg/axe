@@ -1,6 +1,5 @@
 package pm.axe.utils.crypto;
 
-import pm.axe.constants.App;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
@@ -10,6 +9,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import pm.axe.constants.App;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;

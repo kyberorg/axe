@@ -5,11 +5,11 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.*;
+import org.springframework.transaction.CannotCreateTransactionException;
 import pm.axe.Endpoint;
 import pm.axe.constants.HttpCode;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
-import org.springframework.transaction.CannotCreateTransactionException;
 
 @PageTitle("Axe.pm: Error 503")
 @Route(value = Endpoint.UI.ERROR_PAGE_503, layout = MainView.class)

@@ -1,9 +1,9 @@
 package pm.axe.utils.crypto;
 
-import pm.axe.result.OperationResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import pm.axe.result.OperationResult;
 
 /**
  * Symmetric encryption tool. Two-way encryption (encryption/decryption).

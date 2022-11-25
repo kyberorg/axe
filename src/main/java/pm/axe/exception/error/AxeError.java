@@ -1,8 +1,8 @@
 package pm.axe.exception.error;
 
+import lombok.Data;
 import pm.axe.constants.HttpCode;
 import pm.axe.ui.pages.err.err500.ServerErrorPage;
-import lombok.Data;
 
 import java.util.Date;
 

@@ -2,14 +2,13 @@ package pm.axe.test.ui.usage;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
-import pm.axe.test.ui.SelenideTest;
-import pm.axe.test.utils.SelenideUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junitpioneer.jupiter.RetryingTest;
+import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.pageobjects.external.*;
+import pm.axe.test.ui.SelenideTest;
+import pm.axe.test.utils.SelenideUtils;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;

@@ -1,8 +1,8 @@
 package pm.axe.db.dao;
 
+import org.springframework.data.repository.CrudRepository;
 import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 

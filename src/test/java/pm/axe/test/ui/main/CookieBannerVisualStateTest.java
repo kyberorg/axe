@@ -1,23 +1,22 @@
 package pm.axe.test.ui.main;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
+import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.ui.elements.CookieBanner;
 import pm.axe.ui.pages.appinfo.AppInfoPage;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import pm.axe.test.pageobjects.VaadinPageObject;
-import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static pm.axe.constants.App.THREE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static pm.axe.constants.App.THREE;
 
 /**
  * Testing {@link CookieBanner}'s visual state.
@@ -111,7 +110,8 @@ public class CookieBannerVisualStateTest extends SelenideTest {
      */
     @Test
     public void moreInfoLinkHrefIsAppInfoPage() {
-        CookieBannerPageObject.BannerText.LINK.shouldHave(attributeMatching("href", TestUtils.getTestUrl() + "/appInfo"));
+        CookieBannerPageObject.BannerText.LINK.shouldHave(attributeMatching("href",
+                TestUtils.getTestUrl() + "/appInfo"));
     }
 
     /**

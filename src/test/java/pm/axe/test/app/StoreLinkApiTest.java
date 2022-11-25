@@ -1,5 +1,12 @@
 package pm.axe.test.app;
 
+import kong.unirest.HttpRequest;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junitpioneer.jupiter.Issue;
 import pm.axe.Endpoint;
 import pm.axe.constants.HttpCode;
 import pm.axe.constants.MimeType;
@@ -9,18 +16,11 @@ import pm.axe.json.PostLinkResponse;
 import pm.axe.test.TestApp;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.utils.AppUtils;
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
-import org.junitpioneer.jupiter.Issue;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static pm.axe.constants.Header.CONTENT_TYPE;
 import static pm.axe.constants.Header.X_AXE_TOKEN;
 import static pm.axe.core.IdentGenerator.IDENT_DEFAULT_LENGTH;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit testing for store API.

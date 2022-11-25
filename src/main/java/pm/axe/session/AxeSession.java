@@ -2,11 +2,11 @@ package pm.axe.session;
 
 import com.google.gson.Gson;
 import com.vaadin.flow.server.VaadinSession;
-import pm.axe.services.AxeSessionService;
-import pm.axe.utils.AppUtils;
 import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.services.AxeSessionService;
+import pm.axe.utils.AppUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;

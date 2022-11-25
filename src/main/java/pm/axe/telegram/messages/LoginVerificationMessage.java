@@ -1,7 +1,7 @@
 package pm.axe.telegram.messages;
 
-import pm.axe.db.models.Token;
 import lombok.RequiredArgsConstructor;
+import pm.axe.db.models.Token;
 
 import java.util.HashMap;
 import java.util.Map;

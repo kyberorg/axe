@@ -3,9 +3,9 @@ package pm.axe.redis.serializers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import pm.axe.session.AxeSession;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
+import pm.axe.session.AxeSession;
 
 /**
  * {@link RedisSerializer} for {@link AxeSession} objects, that uses {@link Gson}.

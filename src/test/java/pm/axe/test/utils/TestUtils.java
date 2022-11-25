@@ -1,6 +1,10 @@
 package pm.axe.test.utils;
 
 import com.codeborne.selenide.SelenideElement;
+import kong.unirest.Headers;
+import kong.unirest.HttpResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 import pm.axe.constants.App;
 import pm.axe.constants.Header;
 import pm.axe.constants.MimeType;
@@ -10,10 +14,6 @@ import pm.axe.test.TestApp.RunMode;
 import pm.axe.test.TestedEnv;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.UrlUtils;
-import kong.unirest.Headers;
-import kong.unirest.HttpResponse;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

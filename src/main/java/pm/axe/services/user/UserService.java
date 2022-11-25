@@ -1,17 +1,17 @@
 package pm.axe.services.user;
 
-import pm.axe.db.dao.UserDao;
-import pm.axe.db.models.User;
-import pm.axe.result.OperationResult;
-import pm.axe.users.PasswordValidator;
-import pm.axe.users.UsernameValidator;
-import pm.axe.utils.crypto.PasswordUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
+import pm.axe.db.dao.UserDao;
+import pm.axe.db.models.User;
+import pm.axe.result.OperationResult;
+import pm.axe.users.PasswordValidator;
+import pm.axe.users.UsernameValidator;
+import pm.axe.utils.crypto.PasswordUtils;
 
 import java.text.MessageFormat;
 import java.util.Optional;

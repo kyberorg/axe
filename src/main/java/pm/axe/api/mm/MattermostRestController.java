@@ -1,14 +1,5 @@
 package pm.axe.api.mm;
 
-import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.internal.LinkServiceInput;
-import pm.axe.json.MattermostResponse;
-import pm.axe.json.AxeJson;
-import pm.axe.mm.Mattermost;
-import pm.axe.db.models.Link;
-import pm.axe.result.OperationResult;
-import pm.axe.services.LinkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +7,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import pm.axe.Endpoint;
+import pm.axe.constants.App;
+import pm.axe.db.models.Link;
+import pm.axe.internal.LinkServiceInput;
+import pm.axe.json.AxeJson;
+import pm.axe.json.MattermostResponse;
+import pm.axe.mm.Mattermost;
+import pm.axe.result.OperationResult;
+import pm.axe.services.LinkService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;

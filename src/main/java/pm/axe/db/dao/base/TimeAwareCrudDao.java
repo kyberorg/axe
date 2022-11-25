@@ -1,8 +1,8 @@
 package pm.axe.db.dao.base;
 
-import pm.axe.db.models.TimeModel;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import pm.axe.db.models.TimeModel;
 
 /**
  * Time aware {@link CrudRepository}.

@@ -1,9 +1,9 @@
 package pm.axe.services;
 
-import pm.axe.redis.dao.RobotsRedisDao;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import pm.axe.redis.dao.RobotsRedisDao;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
