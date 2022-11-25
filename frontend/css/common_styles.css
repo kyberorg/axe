@@ -106,25 +106,25 @@
 
 /* Areas */
 .main-area {
-    background: var(--yalsee-main-area-color);
+    background: var(--axe-main-area-color);
 }
 
 /* Styles */
 .border {
-    border: 1px solid var(--yalsee-border-color);
-    border-radius: var(--yalsee-border-radius);
+    border: 1px solid var(--axe-border-color);
+    border-radius: var(--axe-border-radius);
 }
 
 .bold {
     font-weight: bold;
 }
 
-.yalsee-layout {
+.axe-layout {
     padding-top: 1em;
 }
 
 .color-border {
-    border-color: var(--yalsee-section-border-color) !important;
+    border-color: var(--axe-section-border-color) !important;
 }
 
 .section {
@@ -148,30 +148,30 @@ vaadin-vertical-layout.section-content {
 html {
     font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --lumo-font-family: Pebble, sans-serif, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --yalsee-main-area-color: rgb(240, 240, 240);
-    --yalsee-result-area-color: rgb(223, 240, 216);
-    --yalsee-border-color: rgb(227, 227, 227);
-    --yalsee-border-radius: 0.7rem;
-    --yalsee-section-border-color: rgb(25, 36, 52);
-    --yalsee-text-color: rgb(25, 36, 52);
-    --yalsee-drawer-toggle-color: rgb(24, 39, 57);
-    --yalsee-qr-code-border-radius: 0%;
-    --yalsee-success-color: rgb(21, 132, 67);
-    --yalsee-danger-color: rgb(202, 21, 12);
-    --yalsee-primary-color: rgb(0, 106, 245);
-    --yalsee-secondary-color: rgb(37, 51, 68);
-    --yalsee-tertiary-color: rgb(144, 189, 249);
+    --axe-main-area-color: rgb(240, 240, 240);
+    --axe-result-area-color: rgb(223, 240, 216);
+    --axe-border-color: rgb(227, 227, 227);
+    --axe-border-radius: 0.7rem;
+    --axe-section-border-color: rgb(25, 36, 52);
+    --axe-text-color: rgb(25, 36, 52);
+    --axe-drawer-toggle-color: rgb(24, 39, 57);
+    --axe-qr-code-border-radius: 0%;
+    --axe-success-color: rgb(21, 132, 67);
+    --axe-danger-color: rgb(202, 21, 12);
+    --axe-primary-color: rgb(0, 106, 245);
+    --axe-secondary-color: rgb(37, 51, 68);
+    --axe-tertiary-color: rgb(144, 189, 249);
 }
 
 html[theme="dark"] {
-    --yalsee-main-area-color: rgba(24, 27, 31, 0.3);
-    --yalsee-result-area-color: rgb(43, 61, 81);
-    --yalsee-border-color: rgb(204, 204, 220, 0.07);
-    --yalsee-section-border-color: rgb(245, 249, 255);
-    --yalsee-text-color: rgb(245, 249, 255);
-    --yalsee-drawer-toggle-color: rgb(235, 243, 254);
-    --yalsee-qr-code-border-radius: 5%;
-    --yalsee-secondary-color: rgb(215, 224, 237);
+    --axe-main-area-color: rgba(24, 27, 31, 0.3);
+    --axe-result-area-color: rgb(43, 61, 81);
+    --axe-border-color: rgb(204, 204, 220, 0.07);
+    --axe-section-border-color: rgb(245, 249, 255);
+    --axe-text-color: rgb(245, 249, 255);
+    --axe-drawer-toggle-color: rgb(235, 243, 254);
+    --axe-qr-code-border-radius: 5%;
+    --axe-secondary-color: rgb(215, 224, 237);
 }
 
 vcf-toggle-button {
@@ -179,7 +179,7 @@ vcf-toggle-button {
 }
 
 vaadin-drawer-toggle {
-    color: var(--yalsee-drawer-toggle-color);
+    color: var(--axe-drawer-toggle-color);
 }
 
 .share-item-logo {

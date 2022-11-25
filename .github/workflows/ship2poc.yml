@@ -23,29 +23,54 @@ jobs:
       - name: Compile JAR
         run: mvn --batch-mode --update-snapshots clean package -P production-mode,noTesting
 
+      - name: Pull latest base and build images
+        run: for img in kio.ee/base/go:1.19 kio.ee/base/java:17-jdk; do docker pull $img; done
+
       - name: Docker build and tag
-        run: docker build -f Dockerfile.DEV -t kio.ee/yalsee/yalsee:poc .
+        run: docker build -f Dockerfile.DEV -t kio.ee/kyberorg/axe:poc .
 
       - name: Docker push
-        run: docker push kio.ee/yalsee/yalsee:poc > poc.sha
+        run: docker push kio.ee/kyberorg/axe:poc > poc.sha
+
+      - name: Get Docker image SHA256
+        id: docker_image_sha
+        run: echo "imageSha=$(cat poc.sha | tail -n 1 | awk '{print $3}')" >> $GITHUB_OUTPUT
+
+      - name: Debug image SHA256
+        run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi kio.ee/yalsee/yalsee:poc
+        run: docker rmi kio.ee/kyberorg/axe:poc > poc.sha
         continue-on-error: true
+
+      - name: Delete SHA file to prevent mess
+        run: rm -f poc.sha
+        continue-on-error: true
+
+      - name: Waiting for image to appear at Registry
+        uses: kyberorg/wait_for_harbor@v0.1.1
+        with:
+          hostname: kio.ee
+          robot: ${{ secrets.KIO_USER }}
+          token: ${{ secrets.KIO_PASS }}
+          imageProject: kyberorg
+          imageRepo: axe
+          imageTag: poc
+          imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Deploy
         uses: wei/curl@master
         with:
-          args: -X POST ${{ secrets.POC_DEPLOY_HOOK }}
+          args: -X POST ${{ secrets.DEV_DEPLOY_HOOK }}?tag=poc@${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Get deployed commit SHA
         id: deployed_commit
-        run: echo "::set-output name=sha::$(echo $GITHUB_SHA | cut -c1-7)"
+        run: echo "sha=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v3
         with:
-          url: https://poc.yals.ee
+          url: https://poc.axe.pm
           responseCode: 200
           timeout: 120
           interval: 1.5

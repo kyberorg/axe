@@ -9,8 +9,8 @@ COPY cmd/entrypoint.go cmd/entrypoint.go
 RUN  GO111MODULE=off CGO_ENABLED=0 go install ./...
 
 FROM kio.ee/base/java:17-jdk as appBuilder
-COPY target/yalsee.jar yalsee.jar
-RUN java -Djarmode=layertools -jar yalsee.jar extract
+COPY target/axe.jar axe.jar
+RUN java -Djarmode=layertools -jar axe.jar extract
 
 FROM kio.ee/base/java:17-jre as runner
 WORKDIR /app

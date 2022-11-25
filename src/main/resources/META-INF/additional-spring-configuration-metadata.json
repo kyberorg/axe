@@ -1,49 +1,39 @@
 {
   "properties": [
     {
-      "name": "application.stage",
+      "name": "app.stage",
       "type": "java.lang.String",
       "description": "Application env for Bugsnag."
     },
     {
-      "name": "server.url",
+      "name": "app.server.url",
       "type": "java.lang.String",
       "description": "URL where site resides. Value added to short link."
     },
     {
-      "name": "app.devMode",
+      "name": "app.dev-mode",
       "type": "java.lang.String",
       "description": "Defines if application works in Development Mode. Dev Mode enables developer features (i.e. Debug Page)."
     },
     {
-      "name": "telegram.enabled",
+      "name": "app.telegram.enabled",
       "type": "java.lang.String",
       "description": "Defines is telegram integration is enabled or not."
     },
     {
-      "name": "telegram.token",
+      "name": "app.telegram.token",
       "type": "java.lang.String",
       "description": "String with token for telegram."
     },
     {
-      "name": "app.site-title",
+      "name": "app.site.title",
       "type": "java.lang.String",
       "description": "String with Site title for displaying at web page."
     },
     {
-      "name": "app.shortDomain",
+      "name": "app.server.short-url",
       "type": "java.lang.String",
       "description": "Short url domain used for links."
-    },
-    {
-      "name": "app.seo.ga.enabled",
-      "type": "java.lang.Boolean",
-      "description": "Enables/Disables Google Analytics."
-    },
-    {
-      "name": "app.seo.ga.file",
-      "type": "java.lang.String",
-      "description": "Google Analytics file name. Has no effect when app.seo.ga.enabled set to false."
     },
     {
       "name": "app.seo.robots.crawl-allowed",
@@ -66,14 +56,9 @@
       "description": "Vaadin Session Timeout in seconds."
     },
     {
-      "name": "redis.app.prefix",
+      "name": "app.redis.prefix",
       "type": "java.lang.String",
       "description": "Application-specific prefix in Redis Keys. Needed to distinguish application's session if they stored within same Redis DB."
-    },
-    {
-      "name": "redis.enabled",
-      "type": "java.lang.String",
-      "description": "Flag to Enable/Disable Redis operations, so application can run with or without having Redis."
     },
     {
       "name": "app.mail.email4errors",

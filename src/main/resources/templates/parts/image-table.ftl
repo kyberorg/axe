@@ -2,7 +2,7 @@
     <tr>
         <td valign="middle" class="aligncenter middle logo" style="padding: 20px 0 10px;"
             align="center">
-            <img style="background-color: #175ddc;" src="${siteUrl}/images/email_logo.png" alt="Yalsee Logo"
+            <img style="background-color: #175ddc;" src="${siteUrl}/images/email_logo.png" alt="Axe Logo"
                  width="149" height="39"/>
         </td>
     </tr>

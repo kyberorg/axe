@@ -37,10 +37,10 @@ jobs:
         run: for img in kio.ee/base/go:1.19 kio.ee/base/java:17-jdk kio.ee/base/java:17-jre; do docker pull $img; done
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.PROD -t kio.ee/yalsee/yalsee:qa .
+        run: docker build -f Dockerfile.PROD -t kio.ee/kyberorg/axe:qa .
 
       - name: Docker push
-        run: docker push kio.ee/yalsee/yalsee:qa > qa.sha
+        run: docker push kio.ee/kyberorg/axe:qa > qa.sha
 
       - name: Get Docker image SHA256
         id: docker_image_sha
@@ -50,7 +50,7 @@ jobs:
         run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi kio.ee/yalsee/yalsee:qa
+        run: docker rmi kio.ee/kyberorg/axe:qa
         continue-on-error: true
 
       - name: Delete SHA file to prevent mess
@@ -63,7 +63,7 @@ jobs:
           harbor-host: kio.ee
           harbor-robot: ${{ secrets.KIO_USER }}
           harbor-token: ${{ secrets.KIO_PASS }}
-          image: kio.ee/yalsee/yalsee:qa
+          image: kio.ee/kyberorg/axe:qa
           digest: ${{ steps.docker_image_sha.outputs.imageSha }}
           max-allowed-severity: high
           report-sort-by: score
@@ -84,7 +84,7 @@ jobs:
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v3
         with:
-          url: https://qa.yals.ee
+          url: https://qa.axe.pm
           responseCode: 200
           timeout: 120
           interval: 1.5
@@ -106,7 +106,7 @@ jobs:
       - name: Test App
         id: runTests
         continue-on-error: true
-        run: mvn -Ptesting-only -Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
+        run: mvn -Ptesting-only -Dtest.url=https://qa.axe.pm -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=axe-qa-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.axe.pm -Dtest.masterToken=${{ secrets.QA_MASTER_TOKEN }} -Dtest.report.failed-tests-filename=target/test-fails.txt clean test
         env:
           JAVA_HOME: /srv/java17
 
@@ -145,7 +145,7 @@ jobs:
         uses: wei/curl@master
         continue-on-error: true
         with:
-          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-qa-${{ steps.date.outputs.date }}
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/axe-qa-${{ steps.date.outputs.date }}
 
   rerun-tests-qa:
     name: Test::ReRun::QA
@@ -165,7 +165,7 @@ jobs:
       - name: ReRun Tests with mvn-rr
         id: reRunTests
         continue-on-error: true
-        run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://qa.yals.ee -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=yalsee-qa-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.yls.ee -Dtest.deleteToken=${{ secrets.QA_DELETE_TOKEN }} -Dtest.show-test-names-in-video=true"
+        run: ./mvn-rr -file="test-fails.txt" -profiles="testing-only" -params="-Dtest.url=https://qa.axe.pm -Dgrid.hostname=http://grid.kio.ee -Dselenide.browser=chrome -Dtest.buildName=axe-qa-rerun-${{ steps.date.outputs.date }} -Dapp.shortUrl=https://q.axe.pm -Dtest.masterToken=${{ secrets.QA_MASTER_TOKEN }} -Dtest.show-test-names-in-video=true"
         env:
           JAVA_HOME: /srv/java17
 
@@ -195,4 +195,4 @@ jobs:
         uses: wei/curl@master
         continue-on-error: true
         with:
-          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/yalsee-qa-rerun-${{ steps.date.outputs.date }}
+          args: -X DELETE -H "X-Token:${{ secrets.GRID_API_TOKEN }}" ${{ secrets.GRID_API_ENDPOINT }}/videos/axe-qa-rerun-${{ steps.date.outputs.date }}

@@ -12,7 +12,6 @@ a[highlight] {
 
 .logo-image {
     border-radius: 100%;
-    width: 165px;
     height: 56px;
     cursor: pointer;
 }
@@ -38,7 +37,7 @@ vaadin-tab a vaadin-icon {
 }
 
 .subtitle-tab {
-    color: var(--yalsee-text-color);
+    color: var(--axe-text-color);
 }
 
 .cb-dialog {

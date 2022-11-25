@@ -1,8 +1,8 @@
 <style type="text/css">
     @font-face {
         font-family: 'Pebble';
-        src: url('https://yals.ee/Pebble-Regular.woff2') format('woff2'),
-        url('https://yals.ee/Pebble-Regular.woff') format('woff');
+        src: url('https://axe.pm/Pebble-Regular.woff2') format('woff2'),
+        url('https://axe.pm/Pebble-Regular.woff') format('woff');
         font-weight: normal;
         font-style: normal;
         font-display: swap;

@@ -46,9 +46,9 @@ server.pid
 /dist/
 .cache
 .mvn
-/docker/yalsee-local-run/redis
-/docker/yalsee-local-run/postgres
-/docker/yalsee-local-run/pgadmin
+/docker/axe-local-run/redis
+/docker/axe-local-run/postgres
+/docker/axe-local-run/pgadmin
 /node_modules/
 
 package.json

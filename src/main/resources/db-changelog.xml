@@ -139,7 +139,7 @@
                                  referencedTableName="users"/>
     </changeSet>
     <changeSet id="5" author="kyberorg" failOnError="true">
-        <!-- Creating yalsee user -->
+        <!-- Creating first user -->
         <insert tableName="users">
             <column name="id" value="1"/>
             <column name="username" value="yalsee"/>

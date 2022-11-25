@@ -7,7 +7,7 @@
     </tr>
     <tr style="${appCss}">
         <td class="content-block last" style="${appCss} padding: 0;" valign="top">
-            Use this code to complete logging in with Yalsee.
+            Use this code to complete logging in with Axe.
         </td>
     </tr>
 </table>

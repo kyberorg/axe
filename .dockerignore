@@ -1,6 +1,6 @@
 # Ignore everything
 **
 # JAR should stay
-!target/yalsee.jar
+!target/axe.jar
 # Entrypoint and Healthcheck should stay as well
 !cmd
