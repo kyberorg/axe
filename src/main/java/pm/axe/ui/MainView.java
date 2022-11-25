@@ -150,8 +150,8 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        if (pageAlreadyInitialized) return;
         tabs.setSelectedTab(tabToTarget.get(beforeEnterEvent.getNavigationTarget()));
+        if (pageAlreadyInitialized) return;
 
         Optional<AxeSession> session = AxeSession.getCurrent();
         //Cookie Banner
