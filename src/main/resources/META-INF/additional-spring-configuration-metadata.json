@@ -89,5 +89,10 @@
       "name": "app.telegram.bot-name",
       "type": "java.lang.String",
       "description": "String with name of Telegram Bot."
+    },
+    {
+      "name": "app.show-rename-notification",
+      "type": "java.lang.String",
+      "description": "Enables/Disables Yalsee is now Axe notification."
     }
   ] }

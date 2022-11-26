@@ -673,6 +673,17 @@ public class AppUtils implements Serializable {
         return getEnv().getProperty(App.Properties.TELEGRAM_BOT_NAME, App.NO_VALUE);
     }
 
+    /**
+     * Determines if app should show "Yalsee is now Axe" Notification.
+     * Regulated by profile property {@link  App.Properties#SHOW_RENAME_NOTIFICATION}
+     *
+     * @return property value
+     */
+    public boolean showRenameNotification() {
+        String showNotificationString = getEnv().getProperty(App.Properties.SHOW_RENAME_NOTIFICATION, "true");
+        return Boolean.parseBoolean(showNotificationString);
+    }
+
     private static boolean clientWantsJson(final String acceptHeader) {
         if (acceptHeader == null) {
             return false;

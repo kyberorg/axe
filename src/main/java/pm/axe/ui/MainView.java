@@ -167,9 +167,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         }
 
         //Rename notification
+        boolean shouldBannerBeShown = appUtils.showRenameNotification();
         boolean renameNotificationAlreadyShown = session.map(ys -> ys.getFlags().isRenameNotificationAlreadyShown())
                 .orElse(false);
-        if (!renameNotificationAlreadyShown) {
+        if (shouldBannerBeShown && !renameNotificationAlreadyShown) {
             //show - new name notification.
             projektRenamedNotification.show();
         }
