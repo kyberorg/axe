@@ -1,14 +1,13 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="Test UI at Grid [Dev]" type="JUnit" factoryName="JUnit">
-        <module name="yalsee"/>
-        <option name="PACKAGE_NAME" value="io.kyberorg.yalsee.test.ui"/>
-        <option name="MAIN_CLASS_NAME" value=""/>
-        <option name="METHOD_NAME" value=""/>
-        <option name="TEST_OBJECT" value="package"/>
-        <option name="VM_PARAMETERS"
-                value="-ea -Dtest.url=https://dev.yals.ee -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dapp.shortUrl=https://d.yls.ee -Dsurefire.rerunFailingTestsCount=2"/>
-        <method v="2">
-            <option name="Make" enabled="true"/>
-        </method>
-    </configuration>
+  <configuration default="false" name="Test UI at Grid [Dev]" type="JUnit" factoryName="JUnit">
+    <module name="axe" />
+    <option name="PACKAGE_NAME" value="pm.axe.test.ui" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="package" />
+    <option name="VM_PARAMETERS" value="-ea -Dtest.url=https://dev.axe.pm -Dgrid.hostname=http://127.0.0.1:4444 -Dselenide.browser=chrome -Dapp.shortUrl=https://d.axe.pm -Dsurefire.rerunFailingTestsCount=2" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
 </component>

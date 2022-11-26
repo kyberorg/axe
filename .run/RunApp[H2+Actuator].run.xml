@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="RunApp[H2+Actuator]" type="JarApplication">
-    <option name="JAR_PATH" value="$PROJECT_DIR$/target/yalsee.jar" />
+    <option name="JAR_PATH" value="$PROJECT_DIR$/target/axe.jar" />
     <option name="VM_PARAMETERS" value="-Dvaadin.production=true" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH" />

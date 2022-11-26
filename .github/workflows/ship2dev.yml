@@ -28,10 +28,10 @@ jobs:
         run: for img in kio.ee/base/go:1.19 kio.ee/base/java:17-jdk; do docker pull $img; done
 
       - name: Docker build and tag
-        run: docker build -f Dockerfile.DEV -t kio.ee/yalsee/yalsee:dev .
+        run: docker build -f Dockerfile.DEV -t kio.ee/kyberorg/axe:dev .
 
       - name: Docker push
-        run: docker push kio.ee/yalsee/yalsee:dev > dev.sha
+        run: docker push kio.ee/kyberorg/axe:dev > dev.sha
 
       - name: Get Docker image SHA256
         id: docker_image_sha
@@ -41,7 +41,7 @@ jobs:
         run: echo ${{ steps.docker_image_sha.outputs.imageSha }}
 
       - name: Delete pushed image to prevent mess
-        run: docker rmi kio.ee/yalsee/yalsee:dev > dev.sha
+        run: docker rmi kio.ee/kyberorg/axe:dev > dev.sha
         continue-on-error: true
 
       - name: Delete SHA file to prevent mess
@@ -54,8 +54,8 @@ jobs:
           hostname: kio.ee
           robot: ${{ secrets.KIO_USER }}
           token: ${{ secrets.KIO_PASS }}
-          imageProject: yalsee
-          imageRepo: yalsee
+          imageProject: kyberorg
+          imageRepo: axe
           imageTag: dev
           imageSha: ${{ steps.docker_image_sha.outputs.imageSha }}
 
@@ -71,7 +71,7 @@ jobs:
       - name: Wait for site appears online
         uses: kyberorg/wait_for_new_version@v3
         with:
-          url: https://dev.yals.ee
+          url: https://dev.axe.pm
           responseCode: 200
           timeout: 120
           interval: 1.5

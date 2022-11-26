@@ -2,9 +2,9 @@
 
 ### Common info
 
-* I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs
+* I use [BugSnag](https://app.bugsnag.com/axe/axe/errors) for capturing bugs
 * Minimal Java level is `17`
-* Application needs `postgres` and optionally `redis` (sessions and robot list)
+* Application needs `postgres` (links and other data) and `redis` (sessions and robot list).
 
 ### How to start coding
 
@@ -13,32 +13,32 @@
 * Select all autodetected Spring facets
 * Use ``` Application.main() ``` to run application in IDE
 
-### About: local profile
+### About: default profile
 
-To develop with locally running dockerized Postgres database and Redis use `local` profile.
+To develop with locally running dockerized Postgres database and Redis use `default` profile.
 
-Profile can be activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `local`
+Profile can be activated in IDEA or by setting env `SPRING_PROFILES_ACTIVE` to `default`
 
 Before very first run you must prepare pgadmin directory with correct ownership
 ```shell
-cd docker/yalsee-local-run
+cd docker/axe-local-run
 mkdir pgadmin
 chown 5050:5050 pgadmin
 ```
 
-Containers with Postgres/Redis and their admin interfaces can be started from `docker/yalsee-local-run` directory by running:
+Containers with Postgres/Redis and their admin interfaces can be started from `docker/axe-local-run` directory by running:
 
 ```shell script
 docker-compose up -d
 ``` 
 
-Containers can be stopped from `docker/yalsee-local-run` directory by running:
+Containers can be stopped from `docker/axe-local-run` directory by running:
 
 ```shell script
 docker-compose down
 ```
 
-Use Telegram local Bot `@yls_local_bot` and its token (currently can be requested
+Use Telegram local Bot `@axe_local_bot` and its token (currently can be requested
 from [kyberorg](mailto:alex@kyberorg.io)) for local run
 
 ### About:debugging and JMX interface
@@ -49,27 +49,30 @@ to prevent misuse direct access to them is denied.
 #### JMX
 JMX interface configured without any security options and therefore cannot be used without SSH tunnel.
 
+#### SSH Configuration
+You request Access to `Dev` and SSH Config from [kyberorg](mailto:alex@kyberorg.io)
+
 #### SSH Tunnel (unrestricted Internet access)
 
-When you have SSH access to `Koda` and connection is unrestricted, you should establish SSH Tunnel to `Koda`.
+When your connection is unrestricted, you should establish SSH Tunnel to `Dev` first.
 
-So connection schema is: `localhost:8000 -> Koda@SSH -> Koda's localhost:8000`
+So connection schema is: `localhost:8000 -> Dev@SSH -> Dev's localhost:8000`
 
 ```shell
-ssh -v -N -L 8888:koda.kyberorg.io:8888 koda.kyberorg.io && 
-ssh -v -N -L 8000:koda.kyberorg.io:8000 koda.kyberorg.io
+ssh -v -N -L 8888:dev:8888 dev && 
+ssh -v -N -L 8000:dev:8000 dev
 ```
 
 #### SSH Tunnel via JumpHost (restricted Internet access)
 
-When internet access restricted you can use our jump host to access `Koda` server. It has SSH over HTTPS port, so there
-are chances to establish connection. So connection schema is: `Local PC (with IDE) -> Sabaton (aka JumpHost) -> Koda`
+When internet access restricted you can use our jump host to access `Dev` server. It has SSH over HTTPS port, so there
+are chances to establish connection. So connection schema is: `Local PC (with IDE) -> Hyppa (aka JumpHost) -> Dev`
 
 * to use Remote JVM debugging run:
 
 ```shell
-ssh -v -N sabaton -J sabaton -L 8888:koda.kyberorg.io:8888 &&
-ssh -v -N sabaton -J sabaton -L 8000:koda.kyberorg.io:8000 
+ssh -v -N hyppa -J hyppa -L 8888:dev:8888 &&
+ssh -v -N hyppa -J hyppa -L 8000:dev:8000 
 ```
 
 #### Remote debugging
@@ -95,7 +98,7 @@ localhost:8888
 To adjust logging we use ENV variables or `-D` vars:
 
 * Use `LOG_LEVEL_CORE` or `-Dlog.level.core` for setting overall log level
-* Use `LOG_LEVEL_APP` or `-Dlog.level.app` for setting application (package: `io.kyberorg.yalsee`) log level
+* Use `LOG_LEVEL_APP` or `-Dlog.level.app` for setting application (package: `pm.axe`) log level
 * Use `LOG_LEVEL_SPRING` or `-Dlog.level.spring` for setting Spring (package: `org.springframework`) log level
 * Use `LOG_LEVEL_DB` or `-Dlog.level.db` for setting Database SQL (package: `org.hibernate`) log level
 
@@ -112,37 +115,37 @@ Can add several browsers like `chrome,firefox`
 ## For Ops
 ### How to Deploy app
 
-* Docker image: `kio.ee/yalsee/yalsee`
+* Docker image: `kio.ee/kyberorg/axe`
 * H2 (default profile) or Postgres database (local profile) needed to run.
 * Redis for storing sessions and stuff like this.
-* I use [BugSnag](https://app.bugsnag.com/yalsee/yalsee/errors) for capturing bugs. So token from Bugsnag needed.
+* I use [BugSnag](https://app.bugsnag.com/axe/axe/errors) for capturing bugs. So token from Bugsnag needed.
 
 #### Docker Swarm
 
 EnvVars:
 
-* SPRING_PROFILES_ACTIVE: `dev,qa or prod`
+* SPRING_PROFILES_ACTIVE: `dev,qa,poc or prod`
 * DB_HOST: `hostname or service (container) name`
 * DB_NAME: `database name`
 * DB_USER: `username for database`
 * DB_PASSWORD or DB_PASSWORD_FILE: `password for db user`
 * TELEGRAM_TOKEN or TELEGRAM_TOKEN_FILE: `token for telegram bot`
 * BUGSNAG_TOKEN or BUGSNAG_TOKEN_FILE: `token for BugSnag`
-* DELETE_TOKEN or DELETE_TOKEN_FILE: `temporary master token for deleting links` (needed until auth story introduced)
+* MASTER_TOKEN or MASTER_TOKEN_FILE: `temporary master token for deleting links` (needed until auth story introduced)
 * REDIS_HOST: `redis hostname/ip or container name`
 * REDIS_PASSWORD or REDIS_PASSWORD_FILE: `password for connecting to redis`
 * FACEBOOK_APP_ID: `Facebook Application ID for sharing link to Facebook`
 * SERVER_KEY: `Symmetric encryption/decryption key`
 * PASSWORD_SALT: `String with Salt added to Password during encryption proccess`
-* MAIL_USER: `Gmail User (email address)`
-* MAIL_PASSWORD: `Gmail Application Password`
+* MAIL_USER: `Axe Mail User (name@axe.pm)`
+* MAIL_PASSWORD: `Axe Mail Password`
 
 Optional EnvVars:
 
 * LOG_LEVEL_APP: `see Logging part`
 * PORT: `start server at port other than 8080 `
-* SERVER_URL: `https://yals.ee` (most likely don't needed as regulated by Spring profile)
-* SHORT_DOMAIN: `yls.ee` (most likely don't needed as regulated by Spring profile)
+* SERVER_URL: `https://axe.pm` (most likely don't needed as regulated by Spring profile)
+* SHORT_DOMAIN: `axe.pm` (most likely don't needed as regulated by Spring profile) - currently same as `SERVER_URL` until app logic rewritten to support premium domain.
 * TELEGRAM_ENABLED `true/false` (most likely don't needed as regulated by Spring profile)
 * DEV_MODE `true/false` (most likely don't needed as regulated by Spring profile)
 * JAVA_DEBUG_PORT: `port for remote debugging` (this is internal port, need to expose it to connect from outside word)
@@ -157,7 +160,6 @@ Optional EnvVars:
 * REDIS_DB: `0-15` (custom database, redis supports numeric db from 0 to 15, default 0)
 * REDIS_TIMEOUT_MILLIS: `Redis connection timeout in milliseconds` (most likely don't needed as regulated by Spring
   profile)
-* REDIS_ENABLED: `true/false` (most likely don't needed as regulated by Spring profile)
 * MAIL_DEBUG: `true/false` (enables/disables mail (SMTP) debug output. Default: false)
 * TELEGRAM_BOT: `Name of telegram bot` (most likely don't needed as regulated by Spring profile)
 
@@ -166,31 +168,46 @@ Ports:
 * host port: `select yourself`
 * container port: `8080 (or PORT)`
 
-Secrets:
-
-* yalsee_db_password: `database password`
-* yalsee_telegram_token: `telegram bot token`
-
-Volumes:
-
-* yalsee_dumps: should be mounted as `/opt/dumps` (volume to store heap dumps, when app crashed)
-
 #### About Telegram Bots
 
-| Stage | Bot Name       | Human Readable Name | 
-|-------|----------------|---------------------|
-| PROD  | yalsee_bot     | Yalsee Bot          |
-| QA    | yls_demo_bot   | Yls Demo Bot        | 
-| Dev   | yls_dev_bot    | Yls Dev Bot         | 
-| Local | yls_local_bot  | Yls Local Bot       |
+| Stage  | Bot Name      | Human Readable Name | 
+|--------|---------------|---------------------|
+| PROD   | axe_pm_bot    | Axe Bot             |
+| QA     | axe_qa_bot    | Axe QA Bot          |
+| PoC    | axe_poc_bot   | Axe PoC Bot         |
+| Dev    | axe_dev_bot   | Axe Dev Bot         | 
+| Local  | axe_local_bot | Axe Local Bot       |
 
 ##### Bot description
 
-* Name: Yls Dev Bot
-* Description: Dev.Yals.ee Link Shortener Bot
+* Name: Axe Dev Bot
+* Description: Axe.PM Shortener Bot
 * About: Makes long links short
 * BotPic: to be done
-* Commands: yalsee - https://longLink.tld description
+* Commands: axe - https://longLink.tld description
+
+
+## About: Git Branches, Tags and Releases
+| Branch    | Docker Tag     | Deploy Destination |
+|-----------|----------------|--------------------|
+| trunk     | trunk          | PROD               |
+| (PR)      | qa             | qa                 |
+| (tag)     | (tag name)     | -                  |
+| any other | dev/custom tag | dev                | 
+
+### Trunk
+Considered as default branch.
+Should always be stable.
+Deploys to Production
+
+### Tags
+Build manually. By design, I use tags for Releases aka Milestones.
+
+### Other branches aka features
+* Always start from trunk branch.
+* Uses `dev` docker tag, unless custom (or branch named) tag provided.
+* Deploy destination = dev server
+
 
 ### Release notes
 There following sections:
@@ -204,3 +221,11 @@ There following sections:
 * `:package: Dependencies Updates`
 * `:broom: Cleanup/Refactoring`
 * `:notebook_with_decorative_cover: Dokumentation`
+
+## About:Artwork
+### Banner (at application startup)
+* Banner created with [Taag](https://patorjk.com/software/taag)
+Settings:
+* Font: Doom
+* CharOptions: both Full
+

@@ -7,21 +7,21 @@
 }
 
 .success {
-    color: var(--yalsee-success-color);
+    color: var(--axe-success-color);
 }
 
 .primary {
-    color: var(--yalsee-primary-color);
+    color: var(--axe-primary-color);
 }
 
 .danger {
-    color: var(--yalsee-danger-color)
+    color: var(--axe-danger-color)
 }
 
 .secondary {
-    color: var(--yalsee-secondary-color);
+    color: var(--axe-secondary-color);
 }
 
 .tertiary {
-    color: var(--yalsee-tertiary-color);
+    color: var(--axe-tertiary-color);
 }

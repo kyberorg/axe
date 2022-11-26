@@ -7,8 +7,8 @@
 
 ## Reporting a Bug
 
-Project maintainer take all security bugs in `yalsee` seriously.
-Thank you for improving the security of `yalsee`. Project maintainer appreciates your efforts and
+Project maintainer take all security bugs in `axe` seriously.
+Thank you for improving the security of `axe`. Project maintainer appreciates your efforts and
 responsible disclosure and will make every effort to acknowledge your
 contributions.
 

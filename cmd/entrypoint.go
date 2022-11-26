@@ -15,7 +15,7 @@ func main() {
 	fileEnv("DB_PASSWORD", "")
 	fileEnv("TELEGRAM_TOKEN", "")
 	fileEnv("BUGSNAG_TOKEN", "")
-	fileEnv("DELETE_TOKEN", "")
+	fileEnv("MASTER_TOKEN", "")
 	fileEnv("REDIS_PASSWORD", "")
 
 	// Remote Debug Support
@@ -81,7 +81,7 @@ func main() {
 	fmt.Printf("Output \n%s\n", stdBuffer.String())
 }
 
-//fileEnv VAR [DEFAULT]
+// fileEnv VAR [DEFAULT]
 func fileEnv(envName string, defaultValue string) {
 	fileVarName := envName + "_FILE"
 
