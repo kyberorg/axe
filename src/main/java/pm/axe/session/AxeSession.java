@@ -61,6 +61,20 @@ public class AxeSession {
          */
         private boolean renameNotificationAlreadyShown = false;
 
+        /**
+         * Defines that announcement is closed and should not be shown again.
+         */
+        private boolean dontShowAnnouncement = false;
+
+        /**
+         * Opposite of {@link #isDontShowAnnouncement()}.
+         *
+         * @return true - if announcement should be shown or false if not,
+         */
+        public boolean showAnnouncement() {
+            return !dontShowAnnouncement;
+        }
+
         @Override
         public boolean equals(final Object o) {
             if (this == o) return true;
@@ -69,7 +83,8 @@ public class AxeSession {
             return cookieBannerAlreadyShown == flags.cookieBannerAlreadyShown
                     && userModeEnabled == flags.userModeEnabled
                     && expirationWarningShown == flags.expirationWarningShown
-                    && renameNotificationAlreadyShown == flags.renameNotificationAlreadyShown;
+                    && renameNotificationAlreadyShown == flags.renameNotificationAlreadyShown
+                    && dontShowAnnouncement == flags.dontShowAnnouncement;
         }
 
         @Override

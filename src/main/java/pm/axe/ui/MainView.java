@@ -154,6 +154,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(tabs);
 
+        //default visual state for announcement line
+        announcementLine.removeAll();
+        announcementLine.setVisible(false);
+
         setId(IDs.VIEW_ID);
 
         // hide the splash screen after the main view is loaded
@@ -200,21 +204,26 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         boolean piwikEnabled = piwikConfig.isEnabled();
         boolean analyticsCookieAllowed =
                 session.map(as -> as.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
+        boolean showAnnouncement =
+                session.map(as -> as.getFlags().showAnnouncement()).orElse(true);
 
         piwikStats = new PiwikStats(piwikConfig, this);
         if (piwikEnabled && analyticsCookieAllowed) {
-            addPiwikElement();
+            //addPiwikElement();
             piwikStats.enableStats();
         }
-        if (piwikStats.isNotEmpty()) {
+
+        if (piwikStats.isNotEmpty() && showAnnouncement) {
             addAnnouncement(piwikStats);
         }
 
         pageAlreadyInitialized = true;
     }
 
-    public void closeAnnouncementLine(){
+    public void closeAnnouncementLine() {
         announcementLine.setVisible(false);
+        announcementLine.removeAll();
+        AxeSession.getCurrent().ifPresent(as -> as.getFlags().setDontShowAnnouncement(true));
     }
 
     /**
@@ -327,6 +336,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         announcementLine.setAlignItems(FlexComponent.Alignment.END);
         announcementLine.add(announcement);
         getElement().appendChild(announcementLine.getElement());
+        announcementLine.setVisible(true);
     }
 
     private AxeSession getAxeSession() {
