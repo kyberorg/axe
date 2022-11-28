@@ -1,6 +1,6 @@
-window.axePiwik = (piwikHost, siteId) => {
+/*window.axePiwik = (piwikHost, siteId) => {
     let _paq = window._paq = window._paq || [];
-    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    /!* tracker methods like "setCustomDimension" should be called before "trackPageView" *!/
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function() {
@@ -10,6 +10,10 @@ window.axePiwik = (piwikHost, siteId) => {
         let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
         g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
     })();
+}*/
+
+window.axePiwik = (piwikHost, siteId) => {
+    console.log("Piwik logged stuff in. SiteId="+siteId)
 }
 
 window.axePiwikOptSwitch = (optOut) => {
