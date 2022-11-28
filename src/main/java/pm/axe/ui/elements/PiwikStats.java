@@ -9,6 +9,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.page.Page;
@@ -17,7 +19,7 @@ import pm.axe.internal.Piwik;
 import pm.axe.ui.MainView;
 import pm.axe.utils.DeviceUtils;
 
-import java.util.Objects;
+import static pm.axe.constants.App.ONE_SECOND_IN_MILLIS;
 
 /**
  * Piwik Stats element.
@@ -31,6 +33,8 @@ public class PiwikStats extends Composite<HorizontalLayout> {
     private final Div leftDiv = new Div();
     private final HorizontalLayout centralLayout = new HorizontalLayout();
     private final Div rightDiv = new Div();
+
+    private final Notification optOutNotification = makeOptOutNotification();
 
     public PiwikStats(final Piwik piwik, final MainView mainView) {
         this.piwik = piwik;
@@ -47,6 +51,7 @@ public class PiwikStats extends Composite<HorizontalLayout> {
 
         getContent().add(leftDiv, centralLayout, rightDiv);
         getContent().setWidthFull();
+        getContent().getStyle().set("margin-left", "1rem");
 
         Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
         Span text = new Span("Axe collects usage statistics");
@@ -63,6 +68,7 @@ public class PiwikStats extends Composite<HorizontalLayout> {
         optOutButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         optOutButton.addClickListener(e -> {
             optOut(true);
+            optOutNotification.open();
             mainView.closeAnnouncementLine();
         });
 
@@ -72,10 +78,13 @@ public class PiwikStats extends Composite<HorizontalLayout> {
         closeButton.addClickListener(e -> mainView.closeAnnouncementLine());
 
         //mobile optimizations
-        if (Objects.requireNonNull(DeviceUtils.createWithUI(mainView.getUi())).isExtraSmallDevice()) {
+        final boolean isMobile = DeviceUtils.isMobileDevice();
+        if (isMobile) {
+            infoIcon.setVisible(false);
             moreInfoLink.setText("Info");
             optOutButton.setMinWidth(25, Unit.PERCENTAGE);
         }
+        adjustNotificationPosition(isMobile);
     }
 
     /**
@@ -99,5 +108,18 @@ public class PiwikStats extends Composite<HorizontalLayout> {
      */
     public boolean isNotEmpty() {
         return getContent().getComponentCount() > 0;
+    }
+
+    private Notification makeOptOutNotification() {
+        Notification notification = new Notification("Opted out");
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(ONE_SECOND_IN_MILLIS); //1 second
+        return notification;
+    }
+
+    private void adjustNotificationPosition(final boolean isMobile) {
+        Notification.Position position = isMobile ? Notification.Position.BOTTOM_CENTER : Notification.Position.MIDDLE;
+        this.optOutNotification.setPosition(position);
     }
 }
