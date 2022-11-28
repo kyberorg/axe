@@ -50,7 +50,6 @@ public class PiwikStats extends Composite<HorizontalLayout> {
 
         getContent().add(leftDiv, centralLayout, rightDiv);
         getContent().setWidthFull();
-        getContent().getStyle().set("margin-left", "1rem");
 
         Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
         Span text = new Span("Axe collects usage statistics");
@@ -76,12 +75,15 @@ public class PiwikStats extends Composite<HorizontalLayout> {
         closeButton.getStyle().set("margin-right", "0.5rem");
         closeButton.addClickListener(e -> mainView.closeAnnouncementLine());
 
-        //mobile optimizations
         final boolean isMobile = DeviceUtils.isMobileDevice();
         if (isMobile) {
+            //mobile optimizations
             infoIcon.setVisible(false);
             moreInfoLink.setText("Info");
             optOutButton.setMinWidth("auto");
+        } else {
+            //desktop optimization
+            getContent().getStyle().set("margin-left", "3rem");
         }
         adjustNotificationPosition(isMobile);
     }
