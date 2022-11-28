@@ -46,9 +46,10 @@ public class PiwikStats extends Composite<HorizontalLayout> {
         Icon infoIcon = VaadinIcon.INFO.create();
         Span text = new Span("Axe is collecting usage statistics.");
         Anchor moreInfoLink = new Anchor(Endpoint.UI.APP_INFO_PAGE, "More Info");
+        Button optOutButton = new Button("OptOut");
         Button closeButton = new Button(new Icon("lumo", "cross"));
 
-        centralLayout.add(infoIcon, text, moreInfoLink, closeButton);
+        centralLayout.add(infoIcon, text, moreInfoLink, optOutButton, closeButton);
 
         moreInfoLink.getElement().addEventListener("click", e -> mainView.closeAnnouncementLine());
 
