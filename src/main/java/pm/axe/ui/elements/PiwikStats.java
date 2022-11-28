@@ -34,7 +34,7 @@ public class PiwikStats extends Component implements HasComponents {
         image.setAlt("");
 
         p.add(image);
-        //add(p);
+        add(p);
     }
 
     /**
