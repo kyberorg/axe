@@ -27,7 +27,7 @@ public class PiwikStats extends Component implements HasComponents {
         Paragraph p = new Paragraph();
         Image image = new Image();
 
-        String src = String.format("https://%s/matomo.php?idsite=%s&amp;rec=1",
+        String src = String.format("https://%s/matomo.php?idsite=%s&rec=1",
                 piwik.getPiwikHost(), piwik.getSiteId());
         image.setSrc(src);
         image.getStyle().set("border", "0");

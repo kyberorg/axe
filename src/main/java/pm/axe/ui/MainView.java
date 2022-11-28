@@ -16,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HighlightConditions;
@@ -28,6 +29,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import pm.axe.constants.App;
@@ -196,10 +198,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         //create Piwik Statistics
         boolean piwikEnabled = piwikConfig.isEnabled();
         boolean analyticsCookieAllowed =
-                session.map(as -> as.getSettings().isAnalyticsCookiesAllowed()).orElse(false);
+                session.map(as -> as.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
 
         piwikStats = new PiwikStats(piwikConfig, UI.getCurrent().getPage());
         if (piwikEnabled && analyticsCookieAllowed) {
+            addPiwikElement();
             piwikStats.enableStats();
         }
 
@@ -295,6 +298,20 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         tabs.add(tab);
     }
 
+    private void addPiwikElement() {
+        Optional<Element> currentPiwikElement = getElement().getChildren().filter(this::isPiwikElement).findFirst();
+        currentPiwikElement.ifPresent(element -> getElement().removeChild(element));
+        piwikStats.setId(IDs.PIWIK_NOSCRIPT);
+        getElement().appendChild(piwikStats.getElement());
+    }
+
+    private boolean isPiwikElement(final Element element) {
+        if (! element.hasAttribute("id")) return false;
+        String id = element.getAttribute("id");
+        if (StringUtils.isBlank(id)) return false;
+        return id.equals(IDs.PIWIK_NOSCRIPT);
+    }
+
     private AxeSession getAxeSession() {
         AxeSession axeSession;
         if (isFirstVisit()) {
@@ -373,5 +390,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         public static final String VIEW_ID = "mainView";
         public static final String APP_LOGO = "appLogo";
         public static final String TEST_NAME_SPAN = "testName";
+        public static final String PIWIK_NOSCRIPT = "piwik";
     }
 }

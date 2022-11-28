@@ -83,7 +83,7 @@ public class AxeSession {
         /**
          * Allow analytics cookies or not. Should never be private.
          */
-        private boolean analyticsCookiesAllowed = false;
+        private boolean analyticsCookiesAllowed = true;
 
         /**
          * Is Dark Mode enabled or default one.
