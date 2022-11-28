@@ -13,14 +13,12 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.dom.Element;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.HighlightConditions;
-import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
@@ -83,8 +81,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
     private final ProjektRenamedNotification projektRenamedNotification = ProjektRenamedNotification.create();
 
+    private final FlexLayout announcementLine = new FlexLayout();
+
     @Getter
     private PiwikStats piwikStats;
+    @Getter
     private final UI ui = UI.getCurrent();
     private final Device currentDevice;
     private String currentSessionId;
@@ -200,13 +201,20 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         boolean analyticsCookieAllowed =
                 session.map(as -> as.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
 
-        piwikStats = new PiwikStats(piwikConfig, UI.getCurrent().getPage());
+        piwikStats = new PiwikStats(piwikConfig, this);
         if (piwikEnabled && analyticsCookieAllowed) {
             addPiwikElement();
             piwikStats.enableStats();
         }
+        if (piwikStats.isNotEmpty()) {
+            addAnnouncement(piwikStats);
+        }
 
         pageAlreadyInitialized = true;
+    }
+
+    public void closeAnnouncementLine(){
+        announcementLine.setVisible(false);
     }
 
     /**
@@ -310,6 +318,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         String id = element.getAttribute("id");
         if (StringUtils.isBlank(id)) return false;
         return id.equals(IDs.PIWIK_NOSCRIPT);
+    }
+
+    private void addAnnouncement(final Component announcement) {
+        announcementLine.removeAll();
+        announcementLine.setId("axeAnnouncement");
+        announcementLine.setClassName("axe-announcement-line");
+        announcementLine.setAlignItems(FlexComponent.Alignment.END);
+        announcementLine.add(announcement);
+        getElement().appendChild(announcementLine.getElement());
     }
 
     private AxeSession getAxeSession() {
