@@ -9,14 +9,13 @@ import pm.axe.internal.Piwik;
 
 @Configuration
 public class PiwikConfig {
-
-    @Value(App.Properties.PIWIK_ENABLED)
+    @Value("${app.seo.piwik.enabled}")
     private boolean piwikEnabled;
 
-    @Value(App.Properties.PIWIK_HOSTNAME)
+    @Value("${app.seo.piwik.piwikHost}")
     private String piwikHost;
 
-    @Value(App.Properties.PIWIK_SITE_ID)
+    @Value("${app.seo.piwik.siteId}")
     private String piwikSiteId;
 
     /**

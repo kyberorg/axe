@@ -49,9 +49,6 @@ public final class App {
         public static final String APP_SITE_TITLE = "app.site.title";
         public static final String SHORT_DOMAIN = "app.server.short-domain";
         public static final String CRAWLERS_ALLOWED = "app.seo.robots.crawl-allowed";
-        public static final String PIWIK_ENABLED = "app.seo.piwik.enabled";
-        public static final String PIWIK_HOSTNAME = "app.seo.piwik.piwikHost";
-        public static final String PIWIK_SITE_ID = "app.seo.piwik.siteId";
         public static final String REDIRECT_PAGE_BYPASS_SYMBOL = "app.redirect-page.bypass-symbol";
         public static final String REDIRECT_PAGE_TIMEOUT = "app.redirect-page.timeout";
         public static final String SESSION_TIMEOUT = "app.session.timeout";
