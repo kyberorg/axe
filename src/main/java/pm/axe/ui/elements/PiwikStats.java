@@ -1,7 +1,6 @@
 package pm.axe.ui.elements;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;
@@ -82,7 +81,7 @@ public class PiwikStats extends Composite<HorizontalLayout> {
         if (isMobile) {
             infoIcon.setVisible(false);
             moreInfoLink.setText("Info");
-            optOutButton.setMinWidth(25, Unit.PERCENTAGE);
+            optOutButton.setMinWidth("auto");
         }
         adjustNotificationPosition(isMobile);
     }

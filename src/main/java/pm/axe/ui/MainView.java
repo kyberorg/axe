@@ -320,7 +320,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         announcementLine.removeAll();
         announcementLine.setId("axeAnnouncement");
         announcementLine.setClassName("axe-announcement-line");
-        announcementLine.setAlignItems(FlexComponent.Alignment.END);
         announcementLine.add(announcement);
         getElement().appendChild(announcementLine.getElement());
         announcementLine.setVisible(true);
