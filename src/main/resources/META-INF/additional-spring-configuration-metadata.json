@@ -97,7 +97,7 @@
     },
     {
       "name": "app.seo.piwik.enabled",
-      "type": "java.lang.String",
+      "type": "java.lang.Boolean",
       "description": "Enables/Disables Piwik."
     },
     {
