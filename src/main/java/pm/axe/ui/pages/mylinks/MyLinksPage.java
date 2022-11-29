@@ -139,9 +139,12 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         filterAndToggleLayout.setWidthFull();
 
+        final Icon searchIcon = VaadinIcon.SEARCH.create();
+        searchIcon.setId("searchIcon");
+
         gridFilterField.setMaxWidth("50%");
         gridFilterField.setPlaceholder("Search");
-        gridFilterField.setPrefixComponent(VaadinIcon.SEARCH.create());
+        gridFilterField.setPrefixComponent(searchIcon);
         gridFilterField.setValueChangeMode(ValueChangeMode.EAGER);
         gridFilterField.setClearButtonVisible(true);
         gridFilterField.getStyle().set("align-self", "flex-start");
