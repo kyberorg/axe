@@ -1,10 +1,7 @@
 package pm.axe.ui.pages.appinfo;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -55,8 +52,8 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         setId(IDs.VIEW_ID);
 
         final Section generalInfoSection = generalInfoSection();
-        final Section cookieSection = cookieSection();
         final Section statsSection = statsSection();
+        final Section cookieSection = cookieSection();
         final Section techInfoSection = techInfoSection();
 
         boolean isMobile = AxeSession.getCurrent().map(as -> as.getDevice().isMobile()).orElse(false);
@@ -129,14 +126,14 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         Span dntInfo = new Span("Matomo respects DNT (Do Not Track) Header.");
 
-        H4 whatCollected = new H4("What is collected?");
+        H5 whatCollected = new H5("What is collected?");
         ListItem ip = new ListItem("Visitor IP (if your IP is 1.2.3.4, Matomo will see it as 1.2.0.0)");
         ListItem referer = new ListItem("Referer");
         ListItem geoInfo = new ListItem("Geo Info (Country, Region, City) based on IP address");
         ListItem techData = new ListItem("Tech Info (OS, Browser info, Browser resolution)");
         ListItem actions = new ListItem("Actions performed");
 
-        H4 whyCollected = new H4("Why it is collected?");
+        H5 whyCollected = new H5("Why it is collected?");
         Span whyText = new Span("Usage statistics help Axe developers to understand how people use Axe " +
                 "and what devices they use. This information helps to test new features and improvements " +
                 "using most popular browsers and resolutions.");
