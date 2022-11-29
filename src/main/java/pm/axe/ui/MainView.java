@@ -57,10 +57,7 @@ import pm.axe.utils.AppUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.http.Cookie;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static pm.axe.ui.MainView.IDs.APP_LOGO;
 @Slf4j
@@ -189,6 +186,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         //Rename notification
         boolean isBannerEnabled = appUtils.showRenameNotification();
         boolean isFromYalsee = StringUtils.isNotBlank(VaadinRequest.getCurrent().getHeader(Header.X_FROM_YALSEE));
+
+        log.info("Headers: ");
+        List<String> headers = Collections.list(VaadinRequest.getCurrent().getHeaderNames());
+        for (String h: headers) {
+            log.info("H: "+ h);
+        }
         boolean renameNotificationAlreadyShown = session.map(ys -> ys.getFlags().isRenameNotificationAlreadyShown())
                 .orElse(false);
 
