@@ -60,7 +60,7 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         adjustNotificationPosition(isMobile);
         removeAll();
 
-        add(generalInfoSection, cookieSection, statsSection, techInfoSection);
+        add(generalInfoSection, statsSection, cookieSection, techInfoSection);
     }
 
     private Section generalInfoSection() {
@@ -74,6 +74,44 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         genInfoSection.add(generalInfoSpan);
 
         return genInfoSection;
+    }
+
+    private Section statsSection() {
+        Section usageStatsSection = new Section("About Usage Statistics");
+
+        Span firstTextStart = new Span("Axe collects usage statistics with ethical analytics tool Matomo " +
+                "(ex. Piwik). Axe Matomo instance is located at ");
+        Code statsAxe = new Code("stats.axe.pm");
+        Span firstTextEnd = new Span(" and hosted in Suomi/Finland.");
+        Span firstSpan = new Span(firstTextStart, statsAxe, firstTextEnd);
+
+
+        Span dntInfo = new Span("Matomo respects DNT (Do Not Track) Header.");
+
+        H6 whatCollected = new H6("What is collected?");
+        UnorderedList list = new UnorderedList();
+        ListItem ip = new ListItem("Visitor IP (if your IP is 1.2.3.4, Matomo will see it as 1.2.0.0)");
+        ListItem referer = new ListItem("Referer");
+        ListItem geoInfo = new ListItem("Geo Info (Country, Region, City) based on IP address");
+        ListItem techData = new ListItem("Tech Info (OS, Browser info, Browser resolution)");
+        ListItem actions = new ListItem("Actions performed");
+
+        list.add(ip, referer, geoInfo, techData, actions);
+
+        H6 whyCollected = new H6("Why it is collected?");
+        Span whyText = new Span("Usage statistics help Axe developers to understand how people use Axe " +
+                "and what devices they use. This information helps to test new features and improvements " +
+                "using most popular browsers and resolutions.");
+
+        Span optOutText = new Span("Still want to OptOut? Click ");
+        Button optOutButton = new Button("here", e -> {
+            mainView.getPiwikStats().optOut(true);
+            optOutNotification.open();
+        });
+        Span optOutSpan = new Span(optOutText, optOutButton);
+
+        usageStatsSection.setContent(firstSpan, dntInfo, whatCollected, list, whyCollected, whyText, optOutSpan);
+        return usageStatsSection;
     }
 
     private Section cookieSection() {
@@ -112,43 +150,6 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         cookieSection.setContent(cookieText, cookieSettingsSpan);
         return cookieSection;
-    }
-
-    private Section statsSection() {
-        Section usageStatsSection = new Section("About Usage Statistics");
-
-        Span firstTextStart = new Span("Axe collects usage statistics with ethical analytics tool Matomo " +
-                "(ex. Piwik). Axe Matomo instance is located at ");
-        Code statsAxe = new Code("stats.axe.pm");
-        Span firstTextEnd = new Span(" and hosted in Suomi/Finland.");
-        Span firstSpan = new Span(firstTextStart, statsAxe, firstTextEnd);
-
-
-        Span dntInfo = new Span("Matomo respects DNT (Do Not Track) Header.");
-
-        H6 whatCollected = new H6("What is collected?");
-        ListItem ip = new ListItem("Visitor IP (if your IP is 1.2.3.4, Matomo will see it as 1.2.0.0)");
-        ListItem referer = new ListItem("Referer");
-        ListItem geoInfo = new ListItem("Geo Info (Country, Region, City) based on IP address");
-        ListItem techData = new ListItem("Tech Info (OS, Browser info, Browser resolution)");
-        ListItem actions = new ListItem("Actions performed");
-
-        H6 whyCollected = new H6("Why it is collected?");
-        Span whyText = new Span("Usage statistics help Axe developers to understand how people use Axe " +
-                "and what devices they use. This information helps to test new features and improvements " +
-                "using most popular browsers and resolutions.");
-
-        Span optOutText = new Span("Still want to OptOut? Click ");
-        Button optOutButton = new Button("here", e -> {
-            mainView.getPiwikStats().optOut(true);
-            optOutNotification.open();
-        });
-        Span optOutSpan = new Span(optOutText, optOutButton);
-
-        usageStatsSection.setContent(firstSpan, dntInfo, whatCollected, ip, referer, geoInfo, techData, actions,
-                whyCollected, whyText, optOutSpan);
-
-        return usageStatsSection;
     }
 
     private Section techInfoSection() {
