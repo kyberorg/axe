@@ -11,7 +11,7 @@ import pm.axe.constants.HttpCode;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 
-@PageTitle("Axe.pm: Error 503")
+@PageTitle("Error 503 - Axe.pm")
 @Route(value = Endpoint.UI.ERROR_PAGE_503, layout = MainView.class)
 @CssImport("./css/error_views.css")
 public class AppDownPage extends AxeBaseLayout implements HasErrorParameter<CannotCreateTransactionException> {

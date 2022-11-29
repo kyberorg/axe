@@ -78,7 +78,7 @@ import java.util.Optional;
 @UIScope
 @CssImport("./css/my_links_page.css")
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: My Links")
+@PageTitle("My Links - Axe.pm")
 public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MyLinksPage.class.getSimpleName() + "]";
 

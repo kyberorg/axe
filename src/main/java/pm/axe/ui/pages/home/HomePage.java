@@ -53,7 +53,7 @@ import pm.axe.utils.*;
 @CssImport("./css/home_view.css")
 
 @Route(value = Endpoint.UI.HOME_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: Short Links for free")
+@PageTitle("Short Links for free - Axe.pm")
 public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + HomePage.class.getSimpleName() + "]";
 

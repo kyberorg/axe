@@ -18,7 +18,7 @@ import pm.axe.ui.layouts.AxeBaseLayout;
  */
 @SpringComponent
 @UIScope
-@PageTitle("Axe.pm: Raw Server Error Loop View")
+@PageTitle("Raw Server Error Loop - Axe.pm")
 @Route(value = Endpoint.TNT.RAW_SERVER_ERROR_LOOP)
 public class RawServerErrorLoopPage extends AxeBaseLayout implements HasErrorParameter<RawLoopException> {
     @Override

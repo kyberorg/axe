@@ -17,7 +17,7 @@ import pm.axe.ui.layouts.AxeBaseLayout;
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.DEBUG_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: Debug Page")
+@PageTitle("Debug Page - Axe.pm")
 public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
 
     private final Span axeSessionSpan = new Span();

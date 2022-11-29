@@ -28,7 +28,7 @@ import static pm.axe.constants.App.ONE_SECOND_IN_MILLIS;
 @UIScope
 @CssImport("./css/common_styles.css")
 @Route(value = Endpoint.UI.SETTINGS_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: Settings Page")
+@PageTitle("Settings - Axe.pm")
 public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
 
     private final H3 pageTitle = new H3("Application Settings");

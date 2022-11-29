@@ -32,7 +32,7 @@ import static pm.axe.constants.App.ONE_SECOND_IN_MILLIS;
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: App Info")
+@PageTitle("App Info - Axe.pm")
 public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
     private static final String UNDEFINED = "UNDEFINED";
     private static final int COMMIT_HASH_LENGTH = 7;

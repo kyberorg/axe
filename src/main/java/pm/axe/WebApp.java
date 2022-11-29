@@ -17,11 +17,11 @@ import pm.axe.utils.AppUtils;
 @Push
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 @PWA(
-        name = "Axe - Short Links for free",
+        name = "Axe.pm - Short Links for free",
         shortName = "axe",
         offlinePath = "offline-page.html",
         offlineResources = {"images/logo.png", "Pebble-Regular.woff"},
-        description = "Axe - Short Links for free")
+        description = "Site that makes long links short")
 @Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 public class WebApp implements AppShellConfigurator {
 
@@ -29,8 +29,8 @@ public class WebApp implements AppShellConfigurator {
 
     @Override
     public void configurePage(final AppShellSettings settings) {
-        String title = "Axe.pm - Short Links for free";
-        String description = "Free URL shortener for making long and ugly links into short URLs"
+        String title = "Short Links for free - Axe.pm";
+        String description = "Free URL shortener for making long and ugly links into nice short URLs"
                 + " that are easy to share and use.";
 
         String previewImage = appUtils.getServerUrl() + Endpoint.TNT.PREVIEW_IMAGE;

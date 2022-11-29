@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @CssImport("./css/common_styles.css")
 @CssImport("./css/redirect_view.css")
 @Route(value = Endpoint.TNT.REDIRECT_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: Redirect Page")
+@PageTitle("Link Info - Axe.pm")
 public class RedirectPage extends AxeBaseLayout implements HasErrorParameter<NeedForRedirectException> {
     private static final String TAG = "[" + RedirectPage.class.getSimpleName() + "]";
 
