@@ -188,7 +188,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         //Rename notification
         boolean isBannerEnabled = appUtils.showRenameNotification();
         boolean isFromYalsee = StringUtils.isNotBlank(VaadinRequest.getCurrent().getParameter("yalsee"));
-        log.debug("{} From Yalsee? {}", TAG, isFromYalsee);
         boolean renameNotificationAlreadyShown = session.map(ys -> ys.getFlags().isRenameNotificationAlreadyShown())
                 .orElse(false);
 
