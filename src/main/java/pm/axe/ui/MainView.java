@@ -29,6 +29,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import pm.axe.constants.App;
@@ -185,10 +186,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         }
 
         //Rename notification
-        boolean shouldBannerBeShown = appUtils.showRenameNotification();
+        boolean isRenameNotificationEnabled = appUtils.showRenameNotification();
+        boolean isFromYalsee = StringUtils.isNotBlank(VaadinRequest.getCurrent().getParameter("yalsee"));
         boolean renameNotificationAlreadyShown = session.map(ys -> ys.getFlags().isRenameNotificationAlreadyShown())
                 .orElse(false);
-        if (shouldBannerBeShown && !renameNotificationAlreadyShown) {
+
+        if (isRenameNotificationEnabled && isFromYalsee && !renameNotificationAlreadyShown) {
             //show - new name notification.
             projektRenamedNotification.show();
         }

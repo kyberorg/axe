@@ -6,7 +6,6 @@ package pm.axe.constants;
  * @since 2.0
  */
 public final class Header {
-
     public static final String LOCATION = "Location";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_LENGTH = "Content-Length";
