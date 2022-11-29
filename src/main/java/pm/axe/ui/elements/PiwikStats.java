@@ -29,6 +29,12 @@ public class PiwikStats extends Composite<HorizontalLayout> {
     private final HorizontalLayout centralLayout = new HorizontalLayout();
     private final Div rightDiv = new Div();
 
+    /**
+     * Creates {@link PiwikStats}.
+     *
+     * @param piwik {@link Piwik} configuration bean.
+     * @param mainView {@link MainView} bean to {@link MainView#closeAnnouncementLine()}.
+     */
     public PiwikStats(final Piwik piwik, final MainView mainView) {
         this.piwik = piwik;
         this.mainView = mainView;
@@ -82,6 +88,8 @@ public class PiwikStats extends Composite<HorizontalLayout> {
 
     /**
      * Allowing user to opt-out or opt-in at runtime. {@code false} means opt-in.
+     *
+     * @param optOut true for optOut, false for optIn
      */
     public void optOut(final boolean optOut) {
         page.executeJs("window.axePiwikOptSwitch($0)", optOut);

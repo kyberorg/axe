@@ -80,8 +80,8 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
     private Section statsSection() {
         Section usageStatsSection = new Section("About Usage Statistics");
 
-        Span firstTextStart = new Span("Axe collects usage statistics with ethical analytics tool Matomo " +
-                "(ex. Piwik). Axe Matomo instance is located at ");
+        Span firstTextStart = new Span("Axe collects usage statistics with ethical analytics tool Matomo "
+                + "(ex. Piwik). Axe Matomo instance is located at ");
         Code statsAxe = new Code("stats.axe.pm");
         Span firstTextEnd = new Span(" and hosted in Suomi/Finland.");
         Span firstSpan = new Span(firstTextStart, statsAxe, firstTextEnd);
@@ -101,9 +101,9 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         list.add(ip, referer, geoInfo, techData, actions);
 
         H6 whyCollected = new H6("Why it is collected?");
-        Span whyText = new Span("Usage statistics help Axe developers to understand how people use Axe " +
-                "and what devices they use. This information helps to test new features and improvements " +
-                "using most popular browsers and resolutions.");
+        Span whyText = new Span("Usage statistics help Axe developers to understand how people use Axe "
+                + "and what devices they use. This information helps to test new features and improvements "
+                + "using most popular browsers and resolutions.");
 
         Span optOutText = new Span("Still want to OptOut? Click ");
         Button optOutButton = new Button("here", e -> {

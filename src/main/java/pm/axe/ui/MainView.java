@@ -221,6 +221,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         pageAlreadyInitialized = true;
     }
 
+    /**
+     * Closes (hides) and clears announcement line up.
+     * This method also updates {@link AxeSession} to prevent showing announcement again and again.
+     */
     public void closeAnnouncementLine() {
         announcementLine.setVisible(false);
         announcementLine.removeAll();
