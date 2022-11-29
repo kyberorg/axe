@@ -205,7 +205,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
      */
     @Test
     public void shouldHaveCorrectTitle() {
-        assertEquals("Axe.pm: Short Links for free", Selenide.title());
+        assertEquals("Short Links for free - Axe.pm", Selenide.title());
     }
 
     /**

@@ -56,7 +56,7 @@ public final class MyLinksViewPageObject {
     public static final SelenideElement GRID_FILTER_FIELD = $("#gridFilterField");
 
     public static class GridFilter {
-        public static final SelenideElement SEARCH_ICON = $("vaadin-icon[slot='prefix']");
+        public static final SelenideElement SEARCH_ICON = $("#searchIcon");
         public static final SelenideElement CLEAR_BUTTON = TextFieldElement.byCss("#gridFilterField").getClearButton();
 
         /**

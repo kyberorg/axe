@@ -42,7 +42,6 @@ import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -564,16 +563,6 @@ public class AppUtils implements Serializable {
             session.getSession().invalidate();
         }
         session.close();
-    }
-
-    /**
-     * Figures out if analytics cookies are allowed in given session.
-     *
-     * @param axeSession session object to read attribute from.
-     * @return true - if analytics cookies are allowed, false - if not.
-     */
-    public boolean isGoogleAnalyticsAllowed(final Optional<AxeSession> axeSession) {
-        return axeSession.map(session -> session.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
     }
 
     /**

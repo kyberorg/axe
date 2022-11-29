@@ -20,7 +20,7 @@ import java.util.Objects;
 @Slf4j
 @SpringComponent
 @UIScope
-@PageTitle("Axe.pm: Error 500")
+@PageTitle("Error 500 Page - Axe.pm")
 @Route(value = Endpoint.UI.RAW_ERROR_PAGE_500)
 @CssImport("./css/error_views.css")
 public class RawServerErrorPage extends ServerErrorLayout implements HasUrlParameter<String>,

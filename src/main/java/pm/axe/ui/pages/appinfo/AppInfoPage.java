@@ -1,7 +1,10 @@
 package pm.axe.ui.pages.appinfo;
 
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -14,18 +17,22 @@ import lombok.RequiredArgsConstructor;
 import pm.axe.Endpoint;
 import pm.axe.constants.App;
 import pm.axe.services.GitService;
+import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
+import pm.axe.ui.elements.Code;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.git.GitRepoState;
 import pm.axe.utils.maven.MavenInfo;
 
+import static pm.axe.constants.App.ONE_SECOND_IN_MILLIS;
+
 @RequiredArgsConstructor
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.APP_INFO_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: App Info")
+@PageTitle("App Info - Axe.pm")
 public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
     private static final String UNDEFINED = "UNDEFINED";
     private static final int COMMIT_HASH_LENGTH = 7;
@@ -33,6 +40,9 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final GitRepoState gitRepoState;
     private final MavenInfo mavenInfo;
     private final AppUtils appUtils;
+    private final MainView mainView;
+
+    private final Notification optOutNotification = makeOptOutNotification();
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
@@ -43,12 +53,15 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         setId(IDs.VIEW_ID);
 
         final Section generalInfoSection = generalInfoSection();
+        final Section statsSection = statsSection();
         final Section cookieSection = cookieSection();
         final Section techInfoSection = techInfoSection();
 
+        boolean isMobile = AxeSession.getCurrent().map(as -> as.getDevice().isMobile()).orElse(false);
+        adjustNotificationPosition(isMobile);
         removeAll();
 
-        add(generalInfoSection, cookieSection, techInfoSection);
+        add(generalInfoSection, statsSection, cookieSection, techInfoSection);
     }
 
     private Section generalInfoSection() {
@@ -62,6 +75,47 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         genInfoSection.add(generalInfoSpan);
 
         return genInfoSection;
+    }
+
+    private Section statsSection() {
+        Section usageStatsSection = new Section("About Usage Statistics");
+
+        Span firstTextStart = new Span("Axe collects usage statistics with ethical analytics tool Matomo "
+                + "(ex. Piwik). Axe Matomo instance is located at ");
+        Code statsAxe = new Code("stats.axe.pm");
+        Span firstTextEnd = new Span(" and hosted in Suomi/Finland.");
+        Span firstSpan = new Span(firstTextStart, statsAxe, firstTextEnd);
+
+
+        Span dntInfo = new Span("Matomo respects DNT (Do Not Track) Header.");
+
+        H6 whatCollected = new H6("What is collected?");
+        UnorderedList list = new UnorderedList();
+        list.getStyle().set("margin", "0");
+        ListItem ip = new ListItem("Visitor IP (if your IP is 1.2.3.4, Matomo will see it as 1.2.0.0)");
+        ListItem referer = new ListItem("Referer");
+        ListItem geoInfo = new ListItem("Geo Info (Country, Region, City) based on IP address");
+        ListItem techData = new ListItem("Tech Info (OS, Browser info, Browser resolution)");
+        ListItem actions = new ListItem("Actions performed");
+
+        list.add(ip, referer, geoInfo, techData, actions);
+
+        H6 whyCollected = new H6("Why it is collected?");
+        Span whyText = new Span("Usage statistics help Axe developers to understand how people use Axe "
+                + "and what devices they use. This information helps to test new features and improvements "
+                + "using most popular browsers and resolutions.");
+
+        Span optOutText = new Span("Still want to OptOut? Click ");
+        Button optOutButton = new Button("here", e -> {
+            mainView.getPiwikStats().optOut(true);
+            AxeSession.getCurrent().ifPresent(as -> as.getSettings().setAnalyticsCookiesAllowed(false));
+            optOutNotification.open();
+        });
+        optOutButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        Span optOutSpan = new Span(optOutText, optOutButton);
+
+        usageStatsSection.setContent(firstSpan, dntInfo, whatCollected, list, whyCollected, whyText, optOutSpan);
+        return usageStatsSection;
     }
 
     private Section cookieSection() {
@@ -153,6 +207,19 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         versionRaw.add(version);
 
         return versionRaw;
+    }
+
+    private Notification makeOptOutNotification() {
+        Notification notification = new Notification("Done");
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(ONE_SECOND_IN_MILLIS); //1 second
+        return notification;
+    }
+
+    private void adjustNotificationPosition(final boolean isMobile) {
+        Notification.Position position = isMobile ? Notification.Position.BOTTOM_CENTER : Notification.Position.MIDDLE;
+        this.optOutNotification.setPosition(position);
     }
 
     public static class IDs {

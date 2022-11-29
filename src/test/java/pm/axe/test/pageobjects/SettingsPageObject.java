@@ -28,10 +28,6 @@ public final class SettingsPageObject {
                 $("#" + SettingsPage.IDs.ANALYTICS_COOKIE_LABEL);
         public static final SelenideElement ANALYTICS_COOKIE_VALUE =
                 $("#" + SettingsPage.IDs.ANALYTICS_COOKIE_VALUE);
-        public static final SelenideElement ANALYTICS_COOKIE_POSTFIX_SPAN =
-                $("#" + SettingsPage.IDs.ANALYTICS_COOKIE_SPAN + " " + PageReloadPostfix.SPAN);
-        public static final SelenideElement ANALYTICS_COOKIE_POSTFIX_BUTTON =
-                $("#" + SettingsPage.IDs.ANALYTICS_COOKIE_SPAN + " " + PageReloadPostfix.BUTTON);
     }
 
     public static final class BetaSettings {
@@ -39,11 +35,6 @@ public final class SettingsPageObject {
         public static final SelenideElement DARK_MODE_SPAN = $("#" + SettingsPage.IDs.DARK_MODE_SPAN);
         public static final SelenideElement DARK_MODE_LABEL = $("#" + SettingsPage.IDs.DARK_MODE_LABEL);
         public static final SelenideElement DARK_MODE_VALUE = $("#" + SettingsPage.IDs.DARK_MODE_VALUE);
-    }
-
-    public static final class PageReloadPostfix {
-        public static final String SPAN = "." + SettingsPage.Classes.POSTFIX;
-        public static final String BUTTON = "." + SettingsPage.Classes.PAGE_RELOAD_BUTTON;
     }
 
     /**

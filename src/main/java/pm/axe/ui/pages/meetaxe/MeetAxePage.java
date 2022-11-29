@@ -14,7 +14,7 @@ import pm.axe.ui.layouts.AxeBaseLayout;
 @SpringComponent
 @UIScope
 @Route(value = Endpoint.UI.MEET_AXE_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: Meet Axe")
+@PageTitle("Meet Axe - Axe.pm")
 @CssImport("./css/meet_axe_page.css")
 public class MeetAxePage extends AxeBaseLayout {
     private final Image image = new Image();

@@ -19,7 +19,7 @@ import pm.axe.ui.layouts.AxeBaseLayout;
  */
 @SpringComponent
 @UIScope
-@PageTitle("Axe.pm: Server Error Loop View")
+@PageTitle("Server Error Loop Page - Axe.pm")
 @Route(value = Endpoint.TNT.SERVER_ERROR_LOOP, layout = MainView.class)
 public class ServerErrorLoopPage extends AxeBaseLayout implements HasErrorParameter<NeedForLoopException> {
     @Override

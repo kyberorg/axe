@@ -78,7 +78,7 @@ import java.util.Optional;
 @UIScope
 @CssImport("./css/my_links_page.css")
 @Route(value = Endpoint.UI.MY_LINKS_PAGE, layout = MainView.class)
-@PageTitle("Axe.pm: My Links")
+@PageTitle("My Links - Axe.pm")
 public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MyLinksPage.class.getSimpleName() + "]";
 
@@ -139,9 +139,12 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         filterAndToggleLayout.setWidthFull();
 
+        final Icon searchIcon = VaadinIcon.SEARCH.create();
+        searchIcon.setId("searchIcon");
+
         gridFilterField.setMaxWidth("50%");
         gridFilterField.setPlaceholder("Search");
-        gridFilterField.setPrefixComponent(VaadinIcon.SEARCH.create());
+        gridFilterField.setPrefixComponent(searchIcon);
         gridFilterField.setValueChangeMode(ValueChangeMode.EAGER);
         gridFilterField.setClearButtonVisible(true);
         gridFilterField.getStyle().set("align-self", "flex-start");

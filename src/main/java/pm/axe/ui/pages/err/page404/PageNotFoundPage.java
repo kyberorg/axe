@@ -15,7 +15,7 @@ import pm.axe.ui.layouts.AxeBaseLayout;
 
 @SpringComponent
 @UIScope
-@PageTitle("Axe.pm: Error 404")
+@PageTitle("Page 404 - Axe.pm")
 @Route(value = Endpoint.UI.PAGE_404, layout = MainView.class)
 @CssImport("./css/error_views.css")
 public class PageNotFoundPage extends AxeBaseLayout implements HasErrorParameter<PageNotFoundException> {

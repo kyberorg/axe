@@ -94,5 +94,20 @@
       "name": "app.show-rename-notification",
       "type": "java.lang.String",
       "description": "Enables/Disables Yalsee is now Axe notification."
+    },
+    {
+      "name": "app.seo.piwik.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables/Disables Piwik."
+    },
+    {
+      "name": "app.seo.piwik.piwikHost",
+      "type": "java.lang.String",
+      "description": "Hostname of piwik instance. Just hostname without protocol."
+    },
+    {
+      "name": "app.seo.piwik.siteId",
+      "type": "java.lang.String",
+      "description": "String with Piwik Site Id. See it in Piwik UI."
     }
   ] }

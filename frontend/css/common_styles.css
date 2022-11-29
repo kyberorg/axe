@@ -161,6 +161,7 @@ html {
     --axe-primary-color: rgb(0, 106, 245);
     --axe-secondary-color: rgb(37, 51, 68);
     --axe-tertiary-color: rgb(144, 189, 249);
+    --axe-announcement-line-color: rgb(0, 205, 0);
 }
 
 html[theme="dark"] {
@@ -172,6 +173,7 @@ html[theme="dark"] {
     --axe-drawer-toggle-color: rgb(235, 243, 254);
     --axe-qr-code-border-radius: 5%;
     --axe-secondary-color: rgb(215, 224, 237);
+    --axe-announcement-line-color: rgb(17, 86, 158);
 }
 
 vcf-toggle-button {
@@ -179,7 +181,7 @@ vcf-toggle-button {
 }
 
 vaadin-drawer-toggle {
-    color: var(--axe-drawer-toggle-color);
+    color: var(--axe-drawer-toggle-color)!important;
 }
 
 .share-item-logo {
@@ -188,3 +190,7 @@ vaadin-drawer-toggle {
     border-radius: 100%;
 }
 
+.axe-announcement-line {
+    background-color: var(--axe-announcement-line-color);
+    min-height: 2rem;
+}

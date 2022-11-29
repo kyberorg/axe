@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -26,12 +27,14 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WebBrowser;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import pm.axe.constants.App;
 import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
+import pm.axe.internal.Piwik;
 import pm.axe.result.OperationResult;
 import pm.axe.services.AxeSessionCookieService;
 import pm.axe.services.AxeSessionService;
@@ -39,6 +42,7 @@ import pm.axe.session.AxeSession;
 import pm.axe.session.Device;
 import pm.axe.ui.elements.AppMenu;
 import pm.axe.ui.elements.CookieBanner;
+import pm.axe.ui.elements.PiwikStats;
 import pm.axe.ui.elements.ProjektRenamedNotification;
 import pm.axe.ui.pages.appinfo.AppInfoPage;
 import pm.axe.ui.pages.debug.DebugPage;
@@ -62,12 +66,14 @@ import static pm.axe.ui.MainView.IDs.APP_LOGO;
 @UIScope
 @CssImport("./css/main_view.css")
 @JsModule("./js/open-share-menu.js")
+@JsModule("./js/piwik.js")
 public class MainView extends AppLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
     private final AppUtils appUtils;
     private final AxeSessionService sessionService;
     private final AxeSessionCookieService cookieService;
+    private final Piwik piwikConfig;
 
     private HorizontalLayout header;
     private final Component appMenuPlaceholder = new Button();
@@ -76,6 +82,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
     private final ProjektRenamedNotification projektRenamedNotification = ProjektRenamedNotification.create();
 
+    private final FlexLayout announcementLine = new FlexLayout();
+
+    @Getter
+    private PiwikStats piwikStats;
+    @Getter
     private final UI ui = UI.getCurrent();
     private final Device currentDevice;
     private String currentSessionId;
@@ -89,12 +100,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
      * @param appUtils       application utils for determine dev mode
      * @param sessionService service for manipulating with {@link AxeSession}.
      * @param cookieService  service for actions with {@link AxeSession} {@link Cookie}.
+     * @param piwikConfig bean with Piwik configuration.
      */
     public MainView(final AppUtils appUtils,
-                    final AxeSessionService sessionService, final AxeSessionCookieService cookieService) {
+                    final AxeSessionService sessionService, final AxeSessionCookieService cookieService,
+                    final Piwik piwikConfig) {
         this.appUtils = appUtils;
         this.sessionService = sessionService;
         this.cookieService = cookieService;
+        this.piwikConfig = piwikConfig;
 
         this.currentDevice = getCurrentDevice();
         init();
@@ -141,6 +155,10 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(tabs);
 
+        //default visual state for announcement line
+        announcementLine.removeAll();
+        announcementLine.setVisible(false);
+
         setId(IDs.VIEW_ID);
 
         // hide the splash screen after the main view is loaded
@@ -182,7 +200,35 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
             header.replace(appMenuPlaceholder, appMenu);
             appMenu.moveUserButtonToFarRight();
         }
+
+        //create Piwik Statistics
+        boolean piwikEnabled = piwikConfig.isEnabled();
+        boolean analyticsCookieAllowed =
+                session.map(as -> as.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
+        boolean showAnnouncement =
+                session.map(as -> as.getFlags().showAnnouncement()).orElse(true);
+
+        piwikStats = new PiwikStats(piwikConfig, this);
+        if (piwikEnabled && analyticsCookieAllowed) {
+            //addPiwikElement();
+            piwikStats.enableStats();
+        }
+
+        if (piwikStats.isNotEmpty() && showAnnouncement) {
+            addAnnouncement(piwikStats);
+        }
+
         pageAlreadyInitialized = true;
+    }
+
+    /**
+     * Closes (hides) and clears announcement line up.
+     * This method also updates {@link AxeSession} to prevent showing announcement again and again.
+     */
+    public void closeAnnouncementLine() {
+        announcementLine.setVisible(false);
+        announcementLine.removeAll();
+        AxeSession.getCurrent().ifPresent(as -> as.getFlags().setDontShowAnnouncement(true));
     }
 
     /**
@@ -272,6 +318,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         Anchor link = new Anchor(targetUrl, iconElement, labelElement);
         Tab tab = new Tab(link);
         tabs.add(tab);
+    }
+
+    private void addAnnouncement(final Component announcement) {
+        announcementLine.removeAll();
+        announcementLine.setId("axeAnnouncement");
+        announcementLine.setClassName("axe-announcement-line");
+        announcementLine.add(announcement);
+        getElement().appendChild(announcementLine.getElement());
+        announcementLine.setVisible(true);
     }
 
     private AxeSession getAxeSession() {

@@ -9,7 +9,6 @@ import pm.axe.test.ui.SelenideTest;
 import pm.axe.ui.pages.settings.SettingsPage;
 
 import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.open;
 
 /**
@@ -36,16 +35,6 @@ public class SettingsPageActionTest extends SelenideTest {
         SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.click();
         open("/settings");
         SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
-    }
-
-    /**
-     * Page Reload Button in Analytics Cookie Span reloads Page.
-     */
-    @Test
-    public void pageReloadButtonInAnalyticsCookieSpanReloadsPage() {
-        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.click();
-        VaadinPageObject.waitForVaadin();
-        SettingsPageObject.PAGE_ID.should(exist);
     }
 
     /**
