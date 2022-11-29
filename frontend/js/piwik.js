@@ -17,9 +17,11 @@ window.axePiwikOptSwitch = (optOut) => {
     _paq.push([function () {
         if (optOut) {
             // user is currently opted out
+            console.log("Piwik: User opted out")
             _paq.push(['optUserOut']);
         } else {
             // user is currently opted in
+            console.log("Piwik: User opted in")
             _paq.push(['forgetUserOptOut']);
         }
     }])

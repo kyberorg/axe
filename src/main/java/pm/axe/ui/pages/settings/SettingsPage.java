@@ -105,7 +105,7 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
 
     private void setPageStructure() {
         techCookiesSpan.add(techCookiesLabel, techCookiesValue);
-        analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue, pageReloadPostfix());
+        analyticsCookiesSpan.add(analyticsCookiesLabel, analyticsCookiesValue);
 
         darkModeSpan.add(darkModeLabel, darkModeValue);
         usersFeatureSpan.add(usersFeatureLabel, usersFeatureValue, pageReloadPostfix());
@@ -130,7 +130,7 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
     private void onAnalyticCookiesChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
         AxeSession.getCurrent()
                 .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue()));
-        mainView.getPiwikStats().optOut(event.getValue());
+        mainView.getPiwikStats().optOut(!event.getValue());
         notifyClient();
     }
 
