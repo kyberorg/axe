@@ -1,6 +1,7 @@
 package pm.axe.ui.pages.appinfo;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -90,6 +91,7 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         H6 whatCollected = new H6("What is collected?");
         UnorderedList list = new UnorderedList();
+        list.getStyle().set("margin", "0");
         ListItem ip = new ListItem("Visitor IP (if your IP is 1.2.3.4, Matomo will see it as 1.2.0.0)");
         ListItem referer = new ListItem("Referer");
         ListItem geoInfo = new ListItem("Geo Info (Country, Region, City) based on IP address");
@@ -108,6 +110,7 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
             mainView.getPiwikStats().optOut(true);
             optOutNotification.open();
         });
+        optOutButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         Span optOutSpan = new Span(optOutText, optOutButton);
 
         usageStatsSection.setContent(firstSpan, dntInfo, whatCollected, list, whyCollected, whyText, optOutSpan);
