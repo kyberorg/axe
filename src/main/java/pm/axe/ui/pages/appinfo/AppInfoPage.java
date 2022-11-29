@@ -126,14 +126,14 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         Span dntInfo = new Span("Matomo respects DNT (Do Not Track) Header.");
 
-        H5 whatCollected = new H5("What is collected?");
+        H6 whatCollected = new H6("What is collected?");
         ListItem ip = new ListItem("Visitor IP (if your IP is 1.2.3.4, Matomo will see it as 1.2.0.0)");
         ListItem referer = new ListItem("Referer");
         ListItem geoInfo = new ListItem("Geo Info (Country, Region, City) based on IP address");
         ListItem techData = new ListItem("Tech Info (OS, Browser info, Browser resolution)");
         ListItem actions = new ListItem("Actions performed");
 
-        H5 whyCollected = new H5("Why it is collected?");
+        H6 whyCollected = new H6("Why it is collected?");
         Span whyText = new Span("Usage statistics help Axe developers to understand how people use Axe " +
                 "and what devices they use. This information helps to test new features and improvements " +
                 "using most popular browsers and resolutions.");
