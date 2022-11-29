@@ -14,7 +14,6 @@ public final class Header {
     public static final String X_AXE_TOKEN = "X-Axe-Token";
     public static final String X_REAL_IP = "X-Real-IP";
     public static final String X_FORWARDED_PROTO = "X-Forwarded-Proto";
-    public static final String X_FROM_YALSEE = "X-From-Yalsee";
 
     private Header() {
         throw new UnsupportedOperationException("Utility class");

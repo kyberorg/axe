@@ -33,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import pm.axe.constants.App;
-import pm.axe.constants.Header;
 import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
 import pm.axe.internal.Piwik;
@@ -57,7 +56,10 @@ import pm.axe.utils.AppUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.http.Cookie;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static pm.axe.ui.MainView.IDs.APP_LOGO;
 @Slf4j
@@ -185,7 +187,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
         //Rename notification
         boolean isBannerEnabled = appUtils.showRenameNotification();
-        boolean isFromYalsee = StringUtils.isNotBlank(VaadinRequest.getCurrent().getHeader(Header.X_FROM_YALSEE));
+        boolean isFromYalsee = StringUtils.isNotBlank(VaadinRequest.getCurrent().getParameter("yalsee"));
         log.debug("{} From Yalsee? {}", TAG, isFromYalsee);
         boolean renameNotificationAlreadyShown = session.map(ys -> ys.getFlags().isRenameNotificationAlreadyShown())
                 .orElse(false);
