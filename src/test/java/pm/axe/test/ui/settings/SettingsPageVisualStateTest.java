@@ -158,25 +158,6 @@ public class SettingsPageVisualStateTest extends SelenideTest {
     }
 
     /**
-     * Analytics Cookie Span has Page Reload Postfix inside.
-     */
-    @Test
-    public void analyticsCookieSpanHasPageReloadPostfixInside() {
-        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_POSTFIX_SPAN.should(exist);
-        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_POSTFIX_SPAN.shouldBe(visible);
-    }
-
-    /**
-     * Analytics Cookie Page Reload Postfix has Button, and it has text "Page Reload".
-     */
-    @Test
-    public void analyticsCookiePageReloadPostfixHasPageReloadButton() {
-        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.should(exist);
-        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.shouldBe(visible);
-        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_POSTFIX_BUTTON.shouldHave(text("Page Reload"));
-    }
-
-    /**
      * Beta Settings Title exist and visible.
      */
     @Test

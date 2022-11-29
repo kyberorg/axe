@@ -192,4 +192,5 @@ vaadin-drawer-toggle {
 
 .axe-announcement-line {
     background-color: var(--axe-announcement-line-color);
+    min-height: 2rem;
 }
