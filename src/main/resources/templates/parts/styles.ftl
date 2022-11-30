@@ -47,6 +47,9 @@
         background-color: #f0f0f0;
     }
 
+    .main {
+        border-radius: 15% !important;
+    }
     @media only screen and (max-width: 600px) {
         body {
             padding: 0 !important;
@@ -54,7 +57,7 @@
 
         .container {
             padding: 0 !important;
-            width: 100% !important;
+            width: 90% !important;
         }
 
         .content {
@@ -68,7 +71,6 @@
         .main {
             border-right: none !important;
             border-left: none !important;
-            border-radius: 0 !important;
         }
 
         .logo {

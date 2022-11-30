@@ -1,5 +1,6 @@
 package pm.axe.services.mail;
 
+import com.sun.mail.smtp.SMTPMessage;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import io.micrometer.core.instrument.util.StringUtils;
@@ -64,7 +65,10 @@ public class MailSenderService {
         helper.setSubject(fullSubject);
 
         helper.setText(letterHtmlBody, true);
-        return mailMessage;
+
+        SMTPMessage smtpMessage = new SMTPMessage(mailMessage);
+        smtpMessage.setEnvelopeFrom(appUtils.getEmailFromAddress());
+        return smtpMessage;
     }
 
     /**

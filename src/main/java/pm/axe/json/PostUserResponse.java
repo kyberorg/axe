@@ -75,7 +75,7 @@ public class PostUserResponse {
 
             if (StringUtils.isNotBlank(email)) {
                 //got email
-                sb.append(String.format("Confirmation e-mail sent to %s ", email));
+                sb.append(String.format("Confirmation e-mail sent to %s. ", email));
                 accountHasNoConfirmationMethods = false;
             }
             if (StringUtils.isNotBlank(telegramToken)) {
