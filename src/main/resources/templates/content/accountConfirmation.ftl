@@ -11,3 +11,22 @@
         </td>
     </tr>
 </table>
+
+<script type="application/ld+json">
+        [{
+            "@context": "https://schema.org",
+            "@type": "EmailMessage",
+            "potentialAction": {
+                "@type": "ViewAction",
+                "target": "${link}",
+                "url": "${link}",
+                "name": "Confirm your account"
+            },
+            "description": "Confirm your account by clicking confirmation link",
+            "publisher": {
+                "@type": "Organization",
+                "name": "AxeLinks",
+                "url": "https://axe.pm"
+            }
+        }]
+</script>

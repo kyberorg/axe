@@ -50,6 +50,7 @@
     .main {
         border-radius: 15% !important;
     }
+
     @media only screen and (max-width: 600px) {
         body {
             padding: 0 !important;
@@ -66,11 +67,6 @@
 
         .content-wrap {
             padding: 10px !important;
-        }
-
-        .main {
-            border-right: none !important;
-            border-left: none !important;
         }
 
         .logo {

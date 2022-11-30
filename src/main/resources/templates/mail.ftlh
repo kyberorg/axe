@@ -7,7 +7,7 @@
 <body style="-webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; height: 100%; line-height: 25px; width: 100% !important; margin: 0;"
       bgcolor="#f0f0f0">
 <#include "parts/styles.ftl" parse=false>
-
+<div itemscope itemtype="https://schema.org/EmailMessage">
 <table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f0f0f0">
     <tr>
         <td class="container" width="100%" align="center">
@@ -31,5 +31,6 @@
         </td>
     </tr>
 </table>
+</div>
 </body>
 </html>
