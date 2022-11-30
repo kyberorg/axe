@@ -48,7 +48,7 @@
     }
 
     .main {
-        border-radius: 15% !important;
+        border-radius: 5% !important;
     }
 
     @media only screen and (max-width: 600px) {
@@ -58,7 +58,7 @@
 
         .container {
             padding: 0 !important;
-            width: 90% !important;
+            width: 95% !important;
         }
 
         .content {
