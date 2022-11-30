@@ -60,7 +60,7 @@ public class MailSenderService {
         String letterHtmlBody = createLetterBody(letterType, vars);
 
         helper.setReplyTo(appUtils.getEmailFromAddress());
-        helper.setFrom(appUtils.getEmailFromAddress());
+        helper.setFrom(appUtils.getEmailFromAddress(), "Aleks from Axe"); //TODO remove hardcode
         helper.setTo(targetEmail);
         helper.setSubject(fullSubject);
 

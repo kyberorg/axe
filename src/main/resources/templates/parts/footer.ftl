@@ -3,8 +3,8 @@
         <td align="center" style="margin: 0; padding: 0;" valign="top">
             <table cellpadding="0" cellspacing="0" style="margin: 0 auto;">
                 <tr>
-                    <td style="margin: 0; padding: 0 10px;" valign="top"><a href="https://github.com/kyberorg/axe" target="_blank">GitHub Project</a> | </td>
-                    <td style="margin: 0; padding: 0 10px;" valign="top">Have ideas? <a href="https://github.com/kyberorg/axe/discussions" target="_blank">Let's discuss</a> | </td>
+                    <td style="margin: 0; padding: 0 10px;" valign="top"><a href="https://github.com/kyberorg/axe" target="_blank">GitHub Project</a>|</td>
+                    <td style="margin: 0; padding: 0 10px;" valign="top">Have ideas? <a href="https://github.com/kyberorg/axe/discussions" target="_blank">Let's discuss</a>|</td>
                     <td style="margin: 0; padding: 0 10px;" valign="top">Need help? <a href="mailto:kyberorg@axe.pm" target="_blank">Email me</a></td>
                 </tr>
             </table>
