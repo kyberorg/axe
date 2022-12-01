@@ -1,16 +1,7 @@
 <style type="text/css">
-    @font-face {
-        font-family: 'Pebble';
-        src: url('https://axe.pm/Pebble-Regular.woff2') format('woff2'),
-        url('https://axe.pm/Pebble-Regular.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-    }
-
     body {
         margin: 0;
-        font-family: Pebble, sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         box-sizing: border-box;
         font-size: 16px;
         color: #333;
@@ -21,7 +12,7 @@
 
     body * {
         margin: 0;
-        font-family: Pebble, sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         box-sizing: border-box;
         font-size: 16px;
         color: #333;
