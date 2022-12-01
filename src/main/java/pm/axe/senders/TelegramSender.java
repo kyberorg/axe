@@ -18,7 +18,6 @@ import pm.axe.telegram.messages.LoginVerificationMessage;
 import pm.axe.telegram.messages.PasswordResetMessage;
 import pm.axe.telegram.messages.TelegramMessage;
 import pm.axe.users.AccountType;
-import pm.axe.users.TokenType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -80,7 +79,7 @@ public class TelegramSender extends TokenSender {
 
         //Shortify link, if needed
         if (templateVars.containsKey("link") && token.getTokenType().shouldCreateShortLink()) {
-            OperationResult shortifyResult = shortifyLink(templateVars, token.getTokenType());
+            OperationResult shortifyResult = shortifyLink(templateVars, token);
             if (shortifyResult.ok()) {
                 templateVars.put("link", shortifyResult.getStringPayload());
             } else {
@@ -108,12 +107,12 @@ public class TelegramSender extends TokenSender {
         return OperationResult.success();
     }
 
-    private OperationResult shortifyLink(final Map<String, Object> vars, final TokenType tokenType) {
+    private OperationResult shortifyLink(final Map<String, Object> vars, final Token token) {
         String longLink = (String) vars.getOrDefault("link", App.NO_VALUE);
         if (longLink.equals(App.NO_VALUE)) {
             return OperationResult.elementNotFound().withMessage(MSG_NO_LONG_LINK_FOUND);
         }
-        return linkService.shortifyLinkForTokens(longLink, tokenType);
+        return linkService.shortifyLinkForTokens(longLink, token);
     }
 
     private OperationResult tokenOwnerHasConfirmedTelegramAccount(final User tokenOwner) {

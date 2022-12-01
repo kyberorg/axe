@@ -19,6 +19,8 @@ public final class App {
     public static final int ONE_SECOND_IN_MILLIS = 1000;
     public static final String TIME_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss z";
     public static final String MINUS = "-";
+    public static final int STRING_START_INDEX = 0;
+    public static final int STRING_EIGHTS_LETTER_INDEX = 8;
 
     private App() {
         throw new UnsupportedOperationException("Utility class");

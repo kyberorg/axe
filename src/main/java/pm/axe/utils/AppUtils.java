@@ -412,7 +412,12 @@ public class AppUtils implements Serializable {
      * @return string with full domain
      */
     public String getServerDomain() {
-        return UrlUtils.removeProtocol(getServerUrl());
+        String serverUrlWithoutProto = UrlUtils.removeProtocol(getServerUrl());
+        //for local instance
+        if (serverUrlWithoutProto.contains(":")) {
+            serverUrlWithoutProto = serverUrlWithoutProto.split(":")[0];
+        }
+        return serverUrlWithoutProto;
     }
 
     /**

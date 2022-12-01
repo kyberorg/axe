@@ -2,6 +2,7 @@ package pm.axe.core;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import pm.axe.constants.App;
+import pm.axe.db.models.Token;
 import pm.axe.users.TokenType;
 
 /**
@@ -49,13 +50,23 @@ public final class IdentGenerator {
     /**
      * Generates ident, based on {@link TokenType}. Method not checking if ident already exists.
      *
-     * @param tokenType token type for getting ident prefix.
+     * @param token token for getting ident prefix.
      * @return ident prefix plus random part.
      */
-    public static String generateTokenIdent(final TokenType tokenType) {
-        String prefix = tokenType.getIdentPrefix();
+    public static String generateTokenIdent(final Token token) {
+        if (token.getTokenType() == TokenType.ACCOUNT_CONFIRMATION_TOKEN) {
+            return generateAccountConfirmationIdent(token);
+        }
+        String prefix = token.getTokenType().getIdentPrefix();
         String number = RandomStringUtils.randomNumeric(App.FOUR);
         String letter = RandomStringUtils.randomAlphabetic(1);
         return String.join("", prefix, number, letter);
+    }
+
+    private static String generateAccountConfirmationIdent(final Token token) {
+        String prefix = token.getTokenType().getIdentPrefix();
+        String firstPartOfToken = token.getToken().substring(App.STRING_START_INDEX,App.STRING_EIGHTS_LETTER_INDEX);
+        return String.join("", prefix, firstPartOfToken);
+
     }
 }

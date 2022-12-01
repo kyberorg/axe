@@ -53,7 +53,7 @@ public class MailTokenSender extends TokenSender {
         String link = letter.getLink();
         //shortify link, if needed
         if (token.getTokenType().shouldCreateShortLink()) {
-            OperationResult shortifyResult = linkService.shortifyLinkForTokens(link, token.getTokenType());
+            OperationResult shortifyResult = linkService.shortifyLinkForTokens(link, token);
             if (shortifyResult.ok()) {
                 link = shortifyResult.getStringPayload();
             } else {
