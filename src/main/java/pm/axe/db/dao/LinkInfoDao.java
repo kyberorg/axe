@@ -3,6 +3,7 @@ package pm.axe.db.dao;
 import org.springframework.stereotype.Repository;
 import pm.axe.db.dao.base.TimeAwareCrudDao;
 import pm.axe.db.models.LinkInfo;
+import pm.axe.db.models.User;
 
 import java.util.List;
 
@@ -45,4 +46,19 @@ public interface LinkInfoDao extends TimeAwareCrudDao<LinkInfo, Long> {
      * @return number of found records. Normally it should be only 1 record or 0 records if nothing found.
      */
     long countByIdent(String ident);
+
+    /**
+     * If there are errors owned by given {@link User}.
+     */
+    boolean existsByOwner(User owner);
+
+    /**
+     * List if {@link LinkInfo} records owned by given {@link User}.
+     *
+     * @param owner link's owner.
+     * @return list with found records.
+     */
+    List<LinkInfo> findByOwner(User owner);
+
+
 }

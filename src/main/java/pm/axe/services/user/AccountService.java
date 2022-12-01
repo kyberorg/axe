@@ -202,8 +202,37 @@ public class AccountService {
         }
     }
 
+    /**
+     * Gets all {@link Account} records linked with given {@link User}.
+     *
+     * @param user {@link Account} owner.
+     * @return list of {@link User}'s {@link Account}s.
+     */
+    public List<Account> getAllAccountsLinkedWithUser(final User user) {
+        return accountDao.findByUser(user);
+    }
+
     private boolean accountHasGivenAccountName(final Account account) {
         Optional<String> decryptedAccountName = decryptAccountName(account);
         return decryptedAccountName.map(accountName -> accountName.equals(accountToSearch)).orElse(false);
+    }
+
+    /**
+     * Deletes {@link Account}.
+     *
+     * @param account {@link Account} to delete.
+     *
+     * @return {@link OperationResult#success()} or {@link OperationResult} with error.
+     */
+    public OperationResult deleteAccount(Account account) {
+        try {
+            accountDao.delete(account);
+            return OperationResult.success();
+        } catch (CannotCreateTransactionException c) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} failed to confirm account got exception {}", TAG, e.getMessage());
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
     }
 }

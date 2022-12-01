@@ -12,6 +12,7 @@ import pm.axe.core.BanHammer;
 import pm.axe.core.IdentGenerator;
 import pm.axe.db.dao.LinkDao;
 import pm.axe.db.models.Link;
+import pm.axe.db.models.LinkInfo;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.events.link.LinkDeletedEvent;
@@ -296,6 +297,17 @@ public class LinkService {
         } else {
             return createLinkResult;
         }
+    }
+
+    /**
+     * Gets {@link Link} record by its {@link LinkInfo}, if they have same {@link Link#getIdent()}.
+     *
+     * @param linkInfo {@link LinkInfo} record.
+     * @return {@link Optional} of {@link Link} if exists or {@link Optional#empty()}.
+
+     */
+    public Optional<Link> getLinkByLinkInfo(final LinkInfo linkInfo) {
+        return repo.findSingleByIdent(linkInfo.getIdent());
     }
 
     private OperationResult validateIdent(final String ident) {

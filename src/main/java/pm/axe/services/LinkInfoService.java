@@ -108,7 +108,28 @@ public class LinkInfoService {
         repo.update(updatedLinkInfo);
     }
 
+    /**
+     * Has given {@link User} any {@link LinkInfo} records stored.
+     *
+     * @param user link's owner
+     * @return true - if it has, false if not.
+     */
+    public boolean isUserHasLinks(final User user) {
+        return repo.existsByOwner(user);
+    }
+
+    /**
+     * Gets all {@link LinkInfo} records owned by given {@link User}.
+     * @param user link's owner.
+     * @return list of {@link LinkInfo} records or empty {@link List} if no records found.
+     */
+    public List<LinkInfo> getAllRecordsOwnedByUser(final User user) {
+        return repo.findByOwner(user);
+    }
+
     private boolean linkInfoExistsForIdent(final String ident) {
         return repo.countByIdent(ident) > 0;
     }
+
+
 }

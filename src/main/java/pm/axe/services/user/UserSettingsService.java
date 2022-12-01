@@ -53,6 +53,15 @@ public class UserSettingsService {
         return createOrUpdateUserSettings(userSettings);
     }
 
+    /**
+     * Deletes {@link UserSettings}.
+     *
+     * @param settings {@link UserSettings} to delete.
+     */
+    public void deleteUserSettings(final UserSettings settings) {
+        userSettingsDao.delete(settings);
+    }
+
     private OperationResult createOrUpdateUserSettings(final UserSettings userSettings) {
         try {
             userSettingsDao.save(userSettings);

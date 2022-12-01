@@ -174,6 +174,11 @@ public final class Endpoint {
          * Users Registration.
          */
         public static final String REGISTER_USER_API = USERS_API + "/";
+
+        /**
+         * User Deletion.
+         */
+        public static final String DELETE_USER_API = USERS_API + "/{username}";
     }
 
     public static class Static {
