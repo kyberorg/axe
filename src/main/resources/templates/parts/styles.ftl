@@ -1,16 +1,7 @@
 <style type="text/css">
-    @font-face {
-        font-family: 'Pebble';
-        src: url('https://axe.pm/Pebble-Regular.woff2') format('woff2'),
-        url('https://axe.pm/Pebble-Regular.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-    }
-
     body {
         margin: 0;
-        font-family: Pebble, sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         box-sizing: border-box;
         font-size: 16px;
         color: #333;
@@ -21,7 +12,7 @@
 
     body * {
         margin: 0;
-        font-family: Pebble, sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         box-sizing: border-box;
         font-size: 16px;
         color: #333;
@@ -47,6 +38,10 @@
         background-color: #f0f0f0;
     }
 
+    .main {
+        border-radius: 5% !important;
+    }
+
     @media only screen and (max-width: 600px) {
         body {
             padding: 0 !important;
@@ -54,7 +49,7 @@
 
         .container {
             padding: 0 !important;
-            width: 100% !important;
+            width: 95% !important;
         }
 
         .content {
@@ -63,12 +58,6 @@
 
         .content-wrap {
             padding: 10px !important;
-        }
-
-        .main {
-            border-right: none !important;
-            border-left: none !important;
-            border-radius: 0 !important;
         }
 
         .logo {

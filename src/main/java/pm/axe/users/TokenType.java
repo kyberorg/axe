@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
  * Type of Token with its properties.
  */
 public enum TokenType {
-    ACCOUNT_CONFIRMATION_TOKEN(86400, "", TokenValueType.UUID), //24h
+    ACCOUNT_CONFIRMATION_TOKEN(86400, "ac", TokenValueType.UUID), //24h
     TELEGRAM_CONFIRMATION_TOKEN(86400, "", TokenValueType.TELEGRAM_TOKEN), //24h
     LOGIN_VERIFICATION_TOKEN(3600, "", TokenValueType.CODE), //1h
     PASSWORD_RESET_TOKEN(3600, "fp", TokenValueType.UUID), //1h

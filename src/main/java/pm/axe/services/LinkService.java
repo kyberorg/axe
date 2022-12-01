@@ -12,6 +12,7 @@ import pm.axe.core.BanHammer;
 import pm.axe.core.IdentGenerator;
 import pm.axe.db.dao.LinkDao;
 import pm.axe.db.models.Link;
+import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.events.link.LinkDeletedEvent;
 import pm.axe.events.link.LinkSavedEvent;
@@ -276,14 +277,14 @@ public class LinkService {
      * Makes long link short, based on {@link TokenType}.
      *
      * @param longLink  non-empty string with long link.
-     * @param tokenType token type to determine ident prefix.
+     * @param token token to determine ident prefix.
      * @return {@link OperationResult#success()} with short in {@link OperationResult#payload}
      * or {@link OperationResult} from {@link #createLink(LinkServiceInput)} method.
      */
-    public OperationResult shortifyLinkForTokens(final String longLink, final TokenType tokenType) {
+    public OperationResult shortifyLinkForTokens(final String longLink, final Token token) {
         String ident;
         do {
-            ident = IdentGenerator.generateTokenIdent(tokenType);
+            ident = IdentGenerator.generateTokenIdent(token);
         } while (this.isLinkWithIdentExist(ident).ok());
 
         LinkServiceInput input = LinkServiceInput.builder(longLink).customIdent(ident).build();

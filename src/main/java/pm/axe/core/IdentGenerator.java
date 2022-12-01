@@ -2,6 +2,7 @@ package pm.axe.core;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import pm.axe.constants.App;
+import pm.axe.db.models.Token;
 import pm.axe.users.TokenType;
 
 /**
@@ -33,6 +34,9 @@ public final class IdentGenerator {
     public static final String VALID_IDENT_PATTERN = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){0,"
             + IDENT_MAX_LENGTH_WITHOUT_FIRST_AND_LAST_CHARS + "}[a-zA-Z0-9]$";
 
+    private static final int TOKEN_SUBSTRING_START_INDEX = 0;
+    private static final int TOKEN_SUBSTRING_END_INDEX = 7;
+
     private IdentGenerator() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -49,13 +53,22 @@ public final class IdentGenerator {
     /**
      * Generates ident, based on {@link TokenType}. Method not checking if ident already exists.
      *
-     * @param tokenType token type for getting ident prefix.
+     * @param token token for getting ident prefix.
      * @return ident prefix plus random part.
      */
-    public static String generateTokenIdent(final TokenType tokenType) {
-        String prefix = tokenType.getIdentPrefix();
+    public static String generateTokenIdent(final Token token) {
+        if (token.getTokenType() == TokenType.ACCOUNT_CONFIRMATION_TOKEN) {
+            return generateAccountConfirmationIdent(token);
+        }
+        String prefix = token.getTokenType().getIdentPrefix();
         String number = RandomStringUtils.randomNumeric(App.FOUR);
         String letter = RandomStringUtils.randomAlphabetic(1);
         return String.join("", prefix, number, letter);
+    }
+
+    private static String generateAccountConfirmationIdent(final Token token) {
+        String prefix = token.getTokenType().getIdentPrefix();
+        String firstPartOfToken = token.getToken().substring(TOKEN_SUBSTRING_START_INDEX, TOKEN_SUBSTRING_END_INDEX);
+        return String.join("", prefix, firstPartOfToken);
     }
 }

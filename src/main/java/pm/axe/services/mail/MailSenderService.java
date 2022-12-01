@@ -1,10 +1,12 @@
 package pm.axe.services.mail;
 
+import com.sun.mail.smtp.SMTPMessage;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -59,12 +61,16 @@ public class MailSenderService {
         String letterHtmlBody = createLetterBody(letterType, vars);
 
         helper.setReplyTo(appUtils.getEmailFromAddress());
-        helper.setFrom(appUtils.getEmailFromAddress());
+        helper.setFrom(appUtils.getEmailFromAddress(), "Aleks from " + appUtils.getApplicationName());
         helper.setTo(targetEmail);
         helper.setSubject(fullSubject);
 
         helper.setText(letterHtmlBody, true);
-        return mailMessage;
+        helper.addInline("axeLogo", new ClassPathResource("email_logo.png"));
+
+        SMTPMessage smtpMessage = new SMTPMessage(mailMessage);
+        smtpMessage.setEnvelopeFrom(appUtils.getEmailFromAddress());
+        return smtpMessage;
     }
 
     /**

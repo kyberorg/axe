@@ -42,10 +42,10 @@ public interface Letter {
      * Extracts Username from Token.
      *
      * @param token non-empty {@link Token} to extract Username from.
-     * @return string with username if username, provided by user or pre-defined string, if name is generated.
+     * @return string with username if username, provided by user or empty string, if name is generated.
      */
     default String getUsername(final Token token) {
         String username = token.getUser().getUsername();
-        return UsernameGenerator.isGenerated(username) ? "Axe User" : username;
+        return UsernameGenerator.isGenerated(username) ? "" : username;
     }
 }
