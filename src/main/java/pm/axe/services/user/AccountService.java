@@ -224,7 +224,7 @@ public class AccountService {
      *
      * @return {@link OperationResult#success()} or {@link OperationResult} with error.
      */
-    public OperationResult deleteAccount(Account account) {
+    public OperationResult deleteAccount(final Account account) {
         try {
             accountDao.delete(account);
             return OperationResult.success();

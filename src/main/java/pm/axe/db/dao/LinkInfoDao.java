@@ -49,6 +49,9 @@ public interface LinkInfoDao extends TimeAwareCrudDao<LinkInfo, Long> {
 
     /**
      * If there are errors owned by given {@link User}.
+     *
+     * @param owner {@link User} to search {@link LinkInfo}s for.
+     * @return true - user owns at least one {@link LinkInfo} record, false - if not.
      */
     boolean existsByOwner(User owner);
 

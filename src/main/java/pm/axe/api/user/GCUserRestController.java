@@ -24,6 +24,14 @@ public class GCUserRestController {
 
     private final TokenCheckerMiddleware tokenChecker;
 
+    /**
+     * Endpoint that allows to trigger Garbage Users Collection manually.
+     * It just triggers GC, for GC results see Application logs.
+     *
+     * @param request to get headers from.
+     * @return 202 - if GC triggered successfully,
+     * 401 - if token check failed, 409 - if another GC operation is in progress.
+     */
     @PostMapping(value = Endpoint.Api.GC_USER_API)
     public ResponseEntity<?> requestGarbageUsersCollection(final HttpServletRequest request) {
         log.info("{} Got Users GC request.", TAG);

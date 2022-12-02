@@ -156,8 +156,8 @@ public class UserOperationsService {
     public OperationResult deleteUser(final User user, final boolean force) {
         OperationResult opResult;
         if (user.isConfirmed() && !force) {
-            log.warn("{} {} User '{}' is confirmed (has at least one confirmed account). " +
-                            "Cannot delete User without FORCE",
+            log.warn("{} {} User '{}' is confirmed (has at least one confirmed account). "
+                            + "Cannot delete User without FORCE",
                     TAG, USER_DELETION_OP, user.getUsername());
             return OperationResult.banned().withMessage("Cannot delete confirmed user. Force required.");
         }
@@ -167,8 +167,8 @@ public class UserOperationsService {
                     TAG, USER_DELETION_OP, user.getUsername());
             //get all linkInfo
             List<LinkInfo> allUsersLinksInfoRecords = linkInfoService.getAllRecordsOwnedByUser(user);
-            List <Link> allUserLinks = new ArrayList<>();
-           for (LinkInfo linkInfo: allUsersLinksInfoRecords) {
+            List<Link> allUserLinks = new ArrayList<>();
+           for (LinkInfo linkInfo : allUsersLinksInfoRecords) {
                Optional<Link> linkOptional = linkService.getLinkByLinkInfo(linkInfo);
                if (linkOptional.isPresent()) {
                    allUserLinks.add(linkOptional.get());
@@ -185,7 +185,7 @@ public class UserOperationsService {
             log.info("{} {} All {} records for '{}' were deleted",
                     TAG, USER_DELETION_OP, LinkInfo.class.getSimpleName(), user.getUsername());
             //delete all links
-            for (Link l: allUserLinks) {
+            for (Link l : allUserLinks) {
                 opResult = linkService.deleteLinkWithIdent(l.getIdent());
                 if (opResult.notOk()) {
                     log.info("{} {} failed to delete {} for '{}'. OpResult: {}",
@@ -209,7 +209,7 @@ public class UserOperationsService {
 
         //remove user's tokens
         List<Token> usersTokens = tokenService.getAllTokensOwnedByUser(user);
-        for (Token t: usersTokens) {
+        for (Token t : usersTokens) {
             opResult = tokenService.deleteToken(t.getToken());
             if (opResult.notOk()) {
                 log.info("{} {} failed to delete {} for '{}'. OpResult: {}",
@@ -226,7 +226,7 @@ public class UserOperationsService {
                 TAG, USER_DELETION_OP, user.getUsername(), UserSettings.class.getSimpleName());
         //remove accounts
         List<Account> userAccounts = accountService.getAllAccountsLinkedWithUser(user);
-        for (Account a: userAccounts) {
+        for (Account a : userAccounts) {
             opResult = accountService.deleteAccount(a);
             if (opResult.notOk()) {
                 log.info("{} {} failed to delete {} for '{}'. OpResult: {}",

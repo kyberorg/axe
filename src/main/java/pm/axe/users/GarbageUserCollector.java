@@ -36,6 +36,11 @@ public class GarbageUserCollector {
     @Getter
     private final Semaphore mutex = new Semaphore(1);
 
+    /**
+     * Collects and deletes Garbage (aka inactive) users. See {@link #isGarbageUser(User)} for Garbage User Criteria.
+     *
+     * @throws InterruptedException when attempt to run method twice.
+     */
     @Async
     @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.HOURS)
     public void collectAndDelete() throws InterruptedException {
