@@ -11,6 +11,7 @@ import pm.axe.db.models.User;
 import pm.axe.result.OperationResult;
 import pm.axe.users.TokenType;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -178,7 +179,7 @@ public class TokenService {
      */
     public OperationResult deleteToken(final String token) {
         try {
-            Optional<Token> tokenRecord = getToken(token);
+            Optional<Token> tokenRecord = tokenDao.findFirstByToken(token);
             if (tokenRecord.isPresent()) {
                 tokenDao.delete(tokenRecord.get());
                 return OperationResult.success();
@@ -191,6 +192,16 @@ public class TokenService {
         } catch (Exception e) {
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
+    }
+
+    /**
+     * Gets all {@link Token}s owned by given {@link User}. This method ain't check if {@link Token} is valid or not.
+     *
+     * @param user {@link Token}'s owner.
+     * @return list of {@link Token}s owned by given {@link User}.
+     */
+    public List<Token> getAllTokensOwnedByUser(final User user) {
+        return tokenDao.findByUser(user);
     }
 
     private void verifyTokenValueIsUnique(final Token token) {

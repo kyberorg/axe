@@ -58,6 +58,7 @@ public final class App {
         public static final String EMAIL_FOR_ERRORS = "app.mail.email4errors";
         public static final String EMAIL_FROM_ADDRESS = "app.mail.from-address";
         public static final String SHOW_RENAME_NOTIFICATION = "app.show-rename-notification";
+        public static final String GARBAGE_USER_AFTER = "app.users.garbage-after-seconds";
     }
 
     public static class Env {

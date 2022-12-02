@@ -109,5 +109,10 @@
       "name": "app.seo.piwik.siteId",
       "type": "java.lang.String",
       "description": "String with Piwik Site Id. See it in Piwik UI."
+    },
+    {
+      "name": "app.users.garbage-after-seconds",
+      "type": "java.lang.Integer",
+      "description": "After which number of seconds user is marked as garbage, when it is unconfirmed and has no links."
     }
   ] }

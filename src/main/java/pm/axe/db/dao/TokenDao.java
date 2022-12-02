@@ -7,6 +7,7 @@ import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.users.TokenType;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -60,6 +61,14 @@ public interface TokenDao extends TimeAwareCrudDao<Token, Long> {
      * @return found {@link Token} record or {@code null}
      */
     Token findByTokenTypeAndUser(TokenType tokenType, User user);
+
+    /**
+     * Finds all {@link Token} records owned by {@link User}.
+     *
+     * @param user {@link Token}'s owner
+     * @return list of found {@link Token}s or empty {@link List}.
+     */
+    List<Token> findByUser(User user);
 
     /**
      * Async Token deletion.

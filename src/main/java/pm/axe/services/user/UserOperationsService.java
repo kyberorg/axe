@@ -4,20 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import pm.axe.db.models.Account;
-import pm.axe.db.models.Token;
-import pm.axe.db.models.User;
-import pm.axe.db.models.UserSettings;
+import pm.axe.db.models.*;
 import pm.axe.internal.RegisterUserInput;
 import pm.axe.result.OperationResult;
 import pm.axe.senders.Senders;
+import pm.axe.services.LinkInfoService;
+import pm.axe.services.LinkService;
 import pm.axe.services.user.rollback.RollbackService;
 import pm.axe.services.user.rollback.RollbackTask;
 import pm.axe.users.AccountType;
 import pm.axe.users.TokenType;
 
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Service, that performs user-related operations.
@@ -27,6 +25,7 @@ import java.util.Stack;
 @Service
 public class UserOperationsService {
     private static final String TAG = "[" + UserOperationsService.class.getSimpleName() + "]";
+    private static final String USER_DELETION_OP = "(Delete User)";
     public static final String TELEGRAM_TOKEN_KEY = "telegramToken";
     private final Stack<RollbackTask> rollbackTasks = new Stack<>();
     private final RollbackService rollbackService;
@@ -34,6 +33,8 @@ public class UserOperationsService {
     private final UserSettingsService userSettingsService;
     private final AccountService accountService;
     private final TokenService tokenService;
+    private final LinkInfoService linkInfoService;
+    private final LinkService linkService;
     private final Senders senders;
 
     /**
@@ -142,5 +143,103 @@ public class UserOperationsService {
         OperationResult success = OperationResult.success();
         return Objects.isNull(telegramConfirmationToken)
                 ? success : success.addPayload(TELEGRAM_TOKEN_KEY, telegramConfirmationToken.getToken());
+    }
+
+    /**
+     * Deletes User and its Accounts.
+     *
+     * @param user {@link User} record to delete
+     * @param force delete {@link User}, event if it has connected records in DB.
+     *              This will delete those records as well.
+     * @return {@link OperationResult#ok()}
+     */
+    public OperationResult deleteUser(final User user, final boolean force) {
+        OperationResult opResult;
+        if (user.isConfirmed() && !force) {
+            log.warn("{} {} User '{}' is confirmed (has at least one confirmed account). "
+                            + "Cannot delete User without FORCE",
+                    TAG, USER_DELETION_OP, user.getUsername());
+            return OperationResult.banned().withMessage("Cannot delete confirmed user. Force required.");
+        }
+        boolean userHasLinks = linkInfoService.isUserHasLinks(user);
+        if (userHasLinks && force) {
+            log.info("{} {} OK. User '{}' has links. Deleting them with force!",
+                    TAG, USER_DELETION_OP, user.getUsername());
+            //get all linkInfo
+            List<LinkInfo> allUsersLinksInfoRecords = linkInfoService.getAllRecordsOwnedByUser(user);
+            List<Link> allUserLinks = new ArrayList<>();
+           for (LinkInfo linkInfo : allUsersLinksInfoRecords) {
+               Optional<Link> linkOptional = linkService.getLinkByLinkInfo(linkInfo);
+               if (linkOptional.isPresent()) {
+                   allUserLinks.add(linkOptional.get());
+               } else {
+                   log.warn("{} {} Suddenly no {} record corresponding with {}. Skipping deleting {} record",
+                           TAG, USER_DELETION_OP, Link.class.getSimpleName(),
+                           LinkInfo.class.getSimpleName(), Link.class.getSimpleName());
+               }
+           }
+           //delete all LinkInfos first
+            for (LinkInfo li : allUsersLinksInfoRecords) {
+                linkInfoService.deleteLinkInfo(li.getIdent());
+            }
+            log.info("{} {} All {} records for '{}' were deleted",
+                    TAG, USER_DELETION_OP, LinkInfo.class.getSimpleName(), user.getUsername());
+            //delete all links
+            for (Link l : allUserLinks) {
+                opResult = linkService.deleteLinkWithIdent(l.getIdent());
+                if (opResult.notOk()) {
+                    log.info("{} {} failed to delete {} for '{}'. OpResult: {}",
+                            TAG, USER_DELETION_OP, Link.class.getSimpleName(), user.getUsername(), opResult);
+                    return opResult;
+                }
+            }
+            log.info("{} {} All {} records for '{}' were deleted",
+                    TAG, USER_DELETION_OP, Link.class.getSimpleName(), user.getUsername());
+        } else if (userHasLinks) {
+            //cannot proceed w/o force
+            log.warn("{} {} User '{}' has links. Cannot delete User without FORCE",
+                    TAG, USER_DELETION_OP, user.getUsername());
+            return OperationResult.banned()
+                    .withMessage(String.format("User '%s' has links. Force required.",
+                            user.getUsername()));
+        } else {
+            //no links
+            log.info("{} {} User '{}' has no links. Great! Next step.", TAG, USER_DELETION_OP, user.getUsername());
+        }
+
+        //remove user's tokens
+        List<Token> usersTokens = tokenService.getAllTokensOwnedByUser(user);
+        for (Token t : usersTokens) {
+            opResult = tokenService.deleteToken(t.getToken());
+            if (opResult.notOk()) {
+                log.info("{} {} failed to delete {} for '{}'. OpResult: {}",
+                        TAG, USER_DELETION_OP, Token.class.getSimpleName(), user.getUsername(), opResult);
+                return opResult;
+            }
+        }
+        log.info("{} {} All {}s for '{}' were deleted",
+                TAG, USER_DELETION_OP, Token.class.getSimpleName(), user.getUsername());
+        //remove user settings
+        Optional<UserSettings> userSettings = userSettingsService.getUserSettings(user);
+        userSettings.ifPresent(userSettingsService::deleteUserSettings);
+        log.info("{} {} '{}' {} were deleted",
+                TAG, USER_DELETION_OP, user.getUsername(), UserSettings.class.getSimpleName());
+        //remove accounts
+        List<Account> userAccounts = accountService.getAllAccountsLinkedWithUser(user);
+        for (Account a : userAccounts) {
+            opResult = accountService.deleteAccount(a);
+            if (opResult.notOk()) {
+                log.info("{} {} failed to delete {} for '{}'. OpResult: {}",
+                        TAG, USER_DELETION_OP, Account.class.getSimpleName(), user.getUsername(), opResult);
+                return opResult;
+            }
+        }
+        log.info("{} {} All {}s linked with '{}' were deleted",
+                TAG, USER_DELETION_OP, Account.class.getSimpleName(), user.getUsername());
+        //remove user record
+        OperationResult deletionResult = userService.deleteUser(user);
+        log.info("{} {} {} '{}' is deleted. Done!",
+                TAG, USER_DELETION_OP, User.class.getSimpleName(), user.getUsername());
+        return deletionResult;
     }
 }

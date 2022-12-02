@@ -28,4 +28,12 @@ public interface AccountDao extends CrudRepository<Account, Long> {
      * @return list of {@link Account}s found. List can be empty, when nothing found.
      */
     List<Account> findByType(AccountType accountType);
+
+    /**
+     * Lists all {@link Account}s owned by given {@link User}.
+     *
+     * @param user type of account wanted.
+     * @return list of {@link Account}s found. List can be empty, when nothing found.
+     */
+    List<Account> findByUser(User user);
 }

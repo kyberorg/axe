@@ -2,6 +2,7 @@ package pm.axe.services.user;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import pm.axe.users.UsernameValidator;
 import pm.axe.utils.crypto.PasswordUtils;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,6 +51,20 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(
                     MessageFormat.format("User with username {0} cannot be found.", username));
         }
+    }
+
+    /**
+     * Returns {@link User} by its username.
+     * As opposed to the {@link #loadUserByUsername(String) this method gives no exceptions.
+     *
+     * @param username non-empty string with username.
+     *
+     * @return {@link Optional} with {@link User} object if found
+     * or {@link Optional#empty()} if not found or username is empty.
+     */
+    public Optional<User> getUserByUsername(final String username) {
+        if (StringUtils.isBlank(username)) return Optional.empty();
+        return userDao.findByUsername(username);
     }
 
     /**
@@ -141,6 +158,37 @@ public class UserService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("Suddenly there is no default user in the system");
         }
+    }
+
+    /**
+     * Deletes {@link User} record. This method does not check if there are any linked records and will fail in any is.
+     *
+     * @param user record to be deleted
+     * @return {@link OperationResult#ok()} if all good or {@link OperationResult} with error if not.
+     */
+    public OperationResult deleteUser(final User user) {
+        try {
+            userDao.delete(user);
+            return OperationResult.success();
+        } catch (CannotCreateTransactionException e) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} Exception on deleting {} record",
+                    TAG, User.class.getSimpleName());
+            log.debug("", e);
+            return OperationResult.generalFail();
+        }
+    }
+
+    /**
+     * Provides all {@link User}s in System.
+     *
+     * @return {@link List} of all {@link User}s.
+     */
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        userDao.findAll().forEach(users::add);
+        return users;
     }
 
     void confirmUser(final User user) {
