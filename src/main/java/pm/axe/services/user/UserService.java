@@ -15,6 +15,8 @@ import pm.axe.users.UsernameValidator;
 import pm.axe.utils.crypto.PasswordUtils;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -176,6 +178,17 @@ public class UserService implements UserDetailsService {
             log.debug("", e);
             return OperationResult.generalFail();
         }
+    }
+
+    /**
+     * Provides all {@link User}s in System.
+     *
+     * @return {@link List} of all {@link User}s.
+     */
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        userDao.findAll().forEach(users::add);
+        return users;
     }
 
     void confirmUser(final User user) {

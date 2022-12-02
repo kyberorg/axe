@@ -179,6 +179,7 @@ public final class Endpoint {
          * User Deletion.
          */
         public static final String DELETE_USER_API = USERS_API + "/{username}";
+        public static final String GC_USER_API = USERS_API + "/gc";
     }
 
     public static class Static {
