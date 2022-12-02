@@ -77,7 +77,7 @@ public class DeleteUserRestController {
             return ResponseEntity.noContent().build();
         } else if (Objects.equals(deletionResult.getResult(), OperationResult.BANNED)) {
             return ResponseEntity.status(HttpCode.FORBIDDEN)
-                    .body(AxeErrorJson.createWithMessage(deletionResult.getMessage()).andStatus(403));
+                    .body(AxeErrorJson.createWithMessage(deletionResult.getMessage()).andStatus(HttpCode.FORBIDDEN));
         } else {
             log.error("{} User deletion failed. OpResult: {}", TAG, deletionResult);
             errorUtils.reportToBugsnag(AxeErrorBuilder.withTechMessage("User Deletion failed").build());
