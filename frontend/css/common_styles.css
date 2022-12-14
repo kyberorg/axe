@@ -161,7 +161,7 @@ html {
     --axe-primary-color: rgb(0, 106, 245);
     --axe-secondary-color: rgb(37, 51, 68);
     --axe-tertiary-color: rgb(144, 189, 249);
-    --axe-announcement-line-color: rgb(0, 205, 0);
+    --axe-announcement-line-color: rgb(218, 222, 226);
 }
 
 html[theme="dark"] {
@@ -173,7 +173,7 @@ html[theme="dark"] {
     --axe-drawer-toggle-color: rgb(235, 243, 254);
     --axe-qr-code-border-radius: 5%;
     --axe-secondary-color: rgb(215, 224, 237);
-    --axe-announcement-line-color: rgb(17, 86, 158);
+    --axe-announcement-line-color: rgb(52, 66, 84);
 }
 
 vcf-toggle-button {
