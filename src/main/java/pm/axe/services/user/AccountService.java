@@ -152,6 +152,8 @@ public class AccountService {
             if (accountToConfirm == null) {
                 return OperationResult.generalFail().withMessage(ERR_ACCOUNT_IS_EMPTY);
             }
+            accountToConfirm.setConfirmed(true);
+            accountDao.save(accountToConfirm);
 
             User accountOwner = accountToConfirm.getUser();
             if (accountOwner.isStillUnconfirmed()) {
