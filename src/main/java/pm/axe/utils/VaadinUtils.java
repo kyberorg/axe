@@ -9,6 +9,9 @@ import java.util.Optional;
  * Vaadin-specific tools.
  */
 public final class VaadinUtils {
+    private VaadinUtils() {
+        throw new UnsupportedOperationException("Utility class");
+    }
     /**
      * Searches for given Query Parameter.
      *

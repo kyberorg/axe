@@ -49,7 +49,6 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
 
     @Override
     public void setParameter(final BeforeEvent beforeEvent, @OptionalParameter final String parameter) {
-        final String OP = "(Account Confirmation)";
         boolean isTokenParamPresent = VaadinUtils.isParamPresent(App.Params.TOKEN, beforeEvent);
         if (!isTokenParamPresent) {
             log.warn("{} Token param absent", TAG);
@@ -73,7 +72,7 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
             //confirm account
             OperationResult confirmationResult = accountService.confirmAccount(token.get().getConfirmationFor());
             if (confirmationResult.notOk()) {
-                log.error("{} {} Failed to confirm account. OpResult: {}", TAG, OP, confirmationResult);
+                log.error("{} Failed to confirm account. OpResult: {}", TAG, confirmationResult);
                 //creating task to delete confirmation token. We should delete it even if confirmation failed.
                 tokenService.deleteTokenRecord(token.get());
                 //failing with error
