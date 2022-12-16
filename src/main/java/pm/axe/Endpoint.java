@@ -77,13 +77,14 @@ public final class Endpoint {
         /**
          * Account Confirmation Page.
          */
-        public static final String CONFIRMATION_PAGE = "account-confirmation";
+        public static final String CONFIRMATION_PAGE = "confirmation";
 
         /**
          * Password Reset Page.
          */
         public static final String PASSWORD_RESET_PAGE = "password-reset";
-
+        public static final String WELCOME_PAGE = "welcome";
+        public static final String REGISTRATION_FAILED_PAGE = "registrationFailed";
     }
 
     /**

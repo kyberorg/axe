@@ -74,6 +74,7 @@ public final class App {
 
     public static class Params {
         public static final String ERROR_ID = "errorId";
+        public static final String TOKEN = "token";
     }
 
     public static class QR {

@@ -2,6 +2,7 @@ package pm.axe.services.user;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 import pm.axe.db.dao.TokenDao;
@@ -191,6 +192,23 @@ public class TokenService {
             return OperationResult.databaseDown();
         } catch (Exception e) {
             return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
+    /**
+     * Deletes {@link Token} record in {@link Async} manner.
+     *
+     * @param token record to delete.
+     */
+    @Async
+    public void deleteTokenRecord(final Token token) {
+        try {
+            tokenDao.delete(token);
+            log.info("{} {} deleted successfully.", TAG, token);
+        } catch (CannotCreateTransactionException c) {
+            log.error("{} unable to delete token. DB is DOWN", TAG);
+        } catch (Exception e) {
+            log.error("{} unable to delete token. Got exception {}", TAG, e.getMessage());
         }
     }
 
