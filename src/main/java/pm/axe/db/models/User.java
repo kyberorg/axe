@@ -7,12 +7,15 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pm.axe.constants.App;
+import pm.axe.internal.ExcludeFromJson;
 import pm.axe.users.UserRole;
 import pm.axe.utils.crypto.PasswordUtils;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,6 +29,7 @@ public class User extends TimeModel implements UserDetails {
     private String username;
 
     @ToString.Exclude
+    @ExcludeFromJson
     @Column(name = "password")
     private String password;
 
@@ -48,6 +52,18 @@ public class User extends TimeModel implements UserDetails {
         userObject.setUsername(username);
         userObject.setPassword(encryptedPassword);
         return userObject;
+    }
+
+    /**
+     * Creates pseudo-user, that indicates that no user stored.
+     *
+     * @return creates {@link User} with negative {@link #id} and hardcoded username.
+     */
+    public static User createPseudoUser() {
+        User pseudoUser = new User();
+        pseudoUser.setId(App.Defaults.NO_USER);
+        pseudoUser.setUsername("Pseudo-user");
+        return pseudoUser;
     }
 
     @Override
@@ -83,5 +99,17 @@ public class User extends TimeModel implements UserDetails {
      */
     public boolean isStillUnconfirmed() {
         return !isConfirmed();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername());
     }
 }

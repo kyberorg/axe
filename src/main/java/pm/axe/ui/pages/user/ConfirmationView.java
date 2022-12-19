@@ -12,6 +12,7 @@ import pm.axe.db.models.Token;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
+import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.users.TokenType;
@@ -69,18 +70,20 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
         boolean tokenHasCorrectType = token.get().getTokenType() == TokenType.ACCOUNT_CONFIRMATION_TOKEN;
         boolean tokenHasLinkedAccount = token.get().getConfirmationFor() != null;
         if (tokenHasCorrectType && tokenHasLinkedAccount) {
-            //confirm account
+            //Confirm account
             OperationResult confirmationResult = accountService.confirmAccount(token.get().getConfirmationFor());
             if (confirmationResult.notOk()) {
                 log.error("{} Failed to confirm account. OpResult: {}", TAG, confirmationResult);
-                //creating task to delete confirmation token. We should delete it even if confirmation failed.
+                //Creating task to delete confirmation token. We should delete it even if confirmation failed.
                 tokenService.deleteTokenRecord(token.get());
-                //failing with error
+                //Failing with error
                 throw new RuntimeException("Failed to confirm account. Got Server-side error");
             }
-            //delete token (async operation)
+            //Delete token (async operation)
             tokenService.deleteTokenRecord(token.get());
-            //rdr to welcome page
+            //Store User to AxeSession aka Login until current session expires
+            AxeSession.getCurrent().ifPresent(as -> as.setUser(token.get().getConfirmationFor().getUser()));
+            //Redirect to welcome page
             redirectToWelcomePage(beforeEvent);
         } else {
             log.warn("{} Token has wrong type. Got: {}, excepted: {}. Or linked account is gone.",

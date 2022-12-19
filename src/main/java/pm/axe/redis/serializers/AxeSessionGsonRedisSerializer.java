@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
+import pm.axe.internal.AxeGsonExclusionStrategy;
 import pm.axe.session.AxeSession;
 
 /**
@@ -20,7 +21,9 @@ public class AxeSessionGsonRedisSerializer implements RedisSerializer<AxeSession
      * Created {@link AxeSessionGsonRedisSerializer} with customised {@link Gson} instance.
      */
     public AxeSessionGsonRedisSerializer() {
-        this.gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
+        this.gson = new GsonBuilder()
+                .addSerializationExclusionStrategy(AxeGsonExclusionStrategy.get())
+                .setDateFormat(DATE_FORMAT).create();
     }
 
     @Override
