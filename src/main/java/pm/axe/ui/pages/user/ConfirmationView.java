@@ -12,6 +12,7 @@ import pm.axe.db.models.Token;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
+import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.users.TokenType;
@@ -80,6 +81,8 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
             }
             //delete token (async operation)
             tokenService.deleteTokenRecord(token.get());
+            //store User to AxeSession
+            AxeSession.getCurrent().ifPresent(as -> as.setUserId(token.get().getConfirmationFor().getUser().getId()));
             //rdr to welcome page
             redirectToWelcomePage(beforeEvent);
         } else {

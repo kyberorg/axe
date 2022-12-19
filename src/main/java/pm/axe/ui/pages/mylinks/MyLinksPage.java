@@ -25,7 +25,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.dom.DomEvent;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -102,7 +101,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private Grid.Column<LinkInfo> actionsColumn;
 
     private final Notification savedNotification = createSavedNotification();
-    private final Notification userModeNotification = createUserModeNotification();
 
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
@@ -234,10 +232,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
                 .withFunction("handleClick", item -> grid.getDataProvider().refreshItem(item)));
 
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
-
-        //Toggle User-mode (kinda easter egg)
-        grid.getElement().addEventListener("keydown", this::toggleUserMode)
-                .setFilter("event.shiftKey && event.key === 'R'");
     }
 
 
@@ -425,9 +419,8 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     }
 
     private void activateLinkEditor() {
-        boolean userModeActivated = AxeSession.getCurrent().map(ys -> ys.getFlags().isUserModeEnabled())
-                .orElse(false);
-        if (userModeActivated) {
+        boolean userLoggedIn = AxeSession.getCurrent().map(AxeSession::hasUser).orElse(false);
+        if (userLoggedIn) {
             EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
             // Close the editor in case of backward between components
             editableLink.getElement()
@@ -610,10 +603,9 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
             if (identNotUpdated) {
                 linkInfoService.update(linkInfo);
             } else {
-                //TODO replace with real-user check once users are there
-                boolean userModeActivated = AxeSession.getCurrent().map(ys -> ys.getFlags().isUserModeEnabled())
-                        .orElse(false);
-                if (userModeActivated) {
+
+                boolean userLoggedIn = AxeSession.getCurrent().map(AxeSession::hasUser).orElse(false);
+                if (userLoggedIn) {
                     OperationResult getLinkResult = linkService.getLinkByIdent(oldLinkInfo.get().getIdent());
                     if (getLinkResult.ok()) {
                         Link link = getLinkResult.getPayload(Link.class);
@@ -756,27 +748,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         return isSmallScreen;
     }
 
-    private void toggleUserMode(final DomEvent event) {
-        boolean userModeActivated = AxeSession.getCurrent()
-                .map(ys -> ys.getFlags().isUserModeEnabled()).orElse(false);
-        if (userModeActivated) {
-            AxeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(false));
-            ui.access(() -> {
-                this.userModeNotification.setText("User mode deactivated");
-                this.userModeNotification.open();
-            });
-            log.info("{} User mode deactivated.", TAG);
-        } else {
-            AxeSession.getCurrent().ifPresent(ys -> ys.getFlags().setUserModeEnabled(true));
-            ui.access(() -> {
-                activateLinkEditor();
-                this.userModeNotification.setText("User mode activated");
-                this.userModeNotification.open();
-            });
-            log.info("{} User mode activated.", TAG);
-        }
-    }
-
     private Notification createSavedNotification() {
         Notification notification = new Notification();
         notification.setText("Saved!");
@@ -784,19 +755,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         notification.setPosition(Notification.Position.MIDDLE);
         notification.setDuration(App.Defaults.NOTIFICATION_DURATION_MILLIS);
         return notification;
-    }
-
-    private Notification createUserModeNotification() {
-        Notification notification = new Notification();
-        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        notification.setPosition(Notification.Position.TOP_CENTER);
-        notification.setDuration(App.Defaults.NOTIFICATION_DURATION_MILLIS);
-        notification.addDetachListener(this::refreshPage);
-        return notification;
-    }
-
-    private void refreshPage(final DetachEvent event) {
-        event.getUI().getPage().reload();
     }
 
     public static class IDs {

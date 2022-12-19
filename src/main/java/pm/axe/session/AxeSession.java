@@ -5,6 +5,7 @@ import com.vaadin.flow.server.VaadinSession;
 import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.constants.App;
 import pm.axe.services.AxeSessionService;
 import pm.axe.utils.AppUtils;
 
@@ -32,6 +33,7 @@ public class AxeSession {
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
     private final Device device;
+    private long userId = App.Defaults.NO_USER;
     private final Flags flags = new Flags();
     private final Settings settings = new Settings();
 
@@ -45,11 +47,6 @@ public class AxeSession {
          * Defines is banner is already displayed and should not appear once again.
          */
         private boolean cookieBannerAlreadyShown = true;
-
-        /**
-         * Temporary flag to simulate User mode until this will be released.
-         */
-        private boolean userModeEnabled = false;
 
         /**
          * Did we already warn user about session expiry ?
@@ -81,7 +78,6 @@ public class AxeSession {
             if (o == null || getClass() != o.getClass()) return false;
             Flags flags = (Flags) o;
             return cookieBannerAlreadyShown == flags.cookieBannerAlreadyShown
-                    && userModeEnabled == flags.userModeEnabled
                     && expirationWarningShown == flags.expirationWarningShown
                     && renameNotificationAlreadyShown == flags.renameNotificationAlreadyShown
                     && dontShowAnnouncement == flags.dontShowAnnouncement;
@@ -89,7 +85,7 @@ public class AxeSession {
 
         @Override
         public int hashCode() {
-            return Objects.hash(cookieBannerAlreadyShown, userModeEnabled, expirationWarningShown);
+            return Objects.hash(cookieBannerAlreadyShown, expirationWarningShown);
         }
     }
 
@@ -122,7 +118,7 @@ public class AxeSession {
 
         @Override
         public int hashCode() {
-            return Objects.hash(analyticsCookiesAllowed);
+            return Objects.hash(analyticsCookiesAllowed, darkMode, usersFeatureEnabled);
         }
     }
 
@@ -258,11 +254,21 @@ public class AxeSession {
         return device != null;
     }
 
+    /**
+     * If session has valid User id. Normally, this indicates that user logged in.
+     *
+     * @return true - if active user session bound to given {@link AxeSession}, false if not.
+     */
+    public boolean hasUser() {
+        return getUserId() != App.Defaults.NO_USER && getUserId() > 0;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof AxeSession session)) return false;
         return getSessionId().equals(session.getSessionId())
+                && Objects.equals(getUserId(), session.getUserId())
                 && Objects.equals(getDevice(), session.getDevice())
                 && getFlags().equals(session.getFlags())
                 && getSettings().equals(session.getSettings());
@@ -270,12 +276,11 @@ public class AxeSession {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSessionId(), getDevice(), getFlags(), getSettings(),
+        return Objects.hash(getSessionId(), getUserId(), getDevice(), getFlags(), getSettings(),
                 getCreated(), getNotValidAfter(), getVersion());
     }
 
     private int sessionTimeout() {
         return AppUtils.getSessionTimeoutFromStaticContext();
     }
-
 }

@@ -89,6 +89,7 @@ public final class App {
         public static final int SESSION_TIMEOUT_SECONDS = 1800;
         public static final int NOTIFICATION_DURATION_MILLIS = 1500;
         public static final String EMAIL_FROM_ADDRESS = "axe@axe.pm";
+        public static final int NO_USER = -1;
     }
 
     public static class Api {
