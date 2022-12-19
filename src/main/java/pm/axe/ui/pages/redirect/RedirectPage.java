@@ -14,7 +14,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpStatus;
 import pm.axe.Endpoint;
 import pm.axe.constants.App;
 import pm.axe.constants.Header;
@@ -169,11 +168,10 @@ public class RedirectPage extends AxeBaseLayout implements HasErrorParameter<Nee
     private int doHeaderRedirect(final String target) {
         if (StringUtils.isNotBlank(target)) {
             VaadinResponse.getCurrent().setHeader(Header.LOCATION, UrlUtils.covertUnicodeUrlToAscii(target));
-            //using 301 here, because Vaadin's HttpStatusCode has no clue about status 308.
-            return HttpStatus.MOVED_PERMANENTLY.value();
+            return HttpCode.TEMPORARY_REDIRECT;
         } else {
             log.error("{} Target is empty", TAG);
-            return HttpStatus.INTERNAL_SERVER_ERROR.value();
+            return HttpCode.SERVER_ERROR;
         }
     }
 
