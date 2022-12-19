@@ -39,18 +39,17 @@ public class AxeSessionCookieService {
     /**
      * Creates Cookie from {@link AxeSession}.
      *
-     * @param as non-empty {@link AxeSession} to get info from.
+     * @param ys non-empty {@link AxeSession} to get info from.
      * @return Session Cookie.
      * @throws IllegalArgumentException when {@link AxeSession} is {@code null}.
      */
-    public Cookie createCookie(final AxeSession as) {
-        if (as == null) throw new IllegalArgumentException("AxeSession cannot be null");
-        Cookie cookie = new Cookie(App.CookieNames.AXE_SESSION, as.getSessionId());
+    public Cookie createCookie(final AxeSession ys) {
+        if (ys == null) throw new IllegalArgumentException("AxeSession cannot be null");
+        Cookie cookie = new Cookie(App.CookieNames.AXE_SESSION, ys.getSessionId());
         cookie.setMaxAge(appUtils.getSessionTimeout());
-        cookie.setSecure(as.getDevice().isSecureConnection());
+        cookie.setSecure(ys.getDevice().isSecureConnection());
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setComment("SameSite=lax");
         return cookie;
     }
 

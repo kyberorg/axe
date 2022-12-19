@@ -31,9 +31,9 @@ public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
     @Override
     public void beforeEnter(final BeforeEnterEvent event) {
         if (event.isRefreshEvent()) return;
-        AxeSession.getCurrent().ifPresent(as -> {
-            if (as.hasUser()) {
-                welcomeSpan.setText(String.format("Welcome, %s!", as.getUser().getUsername()));
+        AxeSession.getCurrent().ifPresent(axs -> {
+            if (axs.hasUser()) {
+                welcomeSpan.setText(String.format("Welcome, %s!", axs.getUser().getUsername()));
             }
         });
     }
