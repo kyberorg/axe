@@ -82,7 +82,7 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
             //delete token (async operation)
             tokenService.deleteTokenRecord(token.get());
             //store User to AxeSession
-            AxeSession.getCurrent().ifPresent(as -> as.setUserId(token.get().getConfirmationFor().getUser().getId()));
+            AxeSession.getCurrent().ifPresent(as -> as.setUser(token.get().getConfirmationFor().getUser()));
             //rdr to welcome page
             redirectToWelcomePage(beforeEvent);
         } else {

@@ -5,7 +5,7 @@ import com.vaadin.flow.server.VaadinSession;
 import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import pm.axe.constants.App;
+import pm.axe.db.models.User;
 import pm.axe.services.AxeSessionService;
 import pm.axe.utils.AppUtils;
 
@@ -33,7 +33,7 @@ public class AxeSession {
 
     private final String sessionId = RandomStringUtils.randomAlphanumeric(SESSION_ID_LEN);
     private final Device device;
-    private long userId = App.Defaults.NO_USER;
+    private User user = User.createPseudoUser();
     private final Flags flags = new Flags();
     private final Settings settings = new Settings();
 
@@ -260,7 +260,7 @@ public class AxeSession {
      * @return true - if active user session bound to given {@link AxeSession}, false if not.
      */
     public boolean hasUser() {
-        return getUserId() != App.Defaults.NO_USER && getUserId() > 0;
+        return getUser() != User.createPseudoUser();
     }
 
     @Override
@@ -268,7 +268,7 @@ public class AxeSession {
         if (this == o) return true;
         if (!(o instanceof AxeSession session)) return false;
         return getSessionId().equals(session.getSessionId())
-                && Objects.equals(getUserId(), session.getUserId())
+                && Objects.equals(getUser(), session.getUser())
                 && Objects.equals(getDevice(), session.getDevice())
                 && getFlags().equals(session.getFlags())
                 && getSettings().equals(session.getSettings());
@@ -276,7 +276,7 @@ public class AxeSession {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSessionId(), getUserId(), getDevice(), getFlags(), getSettings(),
+        return Objects.hash(getSessionId(), getUser(), getDevice(), getFlags(), getSettings(),
                 getCreated(), getNotValidAfter(), getVersion());
     }
 

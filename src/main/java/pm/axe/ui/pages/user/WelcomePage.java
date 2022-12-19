@@ -8,13 +8,9 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import pm.axe.Endpoint;
-import pm.axe.db.models.User;
-import pm.axe.services.user.UserService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
-
-import java.util.Optional;
 
 /**
  * Page, which shown when confirmation performed by {@link ConfirmationView} succeeded.
@@ -24,13 +20,11 @@ import java.util.Optional;
 @Route(value = Endpoint.UI.WELCOME_PAGE, layout = MainView.class)
 @PageTitle("Welcome - Axe.pm")
 public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
-    private final UserService userService;
     private final Span welcomeSpan = new Span("Welcome");
     /**
      * Creates {@link WelcomePage}.
      */
-    public WelcomePage(UserService userService) {
-        this.userService = userService;
+    public WelcomePage() {
         add(welcomeSpan);
     }
 
@@ -39,8 +33,7 @@ public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
         if (event.isRefreshEvent()) return;
         AxeSession.getCurrent().ifPresent(as -> {
             if (as.hasUser()) {
-                Optional<User> boundUser = userService.getUserById(as.getUserId());
-                boundUser.ifPresent(user -> welcomeSpan.setText("Welcome, " + user.getUsername()));
+                welcomeSpan.setText("Welcome, " + as.getUser().getUsername());
             }
         });
     }
