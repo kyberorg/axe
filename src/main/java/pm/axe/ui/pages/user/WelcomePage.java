@@ -20,7 +20,7 @@ import pm.axe.ui.layouts.AxeBaseLayout;
 @Route(value = Endpoint.UI.WELCOME_PAGE, layout = MainView.class)
 @PageTitle("Welcome - Axe.pm")
 public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
-    private final Span welcomeSpan = new Span("Welcome");
+    private final Span welcomeSpan = new Span("Welcome!");
     /**
      * Creates {@link WelcomePage}.
      */
@@ -33,7 +33,7 @@ public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
         if (event.isRefreshEvent()) return;
         AxeSession.getCurrent().ifPresent(as -> {
             if (as.hasUser()) {
-                welcomeSpan.setText("Welcome, " + as.getUser().getUsername());
+                welcomeSpan.setText(String.format("Welcome, %s!", as.getUser().getUsername()));
             }
         });
     }

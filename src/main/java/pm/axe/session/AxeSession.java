@@ -255,12 +255,12 @@ public class AxeSession {
     }
 
     /**
-     * If session has valid User id. Normally, this indicates that user logged in.
+     * If session has valid User. Normally, this indicates that user logged in.
      *
      * @return true - if active user session bound to given {@link AxeSession}, false if not.
      */
     public boolean hasUser() {
-        return getUser() != User.createPseudoUser();
+        return !getUser().equals(User.createPseudoUser());
     }
 
     @Override
