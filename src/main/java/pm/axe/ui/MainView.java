@@ -369,10 +369,6 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
     private void sendSessionCookie(final AxeSession axeSession) {
         //create cookie + remove current if any + send new to browser
         Cookie sessionCookie = cookieService.createCookie(axeSession);
-        //resetting current if any
-        Cookie resetCookie = new Cookie(sessionCookie.getName(), "-");
-        resetCookie.setMaxAge(0);
-        VaadinService.getCurrentResponse().addCookie(resetCookie);
         //sending normal one
         VaadinService.getCurrentResponse().addCookie(sessionCookie);
     }
