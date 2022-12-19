@@ -60,10 +60,10 @@ public class User extends TimeModel implements UserDetails {
      * @return creates {@link User} with negative {@link #id} and hardcoded username.
      */
     public static User createPseudoUser() {
-        User placeholder = new User();
-        placeholder.setId(App.Defaults.NO_USER);
-        placeholder.setUsername("Pseudo-user");
-        return placeholder;
+        User pseudoUser = new User();
+        pseudoUser.setId(App.Defaults.NO_USER);
+        pseudoUser.setUsername("Pseudo-user");
+        return pseudoUser;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class User extends TimeModel implements UserDetails {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
         return Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername());

@@ -24,12 +24,12 @@ public final class AxeGsonExclusionStrategy {
         return new ExclusionStrategy() {
 
             @Override
-            public boolean shouldSkipField(FieldAttributes field) {
+            public boolean shouldSkipField(final FieldAttributes field) {
                 return field.getAnnotation(ExcludeFromJson.class) != null;
             }
 
             @Override
-            public boolean shouldSkipClass(Class<?> aClass) {
+            public boolean shouldSkipClass(final Class<?> aClass) {
                 return false;
             }
         };
