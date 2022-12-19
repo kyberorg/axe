@@ -169,7 +169,8 @@ public class RedirectPage extends AxeBaseLayout implements HasErrorParameter<Nee
     private int doHeaderRedirect(final String target) {
         if (StringUtils.isNotBlank(target)) {
             VaadinResponse.getCurrent().setHeader(Header.LOCATION, UrlUtils.covertUnicodeUrlToAscii(target));
-            return HttpStatus.PERMANENT_REDIRECT.value();
+            //using 301 here, because Vaadin's HttpStatusCode has no clue about status 308.
+            return HttpStatus.MOVED_PERMANENTLY.value();
         } else {
             log.error("{} Target is empty", TAG);
             return HttpStatus.INTERNAL_SERVER_ERROR.value();
