@@ -28,7 +28,7 @@ public class SlashEndpointTest extends UnirestTest {
      */
     @Test
     public void storeURLAndCheckIfRedirectToSameURL() {
-        String url = "https://ci.yadev.eu";
+        String url = "https://undev.byk.ee";
         String ident = store(url);
         assertNotNull(ident);
 
@@ -42,7 +42,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(true);
 
-        assertEquals(HttpCode.TEMPORARY_REDIRECT, result.getStatus());
+        assertEquals(301, result.getStatus());
         assertTrue(result.getHeaders().containsKey(Header.LOCATION));
         String location = result.getHeaders().getFirst(Header.LOCATION);
         assertTrue(StringUtils.isNotBlank(location), "Got empty " + Header.LOCATION + " header");
