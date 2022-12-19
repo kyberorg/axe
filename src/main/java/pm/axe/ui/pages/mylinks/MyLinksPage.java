@@ -125,8 +125,8 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     }
 
     private void initElements() {
-        sessionBanner.setText("Those are links stored in current session. "
-                + "Soon you will be able to store them permanently, once we introduce users");
+        sessionBanner.setText("Those are links stored in current session (30 minutes). "
+                + "Soon you will be able to store them permanently, once we introduce users.");
 
         noRecordsBannerText.setText("It looks lonely here. What about saving something at ");
         noRecordsBannerLink.setHref("/");
