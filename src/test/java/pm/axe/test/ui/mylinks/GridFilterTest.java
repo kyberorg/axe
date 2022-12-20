@@ -10,7 +10,7 @@ import pm.axe.test.ui.SelenideTest;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.visible;
-import static pm.axe.constants.App.THREE;
+import static pm.axe.Axe.C.THREE;
 
 /**
  * Tests Filter for Grid.

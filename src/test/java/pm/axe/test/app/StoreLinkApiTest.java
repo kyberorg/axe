@@ -1,15 +1,11 @@
 package pm.axe.test.app;
 
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
+import kong.unirest.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junitpioneer.jupiter.Issue;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.json.EmptyJson;
 import pm.axe.json.PostLinkRequest;
 import pm.axe.json.PostLinkResponse;
@@ -18,8 +14,8 @@ import pm.axe.test.utils.TestUtils;
 import pm.axe.utils.AppUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static pm.axe.constants.Header.CONTENT_TYPE;
-import static pm.axe.constants.Header.X_AXE_TOKEN;
+import static pm.axe.Axe.Headers.CONTENT_TYPE;
+import static pm.axe.Axe.Headers.X_AXE_TOKEN;
 import static pm.axe.core.IdentGenerator.IDENT_DEFAULT_LENGTH;
 
 /**
@@ -42,7 +38,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -56,7 +52,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.UNSUPPORTED_MEDIA_TYPE, result.getStatus());
+        assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, result.getStatus());
     }
 
     /**
@@ -65,14 +61,14 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithEmptyBodyStatusIs400() {
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body("");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -81,14 +77,14 @@ public class StoreLinkApiTest extends UnirestTest {
     @Test
     public void onRequestWithNonJsonBodyStatusIs400() {
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body("not a JSON");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
 
         TestUtils.assertResultIsAxeErrorJson(result);
     }
@@ -100,14 +96,14 @@ public class StoreLinkApiTest extends UnirestTest {
     public void onRequestWithJSONWithoutLinkParamStatusIs422() {
         HttpRequest request =
                 Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                        .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                        .header(CONTENT_TYPE, MimeTypes.JSON)
                         .body(EmptyJson.create().toString());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.UNPROCESSABLE_ENTRY, result.getStatus());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, result.getStatus());
 
         TestUtils.assertResultIsAxeErrorJson(result);
     }
@@ -121,14 +117,14 @@ public class StoreLinkApiTest extends UnirestTest {
         String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.UNPROCESSABLE_ENTRY, result.getStatus());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, result.getStatus());
 
         TestUtils.assertResultIsAxeErrorJson(result);
     }
@@ -142,14 +138,14 @@ public class StoreLinkApiTest extends UnirestTest {
         String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.UNPROCESSABLE_ENTRY, result.getStatus());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, result.getStatus());
 
         TestUtils.assertResultIsAxeErrorJson(result);
     }
@@ -159,18 +155,18 @@ public class StoreLinkApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithCorrectLinkStatusIs201() {
-        String longLink = "https://kyberorg.io"; // That very long, really
+        String longLink = "https://kyberorg.io"; // This is very long, really
         String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.CREATED, result.getStatus());
+        assertEquals(HttpStatus.CREATED, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
@@ -180,18 +176,18 @@ public class StoreLinkApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithCorrectLinkReturnsJsonWithIdent() {
-        String longLink = "https://kyberorg.io"; // That very long, really
+        String longLink = "https://kyberorg.io"; // That's very long, really
         String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.CREATED, result.getStatus());
+        assertEquals(kong.unirest.HttpStatus.CREATED, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -214,18 +210,18 @@ public class StoreLinkApiTest extends UnirestTest {
      */
     @Test
     public void onRequestWithCorrectLinkReturnsJsonWithShortFQDNLink() {
-        String longLink = "https://kyberorg.io"; // That very long, really
+        String longLink = "https://kyberorg.io"; // That's very long, really
         String correctJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.CREATED, result.getStatus());
+        assertEquals(HttpStatus.CREATED, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -255,14 +251,14 @@ public class StoreLinkApiTest extends UnirestTest {
         String correctJson = PostLinkRequest.create().withLink(linkWithoutProtocol).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.CREATED, result.getStatus());
+        assertEquals(HttpStatus.CREATED, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
@@ -276,14 +272,14 @@ public class StoreLinkApiTest extends UnirestTest {
         String correctJson = PostLinkRequest.create().withLink(bannedUrl).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(correctJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.FORBIDDEN, result.getStatus());
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }
@@ -306,7 +302,7 @@ public class StoreLinkApiTest extends UnirestTest {
         String requestJson = req.toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .header(X_AXE_TOKEN, TestUtils.getDeleteToken())
                 .body(requestJson);
         HttpResponse<String> result = request.asString();
@@ -314,11 +310,11 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.CREATED, result.getStatus());
+        assertEquals(HttpStatus.CREATED, result.getStatus());
     }
 
     /**
-     * Tests that if desired ident conflicts with existing routes - status 409 is send.
+     * Tests that if desired ident conflicts with existing routes - status 409 is sent.
      */
     @Test
     @EnabledIfSystemProperty(named = TestApp.Properties.TEST_MASTER_TOKEN, matches = ".*.*",
@@ -333,7 +329,7 @@ public class StoreLinkApiTest extends UnirestTest {
         String requestJson = req.toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .header(X_AXE_TOKEN, TestUtils.getDeleteToken())
                 .body(requestJson);
         HttpResponse<String> result = request.asString();
@@ -341,7 +337,7 @@ public class StoreLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.CONFLICT, result.getStatus());
+        assertEquals(HttpStatus.CONFLICT, result.getStatus());
     }
 
 }

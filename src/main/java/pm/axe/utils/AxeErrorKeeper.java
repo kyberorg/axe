@@ -3,7 +3,7 @@ package pm.axe.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.exception.error.AxeError;
 
 import java.util.Map;
@@ -55,24 +55,24 @@ public class AxeErrorKeeper {
     }
 
     private void logAxeError(final AxeError axeError) {
-        StringBuilder logMessage = new StringBuilder("=== Error ===").append(App.NEW_LINE);
-        logMessage.append("Error ID: ").append(axeError.getId()).append(App.NEW_LINE);
-        logMessage.append("TimeStamp: ").append(axeError.getTimeStamp()).append(App.NEW_LINE);
+        StringBuilder logMessage = new StringBuilder("=== Error ===").append(Axe.C.NEW_LINE);
+        logMessage.append("Error ID: ").append(axeError.getId()).append(Axe.C.NEW_LINE);
+        logMessage.append("TimeStamp: ").append(axeError.getTimeStamp()).append(Axe.C.NEW_LINE);
 
         if (StringUtils.isNotBlank(axeError.getTechMessage())) {
-            logMessage.append("Tech message: ").append(axeError.getTechMessage()).append(App.NEW_LINE);
+            logMessage.append("Tech message: ").append(axeError.getTechMessage()).append(Axe.C.NEW_LINE);
         }
 
-        if (axeError.getHttpStatus() != App.NO_STATUS) {
-            logMessage.append("Status: ").append(axeError.getHttpStatus()).append(App.NEW_LINE);
+        if (axeError.getHttpStatus() != Axe.C.NO_STATUS) {
+            logMessage.append("Status: ").append(axeError.getHttpStatus()).append(Axe.C.NEW_LINE);
         }
         if (axeError.getRawException() != null) {
             if (log.isDebugEnabled()) {
                 logMessage.append("Trace: ")
-                        .append(ErrorUtils.stackTraceToString(axeError.getRawException())).append(App.NEW_LINE);
+                        .append(ErrorUtils.stackTraceToString(axeError.getRawException())).append(Axe.C.NEW_LINE);
             } else {
                 logMessage.append("Exception: ")
-                        .append(axeError.getRawException().getMessage()).append(App.NEW_LINE);
+                        .append(axeError.getRawException().getMessage()).append(Axe.C.NEW_LINE);
             }
         }
         logMessage.append("=============");

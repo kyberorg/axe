@@ -37,9 +37,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import pm.axe.Axe;
+import pm.axe.Axe.Session;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.App.Session;
 import pm.axe.core.IdentValidator;
 import pm.axe.db.models.Link;
 import pm.axe.db.models.LinkInfo;
@@ -254,7 +254,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
 
     private Image qrImage(final LinkInfo linkInfo) {
         Image image = new Image();
-        OperationResult qrCodeResult = qrCodeService.getQRCode(linkInfo.getIdent(), App.QR.MINIMAL_SIZE_IN_PIXELS);
+        OperationResult qrCodeResult = qrCodeService.getQRCode(linkInfo.getIdent(), Axe.QR.MINIMAL_SIZE_IN_PIXELS);
         if (qrCodeResult.ok()) {
             image.setSrc(qrCodeResult.getStringPayload());
         }
@@ -713,7 +713,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
             timeZone = ZoneId.systemDefault();
         }
         ZonedDateTime tzDate = ts.toLocalDateTime().atZone(timeZone);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(App.TIME_DATE_FORMAT);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Axe.C.TIME_DATE_FORMAT);
         return tzDate.format(formatter);
     }
 
@@ -753,7 +753,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         notification.setText("Saved!");
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         notification.setPosition(Notification.Position.MIDDLE);
-        notification.setDuration(App.Defaults.NOTIFICATION_DURATION_MILLIS);
+        notification.setDuration(Axe.Defaults.NOTIFICATION_DURATION_MILLIS);
         return notification;
     }
 

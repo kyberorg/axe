@@ -1,16 +1,15 @@
 package pm.axe.controllers;
 
+import kong.unirest.HttpStatus;
+import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.exception.error.AxeError;
 import pm.axe.json.AxeErrorJson;
 import pm.axe.utils.AppUtils;
@@ -65,7 +64,7 @@ public class AxeErrorController implements ErrorController {
         path = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
         status = getCorrectStatus();
 
-        if (status < HttpCode.BAD_REQUEST) {
+        if (status < HttpStatus.BAD_REQUEST) {
             //there is no error
             logRequest(false);
             return;
@@ -96,8 +95,8 @@ public class AxeErrorController implements ErrorController {
                 responseWithJson(errorJson);
                 return;
             } else {
-                response.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON);
-                response.setStatus(HttpCode.NOT_ACCEPTABLE);
+                response.setHeader(Axe.Headers.ACCEPT, MimeTypes.JSON);
+                response.setStatus(HttpStatus.NOT_ACCEPTABLE);
             }
             return;
         }
@@ -108,8 +107,8 @@ public class AxeErrorController implements ErrorController {
             } else if (AppUtils.clientWantsJson(req)) {
                 responseWithJson(errorJson);
             } else {
-                resp.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON + "," + MimeType.TEXT_HTML);
-                resp.setStatus(HttpCode.NOT_ACCEPTABLE);
+                resp.setHeader(Axe.Headers.ACCEPT, MimeTypes.JSON + "," + MimeTypes.HTML);
+                resp.setStatus(HttpStatus.NOT_ACCEPTABLE);
             }
         } else {
             //html
@@ -119,17 +118,17 @@ public class AxeErrorController implements ErrorController {
 
     private int getCorrectStatus() {
         if (request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE) == null) {
-            status = HttpCode.SERVER_ERROR;
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         } else {
             try {
                 status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
             } catch (Exception e) {
-                status = HttpCode.SERVER_ERROR;
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
 
             //DB is DOWN
             if (cause instanceof CannotCreateTransactionException) {
-                status = HttpCode.APP_IS_DOWN;
+                status = HttpStatus.SERVICE_UNAVAILABLE;
             }
         }
         return status;
@@ -156,7 +155,7 @@ public class AxeErrorController implements ErrorController {
 
     private void responseWithJson(final AxeErrorJson json) throws IOException {
         response.setStatus(status);
-        response.setContentType(MimeType.APPLICATION_JSON);
+        response.setContentType(MimeTypes.JSON);
         response.getWriter().write(json.toString());
     }
 
@@ -169,14 +168,14 @@ public class AxeErrorController implements ErrorController {
         final String errorPageRoute = loopDetector.isLoopDetected()
                 ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
 
-        response.setStatus(HttpCode.TEMPORARY_REDIRECT);
-        response.setHeader(Header.LOCATION, "/" + errorPageRoute + "?"
-                + App.Params.ERROR_ID + "=" + errorId);
+        response.setStatus(HttpStatus.TEMPORARY_REDIRECT);
+        response.setHeader(Axe.Headers.LOCATION, "/" + errorPageRoute + "?"
+                + Axe.Params.ERROR_ID + "=" + errorId);
     }
 
     private void redirectToAppDownAnalogPage() {
-        response.setStatus(HttpCode.TEMPORARY_REDIRECT);
-        response.setHeader(Header.LOCATION, Endpoint.TNT.APP_OFFLINE);
+        response.setStatus(HttpStatus.TEMPORARY_REDIRECT);
+        response.setHeader(Axe.Headers.LOCATION, Endpoint.TNT.APP_OFFLINE);
     }
 
 }

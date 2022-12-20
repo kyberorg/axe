@@ -2,7 +2,7 @@ package pm.axe.test.unit;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.mm.Mattermost;
 import pm.axe.test.utils.mock.MattermostMock;
 
@@ -129,11 +129,11 @@ public class MattermostTests extends UnitTest {
 
         Mattermost mm = Mattermost.createFromResponseBody(matterMock.toString());
 
-        assertEquals(App.NO_VALUE, mm.getChannelId());
-        assertEquals(App.NO_VALUE, mm.getChannelName());
-        assertEquals(App.NO_VALUE, mm.getCommand());
-        assertEquals(App.NO_VALUE, mm.getTeamDomain());
-        assertEquals(App.NO_VALUE, mm.getTeamId());
+        assertEquals(Axe.C.NO_VALUE, mm.getChannelId());
+        assertEquals(Axe.C.NO_VALUE, mm.getChannelName());
+        assertEquals(Axe.C.NO_VALUE, mm.getCommand());
+        assertEquals(Axe.C.NO_VALUE, mm.getTeamDomain());
+        assertEquals(Axe.C.NO_VALUE, mm.getTeamId());
         assertTrue(mm.getText().contains(host));
         assertEquals(token, mm.getToken());
         assertEquals(userId, mm.getUserId());

@@ -7,7 +7,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.internal.ExcludeFromJson;
 import pm.axe.users.UserRole;
 import pm.axe.utils.crypto.PasswordUtils;
@@ -61,7 +61,7 @@ public class User extends TimeModel implements UserDetails {
      */
     public static User createPseudoUser() {
         User pseudoUser = new User();
-        pseudoUser.setId(App.Defaults.NO_USER);
+        pseudoUser.setId(Axe.Defaults.NO_USER);
         pseudoUser.setUsername("Pseudo-user");
         return pseudoUser;
     }

@@ -4,15 +4,15 @@ import com.beust.jcommander.Strings;
 import com.redfin.sitemapgenerator.ChangeFreq;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
+import kong.unirest.HttpStatus;
+import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.utils.AppUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +50,7 @@ public class TechPartsController {
      * @return string with generated XML
      */
     @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.SITEMAP_XML,
-            produces = MimeType.APPLICATION_XML)
+            produces = MimeTypes.XML)
     public @ResponseBody String getSitemap(final HttpServletResponse response) {
         String baseUrl = appUtils.getServerUrl();
         WebSitemapGenerator sitemapGenerator;
@@ -67,11 +67,11 @@ public class TechPartsController {
 
             sitemapGenerator.addUrl(mainPage).addUrl(appInfo);
         } catch (MalformedURLException e) {
-            response.setStatus(HttpCode.SERVER_ERROR);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             throw new RuntimeException("Server URL is not configured - cannot generate Sitemap.xml");
         }
 
-        response.setContentType(MimeType.APPLICATION_XML);
+        response.setContentType(MimeTypes.XML);
         return Strings.join("", sitemapGenerator.writeAsStrings());
     }
 
@@ -80,20 +80,20 @@ public class TechPartsController {
      *
      * @return robots.txt content
      */
-    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.ROBOTS_TXT, produces = MimeType.TEXT_PLAIN)
+    @RequestMapping(method = RequestMethod.GET, value = Endpoint.Static.ROBOTS_TXT, produces = MimeTypes.TXT)
     public @ResponseBody String getRobotsTxt() {
         StringBuilder builder = new StringBuilder();
-        builder.append("User-agent: ").append("*").append(App.NEW_LINE);
-        builder.append("Crawl-delay: ").append("1000").append(App.NEW_LINE);
+        builder.append("User-agent: ").append("*").append(Axe.C.NEW_LINE);
+        builder.append("Crawl-delay: ").append("1000").append(Axe.C.NEW_LINE);
 
         if (appUtils.areCrawlersAllowed()) {
             builder.append("Allow: ");
         } else {
            builder.append("Disallow: ");
         }
-        builder.append("/").append(App.NEW_LINE);
+        builder.append("/").append(Axe.C.NEW_LINE);
 
-        builder.append("Disallow: ").append("/vaadinServlet/").append(App.NEW_LINE);
+        builder.append("Disallow: ").append("/vaadinServlet/").append(Axe.C.NEW_LINE);
         builder.append("Sitemap: ").append(appUtils.getServerUrl()).append(Endpoint.Static.SITEMAP_XML);
         return builder.toString();
     }

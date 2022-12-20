@@ -7,8 +7,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 import pm.axe.exception.IdentNotFoundException;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
@@ -59,7 +59,7 @@ public class IdentNotFoundPage extends AxeBaseLayout implements HasErrorParamete
      */
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<IdentNotFoundException> parameter) {
-        return HttpCode.NOT_FOUND;
+        return HttpStatus.NOT_FOUND;
     }
 
     public static class IDs {

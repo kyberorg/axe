@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 
 import java.util.Properties;
 
@@ -36,7 +36,7 @@ public class MailConfig {
     public JavaMailSender getJavaMailSender() {
         if (StringUtils.isAnyBlank(mailUser, mailPassword)) {
             return noOpSender();
-        } else if (mailUser.equals(App.MINUS) || mailPassword.equals(App.MINUS)) {
+        } else if (mailUser.equals(Axe.C.MINUS) || mailPassword.equals(Axe.C.MINUS)) {
             return noOpSender();
         } else {
             return axeSender();

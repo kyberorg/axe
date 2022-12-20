@@ -4,7 +4,7 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.WebBrowser;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import pm.axe.constants.Header;
+import pm.axe.Axe;
 import pm.axe.services.RobotsService;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.DeviceUtils;
@@ -55,8 +55,8 @@ public class Device implements Serializable {
             String ip = null;
             String forwardedProtoHeader = null;
             if (request != null) {
-                ip = request.getHeader(Header.X_REAL_IP);
-                forwardedProtoHeader = request.getHeader(Header.X_FORWARDED_PROTO);
+                ip = request.getHeader(Axe.Headers.X_REAL_IP);
+                forwardedProtoHeader = request.getHeader(Axe.Headers.X_FORWARDED_PROTO);
             }
 
             if (StringUtils.isBlank(ip)) {

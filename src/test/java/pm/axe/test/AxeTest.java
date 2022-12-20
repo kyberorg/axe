@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.test.utils.TestWatcherExtension;
@@ -106,21 +106,21 @@ public abstract class AxeTest {
         String testLocation =
                 runMode == TestApp.RunMode.GRID ? "at Grid (" + Configuration.remote + ")" : "locally";
 
-        StringBuilder commonInfoBuilder = new StringBuilder(App.NEW_LINE);
-        commonInfoBuilder.append("=== Tests Common Info ===").append(App.NEW_LINE);
-        commonInfoBuilder.append(String.format("BuildName: %s", BUILD_NAME)).append(App.NEW_LINE);
-        commonInfoBuilder.append(String.format("Will test %s", testLocation)).append(App.NEW_LINE);
-        commonInfoBuilder.append(String.format("Test URL: %s", BASE_URL)).append(App.NEW_LINE);
+        StringBuilder commonInfoBuilder = new StringBuilder(Axe.C.NEW_LINE);
+        commonInfoBuilder.append("=== Tests Common Info ===").append(Axe.C.NEW_LINE);
+        commonInfoBuilder.append(String.format("BuildName: %s", BUILD_NAME)).append(Axe.C.NEW_LINE);
+        commonInfoBuilder.append(String.format("Will test %s", testLocation)).append(Axe.C.NEW_LINE);
+        commonInfoBuilder.append(String.format("Test URL: %s", BASE_URL)).append(Axe.C.NEW_LINE);
 
         if (runMode == TestApp.RunMode.GRID) {
-            commonInfoBuilder.append("Live Sessions: https://grid.kyberorg.io/#/").append(App.NEW_LINE);
+            commonInfoBuilder.append("Live Sessions: https://grid.kyberorg.io/#/").append(Axe.C.NEW_LINE);
             commonInfoBuilder.append(String.format("TestVideo: https://grid.kyberorg.io/video/%s.mp4", BUILD_NAME))
-                    .append(App.NEW_LINE);
+                    .append(Axe.C.NEW_LINE);
         } else {
             commonInfoBuilder.append(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY))
-                    .append(App.NEW_LINE);
+                    .append(Axe.C.NEW_LINE);
         }
-        commonInfoBuilder.append("==================").append(App.NEW_LINE);
+        commonInfoBuilder.append("==================").append(Axe.C.NEW_LINE);
 
         System.out.println(commonInfoBuilder);
     }
@@ -135,11 +135,11 @@ public abstract class AxeTest {
         System.out.println();
         System.out.println();
         StringBuilder summary = new StringBuilder("===== Tests Summary =====");
-        summary.append(App.NEW_LINE);
+        summary.append(Axe.C.NEW_LINE);
 
         //tests on fire
         summary.append("----- ").append(testReport.countOnFireTests()).append(" tests On Fire").append(" -----");
-        summary.append(App.NEW_LINE);
+        summary.append(Axe.C.NEW_LINE);
         for (TestData testData : testReport.getOnFireTests()) {
             summary.append(testData);
             if (testData.getOnFireReason() != null) {
@@ -150,12 +150,12 @@ public abstract class AxeTest {
                     summary.append(testData.getOnFireReason().toString());
                 }
             }
-            summary.append(App.NEW_LINE);
+            summary.append(Axe.C.NEW_LINE);
         }
 
         //failed tests
         summary.append("----- ").append(testReport.countFailedTests()).append(" tests failed").append(" -----");
-        summary.append(App.NEW_LINE);
+        summary.append(Axe.C.NEW_LINE);
         for (TestData testData : testReport.getFailedTests()) {
             summary.append(testData);
             if (testData.getFailCause() != null) {
@@ -166,43 +166,43 @@ public abstract class AxeTest {
                     summary.append(testData.getFailCause().toString());
                 }
             }
-            summary.append(App.NEW_LINE);
+            summary.append(Axe.C.NEW_LINE);
         }
 
         //passed tests
         summary.append("----- ").append(testReport.countPassedTests()).append(" tests passed").append(" -----");
-        summary.append(App.NEW_LINE);
+        summary.append(Axe.C.NEW_LINE);
         if (REPORT_PASSED_TESTS) {
             for (TestData testData : testReport.getPassedTests()) {
                 summary.append(testData);
-                summary.append(App.NEW_LINE);
+                summary.append(Axe.C.NEW_LINE);
             }
         } else {
             summary.append("Passed tests are not included. Please use -D")
                     .append(TestApp.Properties.REPORT_PASSED_TESTS).append("=true to include them.");
-            summary.append(App.NEW_LINE);
+            summary.append(Axe.C.NEW_LINE);
         }
 
         //ignored tests
         summary.append("----- ").append(testReport.countIgnoredTests()).append(" tests ignored").append(" -----");
-        summary.append(App.NEW_LINE);
+        summary.append(Axe.C.NEW_LINE);
         for (TestData testData : testReport.getIgnoredTests()) {
             summary.append(testData);
             if (StringUtils.isNotBlank(testData.getIgnoreReason())) {
                 summary.append(" Reason: ").append(testData.getIgnoreReason());
             }
-            summary.append(App.NEW_LINE);
+            summary.append(Axe.C.NEW_LINE);
         }
 
         //aborted tests
         summary.append("----- ").append(testReport.countAbortedTests()).append(" tests aborted").append(" -----");
-        summary.append(App.NEW_LINE);
+        summary.append(Axe.C.NEW_LINE);
         for (TestData testData : testReport.getAbortedTests()) {
             summary.append(testData);
             if (testData.getAbortedCause() != null) {
                 summary.append(" Reason: ").append(testData.getAbortedCause().getMessage());
             }
-            summary.append(App.NEW_LINE);
+            summary.append(Axe.C.NEW_LINE);
         }
         //number of tests
         summary.append("Total tests run: ").append(testReport.countCompletedTests())
@@ -217,7 +217,7 @@ public abstract class AxeTest {
         summary.append("in ").append(totalTimeSpent).append(" (de facto in ").append(deFactoTimeSpent).append(")");
 
         //print me now
-        summary.append(String.valueOf(App.NEW_LINE).repeat(2));
+        summary.append(String.valueOf(Axe.C.NEW_LINE).repeat(2));
         System.out.println(summary);
     }
 
@@ -230,7 +230,7 @@ public abstract class AxeTest {
         //on fire tests
         for (TestData testData : testReport.getOnFireTests()) {
             try {
-                FileUtils.writeStringToFile(file, testData.toTestName() + App.NEW_LINE,
+                FileUtils.writeStringToFile(file, testData.toTestName() + Axe.C.NEW_LINE,
                         StandardCharsets.UTF_8, true);
             } catch (IOException e) {
                 System.err.println("Failed to write failed test to file " + FILE_WITH_FAILED_TESTS);
@@ -240,7 +240,7 @@ public abstract class AxeTest {
         //failed tests
         for (TestData testData : testReport.getFailedTests()) {
             try {
-                FileUtils.writeStringToFile(file, testData.toTestName() + App.NEW_LINE,
+                FileUtils.writeStringToFile(file, testData.toTestName() + Axe.C.NEW_LINE,
                         StandardCharsets.UTF_8, true);
             } catch (IOException e) {
                 System.err.println("Failed to write failed test to file " + FILE_WITH_FAILED_TESTS);

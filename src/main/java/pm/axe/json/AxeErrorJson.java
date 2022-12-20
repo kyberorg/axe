@@ -3,10 +3,10 @@ package pm.axe.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
+import kong.unirest.HttpStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import pm.axe.constants.HttpCode;
 import pm.axe.exception.error.AxeError;
 
 import java.util.Date;
@@ -31,7 +31,7 @@ public class AxeErrorJson implements AxeJson {
     @Builder.Default
     @JsonProperty("status")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private int status = HttpCode.SERVER_ERROR;
+    private int status = HttpStatus.INTERNAL_SERVER_ERROR;
 
     @JsonProperty("path")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class AxeErrorJson implements AxeJson {
     /**
      * Adds status without invoking builder.
      *
-     * @param status int with http status: see {@link HttpCode}
+     * @param status int with http status: see {@link HttpStatus}
      * @return same {@link AxeErrorJson}, but with status
      */
     public AxeErrorJson andStatus(final int status) {

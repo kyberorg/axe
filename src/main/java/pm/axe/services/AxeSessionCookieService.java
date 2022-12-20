@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.result.OperationResult;
 import pm.axe.session.AxeSession;
 import pm.axe.session.Device;
@@ -45,7 +45,7 @@ public class AxeSessionCookieService {
      */
     public Cookie createCookie(final AxeSession ys) {
         if (ys == null) throw new IllegalArgumentException("AxeSession cannot be null");
-        Cookie cookie = new Cookie(App.CookieNames.AXE_SESSION, ys.getSessionId());
+        Cookie cookie = new Cookie(Axe.CookieNames.AXE_SESSION, ys.getSessionId());
         cookie.setMaxAge(appUtils.getSessionTimeout());
         cookie.setSecure(ys.getDevice().isSecureConnection());
         cookie.setHttpOnly(true);

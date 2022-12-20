@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import lombok.Data;
 import org.apache.commons.validator.GenericValidator;
+import pm.axe.Axe;
 import pm.axe.api.mm.MattermostRestController;
-import pm.axe.constants.App;
 import pm.axe.mm.Mattermost;
 import pm.axe.utils.UrlExtraValidator;
 
@@ -18,7 +18,7 @@ import pm.axe.utils.UrlExtraValidator;
 public final class MattermostResponse implements AxeJson {
 
     @JsonProperty("icon_url")
-    private String iconUrl = App.Mattermost.BOT_ICON;
+    private String iconUrl = Axe.Mattermost.BOT_ICON;
 
     @JsonProperty("text")
     private String text;
@@ -30,7 +30,7 @@ public final class MattermostResponse implements AxeJson {
     private String gotoLocation;
 
     @JsonProperty("username")
-    private final String username = App.Mattermost.BOT_NAME;
+    private final String username = Axe.Mattermost.BOT_NAME;
 
     private MattermostResponse() {
     }
@@ -45,8 +45,8 @@ public final class MattermostResponse implements AxeJson {
         MattermostResponse mmJson = new MattermostResponse();
 
         boolean containsUrl = UrlExtraValidator.isStringContainsUrl(text);
-        boolean isErrorMessage = text.contains(App.Emoji.WARNING);
-        boolean isUsageMessage = (text.contains(App.Emoji.INFO) && text.contains("Usage"));
+        boolean isErrorMessage = text.contains(Axe.Emoji.WARNING);
+        boolean isUsageMessage = (text.contains(Axe.Emoji.INFO) && text.contains("Usage"));
         if (containsUrl || isErrorMessage || isUsageMessage) {
             mmJson.text = text;
             return mmJson;

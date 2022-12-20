@@ -2,12 +2,12 @@ package pm.axe.test.app;
 
 import kong.unirest.HttpRequestWithBody;
 import kong.unirest.HttpResponse;
+import kong.unirest.HttpStatus;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
 import pm.axe.test.TestApp;
 import pm.axe.test.utils.TestUtils;
 
@@ -33,7 +33,7 @@ public class DeleteLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.UNAUTHORIZED, result.getStatus());
+        assertEquals(HttpStatus.UNAUTHORIZED, result.getStatus());
 
         assertTrue(verifyLinkIsStored(ident), "Link should not be deleted");
     }
@@ -45,13 +45,13 @@ public class DeleteLinkApiTest extends UnirestTest {
     public void onRequestWithWrongTokenStatusIs401() {
         String ident = store("https://kyberorg.io");
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
-        request.header(Header.X_AXE_TOKEN, "wrongTokenVoid");
+        request.header(Axe.Headers.X_AXE_TOKEN, "wrongTokenVoid");
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.UNAUTHORIZED, result.getStatus());
+        assertEquals(HttpStatus.UNAUTHORIZED, result.getStatus());
 
         assertTrue(verifyLinkIsStored(ident), "Link should not be deleted");
     }
@@ -66,13 +66,13 @@ public class DeleteLinkApiTest extends UnirestTest {
         String ident = store("https://kyberorg.io");
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
 
-        request.header(Header.X_AXE_TOKEN, TestUtils.getDeleteToken());
+        request.header(Axe.Headers.X_AXE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NO_CONTENT, result.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT, result.getStatus());
 
         assertFalse(verifyLinkIsStored(ident), "Link should be deleted");
     }
@@ -87,13 +87,13 @@ public class DeleteLinkApiTest extends UnirestTest {
         String ident = "rndStr";
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
 
-        request.header(Header.X_AXE_TOKEN, TestUtils.getDeleteToken());
+        request.header(Axe.Headers.X_AXE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -108,22 +108,22 @@ public class DeleteLinkApiTest extends UnirestTest {
         //first request
         HttpRequestWithBody request = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
 
-        request.header(Header.X_AXE_TOKEN, TestUtils.getDeleteToken());
+        request.header(Axe.Headers.X_AXE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NO_CONTENT, result.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT, result.getStatus());
 
         //second request
         HttpRequestWithBody request2 = Unirest.delete(TEST_URL + Endpoint.Api.LINKS_API + "/" + ident);
-        request2.header(Header.X_AXE_TOKEN, TestUtils.getDeleteToken());
+        request2.header(Axe.Headers.X_AXE_TOKEN, TestUtils.getDeleteToken());
         HttpResponse<String> result2 = request2.asString();
 
         logRequestAndResponse(request2, result2, TAG);
 
         assertNotNull(result2);
-        assertEquals(HttpCode.NOT_FOUND, result2.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result2.getStatus());
     }
 }

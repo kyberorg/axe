@@ -14,8 +14,8 @@ import com.vaadin.flow.server.Version;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
 import pm.axe.services.GitService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
@@ -26,7 +26,7 @@ import pm.axe.utils.AppUtils;
 import pm.axe.utils.git.GitRepoState;
 import pm.axe.utils.maven.MavenInfo;
 
-import static pm.axe.constants.App.ONE_SECOND_IN_MILLIS;
+import static pm.axe.Axe.C.ONE_SECOND_IN_MILLIS;
 
 @RequiredArgsConstructor
 @SpringComponent
@@ -195,7 +195,7 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
         Span versionStart = new Span(String.format("Version %s (based on commit ", latestTag));
         Anchor commit =
                 new Anchor(
-                        String.format("%s/%s", App.Git.REPOSITORY, latestCommit),
+                        String.format("%s/%s", Axe.Git.REPOSITORY, latestCommit),
                         latestCommit.substring(0, Integer.min(latestCommit.length(), COMMIT_HASH_LENGTH)));
         commit.setId(IDs.COMMIT_LINK);
         Span versionEnd = new Span(")");

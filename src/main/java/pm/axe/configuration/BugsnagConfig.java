@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.utils.git.MavenGitInfo;
 
 import java.net.InetSocketAddress;
@@ -42,7 +42,7 @@ public class BugsnagConfig {
      */
     @Bean
     public Bugsnag bugsnag() {
-        String bugsnagToken = env.getProperty(App.Env.BUGSNAG_TOKEN, NO_TOKEN);
+        String bugsnagToken = env.getProperty(Axe.Envs.BUGSNAG_TOKEN, NO_TOKEN);
         log.debug("{} Initialing Bugsnag with token {}", TAG, bugsnagToken);
         bugsnag = new Bugsnag(bugsnagToken);
         if (hasProxy()) {
@@ -57,8 +57,8 @@ public class BugsnagConfig {
     }
 
     private boolean hasProxy() {
-        this.proxyHost = env.getProperty(App.Properties.PROXY_HOST, "");
-        this.proxyPort = env.getProperty(App.Properties.PROXY_PORT, "");
+        this.proxyHost = env.getProperty(Axe.Properties.PROXY_HOST, "");
+        this.proxyPort = env.getProperty(Axe.Properties.PROXY_PORT, "");
 
         return (StringUtils.isNotBlank(this.proxyHost) && (StringUtils.isNotBlank(this.proxyPort)));
     }
@@ -68,7 +68,7 @@ public class BugsnagConfig {
     }
 
     private void setApplicationStage() {
-        String stage = env.getProperty(App.Properties.APPLICATION_STAGE, "unknown");
+        String stage = env.getProperty(Axe.Properties.APPLICATION_STAGE, "unknown");
         bugsnag.setReleaseStage(stage);
     }
 }

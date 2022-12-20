@@ -4,9 +4,9 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 import pm.axe.controllers.AxeErrorController;
 import pm.axe.exception.RawLoopException;
 import pm.axe.exception.RawServerException;
@@ -64,6 +64,6 @@ public class RawServerErrorPage extends ServerErrorLayout implements HasUrlParam
      */
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<RawServerException> parameter) {
-        return errorUtils.parseStatusFromErrorParameter(parameter, HttpCode.SERVER_ERROR);
+        return errorUtils.parseStatusFromErrorParameter(parameter, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

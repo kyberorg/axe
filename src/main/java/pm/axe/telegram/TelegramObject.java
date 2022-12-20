@@ -4,7 +4,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 
 import java.util.Objects;
 
@@ -18,7 +18,7 @@ public final class TelegramObject {
 
     private TelegramArguments arguments = TelegramArguments.EMPTY_ARGS;
     private TelegramCommand command = TelegramCommand.UNKNOWN;
-    private String username = App.NO_VALUE;
+    private String username = Axe.C.NO_VALUE;
 
     private String userMessage;
 
@@ -43,7 +43,7 @@ public final class TelegramObject {
 
     private void parseUpdate(final Update update) {
         if (Objects.isNull(update)) {
-            userMessage = App.NO_VALUE;
+            userMessage = Axe.C.NO_VALUE;
             return;
         }
         Message message;
@@ -52,7 +52,7 @@ public final class TelegramObject {
         } else if (update.hasEditedMessage()) {
             message = update.getEditedMessage();
         } else {
-            userMessage = App.NO_VALUE;
+            userMessage = Axe.C.NO_VALUE;
             return;
         }
 
@@ -61,7 +61,7 @@ public final class TelegramObject {
     }
 
     private void parseUserMessage() {
-        if (StringUtils.isBlank(this.userMessage) || this.userMessage.equals(App.NO_VALUE)) {
+        if (StringUtils.isBlank(this.userMessage) || this.userMessage.equals(Axe.C.NO_VALUE)) {
             this.arguments = TelegramArguments.builder().buildEmpty();
             return;
         }
@@ -113,11 +113,11 @@ public final class TelegramObject {
 
     @Override
     public String toString() {
-        return TelegramObject.class.getSimpleName() + " {" + App.NEW_LINE
-                + TelegramArguments.class.getSimpleName() + "=" + arguments + App.NEW_LINE
-                + TelegramCommand.class.getSimpleName() + "=" + command + App.NEW_LINE
-                + "username=" + username + App.NEW_LINE
-                + "userMessage=" + userMessage + App.NEW_LINE
+        return TelegramObject.class.getSimpleName() + " {" + Axe.C.NEW_LINE
+                + TelegramArguments.class.getSimpleName() + "=" + arguments + Axe.C.NEW_LINE
+                + TelegramCommand.class.getSimpleName() + "=" + command + Axe.C.NEW_LINE
+                + "username=" + username + Axe.C.NEW_LINE
+                + "userMessage=" + userMessage + Axe.C.NEW_LINE
                 + "}";
     }
 }

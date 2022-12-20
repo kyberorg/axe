@@ -9,7 +9,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -38,7 +38,7 @@ class EncryptionUtils {
     }
 
     private String setServerKey() {
-        String serverKey = env.getProperty(App.Properties.SERVER_KEY, NO_SERVER_KEY);
+        String serverKey = env.getProperty(Axe.Properties.SERVER_KEY, NO_SERVER_KEY);
         if (serverKey.equals(NO_SERVER_KEY)) {
             log.debug("No Server Key defined - using empty string instead");
             return "";
@@ -48,7 +48,7 @@ class EncryptionUtils {
     }
 
     private String setPasswordSalt() {
-        String envPasswordSalt = env.getProperty(App.Properties.PASSWORD_SALT, NO_PASSWORD_SALT);
+        String envPasswordSalt = env.getProperty(Axe.Properties.PASSWORD_SALT, NO_PASSWORD_SALT);
         final String passwordSalt;
         if (envPasswordSalt.equals(NO_PASSWORD_SALT)) {
             passwordSalt = getServerKey();

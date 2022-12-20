@@ -4,10 +4,10 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.CannotCreateTransactionException;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 import pm.axe.controllers.AxeErrorController;
 import pm.axe.exception.GeneralServerException;
 import pm.axe.exception.NeedForLoopException;
@@ -52,13 +52,13 @@ public class ServerErrorPage extends ServerErrorLayout implements HasErrorParame
     public void setParameter(final BeforeEvent event, @OptionalParameter final String parameter) {
         AxeError axeError = errorUtils.getAxeErrorFromEvent(event);
         if (Objects.isNull(axeError)) {
-            event.rerouteToError(NeedForLoopException.class, Integer.toString(HttpCode.SERVER_ERROR));
+            event.rerouteToError(NeedForLoopException.class, Integer.toString(HttpStatus.INTERNAL_SERVER_ERROR));
             return;
         }
 
         switch (axeError.getHttpStatus()) {
-            case HttpCode.NOT_FOUND -> event.rerouteToError(NotFoundException.class);
-            case HttpCode.APP_IS_DOWN -> event.rerouteToError(CannotCreateTransactionException.class);
+            case HttpStatus.NOT_FOUND -> event.rerouteToError(NotFoundException.class);
+            case HttpStatus.SERVICE_UNAVAILABLE -> event.rerouteToError(CannotCreateTransactionException.class);
             default -> {
                 fillUIWithValuesFromError(axeError);
                 event.rerouteToError(NeedForLoopException.class, Integer.toString(axeError.getHttpStatus()));
@@ -75,6 +75,6 @@ public class ServerErrorPage extends ServerErrorLayout implements HasErrorParame
      */
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<GeneralServerException> parameter) {
-        return errorUtils.parseStatusFromErrorParameter(parameter, HttpCode.SERVER_ERROR);
+        return errorUtils.parseStatusFromErrorParameter(parameter, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

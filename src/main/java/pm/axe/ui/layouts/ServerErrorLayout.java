@@ -9,7 +9,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.exception.error.AxeError;
 import pm.axe.ui.pages.err.raw500.RawServerErrorPage;
 import pm.axe.utils.AppUtils;
@@ -157,13 +157,13 @@ public class ServerErrorLayout extends AxeBaseLayout {
 
     private String formatTechMessage(final String techMessage) {
         return techMessage
-                .replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
-                .replaceAll(";", App.WEB_NEW_LINE)
+                .replaceAll(Axe.C.NEW_LINE, Axe.C.WEB_NEW_LINE)
+                .replaceAll(";", Axe.C.WEB_NEW_LINE)
                 .replaceAll("nested exception is", "&emsp;->");
     }
 
     private String formatTrace(final String traceMessage) {
-        return traceMessage.replaceAll(App.NEW_LINE, App.WEB_NEW_LINE)
+        return traceMessage.replaceAll(Axe.C.NEW_LINE, Axe.C.WEB_NEW_LINE)
                 .replaceAll("at ", "&emsp;&emsp;at ");
     }
 

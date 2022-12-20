@@ -1,16 +1,11 @@
 package pm.axe.test.app;
 
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
-import kong.unirest.Unirest;
+import kong.unirest.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.json.PostLinkRequest;
 
 import javax.imageio.ImageIO;
@@ -20,7 +15,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static pm.axe.constants.Header.CONTENT_TYPE;
+import static pm.axe.Axe.Headers.CONTENT_TYPE;
 
 /**
  * Testing locations related to QR codes.
@@ -49,7 +44,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         assertNotNull(body);
@@ -73,7 +68,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         assertNotNull(body);
@@ -81,7 +76,7 @@ public class GetQRApiTest extends UnirestTest {
 
         String qrCode = body.getObject().getString("qr_code");
         assertValidQRCode(qrCode);
-        assertQRCodeHasExactSize(qrCode, App.QR.DEFAULT_QR_CODE_SIZE);
+        assertQRCodeHasExactSize(qrCode, Axe.QR.DEFAULT_QR_CODE_SIZE);
     }
 
     /**
@@ -95,7 +90,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -109,7 +104,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -122,7 +117,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -142,7 +137,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         String qrCode = body.getObject().getString("qr_code");
@@ -165,7 +160,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -182,7 +177,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -199,7 +194,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -216,7 +211,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -233,7 +228,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -246,7 +241,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
     }
 
     /**
@@ -264,7 +259,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -282,7 +277,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -300,7 +295,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -318,7 +313,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -336,7 +331,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -354,7 +349,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -372,7 +367,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -390,7 +385,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -408,7 +403,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     }
 
     /**
@@ -427,7 +422,7 @@ public class GetQRApiTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         JsonNode body = result.getBody();
         String qrCode = body.getObject().getString("qr_code");
@@ -443,13 +438,13 @@ public class GetQRApiTest extends UnirestTest {
 
             HttpRequest request =
                     Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                            .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                            .header(CONTENT_TYPE, MimeTypes.JSON)
                             .body(storeRequest.toString());
             HttpResponse<JsonNode> result = request.asJson();
 
             logRequestAndResponse(request, result, TAG);
 
-            if (result.getStatus() != HttpCode.CREATED) {
+            if (result.getStatus() != HttpStatus.CREATED) {
                 log.error("Store API fail");
                 throw new IllegalStateException("Could not get short link from Store API");
             }

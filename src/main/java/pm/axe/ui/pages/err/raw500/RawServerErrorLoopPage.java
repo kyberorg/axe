@@ -3,8 +3,8 @@ package pm.axe.ui.pages.err.raw500;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 import pm.axe.exception.RawLoopException;
 import pm.axe.exception.RawServerException;
 import pm.axe.ui.layouts.AxeBaseLayout;
@@ -24,6 +24,6 @@ public class RawServerErrorLoopPage extends AxeBaseLayout implements HasErrorPar
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<RawLoopException> parameter) {
         event.rerouteToError(RawServerException.class, parameter.getCustomMessage());
-        return HttpCode.SERVER_ERROR;
+        return HttpStatus.INTERNAL_SERVER_ERROR;
     }
 }

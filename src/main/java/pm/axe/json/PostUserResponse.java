@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Since;
 import org.apache.commons.lang3.StringUtils;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.telegram.TelegramCommand;
 import pm.axe.utils.AppUtils;
 
@@ -89,7 +89,7 @@ public class PostUserResponse {
                 }
                 sb.append("by sending following string '")
                         .append(telegramHelloCmd).append(" ").append(telegramToken).append("' to ")
-                        .append(App.AT).append(AppUtils.getTelegramBotName());
+                        .append(Axe.C.AT).append(AppUtils.getTelegramBotName());
             }
             response.message = sb.toString();
             return response;

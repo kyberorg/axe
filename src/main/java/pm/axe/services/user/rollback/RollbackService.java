@@ -1,12 +1,12 @@
 package pm.axe.services.user.rollback;
 
+import kong.unirest.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
-import pm.axe.constants.HttpCode;
 import pm.axe.db.dao.AccountDao;
 import pm.axe.db.dao.TokenDao;
 import pm.axe.db.dao.UserDao;
@@ -58,7 +58,7 @@ public class RollbackService {
                         message.append(t);
                     }
                 }
-                reportToBugsnag(message.toString(), HttpCode.SERVER_ERROR, null);
+                reportToBugsnag(message.toString(), HttpStatus.INTERNAL_SERVER_ERROR, null);
                 return;
             }
         }
@@ -74,7 +74,7 @@ public class RollbackService {
             log.debug("{} {} executed successfully", TAG, task);
             return OperationResult.success();
         } catch (CannotCreateTransactionException e) {
-            reportToBugsnag("Database is DOWN", HttpCode.APP_IS_DOWN, e);
+            reportToBugsnag("Database is DOWN", HttpStatus.SERVICE_UNAVAILABLE, e);
             return OperationResult.databaseDown();
         } catch (Exception e) {
             log.error("{} Exception on rolling changes back.", TAG);

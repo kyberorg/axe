@@ -1,6 +1,7 @@
 package pm.axe.configuration;
 
 import kong.unirest.HttpResponse;
+import kong.unirest.HttpStatus;
 import kong.unirest.Unirest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +10,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import pm.axe.constants.HttpCode;
 import pm.axe.utils.AppUtils;
 
 import java.util.ArrayList;
@@ -62,6 +62,6 @@ public class EndpointsListener implements ApplicationListener<ContextRefreshedEv
     private boolean routePresentInApplication(final String routeToCheck) {
         //noinspection rawtypes we need only status
         HttpResponse httpResponse = Unirest.get(appUtils.getServerUrl() + routeToCheck).asEmpty();
-        return httpResponse.getStatus() != HttpCode.NOT_FOUND;
+        return httpResponse.getStatus() != HttpStatus.NOT_FOUND;
     }
 }

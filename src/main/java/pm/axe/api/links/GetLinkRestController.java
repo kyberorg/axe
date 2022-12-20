@@ -1,5 +1,7 @@
 package pm.axe.api.links;
 
+import kong.unirest.HttpStatus;
+import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.core.IdentValidator;
 import pm.axe.json.AxeErrorJson;
 import pm.axe.json.GetLinkResponse;
@@ -35,13 +35,13 @@ public class GetLinkRestController {
     /**
      * Wildcard API. Currently, not implemented. Reserved to provide user's links.
      *
-     * @return currently {@link ResponseEntity} with {@link AxeErrorJson} and {@link HttpCode#NOT_IMPLEMENTED}
+     * @return currently {@link ResponseEntity} with {@link AxeErrorJson} and {@link HttpStatus#NOT_IMPLEMENTED}
      */
     @GetMapping(path = {Endpoint.Api.LINKS_API, Endpoint.Api.LINKS_API + "/"})
     public ResponseEntity<?> getLinks() {
         AxeErrorJson errorJson = AxeErrorJson.createWithMessage("Not implemented yet")
-                .andStatus(HttpCode.NOT_IMPLEMENTED);
-        return ResponseEntity.status(HttpCode.NOT_IMPLEMENTED).body(errorJson);
+                .andStatus(HttpStatus.NOT_IMPLEMENTED);
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(errorJson);
     }
 
     /**
@@ -51,7 +51,7 @@ public class GetLinkRestController {
      * @return {@link ResponseEntity} with {@link GetLinkResponse} or {@link AxeErrorJson}
      */
     @GetMapping(value = Endpoint.Api.GET_LINKS_API,
-            produces = MimeType.APPLICATION_JSON)
+            produces = MimeTypes.JSON)
     public ResponseEntity<?> getLink(final @PathVariable("ident") String ident) {
         log.info("{} got GET request: {\"Ident\": {}}", TAG, ident);
 
@@ -86,8 +86,8 @@ public class GetLinkRestController {
             case OperationResult.ELEMENT_NOT_FOUND -> {
                 log.info("{} ident not found", TAG);
                 AxeErrorJson errorJson = AxeErrorJson.createWithMessage("No link with given ident stored")
-                        .andStatus(HttpCode.NOT_FOUND);
-                return ResponseEntity.status(HttpCode.NOT_FOUND).body(errorJson);
+                        .andStatus(HttpStatus.NOT_FOUND);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorJson);
             }
             case OperationResult.SYSTEM_DOWN -> {
                 log.error("{} Database is DOWN", TAG);

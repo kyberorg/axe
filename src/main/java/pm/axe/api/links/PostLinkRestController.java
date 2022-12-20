@@ -1,5 +1,7 @@
 package pm.axe.api.links;
 
+import kong.unirest.HttpStatus;
+import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -8,11 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
 import pm.axe.api.middleware.TokenCheckerMiddleware;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.db.models.Link;
 import pm.axe.internal.LinkServiceInput;
 import pm.axe.json.AxeErrorJson;
@@ -44,18 +44,17 @@ public class PostLinkRestController {
      *
      * @param requestJson {@link PostLinkRequest} JSON with link to save
      * @param request {@link HttpServletRequest} object to retrieve headers from. Populated by Spring
-     * @return {@link ResponseEntity} with {@link PostLinkResponse} and resource URI in {@link Header#LOCATION}
+     * @return {@link ResponseEntity} with {@link PostLinkResponse} and resource URI in {@link Axe.Headers#LOCATION}
      *  or {@link AxeErrorJson}.
      */
-    @PostMapping(value = Endpoint.Api.LINKS_API,
-            consumes = MimeType.APPLICATION_JSON, produces = MimeType.APPLICATION_JSON)
+    @PostMapping(value = Endpoint.Api.LINKS_API, consumes = MimeTypes.JSON, produces = MimeTypes.JSON)
     public ResponseEntity<?> storeNewLink(final @RequestBody(required = false) PostLinkRequest requestJson,
                                           final HttpServletRequest request) {
         log.info("{} got POST request: {\"JSON\": {}}", TAG, requestJson);
 
         if (requestJson == null) {
             AxeErrorJson errorJson = AxeErrorJson.createWithMessage("Body should be a JSON object")
-                    .andStatus(HttpCode.BAD_REQUEST);
+                    .andStatus(HttpStatus.BAD_REQUEST);
             return ResponseEntity.badRequest().body(errorJson);
         }
 
@@ -103,13 +102,13 @@ public class PostLinkRestController {
                 //sent 409
                 AxeErrorJson errorJson = AxeErrorJson.
                         createWithMessage("We already have link stored with given ident. Try another one")
-                        .andStatus(HttpCode.CONFLICT);
-                return ResponseEntity.status(HttpCode.CONFLICT).body(errorJson);
+                        .andStatus(HttpStatus.CONFLICT);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorJson);
             case OperationResult.BANNED:
                 //analyse ban reason and send 403
                 String banReason = storeResult.getMessage();
-                AxeErrorJson errorJson1 = AxeErrorJson.createWithMessage(banReason).andStatus(HttpCode.FORBIDDEN);
-                return ResponseEntity.status(HttpCode.FORBIDDEN).body(errorJson1);
+                AxeErrorJson errorJson1 = AxeErrorJson.createWithMessage(banReason).andStatus(HttpStatus.FORBIDDEN);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorJson1);
             case OperationResult.SYSTEM_DOWN:
                 return ApiUtils.handleSystemDown();
             case OperationResult.GENERAL_FAIL:
@@ -121,21 +120,21 @@ public class PostLinkRestController {
     private ResponseEntity<AxeErrorJson> handleMalformedUrl() {
         AxeErrorJson errorJson =
                 AxeErrorJson.createWithMessage("Got malformed value at 'link' field. Should be valid URL")
-                        .andStatus(HttpCode.UNPROCESSABLE_ENTRY);
+                        .andStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         return ResponseEntity.unprocessableEntity().body(errorJson);
     }
 
     private ResponseEntity<AxeErrorJson> handleMalformedUrl(final OperationResult operationResult) {
         AxeErrorJson errorJson =
                 AxeErrorJson.createWithMessage(operationResult.getMessage())
-                        .andStatus(HttpCode.UNPROCESSABLE_ENTRY);
+                        .andStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         return ResponseEntity.unprocessableEntity().body(errorJson);
     }
 
     private ResponseEntity<AxeErrorJson> handleMalformedIdent() {
         AxeErrorJson errorJson =
                 AxeErrorJson.createWithMessage("Got malformed 'ident'. It should be from 2 to 255 chars.")
-                        .andStatus(HttpCode.UNPROCESSABLE_ENTRY);
+                        .andStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         return ResponseEntity.unprocessableEntity().body(errorJson);
     }
 }

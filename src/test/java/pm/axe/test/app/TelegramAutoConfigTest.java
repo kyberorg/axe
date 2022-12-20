@@ -2,12 +2,12 @@ package pm.axe.test.app;
 
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
+import kong.unirest.HttpStatus;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.HttpCode;
 import pm.axe.json.TelegramStatusResponse;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.utils.AppUtils;
@@ -33,7 +33,7 @@ public class TelegramAutoConfigTest extends UnirestTest {
         if (TestUtils.isLocalRun()) {
             log.info(
                     "Local run: telegram bot won't be started without token ENV {}. Safe to ignore",
-                    App.Env.TELEGRAM_TOKEN);
+                    Axe.Envs.TELEGRAM_TOKEN);
             return;
         }
 
@@ -42,7 +42,7 @@ public class TelegramAutoConfigTest extends UnirestTest {
 
         logRequestAndResponse(request, apiResponse, TAG);
 
-        if (apiResponse.getStatus() == HttpCode.OK) {
+        if (apiResponse.getStatus() == HttpStatus.OK) {
             String status = extractBotStatus(apiResponse);
             assertTrue(status.contains("Online"));
         } else {

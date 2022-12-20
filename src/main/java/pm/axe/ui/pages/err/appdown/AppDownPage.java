@@ -5,9 +5,9 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.*;
+import kong.unirest.HttpStatus;
 import org.springframework.transaction.CannotCreateTransactionException;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 
@@ -44,6 +44,6 @@ public class AppDownPage extends AxeBaseLayout implements HasErrorParameter<Cann
     @Override
     public int setErrorParameter(final BeforeEnterEvent event,
                                  final ErrorParameter<CannotCreateTransactionException> parameter) {
-        return HttpCode.APP_IS_DOWN;
+        return HttpStatus.SERVICE_UNAVAILABLE;
     }
 }

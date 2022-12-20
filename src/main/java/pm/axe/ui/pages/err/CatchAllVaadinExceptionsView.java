@@ -6,11 +6,10 @@ import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import lombok.RequiredArgsConstructor;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
 import pm.axe.exception.error.AxeError;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AxeErrorKeeper;
@@ -35,7 +34,7 @@ public class CatchAllVaadinExceptionsView extends AxeBaseLayout implements HasEr
         String path = "/" + beforeEnterEvent.getLocation().getPathWithQueryParameters();
 
         ErrorUtils.Args args = ErrorUtils.ArgsBuilder.withException(cause)
-                .addStatus(HttpCode.SERVER_ERROR)
+                .addStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .addPath(path)
                 .build();
         AxeError axeError = errorUtils.convertExceptionToAxeError(args);
@@ -47,9 +46,9 @@ public class CatchAllVaadinExceptionsView extends AxeBaseLayout implements HasEr
         final String errorPageRoute = loopDetector.isLoopDetected()
                 ? Endpoint.UI.RAW_ERROR_PAGE_500 : Endpoint.UI.ERROR_PAGE_500;
 
-        VaadinResponse.getCurrent().setHeader(Header.LOCATION,
-                "/" + errorPageRoute + "?" + App.Params.ERROR_ID + "=" + errorId);
+        VaadinResponse.getCurrent().setHeader(Axe.Headers.LOCATION,
+                "/" + errorPageRoute + "?" + Axe.Params.ERROR_ID + "=" + errorId);
 
-        return HttpCode.TEMPORARY_REDIRECT;
+        return HttpStatus.TEMPORARY_REDIRECT;
     }
 }

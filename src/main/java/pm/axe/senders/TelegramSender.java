@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
@@ -108,8 +108,8 @@ public class TelegramSender extends TokenSender {
     }
 
     private OperationResult shortifyLink(final Map<String, Object> vars, final Token token) {
-        String longLink = (String) vars.getOrDefault("link", App.NO_VALUE);
-        if (longLink.equals(App.NO_VALUE)) {
+        String longLink = (String) vars.getOrDefault("link", Axe.C.NO_VALUE);
+        if (longLink.equals(Axe.C.NO_VALUE)) {
             return OperationResult.elementNotFound().withMessage(MSG_NO_LONG_LINK_FOUND);
         }
         return linkService.shortifyLinkForTokens(longLink, token);

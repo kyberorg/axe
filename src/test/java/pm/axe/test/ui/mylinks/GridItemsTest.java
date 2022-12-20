@@ -5,7 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
@@ -132,7 +132,7 @@ public class GridItemsTest extends SelenideTest {
         SelenideElement actionsCell = MyLinksViewPageObject.Grid.GridData.get().getRow(1).getActionsCell();
         ElementsCollection vaadinButtons = actionsCell.$("flow-component-renderer vaadin-horizontal-layout").
                 $$("vaadin-button");
-        vaadinButtons.shouldHave(size(App.THREE));
+        vaadinButtons.shouldHave(size(Axe.C.THREE));
     }
 
     /**

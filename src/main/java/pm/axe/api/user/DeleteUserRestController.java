@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pm.axe.Endpoint;
 import pm.axe.api.middleware.TokenCheckerMiddleware;
-import pm.axe.constants.HttpCode;
 import pm.axe.db.models.User;
 import pm.axe.exception.error.AxeErrorBuilder;
 import pm.axe.json.AxeErrorJson;
@@ -68,7 +67,7 @@ public class DeleteUserRestController {
         if (Objects.equals(user.getId(), userService.getDefaultUser().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(AxeErrorJson.createWithMessage("Self-destruction is not allowed.")
-                            .andStatus(HttpCode.FORBIDDEN));
+                            .andStatus(HttpStatus.FORBIDDEN));
         }
 
         boolean forceFlag = force != null;
@@ -76,8 +75,8 @@ public class DeleteUserRestController {
         if (deletionResult.ok()) {
             return ResponseEntity.noContent().build();
         } else if (Objects.equals(deletionResult.getResult(), OperationResult.BANNED)) {
-            return ResponseEntity.status(HttpCode.FORBIDDEN)
-                    .body(AxeErrorJson.createWithMessage(deletionResult.getMessage()).andStatus(HttpCode.FORBIDDEN));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(AxeErrorJson.createWithMessage(deletionResult.getMessage()).andStatus(HttpStatus.FORBIDDEN));
         } else {
             log.error("{} User deletion failed. OpResult: {}", TAG, deletionResult);
             errorUtils.reportToBugsnag(AxeErrorBuilder.withTechMessage("User Deletion failed").build());

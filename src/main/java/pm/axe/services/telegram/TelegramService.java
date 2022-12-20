@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.db.models.Link;
 import pm.axe.telegram.TelegramBot;
 import pm.axe.telegram.TelegramObject;
@@ -54,8 +54,8 @@ public class TelegramService {
         String linkDescription = telegramObject.getArguments().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
             String userGreet = (StringUtils.isNotBlank(telegramObject.getUsername())
-                    && (!telegramObject.getUsername().equals(App.NO_VALUE)))
-                    ? "Okay " + App.AT + telegramObject.getUsername() + ", " : "Okay, ";
+                    && (!telegramObject.getUsername().equals(Axe.C.NO_VALUE)))
+                    ? "Okay " + Axe.C.AT + telegramObject.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
             return greeting + fullLink;
         } else {
@@ -74,16 +74,16 @@ public class TelegramService {
         }
 
         String message = " This bot makes short links from long ones"
-                + App.NEW_LINE + App.NEW_LINE
+                + Axe.C.NEW_LINE + Axe.C.NEW_LINE
                 + "https://mySuperLongLink.com"
-                + App.NEW_LINE + App.NEW_LINE
+                + Axe.C.NEW_LINE + Axe.C.NEW_LINE
                 + "or"
-                + App.NEW_LINE + App.NEW_LINE
+                + Axe.C.NEW_LINE + Axe.C.NEW_LINE
                 + "https://mySuperLongLink.com description"
-                + App.NEW_LINE + App.NEW_LINE
+                + Axe.C.NEW_LINE + Axe.C.NEW_LINE
                 + "/usage - Show this message";
 
-        return EmojiParser.parseToUnicode(App.Emoji.INFO + message);
+        return EmojiParser.parseToUnicode(Axe.Emoji.INFO + message);
     }
 
     /**
@@ -95,6 +95,6 @@ public class TelegramService {
         if (!isInitDone) {
             return NO_INIT;
         }
-        return EmojiParser.parseToUnicode(App.Emoji.WARNING + " serverError");
+        return EmojiParser.parseToUnicode(Axe.Emoji.WARNING + " serverError");
     }
 }

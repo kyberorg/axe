@@ -1,5 +1,7 @@
 package pm.axe.api.user;
 
+import kong.unirest.HttpStatus;
+import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pm.axe.Endpoint;
 import pm.axe.api.middleware.TokenCheckerMiddleware;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.exception.error.AxeErrorBuilder;
 import pm.axe.internal.RegisterUserInput;
 import pm.axe.json.AxeErrorJson;
@@ -56,8 +56,8 @@ public class PostUserRestController {
      * @return {@link ResponseEntity} with {@link PostUserResponse} or {@link AxeErrorJson}.
      */
     @PostMapping(value = Endpoint.Api.REGISTER_USER_API,
-            consumes = MimeType.APPLICATION_JSON,
-            produces = MimeType.APPLICATION_JSON)
+            consumes = MimeTypes.JSON,
+            produces = MimeTypes.JSON)
     public ResponseEntity<?> registerUser(final @RequestBody PostUserRequest requestJson,
                                           final HttpServletRequest request) {
         log.debug("{} got POST request: {}", TAG, requestJson);
@@ -65,7 +65,7 @@ public class PostUserRestController {
         //So it works only with Master Token provided.
         OperationResult tokenCheckResult = tokenChecker.checkMasterToken(request);
         if (tokenCheckResult.notOk()) {
-            log.warn("{} Master Token Check failed - returning {}", TAG, HttpCode.UNAUTHORIZED);
+            log.warn("{} Master Token Check failed - returning {}", TAG, HttpStatus.UNAUTHORIZED);
             return ApiUtils.handleTokenFail(tokenCheckResult);
         } else {
             log.info("{} Master Token Check - passed", TAG);
@@ -73,11 +73,11 @@ public class PostUserRestController {
 
         //checking Body
         if (requestJson == null) {
-            return ApiUtils.handleError(HttpCode.BAD_REQUEST, "Body should be a JSON object");
+            return ApiUtils.handleError(HttpStatus.BAD_REQUEST, "Body should be a JSON object");
         }
         OperationResult inputValidationResult = requestJson.isValid();
         if (inputValidationResult.notOk()) {
-            return ApiUtils.handleError(HttpCode.UNPROCESSABLE_ENTRY, inputValidationResult.getMessage());
+            return ApiUtils.handleError(HttpStatus.UNPROCESSABLE_ENTITY, inputValidationResult.getMessage());
         }
 
         //extract fields
@@ -129,27 +129,27 @@ public class PostUserRestController {
                     .build());
             return ApiUtils.handleServerError();
         }
-        log.info("{} Success. User Registered - returning {}", TAG, HttpCode.CREATED);
+        log.info("{} Success. User Registered - returning {}", TAG, HttpStatus.CREATED);
         PostUserResponse.Builder response = PostUserResponse.create().addEmail(email);
 
         if (userRegistrationResult.hasPayload(UserOperationsService.TELEGRAM_TOKEN_KEY)) {
             response.addTelegramToken(userRegistrationResult.
                     getStringPayload(UserOperationsService.TELEGRAM_TOKEN_KEY));
         }
-        return ResponseEntity.status(HttpCode.CREATED).body(response.build());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response.build());
     }
 
     private ResponseEntity<AxeErrorJson> checkEmail(final String email) {
         //email not valid -> 422 (?)
         OperationResult emailValidationResult = mailService.isEmailValid(email);
         if (emailValidationResult.notOk()) {
-            return ApiUtils.handleError(HttpCode.UNPROCESSABLE_ENTRY, emailValidationResult);
+            return ApiUtils.handleError(HttpStatus.UNPROCESSABLE_ENTITY, emailValidationResult);
         }
         //email exists - > 409
         boolean emailAlreadyExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
         if (emailAlreadyExists) {
             String errMessage = String.format("Email %s is already taken. Please try another one", email);
-            return ApiUtils.handleError(HttpCode.CONFLICT, errMessage);
+            return ApiUtils.handleError(HttpStatus.CONFLICT, errMessage);
         }
         return null;
     }
@@ -158,12 +158,12 @@ public class PostUserRestController {
         //username not valid -> 422
         OperationResult usernameVerificationResult = UsernameValidator.isValid(username);
         if (usernameVerificationResult.notOk()) {
-            return ApiUtils.handleError(HttpCode.UNPROCESSABLE_ENTRY, usernameVerificationResult);
+            return ApiUtils.handleError(HttpStatus.UNPROCESSABLE_ENTITY, usernameVerificationResult);
         }
         //username exists -> 409
         boolean isUserAlreadyExist = userService.isUserExists(username);
         if (isUserAlreadyExist) {
-            return ApiUtils.handleError(HttpCode.CONFLICT, "Username already exists. Please try another one");
+            return ApiUtils.handleError(HttpStatus.CONFLICT, "Username already exists. Please try another one");
         }
         return null;
     }
@@ -171,7 +171,7 @@ public class PostUserRestController {
     private ResponseEntity<AxeErrorJson> checkPassword(final String password) {
         OperationResult passwordValidationResult = PasswordValidator.isPasswordValid(password);
         if (passwordValidationResult.notOk()) {
-            return ApiUtils.handleError(HttpCode.UNPROCESSABLE_ENTRY, passwordValidationResult);
+            return ApiUtils.handleError(HttpStatus.UNPROCESSABLE_ENTITY, passwordValidationResult);
         }
         return null;
     }

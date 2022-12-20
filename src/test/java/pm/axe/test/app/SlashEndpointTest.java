@@ -2,13 +2,13 @@ package pm.axe.test.app;
 
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
+import kong.unirest.HttpStatus;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
 import pm.axe.test.utils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,10 +42,10 @@ public class SlashEndpointTest extends UnirestTest {
 
         Unirest.config().reset().followRedirects(true);
 
-        assertEquals(HttpCode.TEMPORARY_REDIRECT, result.getStatus());
-        assertTrue(result.getHeaders().containsKey(Header.LOCATION));
-        String location = result.getHeaders().getFirst(Header.LOCATION);
-        assertTrue(StringUtils.isNotBlank(location), "Got empty " + Header.LOCATION + " header");
+        assertEquals(HttpStatus.TEMPORARY_REDIRECT, result.getStatus());
+        assertTrue(result.getHeaders().containsKey(Axe.Headers.LOCATION));
+        String location = result.getHeaders().getFirst(Axe.Headers.LOCATION);
+        assertTrue(StringUtils.isNotBlank(location), "Got empty " + Axe.Headers.LOCATION + " header");
     }
 
     /**
@@ -60,7 +60,7 @@ public class SlashEndpointTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
     }
 
 }

@@ -6,13 +6,13 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.QueryParameters;
+import kong.unirest.HttpStatus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import pm.axe.constants.App;
-import pm.axe.constants.HttpCode;
+import pm.axe.Axe;
 import pm.axe.exception.AxeException;
 import pm.axe.exception.error.AxeError;
 import pm.axe.exception.error.AxeErrorBuilder;
@@ -74,10 +74,10 @@ public class ErrorUtils {
     public AxeError getAxeErrorFromEvent(final BeforeEvent event) {
         QueryParameters queryParameters = event.getLocation().getQueryParameters();
         if (queryParameters.getParameters().isEmpty()) return null;
-        boolean errorIdKeyIsPresent = queryParameters.getParameters().containsKey(App.Params.ERROR_ID);
+        boolean errorIdKeyIsPresent = queryParameters.getParameters().containsKey(Axe.Params.ERROR_ID);
         if (!errorIdKeyIsPresent) return null;
 
-        List<String> errorIdValues = queryParameters.getParameters().get(App.Params.ERROR_ID);
+        List<String> errorIdValues = queryParameters.getParameters().get(Axe.Params.ERROR_ID);
         boolean errorIdKeyHasSingleValue = errorIdValues.size() == 1;
         if (!errorIdKeyHasSingleValue) return null;
 
@@ -117,7 +117,7 @@ public class ErrorUtils {
      */
     public AxeError convertExceptionToAxeError(final ErrorUtils.Args args) {
         Throwable exceptionFromArgs = args.getException();
-        boolean hasStatus = args.getStatus() != App.NO_STATUS;
+        boolean hasStatus = args.getStatus() != Axe.C.NO_STATUS;
         AxeErrorBuilder axeErrorBuilder;
 
         Throwable exception = findRootCause(exceptionFromArgs);
@@ -199,7 +199,7 @@ public class ErrorUtils {
      */
     public void notifyByEmail(final AxeError axeError) {
         String emailForErrors = appUtils.getEmailForErrors();
-        if (emailForErrors.equals(App.NO_VALUE)) {
+        if (emailForErrors.equals(Axe.C.NO_VALUE)) {
             log.warn("{} failed to notify about server error by email. Reason: email for errors is not set", TAG);
             return;
         }
@@ -236,13 +236,13 @@ public class ErrorUtils {
     }
 
     private void enrichTechMessageWithStatusAndPath(final StringBuilder techMessage, final Args args) {
-        boolean hasStatus = args.getStatus() != App.NO_STATUS;
+        boolean hasStatus = args.getStatus() != Axe.C.NO_STATUS;
         boolean hasPath = StringUtils.isNotBlank(args.getPath());
         if (hasStatus) {
-            techMessage.append(App.NEW_LINE).append("Status: ").append(args.getStatus());
+            techMessage.append(Axe.C.NEW_LINE).append("Status: ").append(args.getStatus());
         }
         if (hasPath) {
-            techMessage.append(App.NEW_LINE).append("Path: ").append(args.getPath());
+            techMessage.append(Axe.C.NEW_LINE).append("Path: ").append(args.getPath());
         }
         techMessage.trimToSize();
     }
@@ -250,13 +250,13 @@ public class ErrorUtils {
     @Data
     public static class Args {
         private Throwable exception;
-        private int status = App.NO_STATUS;
+        private int status = Axe.C.NO_STATUS;
         private String path;
     }
 
     public static class ArgsBuilder {
         private Throwable th;
-        private int status = App.NO_STATUS;
+        private int status = Axe.C.NO_STATUS;
         private String path;
 
         /**
@@ -274,7 +274,7 @@ public class ErrorUtils {
         /**
          * Add status.
          *
-         * @param status http status. See {@link HttpCode} for more.
+         * @param status http status. See {@link HttpStatus} for more.
          * @return {@link ArgsBuilder} object
          */
         public ArgsBuilder addStatus(final int status) {
@@ -301,7 +301,7 @@ public class ErrorUtils {
         public Args build() {
             Args args = new Args();
             args.exception = th;
-            if (status != App.NO_STATUS) {
+            if (status != Axe.C.NO_STATUS) {
                 args.status = status;
             }
             if (StringUtils.isNotBlank(path)) {

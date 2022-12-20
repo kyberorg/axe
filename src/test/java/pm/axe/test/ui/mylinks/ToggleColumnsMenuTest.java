@@ -10,8 +10,8 @@ import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
 
 import static com.codeborne.selenide.Selenide.open;
-import static pm.axe.constants.App.FOUR;
-import static pm.axe.constants.App.THREE;
+import static pm.axe.Axe.C.FOUR;
+import static pm.axe.Axe.C.THREE;
 
 /**
  * Tests {@link MyLinksViewPageObject.ToggleColumnsMenu}.

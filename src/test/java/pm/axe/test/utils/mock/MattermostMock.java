@@ -1,6 +1,6 @@
 package pm.axe.test.utils.mock;
 
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.mm.Mattermost;
 
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public final class MattermostMock {
     public String toString() {
         sb.setLength(0);
         for (String str : collector) {
-            sb.append(str).append(App.AND);
+            sb.append(str).append(Axe.C.AND);
         }
 
         return sb.substring(0, sb.toString().length() - 1);
@@ -139,7 +139,7 @@ public final class MattermostMock {
 
     private String createParam(final Mattermost.Marker marker, final String value) {
         sb.setLength(0);
-        sb.append(marker).append(App.EQUAL).append(value);
+        sb.append(marker).append(Axe.C.EQUAL).append(value);
         return sb.toString();
     }
 }

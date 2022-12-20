@@ -3,7 +3,7 @@ package pm.axe.api.middleware;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import pm.axe.constants.Header;
+import pm.axe.Axe;
 import pm.axe.result.OperationResult;
 import pm.axe.utils.AppUtils;
 
@@ -57,7 +57,7 @@ public class TokenCheckerMiddleware {
     }
 
     private static String extractToken(final HttpServletRequest request) {
-        return request.getHeader(Header.X_AXE_TOKEN);
+        return request.getHeader(Axe.Headers.X_AXE_TOKEN);
     }
 
 

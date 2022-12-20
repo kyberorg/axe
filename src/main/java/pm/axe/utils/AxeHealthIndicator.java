@@ -2,6 +2,7 @@ package pm.axe.utils;
 
 import kong.unirest.GetRequest;
 import kong.unirest.HttpResponse;
+import kong.unirest.HttpStatus;
 import kong.unirest.Unirest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 
 /**
  * Monitors if start page is accessible to users.
@@ -55,7 +55,7 @@ public class AxeHealthIndicator implements HealthIndicator {
         GetRequest request = Unirest.get(selfUrl + Endpoint.UI.HOME_PAGE);
         HttpResponse<String> response = request.asString();
         boolean hasBody = StringUtils.isNotBlank(response.getBody());
-        return (response.getStatus() == HttpCode.OK && hasBody) ? StartPageStatus.OK : StartPageStatus.DOWN;
+        return (response.getStatus() == HttpStatus.OK && hasBody) ? StartPageStatus.OK : StartPageStatus.DOWN;
     }
 
     enum StartPageStatus {

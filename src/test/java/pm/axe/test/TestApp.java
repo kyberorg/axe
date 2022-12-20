@@ -1,10 +1,10 @@
 package pm.axe.test;
 
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.test.utils.TestUtils;
 
 /**
- * Test Application constants, pretty same as {@link App}, but only stuff used in testing scope.
+ * Test Application constants, pretty same as {@link Axe}, but only stuff used in testing scope.
  *
  * @since 2.5
  */
