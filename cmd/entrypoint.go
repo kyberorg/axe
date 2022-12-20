@@ -48,6 +48,8 @@ func main() {
 	// For GSON to work with Java 17
 	appendJavaOpts("--add-opens")
 	appendJavaOpts("java.base/java.lang=ALL-UNNAMED")
+	appendJavaOpts("--add-opens")
+	appendJavaOpts("java.base/java.net=ALL-UNNAMED")
 
 	javaCmd := "java"
 	versionArgs := "--version"
