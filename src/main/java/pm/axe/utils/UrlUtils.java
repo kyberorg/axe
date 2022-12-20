@@ -82,14 +82,14 @@ public final class UrlUtils {
     public static String covertUnicodeUrlToAscii(final String url) {
         if (url == null) return null;
 
-        String trimUrl = url.trim();
+        String trimmedUrl = replaceSpacesInUrl(url.trim());
 
         // Handle international domains by detecting non-ascii and converting them to punycode
-        if (isAscii(trimUrl)) return trimUrl;
+        if (isAscii(trimmedUrl)) return trimmedUrl;
 
         URI uri;
         try {
-            uri = makeFullUri(trimUrl);
+            uri = makeFullUri(trimmedUrl);
 
             String scheme = uri.getScheme() != null ? uri.getScheme() + "://" : null;
             // includes domain and port
@@ -98,15 +98,15 @@ public final class UrlUtils {
             String queryString = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
 
             // Must convert domain to punycode separately from the path
-            trimUrl = scheme + IDN.toASCII(authority) + path + queryString;
+            trimmedUrl = scheme + IDN.toASCII(authority) + path + queryString;
             // Convert path from unicode to ascii encoding
-            trimUrl = new URI(trimUrl).toASCIIString();
+            trimmedUrl = new URI(trimmedUrl).toASCIIString();
         } catch (URISyntaxException e) {
             String message = String.format("String '%s': malformed URL or not URL at all", url);
             log.warn("{} {}", TAG, message);
             throw new RuntimeException(message, e);
         }
-        return trimUrl;
+        return trimmedUrl;
     }
 
     /**

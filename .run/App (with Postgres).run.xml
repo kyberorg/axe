@@ -8,7 +8,7 @@
     <module name="axe" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="pm.axe.Application" />
     <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-    <option name="VM_PARAMETERS" value="--add-opens java.base/java.lang=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED" />
     <method v="2">
       <option name="Make" enabled="true" />
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="axe [clean, package]" run_configuration_type="MavenRunConfiguration" />

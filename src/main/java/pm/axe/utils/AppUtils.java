@@ -587,7 +587,7 @@ public class AppUtils implements Serializable {
         } catch (URISyntaxException e) {
             String message = String.format("String '%s': malformed URL or not URL at all", urlString);
             log.warn("{} {}", TAG, message);
-            throw new RuntimeException(message, e);
+            return false;
         }
     }
 
