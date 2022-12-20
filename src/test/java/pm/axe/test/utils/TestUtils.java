@@ -3,11 +3,10 @@ package pm.axe.test.utils;
 import com.codeborne.selenide.SelenideElement;
 import kong.unirest.Headers;
 import kong.unirest.HttpResponse;
+import kong.unirest.MimeTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.MimeType;
+import pm.axe.Axe;
 import pm.axe.json.AxeErrorJson;
 import pm.axe.test.TestApp;
 import pm.axe.test.TestApp.RunMode;
@@ -43,10 +42,10 @@ public final class TestUtils {
      */
     public static void assertResultIsJson(final HttpResponse<String> result) {
         assertNotNull(result);
-        assertTrue(result.getHeaders().containsKey(Header.CONTENT_TYPE));
-        assertFalse(result.getHeaders().get(Header.CONTENT_TYPE).isEmpty());
+        assertTrue(result.getHeaders().containsKey(Axe.Headers.CONTENT_TYPE));
+        assertFalse(result.getHeaders().get(Axe.Headers.CONTENT_TYPE).isEmpty());
         assertTrue(
-                result.getHeaders().getFirst(Header.CONTENT_TYPE).contains(MimeType.APPLICATION_JSON));
+                result.getHeaders().getFirst(Axe.Headers.CONTENT_TYPE).contains(MimeTypes.JSON));
     }
 
     /**
@@ -83,7 +82,7 @@ public final class TestUtils {
 
         Headers headers = response.getHeaders();
         assertNotNull(headers);
-        String contentType = headers.getFirst(Header.CONTENT_TYPE);
+        String contentType = headers.getFirst(Axe.Headers.CONTENT_TYPE);
         String actualMimeType = extractMime(contentType);
         assertEquals(mimeType, actualMimeType);
     }
@@ -97,14 +96,14 @@ public final class TestUtils {
         assertNotNull(response);
         Headers headers = response.getHeaders();
         assertNotNull(headers);
-        String contentLengthStr = headers.getFirst(Header.CONTENT_LENGTH);
+        String contentLengthStr = headers.getFirst(Axe.Headers.CONTENT_LENGTH);
 
         assertNotNull(contentLengthStr);
         int contentLength = 0;
         try {
             contentLength = Integer.parseInt(contentLengthStr);
         } catch (NumberFormatException e) {
-            fail(String.format("%s header value is not a number", Header.CONTENT_LENGTH));
+            fail(String.format("%s header value is not a number", Axe.Headers.CONTENT_LENGTH));
         }
         assertTrue(contentLength > 0, "Content is empty");
     }
@@ -137,7 +136,7 @@ public final class TestUtils {
      * @return string with Server+Port
      */
     public static String getTestUrl() {
-        final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
+        final int serverPort = Integer.parseInt(System.getProperty(Axe.Properties.SERVER_PORT, "8080"));
         final String localUrl;
 
         if (StringUtils.isNotBlank(System.getProperty(TestApp.Properties.TEST_URL, ""))) {
@@ -160,7 +159,7 @@ public final class TestUtils {
      * @return string with URL app includes in short links
      */
     public static String getAppShortUrl() {
-        final int serverPort = Integer.parseInt(System.getProperty(App.Properties.SERVER_PORT, "8080"));
+        final int serverPort = Integer.parseInt(System.getProperty(Axe.Properties.SERVER_PORT, "8080"));
         String localRunValue = String.format("http://l.axe.pm:%d", serverPort);
 
         TestedEnv testedEnv = getTestedEnv();
@@ -220,10 +219,10 @@ public final class TestUtils {
     /**
      * Provides delete token from test properties.
      *
-     * @return string with token or {@link App#NO_VALUE}
+     * @return string with token or {@link Axe.C#NO_VALUE}
      */
     public static String getDeleteToken() {
-        return System.getProperty(TestApp.Properties.TEST_MASTER_TOKEN, App.NO_VALUE);
+        return System.getProperty(TestApp.Properties.TEST_MASTER_TOKEN, Axe.C.NO_VALUE);
     }
 
     /**

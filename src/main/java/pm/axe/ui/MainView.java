@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
 import pm.axe.internal.Piwik;
@@ -145,7 +145,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         addMenuTab("My Links", MyLinksPage.class, VaadinIcon.TABLE);
         addMenuTab("App Info", AppInfoPage.class, VaadinIcon.INFO);
         addMenuTab("Settings", SettingsPage.class, VaadinIcon.COG);
-        addMenuTab("API Doks", App.Api.API_DOKS_URL, VaadinIcon.CURLY_BRACKETS);
+        addMenuTab("API Doks", Axe.Api.API_DOKS_URL, VaadinIcon.CURLY_BRACKETS);
         addMenuTab("Meet Axe", MeetAxePage.class, VaadinIcon.COMMENT_ELLIPSIS);
 
         // dev-only items
@@ -272,7 +272,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
         DrawerToggle toggle = new DrawerToggle();
 
-        String siteTitle = appUtils.getEnv().getProperty(App.Properties.APP_SITE_TITLE, "axe").toUpperCase();
+        String siteTitle = appUtils.getEnv().getProperty(Axe.Properties.APP_SITE_TITLE, "axe").toUpperCase();
         Span title = new Span(siteTitle);
         title.addClassName("site-title");
 
@@ -342,7 +342,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
             sendSessionCookie(axeSession);
         } else {
             //read from cookie
-            Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.AXE_SESSION,
+            Cookie sessionCookie = appUtils.getCookieByName(Axe.CookieNames.AXE_SESSION,
                     VaadinService.getCurrentRequest());
             OperationResult checkResult = cookieService.checkCookie(sessionCookie, currentDevice);
             if (checkResult.ok()) {
@@ -357,7 +357,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
     }
 
     private boolean isFirstVisit() {
-        Cookie sessionCookie = appUtils.getCookieByName(App.CookieNames.AXE_SESSION,
+        Cookie sessionCookie = appUtils.getCookieByName(Axe.CookieNames.AXE_SESSION,
                 VaadinService.getCurrentRequest());
         return Objects.isNull(sessionCookie);
     }

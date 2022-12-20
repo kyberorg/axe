@@ -21,14 +21,14 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.HttpCode;
 import pm.axe.db.models.Link;
 import pm.axe.events.link.LinkDeletedEvent;
 import pm.axe.events.link.LinkSavedEvent;
@@ -424,9 +424,9 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
         int browserWidth = browserWidthInfo[0];
 
-        int defaultQRBlockSize = App.QR.DEFAULT_QR_BLOCK_SIZE;
-        int defaultQRCodeSize = App.QR.DEFAULT_QR_CODE_SIZE;
-        float qrBlockRatio = App.QR.QR_BLOCK_RATIO;
+        int defaultQRBlockSize = Axe.QR.DEFAULT_QR_BLOCK_SIZE;
+        int defaultQRCodeSize = Axe.QR.DEFAULT_QR_CODE_SIZE;
+        float qrBlockRatio = Axe.QR.QR_BLOCK_RATIO;
 
         int size;
         if (browserWidth > defaultQRBlockSize) {
@@ -441,7 +441,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         int size = calculateQRCodeSize();
         OperationResult getQRCodeResult;
 
-        if (size >= App.QR.MINIMAL_SIZE_IN_PIXELS) {
+        if (size >= Axe.QR.MINIMAL_SIZE_IN_PIXELS) {
             getQRCodeResult = qrCodeService.getQRCode(ident, size);
         } else {
             getQRCodeResult = qrCodeService.getQRCode(ident);
@@ -464,7 +464,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         showError("Internal error. QR generation failed");
         errorUtils.reportToBugsnag(AxeErrorBuilder
                 .withTechMessage(String.format("onFailGenerateQRCode: Operation failed. OpResult: %s", operationResult))
-                .withStatus(HttpCode.SERVER_ERROR)
+                .withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build());
         this.qrCode.setSrc("");
         qrCodeArea.setVisible(false);

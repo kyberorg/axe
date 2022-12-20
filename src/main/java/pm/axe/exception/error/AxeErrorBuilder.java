@@ -1,7 +1,7 @@
 package pm.axe.exception.error;
 
+import kong.unirest.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
-import pm.axe.constants.HttpCode;
 
 /**
  * Builder for {@link AxeError}.
@@ -12,7 +12,7 @@ import pm.axe.constants.HttpCode;
 public final class AxeErrorBuilder {
     private String messageToUser;
     private final String techMessage;
-    private int httpStatus = HttpCode.SERVER_ERROR;
+    private int httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     private Throwable rawException = null;
 
     /**
@@ -43,7 +43,7 @@ public final class AxeErrorBuilder {
     /**
      * Adds http status.
      *
-     * @param status int with valid {@link HttpCode}
+     * @param status int with valid {@link HttpStatus}
      * @return {@link AxeErrorBuilder} object to continue building {@link AxeError}
      */
     public AxeErrorBuilder withStatus(final int status) {

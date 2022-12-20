@@ -3,8 +3,8 @@ package pm.axe.ui.pages.err.err500;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import pm.axe.Endpoint;
-import pm.axe.constants.HttpCode;
 import pm.axe.exception.GeneralServerException;
 import pm.axe.exception.NeedForLoopException;
 import pm.axe.ui.MainView;
@@ -25,6 +25,6 @@ public class ServerErrorLoopPage extends AxeBaseLayout implements HasErrorParame
     @Override
     public int setErrorParameter(final BeforeEnterEvent event, final ErrorParameter<NeedForLoopException> parameter) {
         event.rerouteToError(GeneralServerException.class, parameter.getCustomMessage());
-        return HttpCode.SERVER_ERROR;
+        return HttpStatus.INTERNAL_SERVER_ERROR;
     }
 }

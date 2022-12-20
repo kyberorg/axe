@@ -8,7 +8,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.core.IdentValidator;
 import pm.axe.result.OperationResult;
 import pm.axe.utils.AppUtils;
@@ -29,11 +29,11 @@ public class QRCodeService {
     private static final String TAG = "[" + QRCodeService.class.getSimpleName() + "]";
 
     public static final String ERR_MALFORMED_IDENT = "Ident is not valid";
-    public static final String ERR_MALFORMED_SIZE = "Size is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+    public static final String ERR_MALFORMED_SIZE = "Size is too small. Must be " + Axe.QR.MINIMAL_SIZE_IN_PIXELS
             + "px or more";
-    public static final String ERR_MALFORMED_WIDTH = "Width is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+    public static final String ERR_MALFORMED_WIDTH = "Width is too small. Must be " + Axe.QR.MINIMAL_SIZE_IN_PIXELS
             + "px or more";
-    public static final String ERR_MALFORMED_HEIGHT = "Height is too small. Must be " + App.QR.MINIMAL_SIZE_IN_PIXELS
+    public static final String ERR_MALFORMED_HEIGHT = "Height is too small. Must be " + Axe.QR.MINIMAL_SIZE_IN_PIXELS
             + "px or more";
     public static final String ERR_QR_CREATE_IO_EXCEPTION = "Failed to create QR code: I/O exception";
 
@@ -42,20 +42,20 @@ public class QRCodeService {
     private final LinkService linkService;
 
     /**
-     * Produces base64 encoded PNG with QR code with encoded short link and {@link App.QR#DEFAULT_QR_CODE_SIZE}.
+     * Produces base64 encoded PNG with QR code with encoded short link and {@link Axe.QR#DEFAULT_QR_CODE_SIZE}.
      *
      * @param ident string with ident, which will added to short url
      * @return same as {{@link #getQRCode(String, int, int)}},
      */
     public OperationResult getQRCode(final String ident) {
-        return getQRCode(ident, App.QR.DEFAULT_QR_CODE_SIZE, App.QR.DEFAULT_QR_CODE_SIZE);
+        return getQRCode(ident, Axe.QR.DEFAULT_QR_CODE_SIZE, Axe.QR.DEFAULT_QR_CODE_SIZE);
     }
 
     /**
      * Produces base64 encoded PNG with squared QR code, where encoded short link, with given size.
      *
      * @param ident string with ident, which will added to short url
-     * @param size positive integer with QR code size. Should be {@link App.QR#MINIMAL_SIZE_IN_PIXELS} px or more
+     * @param size positive integer with QR code size. Should be {@link Axe.QR#MINIMAL_SIZE_IN_PIXELS} px or more
      * @return same as {{@link #getQRCode(String, int, int)}},
      * plus {@link OperationResult#MALFORMED_INPUT} with {@link #ERR_MALFORMED_SIZE} message
      */
@@ -80,7 +80,7 @@ public class QRCodeService {
      *
      * {@link OperationResult#MALFORMED_INPUT} with {@link OperationResult#message}:
      * {@link #ERR_MALFORMED_IDENT}, {@link #ERR_MALFORMED_WIDTH}, {@link #ERR_MALFORMED_HEIGHT}
-     * when ident, width or height is malformed, negative or less then {@link App.QR#MINIMAL_SIZE_IN_PIXELS}.
+     * when ident, width or height is malformed, negative or less then {@link Axe.QR#MINIMAL_SIZE_IN_PIXELS}.
      * {@link OperationResult#ELEMENT_NOT_FOUND} when nothing stored under given ident
      * {@link OperationResult#SYSTEM_DOWN} when system or its parts unreachable
      * {@link OperationResult#GENERAL_FAIL} with {@link OperationResult#message} when something unexpected happened.
@@ -145,13 +145,13 @@ public class QRCodeService {
         }
 
         //width check
-        if (width < App.QR.MINIMAL_SIZE_IN_PIXELS) {
+        if (width < Axe.QR.MINIMAL_SIZE_IN_PIXELS) {
             log.error("{} Request has negative width: {}", TAG, width);
             return OperationResult.malformedInput().withMessage(ERR_MALFORMED_WIDTH);
         }
 
         //height check
-        if (height < App.QR.MINIMAL_SIZE_IN_PIXELS) {
+        if (height < Axe.QR.MINIMAL_SIZE_IN_PIXELS) {
             log.error("{} Request has negative height: {}", TAG, height);
             return OperationResult.malformedInput().withMessage(ERR_MALFORMED_HEIGHT);
         }

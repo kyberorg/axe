@@ -1,6 +1,6 @@
 package pm.axe.utils.git;
 
-import pm.axe.constants.App;
+import pm.axe.Axe;
 
 /**
  * Provides correct application version.
@@ -18,14 +18,14 @@ public interface GitInfo {
     /**
      * Provides hash of the latest commit.
      *
-     * @return string with commit hash or {@link App#NO_VALUE} when not found
+     * @return string with commit hash or {@link Axe.C#NO_VALUE} when not found
      */
     String getLatestCommitHash();
 
     /**
      * Provides last tag in git repository.
      *
-     * @return string with name of the latest Git tag or {@link App#NO_VALUE} when not found
+     * @return string with name of the latest Git tag or {@link Axe.C#NO_VALUE} when not found
      */
     String getLatestTag();
 }

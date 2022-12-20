@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.events.session.AxeSessionCreatedEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
 import pm.axe.redis.serializers.AxeSessionGsonRedisSerializer;
@@ -155,9 +155,9 @@ public final class SessionBox {
      */
     static AxeSession logSessionsDiff(final AxeSession previous, final AxeSession current) {
         StringBuilder sb = new StringBuilder("Session difference detected");
-        sb.append(App.NEW_LINE);
-        sb.append("Session ").append("'").append(current.getSessionId()).append("' changed").append(App.NEW_LINE);
-        sb.append("-----").append(App.NEW_LINE);
+        sb.append(Axe.C.NEW_LINE);
+        sb.append("Session ").append("'").append(current.getSessionId()).append("' changed").append(Axe.C.NEW_LINE);
+        sb.append("-----").append(Axe.C.NEW_LINE);
 
         Field[] fields = AxeSession.class.getDeclaredFields();
         Arrays.stream(fields).forEach(field -> {
@@ -173,7 +173,7 @@ public final class SessionBox {
                             sb.append(field.getName()).append(": ")
                                     .append(prevValue).append(" -> ")
                                     .append("null")
-                                    .append(App.NEW_LINE);
+                                    .append(Axe.C.NEW_LINE);
                         }
                         valuesAreDifferent = false;
                     } else if (currentValue instanceof Date) {
@@ -194,7 +194,7 @@ public final class SessionBox {
                                 if (flagValuesAreDifferent) {
                                     sb.append("Flags.").append(flag.getName()).append(": ")
                                             .append(prevFlagValue).append(" -> ")
-                                            .append(currentFlagValue).append(App.NEW_LINE);
+                                            .append(currentFlagValue).append(Axe.C.NEW_LINE);
                                 }
                             }
                         } else if (currentValue instanceof AxeSession.Settings) {
@@ -210,18 +210,18 @@ public final class SessionBox {
                                 if (settingsAreDifferent) {
                                     sb.append("Settings.").append(setting.getName()).append(": ")
                                             .append(prevSetting).append(" -> ")
-                                            .append(currentSetting).append(App.NEW_LINE);
+                                            .append(currentSetting).append(Axe.C.NEW_LINE);
                                 }
                             }
                         } else {
                             sb.append(field.getName()).append(": ")
                                     .append(prevValue).append(" -> ")
                                     .append(currentValue)
-                                    .append(App.NEW_LINE);
+                                    .append(Axe.C.NEW_LINE);
                         }
                     }
                 } catch (IllegalAccessException e) {
-                    sb.append(field.getName()).append("No access").append(App.NEW_LINE);
+                    sb.append(field.getName()).append("No access").append(Axe.C.NEW_LINE);
                 } catch (Exception e) {
                     log.warn("{} got exception while logging Sessions diff. {}", TAG, e);
                 }

@@ -16,7 +16,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.fail;
-import static pm.axe.constants.App.THREE;
+import static pm.axe.Axe.C.THREE;
 
 /**
  * Testing {@link CookieBanner}'s visual state.

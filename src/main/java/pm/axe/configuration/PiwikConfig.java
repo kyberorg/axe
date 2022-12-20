@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.internal.Piwik;
 
 @Configuration
@@ -25,8 +25,8 @@ public class PiwikConfig {
      */
     @Bean
     public Piwik piwik() {
-        boolean piwikHostIsValid = StringUtils.isNotBlank(piwikHost) && !piwikHost.equals(App.MINUS);
-        boolean piwikSiteIdIsValid = StringUtils.isNotBlank(piwikSiteId) && !piwikSiteId.equals(App.MINUS);
+        boolean piwikHostIsValid = StringUtils.isNotBlank(piwikHost) && !piwikHost.equals(Axe.C.MINUS);
+        boolean piwikSiteIdIsValid = StringUtils.isNotBlank(piwikSiteId) && !piwikSiteId.equals(Axe.C.MINUS);
         Piwik piwik;
         if (piwikEnabled && piwikHostIsValid && piwikSiteIdIsValid) {
             piwik = Piwik.builder().enabled(true).piwikHost(piwikHost).siteId(piwikSiteId).build();

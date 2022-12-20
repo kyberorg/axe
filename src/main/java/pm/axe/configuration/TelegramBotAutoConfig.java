@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.BotSession;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.telegram.TelegramBot;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.UrlExtraValidator;
@@ -85,7 +85,7 @@ public class TelegramBotAutoConfig {
             return true;
         } else {
             log.error("{} Server URL is not valid or missing. Did '{}' property or ENV '{}' was set?",
-                    TAG, App.Properties.SERVER_URL, App.Env.SERVER_URL);
+                    TAG, Axe.Properties.SERVER_URL, Axe.Envs.SERVER_URL);
             log.info("{} Server URL is {}", TAG, serverHostname);
             return false;
         }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 import org.junitpioneer.jupiter.Issue;
 import org.selenide.selenoid.SelenoidClipboard;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
@@ -120,7 +120,7 @@ public class GridCellsTest extends SelenideTest {
         String ident = linkText.replace(TestUtils.getAppShortDomain(), ""); //will leave only "/ident" part
 
         linkSpan.click();
-        sleep(App.ONE_SECOND_IN_MILLIS);
+        sleep(Axe.C.ONE_SECOND_IN_MILLIS);
         String textFromClipboard = clipboard().getText();
         assertEquals(TestUtils.getAppShortUrl() + ident, textFromClipboard);
 

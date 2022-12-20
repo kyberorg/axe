@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
@@ -157,7 +157,7 @@ public class HomePageVisibleStateTest extends SelenideTest {
     @Test
     public void protocolSelectorHasThreeOptions() {
         HomePageObject.pasteValueInFormAndSubmitIt("kv.ee");
-        HomePageObject.MainArea.ProtocolSelector.OPTIONS.shouldHave(size(App.THREE));
+        HomePageObject.MainArea.ProtocolSelector.OPTIONS.shouldHave(size(Axe.C.THREE));
         HomePageObject.MainArea.ProtocolSelector.HTTPS_OPTION.shouldBe(visible);
         HomePageObject.MainArea.ProtocolSelector.HTTPS_OPTION.shouldHave(text("https://"));
         HomePageObject.MainArea.ProtocolSelector.HTTP_OPTION.shouldBe(visible);

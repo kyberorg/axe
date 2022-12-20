@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static pm.axe.constants.App.THREE;
+import static pm.axe.Axe.C.THREE;
 
 /**
  * Tests {@link MyLinksPage} by performing different actions with its elements.

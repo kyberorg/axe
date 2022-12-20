@@ -1,13 +1,13 @@
 package pm.axe.controllers;
 
 import kong.unirest.HttpMethod;
+import kong.unirest.HttpStatus;
+import kong.unirest.MimeTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.json.EndpointNotFoundResponse;
 import pm.axe.utils.AppUtils;
 
@@ -54,13 +54,13 @@ public class Page404ForApi {
 
         boolean hasAcceptHeader = AppUtils.hasAcceptHeader(req);
         if (hasAcceptHeader && !AppUtils.clientWantsJson(req)) {
-            resp.setHeader(Header.ACCEPT, MimeType.APPLICATION_JSON);
-            resp.setStatus(HttpCode.NOT_ACCEPTABLE);
+            resp.setHeader(Axe.Headers.ACCEPT, MimeTypes.JSON);
+            resp.setStatus(HttpStatus.NOT_ACCEPTABLE);
             return;
         }
 
-        resp.setStatus(HttpCode.NOT_FOUND);
-        resp.setContentType(MimeType.APPLICATION_JSON);
+        resp.setStatus(HttpStatus.NOT_FOUND);
+        resp.setContentType(MimeTypes.JSON);
         resp.getWriter().write(payload.toString());
     }
 

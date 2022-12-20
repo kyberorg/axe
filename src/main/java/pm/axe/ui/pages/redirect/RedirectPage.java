@@ -12,12 +12,11 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
 import pm.axe.exception.NeedForRedirectException;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
@@ -118,11 +117,11 @@ public class RedirectPage extends AxeBaseLayout implements HasErrorParameter<Nee
     public int setErrorParameter(final BeforeEnterEvent event,
                                  final ErrorParameter<NeedForRedirectException> parameter) {
         String message = parameter.getCustomMessage();
-        String[] parts = message.split(App.URL_SAFE_SEPARATOR);
+        String[] parts = message.split(Axe.C.URL_SAFE_SEPARATOR);
         if (parts.length != 2) {
             log.error("Something wrong with received message {} it's length {}, but only 2 parts are excepted",
                     message, parts.length);
-            return HttpCode.SERVER_ERROR;
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         this.origin = appUtils.getShortUrl() + "/" + parts[0];
@@ -149,7 +148,7 @@ public class RedirectPage extends AxeBaseLayout implements HasErrorParameter<Nee
 
         directAccessBanner.setVisible(false);
         redirectPage.setVisible(true);
-        return HttpCode.OK;
+        return HttpStatus.OK;
     }
 
     private boolean shouldSkipRedirectPage() {
@@ -167,11 +166,11 @@ public class RedirectPage extends AxeBaseLayout implements HasErrorParameter<Nee
 
     private int doHeaderRedirect(final String target) {
         if (StringUtils.isNotBlank(target)) {
-            VaadinResponse.getCurrent().setHeader(Header.LOCATION, UrlUtils.covertUnicodeUrlToAscii(target));
-            return HttpCode.TEMPORARY_REDIRECT;
+            VaadinResponse.getCurrent().setHeader(Axe.Headers.LOCATION, UrlUtils.covertUnicodeUrlToAscii(target));
+            return HttpStatus.TEMPORARY_REDIRECT;
         } else {
             log.error("{} Target is empty", TAG);
-            return HttpCode.SERVER_ERROR;
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
 

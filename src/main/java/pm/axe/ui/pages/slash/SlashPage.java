@@ -7,13 +7,12 @@ import com.vaadin.flow.router.NotFoundException;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinResponse;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kong.unirest.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
 import pm.axe.core.IdentGenerator;
 import pm.axe.exception.IdentNotFoundException;
 import pm.axe.exception.NeedForRedirectException;
@@ -58,7 +57,7 @@ public class SlashPage extends AxeBaseLayout implements HasErrorParameter<NotFou
                 String link = searchResult.getStringPayload();
                 log.info("{} Got long URL. Redirecting to {}", TAG, link);
                 event.rerouteToError(NeedForRedirectException.class,
-                        route + App.URL_SAFE_SEPARATOR + link);
+                        route + Axe.C.URL_SAFE_SEPARATOR + link);
             } else if (searchResult.getResult().equals(OperationResult.ELEMENT_NOT_FOUND)) {
                 log.info("{} No corresponding longURL found. Replying with 404. {\"Ident\": {}}", TAG, route);
                 rerouteTo404(route, event, Target.IDENT_NOT_FOUND);
@@ -74,7 +73,7 @@ public class SlashPage extends AxeBaseLayout implements HasErrorParameter<NotFou
             rerouteTo404(route, event, Target.PAGE_NOT_FOUND);
         }
 
-        return HttpCode.TEMPORARY_REDIRECT;
+        return HttpStatus.TEMPORARY_REDIRECT;
     }
 
     private boolean isIdent(final String route) {
@@ -96,7 +95,7 @@ public class SlashPage extends AxeBaseLayout implements HasErrorParameter<NotFou
 
     private void rerouteTo404(final String route, final BeforeEnterEvent event, final Target target) {
         if (isApiRequest(route) || AppUtils.clientWantsJson(VaadinRequest.getCurrent())) {
-            VaadinResponse.getCurrent().setHeader(Header.LOCATION, api404Endpoint(event));
+            VaadinResponse.getCurrent().setHeader(Axe.Headers.LOCATION, api404Endpoint(event));
         } else {
             if (target == Target.IDENT_NOT_FOUND) {
                 event.rerouteToError(IdentNotFoundException.class);

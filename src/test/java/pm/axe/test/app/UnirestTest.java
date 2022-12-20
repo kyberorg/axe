@@ -3,10 +3,8 @@ package pm.axe.test.app;
 import kong.unirest.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.platform.commons.util.StringUtils;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.json.PostLinkRequest;
 import pm.axe.json.PostLinkResponse;
 import pm.axe.test.AxeTest;
@@ -17,7 +15,7 @@ import pm.axe.utils.AppUtils;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static pm.axe.constants.Header.CONTENT_TYPE;
+import static pm.axe.Axe.Headers.CONTENT_TYPE;
 
 /**
  * Tests, where we run application same ways in {@link SelenideTest} and test.
@@ -57,14 +55,14 @@ public abstract class UnirestTest extends AxeTest {
         String requestJson = PostLinkRequest.create().withLink(longLink).toString();
 
         HttpRequest request = Unirest.post(TEST_URL + Endpoint.Api.LINKS_API)
-                .header(CONTENT_TYPE, MimeType.APPLICATION_JSON)
+                .header(CONTENT_TYPE, MimeTypes.JSON)
                 .body(requestJson);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.CREATED, result.getStatus());
+        assertEquals(HttpStatus.CREATED, result.getStatus());
 
         String responseBody = result.getBody();
         assertNotNull(responseBody);
@@ -86,9 +84,9 @@ public abstract class UnirestTest extends AxeTest {
         HttpResponse<JsonNode> result = request.asJson();
         logRequestAndResponse(request, result, TAG);
 
-        if (result.getStatus() == HttpCode.OK) {
+        if (result.getStatus() == HttpStatus.OK) {
             return result.getBody().getObject().getString("link");
-        } else if (result.getStatus() == HttpCode.NOT_FOUND) {
+        } else if (result.getStatus() == HttpStatus.NOT_FOUND) {
             return LINK_NOT_FOUND_STATUS;
         } else {
             throw new RuntimeException("Error occurred while retrieving link. Please see logs above");
@@ -120,45 +118,45 @@ public abstract class UnirestTest extends AxeTest {
     }
 
     private void logRequest(final HttpRequest request) {
-        StringBuilder reqLog = new StringBuilder("Request: ").append(App.NEW_LINE);
-        reqLog.append(String.format("Request URL: %s", request.getUrl())).append(App.NEW_LINE);
+        StringBuilder reqLog = new StringBuilder("Request: ").append(Axe.C.NEW_LINE);
+        reqLog.append(String.format("Request URL: %s", request.getUrl())).append(Axe.C.NEW_LINE);
         reqLog
                 .append(String.format("Request method: %s", request.getHttpMethod().name()))
-                .append(App.NEW_LINE);
+                .append(Axe.C.NEW_LINE);
         if (request.getBody().isPresent()) {
             try {
                 reqLog
                         .append(String.format("Request body: %s", getRequestBody(request)))
-                        .append(App.NEW_LINE);
+                        .append(Axe.C.NEW_LINE);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 reqLog
                         .append(String.format("Request body: %s", "<failed to retrieve>"))
-                        .append(App.NEW_LINE);
+                        .append(Axe.C.NEW_LINE);
             }
         }
         if (request.getHeaders().size() > 0) {
-            reqLog.append("Request headers: ").append(App.NEW_LINE);
+            reqLog.append("Request headers: ").append(Axe.C.NEW_LINE);
             for (kong.unirest.Header header : request.getHeaders().all()) {
                 reqLog
                         .append(String.format("%s: %s", header.getName(), header.getValue()))
-                        .append(App.NEW_LINE);
+                        .append(Axe.C.NEW_LINE);
             }
         }
         log.info(String.format("%s %s", TAG, reqLog));
     }
 
     private void logResponse(final HttpResponse response) {
-        StringBuilder respLog = new StringBuilder("Response: ").append(App.NEW_LINE);
+        StringBuilder respLog = new StringBuilder("Response: ").append(Axe.C.NEW_LINE);
         respLog
                 .append(String.format("Response status code: %s", response.getStatus()))
-                .append(App.NEW_LINE);
-        respLog.append(String.format("Response body: %s", response.getBody())).append(App.NEW_LINE);
+                .append(Axe.C.NEW_LINE);
+        respLog.append(String.format("Response body: %s", response.getBody())).append(Axe.C.NEW_LINE);
         if (response.getHeaders().size() > 0) {
-            respLog.append("Response headers: ").append(App.NEW_LINE);
+            respLog.append("Response headers: ").append(Axe.C.NEW_LINE);
             for (kong.unirest.Header header : response.getHeaders().all()) {
                 respLog
                         .append(String.format("%s: %s", header.getName(), header.getValue()))
-                        .append(App.NEW_LINE);
+                        .append(Axe.C.NEW_LINE);
             }
         }
         log.info(String.format("%s %s", TAG, respLog));

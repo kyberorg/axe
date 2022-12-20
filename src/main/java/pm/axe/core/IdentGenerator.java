@@ -1,7 +1,7 @@
 package pm.axe.core;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.db.models.Token;
 import pm.axe.users.TokenType;
 
@@ -61,7 +61,7 @@ public final class IdentGenerator {
             return generateAccountConfirmationIdent(token);
         }
         String prefix = token.getTokenType().getIdentPrefix();
-        String number = RandomStringUtils.randomNumeric(App.FOUR);
+        String number = RandomStringUtils.randomNumeric(Axe.C.FOUR);
         String letter = RandomStringUtils.randomAlphabetic(1);
         return String.join("", prefix, number, letter);
     }

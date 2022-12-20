@@ -2,11 +2,11 @@ package pm.axe.test.app;
 
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
+import kong.unirest.HttpStatus;
 import kong.unirest.Unirest;
 import org.junit.jupiter.api.Test;
 import pm.axe.Endpoint;
 import pm.axe.api.links.GetLinkRestController;
-import pm.axe.constants.HttpCode;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.utils.UrlUtils;
 
@@ -36,7 +36,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_IMPLEMENTED, result.getStatus());
+        assertEquals(HttpStatus.NOT_IMPLEMENTED, result.getStatus());
 
         TestUtils.assertResultIsAxeErrorJson(result);
     }
@@ -53,7 +53,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_IMPLEMENTED, result.getStatus());
+        assertEquals(HttpStatus.NOT_IMPLEMENTED, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -73,7 +73,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatus());
     }
 
     /**
@@ -89,7 +89,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -106,7 +106,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -123,7 +123,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -140,7 +140,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -157,7 +157,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -174,7 +174,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -191,7 +191,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -208,7 +208,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -225,7 +225,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -242,7 +242,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -259,7 +259,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.BAD_REQUEST, result.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -274,7 +274,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
         TestUtils.assertResultIsAxeErrorJson(result);
     }
 
@@ -292,7 +292,7 @@ public class GetLinkApiTest extends UnirestTest {
         logRequestAndResponse(request, result, TAG);
 
         assertNotNull(result);
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         TestUtils.assertResultIsJson(result);
     }

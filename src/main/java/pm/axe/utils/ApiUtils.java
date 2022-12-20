@@ -1,9 +1,9 @@
 package pm.axe.utils;
 
+import kong.unirest.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pm.axe.Endpoint;
 import pm.axe.api.middleware.TokenCheckerMiddleware;
-import pm.axe.constants.HttpCode;
 import pm.axe.core.IdentValidator;
 import pm.axe.json.AxeErrorJson;
 import pm.axe.result.OperationResult;
@@ -23,7 +23,7 @@ public final class ApiUtils {
      */
     public static ResponseEntity<AxeErrorJson> handleSystemDown() {
         AxeErrorJson errorJson = AxeErrorJson.createWithMessage("Application is DOWN")
-                .andStatus(HttpCode.APP_IS_DOWN);
+                .andStatus(HttpStatus.SERVICE_UNAVAILABLE);
         return ResponseEntity.status(errorJson.getStatus()).body(errorJson);
     }
 
@@ -34,14 +34,14 @@ public final class ApiUtils {
      */
     public static ResponseEntity<AxeErrorJson> handleServerError() {
         AxeErrorJson errorJson = AxeErrorJson.createWithMessage("Something wrong at our side")
-                .andStatus(HttpCode.SERVER_ERROR);
-        return ResponseEntity.status(HttpCode.SERVER_ERROR).body(errorJson);
+                .andStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorJson);
     }
 
     /**
      * Constructs {@link ResponseEntity} with {@link AxeErrorJson} inside. Uses user-defined message and status.
      *
-     * @param httpStatus int with HTTP Status. See {@link HttpCode}.
+     * @param httpStatus int with HTTP Status. See {@link HttpStatus}.
      * @param message    string with error message.
      * @return {@link ResponseEntity} with {@link AxeErrorJson} inside
      */
@@ -54,7 +54,7 @@ public final class ApiUtils {
      * Constructs {@link ResponseEntity} with {@link AxeErrorJson} inside.
      * Uses user-defined status and message from {@link OperationResult}.
      *
-     * @param httpStatus int with HTTP Status. See {@link HttpCode}.
+     * @param httpStatus int with HTTP Status. See {@link HttpStatus}.
      * @param opResult   operation result to get message from.
      * @return {@link ResponseEntity} with {@link AxeErrorJson} inside
      */
@@ -73,12 +73,12 @@ public final class ApiUtils {
         String errorMarker = checkResult.getResult();
         AxeErrorJson errorJson = switch (errorMarker) {
             case TokenCheckerMiddleware.REQUEST_IS_EMPTY ->
-                    AxeErrorJson.createWithMessage("Got empty request").andStatus(HttpCode.SERVER_ERROR);
+                    AxeErrorJson.createWithMessage("Got empty request").andStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             case TokenCheckerMiddleware.NO_TOKEN ->
                     AxeErrorJson.createWithMessage("Unauthorized: Auth Token must be present")
-                    .andStatus(HttpCode.UNAUTHORIZED);
+                    .andStatus(HttpStatus.UNAUTHORIZED);
             default -> AxeErrorJson.createWithMessage("Unauthorized: Wrong Token")
-                    .andStatus(HttpCode.UNAUTHORIZED);
+                    .andStatus(HttpStatus.UNAUTHORIZED);
         };
         return ResponseEntity.status(errorJson.getStatus()).body(errorJson);
     }
@@ -95,10 +95,10 @@ public final class ApiUtils {
         if (errorReason.equals(IdentValidator.EMPTY_IDENT)) {
             errorJson = AxeErrorJson.createWithMessage("Request should be like this: "
                             + Endpoint.Api.LINKS_API_PLUS_IDENT + " and ident should not be empty")
-                    .andStatus(HttpCode.BAD_REQUEST);
+                    .andStatus(HttpStatus.BAD_REQUEST);
         } else {
             errorJson = AxeErrorJson.createWithMessage("Ident must be 2+ chars alphabetic string")
-                    .andStatus(HttpCode.BAD_REQUEST);
+                    .andStatus(HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.badRequest().body(errorJson);
     }

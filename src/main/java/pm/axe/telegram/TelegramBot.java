@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.db.models.Link;
 import pm.axe.internal.LinkServiceInput;
 import pm.axe.result.OperationResult;
@@ -58,7 +58,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             telegramObject = TelegramObject.createFromUpdate(update);
 
             if (log.isDebugEnabled()) {
-                log.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + App.NEW_LINE + telegramObject);
+                log.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + Axe.C.NEW_LINE + telegramObject);
             }
             telegramService.init(telegramObject);
 

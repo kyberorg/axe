@@ -1,16 +1,11 @@
 package pm.axe.test.app;
 
-import kong.unirest.HttpRequest;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
+import kong.unirest.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.test.utils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,24 +24,24 @@ public class TechPartsTest extends UnirestTest {
     private static final String ALWAYS_NOT_FOUND_API_LOCATION = "/api/void/notFound";
 
     /**
-     * Request has accept header with {@link MimeType#APPLICATION_JSON} value = Reply with JSON.
+     * Request has accept header with {@link MimeTypes#JSON} value = Reply with JSON.
      */
     @Test
     public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_LOCATION)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
+                .header(Axe.Headers.ACCEPT, MimeTypes.JSON);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
+        TestUtils.assertContentType(MimeTypes.JSON, result);
     }
 
     /**
-     * Reply with {@link MimeType#TEXT_HTML} by default.
+     * Reply with {@link MimeTypes#HTML} by default.
      */
     @Test
     public void byDefaultAppReturnHtmlWhenNothingFound() {
@@ -55,27 +50,27 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.TEXT_HTML, result);
+        TestUtils.assertContentType(MimeTypes.HTML, result);
     }
 
     /**
-     * Request to API with {@link MimeType#APPLICATION_JSON} header = Reply with JSON.
+     * Request to API with {@link MimeTypes#JSON} header = Reply with JSON.
      */
     @Test
     public void onApiRequestWithJSONHeaderAppReturnJsonWhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
+                .header(Axe.Headers.ACCEPT, MimeTypes.JSON);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
+        TestUtils.assertContentType(MimeTypes.JSON, result);
     }
 
     /**
@@ -88,48 +83,48 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_FOUND, result.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
+        TestUtils.assertContentType(MimeTypes.JSON, result);
     }
 
     /**
-     * Request to API with other that {@link MimeType#APPLICATION_JSON} content type
-     * (for example {@link MimeType#APPLICATION_XML}) = Reply with 406 (Not acceptable).
+     * Request to API with other that {@link MimeTypes#JSON} content type
+     * (for example {@link MimeTypes#XML}) = Reply with 406 (Not acceptable).
      */
     @Test
     public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenNothingFound() {
         HttpRequest request = Unirest.get(TEST_URL + ALWAYS_NOT_FOUND_API_LOCATION)
-                .header(Header.ACCEPT, MimeType.APPLICATION_XML);
+                .header(Axe.Headers.ACCEPT, MimeTypes.XML);
 
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_ACCEPTABLE, result.getStatus());
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, result.getStatus());
     }
 
     /**
-     * If client want {@link MimeType#APPLICATION_JSON}, we should reply with JSON even when we failed.
+     * If client want {@link MimeTypes#JSON}, we should reply with JSON even when we failed.
      */
     @Test
     public void ifRequestHasAcceptHeaderJsonAppReturnJsonWhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_ENDPOINT)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
+                .header(Axe.Headers.ACCEPT, MimeTypes.JSON);
 
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
+        TestUtils.assertContentType(MimeTypes.JSON, result);
     }
 
     /**
-     * By default, app replies with {@link MimeType#TEXT_HTML}, when failed.
+     * By default, app replies with {@link MimeTypes#HTML}, when failed.
      */
     @Test
     public void byDefaultAppReturnHtmlWhenFailed() {
@@ -138,27 +133,27 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.TEXT_HTML, result);
+        TestUtils.assertContentType(MimeTypes.HTML, result);
     }
 
     /**
-     * On API request with {@link MimeType#APPLICATION_JSON} header, App replies with JSON.
+     * On API request with {@link MimeTypes#JSON} header, App replies with JSON.
      */
     @Test
     public void onApiRequestWithHeaderAppReturnJsonWhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT)
-                .header(Header.ACCEPT, MimeType.APPLICATION_JSON);
+                .header(Axe.Headers.ACCEPT, MimeTypes.JSON);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
+        TestUtils.assertContentType(MimeTypes.JSON, result);
     }
 
     /**
@@ -171,29 +166,29 @@ public class TechPartsTest extends UnirestTest {
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.SERVER_ERROR, result.getStatus());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatus());
 
         TestUtils.assertResponseBodyNotEmpty(result);
-        TestUtils.assertContentType(MimeType.APPLICATION_JSON, result);
+        TestUtils.assertContentType(MimeTypes.JSON, result);
     }
 
     /**
-     * Request to API with other that {@link MimeType#APPLICATION_JSON} content type
-     * (for example {@link MimeType#APPLICATION_XML}) = Reply with 406 (Not acceptable).
+     * Request to API with other that {@link MimeTypes#JSON} content type
+     * (for example {@link MimeTypes#XML}) = Reply with 406 (Not acceptable).
      */
     @Test
     public void onApiRequestWithNotJsonInAcceptHeaderAppReturns406WhenFailed() {
         HttpRequest request = Unirest.get(TEST_URL + Endpoint.ForTests.FAIL_API_ENDPOINT)
-                .header(Header.ACCEPT, MimeType.APPLICATION_XML);
+                .header(Axe.Headers.ACCEPT, MimeTypes.XML);
         HttpResponse<String> result = request.asString();
 
         logRequestAndResponse(request, result, TAG);
 
-        assertEquals(HttpCode.NOT_ACCEPTABLE, result.getStatus());
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, result.getStatus());
     }
 
     /**
-     * Tests that robots.txt exists and content type is {@link MimeType#TEXT_PLAIN}.
+     * Tests that robots.txt exists and content type is {@link MimeTypes#TXT}.
      */
     @Test
     public void robotsTxtIsPresentAndText() {
@@ -205,15 +200,15 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "robots.txt is empty");
-        TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
+        TestUtils.assertContentType(MimeTypes.TXT, result);
     }
 
     /**
-     * Tests that humans.txt exists and content type is {@link MimeType#TEXT_PLAIN}.
+     * Tests that humans.txt exists and content type is {@link MimeTypes#TXT}.
      */
     @Test
     public void humansTxtIsPresentAndText() {
@@ -224,11 +219,11 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "humans.txt is empty");
-        TestUtils.assertContentType(MimeType.TEXT_PLAIN, result);
+        TestUtils.assertContentType(MimeTypes.TXT, result);
     }
 
     /**
@@ -243,7 +238,7 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "favicon.ico is empty");
@@ -264,11 +259,11 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return;
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         String body = result.getBody();
         assertTrue(StringUtils.isNotBlank(body), "sitemap.xml is empty");
-        TestUtils.assertContentType(MimeType.APPLICATION_XML, result);
+        TestUtils.assertContentType(MimeTypes.XML, result);
     }
 
     /**
@@ -319,9 +314,9 @@ public class TechPartsTest extends UnirestTest {
         log.debug("Response: {}", result);
         if (result == null) return null;
 
-        assertEquals(HttpCode.OK, result.getStatus());
+        assertEquals(HttpStatus.OK, result.getStatus());
 
         String body = result.getBody();
-        return body.split(App.NEW_LINE);
+        return body.split(Axe.C.NEW_LINE);
     }
 }

@@ -17,15 +17,14 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
+import kong.unirest.MimeTypes;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import pm.axe.constants.App;
-import pm.axe.constants.Header;
-import pm.axe.constants.MimeType;
+import pm.axe.Axe;
 import pm.axe.session.AxeSession;
 
 import javax.servlet.RequestDispatcher;
@@ -172,7 +171,7 @@ public class AppUtils implements Serializable {
         boolean isProfileNotEnvironmental;
         boolean anotherEnvProfileFound = false;
         for (String profile: activeProfiles) {
-            isProfileNotEnvironmental = (profile.equals(App.Profiles.ACTUATOR) || profile.equals(App.Profiles.PROXY));
+            isProfileNotEnvironmental = (profile.equals(Axe.Profiles.ACTUATOR) || profile.equals(Axe.Profiles.PROXY));
             if (!isProfileNotEnvironmental) {
                 anotherEnvProfileFound = true;
                 break;
@@ -203,11 +202,11 @@ public class AppUtils implements Serializable {
      * Determine if client wants to receive JSON from us.
      *
      * @param request valid {@link HttpServletRequest} request
-     * @return true, if clients {@link Header#ACCEPT} contains {@link MimeType#APPLICATION_JSON} mime type,
+     * @return true, if clients {@link Axe.Headers#ACCEPT} contains {@link MimeTypes#JSON} mime type,
      * false - elsewhere
      */
     public static boolean clientWantsJson(final HttpServletRequest request) {
-        String acceptHeader = request.getHeader(Header.ACCEPT);
+        String acceptHeader = request.getHeader(Axe.Headers.ACCEPT);
         return clientWantsJson(acceptHeader);
     }
 
@@ -215,11 +214,11 @@ public class AppUtils implements Serializable {
      * Determines if client wants to receive JSON from us. Vaadin's implementation.
      *
      * @param vaadinRequest valid {@link VaadinRequest} from VaadinServlet
-     * @return true, if clients {@link Header#ACCEPT} contains {@link MimeType#APPLICATION_JSON} mime type,
+     * @return true, if clients {@link Axe.Headers#ACCEPT} contains {@link MimeTypes#JSON} mime type,
      * false - elsewhere
      */
     public static boolean clientWantsJson(final VaadinRequest vaadinRequest) {
-        String acceptHeader = vaadinRequest.getHeader(Header.ACCEPT);
+        String acceptHeader = vaadinRequest.getHeader(Axe.Headers.ACCEPT);
         return clientWantsJson(acceptHeader);
     }
 
@@ -242,17 +241,17 @@ public class AppUtils implements Serializable {
     }
 
     /**
-     * Determines if client's request has {@link Header#ACCEPT} header with exact {@link MimeType}.
+     * Determines if client's request has {@link Axe.Headers#ACCEPT} header with exact MIME-type.
      *
      * @param req valid {@link HttpServletRequest} request
-     * @return true, if request has {@link Header#ACCEPT} header and its value is not wildcard
-     * (aka accept all) {@link MimeType#ALL}, false - elsewhere
+     * @return true, if request has {@link Axe.Headers#ACCEPT} header and its value is not wildcard
+     * (aka accept all) {@link Axe.C#ALL_MIME_TYPES}, false - elsewhere
      */
     public static boolean hasAcceptHeader(final HttpServletRequest req) {
-        boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
+        boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Axe.Headers.ACCEPT));
         if (acceptHeaderPresent) {
             @SuppressWarnings("UnnecessaryLocalVariable") //increase readability
-            boolean hasExactMimeType = !req.getHeader(Header.ACCEPT).equals(MimeType.ALL);
+            boolean hasExactMimeType = !req.getHeader(Axe.Headers.ACCEPT).equals(Axe.C.ALL_MIME_TYPES);
             return hasExactMimeType;
         } else {
             return false;
@@ -263,20 +262,20 @@ public class AppUtils implements Serializable {
      * This is needed to handle shit like {@literal text/html,application/xhtml+xml,application/xml;q=0.9,**;q=0.8}.
      *
      * @param req request
-     * @return true - any part Accept Header contains {@link MimeType#TEXT_HTML}, false elsewhere
+     * @return true - any part Accept Header contains {@link MimeTypes#HTML}, false elsewhere
      */
     public static boolean clientWantsHtml(final HttpServletRequest req) {
-        boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Header.ACCEPT));
+        boolean acceptHeaderPresent = StringUtils.isNotBlank(req.getHeader(Axe.Headers.ACCEPT));
         if (!acceptHeaderPresent) {
             return false;
         }
-        String rawAcceptHeader = req.getHeader(Header.ACCEPT);
+        String rawAcceptHeader = req.getHeader(Axe.Headers.ACCEPT);
         String[] parts = rawAcceptHeader.split(",");
         if (parts.length < 1) {
             return false;
         }
         for (String mimeType : parts) {
-            if (mimeType.equals(MimeType.TEXT_HTML)) {
+            if (mimeType.equals(MimeTypes.HTML)) {
                 return true;
             }
         }
@@ -384,7 +383,7 @@ public class AppUtils implements Serializable {
      * @return server url from env if found or {@link #DUMMY_HOST}
      */
     public String getServerUrl() {
-        String serverUrl = env.getProperty(App.Properties.SERVER_URL);
+        String serverUrl = env.getProperty(Axe.Properties.SERVER_URL);
         return StringUtils.isNotBlank(serverUrl) ? serverUrl : DUMMY_HOST;
     }
 
@@ -394,7 +393,7 @@ public class AppUtils implements Serializable {
      * @return string with short url (scheme + short domain) if found or Server Url from {@link #getServerUrl()}
      */
     public String getShortUrl() {
-        String shortDomain = env.getProperty(App.Properties.SHORT_DOMAIN, DUMMY_HOST);
+        String shortDomain = env.getProperty(Axe.Properties.SHORT_DOMAIN, DUMMY_HOST);
         if (shortDomain.equals(DUMMY_HOST)) {
             //no short URL - use server URL
             log.debug("No Short Domain defined - using Server URL");
@@ -426,7 +425,7 @@ public class AppUtils implements Serializable {
      * @return string with short domain, if found or Server Url from {@link #getServerUrl()}
      */
     public String getShortDomain() {
-        String shortDomain = env.getProperty(App.Properties.SHORT_DOMAIN, DUMMY_HOST);
+        String shortDomain = env.getProperty(Axe.Properties.SHORT_DOMAIN, DUMMY_HOST);
         if (shortDomain.equals(DUMMY_HOST)) {
             //no short URL - use server domain
             log.debug("No Short Domain defined - using Server Domain");
@@ -442,17 +441,17 @@ public class AppUtils implements Serializable {
      * @return token from env if found or {@link #DUMMY_TOKEN}.
      */
     public String getTelegramToken() {
-        String token = env.getProperty(App.Properties.TELEGRAM_TOKEN);
+        String token = env.getProperty(Axe.Properties.TELEGRAM_TOKEN);
         return StringUtils.isNotBlank(token) ? token : DUMMY_TOKEN;
     }
 
     /**
      * Defines is telegram integration is enabled or not.
      *
-     * @return {@link App.Properties#TELEGRAM_ENABLED} property value or false
+     * @return {@link Axe.Properties#TELEGRAM_ENABLED} property value or false
      */
     public boolean isTelegramDisabled() {
-        return !Boolean.parseBoolean(env.getProperty(App.Properties.TELEGRAM_ENABLED, "false"));
+        return !Boolean.parseBoolean(env.getProperty(Axe.Properties.TELEGRAM_ENABLED, "false"));
     }
 
     /**
@@ -461,16 +460,16 @@ public class AppUtils implements Serializable {
      * @return true if Dev Mode is activated, else false
      */
     public boolean isDevelopmentModeActivated() {
-        return Boolean.parseBoolean(env.getProperty(App.Properties.DEV_MODE, "false"));
+        return Boolean.parseBoolean(env.getProperty(Axe.Properties.DEV_MODE, "false"));
     }
 
     /**
-     * Checks if {@link Header#X_DEVELOPER} header is present.
+     * Checks if {@link Axe.Headers#X_DEVELOPER} header is present.
      *
      * @return true if header is present, false if not.
      */
     public boolean hasDevHeader() {
-        String xDeveloper = VaadinRequest.getCurrent().getHeader(Header.X_DEVELOPER);
+        String xDeveloper = VaadinRequest.getCurrent().getHeader(Axe.Headers.X_DEVELOPER);
         if (StringUtils.isBlank(xDeveloper)) {
             return false;
         } else {
@@ -495,16 +494,16 @@ public class AppUtils implements Serializable {
      * @return true - if crawlers should be allowed, false - elsewhere
      */
     public boolean areCrawlersAllowed() {
-        return Boolean.parseBoolean(getEnv().getProperty(App.Properties.CRAWLERS_ALLOWED));
+        return Boolean.parseBoolean(getEnv().getProperty(Axe.Properties.CRAWLERS_ALLOWED));
     }
 
     /**
      * Reads redirect page bypass symbol from settings.
      *
-     * @return string with skip mark or {@link App#NO_VALUE}
+     * @return string with skip mark or {@link Axe.C#NO_VALUE}
      */
     public String getRedirectPageBypassSymbol() {
-        return getEnv().getProperty(App.Properties.REDIRECT_PAGE_BYPASS_SYMBOL, App.NO_VALUE);
+        return getEnv().getProperty(Axe.Properties.REDIRECT_PAGE_BYPASS_SYMBOL, Axe.C.NO_VALUE);
     }
 
     /**
@@ -535,12 +534,12 @@ public class AppUtils implements Serializable {
     /**
      * Reads redirect page skip from settings.
      *
-     * @return int with timeout from settings or default timeout {@link App.Defaults#REDIRECT_PAGE_TIMEOUT_SECONDS}
+     * @return int with timeout from settings or default timeout {@link Axe.Defaults#REDIRECT_PAGE_TIMEOUT_SECONDS}
      */
     public int getRedirectPageTimeout() {
-        String timeoutString = getEnv().getProperty(App.Properties.REDIRECT_PAGE_TIMEOUT, App.NO_VALUE);
-        if (timeoutString.equals(App.NO_VALUE)) {
-            return App.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
+        String timeoutString = getEnv().getProperty(Axe.Properties.REDIRECT_PAGE_TIMEOUT, Axe.C.NO_VALUE);
+        if (timeoutString.equals(Axe.C.NO_VALUE)) {
+            return Axe.Defaults.REDIRECT_PAGE_TIMEOUT_SECONDS;
         }
         return Integer.parseInt(timeoutString);
     }
@@ -548,12 +547,12 @@ public class AppUtils implements Serializable {
     /**
      * Reads Session Timeout from settings.
      *
-     * @return int with  timeout from settings or default timeout {@link App.Defaults#SESSION_TIMEOUT_SECONDS}
+     * @return int with  timeout from settings or default timeout {@link Axe.Defaults#SESSION_TIMEOUT_SECONDS}
      */
     public int getSessionTimeout() {
-        String timeoutString = getEnv().getProperty(App.Properties.SESSION_TIMEOUT, App.NO_VALUE);
-        if (timeoutString.equals(App.NO_VALUE)) {
-            return App.Defaults.SESSION_TIMEOUT_SECONDS;
+        String timeoutString = getEnv().getProperty(Axe.Properties.SESSION_TIMEOUT, Axe.C.NO_VALUE);
+        if (timeoutString.equals(Axe.C.NO_VALUE)) {
+            return Axe.Defaults.SESSION_TIMEOUT_SECONDS;
         }
         return Integer.parseInt(timeoutString);
     }
@@ -616,19 +615,19 @@ public class AppUtils implements Serializable {
     /**
      * Reads Facebook AppId from Settings.
      *
-     * @return String with Facebook Application ID or {@link App#NO_VALUE}.
+     * @return String with Facebook Application ID or {@link Axe.C#NO_VALUE}.
      */
     public String getFacebookAppId() {
-        return getEnv().getProperty(App.Properties.FACEBOOK_APP_ID, App.NO_VALUE);
+        return getEnv().getProperty(Axe.Properties.FACEBOOK_APP_ID, Axe.C.NO_VALUE);
     }
 
     /**
      * Reads Email for sending errors from Settings.
      *
-     * @return String with Email for sending errors or {@link App#NO_VALUE}.
+     * @return String with Email for sending errors or {@link Axe.C#NO_VALUE}.
      */
     public String getEmailForErrors() {
-        return getEnv().getProperty(App.Properties.EMAIL_FOR_ERRORS, App.NO_VALUE);
+        return getEnv().getProperty(Axe.Properties.EMAIL_FOR_ERRORS, Axe.C.NO_VALUE);
     }
 
     /**
@@ -637,7 +636,7 @@ public class AppUtils implements Serializable {
      * @return String with Email Address or default value.
      */
     public String getEmailFromAddress() {
-        return getEnv().getProperty(App.Properties.EMAIL_FROM_ADDRESS, App.Defaults.EMAIL_FROM_ADDRESS);
+        return getEnv().getProperty(Axe.Properties.EMAIL_FROM_ADDRESS, Axe.Defaults.EMAIL_FROM_ADDRESS);
     }
 
     /**
@@ -646,35 +645,35 @@ public class AppUtils implements Serializable {
      * @return String with Application Name,defined in profile or hardcoded value {@literal Axe}.
      */
     public String getApplicationName() {
-        return getEnv().getProperty(App.Properties.APPLICATION_NAME, "Axe");
+        return getEnv().getProperty(Axe.Properties.APPLICATION_NAME, "Axe");
     }
 
     /**
      * Provides Master Token from EnvVars. This is hardcoded Token to perform potentially destructive operations.
      *
-     * @return string with token, or {@link App#NO_VALUE}.
+     * @return string with token, or {@link Axe.C#NO_VALUE}.
      */
     public String getMasterToken() {
-        return getEnv().getProperty(App.Env.MASTER_TOKEN, App.NO_VALUE);
+        return getEnv().getProperty(Axe.Envs.MASTER_TOKEN, Axe.C.NO_VALUE);
     }
 
     /**
      * Provides Telegram Bot Name from Properties.
      *
-     * @return string with bot's name, or {@link App#NO_VALUE}.
+     * @return string with bot's name, or {@link Axe.C#NO_VALUE}.
      */
     public String getTelegramBotsName() {
-        return getEnv().getProperty(App.Properties.TELEGRAM_BOT_NAME, App.NO_VALUE);
+        return getEnv().getProperty(Axe.Properties.TELEGRAM_BOT_NAME, Axe.C.NO_VALUE);
     }
 
     /**
      * Determines if app should show "Yalsee is now Axe" Notification.
-     * Regulated by profile property {@link  App.Properties#SHOW_RENAME_NOTIFICATION}
+     * Regulated by profile property {@link  Axe.Properties#SHOW_RENAME_NOTIFICATION}
      *
      * @return property value
      */
     public boolean showRenameNotification() {
-        String showNotificationString = getEnv().getProperty(App.Properties.SHOW_RENAME_NOTIFICATION, "true");
+        String showNotificationString = getEnv().getProperty(Axe.Properties.SHOW_RENAME_NOTIFICATION, "true");
         return Boolean.parseBoolean(showNotificationString);
     }
 
@@ -682,7 +681,7 @@ public class AppUtils implements Serializable {
         if (acceptHeader == null) {
             return false;
         } else {
-            return acceptHeader.equals(MimeType.APPLICATION_JSON);
+            return acceptHeader.equals(MimeTypes.JSON);
         }
     }
 }

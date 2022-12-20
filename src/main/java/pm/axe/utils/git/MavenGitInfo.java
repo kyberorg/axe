@@ -3,7 +3,7 @@ package pm.axe.utils.git;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 
 import java.util.Objects;
 
@@ -25,12 +25,12 @@ public class MavenGitInfo implements GitInfo {
     @Override
     public String getLatestCommitHash() {
         return StringUtils.isNotBlank(gitRepoState.getCommitIdAbbrev())
-                ? gitRepoState.getCommitIdAbbrev() : App.NO_VALUE;
+                ? gitRepoState.getCommitIdAbbrev() : Axe.C.NO_VALUE;
     }
 
     @Override
     public String getLatestTag() {
         //we use here version from maven, because it is more stable than git tag
-        return StringUtils.isNotBlank(gitRepoState.getBuildVersion()) ? gitRepoState.getBuildVersion() : App.NO_VALUE;
+        return StringUtils.isNotBlank(gitRepoState.getBuildVersion()) ? gitRepoState.getBuildVersion() : Axe.C.NO_VALUE;
     }
 }

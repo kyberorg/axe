@@ -16,7 +16,7 @@ import pm.axe.ui.pages.mylinks.MyLinksPage;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
-import static pm.axe.constants.App.FOUR;
+import static pm.axe.Axe.C.FOUR;
 
 /**
  * Test default visual state of {@link MyLinksPage}. This state, when user just opens page without doing something else.

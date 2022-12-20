@@ -1,11 +1,11 @@
 package pm.axe.utils.git;
 
 import org.springframework.stereotype.Component;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 
 /**
  * Do nothing git info aka fallback, when other methods failed to apply.
- * Always responds with {@link App#NO_VALUE}
+ * Always responds with {@link Axe.C#NO_VALUE}
  *
  * @since 2.0
  */
@@ -19,11 +19,11 @@ public class NoGitInfo implements GitInfo {
 
     @Override
     public String getLatestCommitHash() {
-        return App.NO_VALUE;
+        return Axe.C.NO_VALUE;
     }
 
     @Override
     public String getLatestTag() {
-        return App.NO_VALUE;
+        return Axe.C.NO_VALUE;
     }
 }

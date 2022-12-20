@@ -6,7 +6,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
 import pm.axe.events.session.AxeSessionCreatedEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
@@ -76,7 +76,7 @@ public class SessionWatchdog implements HttpSessionListener {
     /**
      * Launches Sessions synchronization.
      */
-    @Scheduled(fixedDelay = App.Session.SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = Axe.Session.SESSION_SYNC_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void syncSessions() {
         long existingSessionsCount;
         long newSessionsCount;
@@ -97,8 +97,7 @@ public class SessionWatchdog implements HttpSessionListener {
                 SessionBox.getAllSessions().stream()
                         .filter(not(SessionBox::hasPreviousVersion)) //filter new sessions (without previous state)
                         .map(AxeSession::updateVersion) //they are considered as changed - updating their versions
-                        .map(SessionBox::setAsPreviousVersion) //and save them as previous for next sync
-                        .collect(Collectors.toList())); //and finally add them list for syncing
+                        .map(SessionBox::setAsPreviousVersion).toList()); //and finally add them list for syncing
 
         newSessionsCount = sessionsToSync.size() - existingSessionsCount;
 
@@ -114,7 +113,7 @@ public class SessionWatchdog implements HttpSessionListener {
      * Detects sessions that are about to expire. This method through to show session expiration warning,
      * so it also filters out those sessions where given warning already shown.
      */
-    @Scheduled(fixedRate = App.Session.SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = Axe.Session.SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void detectAlmostExpiredAxeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(AxeSession::isAlmostExpired)
@@ -125,7 +124,7 @@ public class SessionWatchdog implements HttpSessionListener {
     /**
      * Finds expired sessions and removes 'em from {@link SessionBox} and Redis.
      */
-    @Scheduled(fixedDelay = App.Session.SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = Axe.Session.SESSION_WATCHDOG_INTERVAL, timeUnit = TimeUnit.SECONDS)
     public void endExpiredAxeSessions() {
         SessionBox.getAllSessions().stream()
                 .filter(AxeSession::expired)

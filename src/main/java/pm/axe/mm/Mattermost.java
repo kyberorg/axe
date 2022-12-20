@@ -3,7 +3,7 @@ package pm.axe.mm;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import pm.axe.constants.App;
+import pm.axe.Axe;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -20,15 +20,15 @@ import java.util.NoSuchElementException;
 public final class Mattermost {
     private static final String TAG = "[" + Mattermost.class.getSimpleName() + "]";
 
-    private String channelId = App.NO_VALUE;
-    private String channelName = App.NO_VALUE;
-    private String command = App.NO_VALUE;
-    private String teamDomain = App.NO_VALUE;
-    private String teamId = App.NO_VALUE;
-    private String text = App.NO_VALUE;
-    private String token = App.NO_VALUE;
-    private String userId = App.NO_VALUE;
-    private String username = App.NO_VALUE;
+    private String channelId = Axe.C.NO_VALUE;
+    private String channelName = Axe.C.NO_VALUE;
+    private String command = Axe.C.NO_VALUE;
+    private String teamDomain = Axe.C.NO_VALUE;
+    private String teamId = Axe.C.NO_VALUE;
+    private String text = Axe.C.NO_VALUE;
+    private String token = Axe.C.NO_VALUE;
+    private String userId = Axe.C.NO_VALUE;
+    private String username = Axe.C.NO_VALUE;
 
     private MattermostArgumentSet argumentSet = MattermostArgumentSet.EMPTY_SET;
 
@@ -104,7 +104,7 @@ public final class Mattermost {
 
     private void parseText() {
         log.debug("{} Parsing text", TAG);
-        if (StringUtils.isBlank(this.text) || this.text.equals(App.NO_VALUE)) {
+        if (StringUtils.isBlank(this.text) || this.text.equals(Axe.C.NO_VALUE)) {
             this.argumentSet = MattermostArgumentSet.builder().buildEmpty();
             return;
         }
@@ -126,11 +126,11 @@ public final class Mattermost {
     }
 
     private boolean isParamStartWith(final Marker marker) {
-        return param.startsWith(marker.value + App.EQUAL);
+        return param.startsWith(marker.value + Axe.C.EQUAL);
     }
 
     private String removeMarker(final Marker marker) {
-        return this.param.replace(marker.value + App.EQUAL, "");
+        return this.param.replace(marker.value + Axe.C.EQUAL, "");
     }
 
     public enum Marker {

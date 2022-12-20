@@ -6,8 +6,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
 import pm.axe.db.models.Token;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.AccountService;
@@ -50,12 +50,12 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
 
     @Override
     public void setParameter(final BeforeEvent beforeEvent, @OptionalParameter final String parameter) {
-        boolean isTokenParamPresent = VaadinUtils.isParamPresent(App.Params.TOKEN, beforeEvent);
+        boolean isTokenParamPresent = VaadinUtils.isParamPresent(Axe.Params.TOKEN, beforeEvent);
         if (!isTokenParamPresent) {
             log.warn("{} Token param absent", TAG);
             return;
         }
-        Optional<String> tokenString = VaadinUtils.getParamValue(App.Params.TOKEN, beforeEvent);
+        Optional<String> tokenString = VaadinUtils.getParamValue(Axe.Params.TOKEN, beforeEvent);
         if (tokenString.isEmpty()) {
             log.warn("{} Token is empty", TAG);
             redirectToRegistrationFailedPage(beforeEvent);

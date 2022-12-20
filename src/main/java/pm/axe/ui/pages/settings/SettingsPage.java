@@ -22,7 +22,7 @@ import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.layouts.AxeBaseLayout;
 
-import static pm.axe.constants.App.ONE_SECOND_IN_MILLIS;
+import static pm.axe.Axe.C.ONE_SECOND_IN_MILLIS;
 
 @SpringComponent
 @UIScope

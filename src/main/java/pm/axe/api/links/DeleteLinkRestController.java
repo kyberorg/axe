@@ -1,5 +1,7 @@
 package pm.axe.api.links;
 
+import kong.unirest.HttpStatus;
+import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pm.axe.Endpoint;
 import pm.axe.api.middleware.TokenCheckerMiddleware;
-import pm.axe.constants.HttpCode;
-import pm.axe.constants.MimeType;
 import pm.axe.core.IdentValidator;
 import pm.axe.json.AxeErrorJson;
 import pm.axe.result.OperationResult;
@@ -42,7 +42,7 @@ public class DeleteLinkRestController {
      * @return if deletion successfully done - 204 without body, {@link AxeErrorJson} with error else.
      */
     @DeleteMapping(value = Endpoint.Api.DELETE_LINKS_API,
-            produces = MimeType.APPLICATION_JSON)
+            produces = MimeTypes.JSON)
     public ResponseEntity<?> deleteLink(final @PathVariable("ident") String ident,
                                                  final HttpServletRequest request) {
         log.info("{} got request DELETE request: {\"Ident\": {}}", TAG, ident);
@@ -75,8 +75,8 @@ public class DeleteLinkRestController {
             case OperationResult.ELEMENT_NOT_FOUND -> {
                 log.info("{} ident not found", TAG);
                 AxeErrorJson errorJson = AxeErrorJson.createWithMessage("No link with given ident stored")
-                        .andStatus(HttpCode.NOT_FOUND);
-                return ResponseEntity.status(HttpCode.NOT_FOUND).body(errorJson);
+                        .andStatus(HttpStatus.NOT_FOUND);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorJson);
             }
             case OperationResult.SYSTEM_DOWN -> {
                 log.error("{} Database is DOWN", TAG);

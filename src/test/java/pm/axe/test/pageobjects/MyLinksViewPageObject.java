@@ -8,8 +8,8 @@ import pm.axe.test.utils.vaadin.elements.TextFieldElement;
 import pm.axe.ui.pages.mylinks.MyLinksPage;
 
 import static com.codeborne.selenide.Selenide.*;
-import static pm.axe.constants.App.FOUR;
-import static pm.axe.constants.App.THREE;
+import static pm.axe.Axe.C.FOUR;
+import static pm.axe.Axe.C.THREE;
 import static pm.axe.test.pageobjects.VaadinPageObject.waitForVaadin;
 
 /**

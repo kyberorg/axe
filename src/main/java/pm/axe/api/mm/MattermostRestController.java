@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
-import pm.axe.constants.App;
 import pm.axe.db.models.Link;
 import pm.axe.internal.LinkServiceInput;
 import pm.axe.json.AxeJson;
@@ -83,8 +83,8 @@ public class MattermostRestController {
         String linkDescription = mattermost.getArgumentSet().getDescription();
         if (StringUtils.isBlank(linkDescription)) {
             String userGreet = StringUtils.isNotBlank(mattermost.getUsername())
-                    && (!mattermost.getUsername().equals(App.NO_VALUE))
-                    ? "Okay " + App.AT + mattermost.getUsername() + ", " : "Okay, ";
+                    && (!mattermost.getUsername().equals(Axe.C.NO_VALUE))
+                    ? "Okay " + Axe.C.AT + mattermost.getUsername() + ", " : "Okay, ";
             String greeting = userGreet + "here is your short link: ";
 
             return MattermostResponse.createWithText(greeting + fullAxeLink);
@@ -97,13 +97,13 @@ public class MattermostRestController {
         String command = (Objects.nonNull(mattermost) && StringUtils.isNotBlank(mattermost.getCommand()))
                 ? mattermost.getCommand() : "/axe";
 
-        return MattermostResponse.createWithText(App.Emoji.INFO + "  Usage: " + command
+        return MattermostResponse.createWithText(Axe.Emoji.INFO + "  Usage: " + command
                 + " https://mysuperlonglink.tld [Optional Link Description]");
     }
 
     private MattermostResponse serverError() {
-        return MattermostResponse.createWithText(App.Emoji.WARNING + " Server Error")
-                .addGotoLocation(App.Mattermost.SUPPORT_URL);
+        return MattermostResponse.createWithText(Axe.Emoji.WARNING + " Server Error")
+                .addGotoLocation(Axe.Mattermost.SUPPORT_URL);
     }
 
     private String getServerHostname(final HttpServletRequest req) {
