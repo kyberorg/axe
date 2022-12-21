@@ -46,6 +46,7 @@ public final class DeviceUtils {
      * @return true if client device is Android, iPhone or Windows Phone and false is not.
      */
     public static boolean isMobileDevice(final String userAgent) {
+        if (userAgent == null) return false;
         BrowserDetails browserDetails = new BrowserDetails(userAgent);
         return browserDetails.isAndroid() || browserDetails.isIPhone() || browserDetails.isWindowsPhone();
     }
