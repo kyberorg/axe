@@ -49,23 +49,6 @@ public class PiwikStatsBanner extends Composite<HorizontalLayout> {
         Anchor moreInfoLink = new Anchor(Endpoint.UI.APP_INFO_PAGE);
         Button closeButton = new Button(new Icon("lumo", "cross"));
 
-        final boolean isMobile = DeviceUtils.isMobileDevice();
-        if (isMobile) {
-            //mobile text
-            text.setText("Axe collects statistics.");
-            moreInfoLink.setText("Info and OptOut");
-            //mobile optimizations
-            infoIcon.setVisible(false);
-            getContent().getStyle().set("margin-left", "1.5rem");
-            centralLayout.getStyle().set("padding","0 !important");
-        } else {
-            //desktop text
-            text.setText("Axe collects usage statistics.");
-            moreInfoLink.setText("More Info and OptOut");
-            //desktop optimization
-            getContent().getStyle().set("margin-left", "3rem");
-        }
-
         centralLayout.add(infoIcon, text, moreInfoLink, closeButton);
         centralLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         centralLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
@@ -89,6 +72,23 @@ public class PiwikStatsBanner extends Composite<HorizontalLayout> {
             mainView.closeAnnouncementLine();
             mainView.setStatsBannerCookie();
         });
+
+        final boolean isMobile = DeviceUtils.isMobileDevice();
+        if (isMobile) {
+            //mobile text
+            text.setText("Axe collects statistics.");
+            moreInfoLink.setText("Info and OptOut");
+            //mobile optimizations
+            infoIcon.setVisible(false);
+            getContent().getStyle().set("margin-left", "1.5rem");
+            centralLayout.removeClassName("responsive-center");
+        } else {
+            //desktop text
+            text.setText("Axe collects usage statistics.");
+            moreInfoLink.setText("More Info and OptOut");
+            //desktop optimization
+            getContent().getStyle().set("margin-left", "3rem");
+        }
     }
 
     /**
