@@ -80,7 +80,6 @@ public class PiwikStatsBanner extends Composite<HorizontalLayout> {
             moreInfoLink.setText("Info and OptOut");
             //mobile optimizations
             infoIcon.setVisible(false);
-            getContent().getStyle().set("margin-left", "1.5rem");
             centralLayout.removeClassName("responsive-center");
         } else {
             //desktop text
