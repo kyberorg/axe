@@ -2,7 +2,7 @@
     <tr>
         <td valign="middle" class="aligncenter middle logo" style="padding: 20px 0 10px;"
             align="center">
-            <img src='cid:axeLogo' alt="Axe Logo" width="192" height="39"/>
+            <img src='cid:axeLogo' alt="Axe Logo" width="260" height="45"/>
         </td>
     </tr>
 </table>
