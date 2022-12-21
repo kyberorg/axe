@@ -19,6 +19,7 @@ import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.ui.pages.home.HomePage;
+import pm.axe.utils.DeviceUtils;
 
 import java.util.stream.Stream;
 
@@ -78,16 +79,12 @@ public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
                 welcomeTitle.setText(String.format("Welcome to Axe, %s!", axs.getUser().getUsername()));
             }
         });
-        if (isMobileScreen()) {
+        if (DeviceUtils.isMobileDevice()) {
             logo.setSrc("images/logo.png");
         }
     }
 
     private void onStartButtonClicked(final ClickEvent<Button> buttonClickEvent) {
         startButton.getUI().ifPresent(ui -> ui.navigate(HomePage.class));
-    }
-
-    private boolean isMobileScreen() {
-        return AxeSession.getCurrent().map(session -> session.getDevice().isMobile()).orElse(false);
     }
 }
