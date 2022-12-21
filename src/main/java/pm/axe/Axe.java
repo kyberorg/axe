@@ -132,7 +132,7 @@ public final class Axe {
     }
     public static class CssValues {
         public static final String CENTER = "center";
-        public static final String EM_15 = "15em";
+        public static final String FIVE_REM = "5rem";
         public static final String AUTO = "auto";
     }
 }

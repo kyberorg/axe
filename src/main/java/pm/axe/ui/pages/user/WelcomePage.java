@@ -2,8 +2,9 @@ package pm.axe.ui.pages.user;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
 @PageTitle("Welcome - Axe.pm")
 public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
     private final Image logo = new Image();
-    private final H1 welcomeTitle = new H1();
+    private final H2 welcomeTitle = new H2();
     private final Span text = new Span();
     private final Button startButton = new Button();
 
@@ -62,7 +63,8 @@ public class WelcomePage extends AxeBaseLayout implements BeforeEnterObserver {
         logo.addClassName("centered-image");
         logo.addClassName("page-wide-image");
         logo.setHeight(logo.getWidth());
-        logo.setMaxHeight(Axe.CssValues.EM_15);
+        logo.setMaxWidth(70, Unit.PERCENTAGE);
+        logo.setMaxHeight(Axe.CssValues.FIVE_REM);
 
         welcomeTitle.getStyle().set(Axe.Css.MARGIN, Axe.CssValues.AUTO);
     }
