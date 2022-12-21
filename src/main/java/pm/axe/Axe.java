@@ -28,6 +28,7 @@ public final class Axe {
         public static final int ONE_SECOND_IN_MILLIS = 1000;
         public static final String TIME_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss z";
         public static final String MINUS = "-";
+        public static final String CENTER = "center";
     }
 
     public static class Defaults {
@@ -125,5 +126,8 @@ public final class Axe {
         public static final int SESSION_WATCHDOG_INTERVAL = 20; //20 seconds
         public static final int SESSION_SYNC_INTERVAL = 5; //5 seconds
         public static final String EMPTY_ID = "";
+    }
+    public static class CSS {
+        public static final String ALIGN_SELF = "align-self";
     }
 }
