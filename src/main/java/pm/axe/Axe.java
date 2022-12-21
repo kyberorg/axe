@@ -28,7 +28,6 @@ public final class Axe {
         public static final int ONE_SECOND_IN_MILLIS = 1000;
         public static final String TIME_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss z";
         public static final String MINUS = "-";
-        public static final String CENTER = "center";
     }
 
     public static class Defaults {
@@ -127,7 +126,13 @@ public final class Axe {
         public static final int SESSION_SYNC_INTERVAL = 5; //5 seconds
         public static final String EMPTY_ID = "";
     }
-    public static class CSS {
+    public static class Css {
         public static final String ALIGN_SELF = "align-self";
+        public static final String MARGIN = "margin";
+    }
+    public static class CssValues {
+        public static final String CENTER = "center";
+        public static final String EM_15 = "15em";
+        public static final String AUTO = "auto";
     }
 }

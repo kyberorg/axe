@@ -26,9 +26,9 @@ import java.util.stream.Stream;
 @Route(value = Endpoint.UI.REGISTRATION_FAILED_PAGE, layout = MainView.class)
 @PageTitle("Registration failed - Axe.pm")
 public class RegistrationFailedPage extends AxeBaseLayout {
-    private final H2 title = new H2("Registration failed");
-    private final Span linkNotValidLine = new Span("The confirmation link is no longer valid.");
-    private final Span expiredLinkLine = new Span("It may have been used already or it may have expired.");
+    private final H2 pageTitle = new H2();
+    private final Span linkNotValidLine = new Span();
+    private final Span expiredLinkLine = new Span();
     private Button loginButton;
 
     /**
@@ -38,18 +38,23 @@ public class RegistrationFailedPage extends AxeBaseLayout {
         init();
         applyStyle();
 
-        add(title, linkNotValidLine, expiredLinkLine, loginButton);
+        add(pageTitle, linkNotValidLine, expiredLinkLine, loginButton);
     }
 
     private void init() {
+        pageTitle.setText("Registration failed");
+
+        linkNotValidLine.setText("The confirmation link is no longer valid.");
+        expiredLinkLine.setText("It may have been used already or it may have expired.");
+
         loginButton = new Button("Login", VaadinIcon.SIGN_IN.create());
         loginButton.addClickListener(this::onLoginButtonClicked);
         loginButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     }
 
     private void applyStyle() {
-        Stream<? extends HasStyle> elements = Stream.of(title, linkNotValidLine, expiredLinkLine, loginButton);
-        elements.forEach(e -> e.getStyle().set(Axe.CSS.ALIGN_SELF, Axe.C.CENTER));
+        Stream<? extends HasStyle> elements = Stream.of(pageTitle, linkNotValidLine, expiredLinkLine, loginButton);
+        elements.forEach(e -> e.getStyle().set(Axe.Css.ALIGN_SELF, Axe.CssValues.CENTER));
     }
 
     private void onLoginButtonClicked(final ClickEvent<Button> buttonClickEvent) {
