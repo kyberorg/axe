@@ -19,7 +19,7 @@ import pm.axe.utils.DeviceUtils;
 /**
  * Piwik Stats element.
  */
-public class PiwikStats extends Composite<HorizontalLayout> {
+public class PiwikStatsBanner extends Composite<HorizontalLayout> {
     private final Piwik piwik;
     private final MainView mainView;
 
@@ -30,12 +30,12 @@ public class PiwikStats extends Composite<HorizontalLayout> {
     private final Div rightDiv = new Div();
 
     /**
-     * Creates {@link PiwikStats}.
+     * Creates {@link PiwikStatsBanner}.
      *
      * @param piwik {@link Piwik} configuration bean.
      * @param mainView {@link MainView} bean to {@link MainView#closeAnnouncementLine()}.
      */
-    public PiwikStats(final Piwik piwik, final MainView mainView) {
+    public PiwikStatsBanner(final Piwik piwik, final MainView mainView) {
         this.piwik = piwik;
         this.mainView = mainView;
         this.page = mainView.getUi().getPage();
@@ -44,6 +44,32 @@ public class PiwikStats extends Composite<HorizontalLayout> {
         } //else returning empty component.
     }
     private void init() {
+        Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
+        Span text = new Span();
+        Anchor moreInfoLink = new Anchor(Endpoint.UI.APP_INFO_PAGE);
+        Button closeButton = new Button(new Icon("lumo", "cross"));
+
+        final boolean isMobile = DeviceUtils.isMobileDevice();
+        if (isMobile) {
+            //mobile text
+            text.setText("Axe collects statistics.");
+            moreInfoLink.setText("Info and OptOut");
+            //mobile optimizations
+            infoIcon.setVisible(false);
+            getContent().getStyle().set("margin-left", "1.5rem");
+            centralLayout.getStyle().set("padding","0");
+        } else {
+            //desktop text
+            text.setText("Axe collects usage statistics.");
+            moreInfoLink.setText("More Info and OptOut");
+            //desktop optimization
+            getContent().getStyle().set("margin-left", "3rem");
+        }
+
+        centralLayout.add(infoIcon, text, moreInfoLink, closeButton);
+        centralLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        centralLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
         leftDiv.addClassName("responsive-div");
         centralLayout.addClassName("responsive-center");
         rightDiv.addClassName("responsive-div");
@@ -51,32 +77,12 @@ public class PiwikStats extends Composite<HorizontalLayout> {
         getContent().add(leftDiv, centralLayout, rightDiv);
         getContent().setWidthFull();
 
-        Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
-        Span text = new Span("Axe collects usage statistics");
-        Anchor moreInfoLink = new Anchor(Endpoint.UI.APP_INFO_PAGE, "More Info and OptOut");
-        Button closeButton = new Button(new Icon("lumo", "cross"));
-
-        centralLayout.add(infoIcon, text, moreInfoLink, closeButton);
-        centralLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        centralLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-
         moreInfoLink.getElement().addEventListener("click", e -> mainView.closeAnnouncementLine());
-
 
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.getElement().setAttribute("aria-label", "Close");
         closeButton.getStyle().set("margin-right", "0.5rem");
         closeButton.addClickListener(e -> mainView.closeAnnouncementLine());
-
-        final boolean isMobile = DeviceUtils.isMobileDevice();
-        if (isMobile) {
-            //mobile optimizations
-            infoIcon.setVisible(false);
-            moreInfoLink.setText("Info and OptOut");
-        } else {
-            //desktop optimization
-            getContent().getStyle().set("margin-left", "3rem");
-        }
     }
 
     /**
@@ -96,9 +102,9 @@ public class PiwikStats extends Composite<HorizontalLayout> {
     }
 
     /**
-     * Has {@link PiwikStats} any content or not?
+     * Has {@link PiwikStatsBanner} any content or not?
      *
-     * @return true - if {@link PiwikStats} contains at least 1 child, false - if not.
+     * @return true - if {@link PiwikStatsBanner} contains at least 1 child, false - if not.
      */
     public boolean isNotEmpty() {
         return getContent().getComponentCount() > 0;

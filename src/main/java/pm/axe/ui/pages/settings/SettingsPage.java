@@ -130,7 +130,7 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
     private void onAnalyticCookiesChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
         AxeSession.getCurrent()
                 .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue()));
-        mainView.getPiwikStats().optOut(!event.getValue());
+        mainView.getPiwikStatsBanner().optOut(!event.getValue());
         notifyClient();
     }
 

@@ -43,7 +43,7 @@ import pm.axe.session.AxeSession;
 import pm.axe.session.Device;
 import pm.axe.ui.elements.AppMenu;
 import pm.axe.ui.elements.CookieBanner;
-import pm.axe.ui.elements.PiwikStats;
+import pm.axe.ui.elements.PiwikStatsBanner;
 import pm.axe.ui.elements.ProjektRenamedNotification;
 import pm.axe.ui.pages.appinfo.AppInfoPage;
 import pm.axe.ui.pages.debug.DebugPage;
@@ -86,7 +86,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
     private final FlexLayout announcementLine = new FlexLayout();
 
     @Getter
-    private PiwikStats piwikStats;
+    private PiwikStatsBanner piwikStatsBanner;
     @Getter
     private final UI ui = UI.getCurrent();
     private final Device currentDevice;
@@ -211,14 +211,14 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         boolean showAnnouncement =
                 session.map(as -> as.getFlags().showAnnouncement()).orElse(true);
 
-        piwikStats = new PiwikStats(piwikConfig, this);
+        piwikStatsBanner = new PiwikStatsBanner(piwikConfig, this);
         if (piwikEnabled && analyticsCookieAllowed) {
             //addPiwikElement();
-            piwikStats.enableStats();
+            piwikStatsBanner.enableStats();
         }
 
-        if (piwikStats.isNotEmpty() && showAnnouncement) {
-            addAnnouncement(piwikStats);
+        if (piwikStatsBanner.isNotEmpty() && showAnnouncement) {
+            addAnnouncement(piwikStatsBanner);
         }
 
         pageAlreadyInitialized = true;

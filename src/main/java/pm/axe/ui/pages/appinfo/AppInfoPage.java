@@ -107,7 +107,7 @@ public class AppInfoPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         Span optOutText = new Span("Still want to OptOut? Click ");
         Button optOutButton = new Button("here", e -> {
-            mainView.getPiwikStats().optOut(true);
+            mainView.getPiwikStatsBanner().optOut(true);
             AxeSession.getCurrent().ifPresent(as -> as.getSettings().setAnalyticsCookiesAllowed(false));
             optOutNotification.open();
         });
