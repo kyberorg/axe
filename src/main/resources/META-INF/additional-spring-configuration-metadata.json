@@ -114,5 +114,10 @@
       "name": "app.users.garbage-after-seconds",
       "type": "java.lang.Integer",
       "description": "After which number of seconds user is marked as garbage, when it is unconfirmed and has no links."
+    },
+    {
+      "name": "app.stats-banner.cookie-lifetime-seconds",
+      "type": "java.lang.String",
+      "description": "After which number of seconds Piwik Stats Banner will be shown again."
     }
   ] }

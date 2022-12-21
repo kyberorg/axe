@@ -57,7 +57,7 @@ public class PiwikStatsBanner extends Composite<HorizontalLayout> {
             //mobile optimizations
             infoIcon.setVisible(false);
             getContent().getStyle().set("margin-left", "1.5rem");
-            centralLayout.getStyle().set("padding","0");
+            centralLayout.getStyle().set("padding","0 !important");
         } else {
             //desktop text
             text.setText("Axe collects usage statistics.");
@@ -77,12 +77,18 @@ public class PiwikStatsBanner extends Composite<HorizontalLayout> {
         getContent().add(leftDiv, centralLayout, rightDiv);
         getContent().setWidthFull();
 
-        moreInfoLink.getElement().addEventListener("click", e -> mainView.closeAnnouncementLine());
+        moreInfoLink.getElement().addEventListener("click", e -> {
+            mainView.closeAnnouncementLine();
+            mainView.setStatsBannerCookie();
+        });
 
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.getElement().setAttribute("aria-label", "Close");
         closeButton.getStyle().set("margin-right", "0.5rem");
-        closeButton.addClickListener(e -> mainView.closeAnnouncementLine());
+        closeButton.addClickListener(e -> {
+            mainView.closeAnnouncementLine();
+            mainView.setStatsBannerCookie();
+        });
     }
 
     /**
