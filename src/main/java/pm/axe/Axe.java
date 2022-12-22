@@ -93,6 +93,7 @@ public final class Axe {
 
     public static class CookieNames {
         public static final String AXE_SESSION = "AxeSession";
+        public static final String STATS_BANNER_COOKIE = "AxeStatsBannerShown";
     }
 
     public static class Emoji {

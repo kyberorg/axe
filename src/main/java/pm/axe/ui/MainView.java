@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.springframework.beans.factory.annotation.Value;
 import pm.axe.Axe;
 import pm.axe.events.session.AxeSessionAlmostExpiredEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
@@ -43,7 +44,7 @@ import pm.axe.session.AxeSession;
 import pm.axe.session.Device;
 import pm.axe.ui.elements.AppMenu;
 import pm.axe.ui.elements.CookieBanner;
-import pm.axe.ui.elements.PiwikStats;
+import pm.axe.ui.elements.PiwikStatsBanner;
 import pm.axe.ui.elements.ProjektRenamedNotification;
 import pm.axe.ui.pages.appinfo.AppInfoPage;
 import pm.axe.ui.pages.debug.DebugPage;
@@ -71,6 +72,9 @@ import static pm.axe.ui.MainView.IDs.APP_LOGO;
 public class MainView extends AppLayout implements BeforeEnterObserver {
     private static final String TAG = "[" + MainView.class.getSimpleName() + "]";
 
+    @Value("${app.stats-banner.cookie-lifetime-seconds}")
+    private int statsBannerCookieLifetime;
+
     private final AppUtils appUtils;
     private final AxeSessionService sessionService;
     private final AxeSessionCookieService cookieService;
@@ -86,7 +90,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
     private final FlexLayout announcementLine = new FlexLayout();
 
     @Getter
-    private PiwikStats piwikStats;
+    private PiwikStatsBanner piwikStatsBanner;
     @Getter
     private final UI ui = UI.getCurrent();
     private final Device currentDevice;
@@ -210,15 +214,15 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
                 session.map(as -> as.getSettings().isAnalyticsCookiesAllowed()).orElse(true);
         boolean showAnnouncement =
                 session.map(as -> as.getFlags().showAnnouncement()).orElse(true);
+        boolean statsBannerCookieAbsent = !statsBannerCookieAlreadyExists();
 
-        piwikStats = new PiwikStats(piwikConfig, this);
+        piwikStatsBanner = new PiwikStatsBanner(piwikConfig, this);
         if (piwikEnabled && analyticsCookieAllowed) {
-            //addPiwikElement();
-            piwikStats.enableStats();
+            piwikStatsBanner.enableStats();
         }
 
-        if (piwikStats.isNotEmpty() && showAnnouncement) {
-            addAnnouncement(piwikStats);
+        if (piwikStatsBanner.isNotEmpty() && showAnnouncement && statsBannerCookieAbsent) {
+            addAnnouncement(piwikStatsBanner);
         }
 
         pageAlreadyInitialized = true;
@@ -232,6 +236,23 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         announcementLine.setVisible(false);
         announcementLine.removeAll();
         AxeSession.getCurrent().ifPresent(as -> as.getFlags().setDontShowAnnouncement(true));
+    }
+
+    /**
+     * Sets {@link Cookie}, that should prevent showing {@link PiwikStatsBanner} again for some time.
+     */
+    public void setStatsBannerCookie() {
+        if (statsBannerCookieAlreadyExists()) return;
+
+        //create new one
+        Cookie statsBannerCookie = new Cookie(Axe.CookieNames.STATS_BANNER_COOKIE, "true");
+        statsBannerCookie.setMaxAge(statsBannerCookieLifetime);
+        boolean isSecure = AxeSession.getCurrent().map(axs -> axs.getDevice().isSecureConnection()).orElse(false);
+        statsBannerCookie.setSecure(isSecure);
+        statsBannerCookie.setHttpOnly(true);
+        statsBannerCookie.setPath("/");
+        //sending this cookie
+        VaadinService.getCurrentResponse().addCookie(statsBannerCookie);
     }
 
     /**
@@ -385,6 +406,12 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
     private void refreshPage() {
         this.ui.access(() -> this.ui.getPage().reload());
+    }
+
+    private boolean statsBannerCookieAlreadyExists() {
+        Cookie statsBannerCookie =
+                appUtils.getCookieByName(Axe.CookieNames.STATS_BANNER_COOKIE, VaadinRequest.getCurrent());
+        return statsBannerCookie != null;
     }
 
     /**
