@@ -115,6 +115,7 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
 
     private Section getTelegramInfo() {
         String tgCommand = TelegramCommand.START.getCommandText();
+        String tgCmdText = tgCommand.replace("/", "");
         String tgToken = getTelegramToken();
 
         Span telegramSpan = new Span();
@@ -124,7 +125,7 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
         Span toSpan = new Span(" to ");
 
         String botName = AppUtils.getTelegramBotName();
-        String telegramLink = String.format("%s%s?%s=%s", TelegramBot.TELEGRAM_ME_URL, botName, tgCommand, tgToken);
+        String telegramLink = String.format("%s%s?%s=%s", TelegramBot.TELEGRAM_ME_URL, botName, tgCmdText, tgToken);
         Anchor botLink = new Anchor(telegramLink, "@" + botName);
 
         Span endSpan = new Span(" to link your account with Telegram.");
