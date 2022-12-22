@@ -194,3 +194,16 @@ vaadin-drawer-toggle {
     background-color: var(--axe-announcement-line-color);
     min-height: 2rem;
 }
+
+.centered-element {
+    align-self: center;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+/* Fix for Sign-in icon */
+vaadin-icon[icon="vaadin:sign-in"] {
+    padding-left: 0 !important;
+}

@@ -28,6 +28,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
+    public static final String TELEGRAM_ME_URL = "https://telegram.me/";
     private static final String TAG = "[" + TelegramBot.class.getSimpleName() + "]";
 
     private static final Message NO_MESSAGE = new Message();

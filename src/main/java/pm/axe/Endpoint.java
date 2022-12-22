@@ -85,6 +85,7 @@ public final class Endpoint {
         public static final String PASSWORD_RESET_PAGE = "password-reset";
         public static final String WELCOME_PAGE = "welcome";
         public static final String REGISTRATION_FAILED_PAGE = "registrationFailed";
+        public static final String LOGIN_PAGE = "login";
     }
 
     /**
