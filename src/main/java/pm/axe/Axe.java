@@ -127,13 +127,4 @@ public final class Axe {
         public static final int SESSION_SYNC_INTERVAL = 5; //5 seconds
         public static final String EMPTY_ID = "";
     }
-    public static class Css {
-        public static final String ALIGN_SELF = "align-self";
-        public static final String MARGIN = "margin";
-    }
-    public static class CssValues {
-        public static final String CENTER = "center";
-        public static final String FIVE_REM = "5rem";
-        public static final String AUTO = "auto";
-    }
 }

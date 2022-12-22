@@ -11,10 +11,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import pm.axe.Axe;
 import pm.axe.Endpoint;
 import pm.axe.ui.MainView;
-import pm.axe.ui.layouts.AxeBaseLayout;
+import pm.axe.ui.layouts.AxeCompactLayout;
 
 import java.util.stream.Stream;
 
@@ -25,7 +24,7 @@ import java.util.stream.Stream;
 @UIScope
 @Route(value = Endpoint.UI.REGISTRATION_FAILED_PAGE, layout = MainView.class)
 @PageTitle("Registration failed - Axe.pm")
-public class RegistrationFailedPage extends AxeBaseLayout {
+public class RegistrationFailedPage extends AxeCompactLayout {
     private final H2 pageTitle = new H2();
     private final Span linkNotValidLine = new Span();
     private final Span expiredLinkLine = new Span();
@@ -54,7 +53,9 @@ public class RegistrationFailedPage extends AxeBaseLayout {
 
     private void applyStyle() {
         Stream<? extends HasStyle> elements = Stream.of(pageTitle, linkNotValidLine, expiredLinkLine, loginButton);
-        elements.forEach(e -> e.getStyle().set(Axe.Css.ALIGN_SELF, Axe.CssValues.CENTER));
+        elements.forEach(e -> e.addClassName("centered-element"));
+        linkNotValidLine.addClassName("centered-text");
+        expiredLinkLine.addClassName("centered-text");
     }
 
     private void onLoginButtonClicked(final ClickEvent<Button> buttonClickEvent) {
