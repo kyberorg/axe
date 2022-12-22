@@ -2,8 +2,10 @@ package pm.axe.ui.pages.user;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -14,13 +16,23 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import pm.axe.Endpoint;
+import pm.axe.db.models.Token;
+import pm.axe.db.models.User;
+import pm.axe.services.user.TokenService;
 import pm.axe.session.AxeSession;
+import pm.axe.telegram.TelegramBot;
+import pm.axe.telegram.TelegramCommand;
 import pm.axe.ui.MainView;
+import pm.axe.ui.elements.Code;
+import pm.axe.ui.elements.Section;
 import pm.axe.ui.layouts.AxeCompactLayout;
 import pm.axe.ui.pages.home.HomePage;
+import pm.axe.utils.AppUtils;
 import pm.axe.utils.DeviceUtils;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -33,10 +45,14 @@ import java.util.stream.Stream;
 @PageTitle("Welcome - Axe.pm")
 @CssImport(value = "./css/welcome_page.css")
 public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver {
+    private final TokenService tokenService;
     private final Image logo = new Image();
     private final H2 welcomeTitle = new H2();
     private final Span text = new Span();
     private final Button startButton = new Button();
+
+    private final Accordion telegramAccordion = new Accordion();
+    private final Section telegramSection = new Section();
 
     private boolean initDone = false;
 
@@ -49,16 +65,19 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
 
             init();
             applyStyle();
-            add(logo, welcomeTitle, text, startButton);
+            add(logo, welcomeTitle, text, telegramAccordion, startButton);
             initDone = true;
         }
 
-        //update title
+        //Update title and telegram accordion state.
         AxeSession.getCurrent().ifPresent(axs -> {
             if (axs.hasUser()) {
                 welcomeTitle.setText(String.format("Welcome to Axe, %s!", axs.getUser().getUsername()));
+                telegramAccordion.setVisible(StringUtils.isNotBlank(getTelegramToken()));
             }
         });
+
+        //Update Image
         if (DeviceUtils.isMobileDevice()) {
             logo.setSrc("images/logo.png");
         }
@@ -72,6 +91,12 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
         text.setText("Axe makes your really long links short. " +
                 "You can use and share those short links where space really matters.");
 
+        telegramAccordion.add("Have Telegram?", getTelegramInfo());
+        telegramAccordion.close();
+        telegramAccordion.setVisible(false);
+
+        telegramSection.addClassName("telegram-section");
+
         startButton.setText("Get Started");
         startButton.addClickListener(this::onStartButtonClicked);
     }
@@ -79,17 +104,48 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
     private void applyStyle() {
         logo.setClassName("welcome-logo");
         welcomeTitle.setClassName("welcome-title");
+        welcomeTitle.addClassName("centered-text");
         text.setClassName("centered-text");
 
-        Stream<? extends HasStyle> elements = Stream.of(logo, welcomeTitle, text, startButton);
+        Stream<? extends HasStyle> elements = Stream.of(logo, welcomeTitle, text, telegramAccordion, startButton);
         elements.forEach(e -> e.addClassName("centered-element"));
 
         this.setAlignItems(Alignment.CENTER);
     }
 
+    private Section getTelegramInfo() {
+        String tgCommand = TelegramCommand.START.getCommandText();
+        String tgToken = getTelegramToken();
 
+        Span telegramSpan = new Span();
+
+        Span startSpan = new Span("Send ");
+        Code tgString = new Code(String.format("%s %s", tgCommand, tgToken));
+        Span toSpan = new Span(" to ");
+
+        String botName = AppUtils.getTelegramBotName();
+        String telegramLink = String.format("%s%s?%s=%s", TelegramBot.T_ME_URL, botName, tgCommand, tgToken);
+        Anchor botLink = new Anchor(telegramLink, "@" + botName);
+
+        Span endSpan = new Span(" to link your account with Telegram.");
+
+        telegramSpan.add(startSpan, tgString, toSpan, botLink, endSpan);
+        telegramSection.add(telegramSpan);
+        return telegramSection;
+    }
 
     private void onStartButtonClicked(final ClickEvent<Button> buttonClickEvent) {
         startButton.getUI().ifPresent(ui -> ui.navigate(HomePage.class));
+    }
+
+    private String getTelegramToken() {
+        boolean hasUser = AxeSession.getCurrent().map(AxeSession::hasUser).orElse(false);
+        if (hasUser) {
+            User user = AxeSession.getCurrent().get().getUser();
+            Optional<Token> telegramToken = tokenService.getTelegramToken(user);
+            return telegramToken.map(Token::getToken).orElse("");
+        } else {
+            return "";
+        }
     }
 }

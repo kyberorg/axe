@@ -173,6 +173,16 @@ public class TokenService {
     }
 
     /**
+     * Provides telegram token.
+     *
+     * @param user token's owner
+     * @return {@link Optional} with {@link Token} or {@link Optional#empty()}.
+     */
+    public Optional<Token> getTelegramToken(final User user) {
+        return Optional.ofNullable(tokenDao.findByTokenTypeAndUser(TokenType.TELEGRAM_CONFIRMATION_TOKEN, user));
+    }
+
+    /**
      * Deletes token.
      *
      * @param token string with token

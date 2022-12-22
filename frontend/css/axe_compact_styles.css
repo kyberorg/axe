@@ -4,15 +4,6 @@
     }
 }
 
-/* Small Phone Screens */
-@media (max-width: 576px) {
-    /* Fixes bug: responsive-center asymmetric by limiting form on right side */
-    .limited-by-right-side {
-        position: absolute;
-        right: 0;
-    }
-}
-
 @media (min-width: 576px) {
     .axe-compact {
         background: white;
