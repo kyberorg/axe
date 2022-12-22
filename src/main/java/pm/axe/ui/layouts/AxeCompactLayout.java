@@ -5,12 +5,15 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 /**
- * Compact Layout.
+ * Layout, that uses only part of {@link AxeBaseLayout#getCentralLayout()} and its width depends on its content.
  */
 @CssImport(value = "./css/axe_compact_styles.css")
 public class AxeCompactLayout extends AxeBaseLayout {
     private final VerticalLayout compactLayout = new VerticalLayout();
 
+    /**
+     * Creates {@link AxeCompactLayout}.
+     */
     public AxeCompactLayout() {
         init();
         applyStyle();
@@ -26,7 +29,7 @@ public class AxeCompactLayout extends AxeBaseLayout {
     }
 
     @Override
-    public void add(Component... components) {
+    public void add(final Component... components) {
         compactLayout.add(components);
     }
 

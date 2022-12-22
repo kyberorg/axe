@@ -173,7 +173,7 @@ public class TokenService {
     }
 
     /**
-     * Provides telegram token.
+     * Provides {@link User}'s {@link TokenType#TELEGRAM_CONFIRMATION_TOKEN} token.
      *
      * @param user token's owner
      * @return {@link Optional} with {@link Token} or {@link Optional#empty()}.
