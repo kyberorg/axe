@@ -88,8 +88,8 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
         logo.setAlt("Axe Logo");
 
         welcomeTitle.setText("Welcome to Axe!");
-        text.setText("Axe makes your really long links short. " +
-                "You can use and share those short links where space really matters.");
+        text.setText("Axe makes your really long links short. "
+                + "You can use and share those short links where space really matters.");
 
         telegramAccordion.add("Have Telegram?", getTelegramInfo());
         telegramAccordion.close();
