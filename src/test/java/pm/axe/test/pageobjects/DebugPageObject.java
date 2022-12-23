@@ -27,5 +27,6 @@ public final class DebugPageObject {
      */
     public static void cleanSession() {
         END_SESSION_BUTTON.click();
+        waitForVaadin();
     }
 }

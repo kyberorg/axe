@@ -3,6 +3,7 @@ package pm.axe.test.ui.settings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 import pm.axe.test.pageobjects.SettingsPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
@@ -32,9 +33,15 @@ public class SettingsPageActionTest extends SelenideTest {
      */
     @Test
     public void setAnalyticsCookieValueKeepsAfterPageRefresh() {
+        String checkedAttr = SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.getAttribute("checked");
+        boolean isChecked = StringUtils.isNotBlank(checkedAttr);
         SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.click();
         open("/settings");
-        SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
+        if (isChecked) {
+            SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldNotHave(attribute("checked"));
+        } else {
+            SettingsPageObject.CookieSettings.ANALYTICS_COOKIE_VALUE.shouldHave(attribute("checked"));
+        }
     }
 
     /**
