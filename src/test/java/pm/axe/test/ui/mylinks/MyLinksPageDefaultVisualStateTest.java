@@ -5,8 +5,8 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
-import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.test.utils.vaadin.elements.TextFieldElement;
@@ -15,7 +15,6 @@ import pm.axe.ui.pages.mylinks.MyLinksPage;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.open;
 import static pm.axe.Axe.C.FOUR;
 
 /**
@@ -28,10 +27,11 @@ public class MyLinksPageDefaultVisualStateTest extends SelenideTest {
      */
     @BeforeAll
     public static void beforeAllTests() {
-        open("/myLinks");
-        VaadinPageObject.waitForVaadin();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        //cleaning session
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        //Open MyLinks Page
+        MyLinksViewPageObject.openMyLinksPage();
     }
 
     /**
@@ -88,16 +88,6 @@ public class MyLinksPageDefaultVisualStateTest extends SelenideTest {
         MyLinksViewPageObject.Banners.NO_RECORDS_BANNER_LINK.shouldBe(visible);
         MyLinksViewPageObject.Banners.NO_RECORDS_BANNER_LINK.shouldHave(attribute("href",
                 TestUtils.getTestUrl() + "/"));
-    }
-
-    /**
-     * Tests that End Session Button exists, visible and active.
-     */
-    @Test
-    public void endSessionButtonShouldExistAndBeActive() {
-        MyLinksViewPageObject.END_SESSION_BUTTON.should(exist);
-        MyLinksViewPageObject.END_SESSION_BUTTON.shouldBe(visible);
-        MyLinksViewPageObject.END_SESSION_BUTTON.shouldBe(enabled);
     }
 
     /**

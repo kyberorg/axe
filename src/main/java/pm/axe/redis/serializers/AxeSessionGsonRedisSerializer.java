@@ -34,7 +34,7 @@ public class AxeSessionGsonRedisSerializer implements RedisSerializer<AxeSession
 
     @Override
     public AxeSession deserialize(final byte[] bytes) throws SerializationException {
-        String jsonString = new String(bytes);
+        String jsonString = bytes != null ? new String(bytes) : "{}";
         return gson.fromJson(jsonString, AxeSession.class);
     }
 }

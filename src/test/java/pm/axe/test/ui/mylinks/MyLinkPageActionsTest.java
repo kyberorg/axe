@@ -4,10 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
-import pm.axe.test.pageobjects.HomePageObject;
-import pm.axe.test.pageobjects.MainViewPageObject;
-import pm.axe.test.pageobjects.MyLinksViewPageObject;
-import pm.axe.test.pageobjects.VaadinPageObject;
+import pm.axe.test.pageobjects.*;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.ui.pages.mylinks.MyLinksPage;
 import pm.axe.utils.UrlUtils;
@@ -17,7 +14,6 @@ import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pm.axe.Axe.C.THREE;
@@ -35,10 +31,10 @@ public class MyLinkPageActionsTest extends SelenideTest {
     @BeforeEach
     public void beforeEachTest() {
         //cleaning session
-        open("/myLinks");
-        VaadinPageObject.waitForVaadin();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        //Open MyLinks Page
+        MyLinksViewPageObject.openMyLinksPage();
     }
 
     /**
@@ -182,12 +178,12 @@ public class MyLinkPageActionsTest extends SelenideTest {
     public void endSessionButtonEndsSessionAndRemovesAllGridRecords() {
         saveOneLink();
         MyLinksViewPageObject.openMyLinksPage();
-
         MyLinksViewPageObject.Grid.GridData.get().getDataRows().shouldHave(size(1));
-        MyLinksViewPageObject.END_SESSION_BUTTON.click();
-        //page should be refreshed automagically
-        VaadinPageObject.waitForVaadin();
 
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+
+        MyLinksViewPageObject.openMyLinksPage();
         MyLinksViewPageObject.Grid.GridData.get().getDataRows().shouldHave(size(0));
     }
 

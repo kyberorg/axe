@@ -29,7 +29,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
@@ -86,8 +85,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final Span noRecordsBannerText = new Span();
     private final Anchor noRecordsBannerLink = new Anchor();
 
-    private final Button endSessionButton = new Button();
-
     private final Div filterAndToggleLayout = new Div();
     private final TextField gridFilterField = new TextField();
     private final Button toggleColumnsButton = new Button();
@@ -130,11 +127,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         noRecordsBannerLink.setHref("/");
         noRecordsBannerLink.setText("MainPage");
 
-        endSessionButton.setText("End session");
-        endSessionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        endSessionButton.addClickListener(this::onEndSessionButtonClick);
-        endSessionButton.getStyle().set("align-self", "flex-end");
-
         filterAndToggleLayout.setWidthFull();
 
         final Icon searchIcon = VaadinIcon.SEARCH.create();
@@ -162,7 +154,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private void setPageStructure() {
         filterAndToggleLayout.add(gridFilterField, toggleColumnsButton);
         noRecordsBanner.add(noRecordsBannerText, noRecordsBannerLink);
-        add(sessionBanner, noRecordsBanner, endSessionButton, filterAndToggleLayout, grid);
+        add(sessionBanner, noRecordsBanner, filterAndToggleLayout, grid);
     }
 
     private void setIds() {
@@ -171,7 +163,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         noRecordsBanner.setId(IDs.NO_RECORDS_BANNER);
         noRecordsBannerText.setId(IDs.NO_RECORDS_BANNER_TEXT);
         noRecordsBannerLink.setId(IDs.NO_RECORDS_BANNER_LINK);
-        endSessionButton.setId(IDs.END_SESSION_BUTTON);
         filterAndToggleLayout.setId("filterAndToggleLayout");
         gridFilterField.setId("gridFilterField");
         toggleColumnsButton.setId("toggleColumnsButton");
@@ -565,11 +556,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         }
     }
 
-    private void onEndSessionButtonClick(final ClickEvent<Button> buttonClickEvent) {
-        AxeSession.getCurrent().ifPresent(sessionService::destroySession);
-        appUtils.endVaadinSession(VaadinSession.getCurrent());
-    }
-
     private void updateDataAndState() {
         if (sessionId.equals(Session.EMPTY_ID)) return;
         log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
@@ -763,8 +749,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         public static final String NO_RECORDS_BANNER = "noRecordsBanner";
         public static final String NO_RECORDS_BANNER_TEXT = "noRecordsBannerText";
         public static final String NO_RECORDS_BANNER_LINK = "noRecordsBannerLink";
-
-        public static final String END_SESSION_BUTTON = "endSessionButton";
 
         public static final String GRID = "grid";
         public static final String LINK_COLUMN_CLASS = "linkCol";

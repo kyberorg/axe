@@ -31,7 +31,6 @@ public final class MyLinksViewPageObject {
         public static final SelenideElement NO_RECORDS_BANNER_LINK = $("#" + MyLinksPage.IDs.NO_RECORDS_BANNER_LINK);
     }
 
-    public static final SelenideElement END_SESSION_BUTTON = $("#" + MyLinksPage.IDs.END_SESSION_BUTTON);
     public static final SelenideElement TOGGLE_COLUMNS_BUTTON = $("#toggleColumnsButton");
 
     public static class ToggleColumnsMenu {
@@ -374,13 +373,6 @@ public final class MyLinksViewPageObject {
         public static final SelenideElement MESSAGE = $(".delete-dialog-message");
         public static final SelenideElement CANCEL_BUTTON = $(".delete-dialog-cancel-btn");
         public static final SelenideElement DELETE_BUTTON = $(".delete-dialog-delete-btn");
-    }
-
-    /**
-     * Cleans current session by clicking {@link #END_SESSION_BUTTON}.
-     */
-    public static void cleanSession() {
-        END_SESSION_BUTTON.click();
     }
 
     /**
