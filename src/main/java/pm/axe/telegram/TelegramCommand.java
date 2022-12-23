@@ -11,7 +11,7 @@ public enum TelegramCommand {
     START("/start"),
     USAGE("/usage"),
     AXE("/axe"),
-    HELLO("/hello"),
+    BYE("/bye"),
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
@@ -54,15 +54,6 @@ public enum TelegramCommand {
         } else {
             return UNKNOWN;
         }
-    }
-
-    /**
-     * Validates command.
-     *
-     * @return true - if match found, false if not
-     */
-    public boolean isAxeCommand() {
-        return (this == AXE);
     }
 
 }

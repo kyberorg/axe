@@ -2,6 +2,7 @@ package pm.axe.telegram;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,15 +10,23 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import pm.axe.Axe;
+import pm.axe.Endpoint;
+import pm.axe.db.models.Account;
 import pm.axe.db.models.Link;
+import pm.axe.db.models.Token;
+import pm.axe.db.models.User;
 import pm.axe.internal.LinkServiceInput;
 import pm.axe.result.OperationResult;
 import pm.axe.services.LinkService;
 import pm.axe.services.telegram.TelegramService;
+import pm.axe.services.user.AccountService;
+import pm.axe.services.user.TokenService;
+import pm.axe.users.AccountType;
 import pm.axe.utils.AppUtils;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Telegram Bot.
@@ -28,14 +37,15 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
-    public static final String TELEGRAM_ME_URL = "https://telegram.me/";
     private static final String TAG = "[" + TelegramBot.class.getSimpleName() + "]";
-
     private static final Message NO_MESSAGE = new Message();
 
     private final TelegramService telegramService;
     private final LinkService linkService;
     private final AppUtils appUtils;
+
+    private final TokenService tokenService;
+    private final AccountService accountService;
 
     private Update update;
     private TelegramObject telegramObject;
@@ -64,16 +74,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             telegramService.init(telegramObject);
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
-            if (telegramCommand.isAxeCommand()) {
-                message = doLinkAxing();
-            } else {
-                if (telegramCommand == TelegramCommand.NOT_A_COMMAND) {
-                    message = doLinkAxing();
-                } else {
-                    message = telegramService.usage();
-                }
-            }
-
+            message = switch (telegramCommand) {
+                case AXE -> doLinkAxing();
+                case START -> doHello(update);
+                case BYE ->  doBye(update);
+                default -> telegramService.usage();
+            };
         } catch (NoSuchElementException | IllegalArgumentException e) {
             log.error(TAG + " Got exception while handling incoming update."
                     + " " + e.getClass().getName() + ": " + e.getMessage());
@@ -129,6 +135,73 @@ public class TelegramBot extends TelegramLongPollingBot {
             message = telegramService.serverError();
         }
         return message;
+    }
+
+    private String doHello(final Update update) {
+        Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
+        if (telegramMessage.isEmpty()) {
+            return telegramService.serverError();
+        }
+        final Message message = telegramMessage.get();
+        if (StringUtils.isBlank(message.getText())) {
+            return telegramService.serverError();
+        }
+        //remove command
+        final String tokenString = message.getText().replace(TelegramCommand.START.getCommandText(), "").trim();
+        //just start => usage
+        if (StringUtils.isBlank(tokenString)) {
+            return telegramService.usage();
+        }
+        //check token format aka isToken ? -> 400 (mean-less string)
+        if (tokenString.length() != Token.TELEGRAM_TOKEN_LEN) {
+            return "Given string makes no sense.";
+        }
+        //searching for token aka Token found ? -> 404 (token is already used or never existed)
+        Optional<Token> token = tokenService.getToken(tokenString);
+        if (token.isEmpty()) {
+            return "Token may have been used already or it may have expired.";
+        }
+        //token has username? -> 500 (sys err)
+        final User axeUser = token.get().getUser();
+        final String tgUser = message.getFrom().getUserName();
+        if (axeUser == null) {
+            return telegramService.serverError();
+        }
+        //AxeUser has tgAcc ? -> 409 (already confirmed)
+        Optional<Account> tgAccount = accountService.getAccount(axeUser, AccountType.TELEGRAM);
+        if (tgAccount.isPresent()) {
+            return "Account already linked.";
+        }
+        //tgUser has Axe Acc? -> 409 (already confirmed)
+        //create new Account -> 500 (failed, write to @kyberorg)
+        OperationResult createAccountResult = accountService.createTelegramAccount(axeUser, tgUser);
+        if (createAccountResult.notOk()) {
+            if (Objects.equals(createAccountResult.getResult(), OperationResult.CONFLICT)) {
+                return "Account already linked.";
+            } else {
+                return "Failed to link account. Please write to " + Axe.Telegram.KYBERORG;
+            }
+        }
+        //delete token
+        tokenService.deleteTokenRecord(token.get());
+        //200 (Congrats, account linked)
+        return "Great success! Account linked. Now you can save links using this bot and see result at "
+                + AppUtils.getShortUrlFromStaticContext() + "/" + Endpoint.UI.MY_LINKS_PAGE;
+    }
+
+    private String doBye(final Update update) {
+        Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
+        if (telegramMessage.isEmpty()) {
+            return telegramService.serverError();
+        }
+        final Message message = telegramMessage.get();
+        if (StringUtils.isBlank(message.getText())) {
+            return telegramService.serverError();
+        }
+        final String tgUser = message.getFrom().getUserName();
+        Optional<Account> account = accountService.getAccountByAccountName(tgUser, AccountType.TELEGRAM);
+        account.ifPresent(accountService::deleteAccount);
+        return "Goodbye! Thanks for using me!";
     }
 
     /**

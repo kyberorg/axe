@@ -5,11 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import pm.axe.Axe;
 import pm.axe.db.models.Link;
 import pm.axe.telegram.TelegramBot;
 import pm.axe.telegram.TelegramObject;
 import pm.axe.utils.AppUtils;
+
+import java.util.Optional;
 
 /**
  * Service for {@link TelegramBot}.
@@ -96,5 +100,15 @@ public class TelegramService {
             return NO_INIT;
         }
         return EmojiParser.parseToUnicode(Axe.Emoji.WARNING + " serverError");
+    }
+
+    public Optional<Message> getTelegramMessage(final Update update) {
+        if (update.hasMessage()) {
+            return Optional.of(update.getMessage());
+        } else if (update.hasEditedMessage()) {
+            return Optional.of(update.getEditedMessage());
+        } else {
+            return Optional.empty();
+        }
     }
 }

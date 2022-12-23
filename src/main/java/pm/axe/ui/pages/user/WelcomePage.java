@@ -17,12 +17,12 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.services.user.TokenService;
 import pm.axe.session.AxeSession;
-import pm.axe.telegram.TelegramBot;
 import pm.axe.telegram.TelegramCommand;
 import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Code;
@@ -125,7 +125,7 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
         Span toSpan = new Span(" to ");
 
         String botName = AppUtils.getTelegramBotName();
-        String telegramLink = String.format("%s%s?%s=%s", TelegramBot.TELEGRAM_ME_URL, botName, tgCmdText, tgToken);
+        String telegramLink = String.format("%s%s?%s=%s", Axe.Telegram.TELEGRAM_URL, botName, tgCmdText, tgToken);
         Anchor botLink = new Anchor(telegramLink, "@" + botName);
 
         Span endSpan = new Span(" to link your account with Telegram.");

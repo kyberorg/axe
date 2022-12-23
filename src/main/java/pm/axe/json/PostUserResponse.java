@@ -56,11 +56,9 @@ public class PostUserResponse {
          * Adds Telegram Confirmation Token String.
          *
          * @param telegramToken string with telegram token, which links Axe Account with Telegram account.
-         * @return {@link Builder} to continue building {@link PostUserResponse}.
          */
-        public Builder addTelegramToken(final String telegramToken) {
+        public void addTelegramToken(final String telegramToken) {
             this.telegramToken = telegramToken;
-            return this;
         }
 
         /**
@@ -79,8 +77,8 @@ public class PostUserResponse {
                 accountHasNoConfirmationMethods = false;
             }
             if (StringUtils.isNotBlank(telegramToken)) {
-                final String telegramHelloCmd = TelegramCommand.HELLO.getCommandText();
-                response.telegramConfirmationString = String.format("%s %s", telegramHelloCmd, telegramToken);
+                final String telegramStartCmd = TelegramCommand.START.getCommandText();
+                response.telegramConfirmationString = String.format("%s %s", telegramStartCmd, telegramToken);
                 sb.append("By the way, you can also ");
                 if (accountHasNoConfirmationMethods) {
                     sb.append("confirm your account in Telegram ");
@@ -88,7 +86,7 @@ public class PostUserResponse {
                     sb.append("link your account in Telegram ");
                 }
                 sb.append("by sending following string '")
-                        .append(telegramHelloCmd).append(" ").append(telegramToken).append("' to ")
+                        .append(telegramStartCmd).append(" ").append(telegramToken).append("' to ")
                         .append(Axe.C.AT).append(AppUtils.getTelegramBotName());
             }
             response.message = sb.toString();

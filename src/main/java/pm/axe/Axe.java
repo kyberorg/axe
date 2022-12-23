@@ -107,6 +107,11 @@ public final class Axe {
         public static final String SUPPORT_URL = "https://github.com/kyberorg/axe/issues";
     }
 
+    public static class Telegram {
+        public static final String TELEGRAM_URL = "https://telegram.me/";
+        public static final String KYBERORG = "@kyberorg";
+    }
+
     public static class Git {
         public static final String REPOSITORY = "https://github.com/kyberorg/axe/commit";
     }
