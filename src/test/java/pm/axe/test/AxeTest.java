@@ -113,8 +113,8 @@ public abstract class AxeTest {
         commonInfoBuilder.append(String.format("Test URL: %s", BASE_URL)).append(Axe.C.NEW_LINE);
 
         if (runMode == TestApp.RunMode.GRID) {
-            commonInfoBuilder.append("Live Sessions: https://grid.kyberorg.io/#/").append(Axe.C.NEW_LINE);
-            commonInfoBuilder.append(String.format("TestVideo: https://grid.kyberorg.io/video/%s.mp4", BUILD_NAME))
+            commonInfoBuilder.append("Live Sessions: https://grid.byk.ee/#/").append(Axe.C.NEW_LINE);
+            commonInfoBuilder.append(String.format("TestVideo: https://grid.byk.ee/video/%s.mp4", BUILD_NAME))
                     .append(Axe.C.NEW_LINE);
         } else {
             commonInfoBuilder.append(String.format("Videos and screenshots directory: %s", REPORT_DIRECTORY))

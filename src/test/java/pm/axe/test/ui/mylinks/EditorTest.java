@@ -32,6 +32,8 @@ public class EditorTest extends SelenideTest {
         //session cleanup
         DebugPageObject.openDebugPage();
         DebugPageObject.cleanSession();
+        VaadinPageObject.waitForVaadin();
+
         //saving one link
         open("/");
         VaadinPageObject.waitForVaadin();
