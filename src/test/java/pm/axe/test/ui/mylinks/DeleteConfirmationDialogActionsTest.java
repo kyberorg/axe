@@ -3,10 +3,10 @@ package pm.axe.test.ui.mylinks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.NotFoundViewPageObject;
-import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.ui.elements.DeleteConfirmationDialog;
 import pm.axe.ui.pages.err.page404.PageNotFoundPage;
@@ -31,9 +31,9 @@ public class DeleteConfirmationDialogActionsTest extends SelenideTest {
     @BeforeEach
     public void beforeEachTest() {
         //cleaning session
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
         MyLinksViewPageObject.openMyLinksPage();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
     }
 
     /**

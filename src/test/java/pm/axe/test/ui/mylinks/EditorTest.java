@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pm.axe.test.TestApp;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
@@ -29,10 +30,9 @@ public class EditorTest extends SelenideTest {
     @BeforeEach
     public void beforeEachTest() {
         //session cleanup
-        open("/myLinks");
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
         VaadinPageObject.waitForVaadin();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
 
         //saving one link
         open("/");

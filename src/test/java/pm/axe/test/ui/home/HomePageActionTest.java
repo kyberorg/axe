@@ -139,7 +139,9 @@ public class HomePageActionTest extends SelenideTest {
         SelenideElement descriptionCell =
                 MyLinksViewPageObject.Grid.GridData.get().getRow(1).getDescriptionCell();
         descriptionCell.shouldBe(empty);
-        MyLinksViewPageObject.cleanSession();
+        //session cleanup
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
     }
 
     /**
@@ -172,9 +174,9 @@ public class HomePageActionTest extends SelenideTest {
     @Test
     public void whenLinkAndDescriptionInputsAreFilledBothSaved() {
         //cleaning session first
-        open("/myLinks");
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin();
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        //open page
         open("/");
         VaadinPageObject.waitForVaadin();
 
@@ -194,7 +196,9 @@ public class HomePageActionTest extends SelenideTest {
         String actualDescription = descriptionCell.getText();
 
         //cleaning session afterwards
-        MyLinksViewPageObject.cleanSession();
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        MyLinksViewPageObject.openMyLinksPage();
         Assertions.assertEquals(description, actualDescription);
     }
 

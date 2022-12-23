@@ -7,6 +7,7 @@ import org.junit.platform.commons.util.StringUtils;
 import org.junitpioneer.jupiter.Issue;
 import org.selenide.selenoid.SelenoidClipboard;
 import pm.axe.Axe;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
@@ -31,11 +32,10 @@ public class GridCellsTest extends SelenideTest {
      */
     @BeforeAll
     public static void beforeAllTests() {
-        //cleaning session
-        open("/myLinks");
-        VaadinPageObject.waitForVaadin();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        //clean session
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        MyLinksViewPageObject.openMyLinksPage();
 
         //saving one link
         open("/");

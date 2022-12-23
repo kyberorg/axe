@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
 import pm.axe.Axe;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
@@ -31,10 +32,10 @@ public class GridItemsTest extends SelenideTest {
     @BeforeAll
     public static void beforeAllTest() {
         //session cleanup
-        open("/myLinks");
-        VaadinPageObject.waitForVaadin();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        //open page
+        MyLinksViewPageObject.openMyLinksPage();
 
         //saving one link
         open("/");

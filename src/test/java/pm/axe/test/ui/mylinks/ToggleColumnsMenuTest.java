@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
@@ -22,10 +23,11 @@ public class ToggleColumnsMenuTest extends SelenideTest {
      */
     @BeforeAll
     public static void beforeAllTests() {
-        open("/myLinks");
-        VaadinPageObject.waitForVaadin();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
+        //session cleanup
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        //open page
+        MyLinksViewPageObject.openMyLinksPage();
     }
 
     /**
