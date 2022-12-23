@@ -6,14 +6,13 @@
 
 @media (min-width: 576px) {
     .axe-compact {
-        background: white;
         max-width: min(761px, 97%);
         width: max-content !important;
     }
 }
 
 .axe-compact {
-    background: white;
+    background: var(--axe-compact-area-color);
     max-width: min(761px, 97%);
     align-self: center;
 }
