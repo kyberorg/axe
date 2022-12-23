@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
 import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.pageobjects.elements.CookieBannerPageObject;
@@ -41,8 +42,9 @@ public class CookieBannerVisualStateTest extends SelenideTest {
                 //ready to test
                 return;
             }
-            MyLinksViewPageObject.cleanSession();
-            VaadinPageObject.waitForVaadin();
+            DebugPageObject.openDebugPage();
+            DebugPageObject.cleanSession();
+            MyLinksViewPageObject.openMyLinksPage();
             if (CookieBannerPageObject.isBannerHidden()) {
                 fail("Cookie Banner didn't re-appear event after session restart");
             }

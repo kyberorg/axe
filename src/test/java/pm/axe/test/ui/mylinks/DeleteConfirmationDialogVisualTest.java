@@ -4,9 +4,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
-import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
 import pm.axe.test.utils.TestUtils;
 import pm.axe.ui.elements.DeleteConfirmationDialog;
@@ -24,9 +24,9 @@ public class DeleteConfirmationDialogVisualTest extends SelenideTest {
      */
     @BeforeAll
     public static void beforeAllTests() {
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
         MyLinksViewPageObject.openMyLinksPage();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
 
         HomePageObject.saveOneLink("https://kyberorg.io");
         MyLinksViewPageObject.openMyLinksPage();

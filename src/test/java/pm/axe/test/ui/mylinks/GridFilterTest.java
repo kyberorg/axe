@@ -3,9 +3,9 @@ package pm.axe.test.ui.mylinks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
+import pm.axe.test.pageobjects.DebugPageObject;
 import pm.axe.test.pageobjects.HomePageObject;
 import pm.axe.test.pageobjects.MyLinksViewPageObject;
-import pm.axe.test.pageobjects.VaadinPageObject;
 import pm.axe.test.ui.SelenideTest;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -25,9 +25,10 @@ public class GridFilterTest extends SelenideTest {
     @BeforeEach
     public void beforeEachTest() {
         //session cleanup
+        DebugPageObject.openDebugPage();
+        DebugPageObject.cleanSession();
+        //open page
         MyLinksViewPageObject.openMyLinksPage();
-        MyLinksViewPageObject.cleanSession();
-        VaadinPageObject.waitForVaadin(); //this is needed to prevent unopened page after reload.
     }
 
     /**
