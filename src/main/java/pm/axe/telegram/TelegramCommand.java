@@ -11,7 +11,8 @@ public enum TelegramCommand {
     START("/start"),
     USAGE("/usage"),
     AXE("/axe"),
-    BYE("/bye"),
+    MY_AXE_USER("/myAxeUser"),
+    UNLINK("/unlink"),
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
@@ -45,15 +46,13 @@ public enum TelegramCommand {
             return NOT_A_COMMAND;
         }
 
-        if (cmd.equals(START.commandString)) {
-            return START;
-        } else if (cmd.equals(AXE.commandString)) {
-            return AXE;
-        } else if (cmd.equals(USAGE.commandString)) {
-            return USAGE;
-        } else {
-            return UNKNOWN;
+        for (TelegramCommand tgCmd : TelegramCommand.values()) {
+            if (cmd.equals(tgCmd.getCommandText())) {
+                return tgCmd;
+            }
         }
+
+        return TelegramCommand.UNKNOWN;
     }
 
 }

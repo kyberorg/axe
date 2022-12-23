@@ -191,7 +191,7 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
-    void confirmUser(final User user) {
+    public void confirmUser(final User user) {
         user.setConfirmed(true);
         userDao.update(user);
     }

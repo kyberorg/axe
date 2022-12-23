@@ -218,6 +218,10 @@ public class AccountService {
         return Optional.ofNullable(account);
     }
 
+    public List<Account> getAllAccountsByType(final AccountType accountType) {
+        return accountDao.findByType(accountType);
+    }
+
     /**
      * Decrypts account name.
      *

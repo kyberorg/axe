@@ -21,6 +21,7 @@ import pm.axe.services.LinkService;
 import pm.axe.services.telegram.TelegramService;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
+import pm.axe.services.user.UserService;
 import pm.axe.users.AccountType;
 import pm.axe.utils.AppUtils;
 
@@ -46,6 +47,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final TokenService tokenService;
     private final AccountService accountService;
+    private final UserService userService;
+    private final TelegramUserMapping userMapping;
 
     private Update update;
     private TelegramObject telegramObject;
@@ -75,9 +78,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             TelegramCommand telegramCommand = telegramObject.getCommand();
             message = switch (telegramCommand) {
-                case AXE -> doLinkAxing();
-                case START -> doHello(update);
-                case BYE ->  doBye(update);
+                case AXE, NOT_A_COMMAND -> doLinkAxing(update);
+                case START -> doAccountLinking(update);
+                case UNLINK ->  doUnlink(update);
+                case MY_AXE_USER -> getMyAxeUser(update);
                 default -> telegramService.usage();
             };
         } catch (NoSuchElementException | IllegalArgumentException e) {
@@ -116,7 +120,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return appUtils.getTelegramToken();
     }
 
-    private String doLinkAxing() {
+    private String doLinkAxing(final Update update) {
         String message;
         if (telegramObject.getArguments() == TelegramArguments.EMPTY_ARGS) {
             throw new NoSuchElementException("Got " + telegramObject.getCommand()
@@ -128,7 +132,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String url = telegramObject.getArguments().getUrl();
         log.debug("{} URL received {}", TAG, url);
-        OperationResult storeResult = linkService.createLink(LinkServiceInput.builder(url).build());
+
+        LinkServiceInput.LinkServiceInputBuilder linkServiceInput = LinkServiceInput.builder(url);
+        if (update.getMessage() != null && update.getMessage().getFrom() != null
+                && StringUtils.isNotBlank(update.getMessage().getFrom().getUserName())) {
+            String tgUser = update.getMessage().getFrom().getUserName();
+            Optional<User> linkOwner = userMapping.getAxeUser(tgUser);
+            linkOwner.ifPresent(linkServiceInput::linkOwner);
+        }
+
+        OperationResult storeResult = linkService.createLink(linkServiceInput.build());
         if (storeResult.ok()) {
             message = telegramService.success(storeResult.getPayload(Link.class));
         } else {
@@ -137,7 +150,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return message;
     }
 
-    private String doHello(final Update update) {
+    private String doAccountLinking(final Update update) {
         Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
         if (telegramMessage.isEmpty()) {
             return telegramService.serverError();
@@ -182,14 +195,38 @@ public class TelegramBot extends TelegramLongPollingBot {
                 return "Failed to link account. Please write to " + Axe.Telegram.KYBERORG;
             }
         }
+        //confirm account
+        if (axeUser.isStillUnconfirmed()) {
+            userService.confirmUser(axeUser);
+        }
         //delete token
         tokenService.deleteTokenRecord(token.get());
+        //create mapping
+        userMapping.createMapping(tgUser, axeUser);
         //200 (Congrats, account linked)
         return "Great success! Account linked. Now you can save links using this bot and see result at "
                 + AppUtils.getShortUrlFromStaticContext() + "/" + Endpoint.UI.MY_LINKS_PAGE;
     }
 
-    private String doBye(final Update update) {
+    private String getMyAxeUser(final Update update) {
+        Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
+        if (telegramMessage.isEmpty()) {
+            return telegramService.serverError();
+        }
+        final Message message = telegramMessage.get();
+        if (StringUtils.isBlank(message.getText())) {
+            return telegramService.serverError();
+        }
+        final String tgUser = message.getFrom().getUserName();
+        Optional<User> axeUser = userMapping.getAxeUser(tgUser);
+        if (axeUser.isPresent()) {
+            return String.format("Your linked Axe User is `%s`", axeUser.get().getUsername());
+        } else {
+            return "No user linked yet, you can generate find your token at profile page";
+        }
+    }
+
+    private String doUnlink(final Update update) {
         Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
         if (telegramMessage.isEmpty()) {
             return telegramService.serverError();
@@ -201,6 +238,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         final String tgUser = message.getFrom().getUserName();
         Optional<Account> account = accountService.getAccountByAccountName(tgUser, AccountType.TELEGRAM);
         account.ifPresent(accountService::deleteAccount);
+        userMapping.deleteMapping(tgUser);
         return "Goodbye! Thanks for using me!";
     }
 
@@ -229,6 +267,4 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
         return telegramMessage;
     }
-
-
 }
