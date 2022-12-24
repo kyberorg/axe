@@ -10,7 +10,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import pm.axe.Axe;
-import pm.axe.Endpoint;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.Link;
 import pm.axe.db.models.Token;
@@ -21,7 +20,6 @@ import pm.axe.services.LinkService;
 import pm.axe.services.telegram.TelegramService;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
-import pm.axe.services.user.UserService;
 import pm.axe.users.AccountType;
 import pm.axe.utils.AppUtils;
 
@@ -47,7 +45,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final TokenService tokenService;
     private final AccountService accountService;
-    private final UserService userService;
     private final TelegramUserMapping userMapping;
 
     private Update update;
@@ -151,14 +148,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private String doAccountLinking(final Update update) {
+        //get message from update
         Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
-        if (telegramMessage.isEmpty()) {
+        if (telegramMessage.isEmpty() || StringUtils.isBlank(telegramMessage.get().getText())) {
             return telegramService.serverError();
         }
         final Message message = telegramMessage.get();
-        if (StringUtils.isBlank(message.getText())) {
-            return telegramService.serverError();
-        }
         //remove command
         final String tokenString = message.getText().replace(TelegramCommand.START.getCommandText(), "").trim();
         //just start => usage
@@ -167,12 +162,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
         //check token format aka isToken ? -> 400 (mean-less string)
         if (tokenString.length() != Token.TELEGRAM_TOKEN_LEN) {
-            return "Given string makes no sense.";
+            return Axe.Emoji.NO_GOOD + " Given string makes no sense to me.";
         }
         //searching for token aka Token found ? -> 404 (token is already used or never existed)
         Optional<Token> token = tokenService.getToken(tokenString);
         if (token.isEmpty()) {
-            return "Token may have been used already or it may have expired.";
+            return Axe.Emoji.RUBBISH + " This token may have been used already or it may have expired.";
         }
         //token has username? -> 500 (sys err)
         final User axeUser = token.get().getUser();
@@ -180,37 +175,38 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (axeUser == null) {
             return telegramService.serverError();
         }
-        //AxeUser has tgAcc ? -> 409 (already confirmed)
-        Optional<Account> tgAccount = accountService.getAccount(axeUser, AccountType.TELEGRAM);
-        if (tgAccount.isPresent()) {
-            return "Account already linked.";
-        }
         //tgUser has Axe Acc? -> 409 (already confirmed)
+        if (userMapping.getAxeUser(tgUser).isPresent()) {
+            return Axe.Emoji.SUCCESS + " Account linked!";
+        }
         //create new Account -> 500 (failed, write to @kyberorg)
         OperationResult createAccountResult = accountService.createTelegramAccount(axeUser, tgUser);
         if (createAccountResult.notOk()) {
+            //AxeUser has tgAcc ? -> 409 (already confirmed)
             if (Objects.equals(createAccountResult.getResult(), OperationResult.CONFLICT)) {
-                return "Account already linked.";
+                return Axe.Emoji.SUCCESS +  "Account already linked.";
             } else {
-                return "Failed to link account. Please write to " + Axe.Telegram.KYBERORG;
+                return String.format("%s Failed to link account. Please write to %s",
+                        Axe.Emoji.WARNING, Axe.Telegram.KYBERORG);
             }
         }
+
         //confirm account
-        if (axeUser.isStillUnconfirmed()) {
-            userService.confirmUser(axeUser);
-        }
+        accountService.confirmAccount(createAccountResult.getPayload(Account.class));
         //delete token
         tokenService.deleteTokenRecord(token.get());
         //create mapping
         userMapping.createMapping(tgUser, axeUser);
         //200 (Congrats, account linked)
-        return "Great success! Account linked. Now you can save links using this bot and see result at "
-                + AppUtils.getShortUrlFromStaticContext() + "/" + Endpoint.UI.MY_LINKS_PAGE;
+        return String.format("%s Great success! " +
+                "Accounts are linked. Since now you can see all links saved with this bot at %s web interface.",
+                Axe.Emoji.TADA, StringUtils.capitalize(appUtils.getServerDomain().toLowerCase()));
     }
 
     private String getMyAxeUser(final Update update) {
+        //get message from update
         Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
-        if (telegramMessage.isEmpty()) {
+        if (telegramMessage.isEmpty() || StringUtils.isBlank(telegramMessage.get().getText())) {
             return telegramService.serverError();
         }
         final Message message = telegramMessage.get();
@@ -220,26 +216,27 @@ public class TelegramBot extends TelegramLongPollingBot {
         final String tgUser = message.getFrom().getUserName();
         Optional<User> axeUser = userMapping.getAxeUser(tgUser);
         if (axeUser.isPresent()) {
-            return String.format("Your linked Axe User is `%s`", axeUser.get().getUsername());
+            return String.format("%s Your linked %s User is `%s`",
+                    Axe.Emoji.USER, StringUtils.capitalize(appUtils.getServerDomain().toLowerCase()),
+                    axeUser.get().getUsername());
         } else {
-            return "No user linked yet, you can generate find your token at profile page";
+            return Axe.Emoji.O + " No user linked yet, you can generate find your token at profile page";
         }
     }
 
     private String doUnlink(final Update update) {
+        //get message from update
         Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
-        if (telegramMessage.isEmpty()) {
+        if (telegramMessage.isEmpty() || StringUtils.isBlank(telegramMessage.get().getText())) {
             return telegramService.serverError();
         }
         final Message message = telegramMessage.get();
-        if (StringUtils.isBlank(message.getText())) {
-            return telegramService.serverError();
-        }
         final String tgUser = message.getFrom().getUserName();
         Optional<Account> account = accountService.getAccountByAccountName(tgUser, AccountType.TELEGRAM);
         account.ifPresent(accountService::deleteAccount);
         userMapping.deleteMapping(tgUser);
-        return "Goodbye! Thanks for using me!";
+        return String.format("%s Done! Telegram account is no longer linked to any %s user",
+                Axe.Emoji.SUCCESS, StringUtils.capitalize(appUtils.getServerDomain().toLowerCase()));
     }
 
     /**

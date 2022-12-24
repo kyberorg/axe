@@ -99,6 +99,12 @@ public final class Axe {
     public static class Emoji {
         public static final String WARNING = ":warning:";
         public static final String INFO = ":information_source:";
+        public static final String SUCCESS = ":heavy_check_mark:";
+        public static final String TADA = ":tada:";
+        public static final String NO_GOOD = ":no_good:";
+        public static final String RUBBISH = ":recycle:";
+        public static final String USER = ":bust_in_silhouette:";
+        public static final String O = ":o:";
     }
 
     public static class Mattermost {
