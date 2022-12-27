@@ -57,14 +57,13 @@ public class TelegramService {
                 + Axe.C.NEW_LINE + Axe.C.NEW_LINE
                 + "https://mySuperLongLink.com description"
                 + Axe.C.NEW_LINE + Axe.C.NEW_LINE
-                + "/" + TelegramCommand.HELLO.getCommandText() + " Token - links this telegram account with Axe user"
+                + TelegramCommand.HELLO.getCommandText() + " Token - links this telegram account with Axe user"
                 + Axe.C.NEW_LINE + Axe.C.NEW_LINE
-                + "/" + TelegramCommand.MY_AXE_USER.getCommandText()
-                + " - shows Axe user linked to this telegram account"
+                + TelegramCommand.MY_AXE_USER.getCommandText() + " - shows Axe user linked to this telegram account"
                 + Axe.C.NEW_LINE + Axe.C.NEW_LINE
-                + "/" + TelegramCommand.UNLINK.getCommandText() + " - removes active linking"
+                + TelegramCommand.UNLINK.getCommandText() + " - removes active linking"
                 + Axe.C.NEW_LINE + Axe.C.NEW_LINE
-                + "/" + TelegramCommand.USAGE.getCommandText() + " - Show this message";
+                + TelegramCommand.USAGE.getCommandText() + " - Show this message";
 
         return EmojiParser.parseToUnicode(Axe.Emoji.INFO + message);
     }

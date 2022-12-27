@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import pm.axe.Axe;
-import pm.axe.Endpoint;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
@@ -49,9 +48,8 @@ public class HelloHandler implements TelegramCommandHandler {
         //just hello => hello-hello.
         if (StringUtils.isBlank(tokenString)) {
             final String greeting = String.format("%s%s", Axe.C.AT, update.getMessage().getFrom().getUserName());
-            final String welcomePage = String.format("%s/%s", appUtils.getServerUrl(), Endpoint.UI.WELCOME_PAGE);
-            final String getTokenMessage = String.format("Most probably you want to link your account with your "
-                    + "Axe user. For this, you will need token. Get one at %s page.", welcomePage);
+            final String getTokenMessage = "Most probably you want to link your account with your Axe user. "
+                     + "For this, you will need token. Get one at Profile page.";
 
             return EmojiParser.parseToUnicode(String.format("%s %s! %s %s",
                     HELLO_MESSAGE, greeting, Axe.C.NEW_LINE, getTokenMessage));
