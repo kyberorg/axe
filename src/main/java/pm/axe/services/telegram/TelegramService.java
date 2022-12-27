@@ -37,7 +37,7 @@ public class TelegramService {
         String fullLink = shortUrl + "/" + savedLink.getIdent();
 
         if (linkDescription.isEmpty()) {
-            final String userGreet = String.format("Okay, %s%s", Axe.C.AT, tgUser);
+            final String userGreet = String.format("Okay %s%s,", Axe.C.AT, tgUser);
             return String.format("%s here is your short link: %s", userGreet, fullLink);
         } else {
             return fullLink + " " + linkDescription.get();

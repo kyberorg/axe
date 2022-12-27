@@ -14,7 +14,8 @@ public class StartHandler implements TelegramCommandHandler {
     @Override
     public String handle(final Update update) {
         final String userName = update.getMessage().getFrom().getUserName();
-        final String greetings = EmojiParser.parseToUnicode(String.format("%s Hello, %s!", Axe.Emoji.HELLO, userName));
+        final String greetings = EmojiParser.parseToUnicode(String.format("%s Hello, %s%s!",
+                Axe.Emoji.HELLO, Axe.C.AT, userName));
         final String usage = telegramService.usage();
         return greetings + Axe.C.NEW_LINE + usage;
     }
