@@ -2,15 +2,13 @@ package pm.axe.services.telegram;
 
 import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import pm.axe.Axe;
 import pm.axe.db.models.Link;
 import pm.axe.telegram.TelegramBot;
-import pm.axe.telegram.TelegramObject;
+import pm.axe.telegram.TelegramCommand;
 import pm.axe.utils.AppUtils;
 
 import java.util.Optional;
@@ -20,50 +18,29 @@ import java.util.Optional;
  *
  * @since 2.4
  */
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class TelegramService {
-    public static final String TAG = "[" + TelegramService.class.getSimpleName() + "]";
-    public static final String NO_INIT = "Didn't correctly initialized. Did you run telegramService.init()?";
-
+    public static long WRONG_CHAT_ID = -1L;
     private final AppUtils appUtils;
-
-    private boolean isInitDone = false;
-    private TelegramObject telegramObject;
-
-    /**
-     * Initialize telegram with {@link TelegramObject}.
-     *
-     * @param telegramObject valid {@link TelegramObject}
-     */
-    public void init(final TelegramObject telegramObject) {
-        this.telegramObject = telegramObject;
-        isInitDone = true;
-    }
 
     /**
      * Performs actions after longURL was successfully shortened and stored into DB.
      *
+     * @param tgUser  {@link String} with telegram username
      * @param savedLink {@link Link} object which corresponds with saved record
+     * @param linkDescription {@link Optional} string with link description
      * @return message for sending to user
      */
-    public String success(final Link savedLink) {
-        if (!isInitDone) {
-            return NO_INIT;
-        }
+    public String success(final String tgUser, final Link savedLink, final Optional<String> linkDescription) {
         String shortUrl = appUtils.getShortUrl();
         String fullLink = shortUrl + "/" + savedLink.getIdent();
 
-        String linkDescription = telegramObject.getArguments().getDescription();
-        if (StringUtils.isBlank(linkDescription)) {
-            String userGreet = (StringUtils.isNotBlank(telegramObject.getUsername())
-                    && (!telegramObject.getUsername().equals(Axe.C.NO_VALUE)))
-                    ? "Okay " + Axe.C.AT + telegramObject.getUsername() + ", " : "Okay, ";
-            String greeting = userGreet + "here is your short link: ";
-            return greeting + fullLink;
+        if (linkDescription.isEmpty()) {
+            final String userGreet = String.format("Okay, %s%s", Axe.C.AT, tgUser);
+            return String.format("%s here is your short link: %s", userGreet, fullLink);
         } else {
-            return fullLink + " " + linkDescription;
+            return fullLink + " " + linkDescription.get();
         }
     }
 
@@ -73,10 +50,6 @@ public class TelegramService {
      * @return usage message to sent to user
      */
     public String usage() {
-        if (!isInitDone) {
-            return NO_INIT;
-        }
-
         String message = " This bot makes short links from long ones"
                 + Axe.C.NEW_LINE + Axe.C.NEW_LINE
                 + "https://mySuperLongLink.com"
@@ -96,9 +69,6 @@ public class TelegramService {
      * @return string with server error message to send to user
      */
     public String serverError() {
-        if (!isInitDone) {
-            return NO_INIT;
-        }
         return EmojiParser.parseToUnicode(Axe.Emoji.WARNING + " serverError");
     }
 
@@ -109,6 +79,23 @@ public class TelegramService {
             return Optional.of(update.getEditedMessage());
         } else {
             return Optional.empty();
+        }
+    }
+
+    public TelegramCommand extractCommand(final Message message) {
+        String[] args = message.getText().split(" ");
+        if (args.length == 0) {
+            return TelegramCommand.NOT_A_COMMAND;
+        } else {
+            return TelegramCommand.createFromString(args[0]);
+        }
+    }
+
+    public long getChatId(final Update update) {
+        if (update == null || update.getMessage() == null) {
+            return WRONG_CHAT_ID;
+        } else {
+            return update.getMessage().getChatId();
         }
     }
 }

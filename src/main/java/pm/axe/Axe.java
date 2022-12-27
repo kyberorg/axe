@@ -97,14 +97,15 @@ public final class Axe {
     }
 
     public static class Emoji {
+        public static final String HELLO = new String(Character.toChars(0x1F44B));
         public static final String WARNING = ":warning:";
         public static final String INFO = ":information_source:";
-        public static final String SUCCESS = ":heavy_check_mark:";
-        public static final String TADA = ":tada:";
-        public static final String NO_GOOD = ":no_good:";
-        public static final String RUBBISH = ":recycle:";
-        public static final String USER = ":bust_in_silhouette:";
-        public static final String O = ":o:";
+        public static final String SUCCESS = new String(Character.toChars(0x2714));
+        public static final String TADA = new String(Character.toChars(0x1F389));
+        public static final String NO_GOOD = new String(Character.toChars(0x1F937));
+        public static final String RUBBISH = new String(Character.toChars(0x267B));
+        public static final String USER = new String(Character.toChars(0x1F464));
+        public static final String NO_USER = new String(Character.toChars(0x1FAE5));
     }
 
     public static class Mattermost {

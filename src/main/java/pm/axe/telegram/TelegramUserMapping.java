@@ -55,6 +55,10 @@ public class TelegramUserMapping {
         return Optional.ofNullable(mapping.get(tgUser));
     }
 
+    public boolean hasMapping(String tgUser) {
+        return mapping.containsKey(tgUser);
+    }
+
     public void deleteMapping(final String tgUser) {
         if (StringUtils.isBlank(tgUser)) {
             throw new IllegalArgumentException("Telegram USer cannot be blank");

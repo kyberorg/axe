@@ -135,9 +135,10 @@ public class AccountService {
      *
      * @param user  {@link Account}'s owner.
      * @param tgUser string with telegram address.
+     * @param chatId active chat id for sending messages to.
      * @return {@link OperationResult} with created {@link Account} in payload or {@link OperationResult} with error.
      */
-    public OperationResult createTelegramAccount(final User user, final String tgUser) {
+    public OperationResult createTelegramAccount(final User user, final String tgUser, final long chatId) {
         if (isAccountAlreadyExists(tgUser, AccountType.TELEGRAM)) {
             return OperationResult.conflict().withMessage(ERR_EMAIL_ALREADY_EXISTS);
         }
@@ -155,6 +156,7 @@ public class AccountService {
         Account telegramAccount = Account.create(AccountType.TELEGRAM).forUser(user);
         telegramAccount.setAccountName(encryptedTelegramUser);
         telegramAccount.setConfirmed(true);
+        telegramAccount.setExtraInfo(chatId + "");
 
         try {
             accountDao.save(telegramAccount);

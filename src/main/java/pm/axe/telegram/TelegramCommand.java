@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum TelegramCommand {
     START("/start"),
+    HELLO("/hello"),
     USAGE("/usage"),
     AXE("/axe"),
     MY_AXE_USER("/myAxeUser"),
@@ -16,10 +17,10 @@ public enum TelegramCommand {
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
-    private final String commandString;
+    private final String cmdString;
 
     TelegramCommand(final String cmd) {
-        this.commandString = cmd;
+        this.cmdString = cmd;
     }
 
     /**
@@ -28,7 +29,7 @@ public enum TelegramCommand {
      * @return string with command string
      */
     public String getCommandText() {
-        return commandString;
+        return cmdString;
     }
 
     /**
@@ -38,11 +39,7 @@ public enum TelegramCommand {
      * @return created object
      */
     public static TelegramCommand createFromString(final String cmd) {
-        if (StringUtils.isBlank(cmd)) {
-            return UNKNOWN;
-        }
-
-        if (!cmd.startsWith("/")) {
+        if (StringUtils.isBlank(cmd) || !cmd.startsWith("/")) {
             return NOT_A_COMMAND;
         }
 
