@@ -1,5 +1,6 @@
 package pm.axe.telegram.handlers;
 
+import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -56,11 +57,12 @@ public class DefaultHandler implements TelegramCommandHandler {
 
         OperationResult storeResult = linkService.createLink(linkServiceInput.build());
         if (storeResult.ok()) {
-            message = telegramService.success(telegramObject.getUsername(),
-                    storeResult.getPayload(Link.class),
+            message = telegramService.success(storeResult.getPayload(Link.class),
                     telegramObject.getArguments().getDescription());
+        } else if (storeResult.getResult().equals(OperationResult.BANNED)) {
+            message = EmojiParser.parseToUnicode(Axe.Emoji.BANNED + " " + storeResult.getMessage());
         } else {
-            message = telegramService.serverError();
+            message = EmojiParser.parseToUnicode(Axe.Emoji.ERROR + " " + storeResult.getMessage());
         }
         return message;
     }

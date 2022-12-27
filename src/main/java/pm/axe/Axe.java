@@ -106,6 +106,9 @@ public final class Axe {
         public static final String RUBBISH = new String(Character.toChars(0x267B));
         public static final String USER = new String(Character.toChars(0x1F464));
         public static final String NO_USER = new String(Character.toChars(0x1FAE5));
+        public static final String BANNED = new String(Character.toChars(0x1F6AB));
+        public static final String AXE = new String(Character.toChars(0x1FA93));
+        public static final String ERROR = new String(Character.toChars(0x1F44E));
     }
 
     public static class Mattermost {

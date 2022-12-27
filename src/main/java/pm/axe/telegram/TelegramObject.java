@@ -73,18 +73,11 @@ public final class TelegramObject {
         }
 
         this.command = TelegramCommand.createFromString(args[0]);
-
-        this.arguments = switch (this.command) {
-            case NOT_A_COMMAND -> createArgumentsFromMessageWithoutCommand(this.userMessage);
-            case AXE -> trimCommandAndCreateArguments();
-            //no reason for manipulating with user message
-            default -> TelegramArguments.builder().buildEmpty();
-        };
-    }
-
-    private TelegramArguments trimCommandAndCreateArguments() {
-        String remainedArgs = this.userMessage.replace(this.command.getCommandText(), "").trim();
-        return createArgumentsFromMessageWithoutCommand(remainedArgs);
+        if (this.command == TelegramCommand.NOT_A_COMMAND) {
+            this.arguments = createArgumentsFromMessageWithoutCommand(this.userMessage);
+        } else {
+            this.arguments = TelegramArguments.builder().buildEmpty();
+        }
     }
 
     private TelegramArguments createArgumentsFromMessageWithoutCommand(final String userMessageWithoutCommand) {

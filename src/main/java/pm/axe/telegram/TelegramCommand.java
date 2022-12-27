@@ -11,8 +11,7 @@ public enum TelegramCommand {
     START("/start"),
     HELLO("/hello"),
     USAGE("/usage"),
-    AXE("/axe"),
-    MY_AXE_USER("/myAxeUser"),
+    MY_AXE_USER("/my_axe_user"),
     UNLINK("/unlink"),
     NOT_A_COMMAND("__"),
     UNKNOWN("_");

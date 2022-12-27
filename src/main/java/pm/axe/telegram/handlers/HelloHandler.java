@@ -33,7 +33,7 @@ public class HelloHandler implements TelegramCommandHandler {
 
     private final AppUtils appUtils;
 
-    private static final String HELLO_HELLO_MESSAGE = Axe.Emoji.HELLO + " Hello-hello!";
+    private static final String HELLO_MESSAGE = Axe.Emoji.HELLO + " Hello";
     private static final String NO_SENSE_MESSAGE = Axe.Emoji.NO_GOOD + " Given string makes no sense to me.";
     private static final String TOKEN_EXPIRED_MESSAGE =
             Axe.Emoji.RUBBISH + " This token may have been used already or it may have expired.";
@@ -48,10 +48,13 @@ public class HelloHandler implements TelegramCommandHandler {
         final String tokenString = message.getText().replace(TelegramCommand.HELLO.getCommandText(), "").trim();
         //just hello => hello-hello.
         if (StringUtils.isBlank(tokenString)) {
+            final String greeting = String.format("%s%s", Axe.C.AT, update.getMessage().getFrom().getUserName());
             final String welcomePage = String.format("%s/%s", appUtils.getServerUrl(), Endpoint.UI.WELCOME_PAGE);
             final String getTokenMessage = String.format("Most probably you want to link your account with your "
                     + "Axe user. For this, you will need token. Get one at %s page.", welcomePage);
-            return EmojiParser.parseToUnicode(HELLO_HELLO_MESSAGE + Axe.C.NEW_LINE + getTokenMessage);
+
+            return EmojiParser.parseToUnicode(String.format("%s %s! %s %s",
+                    HELLO_MESSAGE, greeting, Axe.C.NEW_LINE, getTokenMessage));
         }
         //check token format aka isToken ? -> 400 (mean-less string)
         if (tokenString.length() != Token.TELEGRAM_TOKEN_LEN) {

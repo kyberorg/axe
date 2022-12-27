@@ -56,7 +56,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         final TelegramCommand telegramCommand = telegramService.extractCommand(telegramMessage.get());
 
         TelegramCommandHandler handler = switch (telegramCommand) {
-            case AXE, NOT_A_COMMAND -> defaultHandler;
+            case NOT_A_COMMAND -> defaultHandler;
             case START -> startHandler;
             case HELLO -> helloHandler;
             case UNLINK ->  unlinkHandler;
