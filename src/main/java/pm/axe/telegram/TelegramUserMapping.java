@@ -40,6 +40,12 @@ public class TelegramUserMapping {
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * Creates new {@link TelegramUserMapping} record.
+     *
+     * @param tgUser non-empty string with telegram user.
+     * @param axeUser corresponding Axe {@link User}.
+     */
     public void createMapping(final String tgUser, final User axeUser) {
         if (StringUtils.isBlank(tgUser)) {
             throw new IllegalArgumentException("Cannot create mapping for empty tgUser");
@@ -51,14 +57,32 @@ public class TelegramUserMapping {
         log.info("{} Mapping created. User: {}", TAG, axeUser.getUsername());
     }
 
+    /**
+     * Gets mapped {@link User}.
+     *
+     * @param tgUser non-empty string with telegram username.
+     * @return {@link Optional} with corresponding Axe {@link User} if found,
+     * {@link Optional#empty()} - if no match found.
+     */
     public Optional<User> getAxeUser(final String tgUser) {
         return Optional.ofNullable(mapping.get(tgUser));
     }
 
-    public boolean hasMapping(String tgUser) {
+    /**
+     * Defines if telegram user has {@link TelegramUserMapping} or not.
+     *
+     * @param tgUser non-empty string with telegram username.
+     * @return true - if telegram user mapped with Axe {@link User}, false if not.
+     */
+    public boolean hasMapping(final String tgUser) {
         return mapping.containsKey(tgUser);
     }
 
+    /**
+     * Deletes record from {@link TelegramUserMapping}.
+     *
+     * @param tgUser non-empty string with telegram username.
+     */
     public void deleteMapping(final String tgUser) {
         if (StringUtils.isBlank(tgUser)) {
             throw new IllegalArgumentException("Telegram USer cannot be blank");
@@ -70,7 +94,12 @@ public class TelegramUserMapping {
             log.warn("{} failed to delete mapping. No mapping found for tgUser {}", TAG, tgUser);
         }
     }
-    //delete by Axe user
+
+    /**
+     * Deletes record from {@link TelegramUserMapping} for given Axe {@link User}.
+     *
+     * @param user mapped Axe {@link User}
+     */
     public void deleteMappingForAxeUser(final User user) {
         String foundRecordKey = "";
         for (Map.Entry<String, User> record: mapping.entrySet()) {
@@ -87,6 +116,11 @@ public class TelegramUserMapping {
         }
     }
 
+    /**
+     * {@link UserDeletedEvent} handler. It deletes active mapping for deleted Axe {@link User}, if any exists.
+     *
+     * @param event {@link UserDeletedEvent}, that contains deleted {@link User} record.
+     */
     @Subscribe
     public void onUserDeleted(final UserDeletedEvent event) {
         if (event.getDeletedUser() == null || event.getDeletedUser().equals(User.createPseudoUser())) {
@@ -96,6 +130,10 @@ public class TelegramUserMapping {
         deleteMappingForAxeUser(event.getDeletedUser());
     }
 
+    /**
+     * Populates {@link TelegramUserMapping} at {@link pm.axe.Application} start-time.
+     * This method gets Telegram {@link Account}s from Database.
+     */
     @Async
     @EventListener(ApplicationReadyEvent.class)
     public void prePopulateMapping() {

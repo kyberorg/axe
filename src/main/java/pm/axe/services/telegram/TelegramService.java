@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class TelegramService {
-    public static long WRONG_CHAT_ID = -1L;
+    public static final long WRONG_CHAT_ID = -1L;
     private final AppUtils appUtils;
 
     /**
@@ -77,6 +77,14 @@ public class TelegramService {
         return EmojiParser.parseToUnicode(Axe.Emoji.WARNING + " serverError");
     }
 
+    /**
+     * Extracts {@link Message} from {@link Update}.
+     *
+     * @param update received Telegram {@link Update}.
+     *
+     * @return {@link Optional} with {@link Message} or {@link Optional#empty()}.
+     * if {@link Update} contains {@link Update#editedMessage}, that {@link Update#editedMessage} will be return.
+     */
     public Optional<Message> getTelegramMessage(final Update update) {
         if (update.hasMessage()) {
             return Optional.of(update.getMessage());
@@ -87,6 +95,13 @@ public class TelegramService {
         }
     }
 
+    /**
+     * Parses {@link TelegramCommand} from non-empty {@link Message}.
+     *
+     * @param message non-empty Telegram {@link Message}.
+     * @return parsed {@link TelegramCommand} or {@link TelegramCommand#NOT_A_COMMAND},
+     * if {@link Message#getText()} doesn't start with }{@literal /}.
+     */
     public TelegramCommand extractCommand(final Message message) {
         String[] args = message.getText().split(" ");
         if (args.length == 0) {
@@ -96,6 +111,12 @@ public class TelegramService {
         }
     }
 
+    /**
+     * Gets {@link Message#getChatId()} from {@link Update} object.
+     *
+     * @param update valid Telegram {@link Update} object.
+     * @return parsed {@link Message#getChatId()} or {@link #WRONG_CHAT_ID}.
+     */
     public long getChatId(final Update update) {
         if (update == null || update.getMessage() == null) {
             return WRONG_CHAT_ID;

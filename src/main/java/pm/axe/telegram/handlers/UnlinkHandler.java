@@ -46,6 +46,11 @@ public class UnlinkHandler implements TelegramCommandHandler {
         }
     }
 
+    /**
+     * Deletes telegram {@link Account} record in {@link Async} manner.
+     *
+     * @param tgUser non-empty string with telegram username.
+     */
     @Async
     public void deleteAccount(final String tgUser) {
         Optional<Account> account = accountService.getAccountByAccountName(tgUser, AccountType.TELEGRAM);
@@ -55,11 +60,16 @@ public class UnlinkHandler implements TelegramCommandHandler {
             return;
         }
         OperationResult opResult = accountService.deleteAccount(account.get());
-        if(opResult.notOk()) {
+        if (opResult.notOk()) {
             log.error("{} failed to delete {}. OpResult: {}", TAG, Account.class.getSimpleName(), opResult);
         }
     }
 
+    /**
+     * Deletes {@link TelegramUserMapping} for given telegram user.
+     *
+     * @param tgUser non-empty string with telegram username.
+     */
     @Async
     public void deleteMapping(final String tgUser) {
         userMapping.deleteMapping(tgUser);

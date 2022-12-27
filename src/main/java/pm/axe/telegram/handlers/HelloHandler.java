@@ -36,8 +36,8 @@ public class HelloHandler implements TelegramCommandHandler {
     private static final String NO_SENSE_MESSAGE = Axe.Emoji.NO_GOOD + " Given string makes no sense to me.";
     private static final String TOKEN_EXPIRED_MESSAGE =
             Axe.Emoji.RUBBISH + " This token may have been used already or it may have expired.";
-    private static final String ACCOUNT_LINKED = Axe.Emoji.SUCCESS + " Account linked!";
-    private static final String ACCOUNT_ALREADY_LINKED = Axe.Emoji.SUCCESS + " Account already linked.";
+    private static final String ACC_ALREADY_LINKED = Axe.Emoji.WARNING + " Account already linked with another user."
+            + TelegramCommand.UNLINK.getCommandText() + " it first.";
 
     @Override
     public String handle(final Update update) {
@@ -71,7 +71,7 @@ public class HelloHandler implements TelegramCommandHandler {
         }
         //tgUser has Axe Acc? -> 409 (already confirmed)
         if (userMapping.getAxeUser(tgUser).isPresent()) {
-            return EmojiParser.parseToUnicode(ACCOUNT_LINKED);
+            return EmojiParser.parseToUnicode(ACC_ALREADY_LINKED);
         }
         //create new Account -> 500 (failed, write to @kyberorg)
         long chatId = message.getChatId();
@@ -79,7 +79,7 @@ public class HelloHandler implements TelegramCommandHandler {
         if (createAccountResult.notOk()) {
             //AxeUser has tgAcc ? -> 409 (already confirmed)
             if (Objects.equals(createAccountResult.getResult(), OperationResult.CONFLICT)) {
-                return EmojiParser.parseToUnicode(ACCOUNT_ALREADY_LINKED);
+                return EmojiParser.parseToUnicode(ACC_ALREADY_LINKED);
             } else {
                 return EmojiParser.parseToUnicode(String.format("%s Failed to link account. Please write to %s",
                         Axe.Emoji.WARNING, Axe.Telegram.KYBERORG));
@@ -92,16 +92,28 @@ public class HelloHandler implements TelegramCommandHandler {
         createUserMapping(tgUser, axeUser);
 
         //200 (Congrats, account linked)
-        return EmojiParser.parseToUnicode(String.format("%s Great success! " +
-                        "Accounts are linked. Since now you can see all links saved with this bot at %s web interface.",
+        return EmojiParser.parseToUnicode(String.format("%s Great success! "
+                        + "Accounts are linked. "
+                        + "Since now you can see all links saved with this bot at %s web interface.",
                 Axe.Emoji.TADA, StringUtils.capitalize(appUtils.getServerDomain().toLowerCase())));
     }
 
+    /**
+     * Triggers {@link Account} confirmation.
+     *
+     * @param createAccountResult {@link OperationResult} to get {@link Account} from.
+     */
     @Async
     public void confirmAccount(final OperationResult createAccountResult) {
         accountService.confirmAccount(createAccountResult.getPayload(Account.class));
     }
 
+    /**
+     * Creates new {@link TelegramUserMapping}.
+     *
+     * @param tgUser non-empty string with Telegram User.
+     * @param axeUser corresponding Axe {@link User}
+     */
     @Async
     public void createUserMapping(final String tgUser, final User axeUser) {
         userMapping.createMapping(tgUser, axeUser);

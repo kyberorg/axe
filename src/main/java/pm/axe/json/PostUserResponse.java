@@ -77,8 +77,8 @@ public class PostUserResponse {
                 accountHasNoConfirmationMethods = false;
             }
             if (StringUtils.isNotBlank(telegramToken)) {
-                final String telegramStartCmd = TelegramCommand.START.getCommandText();
-                response.telegramConfirmationString = String.format("%s %s", telegramStartCmd, telegramToken);
+                final String telegramHelloCmd = TelegramCommand.HELLO.getCommandText();
+                response.telegramConfirmationString = String.format("%s %s", telegramHelloCmd, telegramToken);
                 sb.append("By the way, you can also ");
                 if (accountHasNoConfirmationMethods) {
                     sb.append("confirm your account in Telegram ");
@@ -86,7 +86,7 @@ public class PostUserResponse {
                     sb.append("link your account in Telegram ");
                 }
                 sb.append("by sending following string '")
-                        .append(telegramStartCmd).append(" ").append(telegramToken).append("' to ")
+                        .append(telegramHelloCmd).append(" ").append(telegramToken).append("' to ")
                         .append(Axe.C.AT).append(AppUtils.getTelegramBotName());
             }
             response.message = sb.toString();

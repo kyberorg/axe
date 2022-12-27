@@ -6,6 +6,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@EnableAsync(proxyTargetClass=true)
+@EnableAsync(proxyTargetClass = true)
 public class SpringConfig {
 }

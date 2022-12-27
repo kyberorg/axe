@@ -97,18 +97,22 @@ public final class Axe {
     }
 
     public static class Emoji {
-        public static final String HELLO = new String(Character.toChars(0x1F44B));
-        public static final String WARNING = ":warning:";
-        public static final String INFO = ":information_source:";
-        public static final String SUCCESS = new String(Character.toChars(0x2714));
-        public static final String TADA = new String(Character.toChars(0x1F389));
-        public static final String NO_GOOD = new String(Character.toChars(0x1F937));
-        public static final String RUBBISH = new String(Character.toChars(0x267B));
-        public static final String USER = new String(Character.toChars(0x1F464));
-        public static final String NO_USER = new String(Character.toChars(0x1FAE5));
-        public static final String BANNED = new String(Character.toChars(0x1F6AB));
-        public static final String AXE = new String(Character.toChars(0x1FA93));
-        public static final String ERROR = new String(Character.toChars(0x1F44E));
+        public static final String HELLO = Emoji.create(0x1F44B);
+        public static final String WARNING = Emoji.create(0x26A0);
+        public static final String INFO = Emoji.create(0x2139);
+        public static final String SUCCESS = Emoji.create(0x2714);
+        public static final String TADA = Emoji.create(0x1F389);
+        public static final String NO_GOOD = Emoji.create(0x1F937);
+        public static final String RUBBISH = Emoji.create(0x267B);
+        public static final String USER = Emoji.create(0x1F464);
+        public static final String NO_USER = Emoji.create(0x1FAE5);
+        public static final String BANNED = Emoji.create(0x1F6AB);
+        public static final String AXE = Emoji.create(0x1FA93);
+        public static final String ERROR = Emoji.create(0x1F44E);
+
+        private static String create(final int codePoint) {
+            return new String(Character.toChars(codePoint));
+        }
     }
 
     public static class Mattermost {

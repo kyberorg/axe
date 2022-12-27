@@ -69,7 +69,7 @@ public class TelegramSender extends TokenSender {
             }
         }
         //Getting Chat id to send message to
-        //extra info in telegram account contains chat id.
+        //Extra info in telegram account contains chat id.
         final String chatId = telegramAccountConfirmedCheck.getPayload(Account.class).getExtraInfo();
         if (StringUtils.isBlank(chatId)) {
             return OperationResult.generalFail().withMessage(ERR_NO_CHAT_ID);

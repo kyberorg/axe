@@ -91,7 +91,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 .build();
     }
 
-    private void doSend(final String message, long chatId) {
+    private void doSend(final String message, final long chatId) {
         if (chatId == TelegramService.WRONG_CHAT_ID) {
             log.error("{} Nowhere to send. Got Negative ChatId", TAG);
             return;

@@ -209,6 +209,13 @@ public class AccountService {
         return accountDao.findByUserAndType(user, accountType);
     }
 
+    /**
+     * Searches {@link Account} by plain-text {@link Account} name and {@link AccountType}.
+     *
+     * @param plainAccountName non-encrypted string with {@link Account} name.
+     * @param accountType type of {@link Account}
+     * @return {@link Optional} with found {@link Account} or {@link Optional#empty()} if nothing found.
+     */
     public Optional<Account> getAccountByAccountName(final String plainAccountName, final AccountType accountType) {
         if (StringUtils.isBlank(plainAccountName)) return Optional.empty();
         this.accountToSearch = plainAccountName;
@@ -220,6 +227,13 @@ public class AccountService {
         return Optional.ofNullable(account);
     }
 
+    /**
+     * Gets all {@link Account}s with given {@link AccountType}.
+     *
+     * @param accountType type of {@link Account}.
+     *
+     * @return {@link List} with found {@link Account} records.
+     */
     public List<Account> getAllAccountsByType(final AccountType accountType) {
         return accountDao.findByType(accountType);
     }
