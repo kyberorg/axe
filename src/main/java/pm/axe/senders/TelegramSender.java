@@ -4,6 +4,7 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import pm.axe.Axe;
@@ -42,6 +43,7 @@ public class TelegramSender extends TokenSender {
     private static final String ERR_NO_TELEGRAM_ACCOUNT = "Token owner has no telegram account";
     private static final String ERR_TELEGRAM_ACCOUNT_NOT_CONFIRMED =
             "Token owner has unconfirmed telegram account. Please confirm it first.";
+    private static final String ERR_NO_CHAT_ID = "No corresponding chat ID found: nowhere to send message";
 
     private static final String MSG_NO_NEED_TO_SEND_MESSAGE = "No need to send any message to given token type";
     private static final String MSG_NO_LONG_LINK_FOUND = "No long link found in template vars";
@@ -66,7 +68,12 @@ public class TelegramSender extends TokenSender {
                 return telegramAccountConfirmedCheck;
             }
         }
-
+        //Getting Chat id to send message to
+        //Extra info in telegram account contains chat id.
+        final String chatId = telegramAccountConfirmedCheck.getPayload(Account.class).getExtraInfo();
+        if (StringUtils.isBlank(chatId)) {
+            return OperationResult.generalFail().withMessage(ERR_NO_CHAT_ID);
+        }
         //Getting right telegram message to send
         TelegramMessage telegramMessage = getTelegramMessage(token, telegramAccount);
         if (telegramMessage == null) {
@@ -98,7 +105,7 @@ public class TelegramSender extends TokenSender {
 
         //send it
         try {
-            telegramBot.execute(telegramBot.createSendMessage(compiledTemplate));
+            telegramBot.execute(telegramBot.createSendMessage(compiledTemplate, Long.parseLong(chatId)));
         } catch (TelegramApiException e) {
             log.error("{} failed to send message to Telegram. Got {}: {}",
                     TAG, TelegramApiException.class.getSimpleName(), e.getMessage());
@@ -125,7 +132,8 @@ public class TelegramSender extends TokenSender {
             log.warn("{} {}", TAG, ERR_NO_TELEGRAM_ACCOUNT);
             return OperationResult.elementNotFound().withMessage(ERR_NO_TELEGRAM_ACCOUNT);
         }
-        return telegramAccount.get().isConfirmed() ? OperationResult.success() : OperationResult.banned();
+        return telegramAccount.get().isConfirmed()
+                ? OperationResult.success().addPayload(telegramAccount.get()) : OperationResult.banned();
     }
 
     private TelegramMessage getTelegramMessage(final Token token, final String telegramAccount) {

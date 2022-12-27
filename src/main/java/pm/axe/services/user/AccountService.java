@@ -57,17 +57,6 @@ public class AccountService {
     }
 
     /**
-     * Opposite of {@link #isAccountAlreadyExists(String, AccountType)}.
-     *
-     * @param accountName string with {@link Account#accountName}.
-     * @param accountType {@link Account#type}
-     * @return true - if account with given name not exist, false - if exists.
-     */
-    public boolean isAccountUnique(final String accountName, final AccountType accountType) {
-        return !isAccountAlreadyExists(accountName, accountType);
-    }
-
-    /**
      * Creates {@link AccountType#LOCAL} account.
      *
      * @param user {@link Account}'s owner.
@@ -142,6 +131,46 @@ public class AccountService {
     }
 
     /**
+     * Creates {@link AccountType#TELEGRAM} account.
+     *
+     * @param user  {@link Account}'s owner.
+     * @param tgUser string with telegram address.
+     * @param chatId active chat id for sending messages to.
+     * @return {@link OperationResult} with created {@link Account} in payload or {@link OperationResult} with error.
+     */
+    public OperationResult createTelegramAccount(final User user, final String tgUser, final long chatId) {
+        if (isAccountAlreadyExists(tgUser, AccountType.TELEGRAM)) {
+            return OperationResult.conflict().withMessage(ERR_EMAIL_ALREADY_EXISTS);
+        }
+
+        String encryptedTelegramUser;
+        OperationResult encryptTgUserResult = cryptTool.encrypt(tgUser);
+        if (encryptTgUserResult.ok()) {
+            encryptedTelegramUser = encryptTgUserResult.getStringPayload();
+        } else {
+            log.error("{} Telegram encryption failed. Value: {}. Error: {}",
+                    TAG, tgUser, encryptTgUserResult.getMessage());
+            return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
+        }
+
+        Account telegramAccount = Account.create(AccountType.TELEGRAM).forUser(user);
+        telegramAccount.setAccountName(encryptedTelegramUser);
+        telegramAccount.setConfirmed(true);
+        telegramAccount.setExtraInfo(chatId + "");
+
+        try {
+            accountDao.save(telegramAccount);
+            log.info("{} Created telegram account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
+            return OperationResult.success().addPayload(telegramAccount);
+        } catch (CannotCreateTransactionException e) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
+    /**
      * Sets that {@link Account} confirmed.
      *
      * @param accountToConfirm account to confirm.
@@ -178,6 +207,35 @@ public class AccountService {
      */
     public Optional<Account> getAccount(final User user, final AccountType accountType) {
         return accountDao.findByUserAndType(user, accountType);
+    }
+
+    /**
+     * Searches {@link Account} by plain-text {@link Account} name and {@link AccountType}.
+     *
+     * @param plainAccountName non-encrypted string with {@link Account} name.
+     * @param accountType type of {@link Account}
+     * @return {@link Optional} with found {@link Account} or {@link Optional#empty()} if nothing found.
+     */
+    public Optional<Account> getAccountByAccountName(final String plainAccountName, final AccountType accountType) {
+        if (StringUtils.isBlank(plainAccountName)) return Optional.empty();
+        this.accountToSearch = plainAccountName;
+        List<Account> accounts = accountDao.findByType(accountType);
+        Account account = accounts.parallelStream()
+                .filter(this::accountHasGivenAccountName)
+                .findFirst()
+                .orElse(null);
+        return Optional.ofNullable(account);
+    }
+
+    /**
+     * Gets all {@link Account}s with given {@link AccountType}.
+     *
+     * @param accountType type of {@link Account}.
+     *
+     * @return {@link List} with found {@link Account} records.
+     */
+    public List<Account> getAllAccountsByType(final AccountType accountType) {
+        return accountDao.findByType(accountType);
     }
 
     /**

@@ -7,6 +7,7 @@ import pm.axe.utils.UrlUtils;
 
 import java.net.URI;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Combinations or params present at message in {@link TelegramObject}. Similar to Unix command line args.
@@ -34,8 +35,8 @@ public final class TelegramArguments {
      *
      * @return description if present, empty string is not
      */
-    public String getDescription() {
-        return Objects.isNull(description) ? "" : description;
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
     private static TelegramArguments emptyArgs() {

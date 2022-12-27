@@ -9,16 +9,17 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum TelegramCommand {
     START("/start"),
-    USAGE("/usage"),
-    AXE("/axe"),
     HELLO("/hello"),
+    USAGE("/usage"),
+    MY_AXE_USER("/my_axe_user"),
+    UNLINK("/unlink"),
     NOT_A_COMMAND("__"),
     UNKNOWN("_");
 
-    private final String commandString;
+    private final String cmdString;
 
     TelegramCommand(final String cmd) {
-        this.commandString = cmd;
+        this.cmdString = cmd;
     }
 
     /**
@@ -27,7 +28,7 @@ public enum TelegramCommand {
      * @return string with command string
      */
     public String getCommandText() {
-        return commandString;
+        return cmdString;
     }
 
     /**
@@ -37,32 +38,17 @@ public enum TelegramCommand {
      * @return created object
      */
     public static TelegramCommand createFromString(final String cmd) {
-        if (StringUtils.isBlank(cmd)) {
-            return UNKNOWN;
-        }
-
-        if (!cmd.startsWith("/")) {
+        if (StringUtils.isBlank(cmd) || !cmd.startsWith("/")) {
             return NOT_A_COMMAND;
         }
 
-        if (cmd.equals(START.commandString)) {
-            return START;
-        } else if (cmd.equals(AXE.commandString)) {
-            return AXE;
-        } else if (cmd.equals(USAGE.commandString)) {
-            return USAGE;
-        } else {
-            return UNKNOWN;
+        for (TelegramCommand tgCmd : TelegramCommand.values()) {
+            if (cmd.equals(tgCmd.getCommandText())) {
+                return tgCmd;
+            }
         }
-    }
 
-    /**
-     * Validates command.
-     *
-     * @return true - if match found, false if not
-     */
-    public boolean isAxeCommand() {
-        return (this == AXE);
+        return TelegramCommand.UNKNOWN;
     }
 
 }

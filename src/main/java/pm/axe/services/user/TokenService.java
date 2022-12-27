@@ -2,6 +2,7 @@ package pm.axe.services.user;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -170,6 +171,25 @@ public class TokenService {
     public Optional<Token> getToken(final String tokenString) {
         Optional<Token> token = tokenDao.findFirstByToken(tokenString);
         return token.isPresent() ? returnOnlyValidToken(token.get()) : Optional.empty();
+    }
+
+    /**
+     * Gets Token once and delete it right after getting it.
+     *
+     * @param tokenString string with token value
+     * @return {@link Optional} with found {@link Token} found or {@link Optional#empty()}
+     */
+    public Optional<Token> getAndDeleteToken(final String tokenString) {
+        if (StringUtils.isBlank(tokenString)) return Optional.empty();
+        Optional<Token> token = Optional.empty();
+        try {
+            token = tokenDao.findFirstByToken(tokenString);
+        } catch (Exception e) {
+            log.error("{} Failed to retrieve token from Database. Got exception: {}", TAG, e.getMessage());
+        } finally {
+            token.ifPresent(this::deleteTokenRecord);
+        }
+        return token;
     }
 
     /**

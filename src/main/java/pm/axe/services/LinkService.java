@@ -343,7 +343,7 @@ public class LinkService {
                 return OperationResult.banned().withMessage(OP_LOCAL_URL_BANNED);
             case UrlExtraValidator.URL_NOT_VALID:
             default:
-                log.info("{} not valid URL: {}", TAG, messageFromExtraValidator);
+                log.info("{} Got not valid URL: {}", TAG, messageFromExtraValidator);
                 return OperationResult.malformedInput().withMessage(OP_MALFORMED_URL);
         }
     }
