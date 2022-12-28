@@ -24,7 +24,6 @@ import pm.axe.utils.AppUtils;
         description = "Site that makes long links short")
 @Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 public class WebApp implements AppShellConfigurator {
-
     private final AppUtils appUtils;
 
     @Override
