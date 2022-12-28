@@ -3,6 +3,9 @@ package pm.axe.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  * Does extra validation of URL to filter out not valid URLs passed
  * through {@link org.hibernate.validator.constraints.URL} validation.
@@ -17,6 +20,7 @@ public final class UrlExtraValidator {
     public static final int URL_MAX_SIZE = 15613;
 
     private static final String URL_MARKER = "://";
+    private static final String LOCALHOST = "localhost";
 
     private UrlExtraValidator() {
         throw new UnsupportedOperationException("Utility class");
@@ -31,6 +35,9 @@ public final class UrlExtraValidator {
     public static String isUrlValid(final String url) {
         UrlValidator validator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
         if (validator.isValid(url)) {
+            if (isLocalhost(url)) {
+                return VALID;
+            }
             UrlValidator noLocalValidator = new UrlValidator();
             return noLocalValidator.isValid(url) ? VALID : LOCAL_URL_NOT_ALLOWED;
         } else {
@@ -56,5 +63,14 @@ public final class UrlExtraValidator {
             }
         }
         return urlCount > 0;
+    }
+
+    private static boolean isLocalhost(final String url) {
+        try {
+            URI uri = new URI(url);
+            return uri.getHost().equals(LOCALHOST);
+        } catch (URISyntaxException e) {
+            return false;
+        }
     }
 }
