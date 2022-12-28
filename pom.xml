@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>17</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>23.3.0</vaadin.version>
+        <vaadin.version>23.3.1</vaadin.version>
         <!-- QR Code Software version-->
         <qr.zxing.version>3.5.1</qr.zxing.version>
         <!-- Selenium Version -->
