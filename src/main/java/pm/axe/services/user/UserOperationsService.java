@@ -3,8 +3,10 @@ package pm.axe.services.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.stereotype.Service;
 import pm.axe.db.models.*;
+import pm.axe.events.user.UserDeletedEvent;
 import pm.axe.internal.RegisterUserInput;
 import pm.axe.result.OperationResult;
 import pm.axe.senders.Senders;
@@ -240,6 +242,8 @@ public class UserOperationsService {
         OperationResult deletionResult = userService.deleteUser(user);
         log.info("{} {} {} '{}' is deleted. Done!",
                 TAG, USER_DELETION_OP, User.class.getSimpleName(), user.getUsername());
+        //fire UserDeletedEvent
+        EventBus.getDefault().post(UserDeletedEvent.createWith(user));
         return deletionResult;
     }
 }

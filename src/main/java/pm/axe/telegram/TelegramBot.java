@@ -2,22 +2,18 @@ package pm.axe.telegram;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import pm.axe.Axe;
-import pm.axe.db.models.Link;
-import pm.axe.internal.LinkServiceInput;
-import pm.axe.result.OperationResult;
-import pm.axe.services.LinkService;
 import pm.axe.services.telegram.TelegramService;
+import pm.axe.telegram.handlers.*;
 import pm.axe.utils.AppUtils;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Telegram Bot.
@@ -28,76 +24,47 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
-    public static final String TELEGRAM_ME_URL = "https://telegram.me/";
     private static final String TAG = "[" + TelegramBot.class.getSimpleName() + "]";
 
-    private static final Message NO_MESSAGE = new Message();
-
     private final TelegramService telegramService;
-    private final LinkService linkService;
     private final AppUtils appUtils;
 
-    private Update update;
-    private TelegramObject telegramObject;
+    private final DefaultHandler defaultHandler;
+    private final HelloHandler helloHandler;
+    private final MyAxeUserHandler myAxeUserHandler;
+    private final ShowUsageHandler showUsageHandler;
+    private final StartHandler startHandler;
+    private final UnlinkHandler unlinkHandler;
 
     @Override
     public void onUpdateReceived(final Update update) {
         if (log.isTraceEnabled()) {
             log.trace(TAG + " New Update " + update);
         }
-        this.update = update;
-
         String message;
-        try {
-            if (Objects.isNull(telegramService)) {
-                throw new IllegalStateException("Internal server error: ");
-            }
-
-            log.debug("{} Update (Author: {}, Message: {})", TAG,
-                    getMessage().getFrom().getUserName(), getMessage().getText());
-
-            telegramObject = TelegramObject.createFromUpdate(update);
-
-            if (log.isDebugEnabled()) {
-                log.debug(TAG + " Debugging " + TelegramObject.class.getSimpleName() + Axe.C.NEW_LINE + telegramObject);
-            }
-            telegramService.init(telegramObject);
-
-            TelegramCommand telegramCommand = telegramObject.getCommand();
-            if (telegramCommand.isAxeCommand()) {
-                message = doLinkAxing();
-            } else {
-                if (telegramCommand == TelegramCommand.NOT_A_COMMAND) {
-                    message = doLinkAxing();
-                } else {
-                    message = telegramService.usage();
-                }
-            }
-
-        } catch (NoSuchElementException | IllegalArgumentException e) {
-            log.error(TAG + " Got exception while handling incoming update."
-                    + " " + e.getClass().getName() + ": " + e.getMessage());
-            message = telegramService.usage();
-        } catch (IllegalStateException e) {
-            message = "Internal error: not all components are available. Bot currently not available";
-            log.error(TAG + " " + message + " " + e.getClass().getName() + ": " + e.getMessage());
-        } catch (Exception e) {
-            log.error(TAG + " Got unexpected exception while processing telegram update"
-                    + " " + e.getClass().getName() + ": " + e.getMessage());
+        Optional<Message> telegramMessage = telegramService.getTelegramMessage(update);
+        long chatId = telegramService.getChatId(update);
+        if (telegramMessage.isEmpty() || StringUtils.isBlank(telegramMessage.get().getText())) {
             message = telegramService.serverError();
+            doSend(message, chatId);
+            return;
         }
 
-        if (message.equals(TelegramService.NO_INIT)) {
-            log.error(TelegramService.NO_INIT);
-            message = "Internal error: not all components are initialized";
-        }
+        log.debug("{} Update (Author: {}, RawMessage: {})",
+                TAG, telegramMessage.get().getFrom().getUserName(), telegramMessage.get().getText());
 
-        try {
-            execute(createSendMessage(message));
-        } catch (TelegramApiException e) {
-            log.error(TAG + " Failed to send telegram message. Message: " + message
-                    + " " + e.getClass().getName() + ": " + e.getMessage());
-        }
+        final TelegramCommand telegramCommand = telegramService.extractCommand(telegramMessage.get());
+
+        TelegramCommandHandler handler = switch (telegramCommand) {
+            case NOT_A_COMMAND -> defaultHandler;
+            case START -> startHandler;
+            case HELLO -> helloHandler;
+            case UNLINK ->  unlinkHandler;
+            case MY_AXE_USER -> myAxeUserHandler;
+            default -> showUsageHandler;
+        };
+        message = handler.handle(update);
+        doSend(message, chatId);
     }
 
     @Override
@@ -110,52 +77,30 @@ public class TelegramBot extends TelegramLongPollingBot {
         return appUtils.getTelegramToken();
     }
 
-    private String doLinkAxing() {
-        String message;
-        if (telegramObject.getArguments() == TelegramArguments.EMPTY_ARGS) {
-            throw new NoSuchElementException("Got " + telegramObject.getCommand()
-                    + " command without arguments. Nothing to shorten");
-        } else if (telegramObject.getArguments() == TelegramArguments.BROKEN_ARGS) {
-            throw new IllegalArgumentException(
-                    "UserMessage must contain URL as first or second (when first is command) param");
-        }
-
-        String url = telegramObject.getArguments().getUrl();
-        log.debug("{} URL received {}", TAG, url);
-        OperationResult storeResult = linkService.createLink(LinkServiceInput.builder(url).build());
-        if (storeResult.ok()) {
-            message = telegramService.success(storeResult.getPayload(Link.class));
-        } else {
-            message = telegramService.serverError();
-        }
-        return message;
-    }
-
     /**
      * Converts String Message to {@link SendMessage}.
      *
      * @param message string with message to send.
+     * @param chatId chat id to send message to.
      * @return {@link SendMessage} with given message inside.
      */
-    public SendMessage createSendMessage(final String message) {
-        Message telegramMessage = getMessage();
+    public SendMessage createSendMessage(final String message, final long chatId) {
         return SendMessage.builder()
-                .chatId(Long.toString(telegramMessage.getChatId()))
+                .chatId(chatId)
                 .text(message)
                 .build();
     }
 
-    private Message getMessage() {
-        Message telegramMessage;
-        if (update.hasMessage()) {
-            telegramMessage = update.getMessage();
-        } else if (update.hasEditedMessage()) {
-            telegramMessage = update.getEditedMessage();
-        } else {
-            telegramMessage = NO_MESSAGE;
+    private void doSend(final String message, final long chatId) {
+        if (chatId == TelegramService.WRONG_CHAT_ID) {
+            log.error("{} Nowhere to send. Got Negative ChatId", TAG);
+            return;
         }
-        return telegramMessage;
+        try {
+            execute(createSendMessage(message, chatId));
+        } catch (TelegramApiException e) {
+            log.error("{} Failed to send telegram message. Message: {} {}: {}",
+                    TAG, message, e.getClass().getSimpleName(), e.getMessage());
+        }
     }
-
-
 }

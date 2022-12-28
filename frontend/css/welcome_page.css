@@ -10,3 +10,8 @@
 .telegram-section {
     padding-bottom: 0;
 }
+
+.copy-command-icon {
+    margin-left: 0.5rem;
+    vertical-align: bottom;
+}

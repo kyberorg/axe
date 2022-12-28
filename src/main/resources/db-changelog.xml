@@ -217,4 +217,9 @@
     <changeSet id="9" author="kyberorg">
         <renameColumn tableName="users" oldColumnName="is_enabled" newColumnName="is_confirmed"/>
     </changeSet>
+    <changeSet id="10" author="kyberorg">
+        <addColumn tableName="accounts">
+            <column name="extra_info" type="VARCHAR(255)" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

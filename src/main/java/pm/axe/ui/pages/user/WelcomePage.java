@@ -9,6 +9,9 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -17,12 +20,12 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import pm.axe.Axe;
 import pm.axe.Endpoint;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.services.user.TokenService;
 import pm.axe.session.AxeSession;
-import pm.axe.telegram.TelegramBot;
 import pm.axe.telegram.TelegramCommand;
 import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Code;
@@ -30,6 +33,7 @@ import pm.axe.ui.elements.Section;
 import pm.axe.ui.layouts.AxeCompactLayout;
 import pm.axe.ui.pages.home.HomePage;
 import pm.axe.utils.AppUtils;
+import pm.axe.utils.ClipboardUtils;
 import pm.axe.utils.DeviceUtils;
 
 import java.util.Optional;
@@ -114,24 +118,32 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
     }
 
     private Section getTelegramInfo() {
-        String tgCommand = TelegramCommand.START.getCommandText();
-        String tgCmdText = tgCommand.replace("/", "");
+        String tgCommand = TelegramCommand.HELLO.getCommandText();
         String tgToken = getTelegramToken();
 
         Span telegramSpan = new Span();
 
         Span startSpan = new Span("Send ");
         Code tgString = new Code(String.format("%s %s", tgCommand, tgToken));
+        Icon copyCommandIcon = VaadinIcon.COPY.create();
         Span toSpan = new Span(" to ");
 
         String botName = AppUtils.getTelegramBotName();
-        String telegramLink = String.format("%s%s?%s=%s", TelegramBot.TELEGRAM_ME_URL, botName, tgCmdText, tgToken);
+        String telegramLink = String.format("%s%s", Axe.Telegram.TELEGRAM_URL, botName);
         Anchor botLink = new Anchor(telegramLink, "@" + botName);
 
         Span endSpan = new Span(" to link your account with Telegram.");
 
-        telegramSpan.add(startSpan, tgString, toSpan, botLink, endSpan);
+        telegramSpan.add(startSpan, tgString, copyCommandIcon, toSpan, botLink, endSpan);
         telegramSection.add(telegramSpan);
+
+        copyCommandIcon.setClassName("copy-command-icon");
+        copyCommandIcon.addClickListener(e ->  {
+            Notification.Position position = DeviceUtils.isMobileDevice()
+                    ? Notification.Position.BOTTOM_CENTER : Notification.Position.MIDDLE;
+            ClipboardUtils.copyToClipboardAndNotify(tgString.getText(), "Copied!", position);
+        });
+
         return telegramSection;
     }
 

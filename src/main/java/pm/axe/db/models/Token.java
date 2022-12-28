@@ -19,11 +19,11 @@ import java.util.UUID;
 @Entity
 @Table(name = "tokens")
 public class Token extends TimeModel {
+    public static final int TELEGRAM_TOKEN_LEN = 8;
     /**
      * Default length of Token (code).
      */
     private static final int CODE_TOKEN_LEN = 6;
-    private static final int TELEGRAM_TOKEN_LEN = 8;
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 

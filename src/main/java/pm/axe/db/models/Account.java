@@ -28,6 +28,9 @@ public final class Account extends BaseModel {
     @Column(name = "confirmed", nullable = false)
     private boolean confirmed = false;
 
+    @Column(name = "extra_info")
+    private String extraInfo;
+
     /**
      * Starts to create new {@link Account} of given {@link AccountType}.
      *

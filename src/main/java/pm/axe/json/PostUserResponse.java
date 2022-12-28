@@ -56,11 +56,9 @@ public class PostUserResponse {
          * Adds Telegram Confirmation Token String.
          *
          * @param telegramToken string with telegram token, which links Axe Account with Telegram account.
-         * @return {@link Builder} to continue building {@link PostUserResponse}.
          */
-        public Builder addTelegramToken(final String telegramToken) {
+        public void addTelegramToken(final String telegramToken) {
             this.telegramToken = telegramToken;
-            return this;
         }
 
         /**
