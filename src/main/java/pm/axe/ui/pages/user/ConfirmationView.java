@@ -61,7 +61,7 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
             redirectToRegistrationFailedPage(beforeEvent);
             return;
         }
-        Optional<Token> token = tokenService.getToken(tokenString.get());
+        Optional<Token> token = tokenService.getAndDeleteToken(tokenString.get());
         if (token.isEmpty()) {
             log.warn("{} Token doesn't exist or expired", TAG);
             redirectToRegistrationFailedPage(beforeEvent);
@@ -74,13 +74,9 @@ public class ConfirmationView extends AxeBaseLayout implements HasUrlParameter<S
             OperationResult confirmationResult = accountService.confirmAccount(token.get().getConfirmationFor());
             if (confirmationResult.notOk()) {
                 log.error("{} Failed to confirm account. OpResult: {}", TAG, confirmationResult);
-                //Creating task to delete confirmation token. We should delete it even if confirmation failed.
-                tokenService.deleteTokenRecord(token.get());
                 //Failing with error
                 throw new RuntimeException("Failed to confirm account. Got Server-side error");
             }
-            //Delete token (async operation)
-            tokenService.deleteTokenRecord(token.get());
             //Store User to AxeSession aka Login until current session expires
             AxeSession.getCurrent().ifPresent(as -> as.setUser(token.get().getConfirmationFor().getUser()));
             //Redirect to welcome page
