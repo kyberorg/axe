@@ -163,17 +163,6 @@ public class TokenService {
     }
 
     /**
-     * Gets Token by its {@link Token#token} value.
-     *
-     * @param tokenString string with token value
-     * @return {@link Optional} with found {@link Token} found or {@link Optional#empty()}
-     */
-    public Optional<Token> getToken(final String tokenString) {
-        Optional<Token> token = tokenDao.findFirstByToken(tokenString);
-        return token.isPresent() ? returnOnlyValidToken(token.get()) : Optional.empty();
-    }
-
-    /**
      * Gets Token once and delete it right after getting it.
      *
      * @param tokenString string with token value
@@ -231,7 +220,7 @@ public class TokenService {
      * @param token record to delete.
      */
     @Async
-    public void deleteTokenRecord(final Token token) {
+    void deleteTokenRecord(final Token token) {
         try {
             tokenDao.delete(token);
             log.info("{} {} deleted successfully.", TAG, token);
