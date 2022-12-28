@@ -133,7 +133,7 @@ public class IncorrectInputTest extends SelenideTest {
      */
     @Test
     public void urlSingleLayerDomainLinksAreNotAllowed() {
-        HomePageObject.pasteValueInFormAndSubmitIt("http://localhost");
+        HomePageObject.pasteValueInFormAndSubmitIt("http://machine");
         linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         HomePageObject.ErrorModal.ERROR_TEXT.shouldHave(text(NOT_ALLOWED_TEXT));
@@ -145,7 +145,7 @@ public class IncorrectInputTest extends SelenideTest {
      */
     @Test
     public void urlSingleDomainLinksAreNotAllowed() {
-        HomePageObject.pasteValueInFormAndSubmitIt("http://localhost/ff.ff");
+        HomePageObject.pasteValueInFormAndSubmitIt("http://machine/ff.ff");
         linkIsNotSavedAndResultAndQRCodeAreNotVisible();
         errorBoxShouldAppear();
         HomePageObject.ErrorModal.ERROR_TEXT.shouldHave(text(NOT_ALLOWED_TEXT));
