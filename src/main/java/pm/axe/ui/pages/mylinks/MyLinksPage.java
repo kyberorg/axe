@@ -42,11 +42,12 @@ import pm.axe.Endpoint;
 import pm.axe.core.IdentValidator;
 import pm.axe.db.models.Link;
 import pm.axe.db.models.LinkInfo;
+import pm.axe.db.models.User;
 import pm.axe.events.link.LinkDeletedEvent;
 import pm.axe.events.link.LinkSavedEvent;
 import pm.axe.events.link.LinkUpdatedEvent;
+import pm.axe.events.linkinfo.LinkInfoUpdatedEvent;
 import pm.axe.result.OperationResult;
-import pm.axe.services.AxeSessionService;
 import pm.axe.services.LinkInfoService;
 import pm.axe.services.LinkService;
 import pm.axe.services.QRCodeService;
@@ -66,6 +67,7 @@ import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -96,13 +98,13 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private Grid.Column<LinkInfo> descriptionColumn;
     private Grid.Column<LinkInfo> qrCodeColumn;
     private Grid.Column<LinkInfo> actionsColumn;
+    private EditableLink editableLink;
 
     private final Notification savedNotification = createSavedNotification();
 
     private final LinkInfoService linkInfoService;
     private final QRCodeService qrCodeService;
     private final LinkService linkService;
-    private final AxeSessionService sessionService;
     private final AppUtils appUtils;
     private final IdentValidator identValidator;
 
@@ -111,6 +113,11 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private String sessionId;
     private DeviceUtils deviceUtils;
     private boolean clientHasSmallScreen;
+
+    private boolean userLoggedIn;
+    private User user;
+
+    private boolean editorAlreadyActivated = false;
 
     @PostConstruct
     private void pageInit() {
@@ -175,6 +182,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        initUserState();
         applyLoadState();
         activateLinkEditor();
 
@@ -183,8 +191,19 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         clientHasSmallScreen = isSmallScreen();
     }
 
+    private void initUserState() {
+        this.userLoggedIn = AxeSession.getCurrent().map(AxeSession::hasUser).orElse(false);
+        if (this.userLoggedIn) {
+            this.user = AxeSession.getCurrent().get().getUser();
+        }
+    }
+
     private void applyLoadState() {
         noRecordsBanner.setVisible(gridIsEmpty());
+        if (userLoggedIn) {
+            sessionBanner.setText("My Links");
+            sessionBanner.setClassName("grid-title");
+        }
     }
 
     private void initGrid() {
@@ -410,9 +429,9 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     }
 
     private void activateLinkEditor() {
-        boolean userLoggedIn = AxeSession.getCurrent().map(AxeSession::hasUser).orElse(false);
+        if (editorAlreadyActivated) return; //to avoid double activation
         if (userLoggedIn) {
-            EditableLink editableLink = new EditableLink(appUtils.getShortDomain());
+            editableLink = new EditableLink(appUtils.getShortDomain());
             // Close the editor in case of backward between components
             editableLink.getElement()
                     .addEventListener("keydown",
@@ -422,7 +441,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
             binder.forField(editableLink.getEditIdentField())
                     .withValidator(ident -> ident.length() >= 2, "Must contain at least 2 chars")
                     .withValidator(ident -> identValidator.validate(ident).ok(), "Back-part is not valid")
-                    .withValidator(ident -> {
+                    /*.withValidator(ident -> {
                         if (editableLink.isCurrentValueDiffersFrom(ident)) {
                             //value changed - we need to validate new value
                             return Objects.equals(linkService.isLinkWithIdentExist(ident).getResult(),
@@ -431,7 +450,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
                             //got same value
                             return true;
                         }
-                    }, "Already taken. Try another")
+                    }, "Already taken. Try another")*/
                     .withValidationStatusHandler(status -> {
                         editableLink.getEditIdentField().setInvalid(status.isError());
                         editableLink.getEditIdentField().setErrorMessage(status.getMessage().orElse(""));
@@ -439,6 +458,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
                     .bind("ident");
             linkColumn.setEditorComponent(editableLink);
         }
+        editorAlreadyActivated = true;
     }
 
     private boolean filterItems(final LinkInfo linkInfo) {
@@ -507,13 +527,45 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         onLinkEvent(event.getLink());
     }
 
+    /**
+     * Triggers actions when {@link LinkInfoUpdatedEvent} received.
+     * @param event event object with modified data inside
+     */
+    @Subscribe
+    public void onLinkInfoUpdatedEvent(final LinkInfoUpdatedEvent event) {
+        log.trace("{} {} received: {}", TAG, LinkInfoUpdatedEvent.class.getSimpleName(), event);
+        onLinkInfoEvent(event.getLinkInfo());
+    }
+
     private void onLinkEvent(final Link link) {
-        //act only if link deleted was saved within our session
-        if (sessionId.equals(Session.EMPTY_ID)) return;
-        if (getSessionIdFromLink(link).equals(sessionId)) {
+        if (userLoggedIn) {
+            //act only if link is owned by current user.
+            Optional<LinkInfo> linkInfo = linkInfoService.getLinkInfoByLink(link);
+            if (linkInfo.isPresent() && linkInfo.get().getOwner().equals(user)) {
+                updateDataAndState();
+            }
+        } else {
+            //act only if link deleted or saved within our session
+            if (sessionId.equals(Session.EMPTY_ID)) return;
+            if (getSessionIdFromLink(link).equals(sessionId)) {
+                updateDataAndState();
+            }
+        }
+    }
+
+    private void onLinkInfoEvent(final LinkInfo linkInfo) {
+        //act only if link info within our session or user
+        boolean isApplicable;
+        if (this.userLoggedIn) {
+            isApplicable = linkInfo.getOwner().equals(this.user);
+        } else {
+            isApplicable = linkInfo.getSession().equals(sessionId);
+        }
+        if (isApplicable) {
             updateDataAndState();
         }
     }
+
 
     private void onShareButtonClick(final LinkInfo item) {
         if (item != null) {
@@ -546,6 +598,17 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
 
     private void onSaveButtonClick(final LinkInfo item) {
         if (item != null) {
+            boolean identUpdated = isIdentUpdated(item);
+            if (identUpdated && linkInfoService.linkInfoExistsForIdent(item.getIdent())) {
+                final String errorMessage = "Already exists";
+                if (editableLink == null) {
+                    ErrorUtils.getErrorNotification(errorMessage).open();
+                } else {
+                    editableLink.getEditIdentField().setInvalid(true);
+                    editableLink.getEditIdentField().setErrorMessage(errorMessage);
+                }
+                return;
+            }
             grid.getEditor().save();
         }
     }
@@ -557,16 +620,30 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     }
 
     private void updateDataAndState() {
-        if (sessionId.equals(Session.EMPTY_ID)) return;
-        log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
         if (ui != null) {
             ui.access(() -> {
-                List<LinkInfo> records = linkInfoService.getAllRecordWithSession(sessionId);
-                GridListDataView<LinkInfo> dataView = grid.setItems(records);
-                dataView.addFilter(this::filterItems);
-                noRecordsBanner.setVisible(gridIsEmpty());
+                updateData();
+                updateState();
             });
         }
+    }
+
+    private void updateData() {
+        final List<LinkInfo> records = new ArrayList<>();
+        if (userLoggedIn) {
+            log.debug("{} updating grid. Current User: {}", TAG, user);
+            records.addAll(linkInfoService.getAllRecordsOwnedByUser(user));
+        } else if (!sessionId.equals(Session.EMPTY_ID)) {
+            log.debug("{} updating grid. Current session ID: {}", TAG, sessionId);
+            records.addAll(linkInfoService.getAllRecordWithSession(sessionId));
+        }
+
+        GridListDataView<LinkInfo> dataView = grid.setItems(records);
+        dataView.addFilter(this::filterItems);
+    }
+
+    private void updateState() {
+        noRecordsBanner.setVisible(gridIsEmpty());
     }
 
     private void onEditorSaveEvent(final EditorSaveEvent<LinkInfo> event) {
@@ -589,8 +666,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
             if (identNotUpdated) {
                 linkInfoService.update(linkInfo);
             } else {
-
-                boolean userLoggedIn = AxeSession.getCurrent().map(AxeSession::hasUser).orElse(false);
                 if (userLoggedIn) {
                     OperationResult getLinkResult = linkService.getLinkByIdent(oldLinkInfo.get().getIdent());
                     if (getLinkResult.ok()) {
@@ -741,6 +816,15 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         notification.setPosition(Notification.Position.MIDDLE);
         notification.setDuration(Axe.Defaults.NOTIFICATION_DURATION_MILLIS);
         return notification;
+    }
+
+    private boolean isIdentUpdated(LinkInfo item) {
+        boolean identUpdated = false;
+        Optional<LinkInfo> oldLinkInfo = linkInfoService.getLinkInfoById(item.getId());
+        if (oldLinkInfo.isPresent() && editableLink != null) {
+            identUpdated = !Objects.equals(editableLink.getValue(), oldLinkInfo.get().getIdent());
+        }
+        return identUpdated;
     }
 
     public static class IDs {

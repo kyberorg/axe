@@ -3,11 +3,13 @@ package pm.axe.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.stereotype.Service;
 import pm.axe.db.dao.LinkInfoDao;
 import pm.axe.db.models.Link;
 import pm.axe.db.models.LinkInfo;
 import pm.axe.db.models.User;
+import pm.axe.events.linkinfo.LinkInfoUpdatedEvent;
 import pm.axe.services.user.UserService;
 
 import java.util.List;
@@ -106,6 +108,7 @@ public class LinkInfoService {
      */
     public void update(final LinkInfo updatedLinkInfo) {
         repo.update(updatedLinkInfo);
+        EventBus.getDefault().post(LinkInfoUpdatedEvent.createWith(updatedLinkInfo));
     }
 
     /**
@@ -127,9 +130,13 @@ public class LinkInfoService {
         return repo.findByOwner(user);
     }
 
-    private boolean linkInfoExistsForIdent(final String ident) {
+    /**
+     * Defines if {@link LinkInfo} with given {@link LinkInfo#ident} exists.
+     *
+     * @param ident string with {@link LinkInfo#ident}.
+     * @return true - if record with same {@link LinkInfo#ident} already exists, false if not.
+     */
+    public boolean linkInfoExistsForIdent(final String ident) {
         return repo.countByIdent(ident) > 0;
     }
-
-
 }

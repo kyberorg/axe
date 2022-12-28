@@ -25,3 +25,8 @@
 .tertiary {
     color: var(--axe-tertiary-color);
 }
+
+.grid-title {
+    font-size: 2vw;
+    align-self: center;
+}

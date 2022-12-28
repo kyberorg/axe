@@ -368,9 +368,14 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     }
 
     private void saveLink(final String link, final String linkDescription) {
+        boolean userLoggedIn = AxeSession.getCurrent().map(AxeSession::hasUser).orElse(false);
         String sessionId = AxeSession.getCurrent().map(AxeSession::getSessionId).orElse("");
         LinkServiceInput.LinkServiceInputBuilder linkServiceInputBuilder =
                 LinkServiceInput.builder(link).sessionID(sessionId);
+
+        if (userLoggedIn) {
+            linkServiceInputBuilder.linkOwner(AxeSession.getCurrent().get().getUser());
+        }
 
         if (StringUtils.isNotBlank(linkDescription)) {
             linkServiceInputBuilder.description(linkDescription);
