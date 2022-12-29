@@ -1,10 +1,7 @@
 window.copyToClipboard = (str) => {
     //using new Clipboard API
     if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(str).then(
-            () => alert("Copied text OK. Text=" + str),
-            (e) => alert("Failed to copy text. E=" + e)
-        );
+        requestPermissions().then(r => copyUsingClipboardAPI(str)); //TODO fallback
     } else {
         //fallback to deprecated stuff
         alert("Fallback activated");
@@ -32,4 +29,18 @@ window.copyToClipboard = (str) => {
 
 function isOS() {
     return navigator.userAgent.match(/ipad|iphone/i)
+}
+
+async function requestPermissions() {
+    const queryOpts = {name: 'clipboard-write', allowWithoutGesture: false};
+    const permissionStatus = await navigator.permissions.query(queryOpts);
+// Примет значение 'granted', 'denied' или 'prompt':
+    alert(permissionStatus.state);
+}
+
+function copyUsingClipboardAPI(str) {
+    navigator.clipboard.writeText(str).then(
+        () => alert("Copied text OK. Text=" + str),
+        (e) => alert("Failed to copy text. E=" + e)
+    );
 }
