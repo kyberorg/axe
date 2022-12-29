@@ -431,7 +431,7 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private void activateLinkEditor() {
         if (editorAlreadyActivated) return; //to avoid double activation
         if (userLoggedIn) {
-            editableLink = new EditableLink(appUtils.getShortDomain());
+            editableLink = new EditableLink(appUtils.getShortDomain(), DeviceUtils.isMobileDevice());
             // Close the editor in case of backward between components
             editableLink.getElement()
                     .addEventListener("keydown",
@@ -441,16 +441,6 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
             binder.forField(editableLink.getEditIdentField())
                     .withValidator(ident -> ident.length() >= 2, "Must contain at least 2 chars")
                     .withValidator(ident -> identValidator.validate(ident).ok(), "Back-part is not valid")
-                    /*.withValidator(ident -> {
-                        if (editableLink.isCurrentValueDiffersFrom(ident)) {
-                            //value changed - we need to validate new value
-                            return Objects.equals(linkService.isLinkWithIdentExist(ident).getResult(),
-                                    OperationResult.ELEMENT_NOT_FOUND);
-                        } else {
-                            //got same value
-                            return true;
-                        }
-                    }, "Already taken. Try another")*/
                     .withValidationStatusHandler(status -> {
                         editableLink.getEditIdentField().setInvalid(status.isError());
                         editableLink.getEditIdentField().setErrorMessage(status.getMessage().orElse(""));
@@ -599,14 +589,11 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
     private void onSaveButtonClick(final LinkInfo item) {
         if (item != null) {
             boolean identUpdated = isIdentUpdated(item);
-            if (identUpdated && linkInfoService.linkInfoExistsForIdent(item.getIdent())) {
+            boolean editorHasValue = editableLink != null && StringUtils.isNotBlank(editableLink.getValue());
+            if (identUpdated && editorHasValue && linkInfoService.linkInfoExistsForIdent(editableLink.getValue())) {
                 final String errorMessage = "Already exists";
-                if (editableLink == null) {
-                    ErrorUtils.getErrorNotification(errorMessage).open();
-                } else {
-                    editableLink.getEditIdentField().setInvalid(true);
-                    editableLink.getEditIdentField().setErrorMessage(errorMessage);
-                }
+                editableLink.getEditIdentField().setInvalid(true);
+                editableLink.getEditIdentField().setErrorMessage(errorMessage);
                 return;
             }
             grid.getEditor().save();

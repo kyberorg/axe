@@ -27,6 +27,6 @@
 }
 
 .grid-title {
-    font-size: 2vw;
+    font-size: var(--lumo-font-size-xxl);
     align-self: center;
 }
