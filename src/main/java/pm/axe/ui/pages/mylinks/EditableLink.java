@@ -36,12 +36,17 @@ public class EditableLink extends Composite<HorizontalLayout> implements
      * Creates object.
      *
      * @param shortDomain string with short domain (i.e. axe.pm)
+     * @param forMobile states if element should be initialized for small screen mobile devices.
      */
-    public EditableLink(final String shortDomain) {
+    public EditableLink(final String shortDomain, final boolean forMobile) {
         this.shortDomainPart = new Label(shortDomain + "/");
         this.editIdentField = new TextField();
+        boolean desktopMode = !forMobile;
 
-        getContent().add(shortDomainPart, editIdentField);
+        if (desktopMode) {
+            getContent().add(shortDomain);
+        }
+        getContent().add(editIdentField);
 
         editIdentField.addValueChangeListener(this::onValueChanged);
     }
