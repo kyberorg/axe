@@ -37,7 +37,7 @@ public class HelloHandler implements TelegramCommandHandler {
     private static final String TOKEN_EXPIRED_MESSAGE =
             Axe.Emoji.RUBBISH + " This token may have been used already or it may have expired.";
     private static final String ACC_ALREADY_LINKED = Axe.Emoji.WARNING + " Account already linked with another user."
-            + TelegramCommand.UNLINK.getCommandText() + " it first.";
+            + "Do " + TelegramCommand.UNLINK.getCommandText() + " it first.";
 
     @Override
     public String handle(final Update update) {
