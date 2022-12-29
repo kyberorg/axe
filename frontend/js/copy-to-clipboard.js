@@ -6,6 +6,7 @@ window.copyToClipboard = (str) => {
     document.body.appendChild(textarea);
 
     if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+        alert("iphone!")
         textarea.contentEditable = 'true';
         textarea.readOnly = false;
         let range = document.createRange();
@@ -14,6 +15,7 @@ window.copyToClipboard = (str) => {
         sel.removeAllRanges();
         sel.addRange(range);
         textarea.setSelectionRange(0, 999999);
+        alert("iphone done!")
     } else {
         textarea.select();
     }
