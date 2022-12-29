@@ -1,46 +1,49 @@
 window.copyToClipboard = (str) => {
-    //using new Clipboard API
-    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
-        requestPermissions().then(r => copyUsingClipboardAPI(str)); //TODO fallback
-    } else {
-        //fallback to deprecated stuff
-        alert("Fallback activated");
-        const textarea = document.createElement("textarea");
-        textarea.value = str;
-        textarea.style.position = "absolute";
-        textarea.style.opacity = "0";
-        document.body.appendChild(textarea);
+    Clipboard.copy(str);
+}
 
-        if(isOS()) {
-            let range = document.createRange()
-            range.selectNodeContents(textarea)
-            let selection = window.getSelection()
-            selection.removeAllRanges()
-            selection.addRange(range);
-            textarea.setSelectionRange(0, 999999);
-        } else {
-            input.select()
-        }
+window.Clipboard = (function(window, document, navigator) {
+    let textArea, copy;
 
-        document.execCommand("copy")
-        document.body.removeChild(textarea);
+    function isOS() {
+        return navigator.userAgent.match(/ipad|iphone/i);
     }
-};
 
-function isOS() {
-    return navigator.userAgent.match(/ipad|iphone/i)
-}
+    function createTextArea(text) {
+        textArea = document.createElement('textArea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+    }
 
-async function requestPermissions() {
-    const queryOpts = {name: 'clipboard-write', allowWithoutGesture: false};
-    const permissionStatus = await navigator.permissions.query(queryOpts);
-// Примет значение 'granted', 'denied' или 'prompt':
-    alert(permissionStatus.state);
-}
+    function selectText() {
+        var range,
+            selection;
 
-function copyUsingClipboardAPI(str) {
-    navigator.clipboard.writeText(str).then(
-        () => alert("Copied text OK. Text=" + str),
-        (e) => alert("Failed to copy text. E=" + e)
-    );
-}
+        if (isOS()) {
+            range = document.createRange();
+            range.selectNodeContents(textArea);
+            selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            textArea.setSelectionRange(0, 999999);
+        } else {
+            textArea.select();
+        }
+    }
+
+    function copyToClipboard() {
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+    }
+
+    copy = function(text) {
+        createTextArea(text);
+        selectText();
+        copyToClipboard();
+    };
+
+    return {
+        copy: copy
+    };
+})(window, document, navigator);
+
