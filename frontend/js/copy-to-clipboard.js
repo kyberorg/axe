@@ -2,11 +2,12 @@ window.copyToClipboard = (str) => {
     //using new Clipboard API
     if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(str).then(
-            () => console.log("Copied text OK"),
-            (e) => console.log("Failed to copy text",e)
+            () => alert("Copied text OK. Text=" + str),
+            (e) => alert("Failed to copy text. E=" + e)
         );
     } else {
         //fallback to deprecated stuff
+        alert("Fallback activated");
         const textarea = document.createElement("textarea");
         textarea.value = str;
         textarea.style.position = "absolute";
