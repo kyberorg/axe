@@ -5,21 +5,21 @@ window.copyToClipboard = (str) => {
     textarea.style.opacity = "0";
     document.body.appendChild(textarea);
 
-    if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
-        alert("iphone!")
-        textarea.contentEditable = 'true';
-        textarea.readOnly = false;
-        let range = document.createRange();
-        range.selectNodeContents(textarea);
-        let sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
+    if(isOS()) {
+        let range = document.createRange()
+        range.selectNodeContents(textarea)
+        let selection = window.getSelection()
+        selection.removeAllRanges()
+        selection.addRange(range);
         textarea.setSelectionRange(0, 999999);
-        alert("iphone done!")
     } else {
-        textarea.select();
+        input.select()
     }
 
-    document.execCommand("copy");
+    document.execCommand("copy")
     document.body.removeChild(textarea);
 };
+
+function isOS() {
+    return navigator.userAgent.match(/ipad|iphone/i)
+}
