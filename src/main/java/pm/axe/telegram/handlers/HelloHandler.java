@@ -37,7 +37,7 @@ public class HelloHandler implements TelegramCommandHandler {
     private static final String TOKEN_EXPIRED_MESSAGE =
             Axe.Emoji.RUBBISH + " This token may have been used already or it may have expired.";
     private static final String ACC_ALREADY_LINKED = Axe.Emoji.WARNING + " Account already linked with another user."
-            + TelegramCommand.UNLINK.getCommandText() + " it first.";
+            + "Do " + TelegramCommand.UNLINK.getCommandText() + " it first.";
 
     @Override
     public String handle(final Update update) {
@@ -59,7 +59,7 @@ public class HelloHandler implements TelegramCommandHandler {
             return EmojiParser.parseToUnicode(NO_SENSE_MESSAGE);
         }
         //searching for token aka Token found ? -> 404 (token is already used or never existed)
-        Optional<Token> token = tokenService.getAndDeleteToken(tokenString);
+        Optional<Token> token = tokenService.getToken(tokenString);
         if (token.isEmpty()) {
             return EmojiParser.parseToUnicode(TOKEN_EXPIRED_MESSAGE);
         }
@@ -90,6 +90,8 @@ public class HelloHandler implements TelegramCommandHandler {
         confirmAccount(createAccountResult);
         //create mapping
         createUserMapping(tgUser, axeUser);
+        //Delete token (async operation)
+        tokenService.deleteTokenRecord(token.get());
 
         //200 (Congrats, account linked)
         return EmojiParser.parseToUnicode(String.format("%s Great success! "
@@ -118,4 +120,6 @@ public class HelloHandler implements TelegramCommandHandler {
     public void createUserMapping(final String tgUser, final User axeUser) {
         userMapping.createMapping(tgUser, axeUser);
     }
+
+
 }
