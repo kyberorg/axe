@@ -22,7 +22,7 @@ services:
   pga:
     depends_on:
       - db
-    image: kio.ee/hub/dpage/pgadmin4:6.17
+    image: kio.ee/hub/dpage/pgadmin4:6.18
     restart: always
     ports:
       - '5050:80'
