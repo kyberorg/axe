@@ -2,6 +2,7 @@ package pm.axe.exception.error;
 
 import kong.unirest.HttpStatus;
 import lombok.Data;
+import pm.axe.internal.ExcludeFromJson;
 import pm.axe.ui.pages.err.err500.ServerErrorPage;
 
 import java.util.Date;
@@ -19,7 +20,7 @@ public class AxeError {
     private String messageToUser;
     private String techMessage;
     private int httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-    private Throwable rawException;
+    @ExcludeFromJson private Throwable rawException;
     private String path;
 
     @Override
