@@ -5,6 +5,7 @@ import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +81,15 @@ public class AxeErrorController implements ErrorController {
 
         AxeErrorJson errorJson = AxeErrorJson.createFromAxeError(axeError);
         String errorId = storeAxeError(axeError);
+
+        boolean isWebFirewallInAction = axeError.getRawException() != null
+                && axeError.getRawException() instanceof RequestRejectedException;
+
+        if (isWebFirewallInAction) {
+            axeError.setMessageToUser("Web Firewall rejected this request "
+                    + "because the URL contained a potentially malicious String");
+            axeError.setHttpStatus(HttpStatus.FORBIDDEN);
+        }
 
         errorUtils.reportToBugsnag(axeError);
 

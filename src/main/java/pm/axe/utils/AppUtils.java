@@ -25,6 +25,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import pm.axe.Axe;
+import pm.axe.internal.AxeGsonExclusionStrategy;
 import pm.axe.session.AxeSession;
 
 import javax.servlet.RequestDispatcher;
@@ -52,6 +53,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AppUtils implements Serializable {
     private static final String TAG = "[" + AppUtils.class.getSimpleName() + "]";
+
+    private static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ssZ";
     @Getter
     private final Environment env;
 
@@ -88,7 +91,12 @@ public class AppUtils implements Serializable {
     @Getter
     private static String telegramBotName;
 
-    public static final Gson GSON = new GsonBuilder().serializeNulls().create();
+    public static final Gson GSON = new GsonBuilder()
+            .serializeNulls()
+            .setDateFormat(DATE_FORMAT)
+            .addSerializationExclusionStrategy(AxeGsonExclusionStrategy.get())
+            .create();
+
     public static final String HTML_MODE = "innerHTML";
     private static final String DUMMY_HOST = "DummyHost";
     private static final String DUMMY_TOKEN = "dummyToken";

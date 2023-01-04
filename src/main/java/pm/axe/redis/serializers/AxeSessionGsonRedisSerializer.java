@@ -2,11 +2,10 @@ package pm.axe.redis.serializers;
 
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
-import pm.axe.internal.AxeGsonExclusionStrategy;
 import pm.axe.session.AxeSession;
+import pm.axe.utils.AppUtils;
 
 /**
  * {@link RedisSerializer} for {@link AxeSession} objects, that uses {@link Gson}.
@@ -14,17 +13,7 @@ import pm.axe.session.AxeSession;
  * @since 3.8
  */
 public class AxeSessionGsonRedisSerializer implements RedisSerializer<AxeSession> {
-    private final Gson gson;
-    private static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ssZ";
-
-    /**
-     * Created {@link AxeSessionGsonRedisSerializer} with customised {@link Gson} instance.
-     */
-    public AxeSessionGsonRedisSerializer() {
-        this.gson = new GsonBuilder()
-                .addSerializationExclusionStrategy(AxeGsonExclusionStrategy.get())
-                .setDateFormat(DATE_FORMAT).create();
-    }
+    private final Gson gson = AppUtils.GSON;
 
     @Override
     public byte[] serialize(final AxeSession o) throws SerializationException {
