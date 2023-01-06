@@ -1,4 +1,5 @@
 window.copyToClipboard = (str) => {
+    alert(str);
     const textarea = document.createElement('textarea');
     textarea.value = str
     textarea.setAttribute('readonly', '');
@@ -18,4 +19,5 @@ window.copyToClipboard = (str) => {
         document.getSelection().removeAllRanges();
         document.getSelection().addRange(selected);
     }
+    alert('Done');
 }
