@@ -289,7 +289,7 @@ public class HomePageActionTest extends SelenideTest {
      */
     @Test
     public void whenHttpProtocolSelected_linkWithHttpSaved() {
-        HomePageObject.pasteValueInForm("http.byk.ee");
+        HomePageObject.pasteValueInForm("http.ksys.ee");
         HomePageObject.MainArea.DESCRIPTION_ACCORDION.click();
         HomePageObject.MainArea.ProtocolSelector.HTTP_OPTION.click();
         HomePageObject.MainArea.SUBMIT_BUTTON.click();
