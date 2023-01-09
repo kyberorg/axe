@@ -20,7 +20,7 @@ import pm.axe.Endpoint;
 import pm.axe.services.AxeSessionService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
-import pm.axe.ui.elements.TheButton;
+import pm.axe.ui.elements.CopyToClipboardIcon;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
 
@@ -42,7 +42,7 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final Button endSessionAndCleanCookies = new Button();
 
     private final Span textSpan = new Span("https://axe.pm");
-    private final TheButton theButton = new TheButton();
+    private final CopyToClipboardIcon copyToClipboardIcon = new CopyToClipboardIcon();
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
@@ -77,8 +77,8 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
         endSessionAndCleanCookies.addThemeVariants(ButtonVariant.LUMO_ERROR);
         endSessionAndCleanCookies.addClickListener(this::onCleanCookieEndSessionButtonClick);
 
-        theButton.getContent().addClickListener(e -> theButton.setContent(textSpan.getText()));
-        add(textSpan, theButton);
+        copyToClipboardIcon.getContent().addClickListener(e -> copyToClipboardIcon.setTextToCopy(textSpan.getText()));
+        add(textSpan, copyToClipboardIcon);
     }
 
     private void onEndSessionButtonClick(final ClickEvent<Button> event) {
