@@ -9,8 +9,6 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -29,6 +27,7 @@ import pm.axe.session.AxeSession;
 import pm.axe.telegram.TelegramCommand;
 import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Code;
+import pm.axe.ui.elements.CopyToClipboardIcon;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.layouts.AxeCompactLayout;
 import pm.axe.ui.pages.home.HomePage;
@@ -125,7 +124,7 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
 
         Span startSpan = new Span("Send ");
         Code tgString = new Code(String.format("%s %s", tgCommand, tgToken));
-        Icon copyCommandIcon = VaadinIcon.COPY.create();
+        CopyToClipboardIcon copyCommandIcon = new CopyToClipboardIcon();
         Span toSpan = new Span(" to ");
 
         String botName = AppUtils.getTelegramBotName();
@@ -138,10 +137,11 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
         telegramSection.add(telegramSpan);
 
         copyCommandIcon.setClassName("copy-command-icon");
-        copyCommandIcon.addClickListener(e ->  {
+        copyCommandIcon.getContent().addClickListener(e ->  {
+            copyCommandIcon.setTextToCopy(tgString.getText());
             Notification.Position position = DeviceUtils.isMobileDevice()
                     ? Notification.Position.BOTTOM_CENTER : Notification.Position.MIDDLE;
-            ClipboardUtils.copyToClipboardAndNotify(tgString.getText(), "Copied!", position);
+            ClipboardUtils.getLinkCopiedNotification("Copied!", position).open();
         });
 
         return telegramSection;

@@ -40,6 +40,7 @@ import pm.axe.services.QRCodeService;
 import pm.axe.services.overall.OverallService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
+import pm.axe.ui.elements.CopyToClipboardIcon;
 import pm.axe.ui.elements.MobileShareMenu;
 import pm.axe.ui.elements.ShareMenu;
 import pm.axe.utils.*;
@@ -89,6 +90,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     private ShareMenu shareMenu;
 
     private String descriptionInputHolder;
+
+    private CopyToClipboardIcon copyLinkIcon;
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
@@ -215,15 +218,14 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         shareIcon.setId(IDs.SHARE_ICON);
         shareIcon.addClickListener(this::openShareMenu);
 
-        Icon copyLinkImage;
-        copyLinkImage = new Icon(VaadinIcon.COPY);
-        copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
-        copyLinkImage.addClickListener(this::copyLinkToClipboard);
+        copyLinkIcon = new CopyToClipboardIcon();
+        copyLinkIcon.setId(IDs.COPY_LINK_BUTTON);
+        copyLinkIcon.getContent().addClickListener(this::copyLinkToClipboard);
 
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-        resultArea.add(emptySpan, shortLink, shareIcon, copyLinkImage);
+        resultArea.add(emptySpan, shortLink, shareIcon, copyLinkIcon);
         resultArea.addClassNames("result-area", "border");
         resultArea.setWidthFull();
         return resultArea;
@@ -363,8 +365,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     private void copyLinkToClipboard(
             final ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
         log.trace("{} Copy link button clicked. From client? {}", TAG, buttonClickEvent.isFromClient());
-        ClipboardUtils.copyToClipboardAndNotify(shortLink.getText(),
-                "Short link copied", Notification.Position.MIDDLE);
+        copyLinkIcon.setTextToCopy(shortLink.getText());
+        ClipboardUtils.getLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE).open();
     }
 
     private void saveLink(final String link, final String linkDescription) {
