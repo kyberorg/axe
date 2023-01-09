@@ -32,11 +32,4 @@ public class CopyToClipboardIcon extends Composite<Icon> implements HasStyle {
         getContent().getElement().removeAttribute("text");
         getContent().getElement().setAttribute("text", textToCopy);
     }
-
-    /**
-     * Performs programmatic click.
-     */
-    public void click() {
-        getContent().getElement().callJsFunction("click");
-    }
 }

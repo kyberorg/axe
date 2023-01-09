@@ -53,7 +53,6 @@ import pm.axe.services.LinkService;
 import pm.axe.services.QRCodeService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
-import pm.axe.ui.elements.CopyToClipboardIcon;
 import pm.axe.ui.elements.DeleteConfirmationDialog;
 import pm.axe.ui.elements.MobileShareMenu;
 import pm.axe.ui.elements.ShareMenu;
@@ -251,7 +250,12 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         String shortDomain = appUtils.getShortDomain();
         String ident = linkInfo.getIdent();
         String shortLink = appUtils.getShortUrl() + "/" + ident;
-        CopyToClipboardIcon copyToClipboardIcon = new CopyToClipboardIcon();
+
+        //adding copy to clipboard stuff
+        link.getElement().removeAttribute("onclick");
+        link.getElement().setAttribute("onclick", "copyTextToClipboard(this)");
+        link.getElement().removeAttribute("text");
+        link.getElement().setAttribute("text", shortLink);
 
         if (clientHasSmallScreen) {
             link.setText(ident);
@@ -259,12 +263,8 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
             link.setText(shortDomain + "/" + ident);
         }
 
-        link.addClickListener(event -> {
-            copyToClipboardIcon.setTextToCopy(shortLink);
-            copyToClipboardIcon.click();
-            ClipboardUtils.getLinkCopiedNotification("Short link copied",
-                    Notification.Position.BOTTOM_CENTER).open();
-        });
+        link.addClickListener(event -> ClipboardUtils.getLinkCopiedNotification("Short link copied",
+                Notification.Position.BOTTOM_CENTER).open());
         return link;
     }
 
