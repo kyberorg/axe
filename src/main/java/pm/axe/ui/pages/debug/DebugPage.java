@@ -41,6 +41,7 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final Button endSessionButton = new Button();
     private final Button endSessionAndCleanCookies = new Button();
 
+    private final Span textSpan = new Span("https://axe.pm");
     private final TheButton theButton = new TheButton();
 
     @Override
@@ -76,7 +77,8 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
         endSessionAndCleanCookies.addThemeVariants(ButtonVariant.LUMO_ERROR);
         endSessionAndCleanCookies.addClickListener(this::onCleanCookieEndSessionButtonClick);
 
-        add(theButton);
+        theButton.getContent().addClickListener(e -> theButton.setContent(textSpan.getText()));
+        add(textSpan, theButton);
     }
 
     private void onEndSessionButtonClick(final ClickEvent<Button> event) {
