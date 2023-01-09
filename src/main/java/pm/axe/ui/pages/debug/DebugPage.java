@@ -20,6 +20,7 @@ import pm.axe.Endpoint;
 import pm.axe.services.AxeSessionService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
+import pm.axe.ui.elements.TheButton;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
 
@@ -39,6 +40,8 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final HorizontalLayout endSessionButtons = new HorizontalLayout();
     private final Button endSessionButton = new Button();
     private final Button endSessionAndCleanCookies = new Button();
+
+    private final TheButton theButton = new TheButton();
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
@@ -72,6 +75,8 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
         endSessionAndCleanCookies.setText("Clean Cookie and End Session");
         endSessionAndCleanCookies.addThemeVariants(ButtonVariant.LUMO_ERROR);
         endSessionAndCleanCookies.addClickListener(this::onCleanCookieEndSessionButtonClick);
+
+        add(theButton);
     }
 
     private void onEndSessionButtonClick(final ClickEvent<Button> event) {

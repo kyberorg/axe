@@ -18,13 +18,4 @@ window.copyToClipboard = (str) => {
         document.getSelection().removeAllRanges();
         document.getSelection().addRange(selected);
     }
-    //this is demo
-    navigator.clipboard.readText()
-  .then(text => {
-    alert('Pasted content: ', text);
-  })
-  .catch(err => {
-    alert('Failed to read clipboard contents: ', err);
-  });
-
 }
