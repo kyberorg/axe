@@ -37,11 +37,14 @@ public final class ClipboardUtils {
         getLinkCopiedNotification(notificationText, notificationPosition).open();
     }
 
-    private static void copyToClipboard(final String textToCopy) {
-        UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", textToCopy);
-    }
-
-    private static Notification getLinkCopiedNotification(final String notificationText,
+    /**
+     * Creates {@link Notification} that reports, that link is copied.
+     *
+     * @param notificationText text of {@link Notification}
+     * @param notificationPosition {@link Notification.Position} at screen.
+     * @return ready to use {@link Notification}, which should be {@link Notification#open()}ed.
+     */
+    public static Notification getLinkCopiedNotification(final String notificationText,
                                                           final Notification.Position notificationPosition) {
         final int notificationDuration = 3000;
         Notification notification =
@@ -50,4 +53,7 @@ public final class ClipboardUtils {
         return notification;
     }
 
+    private static void copyToClipboard(final String textToCopy) {
+        UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", textToCopy);
+    }
 }

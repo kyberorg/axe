@@ -2,7 +2,6 @@ package pm.axe.ui.elements;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -29,6 +28,7 @@ public final class ShareMenu extends Composite<Dialog> {
     private final Dialog dialog = getContent();
     private final List<ShareItem> shareItems = new ArrayList<>();
     private TextField shortLinkText;
+    private final CopyToClipboardIcon copyIcon =  new CopyToClipboardIcon();
 
     /**
      * Creates dialog. Created dialog ain't open automatically.
@@ -102,19 +102,17 @@ public final class ShareMenu extends Composite<Dialog> {
         shortLinkText.setReadOnly(true);
         shortLinkText.setWidthFull();
 
-        Button copyButton = new Button();
-        copyButton.setText("Copy");
-        copyButton.addClickListener(this::onCopyButtonClicked);
+        copyIcon.getContent().addClickListener(this::onCopyIconClicked);
 
         scroller.setContent(locationsLayout);
-        textAndCopyLayout.add(shortLinkText, copyButton);
+        textAndCopyLayout.add(shortLinkText, copyIcon);
         dialogLayout.add(scroller, textAndCopyLayout);
         return dialogLayout;
     }
 
-    private void onCopyButtonClicked(final ClickEvent<Button> event) {
-        ClipboardUtils.copyToClipboardAndNotify(shortLinkText.getValue(),
-                "Short link copied", Notification.Position.MIDDLE);
+    private void onCopyIconClicked(final ClickEvent<Icon> event) {
+        copyIcon.setTextToCopy(shortLinkText.getValue());
+        ClipboardUtils.getLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE).open();
     }
 
     public enum Icons {
