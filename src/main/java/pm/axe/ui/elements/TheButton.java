@@ -11,6 +11,6 @@ public class TheButton extends Composite<Button> implements HasStyle {
 
     public void setContent(final String textToCopy) {
         getContent().getElement().removeAttribute("onclick");
-        getContent().getElement().setAttribute("onclick", "copyToClipboard(" + textToCopy +")");
+        getContent().getElement().setAttribute("onclick", "copyToClipboard('" + textToCopy +"')");
     }
 }
