@@ -18,6 +18,9 @@ public class CopyToClipboardIcon extends Composite<Icon> implements HasStyle {
 
     public CopyToClipboardIcon() {
         getContent().getElement().setAttribute("icon", "vaadin" + ":" + copyIcon);
+
+        getContent().getElement().removeAttribute("onclick");
+        getContent().getElement().setAttribute("onclick", "copyToClipboard(this)");
     }
 
     /**
@@ -26,7 +29,7 @@ public class CopyToClipboardIcon extends Composite<Icon> implements HasStyle {
      * @param textToCopy string with text to copy.
      */
     public void setTextToCopy(final String textToCopy) {
-        getContent().getElement().removeAttribute("onclick");
-        getContent().getElement().setAttribute("onclick", "copyToClipboard('" + textToCopy +"')");
+        getContent().getElement().removeAttribute("text");
+        getContent().getElement().setAttribute("text", textToCopy);
     }
 }

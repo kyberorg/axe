@@ -102,6 +102,7 @@ public final class ShareMenu extends Composite<Dialog> {
         shortLinkText.setReadOnly(true);
         shortLinkText.setWidthFull();
 
+        copyIcon.setTextToCopy(shortLinkText.getValue());
         copyIcon.getContent().addClickListener(this::onCopyIconClicked);
 
         scroller.setContent(locationsLayout);
@@ -111,7 +112,7 @@ public final class ShareMenu extends Composite<Dialog> {
     }
 
     private void onCopyIconClicked(final ClickEvent<Icon> event) {
-        copyIcon.setTextToCopy(shortLinkText.getValue());
+
         ClipboardUtils.getLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE).open();
     }
 

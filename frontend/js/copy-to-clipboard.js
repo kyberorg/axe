@@ -1,3 +1,7 @@
+window.copyToClipboard = (element) => {
+    alert(element.getAttribute("text"));
+}
+
 window.copyToClipboard = (str) => {
     const textarea = document.createElement('textarea');
     textarea.value = str

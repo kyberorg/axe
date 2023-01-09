@@ -91,8 +91,6 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private String descriptionInputHolder;
 
-    private CopyToClipboardIcon copyLinkIcon;
-
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
@@ -218,8 +216,9 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         shareIcon.setId(IDs.SHARE_ICON);
         shareIcon.addClickListener(this::openShareMenu);
 
-        copyLinkIcon = new CopyToClipboardIcon();
+        CopyToClipboardIcon copyLinkIcon = new CopyToClipboardIcon();
         copyLinkIcon.setId(IDs.COPY_LINK_BUTTON);
+        copyLinkIcon.setTextToCopy(shortLink.getText());
         copyLinkIcon.getContent().addClickListener(this::copyLinkToClipboard);
 
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -365,7 +364,6 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
     private void copyLinkToClipboard(
             final ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
         log.trace("{} Copy link button clicked. From client? {}", TAG, buttonClickEvent.isFromClient());
-        copyLinkIcon.setTextToCopy(shortLink.getText());
         ClipboardUtils.getLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE).open();
     }
 
