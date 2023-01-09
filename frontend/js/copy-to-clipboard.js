@@ -1,5 +1,6 @@
-window.copyToClipboard = (element) => {
-    alert(element.getAttribute("text"));
+window.copyTextToClipboard = (element) => {
+    console.log(element.getAttribute("text"));
+    copyToClipboard(element.getAttribute("text"));
 }
 
 window.copyToClipboard = (str) => {

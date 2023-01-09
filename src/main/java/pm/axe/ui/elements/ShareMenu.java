@@ -46,6 +46,7 @@ public final class ShareMenu extends Composite<Dialog> {
      */
     public void setShortLink(final String shortLink) {
         shortLinkText.setValue(shortLink);
+        copyIcon.setTextToCopy(shortLink);
         shareItems.forEach(item -> item.updateShortLink(shortLink));
     }
 

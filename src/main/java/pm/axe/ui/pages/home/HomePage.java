@@ -91,6 +91,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private String descriptionInputHolder;
 
+    private CopyToClipboardIcon copyLinkIcon;
+
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
@@ -216,9 +218,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         shareIcon.setId(IDs.SHARE_ICON);
         shareIcon.addClickListener(this::openShareMenu);
 
-        CopyToClipboardIcon copyLinkIcon = new CopyToClipboardIcon();
+        copyLinkIcon = new CopyToClipboardIcon();
         copyLinkIcon.setId(IDs.COPY_LINK_BUTTON);
-        copyLinkIcon.setTextToCopy(shortLink.getText());
         copyLinkIcon.getContent().addClickListener(this::copyLinkToClipboard);
 
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -398,6 +399,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         log.debug("{} New link successfully saved: {}", TAG, savedLink);
         shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
+        copyLinkIcon.setTextToCopy(shortLink.getText());
         resultArea.setVisible(true);
         myLinksNoteArea.setVisible(true);
         generateQRCode(savedLink.getIdent());
