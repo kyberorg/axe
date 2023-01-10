@@ -343,7 +343,7 @@
 
         <!-- Snyk deps -->
         <!-- We don't use those deps but other deps are using old version. So those are here to improve security -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <version>5.7.5</version>
@@ -368,7 +368,7 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
             <version>4.1.86.Final</version>
-        </dependency>
+        </dependency>-->
 
         <!-- End Snyk deps -->
     </dependencies>
