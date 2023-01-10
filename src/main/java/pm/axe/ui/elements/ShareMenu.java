@@ -2,6 +2,7 @@ package pm.axe.ui.elements;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -27,8 +28,9 @@ public final class ShareMenu extends Composite<Dialog> {
     private final Icon closeIcon = VaadinIcon.CLOSE.create();
     private final Dialog dialog = getContent();
     private final List<ShareItem> shareItems = new ArrayList<>();
+
+    private final Button copyButton = new Button();
     private TextField shortLinkText;
-    private final CopyToClipboardIcon copyIcon =  new CopyToClipboardIcon();
 
     /**
      * Creates dialog. Created dialog ain't open automatically.
@@ -46,7 +48,7 @@ public final class ShareMenu extends Composite<Dialog> {
      */
     public void setShortLink(final String shortLink) {
         shortLinkText.setValue(shortLink);
-        copyIcon.setTextToCopy(shortLink);
+        ClipboardUtils.setTextToCopy(shortLink).forComponent(copyButton);
         shareItems.forEach(item -> item.updateShortLink(shortLink));
     }
 
@@ -103,18 +105,19 @@ public final class ShareMenu extends Composite<Dialog> {
         shortLinkText.setReadOnly(true);
         shortLinkText.setWidthFull();
 
-        copyIcon.setTextToCopy(shortLinkText.getValue());
-        copyIcon.getContent().addClickListener(this::onCopyIconClicked);
+        copyButton.setText("Copy");
+        copyButton.addClickListener(this::onCopyButtonClicked);
+        ClipboardUtils.setCopyToClipboardFunctionFor(copyButton);
 
         scroller.setContent(locationsLayout);
-        textAndCopyLayout.add(shortLinkText, copyIcon);
+        textAndCopyLayout.add(shortLinkText, copyButton);
         dialogLayout.add(scroller, textAndCopyLayout);
         return dialogLayout;
     }
 
-    private void onCopyIconClicked(final ClickEvent<Icon> event) {
-
-        ClipboardUtils.getLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE).open();
+    private void onCopyButtonClicked(final ClickEvent<Button> event) {
+        //Copying is done by JSModule
+        ClipboardUtils.showLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE);
     }
 
     public enum Icons {

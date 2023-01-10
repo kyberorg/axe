@@ -1,9 +1,5 @@
 window.copyTextToClipboard = (element) => {
-    console.log(element.getAttribute("text"));
-    copyToClipboard(element.getAttribute("text"));
-}
-
-window.copyToClipboard = (str) => {
+    let str = element.getAttribute("text");
     const textarea = document.createElement('textarea');
     textarea.value = str
     textarea.setAttribute('readonly', '');

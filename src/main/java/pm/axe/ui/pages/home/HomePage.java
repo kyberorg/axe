@@ -40,7 +40,6 @@ import pm.axe.services.QRCodeService;
 import pm.axe.services.overall.OverallService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
-import pm.axe.ui.elements.CopyToClipboardIcon;
 import pm.axe.ui.elements.MobileShareMenu;
 import pm.axe.ui.elements.ShareMenu;
 import pm.axe.utils.*;
@@ -91,7 +90,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private String descriptionInputHolder;
 
-    private CopyToClipboardIcon copyLinkIcon;
+    private Icon copyLinkImage;
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
@@ -218,14 +217,16 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         shareIcon.setId(IDs.SHARE_ICON);
         shareIcon.addClickListener(this::openShareMenu);
 
-        copyLinkIcon = new CopyToClipboardIcon();
-        copyLinkIcon.setId(IDs.COPY_LINK_BUTTON);
-        copyLinkIcon.getContent().addClickListener(this::copyLinkToClipboard);
+
+        copyLinkImage = VaadinIcon.COPY.create();
+        copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
+        copyLinkImage.addClickListener(this::copyLinkToClipboard);
+        ClipboardUtils.setCopyToClipboardFunctionFor(copyLinkImage);
 
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 
-        resultArea.add(emptySpan, shortLink, shareIcon, copyLinkIcon);
+        resultArea.add(emptySpan, shortLink, shareIcon, copyLinkImage);
         resultArea.addClassNames("result-area", "border");
         resultArea.setWidthFull();
         return resultArea;
@@ -362,10 +363,10 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
     }
 
-    private void copyLinkToClipboard(
-            final ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
+    private void copyLinkToClipboard(final ClickEvent<Icon> buttonClickEvent) {
         log.trace("{} Copy link button clicked. From client? {}", TAG, buttonClickEvent.isFromClient());
-        ClipboardUtils.getLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE).open();
+        //Copying is done by JSModule
+        ClipboardUtils.showLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE);
     }
 
     private void saveLink(final String link, final String linkDescription) {
@@ -399,7 +400,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         log.debug("{} New link successfully saved: {}", TAG, savedLink);
         shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
-        copyLinkIcon.setTextToCopy(shortLink.getText());
+        ClipboardUtils.setTextToCopy(shortLink.getText()).forComponent(copyLinkImage);
         resultArea.setVisible(true);
         myLinksNoteArea.setVisible(true);
         generateQRCode(savedLink.getIdent());

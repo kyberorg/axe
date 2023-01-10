@@ -20,6 +20,7 @@ public class CopyToClipboardIcon extends Composite<Icon> implements HasStyle {
         getContent().getElement().setAttribute("icon", "vaadin" + ":" + copyIcon);
 
         getContent().getElement().removeAttribute("onclick");
+        //this should match function in JsModule
         getContent().getElement().setAttribute("onclick", "copyTextToClipboard(this)");
     }
 
