@@ -1,5 +1,7 @@
 package pm.axe.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kong.unirest.HttpMethod;
 import kong.unirest.HttpStatus;
 import kong.unirest.MimeTypes;
@@ -11,8 +13,6 @@ import pm.axe.Endpoint;
 import pm.axe.json.EndpointNotFoundResponse;
 import pm.axe.utils.AppUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

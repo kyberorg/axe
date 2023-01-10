@@ -1,5 +1,9 @@
 package pm.axe.session;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenrobot.eventbus.EventBus;
@@ -12,10 +16,6 @@ import pm.axe.events.session.AxeSessionCreatedEvent;
 import pm.axe.events.session.AxeSessionDestroyedEvent;
 import pm.axe.services.AxeSessionService;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

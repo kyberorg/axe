@@ -1,13 +1,12 @@
 package pm.axe.api.middleware;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import pm.axe.Axe;
 import pm.axe.result.OperationResult;
 import pm.axe.utils.AppUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Validates Provided Token.

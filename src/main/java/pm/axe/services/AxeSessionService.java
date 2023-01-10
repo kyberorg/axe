@@ -1,5 +1,6 @@
 package pm.axe.services;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import pm.axe.session.Device;
 import pm.axe.session.SessionBox;
 import pm.axe.utils.AppUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Optional;
 

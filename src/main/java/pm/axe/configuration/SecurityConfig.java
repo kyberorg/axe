@@ -24,9 +24,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable() //vaadin has its own
-                .authorizeRequests()
-                .antMatchers("/protected/path").authenticated() //protect some page
-                .antMatchers("/**").permitAll();
+                .authorizeHttpRequests()
+                .anyRequest().permitAll(); //we don't use it
         return httpSecurity.build();
     }
 

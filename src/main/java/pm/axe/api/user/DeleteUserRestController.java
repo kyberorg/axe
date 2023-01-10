@@ -1,5 +1,6 @@
 package pm.axe.api.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kong.unirest.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ import pm.axe.services.user.UserService;
 import pm.axe.utils.ApiUtils;
 import pm.axe.utils.ErrorUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 

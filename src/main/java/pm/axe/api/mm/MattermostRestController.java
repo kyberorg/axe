@@ -1,5 +1,6 @@
 package pm.axe.api.mm;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,6 @@ import pm.axe.mm.Mattermost;
 import pm.axe.result.OperationResult;
 import pm.axe.services.LinkService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 

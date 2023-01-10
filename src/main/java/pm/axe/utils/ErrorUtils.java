@@ -6,6 +6,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.QueryParameters;
+import jakarta.mail.internet.MimeMessage;
 import kong.unirest.HttpStatus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import pm.axe.exception.error.UserMessageGenerator;
 import pm.axe.mail.LetterType;
 import pm.axe.services.mail.MailSenderService;
 
-import javax.mail.internet.MimeMessage;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;

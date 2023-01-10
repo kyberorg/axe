@@ -1,8 +1,9 @@
 package pm.axe.configuration;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -13,8 +14,6 @@ import pm.axe.telegram.TelegramBot;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.UrlExtraValidator;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +27,7 @@ import static pm.axe.utils.UrlExtraValidator.VALID;
  */
 @Slf4j
 @RequiredArgsConstructor
-@ConditionalOnBean(TelegramBot.class)
+//@ConditionalOnBean(TelegramBot.class)
 @Configuration
 public class TelegramBotAutoConfig {
     private static final String TAG = "[" + TelegramBotAutoConfig.class.getSimpleName() + "]";

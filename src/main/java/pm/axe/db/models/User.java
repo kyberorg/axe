@@ -1,5 +1,6 @@
 package pm.axe.db.models;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,6 @@ import pm.axe.internal.ExcludeFromJson;
 import pm.axe.users.UserRole;
 import pm.axe.utils.crypto.PasswordUtils;
 
-import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;

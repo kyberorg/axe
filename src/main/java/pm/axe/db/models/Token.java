@@ -1,12 +1,12 @@
 package pm.axe.db.models;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import pm.axe.users.TokenType;
 import pm.axe.users.TokenValueType;
 import pm.axe.utils.AppUtils;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Locale;

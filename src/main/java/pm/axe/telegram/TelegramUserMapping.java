@@ -1,5 +1,7 @@
 package pm.axe.telegram;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,8 +18,6 @@ import pm.axe.events.user.UserDeletedEvent;
 import pm.axe.services.user.AccountService;
 import pm.axe.users.AccountType;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

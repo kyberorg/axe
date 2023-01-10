@@ -14,6 +14,7 @@ import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import pm.axe.Axe;
 import pm.axe.Endpoint;
@@ -22,8 +23,6 @@ import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
-
-import javax.servlet.http.Cookie;
 
 @RequiredArgsConstructor
 @SpringComponent

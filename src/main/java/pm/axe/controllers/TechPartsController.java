@@ -4,6 +4,7 @@ import com.beust.jcommander.Strings;
 import com.redfin.sitemapgenerator.ChangeFreq;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
+import jakarta.servlet.http.HttpServletResponse;
 import kong.unirest.HttpStatus;
 import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import pm.axe.Axe;
 import pm.axe.Endpoint;
 import pm.axe.utils.AppUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.util.Date;
 

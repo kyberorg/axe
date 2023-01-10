@@ -1,5 +1,6 @@
 package pm.axe.services;
 
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +11,6 @@ import pm.axe.session.AxeSession;
 import pm.axe.session.Device;
 import pm.axe.utils.AppUtils;
 
-import javax.servlet.http.Cookie;
 import java.util.Objects;
 import java.util.Optional;
 

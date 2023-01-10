@@ -4,6 +4,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import pm.axe.Axe;
@@ -19,7 +20,6 @@ import pm.axe.users.TokenType;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.VaadinUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 /**

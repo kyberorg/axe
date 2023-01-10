@@ -1,5 +1,6 @@
 package pm.axe.senders;
 
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,6 @@ import pm.axe.result.OperationResult;
 import pm.axe.services.LinkService;
 import pm.axe.services.mail.MailSenderService;
 
-import javax.mail.internet.MimeMessage;
 import java.util.Map;
 import java.util.Objects;
 

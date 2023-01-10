@@ -1,5 +1,6 @@
 package pm.axe.api.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kong.unirest.HttpStatus;
 import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,6 @@ import pm.axe.users.UsernameGenerator;
 import pm.axe.users.UsernameValidator;
 import pm.axe.utils.ApiUtils;
 import pm.axe.utils.ErrorUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * User Registration Endpoint.

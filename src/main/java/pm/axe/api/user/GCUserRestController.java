@@ -1,5 +1,6 @@
 package pm.axe.api.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kong.unirest.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,6 @@ import pm.axe.json.AxeErrorJson;
 import pm.axe.result.OperationResult;
 import pm.axe.users.GarbageUserCollector;
 import pm.axe.utils.ApiUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RequiredArgsConstructor

@@ -3,12 +3,11 @@ package pm.axe.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
+import jakarta.validation.constraints.NotNull;
 import kong.unirest.HttpMethod;
 import lombok.Data;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * This struct of JSON send when API endpoint is not found.

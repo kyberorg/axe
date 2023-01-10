@@ -1,5 +1,6 @@
 package pm.axe.redis.dao;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,7 +10,6 @@ import pm.axe.redis.dao.base.RedisDao;
 import pm.axe.session.AxeSession;
 import pm.axe.utils.AppUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 

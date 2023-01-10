@@ -1,5 +1,6 @@
 package pm.axe.api.links;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kong.unirest.HttpStatus;
 import kong.unirest.MimeTypes;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,6 @@ import pm.axe.result.OperationResult;
 import pm.axe.services.LinkService;
 import pm.axe.utils.ApiUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
 /**
