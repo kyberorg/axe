@@ -90,6 +90,8 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
 
     private String descriptionInputHolder;
 
+    private Icon copyLinkImage;
+
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         init();
@@ -215,10 +217,11 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         shareIcon.setId(IDs.SHARE_ICON);
         shareIcon.addClickListener(this::openShareMenu);
 
-        Icon copyLinkImage;
-        copyLinkImage = new Icon(VaadinIcon.COPY);
+
+        copyLinkImage = VaadinIcon.COPY.create();
         copyLinkImage.setId(IDs.COPY_LINK_BUTTON);
         copyLinkImage.addClickListener(this::copyLinkToClipboard);
+        ClipboardUtils.setCopyToClipboardFunctionFor(copyLinkImage);
 
         resultArea.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         resultArea.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -360,11 +363,10 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         }
     }
 
-    private void copyLinkToClipboard(
-            final ClickEvent<com.vaadin.flow.component.icon.Icon> buttonClickEvent) {
+    private void copyLinkToClipboard(final ClickEvent<Icon> buttonClickEvent) {
         log.trace("{} Copy link button clicked. From client? {}", TAG, buttonClickEvent.isFromClient());
-        ClipboardUtils.copyToClipboardAndNotify(shortLink.getText(),
-                "Short link copied", Notification.Position.MIDDLE);
+        //Copying is done by JSModule
+        ClipboardUtils.showLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE);
     }
 
     private void saveLink(final String link, final String linkDescription) {
@@ -398,6 +400,7 @@ public class HomePage extends HorizontalLayout implements BeforeEnterObserver {
         log.debug("{} New link successfully saved: {}", TAG, savedLink);
         shortLink.setText(appUtils.getShortUrl() + "/" + savedLink.getIdent());
         shortLink.setHref(appUtils.getShortUrl() + "/" + savedLink.getIdent());
+        ClipboardUtils.setTextToCopy(shortLink.getText()).forComponent(copyLinkImage);
         resultArea.setVisible(true);
         myLinksNoteArea.setVisible(true);
         generateQRCode(savedLink.getIdent());

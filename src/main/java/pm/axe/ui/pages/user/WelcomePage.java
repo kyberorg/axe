@@ -137,11 +137,13 @@ public class WelcomePage extends AxeCompactLayout implements BeforeEnterObserver
         telegramSpan.add(startSpan, tgString, copyCommandIcon, toSpan, botLink, endSpan);
         telegramSection.add(telegramSpan);
 
+        ClipboardUtils.setCopyToClipboardFunctionFor(copyCommandIcon);
+        ClipboardUtils.setTextToCopy(tgString.getText()).forComponent(copyCommandIcon);
         copyCommandIcon.setClassName("copy-command-icon");
         copyCommandIcon.addClickListener(e ->  {
             Notification.Position position = DeviceUtils.isMobileDevice()
                     ? Notification.Position.BOTTOM_CENTER : Notification.Position.MIDDLE;
-            ClipboardUtils.copyToClipboardAndNotify(tgString.getText(), "Copied!", position);
+            ClipboardUtils.showLinkCopiedNotification("Copied!", position);
         });
 
         return telegramSection;

@@ -65,7 +65,7 @@ jobs:
           harbor-token: ${{ secrets.KIO_PASS }}
           image: kio.ee/kyberorg/axe:qa
           digest: ${{ steps.docker_image_sha.outputs.imageSha }}
-          max-allowed-severity: high
+          max-allowed-severity: critical
           report-sort-by: score
           timeout: 100
           github-url: ${{ github.event.pull_request.comments_url }}

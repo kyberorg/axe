@@ -33,7 +33,7 @@
         <!-- Java version -->
         <java.version>17</java.version>
         <!-- Vaadin version -->
-        <vaadin.version>23.3.1</vaadin.version>
+        <vaadin.version>23.3.2</vaadin.version>
         <!-- QR Code Software version-->
         <qr.zxing.version>3.5.1</qr.zxing.version>
         <!-- Selenium Version -->
@@ -54,7 +54,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>2.7.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     

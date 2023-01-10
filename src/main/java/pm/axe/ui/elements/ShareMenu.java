@@ -28,6 +28,8 @@ public final class ShareMenu extends Composite<Dialog> {
     private final Icon closeIcon = VaadinIcon.CLOSE.create();
     private final Dialog dialog = getContent();
     private final List<ShareItem> shareItems = new ArrayList<>();
+
+    private final Button copyButton = new Button();
     private TextField shortLinkText;
 
     /**
@@ -46,6 +48,7 @@ public final class ShareMenu extends Composite<Dialog> {
      */
     public void setShortLink(final String shortLink) {
         shortLinkText.setValue(shortLink);
+        ClipboardUtils.setTextToCopy(shortLink).forComponent(copyButton);
         shareItems.forEach(item -> item.updateShortLink(shortLink));
     }
 
@@ -102,9 +105,9 @@ public final class ShareMenu extends Composite<Dialog> {
         shortLinkText.setReadOnly(true);
         shortLinkText.setWidthFull();
 
-        Button copyButton = new Button();
         copyButton.setText("Copy");
         copyButton.addClickListener(this::onCopyButtonClicked);
+        ClipboardUtils.setCopyToClipboardFunctionFor(copyButton);
 
         scroller.setContent(locationsLayout);
         textAndCopyLayout.add(shortLinkText, copyButton);
@@ -113,8 +116,8 @@ public final class ShareMenu extends Composite<Dialog> {
     }
 
     private void onCopyButtonClicked(final ClickEvent<Button> event) {
-        ClipboardUtils.copyToClipboardAndNotify(shortLinkText.getValue(),
-                "Short link copied", Notification.Position.MIDDLE);
+        //Copying is done by JSModule
+        ClipboardUtils.showLinkCopiedNotification("Short link copied", Notification.Position.MIDDLE);
     }
 
     public enum Icons {
