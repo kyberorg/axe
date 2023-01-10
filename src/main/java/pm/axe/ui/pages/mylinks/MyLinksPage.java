@@ -252,10 +252,8 @@ public class MyLinksPage extends AxeBaseLayout implements BeforeEnterObserver {
         String shortLink = appUtils.getShortUrl() + "/" + ident;
 
         //adding copy to clipboard stuff
-        link.getElement().removeAttribute("onclick");
-        link.getElement().setAttribute("onclick", "copyTextToClipboard(this)");
-        link.getElement().removeAttribute("text");
-        link.getElement().setAttribute("text", shortLink);
+        ClipboardUtils.setCopyToClipboardFunction(link);
+        ClipboardUtils.setTextToCopy(shortLink, link);
 
         if (clientHasSmallScreen) {
             link.setText(ident);

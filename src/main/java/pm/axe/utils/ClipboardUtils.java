@@ -1,5 +1,6 @@
 package pm.axe.utils;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.notification.Notification;
@@ -19,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @UIScope
 @JsModule("./js/copy-to-clipboard.js")
 public final class ClipboardUtils {
+    private static final String ON_CLICK = "onclick";
+    private static final String ATTRIBUTE_NAME = "text";
 
     private ClipboardUtils() {
         throw new UnsupportedOperationException("Utility class");
@@ -35,6 +38,16 @@ public final class ClipboardUtils {
                                                 final Notification.Position notificationPosition) {
         copyToClipboard(textToCopy);
         getLinkCopiedNotification(notificationText, notificationPosition).open();
+    }
+
+    public static void setCopyToClipboardFunction(final Component component) {
+        component.getElement().removeAttribute(ON_CLICK);
+        component.getElement().setAttribute(ON_CLICK, "copyTextToClipboard(this)");
+    }
+
+    public static void setTextToCopy(final String textToCopy, final Component component) {
+        component.getElement().removeAttribute(ATTRIBUTE_NAME);
+        component.getElement().setAttribute(ATTRIBUTE_NAME, textToCopy);
     }
 
     /**
