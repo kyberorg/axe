@@ -1,0 +1,14 @@
+.axe-form-title {
+    align-self: center;
+}
+
+.axe-compact-form {
+    background: var(--axe-compact-area-color);
+    max-width: min(761px, 97%);
+    align-self: center;
+    width: min-content !important;
+}
+
+.space-after-submit-button {
+    width: 100%;
+}

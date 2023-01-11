@@ -11,12 +11,15 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import pm.axe.ui.pages.user.LoginPage;
 import pm.axe.utils.ErrorUtils;
 
 /**
  * Application Menu.
  */
 public final class AppMenu extends Composite<MenuBar> {
+
+    private final Button loginButton = getLoginButton();
 
     /**
      * Creates menu, that should be shown to all visitors.
@@ -58,7 +61,7 @@ public final class AppMenu extends Composite<MenuBar> {
         if (isUserMenu) {
             userMenuButtons.add(getLogoutButton());
         } else {
-            userMenuButtons.add(getLoginButton(), getRegisterButton());
+            userMenuButtons.add(loginButton, getRegisterButton());
         }
 
         //buttons
@@ -99,7 +102,7 @@ public final class AppMenu extends Composite<MenuBar> {
     }
 
     private void onLoginButtonClicked(final ClickEvent<Button> event) {
-        showNotImplementedWarning();
+        loginButton.getUI().ifPresent(ui -> ui.navigate(LoginPage.class));
     }
 
     private void onRegisterButtonClicked(final ClickEvent<Button> event) {
