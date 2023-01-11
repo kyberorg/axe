@@ -79,6 +79,11 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
         forgotPasswordSection.setClassName("forgot-password-section");
 
         setComponentsAfterSubmitButton(forgotPasswordSection);
+
+        //TODO small screen only
+        getCentralLayout().getStyle().set("padding-left", "1px");
+        getCentralLayout().getStyle().set("padding-right", "1px");
+
     }
 
     private void onLogin(final ClickEvent<Button> event) {

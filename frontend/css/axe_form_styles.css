@@ -27,12 +27,12 @@
 
 @media (min-width: 361px) and (max-width: 375px) {
     vaadin-form-item vaadin-text-field, vaadin-password-field {
-        max-width: calc(100% - 1rem);
+        max-width: calc(100% - 1.2rem);
     }
 }
 
 @media (min-width: 376px) and (max-width: 417px) {
     vaadin-form-item vaadin-text-field, vaadin-password-field {
-        max-width: calc(100% - 0.5rem);
+        max-width: calc(100% - 0.7rem);
     }
 }
