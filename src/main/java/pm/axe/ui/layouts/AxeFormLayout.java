@@ -37,7 +37,7 @@ public class AxeFormLayout extends AxeBaseLayout {
     }
 
     protected void setCompactMode() {
-        form.addClassName("axe-compact-form");
+        form.addClassName("axe-compact");
     }
 
     protected void setFormTitle(final String title) {

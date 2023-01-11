@@ -2,3 +2,8 @@
     text-align: center;
     width: 100%;
 }
+
+.vertically-compact {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
