@@ -4,11 +4,35 @@
 
 .axe-compact-form {
     background: var(--axe-compact-area-color);
-    max-width: min(761px, 97%);
+    max-width: min(761px, 95%);
     align-self: center;
     width: min-content !important;
 }
 
 .space-after-submit-button {
     width: 100%;
+}
+
+@media (max-width: 355px) {
+    vaadin-form-item vaadin-text-field, vaadin-password-field {
+        max-width: calc(100% - 2rem);
+    }
+}
+
+@media (min-width: 356px) and (max-width: 361px) {
+    vaadin-form-item vaadin-text-field, vaadin-password-field {
+        max-width: calc(100% - 1.7rem);
+    }
+}
+
+@media (min-width: 361px) and (max-width: 375px) {
+    vaadin-form-item vaadin-text-field, vaadin-password-field {
+        max-width: calc(100% - 1rem);
+    }
+}
+
+@media (min-width: 376px) and (max-width: 417px) {
+    vaadin-form-item vaadin-text-field, vaadin-password-field {
+        max-width: calc(100% - 0.5rem);
+    }
 }

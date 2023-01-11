@@ -72,7 +72,7 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
         getSubmitButton().addClickShortcut(Key.ENTER);
         getSubmitButton().addClickListener(this::onLogin);
 
-        forgotPasswordLink.setHref(Endpoint.UI.PASSWORD_RESET_PAGE);
+        forgotPasswordLink.setHref(Endpoint.UI.FORGOT_PASSWORD_PAGE);
         forgotPasswordLink.setText("Forgot your password?");
         forgotPasswordLink.setClassName("forgot-password-link");
         forgotPasswordSection.add(forgotPasswordLink);
