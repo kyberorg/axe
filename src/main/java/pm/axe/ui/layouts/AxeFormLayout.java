@@ -8,6 +8,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.stream.Stream;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
 @CssImport(value = "./css/axe_form_styles.css")
 public class AxeFormLayout extends AxeBaseLayout {
 
+    @Getter(value = AccessLevel.PROTECTED)
     private final VerticalLayout form = new VerticalLayout();
     private final H2 formTitle = new H2();
     private final Div formSubTitle = new Div();
@@ -23,7 +25,7 @@ public class AxeFormLayout extends AxeBaseLayout {
     private final Div spaceAfterFields = new Div();
     private final Hr separator = new Hr();
 
-    @Getter
+    @Getter(value = AccessLevel.PROTECTED)
     private final Button submitButton = new Button();
     private final Div spaceAfterSubmitButton = new Div();
 
