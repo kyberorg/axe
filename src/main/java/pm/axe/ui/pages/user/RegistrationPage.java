@@ -107,8 +107,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private Span createLegalInfo() {
         Span tosStart = new Span("By signing up, you accept our ");
         Anchor linkToTerms = new Anchor();
-        //TODO correct location when ready
-        linkToTerms.setHref(Endpoint.UI.APP_INFO_PAGE);
+        linkToTerms.setHref(Endpoint.UI.TOS_PAGE);
         linkToTerms.setText("Terms of Service");
 
         Span tosEnd = new Span(".");
