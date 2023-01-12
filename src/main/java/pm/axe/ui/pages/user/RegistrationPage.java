@@ -69,7 +69,9 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
         usernameEmailInput.setLabel("Username/Email");
         usernameEmailInput.setClearButtonVisible(true);
+        usernameEmailInput.setTooltipText("Username here please");
         passwordInput.setLabel("Password");
+        passwordInput.setTooltipText("Password should be at least 3 chars");
 
         emailField.setLabel("Email");
         emailField.setClassName("email-input");
