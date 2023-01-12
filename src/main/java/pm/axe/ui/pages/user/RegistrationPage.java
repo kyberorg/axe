@@ -6,10 +6,8 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -41,8 +39,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private final Details contactPointDetails = new Details();
     private final EmailField emailField = new EmailField();
 
-    private final VerticalLayout tfaLayout = new VerticalLayout();
-    private final Label tfaLabel = new Label();
+    private final Details tfaDetails = new Details();
     private final Checkbox tfaBox = new Checkbox();
 
     private final Span tosNote = createLegalInfo();
@@ -82,11 +79,11 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
         tfaBox.setId("tfaBox");
         tfaBox.setLabel("Protect my account with additional one time codes");
-        tfaLabel.setText("Two-Factor Authentication (2FA)");
-        tfaLayout.setPadding(false);
-        tfaLayout.add(tfaLabel, tfaBox);
+        tfaDetails.setSummaryText("Two-Factor Authentication (2FA)");
+        tfaDetails.setOpened(true);
+        tfaDetails.addContent(tfaBox);
 
-        setFormFields(usernameEmailInput, passwordInput, contactPointDetails, tfaLayout);
+        setFormFields(usernameEmailInput, passwordInput, contactPointDetails, tfaDetails);
 
         setComponentsAfterFields(tosNote);
         setSubmitButtonText("Sign up");

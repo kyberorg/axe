@@ -22,6 +22,7 @@ public class AxeFormLayout extends AxeBaseLayout {
     private final Div formSubTitle = new Div();
 
     private final VerticalLayout fields = new VerticalLayout();
+    @Getter(value = AccessLevel.PROTECTED)
     private final Div spaceAfterFields = new Div();
     private final Hr separator = new Hr();
 

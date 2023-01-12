@@ -61,6 +61,7 @@ public class ForgotPasswordPage extends AxeFormLayout implements BeforeEnterObse
         setFormFields(usernameInput);
 
         contactKyberorgSpan = getContactKyberorgSpan();
+        getSpaceAfterFields().getStyle().set("padding-left", "0");
         setComponentsAfterFields(getRecoveryNote());
         setSubmitButtonText("Submit");
         getSubmitButton().addClickShortcut(Key.ENTER);
