@@ -20,7 +20,7 @@ public class AxeFormLayout extends AxeBaseLayout {
     private final H2 formTitle = new H2();
     private final Div formSubTitle = new Div();
 
-    private final Div fields = new Div();
+    private final VerticalLayout fields = new VerticalLayout();
     private final Div spaceAfterFields = new Div();
     private final Hr separator = new Hr();
 
@@ -102,6 +102,10 @@ public class AxeFormLayout extends AxeBaseLayout {
         formSubTitle.setClassName("axe-form-subtitle");
 
         fields.setClassName("axe-fields");
+        fields.setSpacing(false);
+        fields.addClassName("vertically-compact");
+
+        spaceAfterFields.addClassName("space-after-fields");
 
         separator.addClassName("separator");
 

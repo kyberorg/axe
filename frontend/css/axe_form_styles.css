@@ -6,6 +6,15 @@
     width: 100%;
 }
 
-.form-input {
+.vertically-compact {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.axe-fields > * {
     min-width: min(70vw, 300px);
+}
+
+.space-after-fields {
+    max-width: min(70vw, 300px);
 }

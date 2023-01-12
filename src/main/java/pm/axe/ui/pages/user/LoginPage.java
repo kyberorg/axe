@@ -9,7 +9,6 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -35,7 +34,6 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     private final Span spaceSpan = new Span();
     private final Anchor subTitleLink = new Anchor();
 
-    private final VerticalLayout fields = new VerticalLayout();
     private final TextField usernameInput = new TextField();
     private final PasswordField passwordInput = new PasswordField();
     private final Checkbox forgotMe = new Checkbox();
@@ -64,12 +62,8 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
         usernameInput.setLabel("Username/Email");
         passwordInput.setLabel("Password");
         forgotMe.setLabel("Log me out after");
-        fields.add(usernameInput, passwordInput, forgotMe);
-        fields.getChildren().forEach(component -> component.getElement().setAttribute("class", "form-input"));
-        fields.setSpacing(false);
-        fields.addClassName("vertically-compact");
 
-        setFormFields(fields);
+        setFormFields(usernameInput, passwordInput, forgotMe);
 
         setSubmitButtonText("Jump in");
         getSubmitButton().addClickShortcut(Key.ENTER);
@@ -82,11 +76,6 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
         forgotPasswordSection.setClassName("forgot-password-section");
 
         setComponentsAfterSubmitButton(forgotPasswordSection);
-
-        //TODO small screen only
-        getCentralLayout().getStyle().set("padding-left", "1px");
-        getCentralLayout().getStyle().set("padding-right", "1px");
-
     }
 
     private void onLogin(final ClickEvent<Button> event) {
