@@ -114,19 +114,17 @@ public class ForgotPasswordPage extends AxeFormLayout implements BeforeEnterObse
     }
 
     private Span getContactKyberorgSpan() {
-        Span contact = new Span("Contact");
-        Span spaceSpan = new Span(" ");
-
+        Span contact = new Span("Contact ");
         String kyberorg = "kyberorg";
         String telegramLink = String.format("%s%s", Axe.Telegram.TELEGRAM_URL, kyberorg);
         Anchor tgLink = new Anchor(telegramLink, "@" + kyberorg);
 
-        Span dropEmailText = new Span("or drop email to");
+        Span dropEmailText = new Span(" or drop email to ");
         String axeEmail = appUtils.getEmailFromAddress();
         String mailTo = String.format("mailto:%s", axeEmail);
         Anchor emailLink = new Anchor(mailTo, axeEmail);
 
-        return new Span(contact, spaceSpan, tgLink, spaceSpan, dropEmailText, spaceSpan, emailLink);
+        return new Span(contact, tgLink, dropEmailText, emailLink);
     }
 
     private Span getSuccessSpan() {
