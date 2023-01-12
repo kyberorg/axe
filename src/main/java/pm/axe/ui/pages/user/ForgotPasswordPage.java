@@ -45,6 +45,7 @@ public class ForgotPasswordPage extends AxeFormLayout implements BeforeEnterObse
 
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
+        if (beforeEnterEvent.isRefreshEvent()) return;
         if (pageAlreadyInitialized) return;
         pageInit();
         applyState();

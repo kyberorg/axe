@@ -44,9 +44,13 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     private boolean pageAlreadyInitialized = false;
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        if (pageAlreadyInitialized) return;
-        init();
-        pageAlreadyInitialized = true;
+        if (beforeEnterEvent.isRefreshEvent()) return;
+        if (pageAlreadyInitialized) {
+           cleanInputs();
+        } else {
+            init();
+            pageAlreadyInitialized = true;
+        }
     }
 
     private void init() {
@@ -60,6 +64,7 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
         setFormSubTitle(subTitleText, spaceSpan, subTitleLink);
 
         usernameInput.setLabel("Username/Email");
+        usernameInput.setClearButtonVisible(true);
         passwordInput.setLabel("Password");
         forgotMe.setLabel("Log me out after");
 
@@ -80,5 +85,11 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
 
     private void onLogin(final ClickEvent<Button> event) {
         Notification.show("Not implemented yet");
+    }
+
+    private void cleanInputs() {
+        usernameInput.clear();
+        passwordInput.clear();
+        forgotMe.clear();
     }
 }
