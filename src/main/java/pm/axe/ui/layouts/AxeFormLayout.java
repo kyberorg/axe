@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 @CssImport(value = "./css/axe_form_styles.css")
 public class AxeFormLayout extends AxeBaseLayout {
-    protected static final String START_POINT = "1px";
 
     private final VerticalLayout form = new VerticalLayout();
     private final H2 formTitle = new H2();

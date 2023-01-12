@@ -2,6 +2,9 @@
     align-self: center;
 }
 
+.axe-form-subtitle {
+    padding-left: 1rem;
+}
 .space-after-submit-button {
     width: 100%;
 }
@@ -12,9 +15,10 @@
 }
 
 .axe-fields > * {
-    min-width: min(70vw, 300px);
+    min-width: 99%;
 }
 
 .space-after-fields {
-    max-width: min(70vw, 300px);
+    padding-left: 1rem;
+    max-width: 99%;
 }
