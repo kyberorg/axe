@@ -7,7 +7,7 @@ import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import org.apache.commons.lang3.RandomStringUtils;
 import pm.axe.utils.ClipboardUtils;
@@ -49,9 +49,11 @@ public class PasswordGenerator extends Composite<Details> {
         redoButton.setTooltipText("Re-generate it");
         redoButton.addClickListener(this::onRedoButtonClicked);
 
-        HorizontalLayout content = new HorizontalLayout();
+        FlexLayout content = new FlexLayout();
         content.setAlignItems(FlexComponent.Alignment.CENTER);
+        content.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
         content.add(generatedPasswordHolder, useItButton, redoButton);
+        content.expand(generatedPasswordHolder);
         getContent().setContent(content);
     }
 
