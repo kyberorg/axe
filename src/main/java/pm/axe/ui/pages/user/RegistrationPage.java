@@ -108,6 +108,9 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     }
 
     private void onUserEmailFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        if (getFields().indexOf(usernameLayout) != -1 ) {
+            getFields().remove(userEmailLayout);
+        }
         String input = event.getValue();
         boolean isInputEmpty = StringUtils.isBlank(input);
         if (isInputEmpty) {
@@ -121,7 +124,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
             if (generationResult.ok()) {
                 usernameInput.setValue(generationResult.getStringPayload());
                 //paste username fields
-                getFields().replace(usernameRequirements, usernameLayout);
+                getFields().addComponentAtIndex(1, usernameLayout);
             }
         } else {
             //input is username
