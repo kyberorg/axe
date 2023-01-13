@@ -187,14 +187,18 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         Notification.show("Not implemented yet");
     }
 
+    private boolean isUsernameLayoutVisible() {
+        return getFields().indexOf(usernameLayout) != -1;
+    }
+
     private void hideUsernameField() {
-        if (getFields().indexOf(usernameLayout) != -1 ) {
+        if (isUsernameLayoutVisible()) {
             getFields().remove(usernameLayout);
         }
     }
 
     private void updateLabelForUserEmailInput() {
-        if (usernameInput.isVisible()) {
+        if (isUsernameLayoutVisible()) {
             userEmailInput.setLabel(JUST_EMAIL_LABEL);
         } else {
             userEmailInput.setLabel(USERNAME_EMAIL_LABEL);
@@ -261,7 +265,9 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         passwordInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         passwordInput.addValueChangeListener(this::onPasswordFieldChanged);
         passwordInput.setClassName("input");
-        passwordInput.setTooltipText("At least 3 chars. Use password generator - make it strong");
+        passwordInput.setTooltipText(String.format("At least %d symbols. Max %d symbols. " +
+                        "Use password generator - make it strong.",
+                PASSWORD_MIN_LEN, PASSWORD_MAX_LEN));
 
         passwordInfoButton.setIconAfterText(true);
         passwordInfoButton.setClassName("info-button");

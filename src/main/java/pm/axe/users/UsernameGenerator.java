@@ -81,7 +81,7 @@ public class UsernameGenerator {
                 if (nameValidationResult.notOk()) {
                     return generateRandom();
                 }
-                isUsernameAlreadyExist = userService.isUserExists(nameFromEmail);
+                isUsernameAlreadyExist = userService.isUserExists(generatedName);
                 if (!isUsernameAlreadyExist) {
                     return OperationResult.success().addPayload(generatedName);
                 }
