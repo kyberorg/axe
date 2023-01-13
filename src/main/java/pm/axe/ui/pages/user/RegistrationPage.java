@@ -43,6 +43,11 @@ import java.util.stream.Stream;
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Registration - Axe.pm")
 public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserver {
+    private static final String USERNAME_EMAIL_LABEL = "Username/Email";
+    private static final String JUST_EMAIL_LABEL = "Email";
+    private static final int PASSWORD_MIN_LEN = 3;
+    private static final int PASSWORD_MAX_LEN = 71; //BCrypt limitation
+
     private final UsernameGenerator usernameGenerator;
     private final UserService userService;
 
@@ -89,7 +94,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         setFormSubTitle(subTitleText, subTitleLink);
 
         setupUserEmailSection();
-        setupUserSection();
+        setupUsernameSection();
         setupUserRequirementsSection();
         setupPasswordSection();
 
@@ -108,13 +113,11 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     }
 
     private void onUserEmailFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
-        if (getFields().indexOf(usernameLayout) != -1 ) {
-            getFields().remove(userEmailLayout);
-        }
         String input = event.getValue();
         boolean isInputEmpty = StringUtils.isBlank(input);
         if (isInputEmpty) {
-            onInvalidUserEmail("Username cannot be empty");
+            hideUsernameField();
+            updateLabelForUserEmailInput();
             return;
         }
         boolean isEmail = EmailValidator.getInstance().isValid(input);
@@ -125,8 +128,11 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
                 usernameInput.setValue(generationResult.getStringPayload());
                 //paste username fields
                 getFields().addComponentAtIndex(1, usernameLayout);
+                updateLabelForUserEmailInput();
             }
         } else {
+            hideUsernameField();
+            updateLabelForUserEmailInput();
             //input is username
             OperationResult usernameValidation = UsernameValidator.isValid(input);
             if (usernameValidation.ok()) {
@@ -139,17 +145,64 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         }
     }
 
+    private void onUsernameFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        final String username = event.getValue();
+        if (StringUtils.isBlank(username)) return;
+        OperationResult usernameValidation = UsernameValidator.isValid(username);
+        if (usernameValidation.ok()) {
+            if (userService.isUserExists(username)) {
+                onInvalidUsername("Username already exists");
+            }
+        } else {
+            onInvalidUsername("Username doesn't meet requirements");
+        }
+    }
+
+    private void onPasswordFieldChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
+        String password = event.getValue();
+        if (StringUtils.isBlank(password)) return;
+        if (password.length() < PASSWORD_MIN_LEN) {
+          onInvalidPassword(String.format("Password is very short. Minimum %d symbols", PASSWORD_MIN_LEN));
+        } else if (password.length() > PASSWORD_MAX_LEN) {
+            onInvalidPassword(String.format("Password is too long. Max %d symbols", PASSWORD_MAX_LEN));
+        }
+    }
+
     private void onInvalidUserEmail(final String errorMessage) {
         userEmailInput.setInvalid(true);
         userEmailInput.setErrorMessage(errorMessage);
     }
+
+    private void onInvalidUsername(final String errorMessage) {
+        usernameInput.setInvalid(true);
+        usernameInput.setErrorMessage(errorMessage);
+    }
+
+    public void onInvalidPassword(final String errorMessage) {
+        passwordInput.setInvalid(true);
+        passwordInput.setErrorMessage(errorMessage);
+    }
+
     private void onRegister(final ClickEvent<Button> event) {
         Notification.show("Not implemented yet");
     }
 
+    private void hideUsernameField() {
+        if (getFields().indexOf(usernameLayout) != -1 ) {
+            getFields().remove(usernameLayout);
+        }
+    }
+
+    private void updateLabelForUserEmailInput() {
+        if (usernameInput.isVisible()) {
+            userEmailInput.setLabel(JUST_EMAIL_LABEL);
+        } else {
+            userEmailInput.setLabel(USERNAME_EMAIL_LABEL);
+        }
+    }
 
     private void setupUserEmailSection() {
-        userEmailInput.setLabel("Username/Email");
+        userEmailInput.setLabel(USERNAME_EMAIL_LABEL);
         userEmailInput.setClearButtonVisible(true);
         userEmailInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         userEmailInput.addValueChangeListener(this::onUserEmailFieldChanged);
@@ -167,11 +220,11 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         userEmailLayout.add(userEmailInput, userEmailInfoButton);
     }
 
-
-
-    private void setupUserSection() {
+    private void setupUsernameSection() {
         usernameInput.setLabel("Username");
         usernameInput.setClearButtonVisible(true);
+        usernameInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        usernameInput.addValueChangeListener(this::onUsernameFieldChanged);
         usernameInput.setTooltipText("You can use both as login");
         usernameInput.setClassName("input");
 
@@ -205,6 +258,8 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
     private void setupPasswordSection() {
         passwordInput.setLabel("Password");
+        passwordInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        passwordInput.addValueChangeListener(this::onPasswordFieldChanged);
         passwordInput.setClassName("input");
         passwordInput.setTooltipText("At least 3 chars. Use password generator - make it strong");
 
