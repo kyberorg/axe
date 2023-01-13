@@ -3,6 +3,7 @@ package pm.axe.ui.elements;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -43,11 +44,13 @@ public class PasswordGenerator extends Composite<Details> {
 
         useItButton.setTooltipText("Use this password");
         useItButton.addClickListener(this::onUseThisPasswordClicked);
+        useItButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         ClipboardUtils.setCopyToClipboardFunctionFor(useItButton);
         ClipboardUtils.setTextToCopy(generatedPasswordHolder.getText()).forComponent(useItButton);
 
         redoButton.setTooltipText("Re-generate it");
         redoButton.addClickListener(this::onRedoButtonClicked);
+        redoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         FlexLayout content = new FlexLayout();
         content.setAlignItems(FlexComponent.Alignment.CENTER);
