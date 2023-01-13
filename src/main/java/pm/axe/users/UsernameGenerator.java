@@ -6,6 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.CannotCreateTransactionException;
+import pm.axe.Axe;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.UserService;
 
@@ -17,6 +18,7 @@ import pm.axe.services.user.UserService;
 @Component
 public class UsernameGenerator {
     private static final String TAG = "[" + UsernameGenerator.class.getSimpleName() + "]";
+    private static final int MAX_ROUNDS = 5;
 
     public static final String USER_PREFIX = "user";
     public static final int USERNAME_RANDOM_PART_LEN = 6;
@@ -38,12 +40,12 @@ public class UsernameGenerator {
      *
      * @return {@link OperationResult} with username {@link String} in payload or {@link OperationResult} with error.
      */
-    public OperationResult generate() {
+    public OperationResult generateRandom() {
         try {
             String generatedUsername;
             boolean isUsernameAlreadyExist;
             do {
-                generatedUsername = generatedNew();
+                generatedUsername = generateNew();
                 isUsernameAlreadyExist = userService.isUserExists(generatedUsername);
             } while (isUsernameAlreadyExist);
             return OperationResult.success().addPayload(generatedUsername);
@@ -56,7 +58,41 @@ public class UsernameGenerator {
         }
     }
 
-    private String generatedNew() {
+    public OperationResult generateFromEmail(final String emailAddress) {
+        String[] parts = emailAddress.split(Axe.C.AT);
+        if (parts.length < 2) {
+            return OperationResult.malformedInput().withMessage(String.format("%s is not valid email", emailAddress));
+        }
+        String[] usernameParts = parts[0].split("\\" + Axe.C.PLUS);
+        if (usernameParts.length < 1) {
+            return OperationResult.malformedInput().withMessage("Something is wrong with provided email");
+        }
+        String nameFromEmail = usernameParts[0];
+        OperationResult nameValidationResult = UsernameValidator.isValid(nameFromEmail);
+        if (nameValidationResult.notOk()) {
+            return generateRandom();
+        }
+        boolean isUsernameAlreadyExist = userService.isUserExists(nameFromEmail);
+        if (isUsernameAlreadyExist) {
+            String generatedName;
+            for (int i=1; i <= MAX_ROUNDS; i++) {
+                generatedName = nameFromEmail + i;
+                nameValidationResult = UsernameValidator.isValid(generatedName);
+                if (nameValidationResult.notOk()) {
+                    return generateRandom();
+                }
+                isUsernameAlreadyExist = userService.isUserExists(nameFromEmail);
+                if (!isUsernameAlreadyExist) {
+                    return OperationResult.success().addPayload(generatedName);
+                }
+            }
+            return generateRandom();
+        } else {
+            return OperationResult.success().addPayload(nameFromEmail);
+        }
+    }
+
+    private String generateNew() {
         return USER_PREFIX + RandomStringUtils.randomNumeric(USERNAME_RANDOM_PART_LEN);
     }
 }

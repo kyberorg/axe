@@ -1,5 +1,6 @@
 package pm.axe.ui.pages.user;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -22,9 +24,15 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import pm.axe.Endpoint;
+import pm.axe.result.OperationResult;
+import pm.axe.services.user.UserService;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeFormLayout;
+import pm.axe.users.UsernameGenerator;
+import pm.axe.users.UsernameValidator;
 
 import java.util.stream.Stream;
 
@@ -35,6 +43,8 @@ import java.util.stream.Stream;
 @Route(value = Endpoint.UI.REGISTRATION_PAGE, layout = MainView.class)
 @PageTitle("Registration - Axe.pm")
 public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserver {
+    private final UsernameGenerator usernameGenerator;
+    private final UserService userService;
 
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -97,6 +107,39 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         usernameInput.clear();
     }
 
+    private void onUserEmailFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        String input = event.getValue();
+        boolean isInputEmpty = StringUtils.isBlank(input);
+        if (isInputEmpty) {
+            onInvalidUserEmail("Username cannot be empty");
+            return;
+        }
+        boolean isEmail = EmailValidator.getInstance().isValid(input);
+        if (isEmail) {
+            //input is email
+            OperationResult generationResult = usernameGenerator.generateFromEmail(input);
+            if (generationResult.ok()) {
+                usernameInput.setValue(generationResult.getStringPayload());
+                //paste username fields
+                getFields().replace(usernameRequirements, usernameLayout);
+            }
+        } else {
+            //input is username
+            OperationResult usernameValidation = UsernameValidator.isValid(input);
+            if (usernameValidation.ok()) {
+                if (userService.isUserExists(input)) {
+                    onInvalidUserEmail("Username already exists");
+                }
+            } else {
+                onInvalidUserEmail("Username doesn't meet requirements");
+            }
+        }
+    }
+
+    private void onInvalidUserEmail(final String errorMessage) {
+        userEmailInput.setInvalid(true);
+        userEmailInput.setErrorMessage(errorMessage);
+    }
     private void onRegister(final ClickEvent<Button> event) {
         Notification.show("Not implemented yet");
     }
@@ -105,8 +148,11 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private void setupUserEmailSection() {
         userEmailInput.setLabel("Username/Email");
         userEmailInput.setClearButtonVisible(true);
+        userEmailInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+        userEmailInput.addValueChangeListener(this::onUserEmailFieldChanged);
         userEmailInput.setTooltipText("Email stored encrypted. See requirements below.");
         userEmailInput.setClassName("input");
+
         userEmailInfoButton.setIconAfterText(true);
         userEmailInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         userEmailInfoButton.setClassName("info-button");
@@ -117,6 +163,8 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         userEmailLayout.setAlignItems(Alignment.BASELINE);
         userEmailLayout.add(userEmailInput, userEmailInfoButton);
     }
+
+
 
     private void setupUserSection() {
         usernameInput.setLabel("Username");
@@ -154,21 +202,15 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
     private void setupPasswordSection() {
         passwordInput.setLabel("Password");
-        passwordInput.setTooltipText("At least 3 chars. Use password generator - make it strong.");
-        Tooltip passwordTooltip = passwordInput.getTooltip().withManual(true);
-        passwordInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        passwordInfoButton.addClickListener(event -> passwordTooltip.setOpened(!passwordTooltip.isOpened()));
-
-        passwordInput.setLabel("Password");
         passwordInput.setClassName("input");
         passwordInput.setTooltipText("At least 3 chars. Use password generator - make it strong");
 
         passwordInfoButton.setIconAfterText(true);
         passwordInfoButton.setClassName("info-button");
-        passwordInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-        Tooltip usernameTooltip = passwordInput.getTooltip().withManual(true);
-        passwordInfoButton.addClickListener(event -> usernameTooltip.setOpened(!usernameTooltip.isOpened()));
+        passwordInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        Tooltip passwordTooltip = passwordInput.getTooltip().withManual(true);
+        passwordInfoButton.addClickListener(event -> passwordTooltip.setOpened(!passwordTooltip.isOpened()));
 
         passwordLayout.add(passwordInput, passwordInfoButton);
         passwordLayout.setAlignItems(Alignment.BASELINE);

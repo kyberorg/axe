@@ -21,6 +21,7 @@ public class AxeFormLayout extends AxeBaseLayout {
     private final H2 formTitle = new H2();
     private final Div formSubTitle = new Div();
 
+    @Getter(value = AccessLevel.PROTECTED)
     private final VerticalLayout fields = new VerticalLayout();
     @Getter(value = AccessLevel.PROTECTED)
     private final Div spaceAfterFields = new Div();

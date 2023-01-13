@@ -103,7 +103,7 @@ public class PostUserRestController {
             }
         } else {
             log.info("{} There is no user-defined Username in Request. Generating custom Username", TAG);
-            OperationResult usernameGenerationResult = usernameGenerator.generate();
+            OperationResult usernameGenerationResult = usernameGenerator.generateRandom();
             if (usernameGenerationResult.ok()) {
                 username = usernameGenerationResult.getStringPayload();
             } else {

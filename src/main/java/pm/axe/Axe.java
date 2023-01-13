@@ -28,6 +28,7 @@ public final class Axe {
         public static final int ONE_SECOND_IN_MILLIS = 1000;
         public static final String TIME_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss z";
         public static final String MINUS = "-";
+        public static final String PLUS = "+";
     }
 
     public static class Defaults {
