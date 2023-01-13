@@ -55,7 +55,7 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
 
     private void init() {
         setCompactMode();
-        getForm().getStyle().set("width", "100% !important"); //dirty fix for large screens
+        getForm().getStyle().set("width", "min(380px, 100%) !important"); //dirty fix for large screens
 
         setFormTitle("Sign in to Axe");
         subTitleText.setText("New to Axe?");

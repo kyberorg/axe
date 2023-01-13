@@ -1,3 +1,8 @@
-.email-input {
-    min-width: 99%;
+.input {
+    flex-shrink: 0.3;
+    width: 100%;
+}
+
+.info-button {
+    border-radius: 100%;
 }

@@ -2,13 +2,17 @@ package pm.axe.ui.pages.user;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -22,6 +26,8 @@ import pm.axe.Endpoint;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeFormLayout;
 
+import java.util.stream.Stream;
+
 @SpringComponent
 @UIScope
 @RequiredArgsConstructor
@@ -33,14 +39,19 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
 
-    private final TextField usernameEmailInput = new TextField();
+    private final FlexLayout userEmailLayout = new FlexLayout();
+    private final TextField userEmailInput = new TextField();
+    private final Button userEmailInfoButton = new Button(VaadinIcon.INFO_CIRCLE_O.create());
+
+    private final FlexLayout usernameLayout = new FlexLayout();
+    private final TextField usernameInput = new TextField();
+    private final Button usernameInfoButton = new Button(VaadinIcon.INFO_CIRCLE_O.create());
+
+    private final Details usernameRequirements = new Details();
+
+    private final FlexLayout passwordLayout = new FlexLayout();
     private final PasswordField passwordInput = new PasswordField();
-
-    private final Details contactPointDetails = new Details();
-    private final EmailField emailField = new EmailField();
-
-    private final Details tfaDetails = new Details();
-    private final Checkbox tfaBox = new Checkbox();
+    private final Button passwordInfoButton = new Button(VaadinIcon.INFO_CIRCLE_O.create());
 
     private final Span tosNote = createLegalInfo();
 
@@ -67,25 +78,12 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
         setFormSubTitle(subTitleText, subTitleLink);
 
-        usernameEmailInput.setLabel("Username/Email");
-        usernameEmailInput.setClearButtonVisible(true);
-        usernameEmailInput.setTooltipText("Username here please");
-        passwordInput.setLabel("Password");
-        passwordInput.setTooltipText("Password should be at least 3 chars");
+        setupUserEmailSection();
+        setupUserSection();
+        setupUserRequirementsSection();
+        setupPasswordSection();
 
-        emailField.setLabel("Email");
-        emailField.setClassName("email-input");
-        contactPointDetails.setSummaryText("Contact point (optional)");
-        contactPointDetails.setOpened(false);
-        contactPointDetails.addContent(emailField);
-
-        tfaBox.setId("tfaBox");
-        tfaBox.setLabel("Protect my account with additional one time codes");
-        tfaDetails.setSummaryText("Two-Factor Authentication (2FA)");
-        tfaDetails.setOpened(true);
-        tfaDetails.addContent(tfaBox);
-
-        setFormFields(usernameEmailInput, passwordInput, contactPointDetails, tfaDetails);
+        setFormFields(userEmailLayout, usernameRequirements, passwordLayout);
 
         setComponentsAfterFields(tosNote);
         setSubmitButtonText("Sign up");
@@ -94,13 +92,86 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     }
 
     private void cleanInputs() {
-        usernameEmailInput.clear();
+        userEmailInput.clear();
         passwordInput.clear();
-        emailField.clear();
+        usernameInput.clear();
     }
 
     private void onRegister(final ClickEvent<Button> event) {
         Notification.show("Not implemented yet");
+    }
+
+
+    private void setupUserEmailSection() {
+        userEmailInput.setLabel("Username/Email");
+        userEmailInput.setClearButtonVisible(true);
+        userEmailInput.setTooltipText("Email stored encrypted. See requirements below.");
+        userEmailInput.setClassName("input");
+        userEmailInfoButton.setIconAfterText(true);
+        userEmailInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        userEmailInfoButton.setClassName("info-button");
+
+        Tooltip userEmailTooltip = userEmailInput.getTooltip().withManual(true);
+        userEmailInfoButton.addClickListener(event -> userEmailTooltip.setOpened(!userEmailTooltip.isOpened()));
+
+        userEmailLayout.setAlignItems(Alignment.BASELINE);
+        userEmailLayout.add(userEmailInput, userEmailInfoButton);
+    }
+
+    private void setupUserSection() {
+        usernameInput.setLabel("Username");
+        usernameInput.setClearButtonVisible(true);
+        usernameInput.setTooltipText("You can use both as login");
+        usernameInput.setClassName("input");
+
+        usernameInfoButton.setIconAfterText(true);
+        usernameInfoButton.setClassName("info-button");
+        usernameInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+        Tooltip usernameTooltip = usernameInput.getTooltip().withManual(true);
+        usernameInfoButton.addClickListener(event -> usernameTooltip.setOpened(!usernameTooltip.isOpened()));
+
+        usernameLayout.setAlignItems(Alignment.BASELINE);
+        usernameLayout.add(usernameInput, usernameInfoButton);
+    }
+
+    private void setupUserRequirementsSection() {
+        usernameRequirements.setSummaryText("Username requirements");
+        Span span = new Span("Username should be");
+
+        UnorderedList requirements = new UnorderedList();
+        requirements.removeAll();
+        Stream.of("The number of characters must be between 2 and 20.",
+                        "Alphanumeric characters (a-zA-Z0-9), lowercase, or uppercase.",
+                        "Also allowed of the dot (.), underscore (_), and hyphen (-).",
+                        "The dot (.), underscore (_), or hyphen (-) must not be the first or last character.",
+                        "The dot (.), underscore (_), or hyphen (-) does not appear consecutively, e.g., name..surname.")
+                .forEach(requirement -> requirements.add(new ListItem(requirement)));
+
+        usernameRequirements.addContent(span, requirements);
+        usernameRequirements.setOpened(false);
+    }
+
+    private void setupPasswordSection() {
+        passwordInput.setLabel("Password");
+        passwordInput.setTooltipText("At least 3 chars. Use password generator - make it strong.");
+        Tooltip passwordTooltip = passwordInput.getTooltip().withManual(true);
+        passwordInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        passwordInfoButton.addClickListener(event -> passwordTooltip.setOpened(!passwordTooltip.isOpened()));
+
+        passwordInput.setLabel("Password");
+        passwordInput.setClassName("input");
+        passwordInput.setTooltipText("At least 3 chars. Use password generator - make it strong");
+
+        passwordInfoButton.setIconAfterText(true);
+        passwordInfoButton.setClassName("info-button");
+        passwordInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+        Tooltip usernameTooltip = passwordInput.getTooltip().withManual(true);
+        passwordInfoButton.addClickListener(event -> usernameTooltip.setOpened(!usernameTooltip.isOpened()));
+
+        passwordLayout.add(passwordInput, passwordInfoButton);
+        passwordLayout.setAlignItems(Alignment.BASELINE);
     }
 
     private Span createLegalInfo() {
