@@ -30,6 +30,7 @@ import pm.axe.Endpoint;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.UserService;
 import pm.axe.ui.MainView;
+import pm.axe.ui.elements.PasswordGenerator;
 import pm.axe.ui.layouts.AxeFormLayout;
 import pm.axe.users.UsernameGenerator;
 import pm.axe.users.UsernameValidator;
@@ -45,6 +46,7 @@ import java.util.stream.Stream;
 public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserver {
     private static final String USERNAME_EMAIL_LABEL = "Username/Email";
     private static final String JUST_EMAIL_LABEL = "Email";
+    private static final int USERNAME_MIN_LEN = 2;
     private static final int PASSWORD_MIN_LEN = 3;
     private static final int PASSWORD_MAX_LEN = 71; //BCrypt limitation
 
@@ -67,6 +69,8 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private final FlexLayout passwordLayout = new FlexLayout();
     private final PasswordField passwordInput = new PasswordField();
     private final Button passwordInfoButton = new Button(VaadinIcon.INFO_CIRCLE_O.create());
+
+    private final PasswordGenerator passwordGenerator = PasswordGenerator.create();
 
     private final Span tosNote = createLegalInfo();
 
@@ -97,8 +101,9 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         setupUsernameSection();
         setupUserRequirementsSection();
         setupPasswordSection();
+        setupPasswordGeneratorSection();
 
-        setFormFields(userEmailLayout, usernameRequirements, passwordLayout);
+        setFormFields(userEmailLayout, usernameRequirements, passwordLayout, passwordGenerator);
 
         setComponentsAfterFields(tosNote);
         setSubmitButtonText("Sign up");
@@ -207,6 +212,8 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
     private void setupUserEmailSection() {
         userEmailInput.setLabel(USERNAME_EMAIL_LABEL);
+        userEmailInput.setRequired(true);
+        userEmailInput.setMinLength(USERNAME_MIN_LEN);
         userEmailInput.setClearButtonVisible(true);
         userEmailInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         userEmailInput.addValueChangeListener(this::onUserEmailFieldChanged);
@@ -226,6 +233,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
     private void setupUsernameSection() {
         usernameInput.setLabel("Username");
+        usernameInput.setMinLength(USERNAME_MIN_LEN);
         usernameInput.setClearButtonVisible(true);
         usernameInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         usernameInput.addValueChangeListener(this::onUsernameFieldChanged);
@@ -262,6 +270,9 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
     private void setupPasswordSection() {
         passwordInput.setLabel("Password");
+        passwordInput.setRequired(true);
+        passwordInput.setMinLength(PASSWORD_MIN_LEN);
+        passwordInput.setMaxLength(PASSWORD_MAX_LEN);
         passwordInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         passwordInput.addValueChangeListener(this::onPasswordFieldChanged);
         passwordInput.setClassName("input");
@@ -278,6 +289,11 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
 
         passwordLayout.add(passwordInput, passwordInfoButton);
         passwordLayout.setAlignItems(Alignment.BASELINE);
+    }
+
+    private void setupPasswordGeneratorSection() {
+        passwordGenerator.setCopyTarget(passwordInput);
+        passwordGenerator.setOpened(false);
     }
 
     private Span createLegalInfo() {
