@@ -35,6 +35,7 @@ import pm.axe.ui.layouts.AxeCompactLayout;
 import pm.axe.users.AccountType;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @SpringComponent
@@ -52,7 +53,11 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (event.isRefreshEvent()) return;
-        boundUserOrGoToLogin(event);
+        boundUserIfAny();
+        if (Objects.isNull(user)) {
+            event.forwardTo(LoginPage.class);
+            return;
+        }
         confirmedAccounts = getConfirmedAccountsFor(user);
 
         if (!pageAlreadyInitialized) {
@@ -73,7 +78,7 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
         Button editUsernameButton = new Button("Edit");
         Button saveUsernameButton = new Button("Save");
         FlexLayout usernameLayout = new FlexLayout(username, editUsernameButton);
-        usernameLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        usernameLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
         usernameLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
         //TODO replace with methods and fix button replace login - see MyLinksPage
         editUsernameButton.addClickListener(e -> {
@@ -91,7 +96,7 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
 
         Button saveEmailButton = new Button("Save");
         FlexLayout emailLayout = new FlexLayout(emailField, saveEmailButton);
-        emailLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        emailLayout.setAlignItems(Alignment.BASELINE);
         emailLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
 
         //how Axe use email details
@@ -143,16 +148,12 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
                 secondSeparator, tfaDetails);
     }
 
-    private void boundUserOrGoToLogin(BeforeEnterEvent event) {
+    private void boundUserIfAny() {
         Optional<AxeSession> axeSession = AxeSession.getCurrent();
         if (axeSession.isPresent()) {
             if (axeSession.get().hasUser()) {
                 user = axeSession.get().getUser();
-            } else {
-                event.forwardTo(Endpoint.UI.LOGIN_PAGE);
             }
-        } else {
-            event.forwardTo(LoginPage.class);
         }
     }
 
