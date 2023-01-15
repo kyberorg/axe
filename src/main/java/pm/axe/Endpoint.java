@@ -89,6 +89,7 @@ public final class Endpoint {
         public static final String REGISTRATION_PAGE = "register";
         public static final String FORGOT_PASSWORD_PAGE = "forgot-password";
         public static final String TOS_PAGE = "terms-of-service";
+        public static final String PROFILE_PAGE = "profile";
     }
 
     /**

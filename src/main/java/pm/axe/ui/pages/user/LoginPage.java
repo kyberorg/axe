@@ -19,8 +19,14 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
 import pm.axe.Endpoint;
+import pm.axe.db.models.User;
+import pm.axe.services.user.UserService;
+import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeFormLayout;
+import pm.axe.utils.AppUtils;
+
+import java.util.Optional;
 
 
 @SpringComponent
@@ -30,6 +36,8 @@ import pm.axe.ui.layouts.AxeFormLayout;
 @Route(value = Endpoint.UI.LOGIN_PAGE, layout = MainView.class)
 @PageTitle("Login Page - Axe.pm")
 public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
+    private final AppUtils appUtils;
+    private final UserService userService;
     private final Span subTitleText = new Span();
     private final Span spaceSpan = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -86,7 +94,26 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     }
 
     private void onLogin(final ClickEvent<Button> event) {
-        Notification.show("Not implemented yet");
+        //TODO do fields validation before sending anything
+        //FIXME remove after real login progress implemented
+        if (appUtils.isDevelopmentModeActivated()) {
+            doEasyLogin();
+        } else {
+            Notification.show("Not implemented yet");
+        }
+    }
+
+    private void doEasyLogin() {
+        if (userService.isUserExists(usernameInput.getValue())) {
+            AxeSession.getCurrent().ifPresent(axs -> {
+                Optional<User> user = userService.getUserByUsername(usernameInput.getValue());
+                user.ifPresent(axs::setUser);
+                usernameInput.getUI().ifPresent(ui -> ui.navigate(Endpoint.UI.PROFILE_PAGE));
+            });
+        } else {
+            usernameInput.setInvalid(true);
+            usernameInput.setErrorMessage("No such user found");
+        }
     }
 
     private void cleanInputs() {
