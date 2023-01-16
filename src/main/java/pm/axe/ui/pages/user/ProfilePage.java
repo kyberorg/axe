@@ -1,13 +1,12 @@
 package pm.axe.ui.pages.user;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.details.Details;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -27,7 +26,9 @@ import org.apache.commons.lang3.StringUtils;
 import pm.axe.Endpoint;
 import pm.axe.db.models.Account;
 import pm.axe.db.models.User;
+import pm.axe.db.models.UserSettings;
 import pm.axe.services.user.AccountService;
+import pm.axe.services.user.UserSettingsService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.elements.PasswordGenerator;
@@ -46,9 +47,12 @@ import java.util.Optional;
 @PageTitle("My Profile - Axe.pm")
 public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver {
     private final AccountService accountService;
+    private final UserSettingsService userSettingsService;
     private boolean pageAlreadyInitialized = false;
     private User user;
     private List<Account> confirmedAccounts;
+
+    private Checkbox tfaBox;
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -124,16 +128,28 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
 
         //tfa section
         Details tfaDetails = new Details("Two-Factor Authentication (2FA)");
-        Checkbox tfaBox = new Checkbox("Protect my account with additional one time codes");
-        tfaBox.setEnabled(!confirmedAccounts.isEmpty());
 
-        Select<AccountType> tfaChannelSelect = new Select<>();
-        tfaChannelSelect.setItems(confirmedAccounts.stream().map(Account::getType).toList());
+        tfaBox = new Checkbox("Protect my account with additional one time codes");
+        tfaBox.setValue(userSettingsService.isTfaEnabled(user));
+        tfaBox.setEnabled(!confirmedAccounts.isEmpty());
+        tfaBox.addValueChangeListener(this::onTfaBoxChanged);
+
+        Span noConfirmedAccountsSpan = getNoConfirmedAccountsSpan();
+        Select<String> tfaChannelSelect = new Select<>();
+        tfaChannelSelect.setLabel("Send to");
+        tfaChannelSelect.setItems(confirmedAccounts.stream().map(this::getAccountTypeName).toList());
         Button saveTfaChannelButton = new Button("Save");
+
         HorizontalLayout tfaChannelLayout = new HorizontalLayout(tfaChannelSelect, saveTfaChannelButton);
 
         VerticalLayout tfaContent = new VerticalLayout(tfaBox);
-        if (confirmedAccounts.size() > 1) {
+        if (confirmedAccounts.isEmpty()) {
+            tfaContent.add(noConfirmedAccountsSpan);
+        } else if (confirmedAccounts.size() == 1) {
+            tfaChannelSelect.setValue(getAccountTypeName(confirmedAccounts.get(0)));
+            tfaChannelSelect.setEnabled(false);
+            tfaContent.add(tfaChannelSelect);
+        } else {
             tfaContent.add(tfaChannelLayout);
         }
         tfaDetails.setContent(tfaContent);
@@ -146,6 +162,18 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
         add(title, usernameLayout, emailLayout, howEmailUsedDetails,
                 firstSeparator, passwordLayout,
                 secondSeparator, tfaDetails);
+    }
+
+    private void onTfaBoxChanged(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> valueChangeEvent) {
+        Optional<UserSettings> userSettings = userSettingsService.getUserSettings(user);
+        if (userSettings.isPresent()) {
+            userSettings.get().setTfaEnabled(tfaBox.getValue());
+            userSettingsService.updateUserSettings(userSettings.get());
+            Notification.show("Saved");
+        } else {
+            tfaBox.setEnabled(false);
+            Notification.show("Failed to save. System error.");
+        }
     }
 
     private void boundUserIfAny() {
@@ -174,5 +202,16 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
 
     private List<Account> getConfirmedAccountsFor(final User user) {
         return accountService.getAllAccountsLinkedWithUser(user).stream().filter(Account::isConfirmed).toList();
+    }
+
+    private String getAccountTypeName(final Account account) {
+        return StringUtils.capitalize(account.getType().name());
+    }
+
+    private Span getNoConfirmedAccountsSpan() {
+        Span firstPart = new Span("In order to use 2FA, please ");
+        Anchor link = new Anchor(Endpoint.UI.CONFIRM_ACCOUNT_PAGE, "confirm account");
+        Span lastPart = new Span(" .");
+        return new Span(firstPart, link, lastPart);
     }
 }

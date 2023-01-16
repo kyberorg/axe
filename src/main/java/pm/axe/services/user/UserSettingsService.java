@@ -62,6 +62,11 @@ public class UserSettingsService {
         userSettingsDao.delete(settings);
     }
 
+    public boolean isTfaEnabled(final User user) {
+        Optional<UserSettings> userSettings = getUserSettings(user);
+        return userSettings.map(UserSettings::isTfaEnabled).orElse(false);
+    }
+
     private OperationResult createOrUpdateUserSettings(final UserSettings userSettings) {
         try {
             userSettingsDao.save(userSettings);
@@ -77,4 +82,6 @@ public class UserSettingsService {
             return OperationResult.generalFail();
         }
     }
+
+
 }
