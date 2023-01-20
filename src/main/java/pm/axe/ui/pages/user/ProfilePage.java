@@ -78,7 +78,7 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
         //username
         TextField username = new TextField("Username");
         username.setValue(user.getUsername());
-        username.setEnabled(false);
+        username.setReadOnly(true);
         Button editUsernameButton = new Button("Edit");
         Button saveUsernameButton = new Button("Save");
         FlexLayout usernameLayout = new FlexLayout(username, editUsernameButton);
@@ -86,26 +86,38 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
         usernameLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
         //TODO replace with methods and fix button replace login - see MyLinksPage
         editUsernameButton.addClickListener(e -> {
-            username.setEnabled(true);
+            username.setReadOnly(false);
             usernameLayout.replace(editUsernameButton, saveUsernameButton);
         });
         saveUsernameButton.addClickListener(e -> {
-           username.setEnabled(false);
+           username.setReadOnly(true);
            usernameLayout.replace(saveUsernameButton, editUsernameButton);
         });
 
         //email
         EmailField emailField = new EmailField("E-mail");
         emailField.setValue(getCurrentEmail());
+        emailField.setReadOnly(true);
 
+        Button editEmailButton = new Button("Edit");
         Button saveEmailButton = new Button("Save");
-        FlexLayout emailLayout = new FlexLayout(emailField, saveEmailButton);
-        emailLayout.setAlignItems(Alignment.BASELINE);
+        FlexLayout emailLayout = new FlexLayout(emailField, editEmailButton);
         emailLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
+        emailLayout.setAlignItems(Alignment.BASELINE);
+
+        //TODO replace with methods and fix button replace login - see MyLinksPage
+        editEmailButton.addClickListener(e -> {
+           emailField.setReadOnly(false);
+           emailLayout.replace(editEmailButton, saveEmailButton);
+        });
+        saveEmailButton.addClickListener(e -> {
+           emailField.setReadOnly(true);
+           emailLayout.replace(saveEmailButton, editEmailButton);
+        });
 
         //how Axe use email details
-        Details howEmailUsedDetails = new Details("How Axe use email?");
-        Span span = new Span("Account Recovery"); //TODO replace with UL with usage
+        Details howEmailUsedDetails = new Details("What will be send to email?");
+        Span span = new Span("Account Recovery"); //TODO replace with UL with usage - see RegForm for UL example
         howEmailUsedDetails.setOpened(false);
         howEmailUsedDetails.setContent(span);
 
@@ -127,7 +139,7 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
         Hr secondSeparator = new Hr();
 
         //tfa section
-        Details tfaDetails = new Details("Two-Factor Authentication (2FA)");
+        H5 tfaTitle = new H5("Two-Factor Authentication (2FA)");
 
         tfaBox = new Checkbox("Protect my account with additional one time codes");
         tfaBox.setValue(userSettingsService.isTfaEnabled(user));
@@ -135,33 +147,39 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
         tfaBox.addValueChangeListener(this::onTfaBoxChanged);
 
         Span noConfirmedAccountsSpan = getNoConfirmedAccountsSpan();
+        TextField tfaField = new TextField();
+        tfaField.setReadOnly(true);
+
+        Label sendToLabel = new Label("Send to:");
         Select<String> tfaChannelSelect = new Select<>();
-        tfaChannelSelect.setLabel("Send to");
-        tfaChannelSelect.setItems(confirmedAccounts.stream().map(this::getAccountTypeName).toList());
         Button saveTfaChannelButton = new Button("Save");
 
-        HorizontalLayout tfaChannelLayout = new HorizontalLayout(tfaChannelSelect, saveTfaChannelButton);
+        HorizontalLayout tfaSelectLayout = new HorizontalLayout(sendToLabel, tfaChannelSelect, saveTfaChannelButton);
+        tfaSelectLayout.setAlignItems(Alignment.CENTER);
+        HorizontalLayout tfaFieldLayout = new HorizontalLayout(sendToLabel, tfaField);
+        tfaFieldLayout.setAlignItems(Alignment.CENTER);
 
         VerticalLayout tfaContent = new VerticalLayout(tfaBox);
+        tfaContent.setPadding(false);
+
         if (confirmedAccounts.isEmpty()) {
             tfaContent.add(noConfirmedAccountsSpan);
         } else if (confirmedAccounts.size() == 1) {
-            tfaChannelSelect.setValue(getAccountTypeName(confirmedAccounts.get(0)));
-            tfaChannelSelect.setEnabled(false);
-            tfaContent.add(tfaChannelSelect);
+            tfaField.setValue(getAccountTypeName(confirmedAccounts.get(0)));
+            tfaContent.add(tfaFieldLayout);
         } else {
-            tfaContent.add(tfaChannelLayout);
+            tfaChannelSelect.setItems(confirmedAccounts.stream().map(this::getAccountTypeName).toList());
+            tfaContent.add(tfaSelectLayout);
         }
-        tfaDetails.setContent(tfaContent);
-        tfaDetails.setOpened(true);
 
         //TODO 3rd separator
+        //TODO Settings Tab/Zone
         //TODO danger zone
 
         //overall layout
         add(title, usernameLayout, emailLayout, howEmailUsedDetails,
                 firstSeparator, passwordLayout,
-                secondSeparator, tfaDetails);
+                secondSeparator, tfaTitle, tfaContent);
     }
 
     private void onTfaBoxChanged(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> valueChangeEvent) {

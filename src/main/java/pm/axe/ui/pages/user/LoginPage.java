@@ -3,12 +3,16 @@ package pm.axe.ui.pages.user;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -18,6 +22,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import pm.axe.Endpoint;
 import pm.axe.db.models.User;
 import pm.axe.services.user.UserService;
@@ -45,6 +50,7 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     private final TextField usernameInput = new TextField();
     private final PasswordField passwordInput = new PasswordField();
     private final Checkbox forgotMe = new Checkbox();
+    private final Button forgotMeInfoButton = new Button(VaadinIcon.INFO_CIRCLE_O.create());
 
     private final Section forgotPasswordSection = new Section();
     private final Anchor forgotPasswordLink = new Anchor();
@@ -75,10 +81,22 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
 
         usernameInput.setLabel("Username/Email");
         usernameInput.setClearButtonVisible(true);
+        usernameInput.setRequired(true);
         passwordInput.setLabel("Password");
-        forgotMe.setLabel("Log me out after");
+        passwordInput.setRequired(true);
 
-        setFormFields(usernameInput, passwordInput, forgotMe);
+        forgotMe.setLabel("Log me out after");
+        forgotMe.setTooltipText("If enabled, Axe will log you out once current session is over");
+        forgotMeInfoButton.setIconAfterText(true);
+        forgotMeInfoButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        forgotMeInfoButton.setClassName("info-button");
+
+        Tooltip forgotMeTooltip = forgotMe.getTooltip().withManual(true);
+        forgotMeInfoButton.addClickListener(e -> forgotMeTooltip.setOpened(!forgotMeTooltip.isOpened()));
+        FlexLayout forgotMeLayout = new FlexLayout(forgotMe, forgotMeInfoButton);
+        forgotMeLayout.setAlignItems(Alignment.BASELINE);
+
+        setFormFields(usernameInput, passwordInput, forgotMeLayout);
 
         setSubmitButtonText("Jump in");
         getSubmitButton().addClickShortcut(Key.ENTER);
@@ -104,9 +122,13 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     }
 
     private void doEasyLogin() {
-        if (userService.isUserExists(usernameInput.getValue())) {
+        String username = StringUtils.isNotBlank(usernameInput.getValue()) ? usernameInput.getValue().trim() : "";
+        if (StringUtils.isBlank(username)) {
+            usernameInput.setInvalid(true);
+            usernameInput.setErrorMessage("Please type username or email here");
+        } else if (userService.isUserExists(username)) {
             AxeSession.getCurrent().ifPresent(axs -> {
-                Optional<User> user = userService.getUserByUsername(usernameInput.getValue());
+                Optional<User> user = userService.getUserByUsername(username);
                 user.ifPresent(axs::setUser);
                 usernameInput.getUI().ifPresent(ui -> ui.navigate(Endpoint.UI.PROFILE_PAGE));
             });
