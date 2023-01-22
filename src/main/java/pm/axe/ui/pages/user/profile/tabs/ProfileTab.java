@@ -85,11 +85,14 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
 
         //telegram section
         FlexLayout telegramLayout = new FlexLayout();
+        telegramLayout.setAlignItems(Alignment.BASELINE);
+
         Optional<Account> telegramAccount = getTelegramAccount();
-        if (telegramAccount.isPresent()) {
+        Optional<String> telegramUsername = getTelegramUsername();
+        if (telegramAccount.isPresent() && telegramUsername.isPresent()) { //FIXME fix logic
             TextField telegramField = new TextField("Telegram");
             telegramField.setPrefixComponent(VaadinIcon.AT.create());
-            telegramField.setValue(telegramAccount.get().getAccountName());
+            telegramField.setValue(telegramUsername.get());
             Button unlink = new Button("Unlink");
             telegramLayout.add(telegramField, unlink);
         } else {
@@ -138,5 +141,14 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             }
         }
         return Optional.ofNullable(tgToken);
+    }
+
+    private Optional<String> getTelegramUsername() {
+        Optional<Account> telegramAccount = getTelegramAccount();
+        if (telegramAccount.isPresent()) {
+            return accountService.decryptAccountName(telegramAccount.get());
+        } else {
+            return Optional.empty();
+        }
     }
 }
