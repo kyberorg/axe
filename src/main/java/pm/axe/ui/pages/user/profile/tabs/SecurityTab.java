@@ -22,6 +22,7 @@ import pm.axe.internal.HasTabInit;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.UserSettingsService;
 import pm.axe.ui.elements.PasswordGenerator;
+import pm.axe.users.AccountType;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,8 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     private final AccountService accountService;
     private final UserSettingsService userSettingsService;
     private Checkbox tfaBox;
+    private TextField tfaField;
+    private Select<String> tfaChannelSelect;
 
     private User user;
 
@@ -66,17 +69,18 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         tfaBox.addValueChangeListener(this::onTfaBoxChanged);
 
         Span noConfirmedAccountsSpan = getNoConfirmedAccountsSpan();
-        TextField tfaField = new TextField();
+
+        tfaField = new TextField();
         tfaField.setReadOnly(true);
 
         Label sendToLabel = new Label("Send to:");
-        Select<String> tfaChannelSelect = new Select<>();
+        tfaChannelSelect = new Select<>();
         Button saveTfaChannelButton = new Button("Save");
 
         HorizontalLayout tfaSelectLayout = new HorizontalLayout(sendToLabel, tfaChannelSelect, saveTfaChannelButton);
-        tfaSelectLayout.setAlignItems(Alignment.CENTER);
+        tfaSelectLayout.setAlignItems(Alignment.BASELINE);
         HorizontalLayout tfaFieldLayout = new HorizontalLayout(sendToLabel, tfaField);
-        tfaFieldLayout.setAlignItems(Alignment.CENTER);
+        tfaFieldLayout.setAlignItems(Alignment.BASELINE);
 
         VerticalLayout tfaContent = new VerticalLayout(tfaBox);
         tfaContent.setPadding(false);
@@ -89,6 +93,11 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         } else {
             tfaChannelSelect.setItems(confirmedAccounts.stream().map(this::getAccountTypeName).toList());
             tfaContent.add(tfaSelectLayout);
+            //set default value
+            Optional<UserSettings> userSettings = userSettingsService.getUserSettings(user);
+            userSettings.ifPresent(settings -> tfaChannelSelect.setValue(
+                    StringUtils.capitalize(userSettings.get().getTfaChannel().name())
+            ));
         }
 
         VerticalLayout tfaLayout = new VerticalLayout(tfaTitle, tfaBox, tfaContent);
@@ -98,9 +107,38 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     }
 
     private void onTfaBoxChanged(AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> valueChangeEvent) {
+        AccountType tfaChannel;
+        boolean tfaBoxChecked = tfaBox.getValue();
+        if (tfaBoxChecked) {
+            //Selecting tfa channel
+            if (tfaField.isVisible() && !tfaField.isEmpty()) {
+                tfaChannel = AccountType.valueOf(tfaField.getValue());
+            } else if (tfaChannelSelect.isVisible()) {
+                if (tfaChannelSelect.isEmpty() || tfaChannelSelect.getValue().equals(AccountType.LOCAL.name())) {
+                    tfaBox.setValue(false);
+                    tfaChannelSelect.setInvalid(true);
+                    tfaChannelSelect.setErrorMessage("Please select 2FA destination");
+                    tfaChannelSelect.focus();
+                    return;
+                } else {
+                    tfaChannel = AccountType.valueOf(tfaChannelSelect.getValue());
+                }
+            } else {
+                //should never happen
+                tfaBox.setValue(false);
+                Notification.show("Failed to save. No valid and confirmed 2FA channels exist yet");
+                return;
+            }
+        } else {
+            //tfa disabled - reset channel
+            tfaChannel = AccountType.LOCAL;
+        }
+
+        //saving
         Optional<UserSettings> userSettings = userSettingsService.getUserSettings(user);
         if (userSettings.isPresent()) {
             userSettings.get().setTfaEnabled(tfaBox.getValue());
+            userSettings.get().setTfaChannel(tfaChannel);
             userSettingsService.updateUserSettings(userSettings.get());
             Notification.show("Saved");
         } else {

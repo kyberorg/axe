@@ -101,12 +101,14 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             } else {
                 telegramLayout.setVisible(false);
             }
-
         } else {
             Optional<Token> tgToken = getTelegramToken();
             if (tgToken.isPresent()) {
+                Details telegramDetails = new Details("Link Telegram Account");
+                telegramDetails.setOpened(true);
                 TelegramSpan telegramSpan = TelegramSpan.create(tgToken.get());
-                telegramLayout.add(telegramSpan);
+                telegramDetails.setContent(telegramSpan);
+                telegramLayout.add(telegramDetails);
             } else {
                 telegramLayout.setVisible(false);
             }
