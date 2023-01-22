@@ -88,13 +88,20 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         telegramLayout.setAlignItems(Alignment.BASELINE);
 
         Optional<Account> telegramAccount = getTelegramAccount();
-        Optional<String> telegramUsername = getTelegramUsername();
-        if (telegramAccount.isPresent() && telegramUsername.isPresent()) { //FIXME fix logic
-            TextField telegramField = new TextField("Telegram");
-            telegramField.setPrefixComponent(VaadinIcon.AT.create());
-            telegramField.setValue(telegramUsername.get());
-            Button unlink = new Button("Unlink");
-            telegramLayout.add(telegramField, unlink);
+
+        if (telegramAccount.isPresent()) {
+            Optional<String> telegramUsername =  accountService.decryptAccountName(telegramAccount.get());
+            if (telegramUsername.isPresent()) {
+                TextField telegramField = new TextField("Telegram");
+                telegramField.setReadOnly(true);
+                telegramField.setPrefixComponent(VaadinIcon.AT.create());
+                telegramField.setValue(telegramUsername.get());
+                Button unlink = new Button("Unlink");
+                telegramLayout.add(telegramField, unlink);
+            } else {
+                telegramLayout.setVisible(false);
+            }
+
         } else {
             Optional<Token> tgToken = getTelegramToken();
             if (tgToken.isPresent()) {
@@ -143,12 +150,4 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         return Optional.ofNullable(tgToken);
     }
 
-    private Optional<String> getTelegramUsername() {
-        Optional<Account> telegramAccount = getTelegramAccount();
-        if (telegramAccount.isPresent()) {
-            return accountService.decryptAccountName(telegramAccount.get());
-        } else {
-            return Optional.empty();
-        }
-    }
 }
