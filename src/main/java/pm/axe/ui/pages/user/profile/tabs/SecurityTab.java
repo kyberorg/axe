@@ -75,6 +75,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
 
         Label sendToLabel = new Label("Send to:");
         tfaChannelSelect = new Select<>();
+        tfaChannelSelect.addValueChangeListener(this::onTfaSelectModified);
         Button saveTfaChannelButton = new Button("Save");
 
         HorizontalLayout tfaSelectLayout = new HorizontalLayout(sendToLabel, tfaChannelSelect, saveTfaChannelButton);
@@ -134,6 +135,21 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
             tfaChannel = AccountType.LOCAL;
         }
 
+        saveTfa(tfaChannel);
+    }
+
+    private void onTfaSelectModified(final AbstractField.ComponentValueChangeEvent<Select<String>, String> event) {
+        AccountType selectedAccountType = AccountType.valueOf(tfaChannelSelect.getValue());
+        if (selectedAccountType != AccountType.LOCAL) {
+            tfaBox.setValue(true);
+            saveTfa(selectedAccountType);
+        } else {
+            //should not happen, but no TFA for LOCAL
+            tfaBox.setValue(false);
+        }
+    }
+
+    private void saveTfa(final AccountType tfaChannel) {
         //saving
         Optional<UserSettings> userSettings = userSettingsService.getUserSettings(user);
         if (userSettings.isPresent()) {
