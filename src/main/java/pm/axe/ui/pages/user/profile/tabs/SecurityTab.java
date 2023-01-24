@@ -76,9 +76,8 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         Label sendToLabel = new Label("Send to:");
         tfaChannelSelect = new Select<>();
         tfaChannelSelect.addValueChangeListener(this::onTfaSelectModified);
-        Button saveTfaChannelButton = new Button("Save");
 
-        HorizontalLayout tfaSelectLayout = new HorizontalLayout(sendToLabel, tfaChannelSelect, saveTfaChannelButton);
+        HorizontalLayout tfaSelectLayout = new HorizontalLayout(sendToLabel, tfaChannelSelect);
         tfaSelectLayout.setAlignItems(Alignment.BASELINE);
         HorizontalLayout tfaFieldLayout = new HorizontalLayout(sendToLabel, tfaField);
         tfaFieldLayout.setAlignItems(Alignment.BASELINE);
