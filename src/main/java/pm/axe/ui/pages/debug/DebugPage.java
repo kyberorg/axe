@@ -68,8 +68,7 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
         }
 
         final Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
-        final boolean hasUserSettings = userSettings.isPresent();
-        if (hasUserSettings) {
+        if (userSettings.isPresent()) {
             PeriodDuration loginSessionDuration = userSettings.get().getLoginSessionDuration();
             String sessionDurationString = AmountFormats.wordBased(loginSessionDuration.getPeriod(),
                     loginSessionDuration.getDuration(), Locale.ENGLISH);
