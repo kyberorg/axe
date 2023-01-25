@@ -270,6 +270,13 @@
             <version>2.0.0</version>
         </dependency>
 
+        <!-- Advanced Time Types -->
+        <dependency>
+            <groupId>org.threeten</groupId>
+            <artifactId>threeten-extra</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
         <!-- Spring Annotation Processor for generating .properties metadata -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

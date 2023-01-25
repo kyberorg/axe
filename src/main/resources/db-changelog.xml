@@ -222,4 +222,11 @@
             <column name="extra_info" type="VARCHAR(255)" />
         </addColumn>
     </changeSet>
+    <changeSet id="11" author="kyberorg">
+        <addColumn tableName="user_settings">
+            <column name="dark_mode" type="BOOLEAN" />
+            <column name="landing_page" type="VARCHAR(255)" />
+            <column name="login_session_duration" type="VARCHAR(255)" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

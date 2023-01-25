@@ -15,15 +15,21 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
+import org.threeten.extra.AmountFormats;
+import org.threeten.extra.PeriodDuration;
 import pm.axe.Axe;
 import pm.axe.Endpoint;
+import pm.axe.db.models.UserSettings;
 import pm.axe.services.AxeSessionService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
+import pm.axe.utils.AxeSessionUtils;
 
 import javax.servlet.http.Cookie;
+import java.util.Locale;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @SpringComponent
@@ -32,9 +38,11 @@ import javax.servlet.http.Cookie;
 @PageTitle("Debug Page - Axe.pm")
 public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final AxeSessionService sessionService;
+    private final AxeSessionUtils axeSessionUtils;
     private final AppUtils appUtils;
     private final Span axeSessionSpan = new Span();
     private final Span vaadinSessionSpan = new Span();
+    private final Span loginSessionDurationSpan = new Span();
 
     private final HorizontalLayout endSessionButtons = new HorizontalLayout();
     private final Button endSessionButton = new Button();
@@ -57,6 +65,15 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
         if (hasVaadinSession) {
             vaadinSessionSpan.setText("Vaadin Session ID: " + VaadinSession.getCurrent().getSession().getId());
             add(vaadinSessionSpan);
+        }
+
+        final Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
+        if (userSettings.isPresent()) {
+            PeriodDuration loginSessionDuration = userSettings.get().getLoginSessionDuration();
+            String sessionDurationString = AmountFormats.wordBased(loginSessionDuration.getPeriod(),
+                    loginSessionDuration.getDuration(), Locale.ENGLISH);
+            loginSessionDurationSpan.setText("Your login session duration is " + sessionDurationString);
+            add(loginSessionDurationSpan);
         }
 
         add(new Span("Ready to debug something..."));

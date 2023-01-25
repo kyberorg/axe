@@ -1,5 +1,9 @@
 package pm.axe;
 
+import org.threeten.extra.PeriodDuration;
+
+import java.time.Period;
+
 /**
  * Application constants.
  *
@@ -36,6 +40,7 @@ public final class Axe {
         public static final int NOTIFICATION_DURATION_MILLIS = 1500;
         public static final String EMAIL_FROM_ADDRESS = "axe@axe.pm";
         public static final long NO_USER = -1;
+        public static final PeriodDuration LOGIN_SESSION_DURATION = PeriodDuration.of(Period.ofMonths(1));
     }
 
     public static class Profiles {
