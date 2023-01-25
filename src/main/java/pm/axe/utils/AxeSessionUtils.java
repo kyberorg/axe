@@ -3,6 +3,7 @@ package pm.axe.utils;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
 import pm.axe.services.user.UserSettingsService;
 import pm.axe.session.AxeSession;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Component
 @UIScope
-public class UIUtils {
+public class AxeSessionUtils {
     private final UserSettingsService uss;
 
     /**

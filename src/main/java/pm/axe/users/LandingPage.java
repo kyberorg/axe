@@ -13,7 +13,7 @@ public enum LandingPage {
     @Getter
     private final String path;
 
-    LandingPage(String path) {
+    LandingPage(final String path) {
         this.path = path;
     }
 }

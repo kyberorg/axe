@@ -6,6 +6,9 @@ import pm.axe.Axe;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+/**
+ * Converts {@link PeriodDuration} object to {@link String} and back.
+ */
 @Converter(autoApply = true)
 public class PeriodDurationConverter implements AttributeConverter<PeriodDuration, String> {
     @Override

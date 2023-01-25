@@ -25,10 +25,9 @@ import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeBaseLayout;
 import pm.axe.utils.AppUtils;
-import pm.axe.utils.UIUtils;
+import pm.axe.utils.AxeSessionUtils;
 
 import javax.servlet.http.Cookie;
-import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -39,7 +38,7 @@ import java.util.Optional;
 @PageTitle("Debug Page - Axe.pm")
 public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final AxeSessionService sessionService;
-    private final UIUtils uiUtils;
+    private final AxeSessionUtils axeSessionUtils;
     private final AppUtils appUtils;
     private final Span axeSessionSpan = new Span();
     private final Span vaadinSessionSpan = new Span();
@@ -68,13 +67,12 @@ public class DebugPage extends AxeBaseLayout implements BeforeEnterObserver {
             add(vaadinSessionSpan);
         }
 
-        final Optional<UserSettings> userSettings = uiUtils.getCurrentUserSettings();
+        final Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
         final boolean hasUserSettings = userSettings.isPresent();
         if (hasUserSettings) {
             PeriodDuration loginSessionDuration = userSettings.get().getLoginSessionDuration();
             String sessionDurationString = AmountFormats.wordBased(loginSessionDuration.getPeriod(),
                     loginSessionDuration.getDuration(), Locale.ENGLISH);
-            loginSessionDuration.get(ChronoUnit.SECONDS);
             loginSessionDurationSpan.setText("Your login session duration is " + sessionDurationString);
             add(loginSessionDurationSpan);
         }

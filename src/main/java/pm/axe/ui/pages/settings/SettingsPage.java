@@ -23,6 +23,7 @@ import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.layouts.AxeBaseLayout;
+import pm.axe.utils.AxeSessionUtils;
 
 import java.util.Optional;
 
@@ -54,7 +55,8 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final Notification savedNotification = makeSavedNotification();
 
     private final MainView mainView;
-    private final UserSettingsService userSettingsService;
+    private final AxeSessionUtils axeSessionUtils;
+    private final UserSettingsService uss;
 
     private boolean isClientChange;
     private UI currentUI;
@@ -63,11 +65,13 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
      * Creates {@link SettingsPage}.
      *
      * @param mainView            main view bean to switch theme.
-     * @param uss user settings service to read user settings, if user logged in.
+     * @param axeSessionUtils             session utils to read user settings from, if any user logged in.
+     * @param uss to save updated {@link UserSettings}.
      */
-    public SettingsPage(final MainView mainView, final UserSettingsService uss) {
+    public SettingsPage(final MainView mainView, final AxeSessionUtils axeSessionUtils, final UserSettingsService uss) {
         this.mainView = mainView;
-        this.userSettingsService = uss;
+        this.axeSessionUtils = axeSessionUtils;
+        this.uss = uss;
         pageInit();
     }
 
@@ -90,7 +94,7 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
                     if (ys.hasDevice()) adjustNotificationPosition(ys.getDevice().isMobile());
                 });
         //set values from UserSettings
-        Optional<UserSettings> userSettings = getCurrentUserSettings();
+        Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
         userSettings.ifPresent(us -> darkModeValue.setValue(us.isDarkMode()));
         //automatic set all values, all other actions are from client.
         isClientChange = true;
@@ -149,9 +153,9 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
         mainView.applyTheme(isDarkTheme);
         AxeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
         //write to user settings as well,  if any bound.
-        getCurrentUserSettings().ifPresent(us -> {
+        axeSessionUtils.getCurrentUserSettings().ifPresent(us -> {
             us.setDarkMode(event.getValue());
-            userSettingsService.updateUserSettings(us);
+            uss.updateUserSettings(us);
         });
     }
 
@@ -194,15 +198,6 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         postfixSpan.add(start, pageReloadButton, end);
         return postfixSpan;
-    }
-
-    private Optional<UserSettings> getCurrentUserSettings() {
-        Optional<AxeSession> axs = AxeSession.getCurrent();
-        if (axs.isPresent() && axs.get().hasUser()) {
-            return userSettingsService.getUserSettings(axs.get().getUser());
-        }  else {
-            return Optional.empty();
-        }
     }
 
     public static class IDs {

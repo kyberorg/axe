@@ -43,7 +43,7 @@ public class UserSettings extends BaseModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "landing_page")
-    private LandingPage landingPage;
+    private LandingPage landingPage = LandingPage.HOME_PAGE;
 
     @Convert(converter = PeriodDurationConverter.class)
     @Column(name = "login_session_duration")
