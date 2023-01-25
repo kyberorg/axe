@@ -71,7 +71,7 @@ jobs:
           github-url: ${{ github.event.pull_request.comments_url }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-mode: update_last
-      if: ${{ false }}
+        if: ${{ false }}
 
       - name: Deploy
         uses: wei/curl@master
