@@ -17,10 +17,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import pm.axe.Endpoint;
+import pm.axe.db.models.UserSettings;
+import pm.axe.services.user.UserSettingsService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.layouts.AxeBaseLayout;
+
+import java.util.Optional;
 
 import static pm.axe.Axe.C.ONE_SECOND_IN_MILLIS;
 
@@ -50,6 +54,7 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
     private final Notification savedNotification = makeSavedNotification();
 
     private final MainView mainView;
+    private final UserSettingsService userSettingsService;
 
     private boolean isClientChange;
     private UI currentUI;
@@ -57,10 +62,12 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
     /**
      * Creates {@link SettingsPage}.
      *
-     * @param mainView main view bean to switch theme.
+     * @param mainView            main view bean to switch theme.
+     * @param uss user settings service to read user settings, if user logged in.
      */
-    public SettingsPage(final MainView mainView) {
+    public SettingsPage(final MainView mainView, final UserSettingsService uss) {
         this.mainView = mainView;
+        this.userSettingsService = uss;
         pageInit();
     }
 
@@ -82,6 +89,9 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
                     usersFeatureValue.setValue(ys.getSettings().isUsersFeatureEnabled());
                     if (ys.hasDevice()) adjustNotificationPosition(ys.getDevice().isMobile());
                 });
+        //set values from UserSettings
+        Optional<UserSettings> userSettings = getCurrentUserSettings();
+        userSettings.ifPresent(us -> darkModeValue.setValue(us.isDarkMode()));
         //automatic set all values, all other actions are from client.
         isClientChange = true;
     }
@@ -138,6 +148,11 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
         final boolean isDarkTheme = event.getValue();
         mainView.applyTheme(isDarkTheme);
         AxeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
+        //write to user settings as well,  if any bound.
+        getCurrentUserSettings().ifPresent(us -> {
+            us.setDarkMode(event.getValue());
+            userSettingsService.updateUserSettings(us);
+        });
     }
 
     private void onUsersFeatureSwitchChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> e) {
@@ -179,6 +194,15 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
 
         postfixSpan.add(start, pageReloadButton, end);
         return postfixSpan;
+    }
+
+    private Optional<UserSettings> getCurrentUserSettings() {
+        Optional<AxeSession> axs = AxeSession.getCurrent();
+        if (axs.isPresent() && axs.get().hasUser()) {
+            return userSettingsService.getUserSettings(axs.get().getUser());
+        }  else {
+            return Optional.empty();
+        }
     }
 
     public static class IDs {
