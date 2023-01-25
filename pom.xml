@@ -69,7 +69,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>5.7.5</version>
         </dependency>
 
         <dependency>
@@ -268,6 +267,13 @@
             <groupId>com.vaadin.componentfactory</groupId>
             <artifactId>togglebutton</artifactId>
             <version>2.0.0</version>
+        </dependency>
+
+        <!-- Advanced Time Types -->
+        <dependency>
+            <groupId>org.threeten</groupId>
+            <artifactId>threeten-extra</artifactId>
+            <version>1.7.2</version>
         </dependency>
 
         <!-- Spring Annotation Processor for generating .properties metadata -->

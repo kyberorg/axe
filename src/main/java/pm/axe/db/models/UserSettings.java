@@ -4,9 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.threeten.extra.PeriodDuration;
+import pm.axe.db.converters.PeriodDurationConverter;
 import pm.axe.users.AccountType;
+import pm.axe.users.LandingPage;
 
 import javax.persistence.*;
+import java.time.Period;
 
 @Getter
 @Setter
@@ -32,7 +36,19 @@ public class UserSettings extends BaseModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "password_reset_channel")
-    private AccountType passwordResetChannel;
+    private AccountType passwordResetChannel = AccountType.LOCAL;
+
+    @Column(name = "dark_mode")
+    private boolean darkMode = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "landing_page")
+    private LandingPage landingPage = LandingPage.HOME_PAGE;
+
+    @Convert(converter = PeriodDurationConverter.class)
+    @Column(name = "login_session_duration")
+    private PeriodDuration loginSessionDuration = PeriodDuration.of(Period.ofMonths(1));
+
 
     /**
      * Creates new {@link UserSettings}.
