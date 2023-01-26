@@ -148,7 +148,7 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
         notifyClient();
     }
 
-    private void onDarkModeChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
+    public void onDarkModeChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
         final boolean isDarkTheme = event.getValue();
         mainView.applyTheme(isDarkTheme);
         AxeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
