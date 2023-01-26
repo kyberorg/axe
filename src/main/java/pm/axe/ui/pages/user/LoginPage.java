@@ -25,11 +25,14 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import pm.axe.Endpoint;
 import pm.axe.db.models.User;
+import pm.axe.db.models.UserSettings;
 import pm.axe.services.user.UserService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeFormLayout;
+import pm.axe.users.LandingPage;
 import pm.axe.utils.AppUtils;
+import pm.axe.utils.AxeSessionUtils;
 
 import java.util.Optional;
 
@@ -43,6 +46,9 @@ import java.util.Optional;
 public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     private final AppUtils appUtils;
     private final UserService userService;
+    private final AxeSessionUtils axeSessionUtils;
+    private final MainView mainView;
+
     private final Span subTitleText = new Span();
     private final Span spaceSpan = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -130,7 +136,20 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
             AxeSession.getCurrent().ifPresent(axs -> {
                 Optional<User> user = userService.getUserByUsername(username);
                 user.ifPresent(axs::setUser);
-                usernameInput.getUI().ifPresent(ui -> ui.navigate(Endpoint.UI.PROFILE_PAGE));
+                Optional<UserSettings> us = axeSessionUtils.getCurrentUserSettings();
+                //dark mode
+                if (us.isPresent() && us.get().isDarkMode()) {
+                    axs.getSettings().setDarkMode(true);
+                    mainView.applyTheme(true);
+                }
+                //landing page
+                LandingPage landingPage; //page after login
+                if (us.isPresent()) {
+                    landingPage = us.get().getLandingPage();
+                } else {
+                    landingPage = LandingPage.HOME_PAGE;
+                }
+                usernameInput.getUI().ifPresent(ui -> ui.navigate(landingPage.getPath()));
             });
         } else {
             usernameInput.setInvalid(true);

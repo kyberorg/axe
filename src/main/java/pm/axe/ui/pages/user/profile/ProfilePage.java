@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import pm.axe.Endpoint;
 import pm.axe.db.models.User;
 import pm.axe.internal.HasTabInit;
-import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeCompactLayout;
 import pm.axe.ui.pages.user.LoginPage;
@@ -28,11 +27,11 @@ import pm.axe.ui.pages.user.profile.tabs.DangerZoneTab;
 import pm.axe.ui.pages.user.profile.tabs.ProfileTab;
 import pm.axe.ui.pages.user.profile.tabs.SecurityTab;
 import pm.axe.ui.pages.user.profile.tabs.SettingsTab;
+import pm.axe.utils.AxeSessionUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 @SpringComponent
 @UIScope
@@ -41,6 +40,7 @@ import java.util.Optional;
 @Route(value = Endpoint.UI.PROFILE_PAGE, layout = MainView.class)
 @PageTitle("My Profile - Axe.pm")
 public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver {
+    private final AxeSessionUtils axeSessionUtils;
     private final Tab profileTab = new Tab(VaadinIcon.USER.create(), new Span("Profile"));
     private final Tab securityTab = new Tab(VaadinIcon.SHIELD.create(), new Span("Security"));
     private final Tab settingsTab = new Tab(VaadinIcon.COG.create(), new Span("Settings"));
@@ -58,7 +58,7 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (event.isRefreshEvent()) return;
-        boundUserIfAny();
+        user = axeSessionUtils.boundUserIfAny();
         if (Objects.isNull(user)) {
             event.forwardTo(LoginPage.class);
             return;
@@ -99,15 +99,6 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
         tabs.setWidthFull();
 
         add(title, tabs, content);
-    }
-
-    private void boundUserIfAny() {
-        Optional<AxeSession> axeSession = AxeSession.getCurrent();
-        if (axeSession.isPresent()) {
-            if (axeSession.get().hasUser()) {
-                user = axeSession.get().getUser();
-            }
-        }
     }
 
     private void setContent(final Tab tab) {

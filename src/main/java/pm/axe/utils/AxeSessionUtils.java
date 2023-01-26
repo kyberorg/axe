@@ -33,4 +33,17 @@ public class AxeSessionUtils {
             return Optional.empty();
         }
     }
+
+    public User boundUserIfAny() {
+        Optional<AxeSession> axeSession = AxeSession.getCurrent();
+        if (axeSession.isPresent()) {
+            if (axeSession.get().hasUser()) {
+                return axeSession.get().getUser();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 }
