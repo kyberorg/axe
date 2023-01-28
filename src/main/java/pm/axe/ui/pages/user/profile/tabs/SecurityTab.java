@@ -104,9 +104,9 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         resetPasswordSelect.addValueChangeListener(this::onResetPasswordSelectModified);
 
         HorizontalLayout resetPasswordFieldLayout = new HorizontalLayout(sendResetLinkToLabel, resetPasswordField);
-        resetPasswordFieldLayout.setAlignItems(Alignment.BASELINE);
+        resetPasswordFieldLayout.setAlignItems(Alignment.CENTER);
         HorizontalLayout resetPasswordSelectLayout = new HorizontalLayout(sendResetLinkToLabel, resetPasswordSelect);
-        resetPasswordSelectLayout.setAlignItems(Alignment.BASELINE);
+        resetPasswordSelectLayout.setAlignItems(Alignment.CENTER);
 
         VerticalLayout resetPasswordContent = new VerticalLayout();
         resetPasswordContent.setPadding(false);
@@ -142,7 +142,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         tfaBox.addValueChangeListener(this::onTfaBoxChanged);
 
         Span noConfirmedAccountsSpan = getNoConfirmedAccountsSpan();
-        Label sentToLabel = new Label("Send to: ");
+        Label sentToLabel = new Label("Send to:");
 
         tfaField = new TextField();
         tfaField.setReadOnly(true);

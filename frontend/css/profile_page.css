@@ -1,3 +1,8 @@
 .profile-title {
     align-self: center;
 }
+
+.toggle-with-prefix-postfix {
+    margin-right: 0.3rem;
+    margin-left: 0.3rem;
+}

@@ -5,8 +5,10 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -17,6 +19,7 @@ import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
 import pm.axe.internal.HasTabInit;
 import pm.axe.services.user.UserSettingsService;
+import pm.axe.ui.elements.Section;
 import pm.axe.ui.pages.settings.SettingsPage;
 import pm.axe.users.LandingPage;
 import pm.axe.utils.AxeSessionUtils;
@@ -33,41 +36,32 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
     private final UserSettingsService uss;
     private final SettingsPage settingsPage;
 
+    private Section loginSessionSection;
+    private Section landingPageSection;
+    private Section darkModeSection;
+
     private final Select<String> landingPageSelect = new Select<>();
     private final ToggleButton darkModeToggle = new ToggleButton();
     @Override
     public void tabInit(final User user) {
         removeAll();
-        add(landingPageLayout(), darkModeLayout(), loginSessionDuration());
+        loginSessionSection = createLoginSessionSection();
+        landingPageSection = createLandingPageSection();
+        darkModeSection = createDarkModeSection();
+
+        add(loginSessionSection, landingPageSection, darkModeSection);
     }
 
-    private Component landingPageLayout() {
-        landingPageSelect.setLabel("Landing Page");
-        landingPageSelect.setItems(Arrays.stream(LandingPage.values()).map(LandingPage::name).toList());
-        Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
-        userSettings.ifPresent(settings -> landingPageSelect.setValue(settings.getLandingPage().name()));
-        landingPageSelect.addValueChangeListener(this::onLandingPageSelectChanged);
-        //TODO add tooltip with manual trigger
-        FlexLayout layout = new FlexLayout(landingPageSelect);
-        layout.setAlignItems(Alignment.BASELINE);
-        return layout;
-    }
-
-    private Component darkModeLayout() {
-        darkModeToggle.setLabel("Dark Mode: ");
-        darkModeToggle.addValueChangeListener(this::onDarkModeToggleChanged);
-        Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
-        userSettings.ifPresent(us -> darkModeToggle.setValue(us.isDarkMode()));
-
-        FlexLayout layout = new FlexLayout(darkModeToggle);
-        layout.setAlignItems(Alignment.BASELINE);
-        return layout;
+    private Section createLoginSessionSection() {
+        loginSessionSection = new Section("Login Session Duration");
+        Component content = loginSessionDuration();
+        loginSessionSection.setContent(content);
+        return loginSessionSection;
     }
 
     private Component loginSessionDuration() {
         //TODO may be a single component
         IntegerField amountField = new IntegerField();
-        amountField.setLabel("Login Session Duration");
         amountField.setStepButtonsVisible(true);
         amountField.setMin(1);
         amountField.setMax(60);
@@ -80,7 +74,54 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
         Button save = new Button("Save");
         save.addClickListener(this::onSessionDurationSaved);
 
-        FlexLayout layout = new FlexLayout(amountField, unitSelect, save);
+        HorizontalLayout fields = new HorizontalLayout(amountField, unitSelect, save);
+        fields.setAlignItems(Alignment.BASELINE);
+
+        Span explanationSpan = new Span("Time you will stay logged in after successful login");
+
+        VerticalLayout content = new VerticalLayout(fields, explanationSpan);
+        content.setPadding(false);
+        return content;
+    }
+
+    private Section createLandingPageSection() {
+        landingPageSection = new Section("Landing page");
+        Component content = landingPageLayout();
+        landingPageSection.setContent(content);
+        return landingPageSection;
+    }
+
+    private Component landingPageLayout() {
+        landingPageSelect.setLabel("Landing Page");
+        landingPageSelect.setItems(Arrays.stream(LandingPage.values()).map(LandingPage::name).toList());
+        Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
+        userSettings.ifPresent(settings -> landingPageSelect.setValue(settings.getLandingPage().name()));
+        landingPageSelect.addValueChangeListener(this::onLandingPageSelectChanged);
+
+        Span explanationSpan = new Span("Page that opens after login");
+        VerticalLayout content = new VerticalLayout(landingPageSelect, explanationSpan);
+        content.setPadding(false);
+        return content;
+    }
+
+    private Section createDarkModeSection() {
+        darkModeSection = new Section("Dark Mode");
+        Component content = darkModeLayout();
+        darkModeSection.setContent(content);
+        return darkModeSection;
+    }
+
+    private Component darkModeLayout() {
+        Span offSpan = new Span("Off");
+
+        darkModeToggle.addValueChangeListener(this::onDarkModeToggleChanged);
+        Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
+        userSettings.ifPresent(us -> darkModeToggle.setValue(us.isDarkMode()));
+        darkModeToggle.addClassName("toggle-with-prefix-postfix");
+
+        Span onSpan = new Span("On");
+
+        FlexLayout layout = new FlexLayout(offSpan, darkModeToggle, onSpan);
         layout.setAlignItems(Alignment.BASELINE);
         return layout;
     }
