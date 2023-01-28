@@ -1,5 +1,6 @@
 package pm.axe.ui.pages.user.profile.tabs;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Span;
@@ -20,6 +21,7 @@ import pm.axe.internal.HasTabInit;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
+import pm.axe.ui.elements.Section;
 import pm.axe.ui.elements.TelegramSpan;
 import pm.axe.users.AccountType;
 
@@ -33,64 +35,81 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private final TokenService tokenService;
     private User user;
 
+    @SuppressWarnings("FieldCanBeLocal") //will be re-drawn if event received
+    private Section accountsSection;
+
+    private final TextField usernameField = new TextField();
+    private final Button editUsernameButton = new Button();
+    private final Button saveUsernameButton = new Button();
+    private final FlexLayout usernameLayout = new FlexLayout();
+
+    private final EmailField emailField = new EmailField();
+    private final Button editEmailButton = new Button();
+    private final Button saveEmailButton = new Button();
+    private final FlexLayout emailLayout = new FlexLayout();
+
     @Override
     public void tabInit(final User user) {
         this.user = user;
 
-        //username
-        TextField username = new TextField("Username");
-        username.setValue(user.getUsername());
-        username.setReadOnly(true);
-        Button editUsernameButton = new Button("Edit");
-        Button saveUsernameButton = new Button("Save");
-        FlexLayout usernameLayout = new FlexLayout(username, editUsernameButton);
+        accountsSection = createAccountSection();
+        add(accountsSection);
+    }
+
+    private Section createAccountSection() {
+        FlexLayout usernameLayout = createUsernameLayout();
+        FlexLayout emailLayout = createEmailLayout();
+        Details emailUsageDetails = createEmailUsageDetails();
+        FlexLayout telegramLayout = createTelegramLayout();
+
+        Section section = new Section("Accounts");
+        section.setContent(usernameLayout, emailLayout, emailUsageDetails, telegramLayout);
+        return section;
+    }
+
+    private FlexLayout createUsernameLayout() {
+        usernameField.setLabel("Username");
+        usernameField.setValue(user.getUsername());
+        usernameField.setReadOnly(true);
+
+        editUsernameButton.setText("Edit");
+        saveUsernameButton.setText("Save");
+
+        usernameLayout.add(usernameField, editUsernameButton);
         usernameLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
         usernameLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
-        //TODO replace with methods and fix button replace login - see MyLinksPage
-        editUsernameButton.addClickListener(e -> {
-            username.setReadOnly(false);
-            usernameLayout.replace(editUsernameButton, saveUsernameButton);
-        });
-        saveUsernameButton.addClickListener(e -> {
-            username.setReadOnly(true);
-            usernameLayout.replace(saveUsernameButton, editUsernameButton);
-        });
 
-        //email
-        EmailField emailField = new EmailField("E-mail");
-        emailField.setValue(getCurrentEmail());
+        editUsernameButton.addClickListener(this::onEditUsername);
+        saveUsernameButton.addClickListener(this::onSaveUsername);
+        return usernameLayout;
+    }
+
+    private FlexLayout createEmailLayout() {
+        emailField.setLabel("E-mail");
+        Optional<String> currentEmail = getCurrentEmail();
+        currentEmail.ifPresent(e -> emailField.setValue(currentEmail.get()));
         emailField.setReadOnly(true);
 
-        Button editEmailButton = new Button("Edit");
-        Button saveEmailButton = new Button("Save");
-        FlexLayout emailLayout = new FlexLayout(emailField, editEmailButton);
+        editEmailButton.setText("Edit");
+        saveEmailButton.setText("Save");
+
+        emailLayout.add(emailField, editEmailButton);
         emailLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
         emailLayout.setAlignItems(Alignment.BASELINE);
 
-        //TODO replace with methods and fix button replace login - see MyLinksPage
-        editEmailButton.addClickListener(e -> {
-            emailField.setReadOnly(false);
-            emailLayout.replace(editEmailButton, saveEmailButton);
-        });
-        saveEmailButton.addClickListener(e -> {
-            emailField.setReadOnly(true);
-            emailLayout.replace(saveEmailButton, editEmailButton);
-        });
+        editEmailButton.addClickListener(this::onEditEmail);
+        saveEmailButton.addClickListener(this::onSaveEmail);
+        return emailLayout;
+    }
 
-        //how Axe use email details
-        Details howEmailUsedDetails = new Details("What will be sent to email?");
-        Span span = new Span("Account Recovery"); //TODO replace with UL with usage - see RegForm for UL example
-        howEmailUsedDetails.setOpened(false);
-        howEmailUsedDetails.setContent(span);
-
-        //telegram section
+    private FlexLayout createTelegramLayout() {
         FlexLayout telegramLayout = new FlexLayout();
         telegramLayout.setAlignItems(Alignment.BASELINE);
 
         Optional<Account> telegramAccount = getTelegramAccount();
 
         if (telegramAccount.isPresent()) {
-            Optional<String> telegramUsername =  accountService.decryptAccountName(telegramAccount.get());
+            Optional<String> telegramUsername = accountService.decryptAccountName(telegramAccount.get());
             if (telegramUsername.isPresent()) {
                 TextField telegramField = new TextField("Telegram");
                 telegramField.setReadOnly(true);
@@ -113,22 +132,47 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
                 telegramLayout.setVisible(false);
             }
         }
-
-        add(usernameLayout, emailLayout, howEmailUsedDetails, telegramLayout);
+        return telegramLayout;
     }
 
-    //TODO maybe Optional<String> instead
-    private String getCurrentEmail() {
+    private Details createEmailUsageDetails() {
+        Details howEmailUsedDetails = new Details("What will be sent to email?");
+        Span span = new Span("Account Recovery"); //TODO replace with UL with usage - see RegForm for UL example
+        howEmailUsedDetails.setOpened(false);
+        howEmailUsedDetails.setContent(span);
+        return howEmailUsedDetails;
+    }
+
+    private void onEditUsername(final ClickEvent<Button> event) {
+        usernameField.setReadOnly(false);
+        usernameLayout.replace(editUsernameButton, saveUsernameButton);
+    }
+
+    private void onSaveUsername(final ClickEvent<Button> event) {
+        usernameField.setReadOnly(true);
+        usernameLayout.replace(saveUsernameButton, editUsernameButton);
+    }
+
+    private void onEditEmail(ClickEvent<Button> event) {
+        emailField.setReadOnly(false);
+        emailLayout.replace(editEmailButton, saveEmailButton);
+    }
+
+    private void onSaveEmail(ClickEvent<Button> event) {
+        emailField.setReadOnly(true);
+        emailLayout.replace(saveEmailButton, editEmailButton);
+    }
+
+
+    private Optional<String> getCurrentEmail() {
         Optional<Account> emailAccount = accountService.getAccount(user, AccountType.EMAIL);
-        if (emailAccount.isPresent()) {
-            Optional<String> plainTextEmail = accountService.decryptAccountName(emailAccount.get());
-            if (plainTextEmail.isPresent() && StringUtils.isNotBlank(plainTextEmail.get())) {
-                return plainTextEmail.get();
-            } else {
-                return "";
-            }
+        if (emailAccount.isEmpty()) return Optional.empty();
+        Optional<String> plainTextEmail = accountService.decryptAccountName(emailAccount.get());
+        if (plainTextEmail.isEmpty()) return Optional.empty();
+        if (StringUtils.isNotBlank(plainTextEmail.get())) {
+            return plainTextEmail;
         } else {
-            return "";
+            return Optional.empty();
         }
     }
 
@@ -151,5 +195,4 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         }
         return Optional.ofNullable(tgToken);
     }
-
 }

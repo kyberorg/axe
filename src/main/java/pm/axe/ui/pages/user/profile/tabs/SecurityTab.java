@@ -3,7 +3,9 @@ package pm.axe.ui.pages.user.profile.tabs;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,6 +24,7 @@ import pm.axe.internal.HasTabInit;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.UserSettingsService;
 import pm.axe.ui.elements.PasswordGenerator;
+import pm.axe.ui.elements.Section;
 import pm.axe.users.AccountType;
 import pm.axe.utils.AxeSessionUtils;
 
@@ -37,37 +40,61 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     private final UserSettingsService userSettingsService;
     private final AxeSessionUtils axeSessionUtils;
 
+    private List<Account> confirmedAccounts;
+
+    private Section changePasswordSection;
+    private Section resetPasswordChannelSection;
+    private Section tfaSection;
+
     private Select<String> resetPasswordSelect;
 
     private Checkbox tfaBox;
     private TextField tfaField;
     private Select<String> tfaChannelSelect;
-
     private User user;
 
     @Override
     public void tabInit(final User user) {
         this.user = user;
-        List<Account> confirmedAccounts = getConfirmedAccountsFor(user);
 
-        //change password section
-        H4 changePasswordTitle = new H4("Change Password");
+        confirmedAccounts = getConfirmedAccountsFor(user);
+
+        changePasswordSection = createChangePasswordSection();
+        resetPasswordChannelSection = createResetPasswordChannelSection();
+        tfaSection = createTfaSection();
+
+        add(changePasswordSection, resetPasswordChannelSection, tfaSection);
+    }
+
+    private Section createChangePasswordSection() {
+        VerticalLayout changePasswordContent = createChangePasswordContent();
+        changePasswordSection = new Section("Change Password");
+        changePasswordSection.setContent(changePasswordContent);
+        return changePasswordSection;
+    }
+
+    private VerticalLayout createChangePasswordContent() {
         PasswordField oldPasswordInput = new PasswordField("Old Password");
         PasswordField newPasswordInput = new PasswordField("New Password");
         PasswordGenerator passwordGenerator = PasswordGenerator.create();
         passwordGenerator.setOpened(false);
         passwordGenerator.setCopyTarget(newPasswordInput);
         Button updatePasswordButton = new Button("Update");
-        VerticalLayout changePasswordLayout = new VerticalLayout(changePasswordTitle,
-                oldPasswordInput, newPasswordInput, passwordGenerator,
-                updatePasswordButton);
+        VerticalLayout changePasswordLayout = new VerticalLayout(oldPasswordInput, newPasswordInput,
+                passwordGenerator, updatePasswordButton);
         changePasswordLayout.setPadding(false);
         changePasswordLayout.setSpacing(false);
+        return changePasswordLayout;
+    }
 
-        Hr separator = new Hr();
+    private Section createResetPasswordChannelSection() {
+        VerticalLayout content = createResetPasswordChannelContent();
+        resetPasswordChannelSection = new Section("Reset password link");
+        resetPasswordChannelSection.setContent(content);
+        return resetPasswordChannelSection;
+    }
 
-        //reset password channel session
-        H4 resetPasswordTitle = new H4("Reset password link");
+    private VerticalLayout createResetPasswordChannelContent() {
         Span noWhereToSendSpan = getNoWhereToSendSpan();
         TextField resetPasswordField = new TextField();
         resetPasswordField.setReadOnly(true);
@@ -98,30 +125,36 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
             ));
         }
 
-        VerticalLayout resetPasswordLayout = new VerticalLayout(resetPasswordTitle, resetPasswordContent);
-        resetPasswordLayout.setPadding(false);
+        return resetPasswordContent;
+    }
 
-        Hr separator2 = new Hr();
+    private Section createTfaSection() {
+        VerticalLayout content = createTfaContent();
+        tfaSection = new Section("Two-Factor Authentication (2FA)");
+        tfaSection.setContent(content);
+        return tfaSection;
+    }
 
-        //tfa section
-        H4 tfaTitle = new H4("Two-Factor Authentication (2FA)");
-
+    private VerticalLayout createTfaContent() {
         tfaBox = new Checkbox("Protect my account with additional one time codes");
         tfaBox.setValue(userSettingsService.isTfaEnabled(user));
         tfaBox.setEnabled(!confirmedAccounts.isEmpty());
         tfaBox.addValueChangeListener(this::onTfaBoxChanged);
 
         Span noConfirmedAccountsSpan = getNoConfirmedAccountsSpan();
-        String sendTo = "Send to"; //TODO kinda static string
+        Label sentToLabel = new Label("Send to: ");
 
         tfaField = new TextField();
-        tfaField.setLabel(sendTo);
         tfaField.setReadOnly(true);
 
+        HorizontalLayout tfaFieldLayout = new HorizontalLayout(sentToLabel, tfaField);
+        tfaFieldLayout.setAlignItems(Alignment.BASELINE);
 
         tfaChannelSelect = new Select<>();
-        tfaChannelSelect.setLabel(sendTo);
         tfaChannelSelect.addValueChangeListener(this::onTfaSelectModified);
+
+        HorizontalLayout tfaSelectLayout = new HorizontalLayout(sentToLabel, tfaChannelSelect);
+        tfaSelectLayout.setAlignItems(Alignment.BASELINE);
 
         VerticalLayout tfaContent = new VerticalLayout(tfaBox);
         tfaContent.setPadding(false);
@@ -130,10 +163,10 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
             tfaContent.add(noConfirmedAccountsSpan);
         } else if (confirmedAccounts.size() == 1) {
             tfaField.setValue(getAccountTypeName(confirmedAccounts.get(0)));
-            tfaContent.add(tfaField);
+            tfaContent.add(tfaFieldLayout);
         } else {
             tfaChannelSelect.setItems(confirmedAccounts.stream().map(this::getAccountTypeName).toList());
-            tfaContent.add(tfaChannelSelect);
+            tfaContent.add(tfaSelectLayout);
             //set default value
             Optional<UserSettings> userSettings = userSettingsService.getUserSettings(user);
             userSettings.ifPresent(settings -> tfaChannelSelect.setValue(
@@ -141,10 +174,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
             ));
         }
 
-        VerticalLayout tfaLayout = new VerticalLayout(tfaTitle, tfaBox, tfaContent);
-        tfaLayout.setPadding(false);
-
-        add(changePasswordLayout, separator, resetPasswordLayout, separator2, tfaLayout);
+        return tfaContent;
     }
 
     private void onResetPasswordSelectModified(final AbstractField.ComponentValueChangeEvent<Select<String>, String> event) {
