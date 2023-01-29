@@ -4,11 +4,11 @@ import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -74,8 +74,9 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
         Button save = new Button("Save");
         save.addClickListener(this::onSessionDurationSaved);
 
-        HorizontalLayout fields = new HorizontalLayout(amountField, unitSelect, save);
+        FlexLayout fields = new FlexLayout(amountField, unitSelect, save);
         fields.setAlignItems(Alignment.BASELINE);
+        fields.setMaxHeight(100, Unit.PERCENTAGE);
 
         Span explanationSpan = new Span("Time you will stay logged in after successful login");
 
