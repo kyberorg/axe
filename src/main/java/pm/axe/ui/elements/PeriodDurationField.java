@@ -147,20 +147,20 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
         if (periodDuration.getDuration().isZero()) {
             //period
             if (periodDuration.getPeriod().getMonths() > 0) {
-                amount.setValue(periodDuration.getPeriod().getMonths());
                 unit.setValue(MONTHS.name());
+                amount.setValue(periodDuration.getPeriod().getMonths());
             } else {
-                amount.setValue(periodDuration.getPeriod().getDays());
                 unit.setValue(DAYS.name());
+                amount.setValue(periodDuration.getPeriod().getDays());
             }
         } else {
             //duration
             if (periodDuration.getDuration().toHoursPart() > 0) {
-                amount.setValue(periodDuration.getDuration().toHoursPart());
                 unit.setValue(HOURS.name());
+                amount.setValue(periodDuration.getDuration().toHoursPart());
             } else {
-                amount.setValue(periodDuration.getDuration().toMinutesPart());
                 unit.setValue(MINUTES.name());
+                amount.setValue(periodDuration.getDuration().toMinutesPart());
             }
         }
     }
