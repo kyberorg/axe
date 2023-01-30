@@ -37,7 +37,7 @@
         <!-- QR Code Software version-->
         <qr.zxing.version>3.5.1</qr.zxing.version>
         <!-- Selenium Version -->
-        <selenium.version>4.7.2</selenium.version>
+        <selenium.version>4.8.0</selenium.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
