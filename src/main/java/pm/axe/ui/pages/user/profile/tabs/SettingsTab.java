@@ -4,14 +4,13 @@ import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +18,12 @@ import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
 import pm.axe.internal.HasTabInit;
 import pm.axe.services.user.UserSettingsService;
+import pm.axe.ui.elements.PeriodDurationField;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.pages.settings.SettingsPage;
 import pm.axe.users.LandingPage;
 import pm.axe.utils.AxeSessionUtils;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -40,6 +39,7 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
     private Section landingPageSection;
     private Section darkModeSection;
 
+    private final PeriodDurationField pdField = new PeriodDurationField();
     private final Select<String> landingPageSelect = new Select<>();
     private final ToggleButton darkModeToggle = new ToggleButton();
     @Override
@@ -60,23 +60,17 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
     }
 
     private Component loginSessionDuration() {
-        //TODO may be a single component
-        IntegerField amountField = new IntegerField();
-        amountField.setStepButtonsVisible(true);
-        amountField.setMin(1);
-        amountField.setMax(60);
-        amountField.setValue(1); //TODO replace with real value from settings
-        Select<String> unitSelect = new Select<>();
-        unitSelect.setItems(ChronoUnit.SECONDS.name(), ChronoUnit.MINUTES.name(),
-                ChronoUnit.HOURS.name(), ChronoUnit.DAYS.name()); //TODO continue list
-        unitSelect.setValue(ChronoUnit.DAYS.name());
-        //TODO on unit change change amount field number max/min values
+        pdField.setHelperText("The longer you're logged in, the less secure it is.");
+        axeSessionUtils.getCurrentUserSettings().ifPresent(us -> pdField.setValue(us.getLoginSessionDuration()));
+
         Button save = new Button("Save");
         save.addClickListener(this::onSessionDurationSaved);
 
-        FlexLayout fields = new FlexLayout(amountField, unitSelect, save);
+        HorizontalLayout fields = new HorizontalLayout(pdField, save);
         fields.setAlignItems(Alignment.BASELINE);
-        fields.setMaxHeight(100, Unit.PERCENTAGE);
+        fields.getStyle().set("flex-wrap", "wrap");
+        fields.setSpacing(false);
+        fields.getThemeList().add("spacing-s");
 
         Span explanationSpan = new Span("Time you will stay logged in after successful login");
 
@@ -142,7 +136,16 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
     }
 
     private void onSessionDurationSaved(ClickEvent<Button> event) {
-        //TODO implement
-        Notification.show("Not implemented yet");
+        axeSessionUtils.getCurrentUserSettings().ifPresent(us -> {
+            if (pdField.isValid()) {
+                us.setLoginSessionDuration(pdField.getValue());
+                uss.updateUserSettings(us);
+                Notification.show("Session duration updated!");
+            } else {
+                pdField.setInvalid(true);
+                pdField.setErrorMessage(PeriodDurationField.ERROR_MESSAGE);
+            }
+
+        });
     }
 }
