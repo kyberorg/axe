@@ -3,6 +3,7 @@ package pm.axe.ui.pages.user.profile.tabs;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -76,7 +77,9 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         usernameField.setReadOnly(true);
 
         editUsernameButton.setText("Edit");
+        editUsernameButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveUsernameButton.setText("Save");
+        saveUsernameButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
         usernameLayout.add(usernameField, editUsernameButton);
         VaadinUtils.fitLayoutInWindow(usernameLayout);
@@ -94,7 +97,9 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         currentEmail.ifPresent(e -> emailField.setValue(currentEmail.get()));
 
         editEmailButton.setText("Edit");
+        editEmailButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveEmailButton.setText("Save");
+        saveEmailButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
         emailLayout.add(emailField, editEmailButton);
         VaadinUtils.fitLayoutInWindow(emailLayout);
@@ -118,8 +123,9 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
                 telegramField.setReadOnly(true);
                 telegramField.setPrefixComponent(VaadinIcon.AT.create());
                 telegramField.setValue(telegramUsername.get());
-                Button unlink = new Button("Unlink");
-                telegramLayout.add(telegramField, unlink);
+                Button unlinkButton = new Button("Unlink");
+                unlinkButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+                telegramLayout.add(telegramField, unlinkButton);
             } else {
                 telegramLayout.setVisible(false);
             }

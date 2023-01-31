@@ -2,6 +2,7 @@ package pm.axe.ui.pages.user.profile.tabs;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
@@ -83,6 +84,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         passwordGenerator.setOpened(false);
         passwordGenerator.setCopyTarget(newPasswordInput);
         Button updatePasswordButton = new Button("Update");
+        updatePasswordButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         VerticalLayout changePasswordLayout = new VerticalLayout(oldPasswordInput, newPasswordInput,
                 passwordGenerator, updatePasswordButton);
         changePasswordLayout.setPadding(false);

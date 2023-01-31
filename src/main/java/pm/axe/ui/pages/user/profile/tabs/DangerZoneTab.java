@@ -3,6 +3,7 @@ package pm.axe.ui.pages.user.profile.tabs;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -39,12 +40,12 @@ public class DangerZoneTab extends VerticalLayout implements HasTabInit {
         deleteAccountSection.getTitle().addClassName("red");
         deleteAccountSection.getTitle().addClassName("bold");
 
-        Button deleteAccountOnlyButton = new Button();
-        deleteAccountOnlyButton.setText("Delete Account");
+        Button deleteAccountOnlyButton = new Button("Delete Account");
+        deleteAccountOnlyButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         deleteAccountOnlyButton.addClickListener(this::onDeleteAccount);
 
-        Button deleteAccountAndLinksButton = new Button();
-        deleteAccountAndLinksButton.setText("Delete Account and Links");
+        Button deleteAccountAndLinksButton = new Button("Delete Account and Links");
+        deleteAccountAndLinksButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         deleteAccountAndLinksButton.addClickListener(this::onDeleteAccountAndLinks);
 
         HorizontalLayout layout = new HorizontalLayout(deleteAccountOnlyButton, deleteAccountAndLinksButton);

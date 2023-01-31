@@ -5,6 +5,7 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -66,11 +67,12 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
         VaadinUtils.setFlex(pdField, "1 1 auto");
         axeSessionUtils.getCurrentUserSettings().ifPresent(us -> pdField.setValue(us.getLoginSessionDuration()));
 
-        Button save = new Button("Save");
-        VaadinUtils.setFlex(save, "1");
-        save.addClickListener(this::onSessionDurationSaved);
+        Button saveButton = new Button("Save");
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        saveButton.addClickListener(this::onSessionDurationSaved);
+        VaadinUtils.setFlex(saveButton, "1");
 
-        HorizontalLayout fields = new HorizontalLayout(pdField, save);
+        HorizontalLayout fields = new HorizontalLayout(pdField, saveButton);
         VaadinUtils.setWrap(fields);
         VaadinUtils.setSmallSpacing(fields);
 
