@@ -3,9 +3,10 @@ package pm.axe.ui.pages.user;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -24,6 +25,7 @@ import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.elements.TelegramSpan;
 import pm.axe.ui.layouts.AxeCompactLayout;
+import pm.axe.utils.VaadinUtils;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -38,7 +40,7 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
     private boolean pageAlreadyInitialized = false;
     private User user;
 
-    private FlexLayout emailLayout;
+    private HorizontalLayout emailLayout;
     private EmailField emailInput;
     private Button submitEmailButton;
     private Span sentSpan;
@@ -69,16 +71,18 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
         add(title, emailSection, telegramSection);
     }
 
-    private FlexLayout emailSectionContent() {
+    private Component emailSectionContent() {
         emailInput = new EmailField("Email address here");
+        emailInput.setHelperText("Axe will send confirmation letter there");
         submitEmailButton = new Button("Submit");
+        submitEmailButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitEmailButton.addClickListener(this::onSubmitEmail);
         sentSpan = new Span("Sent!");
         sentSpan.setClassName("green");
 
-        emailLayout = new FlexLayout(emailInput, submitEmailButton);
-        emailLayout.setAlignItems(Alignment.BASELINE);
-        emailLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
+        emailLayout = new HorizontalLayout(emailInput, submitEmailButton);
+        VaadinUtils.fitLayoutInWindow(emailLayout);
+        VaadinUtils.setSmallSpacing(emailLayout);
         return emailLayout;
     }
 
@@ -106,6 +110,7 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
             return;
         }
         //TODO implement sent confirmation letter call here
+        emailInput.setReadOnly(true);
         emailLayout.replace(submitEmailButton, sentSpan);
     }
 
