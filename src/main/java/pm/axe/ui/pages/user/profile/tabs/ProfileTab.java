@@ -1,7 +1,6 @@
 package pm.axe.ui.pages.user.profile.tabs;
 
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
@@ -28,6 +27,7 @@ import pm.axe.users.AccountType;
 import pm.axe.utils.VaadinUtils;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @SuppressWarnings("DuplicatedCode")
 @RequiredArgsConstructor
@@ -60,10 +60,12 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     }
 
     private Section createAccountSection() {
-        Component usernameLayout = createUsernameLayout();
-        Component emailLayout = createEmailLayout();
+        HorizontalLayout usernameLayout = createUsernameLayout();
+        HorizontalLayout emailLayout = createEmailLayout();
         Details emailUsageDetails = createEmailUsageDetails();
-        Component telegramLayout = createTelegramLayout();
+        HorizontalLayout telegramLayout = createTelegramLayout();
+
+        Stream.of(usernameLayout, emailLayout, emailUsageDetails, telegramLayout).forEach(VaadinUtils::setCentered);
 
         Section section = new Section("Accounts");
         section.setContent(usernameLayout, emailLayout, emailUsageDetails, telegramLayout);
@@ -90,7 +92,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         return usernameLayout;
     }
 
-    private Component createEmailLayout() {
+    private HorizontalLayout createEmailLayout() {
         emailField.setLabel("E-mail");
         Optional<String> currentEmail = getCurrentEmail();
         emailField.setReadOnly(true);
@@ -112,7 +114,6 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
 
     private HorizontalLayout createTelegramLayout() {
         HorizontalLayout telegramLayout = new HorizontalLayout();
-        VaadinUtils.fitLayoutInWindow(telegramLayout);
         VaadinUtils.setSmallSpacing(telegramLayout);
 
         Optional<Account> telegramAccount = getTelegramAccount();

@@ -33,7 +33,9 @@ import pm.axe.ui.layouts.AxeFormLayout;
 import pm.axe.users.AccountType;
 import pm.axe.users.UsernameGenerator;
 import pm.axe.users.UsernameValidator;
+import pm.axe.utils.AxeSessionUtils;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @SpringComponent
@@ -52,6 +54,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private final UsernameGenerator usernameGenerator;
     private final UserService userService;
     private final AccountService accountService;
+    private final AxeSessionUtils axeSessionUtils;
 
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -65,8 +68,14 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private boolean pageAlreadyInitialized = false;
 
     @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if (beforeEnterEvent.isRefreshEvent()) return;
+    public void beforeEnter(BeforeEnterEvent enterEvent) {
+        if (enterEvent.isRefreshEvent()) return;
+        //redirect to landing page if user already in
+        if (Objects.nonNull(axeSessionUtils.boundUserIfAny())) {
+            enterEvent.forwardTo(axeSessionUtils.getLandingPage().getPath());
+            return;
+        }
+        //init once
         if (pageAlreadyInitialized) {
             cleanInputs();
         } else {

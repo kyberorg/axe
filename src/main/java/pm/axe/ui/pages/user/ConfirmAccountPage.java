@@ -20,11 +20,11 @@ import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.TokenService;
-import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.elements.TelegramSpan;
 import pm.axe.ui.layouts.AxeCompactLayout;
+import pm.axe.utils.AxeSessionUtils;
 import pm.axe.utils.VaadinUtils;
 
 import java.util.Objects;
@@ -37,6 +37,7 @@ import java.util.Optional;
 @PageTitle("Confirm Account - Axe.pm")
 public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterObserver {
     private final TokenService tokenService;
+    private final AxeSessionUtils axeSessionUtils;
     private boolean pageAlreadyInitialized = false;
     private User user;
 
@@ -49,9 +50,10 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
 
     @Override
     public void beforeEnter(final BeforeEnterEvent event) {
-        boundUserIfAny();
+        user = axeSessionUtils.boundUserIfAny();
         if (Objects.isNull(user)) {
             event.forwardTo(LoginPage.class);
+            return;
         }
         if (!pageAlreadyInitialized) {
             initPage();
@@ -112,14 +114,5 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
         //TODO implement sent confirmation letter call here
         emailInput.setReadOnly(true);
         emailLayout.replace(submitEmailButton, sentSpan);
-    }
-
-    private void boundUserIfAny() {
-        Optional<AxeSession> axeSession = AxeSession.getCurrent();
-        if (axeSession.isPresent()) {
-            if (axeSession.get().hasUser()) {
-                user = axeSession.get().getUser();
-            }
-        }
     }
 }

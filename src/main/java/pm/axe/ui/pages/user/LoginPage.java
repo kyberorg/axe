@@ -34,6 +34,7 @@ import pm.axe.users.LandingPage;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.AxeSessionUtils;
 
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -63,8 +64,14 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
 
     private boolean pageAlreadyInitialized = false;
     @Override
-    public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
-        if (beforeEnterEvent.isRefreshEvent()) return;
+    public void beforeEnter(final BeforeEnterEvent enterEvent) {
+        if (enterEvent.isRefreshEvent()) return;
+        //redirect to landing page if user already in
+        if (Objects.nonNull(axeSessionUtils.boundUserIfAny())) {
+            enterEvent.forwardTo(axeSessionUtils.getLandingPage().getPath());
+            return;
+        }
+        //init once
         if (pageAlreadyInitialized) {
            cleanInputs();
         } else {
@@ -143,12 +150,7 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
                     mainView.applyTheme(true);
                 }
                 //landing page
-                LandingPage landingPage; //page after login
-                if (us.isPresent()) {
-                    landingPage = us.get().getLandingPage();
-                } else {
-                    landingPage = LandingPage.HOME_PAGE;
-                }
+                LandingPage landingPage = axeSessionUtils.getLandingPage(); //page after login
                 usernameInput.getUI().ifPresent(ui -> ui.navigate(landingPage.getPath()));
             });
         } else {
