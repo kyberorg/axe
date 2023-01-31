@@ -37,7 +37,6 @@ public class DangerZoneTab extends VerticalLayout implements HasTabInit {
     }
 
     private Component deleteAccountSectionContent() {
-        deleteAccountSection.getTitle().addClassName("red");
         deleteAccountSection.getTitle().addClassName("bold");
 
         Button deleteAccountOnlyButton = new Button("Delete Account");
