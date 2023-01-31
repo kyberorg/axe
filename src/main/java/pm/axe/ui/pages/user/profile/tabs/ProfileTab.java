@@ -1,12 +1,12 @@
 package pm.axe.ui.pages.user.profile.tabs;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -24,9 +24,11 @@ import pm.axe.services.user.TokenService;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.elements.TelegramSpan;
 import pm.axe.users.AccountType;
+import pm.axe.utils.VaadinUtils;
 
 import java.util.Optional;
 
+@SuppressWarnings("DuplicatedCode")
 @RequiredArgsConstructor
 @SpringComponent
 @UIScope
@@ -41,12 +43,12 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private final TextField usernameField = new TextField();
     private final Button editUsernameButton = new Button();
     private final Button saveUsernameButton = new Button();
-    private final FlexLayout usernameLayout = new FlexLayout();
+    private final HorizontalLayout usernameLayout = new HorizontalLayout();
 
     private final EmailField emailField = new EmailField();
     private final Button editEmailButton = new Button();
     private final Button saveEmailButton = new Button();
-    private final FlexLayout emailLayout = new FlexLayout();
+    private final HorizontalLayout emailLayout = new HorizontalLayout();
 
     @Override
     public void tabInit(final User user) {
@@ -57,17 +59,18 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     }
 
     private Section createAccountSection() {
-        FlexLayout usernameLayout = createUsernameLayout();
-        FlexLayout emailLayout = createEmailLayout();
+        Component usernameLayout = createUsernameLayout();
+        Component emailLayout = createEmailLayout();
         Details emailUsageDetails = createEmailUsageDetails();
-        FlexLayout telegramLayout = createTelegramLayout();
+        Component telegramLayout = createTelegramLayout();
 
         Section section = new Section("Accounts");
         section.setContent(usernameLayout, emailLayout, emailUsageDetails, telegramLayout);
+        section.setCentered();
         return section;
     }
 
-    private FlexLayout createUsernameLayout() {
+    private HorizontalLayout createUsernameLayout() {
         usernameField.setLabel("Username");
         usernameField.setValue(user.getUsername());
         usernameField.setReadOnly(true);
@@ -76,38 +79,38 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         saveUsernameButton.setText("Save");
 
         usernameLayout.add(usernameField, editUsernameButton);
-        usernameLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
-        usernameLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
+        VaadinUtils.fitLayoutInWindow(usernameLayout);
+        VaadinUtils.setSmallSpacing(usernameLayout);
 
         editUsernameButton.addClickListener(this::onEditUsername);
         saveUsernameButton.addClickListener(this::onSaveUsername);
         return usernameLayout;
     }
 
-    private FlexLayout createEmailLayout() {
+    private Component createEmailLayout() {
         emailField.setLabel("E-mail");
         Optional<String> currentEmail = getCurrentEmail();
-        currentEmail.ifPresent(e -> emailField.setValue(currentEmail.get()));
         emailField.setReadOnly(true);
+        currentEmail.ifPresent(e -> emailField.setValue(currentEmail.get()));
 
         editEmailButton.setText("Edit");
         saveEmailButton.setText("Save");
 
         emailLayout.add(emailField, editEmailButton);
-        emailLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
-        emailLayout.setAlignItems(Alignment.BASELINE);
+        VaadinUtils.fitLayoutInWindow(emailLayout);
+        VaadinUtils.setSmallSpacing(emailLayout);
 
         editEmailButton.addClickListener(this::onEditEmail);
         saveEmailButton.addClickListener(this::onSaveEmail);
         return emailLayout;
     }
 
-    private FlexLayout createTelegramLayout() {
-        FlexLayout telegramLayout = new FlexLayout();
-        telegramLayout.setAlignItems(Alignment.BASELINE);
+    private HorizontalLayout createTelegramLayout() {
+        HorizontalLayout telegramLayout = new HorizontalLayout();
+        VaadinUtils.fitLayoutInWindow(telegramLayout);
+        VaadinUtils.setSmallSpacing(telegramLayout);
 
         Optional<Account> telegramAccount = getTelegramAccount();
-
         if (telegramAccount.isPresent()) {
             Optional<String> telegramUsername = accountService.decryptAccountName(telegramAccount.get());
             if (telegramUsername.isPresent()) {

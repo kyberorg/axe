@@ -1,5 +1,8 @@
 package pm.axe.utils;
 
+import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.QueryParameters;
 
@@ -42,5 +45,33 @@ public final class VaadinUtils {
         } else {
             return Optional.empty();
         }
+    }
+
+    public static void fitLayoutInWindow(final FlexComponent layout) {
+        layout.addClassName("fit-in-window");
+        layout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.AROUND);
+    }
+
+    /**
+     * For those elements, where {@link #fitLayoutInWindow(FlexComponent)} is not fit.
+     *
+     * @param layout {@link FlexComponent} that should be wrapped.
+     */
+    public static void setWrap(final FlexComponent layout) {
+        layout.getStyle().set("flex-wrap", "wrap");
+    }
+
+    public static void setSmallSpacing(final HorizontalLayout layout) {
+        layout.setSpacing(false);
+        layout.getThemeList().add("spacing-s");
+    }
+
+    public static void setCentered(final HasStyle component) {
+        component.addClassName("centered-element");
+    }
+
+    public static void setFlex(final HasStyle component, final String flexValue) {
+        component.getStyle().set("flex", flexValue);
     }
 }

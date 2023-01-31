@@ -27,9 +27,11 @@ import pm.axe.ui.elements.PasswordGenerator;
 import pm.axe.ui.elements.Section;
 import pm.axe.users.AccountType;
 import pm.axe.utils.AxeSessionUtils;
+import pm.axe.utils.VaadinUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @SuppressWarnings("DuplicatedCode")
 @RequiredArgsConstructor
@@ -69,6 +71,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     private Section createChangePasswordSection() {
         VerticalLayout changePasswordContent = createChangePasswordContent();
         changePasswordSection = new Section("Change Password");
+        changePasswordSection.setCentered();
         changePasswordSection.setContent(changePasswordContent);
         return changePasswordSection;
     }
@@ -84,12 +87,14 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
                 passwordGenerator, updatePasswordButton);
         changePasswordLayout.setPadding(false);
         changePasswordLayout.setSpacing(false);
+        Stream.of(oldPasswordInput, newPasswordInput, updatePasswordButton).forEach(VaadinUtils::setCentered);
         return changePasswordLayout;
     }
 
     private Section createResetPasswordChannelSection() {
         VerticalLayout content = createResetPasswordChannelContent();
         resetPasswordChannelSection = new Section("Reset password link");
+        resetPasswordChannelSection.setCentered();
         resetPasswordChannelSection.setContent(content);
         return resetPasswordChannelSection;
     }
@@ -104,8 +109,11 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         resetPasswordSelect.addValueChangeListener(this::onResetPasswordSelectModified);
 
         HorizontalLayout resetPasswordFieldLayout = new HorizontalLayout(sendResetLinkToLabel, resetPasswordField);
+        VaadinUtils.fitLayoutInWindow(resetPasswordFieldLayout);
         resetPasswordFieldLayout.setAlignItems(Alignment.CENTER);
+
         HorizontalLayout resetPasswordSelectLayout = new HorizontalLayout(sendResetLinkToLabel, resetPasswordSelect);
+        VaadinUtils.fitLayoutInWindow(resetPasswordSelectLayout);
         resetPasswordSelectLayout.setAlignItems(Alignment.CENTER);
 
         VerticalLayout resetPasswordContent = new VerticalLayout();
@@ -131,6 +139,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     private Section createTfaSection() {
         VerticalLayout content = createTfaContent();
         tfaSection = new Section("Two-Factor Authentication (2FA)");
+        tfaSection.setCentered();
         tfaSection.setContent(content);
         return tfaSection;
     }
@@ -148,13 +157,13 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         tfaField.setReadOnly(true);
 
         HorizontalLayout tfaFieldLayout = new HorizontalLayout(sentToLabel, tfaField);
-        tfaFieldLayout.setAlignItems(Alignment.BASELINE);
+        VaadinUtils.fitLayoutInWindow(tfaFieldLayout);
 
         tfaChannelSelect = new Select<>();
         tfaChannelSelect.addValueChangeListener(this::onTfaSelectModified);
 
         HorizontalLayout tfaSelectLayout = new HorizontalLayout(sentToLabel, tfaChannelSelect);
-        tfaSelectLayout.setAlignItems(Alignment.BASELINE);
+        VaadinUtils.fitLayoutInWindow(tfaSelectLayout);
 
         VerticalLayout tfaContent = new VerticalLayout(tfaBox);
         tfaContent.setPadding(false);

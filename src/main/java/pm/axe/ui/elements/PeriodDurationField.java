@@ -6,6 +6,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import org.threeten.extra.PeriodDuration;
 import pm.axe.Axe;
+import pm.axe.utils.VaadinUtils;
 
 import java.time.Duration;
 import java.time.Period;
@@ -38,7 +39,9 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
 
         //styles
         amount.setWidth("8em");
+        amount.getStyle().set("flex", "auto");
         unit.setWidth("8em");
+        unit.getStyle().set("flex", "auto");
 
         // aria-label for screen readers
         amount.getElement()
@@ -51,10 +54,8 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
                         + "unit.removeAttribute('aria-labelledby');");
 
         HorizontalLayout layout = new HorizontalLayout(amount, unit);
-        // Removes default spacing
-        layout.setSpacing(false);
-        // Adds small amount of space between the components
-        layout.getThemeList().add("spacing-s");
+        VaadinUtils.setSmallSpacing(layout);
+        VaadinUtils.setWrap(layout);
 
         add(layout);
     }

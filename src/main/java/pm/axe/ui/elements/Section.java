@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -91,6 +92,11 @@ public class Section extends Composite<VerticalLayout> implements HasStyle {
      */
     public void add(final Component component) {
         content.add(component);
+    }
+
+    public void setCentered() {
+        self.setAlignItems(FlexComponent.Alignment.CENTER);
+        content.setWidth("auto");
     }
 
     private void setContentCloserToTitle() {

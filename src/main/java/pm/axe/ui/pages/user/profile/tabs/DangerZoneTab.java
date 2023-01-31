@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import pm.axe.db.models.User;
 import pm.axe.internal.HasTabInit;
 import pm.axe.ui.elements.Section;
+import pm.axe.utils.VaadinUtils;
 
 
 @RequiredArgsConstructor
@@ -29,22 +30,35 @@ public class DangerZoneTab extends VerticalLayout implements HasTabInit {
 
     private void createDeleteAccountSection() {
         deleteAccountSection = new Section("Delete my Account");
+        deleteAccountSection.setCentered();
         Component content = deleteAccountSectionContent();
         deleteAccountSection.setContent(content);
     }
 
     private Component deleteAccountSectionContent() {
-        Button deleteAccountButton = new Button();
-        deleteAccountButton.setText("Delete this Account");
-        deleteAccountButton.addClickListener(this::onDeleteAccount);
+        deleteAccountSection.getTitle().addClassName("red");
+        deleteAccountSection.getTitle().addClassName("bold");
 
-        HorizontalLayout layout = new HorizontalLayout(deleteAccountButton);
-        layout.setAlignItems(Alignment.BASELINE);
+        Button deleteAccountOnlyButton = new Button();
+        deleteAccountOnlyButton.setText("Delete Account");
+        deleteAccountOnlyButton.addClickListener(this::onDeleteAccount);
+
+        Button deleteAccountAndLinksButton = new Button();
+        deleteAccountAndLinksButton.setText("Delete Account and Links");
+        deleteAccountAndLinksButton.addClickListener(this::onDeleteAccountAndLinks);
+
+        HorizontalLayout layout = new HorizontalLayout(deleteAccountOnlyButton, deleteAccountAndLinksButton);
+        VaadinUtils.fitLayoutInWindow(layout);
         return layout;
     }
 
     private void onDeleteAccount(final ClickEvent<Button> event) {
         if (user == null) return; //no user - no action
-        Notification.show("TODO");
+        Notification.show("Will do once they implement me");
+    }
+
+    private void onDeleteAccountAndLinks(final ClickEvent<Button> event) {
+        if (user == null) return; //no user - no action
+        Notification.show("Will do once they implement me");
     }
 }

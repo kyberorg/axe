@@ -23,6 +23,7 @@ import pm.axe.ui.elements.Section;
 import pm.axe.ui.pages.settings.SettingsPage;
 import pm.axe.users.LandingPage;
 import pm.axe.utils.AxeSessionUtils;
+import pm.axe.utils.VaadinUtils;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -54,6 +55,7 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
 
     private Section createLoginSessionSection() {
         loginSessionSection = new Section("Login Session Duration");
+        loginSessionSection.setCentered();
         Component content = loginSessionDuration();
         loginSessionSection.setContent(content);
         return loginSessionSection;
@@ -61,16 +63,16 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
 
     private Component loginSessionDuration() {
         pdField.setHelperText("The longer you're logged in, the less secure it is.");
+        VaadinUtils.setFlex(pdField, "1 1 auto");
         axeSessionUtils.getCurrentUserSettings().ifPresent(us -> pdField.setValue(us.getLoginSessionDuration()));
 
         Button save = new Button("Save");
+        VaadinUtils.setFlex(save, "1");
         save.addClickListener(this::onSessionDurationSaved);
 
         HorizontalLayout fields = new HorizontalLayout(pdField, save);
-        fields.setAlignItems(Alignment.BASELINE);
-        fields.getStyle().set("flex-wrap", "wrap");
-        fields.setSpacing(false);
-        fields.getThemeList().add("spacing-s");
+        VaadinUtils.setWrap(fields);
+        VaadinUtils.setSmallSpacing(fields);
 
         Span explanationSpan = new Span("Time you will stay logged in after successful login");
 
@@ -81,13 +83,13 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
 
     private Section createLandingPageSection() {
         landingPageSection = new Section("Landing page");
+        landingPageSection.setCentered();
         Component content = landingPageLayout();
         landingPageSection.setContent(content);
         return landingPageSection;
     }
 
     private Component landingPageLayout() {
-        landingPageSelect.setLabel("Landing Page");
         landingPageSelect.setItems(Arrays.stream(LandingPage.values()).map(LandingPage::name).toList());
         Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
         userSettings.ifPresent(settings -> landingPageSelect.setValue(settings.getLandingPage().name()));
@@ -101,6 +103,7 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
 
     private Section createDarkModeSection() {
         darkModeSection = new Section("Dark Mode");
+        darkModeSection.setCentered();
         Component content = darkModeLayout();
         darkModeSection.setContent(content);
         return darkModeSection;

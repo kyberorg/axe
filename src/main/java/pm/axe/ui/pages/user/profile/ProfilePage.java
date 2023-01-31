@@ -1,15 +1,16 @@
 package pm.axe.ui.pages.user.profile;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.component.tabs.TabVariant;
-import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -72,6 +73,8 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
 
     private void initPage() {
         removeAll();
+        //making tabs equal
+        getCompactLayout().getStyle().set("width", "100%!important");
         //content map
         contentMap.clear();
         contentMap.put(profileTab, profileTabContent);
@@ -91,22 +94,15 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
             if (content instanceof HasTabInit) {
                 ((HasTabInit) content).tabInit(user);
             }
+            if (content instanceof HasStyle) {
+                ((HasStyle) content).addClassName("tab-content");
+            }
         });
-        Tabs tabs = new Tabs();
-        tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
-        contentMap.forEach((tab, content) -> tabs.add(tab));
-        tabs.addThemeVariants(TabsVariant.LUMO_EQUAL_WIDTH_TABS);
-        tabs.setWidthFull();
+        TabSheet tabSheet = new TabSheet();
+        contentMap.forEach(tabSheet::add);
+        tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_EQUAL_WIDTH_TABS, TabSheetVariant.LUMO_BORDERED);
+        tabSheet.setWidthFull();
 
-        add(title, tabs, content);
-    }
-
-    private void setContent(final Tab tab) {
-        content.removeAll();
-        if (tab == null) {
-            return;
-        }
-        Component tabContent = contentMap.get(tab);
-        content.add(tabContent);
+        add(title, tabSheet, content);
     }
 }

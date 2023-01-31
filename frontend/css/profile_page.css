@@ -6,3 +6,8 @@
     margin-right: 0.3rem;
     margin-left: 0.3rem;
 }
+
+.tab-content {
+    padding-left: 0!important;
+    padding-right: 0!important;
+}

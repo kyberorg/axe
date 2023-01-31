@@ -213,3 +213,15 @@ vaadin-icon[icon="vaadin:sign-in"] {
 .green {
     color: green;
 }
+
+.red {
+    color: red;
+}
+
+.fit-in-window {
+    flex-wrap: wrap;
+}
+
+.fit-in-window > * {
+    flex: 1 0 auto;
+}
