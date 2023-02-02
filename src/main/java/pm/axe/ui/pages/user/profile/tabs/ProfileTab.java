@@ -84,6 +84,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         saveUsernameButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
         usernameLayout.add(usernameField, editUsernameButton);
+        usernameLayout.addClassName("fit-in-section");
         VaadinUtils.fitLayoutInWindow(usernameLayout);
         VaadinUtils.setSmallSpacing(usernameLayout);
 
@@ -104,6 +105,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         saveEmailButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
         emailLayout.add(emailField, editEmailButton);
+        emailLayout.addClassName("fit-in-section");
         VaadinUtils.fitLayoutInWindow(emailLayout);
         VaadinUtils.setSmallSpacing(emailLayout);
 
@@ -114,6 +116,9 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
 
     private HorizontalLayout createTelegramLayout() {
         HorizontalLayout telegramLayout = new HorizontalLayout();
+        telegramLayout.setAlignItems(Alignment.BASELINE);
+        telegramLayout.addClassName("fit-in-section");
+        VaadinUtils.fitLayoutInWindow(telegramLayout);
         VaadinUtils.setSmallSpacing(telegramLayout);
 
         Optional<Account> telegramAccount = getTelegramAccount();

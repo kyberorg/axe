@@ -85,6 +85,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         passwordGenerator.setCopyTarget(newPasswordInput);
         Button updatePasswordButton = new Button("Update");
         updatePasswordButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        updatePasswordButton.setWidthFull();
         VerticalLayout changePasswordLayout = new VerticalLayout(oldPasswordInput, newPasswordInput,
                 passwordGenerator, updatePasswordButton);
         changePasswordLayout.setPadding(false);
