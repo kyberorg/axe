@@ -1,8 +1,6 @@
 package pm.axe.utils;
 
-import com.vaadin.flow.component.Focusable;
-import com.vaadin.flow.component.HasStyle;
-import com.vaadin.flow.component.HasValidation;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEvent;
@@ -82,6 +80,16 @@ public final class VaadinUtils {
         component.setErrorMessage(errorMessage);
         if (component instanceof Focusable<?>) {
             ((Focusable<?>) component).focus();
+        }
+    }
+
+    public static void cleanInput(final Component input) {
+        if (input instanceof HasValue<?,?>) {
+            ((HasValue<?, ?>) input).clear();
+        }
+        if (input instanceof HasValidation) {
+            ((HasValidation) input).setInvalid(false);
+            ((HasValidation) input).setErrorMessage("");
         }
     }
 }

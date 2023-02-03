@@ -66,6 +66,15 @@ public class ErrorUtils {
     }
 
     /**
+     * Creates error notification with {@link #getErrorNotification(String)} and shows it.
+     *
+     * @param text string with error
+     */
+    public static void showErrorNotification(final String text) {
+        getErrorNotification(text).open();
+    }
+
+    /**
      * Extracts {@link AxeError} from {@link BeforeEvent}.
      *
      * @param event {@link BeforeEvent} with {@link AxeError}

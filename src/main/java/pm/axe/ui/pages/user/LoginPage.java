@@ -1,6 +1,8 @@
 package pm.axe.ui.pages.user;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -34,10 +36,7 @@ import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeFormLayout;
 import pm.axe.users.AccountType;
 import pm.axe.users.LandingPage;
-import pm.axe.utils.AppUtils;
-import pm.axe.utils.AxeSessionUtils;
-import pm.axe.utils.ErrorUtils;
-import pm.axe.utils.FieldsValidationUtils;
+import pm.axe.utils.*;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -191,7 +190,7 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
                 if (usernameFromEmail.isPresent()) {
                     username = usernameFromEmail.get();
                 } else {
-                    ErrorUtils.getErrorNotification("Something went wrong, because try using username instead");
+                    ErrorUtils.showErrorNotification("Something went wrong, because try using username instead");
                     return;
                 }
             } else {
@@ -217,18 +216,8 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     }
 
     private void cleanInputs() {
-        cleanInput(usernameInput);
-        cleanInput(passwordInput);
-        cleanInput(forgotMe);
-    }
-
-    private void cleanInput(final Component input) {
-        if (input instanceof HasValue<?,?>) {
-            ((HasValue<?, ?>) input).clear();
-        }
-        if (input instanceof HasValidation) {
-            ((HasValidation) input).setInvalid(false);
-            ((HasValidation) input).setErrorMessage("");
-        }
+        VaadinUtils.cleanInput(usernameInput);
+        VaadinUtils.cleanInput(passwordInput);
+        VaadinUtils.cleanInput(forgotMe);
     }
 }

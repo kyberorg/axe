@@ -9,7 +9,6 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -35,10 +34,14 @@ import pm.axe.users.PasswordValidator;
 import pm.axe.users.UsernameGenerator;
 import pm.axe.users.UsernameValidator;
 import pm.axe.utils.AxeSessionUtils;
+import pm.axe.utils.ErrorUtils;
 import pm.axe.utils.FieldsValidationUtils;
+import pm.axe.utils.VaadinUtils;
 
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import static pm.axe.utils.VaadinUtils.onInvalidInput;
 
 @SpringComponent
 @UIScope
@@ -79,6 +82,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         //init once
         if (pageAlreadyInitialized) {
             cleanInputs();
+            hideUsernameRequirements();
         } else {
             pageInit();
             pageAlreadyInitialized = true;
@@ -109,115 +113,13 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         getSubmitButton().addClickListener(this::onRegister);
     }
 
-    private void cleanInputs() {
-        userEmailInput.clear();
-        passwordInput.clear();
-        usernameInput.clear();
-    }
-
-    private void onUserEmailFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
-        String input = event.getValue().trim();
-        boolean isInputEmpty = StringUtils.isBlank(input);
-        if (isInputEmpty) {
-            userEmailInput.setInvalid(false);
-            hideUsernameField();
-            updateLabelForUserEmailInput();
-            return;
-        }
-        boolean isEmail = EmailValidator.getInstance().isValid(input);
-        if (isEmail) {
-            //input is email
-            OperationResult generationResult = usernameGenerator.generateFromEmail(input);
-            if (generationResult.ok()) {
-                usernameInput.setValue(generationResult.getStringPayload());
-                //paste username fields
-                getFields().addComponentAtIndex(1, usernameInput);
-                updateLabelForUserEmailInput();
-                //check if it exists
-                boolean alreadyExists = accountService.isAccountAlreadyExists(input, AccountType.EMAIL);
-                if (alreadyExists) {
-                    onInvalidUserEmail("Email already taken");
-                }
-            }
-        } else {
-            hideUsernameField();
-            updateLabelForUserEmailInput();
-            //input is username
-            OperationResult usernameValidation = UsernameValidator.isValid(input);
-            if (usernameValidation.ok()) {
-                if (userService.isUserExists(input)) {
-                    onInvalidUserEmail("Username already taken");
-                }
-            } else {
-                onInvalidUserEmail("Username doesn't meet requirements");
-            }
-        }
-    }
-
-    private void onUsernameFieldChanged(AbstractField.ComponentValueChangeEvent<TextField, String> event) {
-        final String username = event.getValue().trim();
-        if (StringUtils.isBlank(username)) return;
-        OperationResult usernameValidation = UsernameValidator.isValid(username);
-        if (usernameValidation.ok()) {
-            if (userService.isUserExists(username)) {
-                onInvalidUsername("Username already exists");
-            }
-        } else {
-            onInvalidUsername("Username doesn't meet requirements");
-        }
-    }
-
-    private void onPasswordFieldChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
-        boolean isPasswordValid = !fieldsValidationUtils.isPasswordInvalid(passwordInput);
-        if (isPasswordValid) {
-            passwordInput.setInvalid(false);
-            passwordInput.setErrorMessage("");
-        }
-
-    }
-
-    private void onInvalidUserEmail(final String errorMessage) {
-        userEmailInput.setInvalid(true);
-        userEmailInput.setErrorMessage(errorMessage);
-        userEmailInput.focus();
-    }
-
-    private void onInvalidUsername(final String errorMessage) {
-        usernameInput.setInvalid(true);
-        usernameInput.setErrorMessage(errorMessage);
-        usernameInput.focus();
-    }
-
-
-    private void onRegister(final ClickEvent<Button> event) {
-        Notification.show("Not implemented yet");
-    }
-
-    private boolean isUsernameInputVisible() {
-        return getFields().indexOf(usernameInput) != -1;
-    }
-
-    private void hideUsernameField() {
-        if (isUsernameInputVisible()) {
-            getFields().remove(usernameInput);
-        }
-    }
-
-    private void updateLabelForUserEmailInput() {
-        if (isUsernameInputVisible()) {
-            userEmailInput.setLabel(JUST_EMAIL_LABEL);
-        } else {
-            userEmailInput.setLabel(USERNAME_EMAIL_LABEL);
-        }
-    }
-
     private void setupUserEmailSection() {
         userEmailInput.setLabel(USERNAME_EMAIL_LABEL);
         userEmailInput.setRequired(true);
         userEmailInput.setMinLength(USERNAME_MIN_LEN);
         userEmailInput.setClearButtonVisible(true);
         userEmailInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
-        userEmailInput.addValueChangeListener(this::onUserEmailFieldChanged);
+        userEmailInput.addValueChangeListener(this::onUserEmailChanged);
         userEmailInput.setHelperText("Valid email address or avaialble username");
         userEmailInput.setClassName("input");
     }
@@ -227,7 +129,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         usernameInput.setMinLength(USERNAME_MIN_LEN);
         usernameInput.setClearButtonVisible(true);
         usernameInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
-        usernameInput.addValueChangeListener(this::onUsernameFieldChanged);
+        usernameInput.addValueChangeListener(this::onUsernameChanged);
         usernameInput.setHelperText("You can use both as login");
         usernameInput.setClassName("input");
     }
@@ -255,10 +157,10 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         passwordInput.setMinLength(PasswordValidator.PASSWORD_MIN_LENGTH);
         passwordInput.setMaxLength(PasswordValidator.PASSWORD_MAX_LENGTH);
         passwordInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
-        passwordInput.addValueChangeListener(this::onPasswordFieldChanged);
+        passwordInput.addValueChangeListener(this::onPasswordChanged);
         passwordInput.setClassName("input");
         passwordInput.setHelperText(String.format("Should be %d-%d symbols long. " +
-                "Tip: Use password generator - make it strong.",
+                        "Tip: Use password generator - make it strong.",
                 PasswordValidator.PASSWORD_MIN_LENGTH, PasswordValidator.PASSWORD_MAX_LENGTH));
     }
 
@@ -281,5 +183,154 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         legalInfoLayout.setPadding(false);
         legalInfoLayout.setSpacing(false);
         return legalInfoLayout;
+    }
+
+    private void onUserEmailChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        hideUsernameRequirements();
+        String input = event.getValue().trim();
+        boolean isInputEmpty = StringUtils.isBlank(input);
+        if (isInputEmpty) {
+            userEmailInput.setInvalid(false);
+            hideUsernameField();
+            updateLabelForUserEmailInput();
+            return;
+        }
+        boolean isEmail = EmailValidator.getInstance().isValid(input);
+        if (isEmail) {
+            //input is email
+            OperationResult generationResult = usernameGenerator.generateFromEmail(input);
+            if (generationResult.ok()) {
+                usernameInput.setValue(generationResult.getStringPayload());
+                //paste username fields
+                getFields().addComponentAtIndex(1, usernameInput);
+                updateLabelForUserEmailInput();
+                //check if it exists
+                boolean alreadyExists = accountService.isAccountAlreadyExists(input, AccountType.EMAIL);
+                if (alreadyExists) {
+                    onInvalidInput(userEmailInput, "Email already taken");
+                }
+            }
+        } else {
+            hideUsernameField();
+            updateLabelForUserEmailInput();
+            //input is username
+            final boolean isUsernameValid = !isUsernameInvalid(userEmailInput);
+            if (isUsernameValid) {
+                userEmailInput.setInvalid(false);
+                userEmailInput.setErrorMessage("");
+            }
+        }
+    }
+
+    private void onUsernameChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        hideUsernameRequirements();
+        final String username = event.getValue().trim();
+        if (StringUtils.isBlank(username)) return;
+        OperationResult usernameValidation = UsernameValidator.isValid(username);
+        if (usernameValidation.ok()) {
+            if (userService.isUserExists(username)) {
+                onInvalidInput(usernameInput, "Username already exists");
+            }
+        } else {
+            onInvalidInput(usernameInput, "Username doesn't meet requirements");
+            showUsernameRequirements();
+        }
+    }
+
+    private void onPasswordChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
+        boolean isPasswordValid = !fieldsValidationUtils.isPasswordInvalid(passwordInput);
+        if (isPasswordValid) {
+            passwordInput.setInvalid(false);
+            passwordInput.setErrorMessage("");
+        }
+    }
+
+    private void onRegister(final ClickEvent<Button> event) {
+        final String usernameOrEmail = userEmailInput.getValue().trim();
+        boolean isUserEmailInputEmpty = StringUtils.isBlank(usernameOrEmail);
+        if (isUserEmailInputEmpty) {
+            onInvalidInput(userEmailInput, "Please type username or email here");
+            return;
+        }
+        boolean isInputEmail = EmailValidator.getInstance().isValid(usernameOrEmail);
+        if (isInputEmail) {
+            //email
+            boolean emailExists = accountService.isAccountAlreadyExists(usernameOrEmail, AccountType.EMAIL);
+            if (emailExists) {
+                onInvalidInput(userEmailInput, "Email already taken");
+                return;
+            }
+        } else {
+            //username
+            if (isUsernameInvalid(userEmailInput)) {
+                return;
+            }
+        }
+
+        //username
+        if (isUsernameInputVisible()) {
+            if (isUsernameInvalid(usernameInput)) {
+                return;
+            }
+        }
+
+        //password
+        if (fieldsValidationUtils.isPasswordInvalid(passwordInput)) {
+            return;
+        }
+
+        //all field are valid - let's do registration
+        doRegistration();
+    }
+
+    private void doRegistration() {
+        ErrorUtils.showErrorNotification("Registration is still not implemented yet");
+    }
+
+    private boolean isUsernameInvalid(final TextField inputField) {
+        final String input = inputField.getValue().trim();
+        OperationResult usernameValidation = UsernameValidator.isValid(input);
+        if (usernameValidation.ok()) {
+            if (userService.isUserExists(input)) {
+                onInvalidInput(inputField, "Username already taken");
+                return true;
+            }
+        } else {
+            onInvalidInput(inputField, "Username doesn't meet requirements");
+            showUsernameRequirements();
+            return true;
+        }
+        return false;
+    }
+
+    private void cleanInputs() {
+        VaadinUtils.cleanInput(userEmailInput);
+        VaadinUtils.cleanInput(passwordInput);
+        VaadinUtils.cleanInput(usernameInput);
+    }
+
+    private void hideUsernameRequirements() {
+        usernameRequirements.setVisible(false);
+    }
+    private void showUsernameRequirements() {
+        usernameRequirements.setVisible(true);
+    }
+
+    private boolean isUsernameInputVisible() {
+        return getFields().indexOf(usernameInput) != -1;
+    }
+
+    private void hideUsernameField() {
+        if (isUsernameInputVisible()) {
+            getFields().remove(usernameInput);
+        }
+    }
+
+    private void updateLabelForUserEmailInput() {
+        if (isUsernameInputVisible()) {
+            userEmailInput.setLabel(JUST_EMAIL_LABEL);
+        } else {
+            userEmailInput.setLabel(USERNAME_EMAIL_LABEL);
+        }
     }
 }
