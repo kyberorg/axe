@@ -11,6 +11,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -43,6 +45,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static com.vaadin.flow.component.button.ButtonVariant.LUMO_TERTIARY_INLINE;
 
 /**
  * App-wide tools.
@@ -327,6 +331,22 @@ public class AppUtils implements Serializable {
         return notification;
     }
 
+    public static void showSuccessNotification(final String text) {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(Axe.Defaults.NOTIFICATION_DURATION_MILLIS); //1.5 seconds
+
+        Icon icon = VaadinIcon.CHECK_CIRCLE.create();
+        Div info = new Div(new Text(text));
+
+        HorizontalLayout layout = new HorizontalLayout(icon, info, createCloseBtn(notification));
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        notification.add(layout);
+        notification.open();
+    }
+
     /**
      * Creates Session Expired Notification.
      *
@@ -355,7 +375,7 @@ public class AppUtils implements Serializable {
         Div text = new Div(new Text(message));
 
         Button pageRefreshButton = new Button("Refresh Page", event -> ui.getPage().reload());
-        pageRefreshButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        pageRefreshButton.addThemeVariants(LUMO_TERTIARY_INLINE);
 
         Button closeButton = new Button("Dismiss", event -> notification.close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
@@ -691,5 +711,13 @@ public class AppUtils implements Serializable {
         } else {
             return acceptHeader.equals(MimeTypes.JSON);
         }
+    }
+
+    private static Button createCloseBtn(final Notification notification) {
+        Button closeBtn = new Button(VaadinIcon.CLOSE_SMALL.create(),
+                clickEvent -> notification.close());
+        closeBtn.addThemeVariants(LUMO_TERTIARY_INLINE);
+
+        return closeBtn;
     }
 }

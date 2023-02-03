@@ -7,7 +7,6 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -27,7 +26,9 @@ import pm.axe.services.user.UserSettingsService;
 import pm.axe.ui.elements.PasswordGenerator;
 import pm.axe.ui.elements.Section;
 import pm.axe.users.AccountType;
+import pm.axe.utils.AppUtils;
 import pm.axe.utils.AxeSessionUtils;
+import pm.axe.utils.ErrorUtils;
 import pm.axe.utils.VaadinUtils;
 
 import java.util.List;
@@ -56,9 +57,13 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     private Select<String> tfaChannelSelect;
     private User user;
 
+    private boolean isClientChange;
+
     @Override
     public void tabInit(final User user) {
         this.user = user;
+        //automatic starts changing values - disabling notifications
+        isClientChange = false;
 
         confirmedAccounts = getConfirmedAccountsFor(user);
 
@@ -67,6 +72,9 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         tfaSection = createTfaSection();
 
         add(changePasswordSection, resetPasswordChannelSection, tfaSection);
+
+        //automatic set all values, all other actions are from client.
+        isClientChange = true;
     }
 
     private Section createChangePasswordSection() {
@@ -201,9 +209,9 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         if (userSettings.isPresent()) {
             userSettings.get().setPasswordResetChannel(accountType);
             userSettingsService.updateUserSettings(userSettings.get());
-            Notification.show("Reset Password Channel updated!");
+            notifyAboutSuccess("Reset Password Channel updated!");
         } else {
-            Notification.show("Failed to save. System error.");
+            notifyAboutError("Failed to save reset password channel. System error.");
         }
     }
 
@@ -227,7 +235,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
             } else {
                 //should never happen
                 tfaBox.setValue(false);
-                Notification.show("Failed to save. No valid and confirmed 2FA channels exist yet");
+                notifyAboutError("Failed to save. No valid and confirmed 2FA channels exist yet");
                 return;
             }
         } else {
@@ -256,10 +264,10 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
             userSettings.get().setTfaEnabled(tfaBox.getValue());
             userSettings.get().setTfaChannel(tfaChannel);
             userSettingsService.updateUserSettings(userSettings.get());
-            Notification.show("Saved");
+            notifyAboutSuccess("Two-Factor Authentication Settings updated!");
         } else {
             tfaBox.setEnabled(false);
-            Notification.show("Failed to save. System error.");
+            notifyAboutError("Failed to save 2FA Settings. System error.");
         }
     }
 
@@ -283,5 +291,17 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         Anchor link = new Anchor(Endpoint.UI.CONFIRM_ACCOUNT_PAGE, "confirm account");
         Span last = new Span(".");
         return new Span(first, link, last);
+    }
+
+    private void notifyAboutSuccess(final String notificationText) {
+        if (isClientChange) {
+            AppUtils.showSuccessNotification(notificationText);
+        }
+    }
+
+    private void notifyAboutError(final String errorText) {
+        if (isClientChange) {
+            ErrorUtils.showErrorNotification(errorText);
+        }
     }
 }
