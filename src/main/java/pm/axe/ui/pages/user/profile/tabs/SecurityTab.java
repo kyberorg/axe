@@ -201,7 +201,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         if (userSettings.isPresent()) {
             userSettings.get().setPasswordResetChannel(accountType);
             userSettingsService.updateUserSettings(userSettings.get());
-            Notification.show("Saved");
+            Notification.show("Reset Password Channel updated!");
         } else {
             Notification.show("Failed to save. System error.");
         }

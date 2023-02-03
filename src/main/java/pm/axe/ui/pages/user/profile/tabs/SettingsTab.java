@@ -132,7 +132,7 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
         if (userSettings.isPresent()) {
             userSettings.get().setLandingPage(landingPage);
             uss.updateUserSettings(userSettings.get());
-            Notification.show("Saved");
+            Notification.show("Landing page updated!");
         }
     }
 
