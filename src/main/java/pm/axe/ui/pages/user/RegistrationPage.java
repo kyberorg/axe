@@ -31,9 +31,11 @@ import pm.axe.ui.MainView;
 import pm.axe.ui.elements.PasswordGenerator;
 import pm.axe.ui.layouts.AxeFormLayout;
 import pm.axe.users.AccountType;
+import pm.axe.users.PasswordValidator;
 import pm.axe.users.UsernameGenerator;
 import pm.axe.users.UsernameValidator;
 import pm.axe.utils.AxeSessionUtils;
+import pm.axe.utils.FieldsValidationUtils;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -48,13 +50,12 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private static final String USERNAME_EMAIL_LABEL = "Username/Email";
     private static final String JUST_EMAIL_LABEL = "Email";
     private static final int USERNAME_MIN_LEN = 2;
-    private static final int PASSWORD_MIN_LEN = 3;
-    private static final int PASSWORD_MAX_LEN = 71; //BCrypt limitation
 
     private final UsernameGenerator usernameGenerator;
     private final UserService userService;
     private final AccountService accountService;
     private final AxeSessionUtils axeSessionUtils;
+    private final FieldsValidationUtils fieldsValidationUtils;
 
     private final Span subTitleText = new Span();
     private final Anchor subTitleLink = new Anchor();
@@ -167,29 +168,26 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     }
 
     private void onPasswordFieldChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
-        String password = event.getValue();
-        if (StringUtils.isBlank(password)) return;
-        if (password.length() < PASSWORD_MIN_LEN) {
-          onInvalidPassword(String.format("Password is very short. Minimum %d symbols", PASSWORD_MIN_LEN));
-        } else if (password.length() > PASSWORD_MAX_LEN) {
-            onInvalidPassword(String.format("Password is too long. Max %d symbols", PASSWORD_MAX_LEN));
+        boolean isPasswordValid = !fieldsValidationUtils.isPasswordInvalid(passwordInput);
+        if (isPasswordValid) {
+            passwordInput.setInvalid(false);
+            passwordInput.setErrorMessage("");
         }
+
     }
 
     private void onInvalidUserEmail(final String errorMessage) {
         userEmailInput.setInvalid(true);
         userEmailInput.setErrorMessage(errorMessage);
+        userEmailInput.focus();
     }
 
     private void onInvalidUsername(final String errorMessage) {
         usernameInput.setInvalid(true);
         usernameInput.setErrorMessage(errorMessage);
+        usernameInput.focus();
     }
 
-    public void onInvalidPassword(final String errorMessage) {
-        passwordInput.setInvalid(true);
-        passwordInput.setErrorMessage(errorMessage);
-    }
 
     private void onRegister(final ClickEvent<Button> event) {
         Notification.show("Not implemented yet");
@@ -254,13 +252,14 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private void setupPasswordSection() {
         passwordInput.setLabel("Password");
         passwordInput.setRequired(true);
-        passwordInput.setMinLength(PASSWORD_MIN_LEN);
-        passwordInput.setMaxLength(PASSWORD_MAX_LEN);
+        passwordInput.setMinLength(PasswordValidator.PASSWORD_MIN_LENGTH);
+        passwordInput.setMaxLength(PasswordValidator.PASSWORD_MAX_LENGTH);
         passwordInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         passwordInput.addValueChangeListener(this::onPasswordFieldChanged);
         passwordInput.setClassName("input");
         passwordInput.setHelperText(String.format("Should be %d-%d symbols long. " +
-                "Tip: Use password generator - make it strong.", PASSWORD_MIN_LEN, PASSWORD_MAX_LEN));
+                "Tip: Use password generator - make it strong.",
+                PasswordValidator.PASSWORD_MIN_LENGTH, PasswordValidator.PASSWORD_MAX_LENGTH));
     }
 
     private void setupPasswordGeneratorSection() {

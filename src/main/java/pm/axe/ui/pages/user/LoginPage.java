@@ -1,7 +1,6 @@
 package pm.axe.ui.pages.user;
 
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -23,19 +22,27 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import pm.axe.Endpoint;
+import pm.axe.db.models.Account;
 import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
+import pm.axe.services.user.AccountService;
 import pm.axe.services.user.UserService;
 import pm.axe.session.AxeSession;
 import pm.axe.ui.MainView;
 import pm.axe.ui.layouts.AxeFormLayout;
+import pm.axe.users.AccountType;
 import pm.axe.users.LandingPage;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.AxeSessionUtils;
+import pm.axe.utils.ErrorUtils;
+import pm.axe.utils.FieldsValidationUtils;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import static pm.axe.utils.VaadinUtils.onInvalidInput;
 
 
 @SpringComponent
@@ -47,7 +54,9 @@ import java.util.Optional;
 public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     private final AppUtils appUtils;
     private final UserService userService;
+    private final AccountService accountService;
     private final AxeSessionUtils axeSessionUtils;
+    private final FieldsValidationUtils fieldsValidationUtils;
     private final MainView mainView;
 
     private final Span subTitleText = new Span();
@@ -95,8 +104,11 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
         usernameInput.setLabel("Username/Email");
         usernameInput.setClearButtonVisible(true);
         usernameInput.setRequired(true);
+        usernameInput.addValueChangeListener(this::onUsernameChanged);
+
         passwordInput.setLabel("Password");
         passwordInput.setRequired(true);
+        passwordInput.addValueChangeListener(this::onPasswordChanged);
 
         forgotMe.setLabel("Log me out after");
         forgotMe.setTooltipText("If enabled, Axe will log you out once current session is over");
@@ -124,8 +136,43 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
         setComponentsAfterSubmitButton(forgotPasswordSection);
     }
 
+    private void onUsernameChanged(final AbstractField.ComponentValueChangeEvent<TextField, String> e) {
+        boolean isEmail = EmailValidator.getInstance().isValid(usernameInput.getValue().trim());
+        boolean inputInvalid = isEmail
+                ? fieldsValidationUtils.isEmailInvalid(usernameInput)
+                : fieldsValidationUtils.isUsernameInvalid(usernameInput);
+
+
+        if (!inputInvalid) {
+            usernameInput.setInvalid(false);
+            usernameInput.setErrorMessage("");
+        }
+    }
+
+    private void onPasswordChanged(final AbstractField.ComponentValueChangeEvent<PasswordField, String> e) {
+        boolean isPasswordValid = !fieldsValidationUtils.isPasswordInvalid(passwordInput);
+        if (isPasswordValid) {
+            passwordInput.setInvalid(false);
+            passwordInput.setErrorMessage("");
+        }
+    }
+
     private void onLogin(final ClickEvent<Button> event) {
-        //TODO do fields validation before sending anything
+        String userOrEmail = usernameInput.getValue().trim();
+        boolean isInputEmpty = StringUtils.isBlank(userOrEmail);
+        if (isInputEmpty) {
+            onInvalidInput(usernameInput, "Please type username or email here");
+            return;
+        }
+
+        boolean isEmail = EmailValidator.getInstance().isValid(userOrEmail);
+        boolean userOrEmailInvalid = isEmail
+                ? fieldsValidationUtils.isEmailInvalid(usernameInput)
+                : fieldsValidationUtils.isUsernameInvalid(usernameInput);
+        if (userOrEmailInvalid) return;
+        if (fieldsValidationUtils.isPasswordInvalid(passwordInput)) return;
+
+        //TODO read value of forgotMe and at accordingly
         //FIXME remove after real login progress implemented
         if (appUtils.isDevelopmentModeActivated()) {
             doEasyLogin();
@@ -135,33 +182,53 @@ public class LoginPage extends AxeFormLayout implements BeforeEnterObserver {
     }
 
     private void doEasyLogin() {
-        String username = StringUtils.isNotBlank(usernameInput.getValue()) ? usernameInput.getValue().trim() : "";
-        if (StringUtils.isBlank(username)) {
-            usernameInput.setInvalid(true);
-            usernameInput.setErrorMessage("Please type username or email here");
-        } else if (userService.isUserExists(username)) {
-            AxeSession.getCurrent().ifPresent(axs -> {
-                Optional<User> user = userService.getUserByUsername(username);
-                user.ifPresent(axs::setUser);
-                Optional<UserSettings> us = axeSessionUtils.getCurrentUserSettings();
-                //dark mode
-                if (us.isPresent() && us.get().isDarkMode()) {
-                    axs.getSettings().setDarkMode(true);
-                    mainView.applyTheme(true);
+        AxeSession.getCurrent().ifPresent(axs -> {
+            final String input = usernameInput.getValue().trim();
+            boolean isInputEmail = EmailValidator.getInstance().isValid(input);
+            String username;
+            if (isInputEmail) {
+                Optional<String> usernameFromEmail = getUsernameByEmail(input);
+                if (usernameFromEmail.isPresent()) {
+                    username = usernameFromEmail.get();
+                } else {
+                    ErrorUtils.getErrorNotification("Something went wrong, because try using username instead");
+                    return;
                 }
-                //landing page
-                LandingPage landingPage = axeSessionUtils.getLandingPage(); //page after login
-                usernameInput.getUI().ifPresent(ui -> ui.navigate(landingPage.getPath()));
-            });
-        } else {
-            usernameInput.setInvalid(true);
-            usernameInput.setErrorMessage("No such user found");
-        }
+            } else {
+                username = input;
+            }
+            Optional<User> user = userService.getUserByUsername(username);
+            user.ifPresent(axs::setUser);
+            Optional<UserSettings> us = axeSessionUtils.getCurrentUserSettings();
+            //dark mode
+            if (us.isPresent() && us.get().isDarkMode()) {
+                axs.getSettings().setDarkMode(true);
+                mainView.applyTheme(true);
+            }
+            //landing page
+            LandingPage landingPage = axeSessionUtils.getLandingPage(); //page after login
+            usernameInput.getUI().ifPresent(ui -> ui.navigate(landingPage.getPath()));
+        });
+    }
+
+    private Optional<String> getUsernameByEmail(final String email) {
+        Optional<Account> account = accountService.getAccountByAccountName(email, AccountType.EMAIL);
+        return account.map(owner -> owner.getUser().getUsername());
     }
 
     private void cleanInputs() {
-        usernameInput.clear();
-        passwordInput.clear();
-        forgotMe.clear();
+        cleanInput(usernameInput);
+        cleanInput(passwordInput);
+        cleanInput(forgotMe);
+    }
+
+    private void cleanInput(final Component input) {
+        if (input instanceof HasValue<?,?>) {
+            ((HasValue<?, ?>) input).clear();
+        }
+        if (input instanceof HasValidation) {
+            ((HasValidation) input).setInvalid(false);
+            ((HasValidation) input).setErrorMessage("");
+        }
     }
 }

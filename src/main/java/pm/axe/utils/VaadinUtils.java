@@ -1,6 +1,8 @@
 package pm.axe.utils;
 
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEvent;
@@ -73,5 +75,13 @@ public final class VaadinUtils {
 
     public static void setFlex(final HasStyle component, final String flexValue) {
         component.getStyle().set("flex", flexValue);
+    }
+
+    public static void onInvalidInput(final HasValidation component, final String errorMessage) {
+        component.setInvalid(true);
+        component.setErrorMessage(errorMessage);
+        if (component instanceof Focusable<?>) {
+            ((Focusable<?>) component).focus();
+        }
     }
 }
