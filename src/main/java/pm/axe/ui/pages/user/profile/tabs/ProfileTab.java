@@ -112,7 +112,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
 
     private HorizontalLayout createEmailLayout() {
         emailField.setLabel("E-mail");
-
+        emailField.setSuffixComponent(VaadinIcon.CHECK.create());
         emailField.setClearButtonVisible(true);
         emailField.setReadOnly(true);
         emailField.addValueChangeListener(this::onEmailChanged);
