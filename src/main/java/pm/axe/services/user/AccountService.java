@@ -26,6 +26,7 @@ import java.util.Optional;
 public class AccountService {
     private static final String TAG = "[" + AccountService.class.getSimpleName() + "]";
     private static final String ERR_ACCOUNT_IS_EMPTY = "Account is null";
+    private static final String ERR_NO_EMAIL_ACCOUNT = "User has no Email Account";
 
     private final AccountDao accountDao;
     private final SymmetricCryptTool cryptTool;
@@ -292,6 +293,42 @@ public class AccountService {
             return OperationResult.databaseDown();
         } catch (Exception e) {
             log.error("{} failed to confirm account got exception {}", TAG, e.getMessage());
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
+    public OperationResult updateEmailAccount(final User user, final String email) {
+        if (user == null) return OperationResult.malformedInput().withMessage("User cannot be NULL");
+        OperationResult validationResult = mailService.isEmailValid(email);
+        if (validationResult.notOk()) {
+            return validationResult;
+        }
+
+
+        Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
+        if (emailAccount.isPresent()) {
+            String encryptedEmail;
+            OperationResult encryptEmailResult = cryptTool.encrypt(email);
+            if (encryptEmailResult.ok()) {
+                encryptedEmail = encryptEmailResult.getStringPayload();
+            } else {
+                log.error("{} Email encryption failed. Value: {}. Error: {}", TAG, email, encryptEmailResult.getMessage());
+                return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
+            }
+            emailAccount.get().setAccountName(encryptedEmail);
+            emailAccount.get().setConfirmed(false);
+        } else {
+            return OperationResult.generalFail().withMessage(ERR_NO_EMAIL_ACCOUNT);
+        }
+
+        try {
+            accountDao.save(emailAccount.get());
+            log.info("{} Updated email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
+            return OperationResult.success().addPayload(emailAccount.get());
+        } catch (CannotCreateTransactionException e) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.debug("", e);
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
