@@ -85,7 +85,7 @@ public final class AreYouSureDialog extends Composite<Dialog> {
         defaultActionButtonAction = actionButton.addClickListener(e -> dialog.close());
 
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        actionButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
+        actionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         HorizontalLayout buttonLayout = new HorizontalLayout(cancelButton, actionButton);
         buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 

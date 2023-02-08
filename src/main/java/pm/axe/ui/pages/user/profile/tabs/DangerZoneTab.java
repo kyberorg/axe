@@ -23,24 +23,24 @@ import java.util.stream.Stream;
 @SpringComponent
 @UIScope
 public class DangerZoneTab extends VerticalLayout implements HasTabInit {
-    private Section deleteAccountSection;
+    private Section dangerZoneSection;
     private User user;
     @Override
     public void tabInit(final User user) {
         this.user = user;
-        createDeleteAccountSection();
-        add(deleteAccountSection);
+        createDangerZoneSection();
+        add(dangerZoneSection);
     }
 
-    private void createDeleteAccountSection() {
-        deleteAccountSection = new Section("Delete my Account");
-        deleteAccountSection.setCentered();
+    private void createDangerZoneSection() {
+        dangerZoneSection = new Section("Danger Zone");
+        dangerZoneSection.setCentered();
         Component content = deleteAccountSectionContent();
-        deleteAccountSection.setContent(content);
+        dangerZoneSection.setContent(content);
     }
 
     private Component deleteAccountSectionContent() {
-        deleteAccountSection.getTitle().addClassName("bold");
+        dangerZoneSection.getTitle().addClassName("bold");
 
         Button deAuthSessionsButton = new Button("Deauthorize Sessions");
         deAuthSessionsButton.addClickListener(this::onDeAuthSessions);
