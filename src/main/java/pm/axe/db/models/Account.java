@@ -41,6 +41,14 @@ public final class Account extends BaseModel {
         return new Builder(accountType);
     }
 
+    public void copy(final Account anotherAccount) {
+        this.setUser(anotherAccount.getUser());
+        this.setType(anotherAccount.getType());
+        this.setAccountName(anotherAccount.getAccountName());
+        this.setConfirmed(anotherAccount.isConfirmed());
+        this.setExtraInfo(anotherAccount.getExtraInfo());
+    }
+
     private Account(final AccountType accountType, final User user) {
         this.type = accountType;
         this.user = user;

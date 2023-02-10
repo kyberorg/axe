@@ -5,6 +5,7 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -24,6 +25,7 @@ import pm.axe.internal.HasTabInit;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
+import pm.axe.services.user.UserOperationsService;
 import pm.axe.services.user.UserService;
 import pm.axe.ui.elements.AreYouSureDialog;
 import pm.axe.ui.elements.Section;
@@ -48,6 +50,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private final AccountService accountService;
     private final TokenService tokenService;
     private final UserService userService;
+    private final UserOperationsService userOpsService;
     private User user;
 
     @SuppressWarnings("FieldCanBeLocal") //will be re-drawn if event received
@@ -112,12 +115,17 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
 
     private HorizontalLayout createEmailLayout() {
         emailField.setLabel("E-mail");
-        emailField.setSuffixComponent(VaadinIcon.CHECK.create());
         emailField.setClearButtonVisible(true);
         emailField.setReadOnly(true);
         emailField.addValueChangeListener(this::onEmailChanged);
 
-        getCurrentEmail().ifPresent(emailField::setValue);
+        Optional<String> currentEmail = getCurrentEmail();
+        currentEmail.ifPresent(emailField::setValue);
+        currentEmail.ifPresent(e -> {
+            VaadinIcon confirmationStatusIcon = isCurrentEmailConfirmed()
+                    ?  VaadinIcon.CHECK : VaadinIcon.ELLIPSIS_CIRCLE;
+            emailField.setSuffixComponent(confirmationStatusIcon.create());
+        });
 
         editEmailButton.setText("Edit");
         editEmailButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -272,6 +280,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
 
     private void onEditEmail(ClickEvent<Button> event) {
         emailField.setReadOnly(false);
+        emailField.setSuffixComponent(new Div());
         emailLayout.replace(editEmailButton, saveEmailButton);
     }
 
@@ -287,6 +296,11 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             return;
         }
 
+        if (StringUtils.isBlank(email)) {
+            onInvalidInput(emailField, "Please provide valid email");
+            return;
+        }
+
         boolean isValidEmail = EmailValidator.getInstance().isValid(email);
         if (isValidEmail) {
             //email
@@ -297,16 +311,35 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             }
         } else {
             //not valid email
-            onInvalidInput(emailField, "Should be valid email");
+            onInvalidInput(emailField, "Should be valid email address");
             return;
         }
 
         //clean -> save
+        Optional<Account> currentEmailRecord = accountService.getAccount(user, AccountType.EMAIL);
+
         OperationResult emailUpdateResult = accountService.updateEmailAccount(user, email);
-        if (emailUpdateResult.ok()) {
-            AppUtils.showSuccessNotification("Email is updated");
-        } else {
+        if (emailUpdateResult.notOk()) {
+            currentEmailRecord.ifPresent(accountService::rollbackAccount);
+            if (currentEmailRecord.isPresent() ) {
+                emailField.setValue(currentEmail.get());
+            } else {
+                emailField.setValue("");
+            }
+
             ErrorUtils.showErrorNotification("Failed to update email. Server error");
+        }
+
+        //sending confirmation letter
+        OperationResult sendConfirmationLetterResult = userOpsService.sendConfirmationLetter(email,
+                emailUpdateResult.getPayload(Account.class));
+        if (sendConfirmationLetterResult.ok()) {
+            emailField.setSuffixComponent(VaadinIcon.ELLIPSIS_CIRCLE.create());
+            AppUtils.showSuccessNotification("Send confirmation to new email. Please check your inbox.");
+        } else {
+            emailField.setSuffixComponent(VaadinIcon.EXCLAMATION_CIRCLE.create());
+            ErrorUtils.showErrorNotification("Failed to send confirmation letter. Please try again later.");
+            currentEmailRecord.ifPresent(accountService::rollbackAccount);
         }
 
         emailField.setReadOnly(true);
@@ -350,6 +383,11 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         } else {
             return Optional.empty();
         }
+    }
+
+    private boolean isCurrentEmailConfirmed() {
+        Optional<Account> emailAccount = accountService.getAccount(user, AccountType.EMAIL);
+        return emailAccount.map(Account::isConfirmed).orElse(false);
     }
 
     private Optional<Account> getTelegramAccount() {

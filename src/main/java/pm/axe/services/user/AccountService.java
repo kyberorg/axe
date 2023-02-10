@@ -332,4 +332,20 @@ public class AccountService {
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
     }
+
+    public void rollbackAccount(final Account oldAccount) {
+        Optional<Account> currentAccount = this.getAccount(oldAccount.getUser(), oldAccount.getType());
+        try {
+            if (currentAccount.isPresent()) {
+                currentAccount.get().copy(oldAccount);
+            } else {
+                accountDao.save(oldAccount);
+            }
+            log.info("{} Account {} rolled back", TAG, oldAccount);
+        } catch (CannotCreateTransactionException e) {
+            log.error("{} failed to rollback account: Database is Down", TAG);
+        } catch (Exception e) {
+            log.error("{} failed  to rollback Account {}: got exception {}", TAG, oldAccount, e.getMessage());
+        }
+    }
 }

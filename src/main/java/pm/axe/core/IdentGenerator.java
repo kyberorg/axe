@@ -35,7 +35,7 @@ public final class IdentGenerator {
             + IDENT_MAX_LENGTH_WITHOUT_FIRST_AND_LAST_CHARS + "}[a-zA-Z0-9]$";
 
     private static final int TOKEN_SUBSTRING_START_INDEX = 0;
-    private static final int TOKEN_SUBSTRING_END_INDEX = 7;
+    private static final int TOKEN_SUBSTRING_END_INDEX = 5;
 
     private IdentGenerator() {
         throw new UnsupportedOperationException("Utility class");
@@ -69,6 +69,7 @@ public final class IdentGenerator {
     private static String generateAccountConfirmationIdent(final Token token) {
         String prefix = token.getTokenType().getIdentPrefix();
         String firstPartOfToken = token.getToken().substring(TOKEN_SUBSTRING_START_INDEX, TOKEN_SUBSTRING_END_INDEX);
-        return String.join("", prefix, firstPartOfToken);
+        String randomPart = RandomStringUtils.randomAlphanumeric(2); //for re-used tokens
+        return String.join("", prefix, firstPartOfToken, randomPart);
     }
 }

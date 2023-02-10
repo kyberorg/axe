@@ -36,16 +36,18 @@ public class TokenService {
      * @return {@link OperationResult} with created {@link Token} or {@link OperationResult} with error.
      */
     public OperationResult createConfirmationToken(final User user, final Account account) {
-        boolean userAlreadyHasConfirmationToken =
-                tokenDao.existsByTokenTypeAndUser(TokenType.ACCOUNT_CONFIRMATION_TOKEN, user);
-        if (userAlreadyHasConfirmationToken) {
-            return OperationResult.banned().withMessage(ERR_USER_ALREADY_HAS_TOKEN);
+        Optional<Token> optionalToken =
+                tokenDao.findByTokenTypeAndUserAndConfirmationFor(TokenType.ACCOUNT_CONFIRMATION_TOKEN, user, account);
+        Token confirmationToken;
+        if (optionalToken.isPresent()) {
+            //use it again
+            confirmationToken = optionalToken.get();
+        } else {
+            //create new
+            confirmationToken = Token.create(TokenType.ACCOUNT_CONFIRMATION_TOKEN).forUser(user);
+            confirmationToken.setConfirmationFor(account);
+            verifyTokenValueIsUnique(confirmationToken);
         }
-
-        Token confirmationToken = Token.create(TokenType.ACCOUNT_CONFIRMATION_TOKEN).forUser(user);
-        confirmationToken.setConfirmationFor(account);
-
-        verifyTokenValueIsUnique(confirmationToken);
 
         try {
             tokenDao.save(confirmationToken);

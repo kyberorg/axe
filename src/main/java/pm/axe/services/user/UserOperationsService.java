@@ -108,26 +108,8 @@ public class UserOperationsService {
         }
         //Create and send - confirmation email for Accounts with Email set.
         if (userAccount.getType() == AccountType.EMAIL) {
-            //Create Confirmation Token
-            OperationResult createConfirmationTokenResult =
-                    tokenService.createConfirmationToken(createdUser, userAccount);
-            if (createConfirmationTokenResult.notOk()) {
-                log.error("{} failed to create confirmation token for {}. OpResult: {}",
-                        TAG, createdUser.getUsername(), createConfirmationTokenResult);
-                return createConfirmationTokenResult;
-            }
-            Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
-            rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
-            //Send it
-            log.info("{} Successfully created {}({}) for user '{}'",
-                    TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
-            OperationResult sendResult = senders.getSender(AccountType.EMAIL).send(confirmationToken, input.getEmail());
-            if (sendResult.notOk()) {
-                log.warn("{} Unable to send created {} to {}. OpResult: {}",
-                        TAG, confirmationToken.getTokenType(), input.getEmail(), sendResult);
-                log.warn("{} Requesting Rollback", TAG);
-                rollbackService.rollback(rollbackTasks);
-            }
+            OperationResult sendConfirmationLetterResult = sendConfirmationLetter(input.getEmail(), userAccount);
+            if (sendConfirmationLetterResult.notOk()) return sendConfirmationLetterResult;
         }
         //Create Telegram Confirmation Token
         Token telegramConfirmationToken;
@@ -145,6 +127,43 @@ public class UserOperationsService {
         OperationResult success = OperationResult.success();
         return Objects.isNull(telegramConfirmationToken)
                 ? success : success.addPayload(TELEGRAM_TOKEN_KEY, telegramConfirmationToken.getToken());
+    }
+
+    public OperationResult sendConfirmationLetter(final String email, final Account userAccount) {
+        //check inputs
+        if (StringUtils.isBlank(email)) {
+            return OperationResult.malformedInput().withMessage("Email cannot be empty");
+        }
+        if (userAccount == null) {
+            return OperationResult.malformedInput().withMessage("User Account cannot be null");
+        }
+        if (userAccount.getUser() == null) {
+            return OperationResult.malformedInput().withMessage("Given Account is not bound to any user");
+        }
+
+        //Create Confirmation Token
+        OperationResult createConfirmationTokenResult =
+                tokenService.createConfirmationToken(userAccount.getUser(), userAccount);
+        if (createConfirmationTokenResult.notOk()) {
+            log.error("{} failed to create confirmation token for {}. OpResult: {}",
+                    TAG, userAccount.getUser().getUsername(), createConfirmationTokenResult);
+            return createConfirmationTokenResult;
+        }
+        Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
+        rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
+        //Send it
+        log.info("{} Successfully created {}({}) for user '{}'",
+                TAG, confirmationToken.getTokenType(), confirmationToken.getToken(),
+                userAccount.getUser().getUsername());
+        OperationResult sendResult = senders.getSender(AccountType.EMAIL).send(confirmationToken, email);
+        if (sendResult.notOk()) {
+            log.warn("{} Unable to send created {} to {}. OpResult: {}",
+                    TAG, confirmationToken.getTokenType(), email, sendResult);
+            log.warn("{} Requesting Rollback", TAG);
+            rollbackService.rollback(rollbackTasks);
+            return sendResult;
+        }
+        return OperationResult.success();
     }
 
     /**
