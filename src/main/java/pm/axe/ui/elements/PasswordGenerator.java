@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import org.apache.commons.lang3.RandomStringUtils;
+import pm.axe.utils.AppUtils;
 import pm.axe.utils.ClipboardUtils;
 
 
@@ -67,6 +68,8 @@ public class PasswordGenerator extends Composite<Details> {
             target.getElement().callJsFunction("_setPasswordVisible", true);
             //suggestion accepted - we can close Password Generator
             getContent().setOpened(false);
+            //show info notification as well
+            AppUtils.showInfoNotification("Also copied to clipboard, so you can record it.");
         } else {
             //copy to clipboard
             ClipboardUtils.showLinkCopiedNotification("Password copied", Notification.Position.MIDDLE);

@@ -210,6 +210,10 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     }
 
     private void onPasswordChanged(final AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
+        if (StringUtils.isBlank(newPasswordInput.getValue())) {
+            newPasswordInput.setInvalid(false);
+            newPasswordInput.setErrorMessage("");
+        }
         boolean isPasswordValid = !fieldsValidationUtils.isPasswordInvalid(newPasswordInput);
         if (isPasswordValid) {
             newPasswordInput.setInvalid(false);
@@ -238,7 +242,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
 
         final boolean isOldPasswordValid = userService.checkPassword(user, oldPassword.trim());
         if (!isOldPasswordValid) {
-            onInvalidInput(oldPasswordInput, "Old Password is incorrect, try again");
+            onInvalidInput(oldPasswordInput, "Old Password is incorrect");
             return;
         }
 

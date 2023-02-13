@@ -347,6 +347,21 @@ public class AppUtils implements Serializable {
         notification.open();
     }
 
+    public static void showInfoNotification(final String text) {
+        Notification notification = new Notification();
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(Axe.Defaults.NOTIFICATION_DURATION_MILLIS); //1.5 seconds
+
+        Icon icon = VaadinIcon.INFO_CIRCLE.create();
+        Div info = new Div(new Text(text));
+
+        HorizontalLayout layout = new HorizontalLayout(icon, info, createCloseBtn(notification));
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        notification.add(layout);
+        notification.open();
+    }
+
     /**
      * Creates Session Expired Notification.
      *
