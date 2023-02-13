@@ -1,6 +1,7 @@
 package pm.axe.ui.pages.user.profile.tabs;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -22,18 +23,18 @@ import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
 import pm.axe.internal.HasTabInit;
 import pm.axe.services.user.AccountService;
+import pm.axe.services.user.UserService;
 import pm.axe.services.user.UserSettingsService;
 import pm.axe.ui.elements.PasswordGenerator;
 import pm.axe.ui.elements.Section;
 import pm.axe.users.AccountType;
-import pm.axe.utils.AppUtils;
-import pm.axe.utils.AxeSessionUtils;
-import pm.axe.utils.ErrorUtils;
-import pm.axe.utils.VaadinUtils;
+import pm.axe.utils.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static pm.axe.utils.VaadinUtils.onInvalidInput;
 
 @SuppressWarnings("DuplicatedCode")
 @RequiredArgsConstructor
@@ -41,14 +42,19 @@ import java.util.stream.Stream;
 @UIScope
 public class SecurityTab extends VerticalLayout implements HasTabInit {
     private final AccountService accountService;
+    private final UserService userService;
     private final UserSettingsService userSettingsService;
     private final AxeSessionUtils axeSessionUtils;
+    private final FieldsValidationUtils fieldsValidationUtils;
 
     private List<Account> confirmedAccounts;
 
     private Section changePasswordSection;
     private Section resetPasswordChannelSection;
     private Section tfaSection;
+
+    private PasswordField oldPasswordInput;
+    private PasswordField newPasswordInput;
 
     private Select<String> resetPasswordSelect;
 
@@ -86,14 +92,20 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
     }
 
     private VerticalLayout createChangePasswordContent() {
-        PasswordField oldPasswordInput = new PasswordField("Old Password");
-        PasswordField newPasswordInput = new PasswordField("New Password");
+        oldPasswordInput = new PasswordField("Old Password");
+
+        newPasswordInput = new PasswordField("New Password");
+        newPasswordInput.addValueChangeListener(this::onPasswordChanged);
+
         PasswordGenerator passwordGenerator = PasswordGenerator.create();
         passwordGenerator.setOpened(false);
         passwordGenerator.setCopyTarget(newPasswordInput);
+
         Button updatePasswordButton = new Button("Update");
+        updatePasswordButton.addClickListener(this::onPasswordUpdate);
         updatePasswordButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         updatePasswordButton.setWidthFull();
+
         VerticalLayout changePasswordLayout = new VerticalLayout(oldPasswordInput, newPasswordInput,
                 passwordGenerator, updatePasswordButton);
         changePasswordLayout.setPadding(false);
@@ -195,6 +207,47 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         }
 
         return tfaContent;
+    }
+
+    private void onPasswordChanged(final AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
+        boolean isPasswordValid = !fieldsValidationUtils.isPasswordInvalid(newPasswordInput);
+        if (isPasswordValid) {
+            newPasswordInput.setInvalid(false);
+            newPasswordInput.setErrorMessage("");
+        }
+    }
+
+    private void onPasswordUpdate(final ClickEvent<Button> event) {
+        final String oldPassword = oldPasswordInput.getValue();
+        final String newPassword = newPasswordInput.getValue();
+        if (StringUtils.isBlank(oldPassword)) {
+            onInvalidInput(oldPasswordInput, "Old Password cannot be blank");
+            return;
+        }
+
+        if (StringUtils.isBlank(newPassword)) {
+            onInvalidInput(newPasswordInput, "New Password cannot be blank");
+            return;
+        }
+
+        final boolean isNewPasswordInvalid = fieldsValidationUtils.isPasswordInvalid(newPasswordInput);
+        if (isNewPasswordInvalid) {
+            //error message is already set by validator.
+            return;
+        }
+
+        final boolean isOldPasswordValid = userService.checkPassword(user, oldPassword.trim());
+        if (!isOldPasswordValid) {
+            onInvalidInput(oldPasswordInput, "Old Password is incorrect, try again");
+            return;
+        }
+
+        //all field are valid - let's change password
+        doPasswordChange();
+    }
+
+    private void doPasswordChange() {
+        AppUtils.showSuccessNotification("Will do once implemented");
     }
 
     private void onResetPasswordSelectModified(final AbstractField.ComponentValueChangeEvent<Select<String>, String> event) {

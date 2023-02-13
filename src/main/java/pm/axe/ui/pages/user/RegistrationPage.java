@@ -263,6 +263,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         } else {
             //username
             if (isUsernameInvalid(userEmailInput)) {
+                //error message is already set by validator.
                 return;
             }
         }
@@ -270,12 +271,14 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         //username
         if (isUsernameInputVisible()) {
             if (isUsernameInvalid(usernameInput)) {
+                //error message is already set by validator.
                 return;
             }
         }
 
         //password
         if (fieldsValidationUtils.isPasswordInvalid(passwordInput)) {
+            //error message is already set by validator.
             return;
         }
 
