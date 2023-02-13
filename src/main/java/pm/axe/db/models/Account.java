@@ -41,7 +41,14 @@ public final class Account extends BaseModel {
         return new Builder(accountType);
     }
 
+    /**
+     * This method updates fields iof current {@link Account} record with values from another.
+     *
+     * @param anotherAccount another non-null {@link Account} record to copy values from.
+     * @throws IllegalArgumentException when anotherAccount is NULL.
+     */
     public void copy(final Account anotherAccount) {
+        if (anotherAccount == null) throw new IllegalArgumentException("Another Account cannot be null");
         this.setUser(anotherAccount.getUser());
         this.setType(anotherAccount.getType());
         this.setAccountName(anotherAccount.getAccountName());

@@ -33,7 +33,7 @@ public class LoginVerificationPage extends AxeFormLayout implements BeforeEnterO
     private boolean pageAlreadyInitialized = false;
 
     @Override
-    public void beforeEnter(BeforeEnterEvent event) {
+    public void beforeEnter(final BeforeEnterEvent event) {
         if (event.isRefreshEvent()) return;
         if (pageAlreadyInitialized) {
             cleanInputs();
@@ -59,7 +59,7 @@ public class LoginVerificationPage extends AxeFormLayout implements BeforeEnterO
         getSubmitButton().addClickListener(this::onSubmit);
     }
 
-    private void onSubmit(ClickEvent<Button> event) {
+    private void onSubmit(final ClickEvent<Button> event) {
         String otp = otpInput.getValue();
         if (StringUtils.isBlank(otp)) {
             otpInput.setInvalid(true);

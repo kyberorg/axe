@@ -105,7 +105,7 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
         return TelegramSpan.create(tgToken);
     }
 
-    private void onSubmitEmail(ClickEvent<Button> event) {
+    private void onSubmitEmail(final ClickEvent<Button> event) {
         if (emailInput.isInvalid()) {
             emailInput.setInvalid(true);
             emailInput.setErrorMessage("Please enter valid email");

@@ -72,7 +72,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
     private boolean pageAlreadyInitialized = false;
 
     @Override
-    public void beforeEnter(BeforeEnterEvent enterEvent) {
+    public void beforeEnter(final BeforeEnterEvent enterEvent) {
         if (enterEvent.isRefreshEvent()) return;
         //redirect to landing page if user already in
         if (Objects.nonNull(axeSessionUtils.boundUserIfAny())) {
@@ -144,7 +144,8 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
                         "Alphanumeric characters (a-zA-Z0-9), lowercase, or uppercase.",
                         "Also allowed of the dot (.), underscore (_), and hyphen (-).",
                         "The dot (.), underscore (_), or hyphen (-) must not be the first or last character.",
-                        "The dot (.), underscore (_), or hyphen (-) does not appear consecutively, e.g., name..surname.")
+                        "The dot (.), underscore (_), or hyphen (-) does not appear consecutively, "
+                                + "e.g., name..surname.")
                 .forEach(requirement -> requirements.add(new ListItem(requirement)));
 
         usernameRequirements.addContent(span, requirements);
@@ -237,7 +238,7 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         }
     }
 
-    private void onPasswordChanged(AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
+    private void onPasswordChanged(final AbstractField.ComponentValueChangeEvent<PasswordField, String> event) {
         boolean isPasswordValid = !fieldsValidationUtils.isPasswordInvalid(passwordInput);
         if (isPasswordValid) {
             passwordInput.setInvalid(false);

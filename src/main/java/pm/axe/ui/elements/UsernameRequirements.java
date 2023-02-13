@@ -9,16 +9,30 @@ import com.vaadin.flow.component.html.UnorderedList;
 
 import java.util.stream.Stream;
 
-public class UsernameRequirements extends Composite<Details> implements HasStyle {
+/**
+ * {@link Details} elements with list of requirements for username.
+ */
+public final class UsernameRequirements extends Composite<Details> implements HasStyle {
 
+    /**
+     * Creates new {@link UsernameRequirements}.
+     *
+     * @return created {@link UsernameRequirements}.
+     */
     public static UsernameRequirements create() {
         return new UsernameRequirements();
     }
 
+    /**
+     * Sets {@link UsernameRequirements} visible.
+     */
     public void show() {
         this.setVisible(true);
     }
 
+    /**
+     * Sets {@link UsernameRequirements} not visible.
+     */
     public void hide() {
         this.setVisible(false);
     }

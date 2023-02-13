@@ -75,6 +75,23 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
         pageInit();
     }
 
+    /**
+     * Trigger actions, when Dark Mode Toggle value changes. It applies dark mode,
+     * updates dark mode setting in {@link AxeSession} and {@link UserSettings}.
+     *
+     * @param event event, that holder that has toggle value.
+     */
+    public void onDarkModeChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
+        final boolean isDarkTheme = event.getValue();
+        mainView.applyTheme(isDarkTheme);
+        AxeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
+        //write to user settings as well,  if any bound.
+        axeSessionUtils.getCurrentUserSettings().ifPresent(us -> {
+            us.setDarkMode(event.getValue());
+            uss.updateUserSettings(us);
+        });
+    }
+
     private void pageInit() {
         setIds();
         setPageStructure();
@@ -146,17 +163,6 @@ public class SettingsPage extends AxeBaseLayout implements BeforeEnterObserver {
                 .ifPresent(session -> session.getSettings().setAnalyticsCookiesAllowed(event.getValue()));
         mainView.getPiwikStatsBanner().optOut(!event.getValue());
         notifyClient();
-    }
-
-    public void onDarkModeChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> event) {
-        final boolean isDarkTheme = event.getValue();
-        mainView.applyTheme(isDarkTheme);
-        AxeSession.getCurrent().ifPresent(session -> session.getSettings().setDarkMode(event.getValue()));
-        //write to user settings as well,  if any bound.
-        axeSessionUtils.getCurrentUserSettings().ifPresent(us -> {
-            us.setDarkMode(event.getValue());
-            uss.updateUserSettings(us);
-        });
     }
 
     private void onUsersFeatureSwitchChanged(final AbstractField.ComponentValueChangeEvent<ToggleButton, Boolean> e) {

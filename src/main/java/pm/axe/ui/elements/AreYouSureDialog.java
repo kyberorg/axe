@@ -57,6 +57,11 @@ public final class AreYouSureDialog extends Composite<Dialog> {
         this.dialog.open();
     }
 
+    /**
+     * Sets text of {@link #actionButton}. Does nothing is text is empty.
+     *
+     * @param text non-empty string with text of {@link #actionButton}.
+     */
     public void setActionButtonText(final String text) {
         if (StringUtils.isNotBlank(text)) {
             actionButton.setText(text);

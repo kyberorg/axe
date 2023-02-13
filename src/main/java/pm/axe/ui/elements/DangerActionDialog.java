@@ -18,9 +18,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import org.apache.commons.lang3.StringUtils;
 import pm.axe.internal.Callback;
+import pm.axe.ui.pages.user.profile.tabs.DangerZoneTab;
 
 /**
- * Confirmation Dialog for actions in {@link pm.axe.ui.pages.user.profile.tabs.DangerZoneTab}.
+ * Confirmation Dialog for actions in {@link DangerZoneTab}.
  *
  */
 @CssImport("./css/danger_dialog.css")
@@ -54,6 +55,11 @@ public final class DangerActionDialog extends Composite<Dialog> {
         return new DangerActionDialog();
     }
 
+    /**
+     * Set {@link Dialog}'s title. This method hides title, when title string is empty.
+     *
+     * @param newTitleText non-empty string to set new title or empty string to hide title.
+     */
     public void setTitleText(final String newTitleText) {
         if (newTitleText.isBlank()) {
             title.setVisible(false);
@@ -61,6 +67,11 @@ public final class DangerActionDialog extends Composite<Dialog> {
         title.setText(newTitleText);
     }
 
+    /**
+     * Set {@link Dialog}'s main message. This method hides message span, when message string is empty.
+     *
+     * @param message non-empty string to set new message or empty string to hide it.
+     */
     public void setMessage(final String message) {
         if (StringUtils.isBlank(message)) {
             messageSpan.setVisible(false);
@@ -68,6 +79,11 @@ public final class DangerActionDialog extends Composite<Dialog> {
         messageSpan.setText(message);
     }
 
+    /**
+     * Set warning text. This method hides warning zone, when warning text is empty.
+     *
+     * @param warningText non-empty string to set new warning message or empty string to hide warning zone.
+     */
     public void setWarningText(final String warningText) {
         if (StringUtils.isBlank(warningText)) {
             warningZone.setVisible(false);
@@ -75,6 +91,11 @@ public final class DangerActionDialog extends Composite<Dialog> {
         warningTextSpan.setText(warningText);
     }
 
+    /**
+     * Set text, that user should type to confirm this dangerous action.
+     *
+     * @param confirmationText non-empty string to set new text or empty string to hide confirmation zone at all.
+     */
     public void setConfirmationText(final String confirmationText) {
         if (StringUtils.isBlank(confirmationText)) {
             confirmationZone.setVisible(false);
@@ -101,6 +122,11 @@ public final class DangerActionDialog extends Composite<Dialog> {
         });
     }
 
+    /**
+     * Sets text of {@link #actionButton}. Does nothing is text is empty.
+     *
+     * @param text non-empty string with text of {@link #actionButton}.
+     */
     public void setActionButtonText(final String text) {
         if (StringUtils.isNotBlank(text)) {
             actionButton.setText(text);

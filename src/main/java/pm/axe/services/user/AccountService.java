@@ -297,6 +297,21 @@ public class AccountService {
         }
     }
 
+    /**
+     * Updates {@link AccountType#EMAIL} {@link Account}.
+     * This method marks updated {@link AccountType#EMAIL} {@link Account} as unconfirmed.
+     *
+     * @param user {@link Account} owner.
+     *
+     * @param email non-empty string with new Email Address (plain value).
+     *
+     * @return {@link OperationResult#success()} with updated {@link Account} as payload,
+     *         {@link OperationResult#malformedInput()}, when new email address not valid.
+     *         {@link OperationResult#generalFail()} with {@link #ERR_ENCRYPTION_FAILED} message,
+     *          when encryption failed.
+     *          {@link OperationResult#generalFail()} with {@link #ERR_NO_EMAIL_ACCOUNT} message,
+     *          when {@link User} has no {@link AccountType#EMAIL} {@link Account}.
+     */
     public OperationResult updateEmailAccount(final User user, final String email) {
         if (user == null) return OperationResult.malformedInput().withMessage("User cannot be NULL");
         OperationResult validationResult = mailService.isEmailValid(email);
@@ -312,7 +327,8 @@ public class AccountService {
             if (encryptEmailResult.ok()) {
                 encryptedEmail = encryptEmailResult.getStringPayload();
             } else {
-                log.error("{} Email encryption failed. Value: {}. Error: {}", TAG, email, encryptEmailResult.getMessage());
+                log.error("{} Email encryption failed. Value: {}. Error: {}",
+                        TAG, email, encryptEmailResult.getMessage());
                 return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
             }
             emailAccount.get().setAccountName(encryptedEmail);
@@ -333,7 +349,14 @@ public class AccountService {
         }
     }
 
+    /**
+     * This method restores values from old {@link Account}.
+     *
+     * @param oldAccount old {@link Account} to restore values from.
+     * @throws IllegalArgumentException when old account is NULL.
+     */
     public void rollbackAccount(final Account oldAccount) {
+        if (oldAccount == null) throw new IllegalArgumentException("old account cannot be null");
         Optional<Account> currentAccount = this.getAccount(oldAccount.getUser(), oldAccount.getType());
         try {
             if (currentAccount.isPresent()) {

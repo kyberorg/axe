@@ -9,17 +9,27 @@ import com.vaadin.flow.component.notification.Notification;
 import pm.axe.Axe;
 import pm.axe.db.models.Token;
 import pm.axe.telegram.TelegramCommand;
+import pm.axe.users.TokenType;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.ClipboardUtils;
 import pm.axe.utils.DeviceUtils;
 
+/**
+ * {@link Span} with message "Send code to link your account with Telegram".
+ */
 public class TelegramSpan extends Composite<Span> {
 
+    /**
+     * Creates new {@link TelegramSpan}.
+     *
+     * @param token {@link TokenType#TELEGRAM_CONFIRMATION_TOKEN} {@link Token}.
+     * @return new {@link TelegramSpan} with prefilled fields.
+     */
     public static TelegramSpan create(final Token token) {
         return new TelegramSpan(token);
     }
 
-    public TelegramSpan(final Token tgToken) {
+    private TelegramSpan(final Token tgToken) {
         String tgCommand = TelegramCommand.HELLO.getCommandText();
 
         Span startSpan = new Span("Send ");

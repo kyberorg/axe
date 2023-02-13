@@ -331,6 +331,12 @@ public class AppUtils implements Serializable {
         return notification;
     }
 
+    /**
+     * Shows Notification, when action succeeded.
+     * Notification closes after {@link Axe.Defaults#NOTIFICATION_DURATION_MILLIS}.
+     *
+     * @param text not-empty string with notification text.
+     */
     public static void showSuccessNotification(final String text) {
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
@@ -347,6 +353,12 @@ public class AppUtils implements Serializable {
         notification.open();
     }
 
+    /**
+     * Shows Informational notification.
+     * Notification closes after {@link Axe.Defaults#NOTIFICATION_DURATION_MILLIS}.
+     *
+     * @param text not-empty string with notification text.
+     */
     public static void showInfoNotification(final String text) {
         Notification notification = new Notification();
         notification.setPosition(Notification.Position.MIDDLE);

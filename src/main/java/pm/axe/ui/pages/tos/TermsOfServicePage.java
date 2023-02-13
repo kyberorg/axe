@@ -14,6 +14,9 @@ import pm.axe.ui.layouts.AxeBaseLayout;
 @Route(value = Endpoint.UI.TOS_PAGE, layout = MainView.class)
 @PageTitle("Terms of Service - Axe.pm")
 public class TermsOfServicePage extends AxeBaseLayout {
+    /**
+     * Creates {@link TermsOfServicePage}.
+     */
     public TermsOfServicePage() {
         add(new Span("Here will be Axe Terms of Service"));
     }

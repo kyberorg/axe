@@ -58,7 +58,16 @@ public class UsernameGenerator {
         }
     }
 
+    /**
+     * Generates new username from provided email.
+     *
+     * @param emailAddress non-empty string with email address.
+     * @return {@link OperationResult#success()} with generated name {@link String} in payload or
+     *         {@link OperationResult#malformedInput()}, when email address is not valid.
+     * @throws IllegalArgumentException when email address is NULL.
+     */
     public OperationResult generateFromEmail(final String emailAddress) {
+        if (emailAddress == null) throw new IllegalArgumentException("Email address cannot be NULL");
         String[] parts = emailAddress.split(Axe.C.AT);
         if (parts.length < 2) {
             return OperationResult.malformedInput().withMessage(String.format("%s is not valid email", emailAddress));
@@ -75,7 +84,7 @@ public class UsernameGenerator {
         boolean isUsernameAlreadyExist = userService.isUserExists(nameFromEmail);
         if (isUsernameAlreadyExist) {
             String generatedName;
-            for (int i=1; i <= MAX_ROUNDS; i++) {
+            for (int i = 1; i <= MAX_ROUNDS; i++) {
                 generatedName = nameFromEmail + i;
                 nameValidationResult = UsernameValidator.isValid(generatedName);
                 if (nameValidationResult.notOk()) {

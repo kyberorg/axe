@@ -35,6 +35,11 @@ public class AxeSessionUtils {
         }
     }
 
+    /**
+     * Extracts {@link User} from current {@link AxeSession}.
+     *
+     * @return bound {@link User} or {@code null}.
+     */
     public User boundUserIfAny() {
         Optional<AxeSession> axeSession = AxeSession.getCurrent();
         if (axeSession.isPresent()) {
@@ -48,6 +53,11 @@ public class AxeSessionUtils {
         }
     }
 
+    /**
+     * Gets {@link LandingPage} from {@link UserSettings}.
+     *
+     * @return {@link LandingPage} from {@link UserSettings} or default value {@link LandingPage#HOME_PAGE}.
+     */
     public LandingPage getLandingPage() {
         final User user = this.boundUserIfAny();
         final Optional<UserSettings> us = this.getCurrentUserSettings();

@@ -126,7 +126,7 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
         return layout;
     }
 
-    private void onLandingPageSelectChanged(AbstractField.ComponentValueChangeEvent<Select<String>, String> event) {
+    private void onLandingPageSelectChanged(final AbstractField.ComponentValueChangeEvent<Select<String>, String> e) {
         LandingPage landingPage = LandingPage.valueOf(landingPageSelect.getValue());
         Optional<UserSettings> userSettings = axeSessionUtils.getCurrentUserSettings();
         if (userSettings.isPresent()) {
@@ -140,7 +140,7 @@ public class SettingsTab extends VerticalLayout implements HasTabInit {
         settingsPage.onDarkModeChanged(event); // do same action as in Settings Page
     }
 
-    private void onSessionDurationSaved(ClickEvent<Button> event) {
+    private void onSessionDurationSaved(final ClickEvent<Button> event) {
         axeSessionUtils.getCurrentUserSettings().ifPresent(us -> {
             if (pdField.isValid()) {
                 us.setLoginSessionDuration(pdField.getValue());

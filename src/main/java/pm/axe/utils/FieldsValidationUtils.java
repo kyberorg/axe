@@ -15,6 +15,7 @@ import pm.axe.users.PasswordValidator;
 
 import static pm.axe.utils.VaadinUtils.onInvalidInput;
 
+
 @RequiredArgsConstructor
 @Component
 @UIScope
@@ -22,7 +23,15 @@ public class FieldsValidationUtils {
     private final AccountService accountService;
     private final UserService userService;
 
+    /**
+     * Checks if username is valid or not.
+     *
+     * @param usernameInput {@link TextField} with username.
+     * @return true if username is valid, false if not.
+     * @throws IllegalArgumentException when usernameInput is NULL
+     */
     public boolean isUsernameInvalid(final TextField usernameInput) {
+        if (usernameInput == null) throw new IllegalArgumentException("usernameInput cannot be NULL");
         String userOrEmail = usernameInput.getValue().trim();
         boolean isInputEmpty = StringUtils.isBlank(userOrEmail);
         if (isInputEmpty) {
@@ -38,7 +47,15 @@ public class FieldsValidationUtils {
         }
     }
 
+    /**
+     * Checks if email address is valid or not.
+     *
+     * @param emailInput {@link TextField} with email address.
+     * @return true if email address is valid, false if not.
+     * @throws IllegalArgumentException when emailInput is NULL
+     */
     public boolean isEmailInvalid(final TextField emailInput) {
+        if (emailInput == null) throw new IllegalArgumentException("email input cannot be null");
         final String email = emailInput.getValue().trim();
         boolean isEmail = EmailValidator.getInstance().isValid(email);
         if (!isEmail) {
@@ -54,7 +71,15 @@ public class FieldsValidationUtils {
         }
     }
 
+    /**
+     * Checks if password is valid or not.
+     *
+     * @param passwordInput {@link PasswordField} with password to check
+     * @return true if password is valid, false - is not.
+     * @throws IllegalArgumentException when passwordInput is NULL
+     */
     public boolean isPasswordInvalid(final PasswordField passwordInput) {
+        if (passwordInput == null) throw new IllegalArgumentException("password input cannot be null");
         String password = passwordInput.getValue().trim();
         OperationResult passwordValidationOp = PasswordValidator.isPasswordValid(password);
         if (passwordValidationOp.notOk()) {

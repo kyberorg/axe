@@ -15,6 +15,9 @@ import java.util.List;
 
 import static java.time.temporal.ChronoUnit.*;
 
+/**
+ * Element, that combines amount or {@link ChronoUnit} units and {@link ChronoUnit}.
+ */
 public class PeriodDurationField extends CustomField<PeriodDuration> {
     public static final String ERROR_MESSAGE = "Invalid duration. Min: 1 minute, Max: 6 months.";
     private static final List<ChronoUnit> SUPPORTED_UNITS = List.of(MONTHS, DAYS, HOURS, MINUTES);
@@ -22,6 +25,10 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
     private final IntegerField amount;
     private final Select<String> unit;
 
+    /**
+     * Creates new {@link PeriodDurationField} with default values.
+     * 1 - as amount of units, {@link ChronoUnit#MONTHS} as unit.
+     */
     public PeriodDurationField() {
         //amount field
         amount = new IntegerField();
@@ -60,6 +67,11 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
         add(layout);
     }
 
+    /**
+     * Examines if both {@link #amount} and {@link #unit} are valid.
+     *
+     * @return true if both are valid, false if not.
+     */
     public boolean isValid() {
         if (amount.isInvalid()) return false;
         return !unit.isInvalid();

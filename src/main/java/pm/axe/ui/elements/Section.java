@@ -94,6 +94,9 @@ public class Section extends Composite<VerticalLayout> implements HasStyle {
         content.add(component);
     }
 
+    /**
+     * Aligns {@link Section} items at {@link FlexComponent.Alignment#CENTER}.
+     */
     public void setCentered() {
         self.setAlignItems(FlexComponent.Alignment.CENTER);
         content.setWidth("auto");

@@ -278,13 +278,13 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         }
     }
 
-    private void onEditEmail(ClickEvent<Button> event) {
+    private void onEditEmail(final ClickEvent<Button> event) {
         emailField.setReadOnly(false);
         emailField.setSuffixComponent(new Div());
         emailLayout.replace(editEmailButton, saveEmailButton);
     }
 
-    private void onSaveEmail(ClickEvent<Button> event) {
+    private void onSaveEmail(final ClickEvent<Button> event) {
         //is same as current ?
         Optional<String> currentEmail = getCurrentEmail();
         if (currentEmail.isEmpty()) return;
@@ -321,7 +321,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         OperationResult emailUpdateResult = accountService.updateEmailAccount(user, email);
         if (emailUpdateResult.notOk()) {
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
-            if (currentEmailRecord.isPresent() ) {
+            if (currentEmailRecord.isPresent()) {
                 emailField.setValue(currentEmail.get());
             } else {
                 emailField.setValue("");
@@ -330,9 +330,18 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             ErrorUtils.showErrorNotification("Failed to update email. Server error");
         }
 
+        //creating confirmation token
+        Account userAccount = emailUpdateResult.getPayload(Account.class);
+        Optional<Token> confirmationToken = userOpsService.createConfirmationToken(userAccount);
+        if (confirmationToken.isEmpty()) {
+            emailField.setSuffixComponent(VaadinIcon.EXCLAMATION_CIRCLE.create());
+            ErrorUtils.showErrorNotification("Failed to send confirmation letter. Please try again later.");
+            currentEmailRecord.ifPresent(accountService::rollbackAccount);
+            return;
+        }
         //sending confirmation letter
-        OperationResult sendConfirmationLetterResult = userOpsService.sendConfirmationLetter(email,
-                emailUpdateResult.getPayload(Account.class));
+        OperationResult sendConfirmationLetterResult =
+                userOpsService.sendConfirmationLetter(confirmationToken.get(), email, userAccount);
         if (sendConfirmationLetterResult.ok()) {
             emailField.setSuffixComponent(VaadinIcon.ELLIPSIS_CIRCLE.create());
             AppUtils.showSuccessNotification("Send confirmation to new email. Please check your inbox.");

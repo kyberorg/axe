@@ -14,9 +14,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import pm.axe.utils.AppUtils;
 import pm.axe.utils.ClipboardUtils;
 
-
+/**
+ * Password Generator elements. Generated password and copy and update buttons.
+ */
 @SuppressWarnings({"FieldCanBeLocal"})
-public class PasswordGenerator extends Composite<Details> {
+public final class PasswordGenerator extends Composite<Details> {
     private static final String SUMMARY_TEXT = "Password Generator";
     private static final int DEFAULT_LEN = 24;
     private final Code generatedPasswordHolder = new Code();
@@ -25,17 +27,33 @@ public class PasswordGenerator extends Composite<Details> {
 
     private PasswordField target;
 
+    /**
+     * Creates new {@link PasswordGenerator}.
+     *
+     * @return created {@link PasswordGenerator}.
+     */
     public static PasswordGenerator create() {
         return new PasswordGenerator();
     }
 
+    /**
+     * Sets {@link PasswordField} where generated password should be pasted.
+     *
+     * @param component {@link PasswordField} where new password pasted.
+     * @throws IllegalArgumentException when target component is NULL
+     */
     public void setCopyTarget(final PasswordField component) {
         if (component == null) throw new IllegalArgumentException("cannot copy to null component");
         this.target = component;
     }
 
-    public void setOpened(final boolean shouldOpen) {
-        getContent().setOpened(shouldOpen);
+    /**
+     * Opens {@link PasswordGenerator}, so content is visible.
+     *
+     * @param open should {@link PasswordGenerator} be opened. False means {@link PasswordGenerator} should be closed.
+     */
+    public void setOpened(final boolean open) {
+        getContent().setOpened(open);
     }
 
     private PasswordGenerator() {
@@ -61,7 +79,7 @@ public class PasswordGenerator extends Composite<Details> {
         getContent().setContent(content);
     }
 
-    private void onUseThisPasswordClicked(ClickEvent<Button> event) {
+    private void onUseThisPasswordClicked(final ClickEvent<Button> event) {
         if (target != null) {
             //copy to component
             target.setValue(generatedPasswordHolder.getText());
@@ -76,7 +94,7 @@ public class PasswordGenerator extends Composite<Details> {
         }
     }
 
-    private void onRedoButtonClicked(ClickEvent<Button> event) {
+    private void onRedoButtonClicked(final ClickEvent<Button> event) {
         generatedPasswordHolder.setText(generatePassword());
         ClipboardUtils.setTextToCopy(generatedPasswordHolder.getText()).forComponent(useItButton);
     }

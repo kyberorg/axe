@@ -108,8 +108,16 @@ public class UserOperationsService {
         }
         //Create and send - confirmation email for Accounts with Email set.
         if (userAccount.getType() == AccountType.EMAIL) {
-            OperationResult sendConfirmationLetterResult = sendConfirmationLetter(input.getEmail(), userAccount);
-            if (sendConfirmationLetterResult.notOk()) return sendConfirmationLetterResult;
+            Optional<Token> confirmationToken = createConfirmationToken(userAccount);
+            if (confirmationToken.isPresent()) {
+                rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken.get()));
+                OperationResult sendConfirmationLetterResult =
+                        sendConfirmationLetter(confirmationToken.get(), input.getEmail(), userAccount);
+                if (sendConfirmationLetterResult.notOk()) return sendConfirmationLetterResult;
+            } else {
+                log.error("{} Failed to create confirmation {}", TAG, Token.class.getSimpleName());
+                rollbackService.rollback(rollbackTasks);
+            }
         }
         //Create Telegram Confirmation Token
         Token telegramConfirmationToken;
@@ -129,7 +137,39 @@ public class UserOperationsService {
                 ? success : success.addPayload(TELEGRAM_TOKEN_KEY, telegramConfirmationToken.getToken());
     }
 
-    public OperationResult sendConfirmationLetter(final String email, final Account userAccount) {
+    /**
+     * Creates Confirmation {@link Token}.
+     * @param userAccount {@link Account} to confirm with given Token.
+     *
+     * @return {@link Optional} with {@link Token} or {@link Optional#empty()} if failed t create token.
+     */
+    public Optional<Token> createConfirmationToken(final Account userAccount) {
+        if (userAccount == null) {
+            throw new IllegalArgumentException("User Account cannot be null");
+        }
+        OperationResult createConfirmationTokenResult =
+                tokenService.createConfirmationToken(userAccount.getUser(), userAccount);
+        if (createConfirmationTokenResult.notOk()) {
+            log.error("{} failed to create confirmation token for {}. OpResult: {}",
+                    TAG, userAccount.getUser().getUsername(), createConfirmationTokenResult);
+            return Optional.empty();
+        }
+        return Optional.ofNullable(createConfirmationTokenResult.getPayload(Token.class));
+    }
+
+    /**
+     * Sends {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN}.
+     *
+     * @param confirmationToken {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN} {@link Token}
+     * @param email non-empty string with email
+     * @param userAccount {@link Account} to confirm with given Token
+     *
+     * @return {@link OperationResult#success()}, when email send,
+     *         {@link OperationResult#malformedInput()}, when something is wrong with params,
+     *         {@link OperationResult#generalFail()}, when failed to send letter.
+     */
+    public OperationResult sendConfirmationLetter(final Token confirmationToken, final String email,
+                                                  final Account userAccount) {
         //check inputs
         if (StringUtils.isBlank(email)) {
             return OperationResult.malformedInput().withMessage("Email cannot be empty");
@@ -141,16 +181,7 @@ public class UserOperationsService {
             return OperationResult.malformedInput().withMessage("Given Account is not bound to any user");
         }
 
-        //Create Confirmation Token
-        OperationResult createConfirmationTokenResult =
-                tokenService.createConfirmationToken(userAccount.getUser(), userAccount);
-        if (createConfirmationTokenResult.notOk()) {
-            log.error("{} failed to create confirmation token for {}. OpResult: {}",
-                    TAG, userAccount.getUser().getUsername(), createConfirmationTokenResult);
-            return createConfirmationTokenResult;
-        }
-        Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
-        rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
+
         //Send it
         log.info("{} Successfully created {}({}) for user '{}'",
                 TAG, confirmationToken.getTokenType(), confirmationToken.getToken(),

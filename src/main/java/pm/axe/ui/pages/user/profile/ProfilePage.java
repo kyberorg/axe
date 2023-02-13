@@ -57,7 +57,7 @@ public class ProfilePage extends AxeCompactLayout implements BeforeEnterObserver
     private final Map<Tab, Component> contentMap = new LinkedHashMap<>();
 
     @Override
-    public void beforeEnter(BeforeEnterEvent event) {
+    public void beforeEnter(final BeforeEnterEvent event) {
         if (event.isRefreshEvent()) return;
         user = axeSessionUtils.boundUserIfAny();
         if (Objects.isNull(user)) {

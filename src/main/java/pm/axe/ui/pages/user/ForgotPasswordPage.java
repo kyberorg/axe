@@ -98,8 +98,8 @@ public class ForgotPasswordPage extends AxeFormLayout implements BeforeEnterObse
 
     private VerticalLayout getRecoveryNote() {
         VerticalLayout recoveryNote = new VerticalLayout();
-        Span infoSpan = new Span("We will send password reset link to contact point (email etc.) " +
-                "linked with given account.");
+        Span infoSpan = new Span("We will send password reset link to contact point (email etc.) "
+                + "linked with given account.");
 
         VerticalLayout nothingLinkedContent = getAccordionContent();
 

@@ -129,7 +129,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
 
         Label sendResetLinkToLabel = new Label("Send reset password link to:");
         resetPasswordSelect = new Select<>();
-        resetPasswordSelect.addValueChangeListener(this::onResetPasswordSelectModified);
+        resetPasswordSelect.addValueChangeListener(this::onResetPassSelectModified);
 
         HorizontalLayout resetPasswordFieldLayout = new HorizontalLayout(sendResetLinkToLabel, resetPasswordField);
         VaadinUtils.fitLayoutInWindow(resetPasswordFieldLayout);
@@ -254,7 +254,7 @@ public class SecurityTab extends VerticalLayout implements HasTabInit {
         AppUtils.showSuccessNotification("Will do once implemented");
     }
 
-    private void onResetPasswordSelectModified(final AbstractField.ComponentValueChangeEvent<Select<String>, String> event) {
+    private void onResetPassSelectModified(final AbstractField.ComponentValueChangeEvent<Select<String>, String> e) {
         AccountType selectedAccountType = AccountType.valueOf(resetPasswordSelect.getValue());
         if (selectedAccountType != AccountType.LOCAL) {
             saveResetPasswordChannel(selectedAccountType);
