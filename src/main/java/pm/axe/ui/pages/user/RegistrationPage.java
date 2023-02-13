@@ -160,8 +160,8 @@ public class RegistrationPage extends AxeFormLayout implements BeforeEnterObserv
         passwordInput.setValueChangeMode(ValueChangeMode.ON_CHANGE);
         passwordInput.addValueChangeListener(this::onPasswordChanged);
         passwordInput.setClassName("input");
-        passwordInput.setHelperText(String.format("Should be %d-%d symbols long. " +
-                        "Tip: Use password generator - make it strong.",
+        passwordInput.setHelperText(String.format("Should be %d-%d symbols long. "
+                        + "Tip: Use password generator - make it strong.",
                 PasswordValidator.PASSWORD_MIN_LENGTH, PasswordValidator.PASSWORD_MAX_LENGTH));
     }
 

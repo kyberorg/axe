@@ -17,7 +17,7 @@ import pm.axe.utils.DeviceUtils;
 /**
  * {@link Span} with message "Send code to link your account with Telegram".
  */
-public class TelegramSpan extends Composite<Span> {
+public final class TelegramSpan extends Composite<Span> {
 
     /**
      * Creates new {@link TelegramSpan}.

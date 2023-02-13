@@ -114,7 +114,7 @@ public final class DangerActionDialog extends Composite<Dialog> {
             boolean isConfirmed = checkConfirmationInput();
             if (!isConfirmed) {
                 confirmInput.setInvalid(true);
-                confirmInput.setErrorMessage("Please type exactly '" + confirmationTextSpan.getText() +"'");
+                confirmInput.setErrorMessage("Please type exactly '" + confirmationTextSpan.getText() + "'");
                 return;
             }
             callback.execute();
@@ -201,7 +201,7 @@ public final class DangerActionDialog extends Composite<Dialog> {
     }
 
     private boolean checkConfirmationInput() {
-        if (!confirmationZone.isVisible()) { return true; }
+        if (!confirmationZone.isVisible()) return true;
 
         String inputText = confirmInput.getValue();
         if (StringUtils.isBlank(inputText)) return false;

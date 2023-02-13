@@ -25,6 +25,11 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
     private final IntegerField amount;
     private final Select<String> unit;
 
+    private static final int SIX_MONTHS = 6;
+    private static final int SIX_MONTHS_IN_DAYS = 182;
+    private static final int SIX_MONTHS_IN_HOURS = 4383;
+    private static final int SIX_MONTHS_IN_MINUTES  = 263000;
+
     /**
      * Creates new {@link PeriodDurationField} with default values.
      * 1 - as amount of units, {@link ChronoUnit#MONTHS} as unit.
@@ -34,7 +39,7 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
         amount = new IntegerField();
         amount.setValue(1);
         amount.setMin(1);
-        amount.setMax(6); //max varies per unit
+        amount.setMax(SIX_MONTHS); //max varies per unit
         amount.setStepButtonsVisible(true);
         amount.addValueChangeListener(this::onAmountChanged);
 
@@ -91,10 +96,10 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
         if (isSupported(chronoUnit)) {
             switch (chronoUnit) {
                 //max 6 months
-                case MONTHS -> amount.setMax(6);
-                case DAYS -> amount.setMax(182);
-                case HOURS -> amount.setMax(4383);
-                case MINUTES -> amount.setMax(263000);
+                case MONTHS -> amount.setMax(SIX_MONTHS);
+                case DAYS -> amount.setMax(SIX_MONTHS_IN_DAYS);
+                case HOURS -> amount.setMax(SIX_MONTHS_IN_HOURS);
+                case MINUTES -> amount.setMax(SIX_MONTHS_IN_MINUTES);
                 default -> {
                     amount.setMax(1);
                     amount.setEnabled(false);
@@ -151,11 +156,8 @@ public class PeriodDurationField extends CustomField<PeriodDuration> {
     }
 
     @Override
-    protected void setPresentationValue(PeriodDuration periodDuration) {
-        if (periodDuration.isZero()) {
-            //zero - set default
-            periodDuration = Axe.Defaults.LOGIN_SESSION_DURATION;
-        }
+    protected void setPresentationValue(final PeriodDuration duration) {
+        PeriodDuration periodDuration = duration.isZero() ? Axe.Defaults.LOGIN_SESSION_DURATION : duration;
 
         if (periodDuration.getDuration().isZero()) {
             //period

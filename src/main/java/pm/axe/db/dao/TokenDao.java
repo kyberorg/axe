@@ -64,7 +64,8 @@ public interface TokenDao extends TimeAwareCrudDao<Token, Long> {
     Token findByTokenTypeAndUser(TokenType tokenType, User user);
 
     /**
-     * Finds {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN} by its {@link TokenType}, {@link User} and {@link Account}
+     * Finds {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN} by its {@link TokenType}, {@link User} and {@link Account}.
+     *
      * @param tokenType normally {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN}.
      * @param user {@link Token}'s owner
      * @param account {@link Account} to be confirmed

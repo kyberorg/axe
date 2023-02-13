@@ -55,7 +55,7 @@ public final class UsernameRequirements extends Composite<Details> implements Ha
                         "Alphanumeric characters (a-zA-Z0-9), lowercase, or uppercase.",
                         "Also allowed of the dot (.), underscore (_), and hyphen (-).",
                         "The dot (.), underscore (_), or hyphen (-) must not be the first or last character.",
-                        "The dot (.), underscore (_), or hyphen (-) does not appear consecutively, e.g., name..surname.")
+                        "The dot (.), underscore (_), or hyphen (-) doesn't appear consecutively, e.g., name..surname.")
                 .forEach(requirement -> requirements.add(new ListItem(requirement)));
         return requirements;
     }
