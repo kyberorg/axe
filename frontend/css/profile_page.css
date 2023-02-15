@@ -20,5 +20,5 @@
 
 .telegram-details {
     display: block;
-    max-width: min(290px, 90vw);
+    max-width: min(290px, 80vw);
 }
