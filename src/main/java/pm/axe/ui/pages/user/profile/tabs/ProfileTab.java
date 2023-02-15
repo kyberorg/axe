@@ -64,7 +64,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private final Button saveEmailButton = new Button();
     private final HorizontalLayout emailLayout = new HorizontalLayout();
 
-    private final DeleteConfirmationDialog deleteConfirmationDialog = DeleteConfirmationDialog.create();
+    private final DeleteConfirmationDialog emailDeleteConfirmationDialog = DeleteConfirmationDialog.create();
 
     @Override
     public void tabInit(final User user) {
@@ -132,7 +132,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         saveEmailButton.setText("Save");
         saveEmailButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
-        deleteConfirmationDialog.setDeleteButtonAction(this::deleteEmail);
+        emailDeleteConfirmationDialog.setDeleteButtonAction(this::deleteEmail);
 
         if (currentEmail.isPresent()) {
             emailLayout.add(emailField, editEmailButton);
@@ -164,6 +164,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
                 TextField telegramField = new TextField("Telegram");
                 telegramField.setReadOnly(true);
                 telegramField.setPrefixComponent(VaadinIcon.AT.create());
+                telegramField.setWidthFull();
                 telegramField.setValue(telegramUsername.get());
                 Button unlinkButton = new Button("Unlink");
                 unlinkButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -298,7 +299,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         final String email = emailField.getValue().trim();
         if (StringUtils.isBlank(email)) {
             setConfirmationStatus(); //for some reason is removes it.
-            //FIXME update existing to void
+            emailDeleteConfirmationDialog.show();
 
             emailField.setReadOnly(true);
             emailLayout.replace(saveEmailButton, editEmailButton);
