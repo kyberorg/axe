@@ -75,6 +75,9 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         add(accountsSection);
 
         usernameRequirements.hide();
+        if (StringUtils.isBlank(emailField.getValue())) {
+            emailField.focus();
+        }
     }
 
     private Section createAccountSection() {
@@ -83,7 +86,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         Details emailUsageDetails = createEmailUsageDetails();
         HorizontalLayout telegramLayout = createTelegramLayout();
 
-        Stream.of(usernameLayout, emailLayout, telegramLayout).forEach(VaadinUtils::setCentered);
+        Stream.of(usernameLayout, emailLayout).forEach(VaadinUtils::setCentered);
 
         Section section = new Section("Accounts");
         section.setContent(usernameLayout, usernameRequirements, emailLayout, emailUsageDetails, telegramLayout);
@@ -94,6 +97,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private HorizontalLayout createUsernameLayout() {
         usernameField.setLabel("Username");
         usernameField.setValue(user.getUsername());
+        usernameField.setWidthFull();
         usernameField.addValueChangeListener(this::onUsernameChanged);
         usernameField.setClearButtonVisible(true);
         usernameField.setReadOnly(true);
@@ -117,22 +121,25 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         emailField.setLabel("E-mail");
         emailField.setClearButtonVisible(true);
         emailField.setReadOnly(true);
+        emailField.setWidthFull();
         emailField.addValueChangeListener(this::onEmailChanged);
 
         Optional<String> currentEmail = getCurrentEmail();
         currentEmail.ifPresent(emailField::setValue);
-        currentEmail.ifPresent(e -> {
-            VaadinIcon confirmationStatusIcon = isCurrentEmailConfirmed()
-                    ?  VaadinIcon.CHECK : VaadinIcon.ELLIPSIS_CIRCLE;
-            emailField.setSuffixComponent(confirmationStatusIcon.create());
-        });
+        currentEmail.ifPresent(e -> setConfirmationStatus());
 
         editEmailButton.setText("Edit");
         editEmailButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveEmailButton.setText("Save");
         saveEmailButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
-        emailLayout.add(emailField, editEmailButton);
+        if (currentEmail.isPresent()) {
+            emailLayout.add(emailField, editEmailButton);
+        } else {
+            emailField.setReadOnly(false);
+            emailLayout.add(emailField, saveEmailButton);
+        }
+
         emailLayout.addClassName("fit-in-section");
         VaadinUtils.fitLayoutInWindow(emailLayout);
         VaadinUtils.setSmallSpacing(emailLayout);
@@ -168,6 +175,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             Optional<Token> tgToken = getTelegramToken();
             if (tgToken.isPresent()) {
                 Details telegramDetails = new Details("Link Telegram Account");
+                telegramDetails.setClassName("telegram-details");
                 telegramDetails.setOpened(true);
                 TelegramSpan telegramSpan = TelegramSpan.create(tgToken.get());
                 telegramDetails.setContent(telegramSpan);
@@ -255,16 +263,17 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         final String email = event.getValue().trim();
         boolean isValidEmail = EmailValidator.getInstance().isValid(email);
         if (StringUtils.isBlank(email)) {
-            usernameField.setInvalid(false);
-            usernameField.setErrorMessage("");
+            emailField.setInvalid(false);
+            emailField.setErrorMessage("");
             return;
         }
 
         Optional<String> currentEmail = getCurrentEmail();
-        if (currentEmail.isEmpty()) return;
-        boolean isSameAsCurrent = currentEmail.get().equals(email);
-        if (isSameAsCurrent) {
-            return;
+        if (currentEmail.isPresent()) {
+            boolean isSameAsCurrent = currentEmail.get().equals(email);
+            if (isSameAsCurrent) {
+                return;
+            }
         }
 
         if (isValidEmail) {
@@ -285,20 +294,25 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     }
 
     private void onSaveEmail(final ClickEvent<Button> event) {
-        //is same as current ?
-        Optional<String> currentEmail = getCurrentEmail();
-        if (currentEmail.isEmpty()) return;
         final String email = emailField.getValue().trim();
-        boolean isSameAsCurrent = currentEmail.get().equals(email);
-        if (isSameAsCurrent) {
+        if (StringUtils.isBlank(email)) {
+            setConfirmationStatus(); //for some reason is removes it.
+            //FIXME update existing to void
             emailField.setReadOnly(true);
             emailLayout.replace(saveEmailButton, editEmailButton);
             return;
         }
 
-        if (StringUtils.isBlank(email)) {
-            onInvalidInput(emailField, "Please provide valid email");
-            return;
+        //is same as current ?
+        Optional<String> currentEmail = getCurrentEmail();
+        if (currentEmail.isPresent()) {
+            boolean isSameAsCurrent = currentEmail.get().equals(email);
+            if (isSameAsCurrent) {
+                setConfirmationStatus(); //for some reason is removes it.
+                emailField.setReadOnly(true);
+                emailLayout.replace(saveEmailButton, editEmailButton);
+                return;
+            }
         }
 
         boolean isValidEmail = EmailValidator.getInstance().isValid(email);
@@ -321,13 +335,13 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         OperationResult emailUpdateResult = accountService.updateEmailAccount(user, email);
         if (emailUpdateResult.notOk()) {
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
-            if (currentEmailRecord.isPresent()) {
+            if (currentEmail.isPresent()) {
                 emailField.setValue(currentEmail.get());
             } else {
                 emailField.setValue("");
             }
-
             ErrorUtils.showErrorNotification("Failed to update email. Server error");
+            return;
         }
 
         //creating confirmation token
@@ -339,6 +353,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
             return;
         }
+
         //sending confirmation letter
         OperationResult sendConfirmationLetterResult =
                 userOpsService.sendConfirmationLetter(confirmationToken.get(), email, userAccount);
@@ -397,6 +412,17 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private boolean isCurrentEmailConfirmed() {
         Optional<Account> emailAccount = accountService.getAccount(user, AccountType.EMAIL);
         return emailAccount.map(Account::isConfirmed).orElse(false);
+    }
+
+    private void setConfirmationStatus() {
+        boolean hasEmail = getCurrentEmail().isPresent();
+        if (hasEmail) {
+            VaadinIcon confirmationStatusIcon = isCurrentEmailConfirmed()
+                    ?  VaadinIcon.CHECK : VaadinIcon.ELLIPSIS_CIRCLE;
+            emailField.setSuffixComponent(confirmationStatusIcon.create());
+        } else {
+            emailField.setSuffixComponent(new Div());
+        }
     }
 
     private Optional<Account> getTelegramAccount() {

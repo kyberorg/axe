@@ -65,7 +65,9 @@ public final class IdentGenerator {
 
     private static String generateAccountConfirmationIdent(final Token token) {
         String prefix = token.getTokenType().getIdentPrefix();
-        String randomPart = RandomStringUtils.randomAlphanumeric(Axe.C.FOUR);
-        return String.join("", prefix, randomPart);
+        String randomNumber = RandomStringUtils.randomNumeric(1);
+        String randomChar = RandomStringUtils.randomAlphanumeric(1);
+        String randomNum = RandomStringUtils.randomNumeric(1);
+        return String.join("", prefix, randomNumber, randomChar, randomNum);
     }
 }

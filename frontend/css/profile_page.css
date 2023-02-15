@@ -17,3 +17,8 @@
         width: min-content;
     }
 }
+
+.telegram-details {
+    display: block;
+    max-width: 290px;
+}

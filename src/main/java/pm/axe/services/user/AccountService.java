@@ -26,7 +26,6 @@ import java.util.Optional;
 public class AccountService {
     private static final String TAG = "[" + AccountService.class.getSimpleName() + "]";
     private static final String ERR_ACCOUNT_IS_EMPTY = "Account is null";
-    private static final String ERR_NO_EMAIL_ACCOUNT = "User has no Email Account";
 
     private final AccountDao accountDao;
     private final SymmetricCryptTool cryptTool;
@@ -309,8 +308,6 @@ public class AccountService {
      *         {@link OperationResult#malformedInput()}, when new email address not valid.
      *         {@link OperationResult#generalFail()} with {@link #ERR_ENCRYPTION_FAILED} message,
      *          when encryption failed.
-     *          {@link OperationResult#generalFail()} with {@link #ERR_NO_EMAIL_ACCOUNT} message,
-     *          when {@link User} has no {@link AccountType#EMAIL} {@link Account}.
      */
     public OperationResult updateEmailAccount(final User user, final String email) {
         if (user == null) return OperationResult.malformedInput().withMessage("User cannot be NULL");
@@ -321,7 +318,9 @@ public class AccountService {
 
 
         Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
+        boolean userHasEmailAccount;
         if (emailAccount.isPresent()) {
+            userHasEmailAccount = true;
             String encryptedEmail;
             OperationResult encryptEmailResult = cryptTool.encrypt(email);
             if (encryptEmailResult.ok()) {
@@ -334,13 +333,17 @@ public class AccountService {
             emailAccount.get().setAccountName(encryptedEmail);
             emailAccount.get().setConfirmed(false);
         } else {
-            return OperationResult.generalFail().withMessage(ERR_NO_EMAIL_ACCOUNT);
+            userHasEmailAccount = false;
         }
 
         try {
-            accountDao.save(emailAccount.get());
-            log.info("{} Updated email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
-            return OperationResult.success().addPayload(emailAccount.get());
+            if (userHasEmailAccount) {
+                accountDao.save(emailAccount.get());
+                log.info("{} Updated email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
+                return OperationResult.success().addPayload(emailAccount.get());
+            } else {
+                return createEmailAccount(user, email);
+            }
         } catch (CannotCreateTransactionException e) {
             return OperationResult.databaseDown();
         } catch (Exception e) {

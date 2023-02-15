@@ -1,6 +1,7 @@
 package pm.axe.ui.elements;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -17,7 +18,7 @@ import pm.axe.utils.DeviceUtils;
 /**
  * {@link Span} with message "Send code to link your account with Telegram".
  */
-public final class TelegramSpan extends Composite<Span> {
+public final class TelegramSpan extends Composite<Span> implements HasStyle {
 
     /**
      * Creates new {@link TelegramSpan}.
