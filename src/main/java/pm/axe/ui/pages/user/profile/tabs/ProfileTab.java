@@ -27,10 +27,7 @@ import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
 import pm.axe.services.user.UserOperationsService;
 import pm.axe.services.user.UserService;
-import pm.axe.ui.elements.AreYouSureDialog;
-import pm.axe.ui.elements.Section;
-import pm.axe.ui.elements.TelegramSpan;
-import pm.axe.ui.elements.UsernameRequirements;
+import pm.axe.ui.elements.*;
 import pm.axe.users.AccountType;
 import pm.axe.users.UsernameValidator;
 import pm.axe.utils.AppUtils;
@@ -66,6 +63,8 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private final Button editEmailButton = new Button();
     private final Button saveEmailButton = new Button();
     private final HorizontalLayout emailLayout = new HorizontalLayout();
+
+    private final DeleteConfirmationDialog deleteConfirmationDialog = DeleteConfirmationDialog.create();
 
     @Override
     public void tabInit(final User user) {
@@ -132,6 +131,8 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         editEmailButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveEmailButton.setText("Save");
         saveEmailButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
+
+        deleteConfirmationDialog.setDeleteButtonAction(this::deleteEmail);
 
         if (currentEmail.isPresent()) {
             emailLayout.add(emailField, editEmailButton);
@@ -298,6 +299,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         if (StringUtils.isBlank(email)) {
             setConfirmationStatus(); //for some reason is removes it.
             //FIXME update existing to void
+
             emailField.setReadOnly(true);
             emailLayout.replace(saveEmailButton, editEmailButton);
             return;
@@ -443,5 +445,10 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             }
         }
         return Optional.ofNullable(tgToken);
+    }
+
+    private void deleteEmail() {
+        Optional<Account> emailAccount = accountService.getAccount(user, AccountType.EMAIL);
+        emailAccount.ifPresent(accountService::deleteAccount);
     }
 }
