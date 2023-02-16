@@ -374,4 +374,23 @@ public class AccountService {
             log.error("{} failed  to rollback Account {}: got exception {}", TAG, oldAccount, e.getMessage());
         }
     }
+
+    public Optional<String> getCurrentEmail(final User user) {
+        if (user == null) throw new IllegalArgumentException("User cannot be NULL");
+
+        Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
+        if (emailAccount.isEmpty()) return Optional.empty();
+        Optional<String> plainTextEmail = decryptAccountName(emailAccount.get());
+        if (plainTextEmail.isEmpty()) return Optional.empty();
+        if (StringUtils.isNotBlank(plainTextEmail.get())) {
+            return plainTextEmail;
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public boolean isCurrentEmailConfirmed(final User user) {
+        Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
+        return emailAccount.map(Account::isConfirmed).orElse(false);
+    }
 }

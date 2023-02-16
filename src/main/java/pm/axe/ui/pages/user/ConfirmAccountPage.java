@@ -1,12 +1,16 @@
 package pm.axe.ui.pages.user;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -15,20 +19,32 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import pm.axe.Endpoint;
+import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
+import pm.axe.mail.EmailConfirmationStatus;
 import pm.axe.result.OperationResult;
+import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
+import pm.axe.services.user.UserOperationsService;
 import pm.axe.ui.MainView;
+import pm.axe.ui.elements.ConfirmedEmailField;
 import pm.axe.ui.elements.Section;
 import pm.axe.ui.elements.TelegramSpan;
 import pm.axe.ui.layouts.AxeCompactLayout;
+import pm.axe.users.AccountType;
+import pm.axe.utils.AppUtils;
 import pm.axe.utils.AxeSessionUtils;
+import pm.axe.utils.ErrorUtils;
 import pm.axe.utils.VaadinUtils;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import static pm.axe.utils.VaadinUtils.onInvalidInput;
 
 @SpringComponent
 @UIScope
@@ -37,14 +53,19 @@ import java.util.Optional;
 @PageTitle("Confirm Account - Axe.pm")
 public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterObserver {
     private final TokenService tokenService;
+    private final AccountService accountService;
+    private final UserOperationsService userOperationsService;
     private final AxeSessionUtils axeSessionUtils;
     private boolean pageAlreadyInitialized = false;
     private User user;
 
+    private boolean hasEmail = false;
+    private boolean hasConfirmedEmail = false;
+
     private HorizontalLayout emailLayout;
-    private EmailField emailInput;
+    private ConfirmedEmailField emailInput;
     private Button submitEmailButton;
-    private Span sentSpan;
+    private Span emailSpan;
 
     private Section telegramSection;
 
@@ -62,31 +83,77 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
     }
 
     private void initPage() {
+        hasEmail = accountService.getAccount(user, AccountType.EMAIL).isPresent();
+
+        if (hasEmail) {
+            hasConfirmedEmail = accountService.isCurrentEmailConfirmed(user);
+        }
+
         H3 title = new H3("Confirm your Account");
 
-        Section emailSection =  new Section("Using Email");
+        Section emailSection = new Section("Using Email");
         emailSection.setCustomContent(emailSectionContent());
 
         telegramSection = new Section("Using Telegram");
         telegramSection.setCustomContent(telegramSectionContent());
 
         add(title, emailSection, telegramSection);
+
+        if (hasConfirmedEmail) {
+            emailSection.setVisible(false);
+        }
     }
 
     private Component emailSectionContent() {
-        emailInput = new EmailField("Email address here");
-        emailInput.setHelperText("Axe will send confirmation letter there");
+        emailInput = new ConfirmedEmailField();
+        emailInput.get().setLabel("Email address here");
+        emailInput.get().setHelperText("Axe will send confirmation letter there");
+        emailInput.get().setClearButtonVisible(true);
+        emailInput.get().addValueChangeListener(this::onEmailChanged);
+
+        Optional<String> currentEmail = accountService.getCurrentEmail(user);
+        currentEmail.ifPresent(email -> emailInput.get().setValue(email));
+
         submitEmailButton = new Button("Submit");
         submitEmailButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitEmailButton.addClickListener(this::onSubmitEmail);
-        sentSpan = new Span("Sent!");
-        sentSpan.setClassName("green");
 
-        emailLayout = new HorizontalLayout(emailInput, submitEmailButton);
+        emailSpan = new Span();
+
+        Details nothingCame = null;
+
+        if (hasEmail) {
+            //user has hasEmail - RO input + span
+            emailInput.get().setReadOnly(true);
+            EmailConfirmationStatus status = hasConfirmedEmail ?
+                    EmailConfirmationStatus.CONFIRMED : EmailConfirmationStatus.PENDING;
+            emailInput.setStatus(status);
+            emailSpan.setText(status.getStatusString());
+            if (status == EmailConfirmationStatus.CONFIRMED) {
+                emailSpan.setClassName("green");
+            } else {
+                emailInput.get().setHelperText("Axe sent confirmation letter to given email.");
+                nothingCame = getNothingCameDetails();
+            }
+            emailLayout = new HorizontalLayout(emailInput, emailSpan);
+        } else {
+            //no email - input + button
+            emailLayout = new HorizontalLayout(emailInput, submitEmailButton);
+        }
+
+        emailLayout.setWidthFull();
         VaadinUtils.fitLayoutInWindow(emailLayout);
         VaadinUtils.setSmallSpacing(emailLayout);
-        return emailLayout;
+
+        if (nothingCame != null) {
+            VerticalLayout layout = new VerticalLayout(emailLayout, nothingCame);
+            layout.setPadding(false);
+            return layout;
+        } else {
+            return emailLayout;
+        }
     }
+
 
     private Component telegramSectionContent() {
         Optional<Token> telegramToken = tokenService.getTelegramToken(user);
@@ -105,14 +172,115 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
         return TelegramSpan.create(tgToken);
     }
 
-    private void onSubmitEmail(final ClickEvent<Button> event) {
-        if (emailInput.isInvalid()) {
-            emailInput.setInvalid(true);
-            emailInput.setErrorMessage("Please enter valid email");
+    private void onEmailChanged(final AbstractField.ComponentValueChangeEvent<EmailField, String> e) {
+        if (!e.isFromClient()) return;
+        final String email = e.getValue().trim();
+        boolean isValidEmail = EmailValidator.getInstance().isValid(email);
+        if (StringUtils.isBlank(email)) {
+            emailInput.get().setInvalid(false);
+            emailInput.get().setErrorMessage("");
+            if (!submitEmailButton.isEnabled()) {
+                submitEmailButton.setEnabled(true);
+            }
             return;
         }
-        //TODO implement sent confirmation letter call here
-        emailInput.setReadOnly(true);
-        emailLayout.replace(submitEmailButton, sentSpan);
+        if (isValidEmail) {
+            boolean emailExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
+            if (emailExists) {
+                onInvalidInput(emailInput.get(), "Email already taken");
+                submitEmailButton.setEnabled(false);
+            } else {
+                emailInput.get().setInvalid(false);
+                emailInput.get().setErrorMessage("");
+                if (!submitEmailButton.isEnabled()) {
+                    submitEmailButton.setEnabled(true);
+                }
+            }
+        } else {
+            //not valid email
+            onInvalidInput(emailInput.get(), "Should be valid email");
+            submitEmailButton.setEnabled(false);
+        }
+    }
+
+    private void onSubmitEmail(final ClickEvent<Button> event) {
+        final String email = emailInput.get().getValue().trim();
+        if (StringUtils.isBlank(email)) {
+            emailInput.get().setInvalid(true);
+            emailInput.get().setErrorMessage("Please enter valid email");
+            return;
+        }
+        boolean isValidEmail = EmailValidator.getInstance().isValid(email);
+        if (isValidEmail) {
+            //email
+            boolean emailExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
+            if (emailExists) {
+                onInvalidInput(emailInput.get(), "Email already taken");
+                return;
+            }
+        } else {
+            //not valid email
+            onInvalidInput(emailInput.get(), "Should be valid email address");
+            return;
+        }
+
+        //clean -> save
+        Optional<Account> currentEmailRecord = accountService.getAccount(user, AccountType.EMAIL);
+        OperationResult emailUpdateResult = accountService.updateEmailAccount(user, email);
+        if (emailUpdateResult.notOk()) {
+            currentEmailRecord.ifPresent(accountService::rollbackAccount);
+            emailInput.setStatus(EmailConfirmationStatus.FAILED);
+            ErrorUtils.showErrorNotification("Failed to update email. Server error");
+            return;
+        }
+        //creating confirmation token
+        Account userAccount = emailUpdateResult.getPayload(Account.class);
+        Optional<Token> confirmationToken = userOperationsService.createConfirmationToken(userAccount);
+        if (confirmationToken.isEmpty()) {
+            emailInput.setStatus(EmailConfirmationStatus.FAILED);
+            ErrorUtils.showErrorNotification("Failed to send confirmation letter. Please try again later.");
+            currentEmailRecord.ifPresent(accountService::rollbackAccount);
+            return;
+        }
+        OperationResult sendConfirmationLetterResult =
+                userOperationsService.sendConfirmationLetter(confirmationToken.get(), email, userAccount);
+        if (sendConfirmationLetterResult.ok()) {
+            emailInput.setStatus(EmailConfirmationStatus.PENDING);
+            emailSpan.setText("Sent! Confirmation is pending");
+            emailSpan.setClassName("green");
+            AppUtils.showSuccessNotification("Send confirmation to new email. Please check your inbox.");
+        } else {
+            emailInput.setStatus(EmailConfirmationStatus.FAILED);
+
+            emailSpan.setText("Failed to send confirmation letter");
+            emailSpan.setClassName("red");
+            ErrorUtils.showErrorNotification("Failed to send confirmation letter. Please try again later.");
+            currentEmailRecord.ifPresent(accountService::rollbackAccount);
+        }
+        emailInput.get().setValue(email);
+        emailInput.get().setReadOnly(true);
+        emailLayout.replace(submitEmailButton, emailSpan);
+    }
+
+    private Details getNothingCameDetails() {
+        Details details = new Details("Didn't receive email?");
+
+        //body
+        Span checkFolders = new Span("Please check inbox or spam folders. ");
+
+        Span stillNothing = new Span("Still nothing? ");
+
+        Span goBack = new Span("Go back to ");
+        Anchor profilePage = new Anchor(Endpoint.UI.PROFILE_PAGE, "Profile Page");
+        Span tryAgain = new Span(" and try again with another email.");
+
+        Span stillNothingSpan = new Span(stillNothing, goBack, profilePage, tryAgain);
+
+        VerticalLayout body = new VerticalLayout(checkFolders, stillNothingSpan);
+        body.setPadding(false);
+        body.setSpacing(false);
+
+        details.setContent(body);
+        return details;
     }
 }
