@@ -85,7 +85,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         Details emailUsageDetails = createEmailUsageDetails();
         HorizontalLayout telegramLayout = createTelegramLayout();
 
-        Stream.of(usernameLayout, emailLayout).forEach(VaadinUtils::setCentered);
+        Stream.of(usernameLayout, emailLayout, emailUsageDetails, telegramLayout).forEach(VaadinUtils::setCentered);
 
         Section section = new Section("Accounts");
         section.setContent(usernameLayout, usernameRequirements, emailLayout, emailUsageDetails, telegramLayout);
@@ -107,7 +107,6 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         saveUsernameButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
         usernameLayout.add(usernameField, editUsernameButton);
-        usernameLayout.addClassName("fit-in-section");
         VaadinUtils.fitLayoutInWindow(usernameLayout);
         VaadinUtils.setSmallSpacing(usernameLayout);
 
@@ -141,7 +140,6 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             emailLayout.add(emailField, saveEmailButton);
         }
 
-        emailLayout.addClassName("fit-in-section");
         VaadinUtils.fitLayoutInWindow(emailLayout);
         VaadinUtils.setSmallSpacing(emailLayout);
 
@@ -153,7 +151,6 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private HorizontalLayout createTelegramLayout() {
         HorizontalLayout telegramLayout = new HorizontalLayout();
         telegramLayout.setAlignItems(Alignment.BASELINE);
-        telegramLayout.addClassName("fit-in-section");
         VaadinUtils.fitLayoutInWindow(telegramLayout);
         VaadinUtils.setSmallSpacing(telegramLayout);
 
