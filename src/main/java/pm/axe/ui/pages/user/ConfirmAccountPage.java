@@ -9,6 +9,8 @@ import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -83,7 +85,7 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
     }
 
     private void initPage() {
-        hasEmail = accountService.getAccount(user, AccountType.EMAIL).isPresent();
+        hasEmail = accountService.isAccountExist(user, AccountType.EMAIL);
 
         if (hasEmail) {
             hasConfirmedEmail = accountService.isCurrentEmailConfirmed(user);
@@ -91,17 +93,22 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
 
         H3 title = new H3("Confirm your Account");
 
+       Component emailSectionContent = hasConfirmedEmail ?
+               createAccountConfirmedSection(AccountType.EMAIL) : emailSectionContent();
+
         Section emailSection = new Section("Using Email");
-        emailSection.setCustomContent(emailSectionContent());
+        emailSection.setCustomContent(emailSectionContent);
+
+        //TG account is already confirmed
+        boolean hasConfirmedTelegram = accountService.isAccountExist(user, AccountType.TELEGRAM);
+
+        Component telegramSectionContent = hasConfirmedTelegram ?
+                createAccountConfirmedSection(AccountType.TELEGRAM) : telegramSectionContent();
 
         telegramSection = new Section("Using Telegram");
-        telegramSection.setCustomContent(telegramSectionContent());
+        telegramSection.setCustomContent(telegramSectionContent);
 
         add(title, emailSection, telegramSection);
-
-        if (hasConfirmedEmail) {
-            emailSection.setVisible(false);
-        }
     }
 
     private Component emailSectionContent() {
@@ -170,6 +177,21 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
             }
         }
         return TelegramSpan.create(tgToken);
+    }
+
+    private Component createAccountConfirmedSection(final AccountType accountType) {
+        if (accountType == null) throw new IllegalArgumentException("accountType cannot be null");
+        Icon successMark = VaadinIcon.CHECK.create();
+        successMark.setColor("green");
+        Span text = new Span("You have successfully confirmed your ");
+        Span accType = new Span(StringUtils.capitalize(accountType.name().toLowerCase()));
+        Span account = new Span(" account");
+
+        Span textSpan = new Span(text, accType, account);
+        HorizontalLayout layout = new HorizontalLayout(successMark, textSpan);
+        layout.setAlignItems(Alignment.CENTER);
+        layout.setMaxHeight("100%");
+        return layout;
     }
 
     private void onEmailChanged(final AbstractField.ComponentValueChangeEvent<EmailField, String> e) {

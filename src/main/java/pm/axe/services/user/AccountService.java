@@ -210,6 +210,17 @@ public class AccountService {
     }
 
     /**
+     * Checks if Account with given  {@link User} and {@link AccountType} exists.
+     *
+     * @param user        account's owner
+     * @param accountType account's type
+     * @return true if exists, false if not.
+     */
+    public boolean isAccountExist(final User user, final AccountType accountType) {
+        return accountDao.existsByUserAndType(user, accountType);
+    }
+
+    /**
      * Searches {@link Account} by plain-text {@link Account} name and {@link AccountType}.
      *
      * @param plainAccountName non-encrypted string with {@link Account} name.

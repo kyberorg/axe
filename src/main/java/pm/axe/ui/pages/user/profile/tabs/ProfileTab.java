@@ -447,6 +447,16 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
 
     private void deleteEmail() {
         Optional<Account> emailAccount = accountService.getAccount(user, AccountType.EMAIL);
-        emailAccount.ifPresent(accountService::deleteAccount);
+        if (emailAccount.isPresent()) {
+            OperationResult result = userOpsService.deleteAccountOnly(emailAccount.get());
+            if (result.ok()) {
+                AppUtils.showSuccessNotification("Email successfully deleted");
+                //TODO update status to NONE
+            } else {
+                ErrorUtils.showErrorNotification("Failed to delete email. System error");
+                //TODO update status to FAILED
+            }
+        }
+
     }
 }

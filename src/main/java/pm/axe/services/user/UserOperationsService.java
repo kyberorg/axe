@@ -296,4 +296,20 @@ public class UserOperationsService {
         EventBus.getDefault().post(UserDeletedEvent.createWith(user));
         return deletionResult;
     }
+
+    public OperationResult deleteAccountOnly(final Account account) {
+        if (account == null) throw new IllegalArgumentException("Account cannot be null");
+        if (account.getUser() == null) throw new IllegalStateException("Account has no owner");
+
+        Optional<Token> accountConfirmationToken = tokenService.getToken(account.getUser(),
+                TokenType.ACCOUNT_CONFIRMATION_TOKEN);
+        if (accountConfirmationToken.isPresent()) {
+            //because we need to delete it in @Sync manner
+            OperationResult tokenDeletionResult = tokenService.deleteToken(accountConfirmationToken.get().getToken());
+            if (tokenDeletionResult.notOk()) {
+                return tokenDeletionResult;
+            }
+        }
+        return accountService.deleteAccount(account);
+    }
 }

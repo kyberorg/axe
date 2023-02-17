@@ -24,8 +24,6 @@ import java.util.Optional;
 public class TokenService {
     private static final String TAG = "[" + TokenService.class.getSimpleName() + "]";
 
-    private static final String ERR_USER_ALREADY_HAS_TOKEN = "User already has token";
-
     private final TokenDao tokenDao;
 
     /**
@@ -174,7 +172,13 @@ public class TokenService {
         return token.isPresent() ? returnOnlyValidToken(token.get()) : Optional.empty();
     }
 
+    public Optional<Token> getToken(final User user, final TokenType tokenType) {
+        if (user == null) throw new IllegalArgumentException("user cannot be null");
+        if (tokenType == null) throw new IllegalArgumentException("token type cannot be null");
 
+        Token token = tokenDao.findByTokenTypeAndUser(tokenType, user);
+        return token != null ? returnOnlyValidToken(token) : Optional.empty();
+    }
 
     /**
      * Provides {@link User}'s {@link TokenType#TELEGRAM_CONFIRMATION_TOKEN} token.
