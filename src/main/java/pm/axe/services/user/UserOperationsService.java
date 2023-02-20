@@ -296,7 +296,14 @@ public class UserOperationsService {
         EventBus.getDefault().post(UserDeletedEvent.createWith(user));
         return deletionResult;
     }
-    
+
+    /**
+     * Updates email and also resets channel.
+     *
+     * @param user email account owner
+     * @param email plain text email address
+     * @return {@link OperationResult} with update email {@link Account} or {@link OperationResult} with fail state.
+     */
     public OperationResult updateEmailAccount(final User user, final String email) {
         OperationResult accountUpdateResult = accountService.updateEmailAccount(user, email);
         if (accountUpdateResult.notOk()) {
@@ -310,6 +317,13 @@ public class UserOperationsService {
         return OperationResult.success().addPayload(account);
     }
 
+    /**
+     * Deletes {@link Account} and resets channels in {@link UserSettings}.
+     *
+     * @param account non-empty {@link Account} to update.
+     * @return delete account {@link OperationResult}.
+     *
+     */
     public OperationResult deleteAccountOnly(final Account account) {
         if (account == null) throw new IllegalArgumentException("Account cannot be null");
         if (account.getUser() == null) throw new IllegalStateException("Account has no owner");

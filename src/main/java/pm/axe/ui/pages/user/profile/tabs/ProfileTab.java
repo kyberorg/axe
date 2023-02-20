@@ -1,6 +1,7 @@
 package pm.axe.ui.pages.user.profile.tabs;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -22,6 +23,7 @@ import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.internal.HasTabInit;
+import pm.axe.mail.EmailConfirmationStatus;
 import pm.axe.result.OperationResult;
 import pm.axe.services.user.AccountService;
 import pm.axe.services.user.TokenService;
@@ -53,16 +55,18 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     @SuppressWarnings("FieldCanBeLocal") //will be re-drawn if event received
     private Section accountsSection;
 
-    private final TextField usernameField = new TextField();
+    private final TextField usernameInput = new TextField();
     private final UsernameRequirements usernameRequirements = UsernameRequirements.create();
     private final Button editUsernameButton = new Button();
     private final Button saveUsernameButton = new Button();
     private final HorizontalLayout usernameLayout = new HorizontalLayout();
 
-    private final EmailField emailField = new EmailField();
+    private final ConfirmedEmailField emailInput = new ConfirmedEmailField();
     private final Button editEmailButton = new Button();
     private final Button saveEmailButton = new Button();
     private final HorizontalLayout emailLayout = new HorizontalLayout();
+
+    private Details emailUsageDetails;
 
     private final DeleteConfirmationDialog emailDeleteConfirmationDialog = DeleteConfirmationDialog.create();
 
@@ -74,15 +78,23 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         add(accountsSection);
 
         usernameRequirements.hide();
-        if (StringUtils.isBlank(emailField.getValue())) {
-            emailField.focus();
+    }
+
+    @Override
+    protected void onAttach(final AttachEvent attachEvent) {
+        if (StringUtils.isBlank(emailInput.getValue())) {
+            emailInput.focus();
+            if (emailUsageDetails != null) {
+                emailUsageDetails.setOpened(true);
+            }
         }
     }
 
     private Section createAccountSection() {
         HorizontalLayout usernameLayout = createUsernameLayout();
         HorizontalLayout emailLayout = createEmailLayout();
-        Details emailUsageDetails = createEmailUsageDetails();
+
+        emailUsageDetails = createEmailUsageDetails();
         HorizontalLayout telegramLayout = createTelegramLayout();
 
         Stream.of(usernameLayout, emailLayout, emailUsageDetails, telegramLayout).forEach(VaadinUtils::setCentered);
@@ -94,19 +106,19 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     }
 
     private HorizontalLayout createUsernameLayout() {
-        usernameField.setLabel("Username");
-        usernameField.setValue(user.getUsername());
-        usernameField.setWidthFull();
-        usernameField.addValueChangeListener(this::onUsernameChanged);
-        usernameField.setClearButtonVisible(true);
-        usernameField.setReadOnly(true);
+        usernameInput.setLabel("Username");
+        usernameInput.setValue(user.getUsername());
+        usernameInput.setWidthFull();
+        usernameInput.addValueChangeListener(this::onUsernameChanged);
+        usernameInput.setClearButtonVisible(true);
+        usernameInput.setReadOnly(true);
 
         editUsernameButton.setText("Edit");
         editUsernameButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveUsernameButton.setText("Save");
         saveUsernameButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
-        usernameLayout.add(usernameField, editUsernameButton);
+        usernameLayout.add(usernameInput, editUsernameButton);
         VaadinUtils.fitLayoutInWindow(usernameLayout);
         VaadinUtils.setSmallSpacing(usernameLayout);
 
@@ -116,14 +128,14 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     }
 
     private HorizontalLayout createEmailLayout() {
-        emailField.setLabel("E-mail");
-        emailField.setClearButtonVisible(true);
-        emailField.setReadOnly(true);
-        emailField.setWidthFull();
-        emailField.addValueChangeListener(this::onEmailChanged);
+        emailInput.setLabel("E-mail");
+        emailInput.setClearButtonVisible(true);
+        emailInput.setReadOnly(true);
+        emailInput.setWidthFull();
+        emailInput.addValueChangeListener(this::onEmailChanged);
 
         Optional<String> currentEmail = getCurrentEmail();
-        currentEmail.ifPresent(emailField::setValue);
+        currentEmail.ifPresent(emailInput::setValue);
         currentEmail.ifPresent(e -> setConfirmationStatus());
 
         editEmailButton.setText("Edit");
@@ -134,10 +146,10 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         emailDeleteConfirmationDialog.setDeleteButtonAction(this::deleteEmail);
 
         if (currentEmail.isPresent()) {
-            emailLayout.add(emailField, editEmailButton);
+            emailLayout.add(emailInput, editEmailButton);
         } else {
-            emailField.setReadOnly(false);
-            emailLayout.add(emailField, saveEmailButton);
+            emailInput.setReadOnly(false);
+            emailLayout.add(emailInput, saveEmailButton);
         }
 
         VaadinUtils.fitLayoutInWindow(emailLayout);
@@ -206,7 +218,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         String input = event.getValue().trim();
         boolean isInputEmpty = StringUtils.isBlank(input);
         if (isInputEmpty) {
-            usernameField.setInvalid(false);
+            usernameInput.setInvalid(false);
             usernameRequirements.hide();
             return;
         }
@@ -216,45 +228,45 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             return;
         }
 
-        final boolean isUsernameValid = !isUsernameInvalid(usernameField);
+        final boolean isUsernameValid = !isUsernameInvalid(usernameInput);
         if (isUsernameValid) {
-            usernameField.setInvalid(false);
-            usernameField.setErrorMessage("");
+            usernameInput.setInvalid(false);
+            usernameInput.setErrorMessage("");
         }
     }
 
     private void onEditUsername(final ClickEvent<Button> event) {
-        usernameField.setReadOnly(false);
+        usernameInput.setReadOnly(false);
         usernameLayout.replace(editUsernameButton, saveUsernameButton);
     }
 
     private void onSaveUsername(final ClickEvent<Button> event) {
-        if (StringUtils.isBlank(usernameField.getValue().trim())) {
-            usernameField.setInvalid(true);
-            usernameField.setErrorMessage("Username cannot be empty");
+        if (StringUtils.isBlank(usernameInput.getValue().trim())) {
+            usernameInput.setInvalid(true);
+            usernameInput.setErrorMessage("Username cannot be empty");
             return;
         }
         //is same as current ?
-        boolean isSameAsCurrent = user.getUsername().equals(usernameField.getValue().trim());
+        boolean isSameAsCurrent = user.getUsername().equals(usernameInput.getValue().trim());
         if (isSameAsCurrent) {
-            usernameField.setReadOnly(true);
+            usernameInput.setReadOnly(true);
             usernameLayout.replace(saveUsernameButton, editUsernameButton);
             return;
         }
 
         //changed -> validate
-        if (isUsernameInvalid(usernameField)) {
+        if (isUsernameInvalid(usernameInput)) {
             return;
         }
 
         //clean -> save
-        OperationResult usernameUpdate = userService.updateUsername(user, usernameField.getValue());
+        OperationResult usernameUpdate = userService.updateUsername(user, usernameInput.getValue());
         if (usernameUpdate.ok()) {
             AppUtils.showSuccessNotification("Username is updated");
         } else {
             ErrorUtils.showErrorNotification("Failed to update Username. Server error");
         }
-        usernameField.setReadOnly(true);
+        usernameInput.setReadOnly(true);
         usernameLayout.replace(saveUsernameButton, editUsernameButton);
     }
 
@@ -262,8 +274,8 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         final String email = event.getValue().trim();
         boolean isValidEmail = EmailValidator.getInstance().isValid(email);
         if (StringUtils.isBlank(email)) {
-            emailField.setInvalid(false);
-            emailField.setErrorMessage("");
+            emailInput.setInvalid(false);
+            emailInput.setErrorMessage("");
             return;
         }
 
@@ -278,39 +290,46 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         if (isValidEmail) {
             boolean emailExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
             if (emailExists) {
-                onInvalidInput(emailField, "Email already taken");
+                onInvalidInput(emailInput, "Email already taken");
             }
         } else {
             //not valid email
-            onInvalidInput(emailField, "Should be valid email");
+            onInvalidInput(emailInput, "Should be valid email");
         }
     }
 
     private void onEditEmail(final ClickEvent<Button> event) {
-        emailField.setReadOnly(false);
-        emailField.setSuffixComponent(new Div());
+        emailInput.setReadOnly(false);
+        emailInput.setSuffixComponent(new Div());
         emailLayout.replace(editEmailButton, saveEmailButton);
     }
 
     private void onSaveEmail(final ClickEvent<Button> event) {
-        final String email = emailField.getValue().trim();
-        if (StringUtils.isBlank(email)) {
-            setConfirmationStatus(); //for some reason is removes it.
+        final String email = emailInput.getValue().trim();
+        Optional<String> currentEmail = getCurrentEmail();
+        if (StringUtils.isBlank(email) && currentEmail.isPresent()) {
             emailDeleteConfirmationDialog.show();
 
-            emailField.setReadOnly(true);
+            emailInput.setReadOnly(true);
+            emailLayout.replace(saveEmailButton, editEmailButton);
+            return;
+        } else if (StringUtils.isBlank(email)) {
+            emailInput.setInvalid(false);
+            emailInput.setErrorMessage("");
+
+            emailInput.setReadOnly(true);
             emailLayout.replace(saveEmailButton, editEmailButton);
             return;
         }
 
         //is same as current ?
-        Optional<String> currentEmail = getCurrentEmail();
         if (currentEmail.isPresent()) {
             boolean isSameAsCurrent = currentEmail.get().equals(email);
             if (isSameAsCurrent) {
-                setConfirmationStatus(); //for some reason is removes it.
-                emailField.setReadOnly(true);
+                emailInput.setReadOnly(true);
                 emailLayout.replace(saveEmailButton, editEmailButton);
+
+                setConfirmationStatus();
                 return;
             }
         }
@@ -320,12 +339,12 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             //email
             boolean emailExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
             if (emailExists) {
-                onInvalidInput(emailField, "Email already taken");
+                onInvalidInput(emailInput, "Email already taken");
                 return;
             }
         } else {
             //not valid email
-            onInvalidInput(emailField, "Should be valid email address");
+            onInvalidInput(emailInput, "Should be valid email address");
             return;
         }
 
@@ -336,9 +355,9 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         if (emailUpdateResult.notOk()) {
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
             if (currentEmail.isPresent()) {
-                emailField.setValue(currentEmail.get());
+                emailInput.setValue(currentEmail.get());
             } else {
-                emailField.setValue("");
+                emailInput.setValue("");
             }
             ErrorUtils.showErrorNotification("Failed to update email. Server error");
             return;
@@ -348,7 +367,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         Account userAccount = emailUpdateResult.getPayload(Account.class);
         Optional<Token> confirmationToken = userOpsService.createConfirmationToken(userAccount);
         if (confirmationToken.isEmpty()) {
-            emailField.setSuffixComponent(VaadinIcon.EXCLAMATION_CIRCLE.create());
+            emailInput.setSuffixComponent(VaadinIcon.EXCLAMATION_CIRCLE.create());
             ErrorUtils.showErrorNotification("Failed to send confirmation letter. Please try again later.");
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
             return;
@@ -358,15 +377,15 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         OperationResult sendConfirmationLetterResult =
                 userOpsService.sendConfirmationLetter(confirmationToken.get(), email, userAccount);
         if (sendConfirmationLetterResult.ok()) {
-            emailField.setSuffixComponent(VaadinIcon.ELLIPSIS_CIRCLE.create());
+            emailInput.setSuffixComponent(VaadinIcon.ELLIPSIS_CIRCLE.create());
             AppUtils.showSuccessNotification("Send confirmation to new email. Please check your inbox.");
         } else {
-            emailField.setSuffixComponent(VaadinIcon.EXCLAMATION_CIRCLE.create());
+            emailInput.setSuffixComponent(VaadinIcon.EXCLAMATION_CIRCLE.create());
             ErrorUtils.showErrorNotification("Failed to send confirmation letter. Please try again later.");
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
         }
 
-        emailField.setReadOnly(true);
+        emailInput.setReadOnly(true);
         emailLayout.replace(saveEmailButton, editEmailButton);
     }
 
@@ -417,11 +436,11 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
     private void setConfirmationStatus() {
         boolean hasEmail = getCurrentEmail().isPresent();
         if (hasEmail) {
-            VaadinIcon confirmationStatusIcon = isCurrentEmailConfirmed()
-                    ?  VaadinIcon.CHECK : VaadinIcon.ELLIPSIS_CIRCLE;
-            emailField.setSuffixComponent(confirmationStatusIcon.create());
+            EmailConfirmationStatus confirmationStatus = isCurrentEmailConfirmed()
+                    ?  EmailConfirmationStatus.CONFIRMED : EmailConfirmationStatus.PENDING;
+            emailInput.setStatus(confirmationStatus);
         } else {
-            emailField.setSuffixComponent(new Div());
+            emailInput.setStatus(EmailConfirmationStatus.NONE);
         }
     }
 
@@ -451,10 +470,10 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
             OperationResult result = userOpsService.deleteAccountOnly(emailAccount.get());
             if (result.ok()) {
                 AppUtils.showSuccessNotification("Email successfully deleted");
-                //TODO update status to NONE
+                emailInput.setStatus(EmailConfirmationStatus.NONE);
             } else {
                 ErrorUtils.showErrorNotification("Failed to delete email. System error");
-                //TODO update status to FAILED
+                emailInput.setStatus(EmailConfirmationStatus.FAILED);
             }
         }
 

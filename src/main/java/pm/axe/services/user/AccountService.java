@@ -385,6 +385,12 @@ public class AccountService {
         }
     }
 
+    /**
+     * Returns current email address.
+     *
+     * @param user email's owner
+     * @return {@link Optional} with email address or {@link Optional#empty()}.
+     */
     public Optional<String> getCurrentEmail(final User user) {
         if (user == null) throw new IllegalArgumentException("User cannot be NULL");
 
@@ -399,6 +405,12 @@ public class AccountService {
         }
     }
 
+    /**
+     * Is current {@link User} confirmed.
+     *
+     * @param user email's owner
+     * @return true if email confirmed, false if email not confirmed or email doesn't exist.
+     */
     public boolean isCurrentEmailConfirmed(final User user) {
         Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
         return emailAccount.map(Account::isConfirmed).orElse(false);

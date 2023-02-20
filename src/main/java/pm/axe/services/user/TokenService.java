@@ -172,6 +172,15 @@ public class TokenService {
         return token.isPresent() ? returnOnlyValidToken(token.get()) : Optional.empty();
     }
 
+    /**
+     * Gets Token by {@link User} and {@link TokenType}.
+     *
+     * @param user {@link Token}'s owner
+     * @param tokenType {@link Token}'s type
+     *
+     * @return {@link Optional} with valid {@link Token} or {@link Optional#empty()}
+     * @throws IllegalArgumentException when user or token typer params are null
+     */
     public Optional<Token> getToken(final User user, final TokenType tokenType) {
         if (user == null) throw new IllegalArgumentException("user cannot be null");
         if (tokenType == null) throw new IllegalArgumentException("token type cannot be null");
