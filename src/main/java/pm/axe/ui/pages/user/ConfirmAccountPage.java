@@ -113,13 +113,13 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
 
     private Component emailSectionContent() {
         emailInput = new ConfirmedEmailField();
-        emailInput.get().setLabel("Email address here");
-        emailInput.get().setHelperText("Axe will send confirmation letter there");
-        emailInput.get().setClearButtonVisible(true);
-        emailInput.get().addValueChangeListener(this::onEmailChanged);
+        emailInput.setLabel("Email address here");
+        emailInput.setHelperText("Axe will send confirmation letter there");
+        emailInput.setClearButtonVisible(true);
+        emailInput.addValueChangeListener(this::onEmailChanged);
 
         Optional<String> currentEmail = accountService.getCurrentEmail(user);
-        currentEmail.ifPresent(email -> emailInput.get().setValue(email));
+        currentEmail.ifPresent(email -> emailInput.setValue(email));
 
         submitEmailButton = new Button("Submit");
         submitEmailButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -131,7 +131,7 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
 
         if (hasEmail) {
             //user has hasEmail - RO input + span
-            emailInput.get().setReadOnly(true);
+            emailInput.setReadOnly(true);
             EmailConfirmationStatus status = hasConfirmedEmail ?
                     EmailConfirmationStatus.CONFIRMED : EmailConfirmationStatus.PENDING;
             emailInput.setStatus(status);
@@ -139,7 +139,7 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
             if (status == EmailConfirmationStatus.CONFIRMED) {
                 emailSpan.setClassName("green");
             } else {
-                emailInput.get().setHelperText("Axe sent confirmation letter to given email.");
+                emailInput.setHelperText("Axe sent confirmation letter to given email.");
                 nothingCame = getNothingCameDetails();
             }
             emailLayout = new HorizontalLayout(emailInput, emailSpan);
@@ -199,8 +199,8 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
         final String email = e.getValue().trim();
         boolean isValidEmail = EmailValidator.getInstance().isValid(email);
         if (StringUtils.isBlank(email)) {
-            emailInput.get().setInvalid(false);
-            emailInput.get().setErrorMessage("");
+            emailInput.setInvalid(false);
+            emailInput.setErrorMessage("");
             if (!submitEmailButton.isEnabled()) {
                 submitEmailButton.setEnabled(true);
             }
@@ -209,27 +209,27 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
         if (isValidEmail) {
             boolean emailExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
             if (emailExists) {
-                onInvalidInput(emailInput.get(), "Email already taken");
+                onInvalidInput(emailInput, "Email already taken");
                 submitEmailButton.setEnabled(false);
             } else {
-                emailInput.get().setInvalid(false);
-                emailInput.get().setErrorMessage("");
+                emailInput.setInvalid(false);
+                emailInput.setErrorMessage("");
                 if (!submitEmailButton.isEnabled()) {
                     submitEmailButton.setEnabled(true);
                 }
             }
         } else {
             //not valid email
-            onInvalidInput(emailInput.get(), "Should be valid email");
+            onInvalidInput(emailInput, "Should be valid email");
             submitEmailButton.setEnabled(false);
         }
     }
 
     private void onSubmitEmail(final ClickEvent<Button> event) {
-        final String email = emailInput.get().getValue().trim();
+        final String email = emailInput.getValue().trim();
         if (StringUtils.isBlank(email)) {
-            emailInput.get().setInvalid(true);
-            emailInput.get().setErrorMessage("Please enter valid email");
+            emailInput.setInvalid(true);
+            emailInput.setErrorMessage("Please enter valid email");
             return;
         }
         boolean isValidEmail = EmailValidator.getInstance().isValid(email);
@@ -237,12 +237,12 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
             //email
             boolean emailExists = accountService.isAccountAlreadyExists(email, AccountType.EMAIL);
             if (emailExists) {
-                onInvalidInput(emailInput.get(), "Email already taken");
+                onInvalidInput(emailInput, "Email already taken");
                 return;
             }
         } else {
             //not valid email
-            onInvalidInput(emailInput.get(), "Should be valid email address");
+            onInvalidInput(emailInput, "Should be valid email address");
             return;
         }
 
@@ -279,8 +279,8 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
             ErrorUtils.showErrorNotification("Failed to send confirmation letter. Please try again later.");
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
         }
-        emailInput.get().setValue(email);
-        emailInput.get().setReadOnly(true);
+        emailInput.setValue(email);
+        emailInput.setReadOnly(true);
         emailLayout.replace(submitEmailButton, emailSpan);
     }
 
