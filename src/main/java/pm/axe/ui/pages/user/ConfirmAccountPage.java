@@ -248,7 +248,7 @@ public class ConfirmAccountPage extends AxeCompactLayout implements BeforeEnterO
 
         //clean -> save
         Optional<Account> currentEmailRecord = accountService.getAccount(user, AccountType.EMAIL);
-        OperationResult emailUpdateResult = accountService.updateEmailAccount(user, email);
+        OperationResult emailUpdateResult = userOperationsService.updateEmailAccount(user, email);
         if (emailUpdateResult.notOk()) {
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
             emailInput.setStatus(EmailConfirmationStatus.FAILED);

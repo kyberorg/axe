@@ -296,6 +296,19 @@ public class UserOperationsService {
         EventBus.getDefault().post(UserDeletedEvent.createWith(user));
         return deletionResult;
     }
+    
+    public OperationResult updateEmailAccount(final User user, final String email) {
+        OperationResult accountUpdateResult = accountService.updateEmailAccount(user, email);
+        if (accountUpdateResult.notOk()) {
+            return accountUpdateResult;
+        }
+        Account account = accountUpdateResult.getPayload(Account.class);
+        OperationResult resetResult = resetChannels(account);
+        if (resetResult.notOk()) {
+            return resetResult;
+        }
+        return OperationResult.success().addPayload(account);
+    }
 
     public OperationResult deleteAccountOnly(final Account account) {
         if (account == null) throw new IllegalArgumentException("Account cannot be null");
@@ -310,6 +323,51 @@ public class UserOperationsService {
                 return tokenDeletionResult;
             }
         }
+
+        //also reset channels (tfa, reset)
+        OperationResult resetResult = resetChannels(account);
+        if (resetResult.notOk()) {
+            return resetResult;
+        }
+
+        //and finally, delete it
         return accountService.deleteAccount(account);
     }
+
+    private OperationResult resetChannels(final Account account) {
+        if (account == null) throw new IllegalArgumentException("account cannot be null");
+        if (account.getUser() == null) throw new IllegalStateException("account has no owner");
+        
+        Optional<UserSettings> userSettings = userSettingsService.getUserSettings(account.getUser());
+        if (userSettings.isPresent()) {
+            UserSettings us = userSettings.get();
+            if (us.getTfaChannel() == account.getType()) {
+                us.setTfaChannel(getAnotherConfirmedAccount(us.getUser()));
+            }
+            if (us.getPasswordResetChannel() == account.getType()) {
+                us.setPasswordResetChannel(getAnotherConfirmedAccount(us.getUser()));
+            }
+            return userSettingsService.updateUserSettings(us);
+        } else {
+            return OperationResult.generalFail().withMessage("UserSettings not found for " 
+                    + account.getUser().getUsername());
+        }
+    }
+
+    private AccountType getAnotherConfirmedAccount(final User user) {
+        if (user == null) throw new IllegalArgumentException("user cannot be null");
+        List<Account> confirmedAccounts = accountService.getAllAccountsLinkedWithUser(user).stream()
+                .filter(Account::isConfirmed).toList();
+        if (confirmedAccounts.size() > 1) {
+            //more than one confirmed account - user should decide, which one to use.
+            return AccountType.LOCAL;
+        } else if (confirmedAccounts.size() == 1) {
+            //just using another confirmed account
+            return confirmedAccounts.get(0).getType();
+        } else {
+            //no more confirmed accounts - reset
+            return AccountType.LOCAL;
+        }
+    }
+
 }

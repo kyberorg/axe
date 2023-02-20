@@ -327,7 +327,6 @@ public class AccountService {
             return validationResult;
         }
 
-
         Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
         boolean userHasEmailAccount;
         if (emailAccount.isPresent()) {

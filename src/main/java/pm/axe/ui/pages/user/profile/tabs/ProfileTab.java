@@ -332,7 +332,7 @@ public class ProfileTab extends VerticalLayout implements HasTabInit {
         //clean -> save
         Optional<Account> currentEmailRecord = accountService.getAccount(user, AccountType.EMAIL);
 
-        OperationResult emailUpdateResult = accountService.updateEmailAccount(user, email);
+        OperationResult emailUpdateResult = userOpsService.updateEmailAccount(user, email);
         if (emailUpdateResult.notOk()) {
             currentEmailRecord.ifPresent(accountService::rollbackAccount);
             if (currentEmail.isPresent()) {
