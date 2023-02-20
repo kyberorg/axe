@@ -22,6 +22,15 @@ public interface AccountDao extends CrudRepository<Account, Long> {
     Optional<Account> findByUserAndType(User user, AccountType accountType);
 
     /**
+     * Searching for User's Account by its {@link AccountType}.
+     *
+     * @param user        account's owner
+     * @param accountType type of account
+     * @return true - if found or false - if not.
+     */
+    boolean existsByUserAndType(User user, AccountType accountType);
+
+    /**
      * Lists all {@link Account}s of given {@link AccountType}.
      *
      * @param accountType type of account wanted.

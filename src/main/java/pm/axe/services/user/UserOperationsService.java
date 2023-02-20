@@ -108,24 +108,14 @@ public class UserOperationsService {
         }
         //Create and send - confirmation email for Accounts with Email set.
         if (userAccount.getType() == AccountType.EMAIL) {
-            //Create Confirmation Token
-            OperationResult createConfirmationTokenResult =
-                    tokenService.createConfirmationToken(createdUser, userAccount);
-            if (createConfirmationTokenResult.notOk()) {
-                log.error("{} failed to create confirmation token for {}. OpResult: {}",
-                        TAG, createdUser.getUsername(), createConfirmationTokenResult);
-                return createConfirmationTokenResult;
-            }
-            Token confirmationToken = createConfirmationTokenResult.getPayload(Token.class);
-            rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken));
-            //Send it
-            log.info("{} Successfully created {}({}) for user '{}'",
-                    TAG, confirmationToken.getTokenType(), confirmationToken.getToken(), createdUser.getUsername());
-            OperationResult sendResult = senders.getSender(AccountType.EMAIL).send(confirmationToken, input.getEmail());
-            if (sendResult.notOk()) {
-                log.warn("{} Unable to send created {} to {}. OpResult: {}",
-                        TAG, confirmationToken.getTokenType(), input.getEmail(), sendResult);
-                log.warn("{} Requesting Rollback", TAG);
+            Optional<Token> confirmationToken = createConfirmationToken(userAccount);
+            if (confirmationToken.isPresent()) {
+                rollbackTasks.push(RollbackTask.create(Token.class, confirmationToken.get()));
+                OperationResult sendConfirmationLetterResult =
+                        sendConfirmationLetter(confirmationToken.get(), input.getEmail(), userAccount);
+                if (sendConfirmationLetterResult.notOk()) return sendConfirmationLetterResult;
+            } else {
+                log.error("{} Failed to create confirmation {}", TAG, Token.class.getSimpleName());
                 rollbackService.rollback(rollbackTasks);
             }
         }
@@ -145,6 +135,66 @@ public class UserOperationsService {
         OperationResult success = OperationResult.success();
         return Objects.isNull(telegramConfirmationToken)
                 ? success : success.addPayload(TELEGRAM_TOKEN_KEY, telegramConfirmationToken.getToken());
+    }
+
+    /**
+     * Creates Confirmation {@link Token}.
+     * @param userAccount {@link Account} to confirm with given Token.
+     *
+     * @return {@link Optional} with {@link Token} or {@link Optional#empty()} if failed t create token.
+     */
+    public Optional<Token> createConfirmationToken(final Account userAccount) {
+        if (userAccount == null) {
+            throw new IllegalArgumentException("User Account cannot be null");
+        }
+        OperationResult createConfirmationTokenResult =
+                tokenService.createConfirmationToken(userAccount.getUser(), userAccount);
+        if (createConfirmationTokenResult.notOk()) {
+            log.error("{} failed to create confirmation token for {}. OpResult: {}",
+                    TAG, userAccount.getUser().getUsername(), createConfirmationTokenResult);
+            return Optional.empty();
+        }
+        return Optional.ofNullable(createConfirmationTokenResult.getPayload(Token.class));
+    }
+
+    /**
+     * Sends {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN}.
+     *
+     * @param confirmationToken {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN} {@link Token}
+     * @param email non-empty string with email
+     * @param userAccount {@link Account} to confirm with given Token
+     *
+     * @return {@link OperationResult#success()}, when email send,
+     *         {@link OperationResult#malformedInput()}, when something is wrong with params,
+     *         {@link OperationResult#generalFail()}, when failed to send letter.
+     */
+    public OperationResult sendConfirmationLetter(final Token confirmationToken, final String email,
+                                                  final Account userAccount) {
+        //check inputs
+        if (StringUtils.isBlank(email)) {
+            return OperationResult.malformedInput().withMessage("Email cannot be empty");
+        }
+        if (userAccount == null) {
+            return OperationResult.malformedInput().withMessage("User Account cannot be null");
+        }
+        if (userAccount.getUser() == null) {
+            return OperationResult.malformedInput().withMessage("Given Account is not bound to any user");
+        }
+
+
+        //Send it
+        log.info("{} Successfully created {}({}) for user '{}'",
+                TAG, confirmationToken.getTokenType(), confirmationToken.getToken(),
+                userAccount.getUser().getUsername());
+        OperationResult sendResult = senders.getSender(AccountType.EMAIL).send(confirmationToken, email);
+        if (sendResult.notOk()) {
+            log.warn("{} Unable to send created {} to {}. OpResult: {}",
+                    TAG, confirmationToken.getTokenType(), email, sendResult);
+            log.warn("{} Requesting Rollback", TAG);
+            rollbackService.rollback(rollbackTasks);
+            return sendResult;
+        }
+        return OperationResult.success();
     }
 
     /**
@@ -246,4 +296,92 @@ public class UserOperationsService {
         EventBus.getDefault().post(UserDeletedEvent.createWith(user));
         return deletionResult;
     }
+
+    /**
+     * Updates email and also resets channel.
+     *
+     * @param user email account owner
+     * @param email plain text email address
+     * @return {@link OperationResult} with update email {@link Account} or {@link OperationResult} with fail state.
+     */
+    public OperationResult updateEmailAccount(final User user, final String email) {
+        OperationResult accountUpdateResult = accountService.updateEmailAccount(user, email);
+        if (accountUpdateResult.notOk()) {
+            return accountUpdateResult;
+        }
+        Account account = accountUpdateResult.getPayload(Account.class);
+        OperationResult resetResult = resetChannels(account);
+        if (resetResult.notOk()) {
+            return resetResult;
+        }
+        return OperationResult.success().addPayload(account);
+    }
+
+    /**
+     * Deletes {@link Account} and resets channels in {@link UserSettings}.
+     *
+     * @param account non-empty {@link Account} to update.
+     * @return delete account {@link OperationResult}.
+     *
+     */
+    public OperationResult deleteAccountOnly(final Account account) {
+        if (account == null) throw new IllegalArgumentException("Account cannot be null");
+        if (account.getUser() == null) throw new IllegalStateException("Account has no owner");
+
+        Optional<Token> accountConfirmationToken = tokenService.getToken(account.getUser(),
+                TokenType.ACCOUNT_CONFIRMATION_TOKEN);
+        if (accountConfirmationToken.isPresent()) {
+            //because we need to delete it in @Sync manner
+            OperationResult tokenDeletionResult = tokenService.deleteToken(accountConfirmationToken.get().getToken());
+            if (tokenDeletionResult.notOk()) {
+                return tokenDeletionResult;
+            }
+        }
+
+        //also reset channels (tfa, reset)
+        OperationResult resetResult = resetChannels(account);
+        if (resetResult.notOk()) {
+            return resetResult;
+        }
+
+        //and finally, delete it
+        return accountService.deleteAccount(account);
+    }
+
+    private OperationResult resetChannels(final Account account) {
+        if (account == null) throw new IllegalArgumentException("account cannot be null");
+        if (account.getUser() == null) throw new IllegalStateException("account has no owner");
+        
+        Optional<UserSettings> userSettings = userSettingsService.getUserSettings(account.getUser());
+        if (userSettings.isPresent()) {
+            UserSettings us = userSettings.get();
+            if (us.getTfaChannel() == account.getType()) {
+                us.setTfaChannel(getAnotherConfirmedAccount(us.getUser()));
+            }
+            if (us.getPasswordResetChannel() == account.getType()) {
+                us.setPasswordResetChannel(getAnotherConfirmedAccount(us.getUser()));
+            }
+            return userSettingsService.updateUserSettings(us);
+        } else {
+            return OperationResult.generalFail().withMessage("UserSettings not found for " 
+                    + account.getUser().getUsername());
+        }
+    }
+
+    private AccountType getAnotherConfirmedAccount(final User user) {
+        if (user == null) throw new IllegalArgumentException("user cannot be null");
+        List<Account> confirmedAccounts = accountService.getAllAccountsLinkedWithUser(user).stream()
+                .filter(Account::isConfirmed).toList();
+        if (confirmedAccounts.size() > 1) {
+            //more than one confirmed account - user should decide, which one to use.
+            return AccountType.LOCAL;
+        } else if (confirmedAccounts.size() == 1) {
+            //just using another confirmed account
+            return confirmedAccounts.get(0).getType();
+        } else {
+            //no more confirmed accounts - reset
+            return AccountType.LOCAL;
+        }
+    }
+
 }

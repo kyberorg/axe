@@ -34,9 +34,6 @@ public final class IdentGenerator {
     public static final String VALID_IDENT_PATTERN = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){0,"
             + IDENT_MAX_LENGTH_WITHOUT_FIRST_AND_LAST_CHARS + "}[a-zA-Z0-9]$";
 
-    private static final int TOKEN_SUBSTRING_START_INDEX = 0;
-    private static final int TOKEN_SUBSTRING_END_INDEX = 7;
-
     private IdentGenerator() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -68,7 +65,9 @@ public final class IdentGenerator {
 
     private static String generateAccountConfirmationIdent(final Token token) {
         String prefix = token.getTokenType().getIdentPrefix();
-        String firstPartOfToken = token.getToken().substring(TOKEN_SUBSTRING_START_INDEX, TOKEN_SUBSTRING_END_INDEX);
-        return String.join("", prefix, firstPartOfToken);
+        String randomNumber = RandomStringUtils.randomNumeric(1);
+        String randomChar = RandomStringUtils.randomAlphanumeric(1);
+        String randomNum = RandomStringUtils.randomNumeric(1);
+        return String.join("", prefix, randomNumber, randomChar, randomNum);
     }
 }

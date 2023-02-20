@@ -23,7 +23,7 @@ public class Token extends TimeModel {
     /**
      * Default length of Token (code).
      */
-    private static final int CODE_TOKEN_LEN = 6;
+    public static final int CODE_TOKEN_LEN = 6;
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 

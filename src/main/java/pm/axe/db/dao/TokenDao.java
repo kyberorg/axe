@@ -3,6 +3,7 @@ package pm.axe.db.dao;
 import lombok.NonNull;
 import org.springframework.scheduling.annotation.Async;
 import pm.axe.db.dao.base.TimeAwareCrudDao;
+import pm.axe.db.models.Account;
 import pm.axe.db.models.Token;
 import pm.axe.db.models.User;
 import pm.axe.users.TokenType;
@@ -61,6 +62,17 @@ public interface TokenDao extends TimeAwareCrudDao<Token, Long> {
      * @return found {@link Token} record or {@code null}
      */
     Token findByTokenTypeAndUser(TokenType tokenType, User user);
+
+    /**
+     * Finds {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN} by its {@link TokenType}, {@link User} and {@link Account}.
+     *
+     * @param tokenType normally {@link TokenType#ACCOUNT_CONFIRMATION_TOKEN}.
+     * @param user {@link Token}'s owner
+     * @param account {@link Account} to be confirmed
+     *
+     * @return {@link Optional} with found {@link Token} record or {@link Optional#empty()}.
+     */
+    Optional<Token> findByTokenTypeAndUserAndConfirmationFor(TokenType tokenType, User user, Account account);
 
     /**
      * Finds all {@link Token} records owned by {@link User}.

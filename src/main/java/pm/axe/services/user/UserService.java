@@ -196,5 +196,33 @@ public class UserService implements UserDetailsService {
         userDao.update(user);
     }
 
+    /**
+     * Updates username.
+     *
+     * @param user {@link User}, that should be updated.
+     * @param username non-empty string with new username.
+     *
+     * @return {@link OperationResult#malformedInput()} if username doesn't meet requirements
+     * or {@link OperationResult#success()} if update was successful.
+     */
+    public OperationResult updateUsername(final User user, final String username) {
+        if (user == null) return OperationResult.malformedInput().withMessage("User cannot be NULL");
+        OperationResult validationResult = UsernameValidator.isValid(username);
+        if (validationResult.notOk()) {
+            return validationResult;
+        }
 
+        user.setUsername(username);
+        try {
+            userDao.update(user);
+            return OperationResult.success();
+        } catch (CannotCreateTransactionException e) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.error("{} Exception on updating {} record",
+                    TAG, User.class.getSimpleName());
+            log.debug("", e);
+            return OperationResult.generalFail();
+        }
+    }
 }

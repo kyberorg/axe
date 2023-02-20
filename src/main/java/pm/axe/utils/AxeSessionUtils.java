@@ -7,6 +7,7 @@ import pm.axe.db.models.User;
 import pm.axe.db.models.UserSettings;
 import pm.axe.services.user.UserSettingsService;
 import pm.axe.session.AxeSession;
+import pm.axe.users.LandingPage;
 
 import java.util.Optional;
 
@@ -32,5 +33,34 @@ public class AxeSessionUtils {
         }  else {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Extracts {@link User} from current {@link AxeSession}.
+     *
+     * @return bound {@link User} or {@code null}.
+     */
+    public User boundUserIfAny() {
+        Optional<AxeSession> axeSession = AxeSession.getCurrent();
+        if (axeSession.isPresent()) {
+            if (axeSession.get().hasUser()) {
+                return axeSession.get().getUser();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Gets {@link LandingPage} from {@link UserSettings}.
+     *
+     * @return {@link LandingPage} from {@link UserSettings} or default value {@link LandingPage#HOME_PAGE}.
+     */
+    public LandingPage getLandingPage() {
+        final User user = this.boundUserIfAny();
+        final Optional<UserSettings> us = this.getCurrentUserSettings();
+        return (user != null && us.isPresent()) ? us.get().getLandingPage() : LandingPage.HOME_PAGE;
     }
 }

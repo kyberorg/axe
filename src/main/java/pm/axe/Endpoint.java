@@ -86,6 +86,12 @@ public final class Endpoint {
         public static final String WELCOME_PAGE = "welcome";
         public static final String REGISTRATION_FAILED_PAGE = "registrationFailed";
         public static final String LOGIN_PAGE = "login";
+        public static final String REGISTRATION_PAGE = "register";
+        public static final String FORGOT_PASSWORD_PAGE = "forgot-password";
+        public static final String TOS_PAGE = "terms-of-service";
+        public static final String PROFILE_PAGE = "profile";
+        public static final String CONFIRM_ACCOUNT_PAGE = "confirm-account";
+        public static final String LOGIN_VERIFICATION_PAGE = "verify";
     }
 
     /**

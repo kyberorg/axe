@@ -8,7 +8,8 @@ import pm.axe.Endpoint;
  */
 public enum LandingPage {
     HOME_PAGE(Endpoint.UI.HOME_PAGE),
-    MY_LINKS_PAGE(Endpoint.UI.MY_LINKS_PAGE);
+    MY_LINKS_PAGE(Endpoint.UI.MY_LINKS_PAGE),
+    PROFILE_PAGE(Endpoint.UI.PROFILE_PAGE);
 
     @Getter
     private final String path;

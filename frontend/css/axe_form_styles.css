@@ -1,0 +1,24 @@
+.axe-form-title {
+    align-self: center;
+}
+
+.axe-form-subtitle {
+    padding-left: 1rem;
+}
+.space-after-submit-button {
+    width: 100%;
+}
+
+.vertically-compact {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.axe-fields > * {
+    min-width: 99%;
+}
+
+.space-after-fields {
+    padding-left: 1rem;
+    max-width: 99%;
+}

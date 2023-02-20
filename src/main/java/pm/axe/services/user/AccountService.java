@@ -210,6 +210,17 @@ public class AccountService {
     }
 
     /**
+     * Checks if Account with given  {@link User} and {@link AccountType} exists.
+     *
+     * @param user        account's owner
+     * @param accountType account's type
+     * @return true if exists, false if not.
+     */
+    public boolean isAccountExist(final User user, final AccountType accountType) {
+        return accountDao.existsByUserAndType(user, accountType);
+    }
+
+    /**
      * Searches {@link Account} by plain-text {@link Account} name and {@link AccountType}.
      *
      * @param plainAccountName non-encrypted string with {@link Account} name.
@@ -294,5 +305,114 @@ public class AccountService {
             log.error("{} failed to confirm account got exception {}", TAG, e.getMessage());
             return OperationResult.generalFail().withMessage(e.getMessage());
         }
+    }
+
+    /**
+     * Updates {@link AccountType#EMAIL} {@link Account}.
+     * This method marks updated {@link AccountType#EMAIL} {@link Account} as unconfirmed.
+     *
+     * @param user {@link Account} owner.
+     *
+     * @param email non-empty string with new Email Address (plain value).
+     *
+     * @return {@link OperationResult#success()} with updated {@link Account} as payload,
+     *         {@link OperationResult#malformedInput()}, when new email address not valid.
+     *         {@link OperationResult#generalFail()} with {@link #ERR_ENCRYPTION_FAILED} message,
+     *          when encryption failed.
+     */
+    public OperationResult updateEmailAccount(final User user, final String email) {
+        if (user == null) return OperationResult.malformedInput().withMessage("User cannot be NULL");
+        OperationResult validationResult = mailService.isEmailValid(email);
+        if (validationResult.notOk()) {
+            return validationResult;
+        }
+
+        Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
+        boolean userHasEmailAccount;
+        if (emailAccount.isPresent()) {
+            userHasEmailAccount = true;
+            String encryptedEmail;
+            OperationResult encryptEmailResult = cryptTool.encrypt(email);
+            if (encryptEmailResult.ok()) {
+                encryptedEmail = encryptEmailResult.getStringPayload();
+            } else {
+                log.error("{} Email encryption failed. Value: {}. Error: {}",
+                        TAG, email, encryptEmailResult.getMessage());
+                return OperationResult.generalFail().withMessage(ERR_ENCRYPTION_FAILED);
+            }
+            emailAccount.get().setAccountName(encryptedEmail);
+            emailAccount.get().setConfirmed(false);
+        } else {
+            userHasEmailAccount = false;
+        }
+
+        try {
+            if (userHasEmailAccount) {
+                accountDao.save(emailAccount.get());
+                log.info("{} Updated email account for {} {}", TAG, User.class.getSimpleName(), user.getUsername());
+                return OperationResult.success().addPayload(emailAccount.get());
+            } else {
+                return createEmailAccount(user, email);
+            }
+        } catch (CannotCreateTransactionException e) {
+            return OperationResult.databaseDown();
+        } catch (Exception e) {
+            log.debug("", e);
+            return OperationResult.generalFail().withMessage(e.getMessage());
+        }
+    }
+
+    /**
+     * This method restores values from old {@link Account}.
+     *
+     * @param oldAccount old {@link Account} to restore values from.
+     * @throws IllegalArgumentException when old account is NULL.
+     */
+    public void rollbackAccount(final Account oldAccount) {
+        if (oldAccount == null) throw new IllegalArgumentException("old account cannot be null");
+        Optional<Account> currentAccount = this.getAccount(oldAccount.getUser(), oldAccount.getType());
+        try {
+            if (currentAccount.isPresent()) {
+                currentAccount.get().copy(oldAccount);
+            } else {
+                accountDao.save(oldAccount);
+            }
+            log.info("{} Account {} rolled back", TAG, oldAccount);
+        } catch (CannotCreateTransactionException e) {
+            log.error("{} failed to rollback account: Database is Down", TAG);
+        } catch (Exception e) {
+            log.error("{} failed  to rollback Account {}: got exception {}", TAG, oldAccount, e.getMessage());
+        }
+    }
+
+    /**
+     * Returns current email address.
+     *
+     * @param user email's owner
+     * @return {@link Optional} with email address or {@link Optional#empty()}.
+     */
+    public Optional<String> getCurrentEmail(final User user) {
+        if (user == null) throw new IllegalArgumentException("User cannot be NULL");
+
+        Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
+        if (emailAccount.isEmpty()) return Optional.empty();
+        Optional<String> plainTextEmail = decryptAccountName(emailAccount.get());
+        if (plainTextEmail.isEmpty()) return Optional.empty();
+        if (StringUtils.isNotBlank(plainTextEmail.get())) {
+            return plainTextEmail;
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Is current {@link User} confirmed.
+     *
+     * @param user email's owner
+     * @return true if email confirmed, false if email not confirmed or email doesn't exist.
+     */
+    public boolean isCurrentEmailConfirmed(final User user) {
+        Optional<Account> emailAccount = getAccount(user, AccountType.EMAIL);
+        return emailAccount.map(Account::isConfirmed).orElse(false);
     }
 }

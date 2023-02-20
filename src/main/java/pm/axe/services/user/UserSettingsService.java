@@ -62,6 +62,17 @@ public class UserSettingsService {
         userSettingsDao.delete(settings);
     }
 
+    /**
+     * Checks if user has 2FA enabled or not.
+     *
+     * @param user {@link UserSettings} owner
+     * @return true - if 2FA is enabled for given {@link User}, false - in other cases.
+     */
+    public boolean isTfaEnabled(final User user) {
+        Optional<UserSettings> userSettings = getUserSettings(user);
+        return userSettings.map(UserSettings::isTfaEnabled).orElse(false);
+    }
+
     private OperationResult createOrUpdateUserSettings(final UserSettings userSettings) {
         try {
             userSettingsDao.save(userSettings);
@@ -77,4 +88,6 @@ public class UserSettingsService {
             return OperationResult.generalFail();
         }
     }
+
+
 }

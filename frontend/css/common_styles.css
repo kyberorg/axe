@@ -209,3 +209,19 @@ vaadin-drawer-toggle {
 vaadin-icon[icon="vaadin:sign-in"] {
     padding-left: 0 !important;
 }
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.fit-in-window {
+    flex-wrap: wrap;
+}
+
+.fit-in-window > * {
+    flex: 1 0 auto;
+}

@@ -1,0 +1,28 @@
+.profile-title {
+    align-self: center;
+}
+
+.toggle-with-prefix-postfix {
+    margin-right: 0.3rem;
+    margin-left: 0.3rem;
+}
+
+.tab-content {
+    padding-left: 0!important;
+    padding-right: 0!important;
+}
+
+@media (max-width: 400px) {
+    .fit-in-section {
+        width: min-content;
+    }
+}
+
+.telegram-details {
+    display: block;
+    max-width: min(290px, 100%);
+}
+
+.telegram-details div {
+    margin: 0.5rem;
+}

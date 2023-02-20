@@ -1,0 +1,20 @@
+html {
+    --axe-warning-zone-color: rgb(231 235 239);
+}
+
+html[theme="dark"] {
+    --axe-warning-zone-color: rgb(55 72 95);
+}
+
+.danger-dialog {
+    max-width: min(501px,97%);
+}
+
+.italic-text {
+    font-style: italic;
+}
+
+.danger-dialog-warning-zone {
+    background: var(--axe-warning-zone-color);
+}
+
