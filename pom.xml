@@ -304,7 +304,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
           <artifactId>selenide</artifactId>
-            <version>6.10.3</version>
+            <version>6.12.2</version>
             <scope>test</scope>
         </dependency>
         <!-- Selenide plugin for Selenoid -->
