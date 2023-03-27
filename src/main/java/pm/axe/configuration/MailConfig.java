@@ -45,7 +45,7 @@ public class MailConfig {
 
     private JavaMailSender axeSender() {
         JavaMailSenderImpl axeSender = new JavaMailSenderImpl();
-        axeSender.setHost("mail.axe.pm");
+        axeSender.setHost("smtp.kmail.ee");
         axeSender.setPort(SMTP_TLS_PORT);
 
         axeSender.setUsername(mailUser);
